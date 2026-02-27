@@ -1,0 +1,233 @@
+{
+  "corpus_summary": {
+    "n_observations": 258,
+    "n_syndicates": 45,
+    "n_years": 11,
+    "year_range": [
+      2014,
+      2024
+    ],
+    "severity_stats": {
+      "mean": 0.4256896950214477,
+      "std": 2.2373660556366453,
+      "median": -0.0009947383521123302,
+      "min": -2.635768193604149,
+      "max": 14.898000000000037,
+      "pct_adverse": 0.46511627906976744
+    },
+    "size_stats": {
+      "mean": 819.027449612403,
+      "std": 4131.785616800857,
+      "median": 35.398,
+      "min": 2.9,
+      "max": 56779.824,
+      "log_size_range": [
+        1.0647107369924282,
+        10.946936330339172
+      ]
+    },
+    "lob_coverage": {},
+    "cause_categories": {
+      "unknown": 258
+    },
+    "line_of_business": {
+      "Property": 58,
+      "Casualty": 45,
+      "Aggregate": 42,
+      "Reinsurance - Property": 26,
+      "Marine": 21,
+      "Reinsurance - Casualty": 16,
+      "Energy": 10,
+      "Professional Lines": 10,
+      "Accident & Health": 10,
+      "Reinsurance - Specialty": 8,
+      "Aviation": 8,
+      "Motor": 4
+    },
+    "obs_per_syndicate": {
+      "mean": 5.733333333333333,
+      "min": 1,
+      "max": 51
+    }
+  },
+  "approaches": {
+    "approach_1_common_events": {
+      "name": "Common Event Matching",
+      "description": "Estimate size effect from same-event, different-syndicate variation",
+      "data_sufficiency": {
+        "n_observations": 256,
+        "n_syndicates": 45,
+        "n_years": 0,
+        "n_events": 10,
+        "min_obs_per_group": 18,
+        "sufficient": true,
+        "issues": []
+      },
+      "estimates": {
+        "size_coefficient": -0.21270349307267794,
+        "size_coefficient_se": 0.07180828111496855,
+        "size_coefficient_pvalue": 0.0033559663639822716,
+        "r_squared": 0.14984904216393413,
+        "lob_coefficients": {}
+      },
+      "robustness": {
+        "bootstrap_mean": null,
+        "bootstrap_std": null,
+        "bootstrap_ci": [
+          null,
+          null
+        ],
+        "cv_stability": null
+      },
+      "assessment": {
+        "sign_correct": true,
+        "magnitude_plausible": true,
+        "statistically_significant": true,
+        "robust": false,
+        "trustworthy": true,
+        "recommendation": "RECOMMENDED - Coefficient -0.2127 is significant and plausible"
+      }
+    },
+    "approach_2_volatility": {
+      "name": "Within-Syndicate Volatility Scaling",
+      "description": "Estimate size-volatility relationship from panel data",
+      "data_sufficiency": {
+        "n_observations": 233,
+        "n_syndicates": 25,
+        "n_years": 11,
+        "n_events": 0,
+        "min_obs_per_group": 3,
+        "sufficient": true,
+        "issues": []
+      },
+      "estimates": {
+        "size_coefficient": -0.9759147402846812,
+        "size_coefficient_se": 0.23894041362084623,
+        "size_coefficient_pvalue": 0.00045615795841741743,
+        "r_squared": 0.42039010661515996,
+        "lob_coefficients": {}
+      },
+      "robustness": {
+        "bootstrap_mean": -0.8767095607114282,
+        "bootstrap_std": 0.43170213488672227,
+        "bootstrap_ci": [
+          -1.5588700596136216,
+          -0.1553470646257002
+        ],
+        "cv_stability": 0.3070565320699742
+      },
+      "assessment": {
+        "sign_correct": true,
+        "magnitude_plausible": false,
+        "statistically_significant": true,
+        "robust": true,
+        "trustworthy": false,
+        "recommendation": "USABLE WITH CAUTION - Coefficient -0.9759, p=0.000"
+      }
+    },
+    "approach_3_lob_specific": {
+      "name": "LOB-Specific Size Effects",
+      "description": "Estimate size effects by LOB with hierarchical shrinkage",
+      "data_sufficiency": {
+        "n_observations": 258,
+        "n_syndicates": 45,
+        "n_years": 0,
+        "n_events": 0,
+        "min_obs_per_group": 4,
+        "sufficient": true,
+        "issues": []
+      },
+      "estimates": {
+        "size_coefficient": -0.26304064171958674,
+        "size_coefficient_se": 0.06863106633086988,
+        "size_coefficient_pvalue": 0.00015957841240389433,
+        "r_squared": null,
+        "lob_coefficients": {
+          "Property": -0.4850124389339539,
+          "Casualty": -0.3038108691448459,
+          "Aggregate": -0.34430181274713834,
+          "Reinsurance - Property": 0.01598169715321252,
+          "Marine": -0.006063308147432627,
+          "Reinsurance - Casualty": -0.022540721344833363,
+          "Energy": -0.05125954629489773,
+          "Professional Lines": -0.02896957212827534,
+          "Accident & Health": -0.010276208357611446
+        }
+      },
+      "robustness": {
+        "bootstrap_mean": -0.27506870062903926,
+        "bootstrap_std": 0.09867919274945869,
+        "bootstrap_ci": [
+          -0.4862572729107723,
+          -0.11409208995583277
+        ],
+        "cv_stability": null
+      },
+      "assessment": {
+        "sign_correct": "True",
+        "magnitude_plausible": "True",
+        "statistically_significant": true,
+        "robust": true,
+        "trustworthy": true,
+        "recommendation": "RECOMMENDED - Overall: -0.2630, LOBs: Property: -0.485, Casualty: -0.304, Aggregate: -0.344, Reinsurance - Property: 0.016"
+      }
+    },
+    "approach_4_rankings": {
+      "name": "Relative Severity Rankings",
+      "description": "Test whether larger syndicates rank lower in severity within shared events",
+      "data_sufficiency": {
+        "n_observations": 256,
+        "n_syndicates": 45,
+        "n_years": 0,
+        "n_events": 10,
+        "min_obs_per_group": 0,
+        "sufficient": true,
+        "issues": []
+      },
+      "estimates": {
+        "size_coefficient": -0.04224863496978152,
+        "size_coefficient_se": null,
+        "size_coefficient_pvalue": 0.6589291881138779,
+        "r_squared": null,
+        "lob_coefficients": {}
+      },
+      "robustness": {
+        "bootstrap_mean": 0.0023183269635295785,
+        "bootstrap_std": 0.01044526622662387,
+        "bootstrap_ci": [
+          -0.02289296494940601,
+          0.019096727739107637
+        ],
+        "cv_stability": null
+      },
+      "assessment": {
+        "sign_correct": "True",
+        "magnitude_plausible": true,
+        "statistically_significant": "False",
+        "robust": true,
+        "trustworthy": "False",
+        "recommendation": "WEAK EVIDENCE - Coefficient: -0.0422, p=0.659"
+      }
+    }
+  },
+  "convergence": {
+    "n_approaches_with_estimates": 4,
+    "coefficients": {
+      "approach_1_common_events": -0.21270349307267794,
+      "approach_2_volatility": -0.9759147402846812,
+      "approach_3_lob_specific": -0.26304064171958674,
+      "approach_4_rankings": -0.04224863496978152
+    },
+    "mean_coefficient": -0.37347687751168185,
+    "std_coefficient": 0.35731210813509884,
+    "coefficient_cv": 0.9567181521804455,
+    "sign_agreement": 1.0,
+    "all_negative": true,
+    "all_positive": false,
+    "outlier_approaches": [],
+    "convergent": "True",
+    "strongly_convergent": "False",
+    "message": "MODERATE CONVERGENCE: Approaches mostly agree (mean: -0.3735, CV: 0.96)"
+  },
+  "overall_recommendation": "RECOMMENDED: Use average of approach_1_common_events, approach_3_lob_specific. Mean coefficient: -0.3735"
+}
