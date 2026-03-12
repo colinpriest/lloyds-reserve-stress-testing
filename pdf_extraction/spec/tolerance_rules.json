@@ -1,0 +1,60 @@
+{
+  "_meta": {
+    "version": "1.0",
+    "date": "2026-03-12",
+    "description": "Rules for classifying discrepancies between LLM outputs as tolerated (within acceptable variation) or material (hard failure requiring review). These rules define what 'agreement' means for each field type."
+  },
+  "always_tolerated": {
+    "description": "These field types never trigger hard failures regardless of disagreement magnitude",
+    "fields": [
+      "exact_reserve_text",
+      "standardized_narrative",
+      "data_quality_notes",
+      "raw_causal_phrases",
+      "primary_causes",
+      "specific_events",
+      "specific_years_affected",
+      "prior_year_events",
+      "named_events",
+      "lob_movements"
+    ],
+    "rationale": "Text fields, subjective categorizations, and event lists vary legitimately between models. The core numeric extraction is what matters for the research dataset."
+  },
+  "always_tolerated_suffixes": {
+    "description": "Fields containing these substrings are always tolerated",
+    "patterns": ["page", "confidence", "Page", "Confidence"],
+    "rationale": "Page numbers differ by PDF viewer indexing. Confidence scores are model-internal assessments."
+  },
+  "numeric_tolerance": {
+    "description": "Two numeric values are considered equivalent if within these bounds",
+    "relative_tolerance": 0.005,
+    "relative_tolerance_description": "0.5% relative difference",
+    "absolute_tolerance": 0.05,
+    "absolute_tolerance_description": "0.05 absolute difference (catches near-zero rounding e.g. -0.01 vs -0.011)",
+    "null_zero_equivalence": true,
+    "null_zero_description": "null/None and 0.0 are treated as equivalent (both mean 'not found / not applicable')"
+  },
+  "list_of_dicts_tolerance": {
+    "description": "Rules for comparing structured lists (gross_premium_mix, lob_movements)",
+    "zero_entries_ignored": true,
+    "zero_threshold": 0.01,
+    "zero_description": "Entries with amount < 0.01 and percentage < 0.01 are ignored (not meaningful)",
+    "subtotal_entries_ignored": true,
+    "subtotal_description": "Entries whose line_of_business starts with 'Total' or 'Sub-total' are ignored (these are subtotal rows, not individual LOBs)"
+  },
+  "material_fields": {
+    "description": "These fields trigger hard failures if they disagree beyond tolerance",
+    "fields": [
+      "syndicate",
+      "year",
+      "opening_reserves_gbp_m",
+      "prior_year_development_gbp_m",
+      "prior_year_development_pct",
+      "direction",
+      "gross_premiums_written_gbp_m",
+      "currency"
+    ],
+    "includes_gross_premium_mix": true,
+    "gross_premium_mix_note": "Non-zero, non-subtotal entries missing from one model or with amount differences beyond numeric tolerance are material"
+  }
+}

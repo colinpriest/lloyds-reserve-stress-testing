@@ -1,0 +1,63 @@
+{
+  "_meta": {
+    "description": "Prompt version log. Each entry records what changed in the extraction prompt and why. Version numbers are embedded in extraction outputs for traceability."
+  },
+  "versions": [
+    {
+      "version": "1.0",
+      "date": "2026-03-11",
+      "description": "Initial prompt version",
+      "changes": "Baseline extraction prompt with field definitions, sign conventions, and segmental analysis instructions.",
+      "trigger": "Initial development",
+      "reports_triggering_change": null
+    },
+    {
+      "version": "1.1",
+      "date": "2026-03-11",
+      "description": "Add Treaty as valid LOB",
+      "changes": "Added 'Treaty' to LLOYDS_LOBS list and instruction: 'If a syndicate has a Treaty division (reinsurance accepted), map it to Treaty -- do NOT split it into Reinsurance - Property/Casualty/Specialty unless the report explicitly breaks it down.'",
+      "trigger": "Gemini and GPT disagreed on how to map reinsurance acceptances -- Gemini split into sub-categories creating duplicates, GPT kept as single Treaty line.",
+      "reports_triggering_change": ["syndicate_1084_2014"]
+    },
+    {
+      "version": "1.2",
+      "date": "2026-03-11",
+      "description": "Add tolerance-based validation to JSON output",
+      "changes": "Added validation block to output JSON with passed/failed status, discrepancy counts, and hard failure details.",
+      "trigger": "Need to track model agreement systematically.",
+      "reports_triggering_change": null
+    },
+    {
+      "version": "1.3",
+      "date": "2026-03-12",
+      "description": "Clarify surplus/(deficit) sign convention",
+      "changes": "Added explicit instruction: 'When a report says surplus/(deficit) run-off deviation of (X) million, the PARENTHESES around the number indicate a DEFICIT = STRENGTHENING (POSITIVE sign). Unparenthesized = surplus = release = NEGATIVE sign.'",
+      "trigger": "syndicate_1110_2015: Gemini correctly read (GBP3.0) as deficit/strengthening (+3.0), GPT incorrectly interpreted as release (-3.0). Manual review of PDF Note 12 confirmed deficit. Added prompt guidance so both models handle this accounting convention consistently.",
+      "reports_triggering_change": ["syndicate_1110_2015"]
+    },
+    {
+      "version": "1.4",
+      "date": "2026-03-12",
+      "description": "Clarify segmental analysis with Direct + Reinsurance sub-tables",
+      "changes": "Added instruction: 'When report has separate Direct insurance and Reinsurance acceptances sub-tables, list individual direct categories then add a SINGLE consolidated Reinsurance acceptances line. Do NOT list individual reinsurance sub-categories separately.'",
+      "trigger": "syndicate_1110_2015: Gemini duplicated LOB category names (e.g. two 'Fire and other damage to property' entries) by listing both direct and reinsurance sub-categories separately. GPT correctly consolidated reinsurance into single line.",
+      "reports_triggering_change": ["syndicate_1110_2015"]
+    },
+    {
+      "version": "1.5",
+      "date": "2026-03-12",
+      "description": "Add EUR as valid currency, clarify native currency reporting",
+      "changes": "Changed currency field from 'GBP or USD' to 'GBP, USD, or EUR -- whichever the report's financial statements are denominated in. Report the amounts in the NATIVE currency, do NOT convert to GBP.'",
+      "trigger": "syndicate_1100_2024: Reports in EUR. Gemini correctly identified EUR, GPT wrongly said GBP and converted amounts, causing disagreement on gross_premiums_written and premium mix amounts.",
+      "reports_triggering_change": ["syndicate_1100_2024"]
+    },
+    {
+      "version": "1.6",
+      "date": "2026-03-12",
+      "description": "Prefer divisional totals over regulatory sub-categories for gross_premium_mix",
+      "changes": "Added instruction: When the report contains BOTH a regulatory segmental analysis (fine-grained statutory classes) AND a divisional/business class summary, use the DIVISIONAL summary. The divisional breakdown gives TOTAL premium per business class (direct + reinsurance combined). The regulatory segmental analysis often shows only the direct insurance component, understating the true LOB total.",
+      "trigger": "syndicate_1183_2015: GPT and Claude both extracted Marine premium as 70.3 (direct-only from regulatory segmental analysis). Gemini correctly extracted 302.9 (total Marine division including direct + reinsurance). The regulatory 'Marine' line only covers direct business; the divisional 'Marine' total aggregates across direct and reinsurance to give the full 302.9. Same pattern for percentage_of_total (6.9% vs 29.73%).",
+      "reports_triggering_change": ["syndicate_1183_2015"]
+    }
+  ]
+}

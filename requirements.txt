@@ -11,7 +11,9 @@ PyMuPDF>=1.23.0
 pandas>=2.0.0
 
 # LLM APIs
-openai>=1.0.0          # ChatGPT for summarization
+openai>=1.0.0          # ChatGPT / GPT-5-mini for extraction & summarization
+google-genai>=1.0.0    # Gemini for extraction
+anthropic>=0.40.0      # Claude for adjudication (third-model tiebreaker)
 # Note: Perplexity uses requests directly (no SDK needed)
 
 # Optional: for async scraping (faster)
@@ -23,10 +25,11 @@ ratelimit>=2.2.1
 # For HTML to text conversion
 html2text>=2020.1.16
 
+# HTML to PDF conversion (for HTML syndicate reports)
+playwright>=1.40.0
+
 # Environment variable management
 python-dotenv>=1.0.0
-
-pymupdf>=1.23.0
 
 # OCR support for scanned PDFs
 pytesseract>=0.3.10

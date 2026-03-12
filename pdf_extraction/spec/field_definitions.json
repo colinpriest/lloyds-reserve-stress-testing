@@ -1,0 +1,142 @@
+{
+  "_meta": {
+    "version": "1.0",
+    "created": "2026-03-12",
+    "description": "Frozen field definitions for the dual-LLM extraction pipeline. Each field specifies meaning, allowed values, units, and what constitutes a material disagreement between models."
+  },
+  "fields": {
+    "syndicate": {
+      "description": "Lloyd's syndicate number",
+      "type": "integer",
+      "units": null,
+      "allowed_values": "Any valid Lloyd's syndicate number (2-5 digits)",
+      "material_disagreement": "Any difference"
+    },
+    "year": {
+      "description": "Financial year-end of the report (calendar year of 31 December year-end)",
+      "type": "integer",
+      "units": null,
+      "allowed_values": "2014-2024",
+      "material_disagreement": "Any difference"
+    },
+    "opening_reserves_gbp_m": {
+      "description": "Opening gross claims outstanding (gross claims reserves) at start of the financial year. This is ONLY claims reserves -- excludes unearned premium provisions. Sourced from Balance Sheet or Technical Reserves note.",
+      "type": "float",
+      "units": "millions in native currency (GBP, USD, or EUR as per report)",
+      "allowed_values": "Positive number or null if not found",
+      "material_disagreement": "Relative difference > 0.5% or absolute difference > 0.05m, unless one is null and other is 0.0"
+    },
+    "prior_year_development_gbp_m": {
+      "description": "Prior year reserve development amount. Sourced from 'Movement in prior year's provision for claims outstanding' note or explicit narrative text quantifying the prior year release/strengthening. NOT from the Technical Reserves reconciliation table (which includes current year movements).",
+      "type": "float",
+      "units": "signed millions in native currency: NEGATIVE = release (reserves were sufficient, surplus returned), POSITIVE = strengthening (reserves were insufficient, additional provision needed)",
+      "allowed_values": "Signed number or null if not found",
+      "material_disagreement": "Any sign disagreement, or magnitude difference > 0.5% relative / 0.05m absolute"
+    },
+    "prior_year_development_pct": {
+      "description": "Prior year development as percentage of opening gross claims outstanding",
+      "type": "float",
+      "units": "signed percentage: NEGATIVE = release, POSITIVE = strengthening",
+      "allowed_values": "Signed number or null if not calculable",
+      "material_disagreement": "Follows from prior_year_development_gbp_m and opening_reserves_gbp_m"
+    },
+    "direction": {
+      "description": "Overall direction of prior year reserve movement",
+      "type": "string",
+      "units": null,
+      "allowed_values": ["release", "strengthening", "flat", "mixed"],
+      "material_disagreement": "Any difference (except release vs mixed or strengthening vs mixed when components go both ways)"
+    },
+    "exact_reserve_text": {
+      "description": "Verbatim sentence(s) from the document describing the prior year reserve movement",
+      "type": "string",
+      "units": null,
+      "allowed_values": "Direct quote from report",
+      "material_disagreement": "Not material -- text differences are tolerated"
+    },
+    "primary_causes": {
+      "description": "Causal factors mapped to standard causal categories",
+      "type": "array of strings",
+      "units": null,
+      "allowed_values": "Standard causal category names from CAUSAL_CATEGORIES list",
+      "material_disagreement": "Not material -- differences tolerated"
+    },
+    "specific_events": {
+      "description": "Named events mentioned in context of reserve movements",
+      "type": "array of strings",
+      "units": null,
+      "allowed_values": "Free text event names",
+      "material_disagreement": "Not material -- differences tolerated"
+    },
+    "specific_years_affected": {
+      "description": "Prior accident years mentioned as affected by reserve movements",
+      "type": "array of integers",
+      "units": null,
+      "allowed_values": "Year integers",
+      "material_disagreement": "Not material -- differences tolerated"
+    },
+    "prior_year_events": {
+      "description": "Structured list of named events from prior years affecting reserves",
+      "type": "array of objects",
+      "units": null,
+      "allowed_values": "Objects with event_name, event_year, impact_description, lobs_affected, amount_gbp_m, confidence",
+      "material_disagreement": "Not material -- differences tolerated"
+    },
+    "named_events": {
+      "description": "All named catastrophe events, large losses, and significant incidents mentioned anywhere in the document",
+      "type": "array of objects",
+      "units": null,
+      "allowed_values": "Objects with event_name, event_year, event_type, net_loss_gbp_m, loss_description, lobs_affected, page, confidence",
+      "material_disagreement": "Not material -- differences tolerated"
+    },
+    "standardized_narrative": {
+      "description": "One paragraph summary of the reserve movement, causes, and affected lines",
+      "type": "string",
+      "units": null,
+      "allowed_values": "Free text",
+      "material_disagreement": "Not material -- text differences tolerated"
+    },
+    "raw_causal_phrases": {
+      "description": "Verbatim causal phrases from the document",
+      "type": "array of strings",
+      "units": null,
+      "allowed_values": "Direct quotes",
+      "material_disagreement": "Not material -- differences tolerated"
+    },
+    "lob_movements": {
+      "description": "Reserve movements broken down by line of business",
+      "type": "array of objects",
+      "units": null,
+      "allowed_values": "Objects with line_of_business (standard Lloyd's LOB name), direction, amount_gbp_m (signed), percentage, confidence",
+      "material_disagreement": "Not material -- differences tolerated (LOB granularity varies by report)"
+    },
+    "gross_premiums_written_gbp_m": {
+      "description": "Total gross premiums written for the year",
+      "type": "float",
+      "units": "millions in native currency",
+      "allowed_values": "Positive number",
+      "material_disagreement": "Relative difference > 0.5% or absolute difference > 0.05m"
+    },
+    "gross_premium_mix": {
+      "description": "Gross premium breakdown by regulatory/statutory class from the Segmental Analysis note. Uses EXACT class names as printed (not mapped to standard Lloyd's LOBs). When report has separate Direct and Reinsurance acceptances sub-tables, individual direct categories are listed plus one consolidated 'Reinsurance acceptances' total.",
+      "type": "array of objects",
+      "units": null,
+      "allowed_values": "Objects with line_of_business (verbatim regulatory class name), amount_gbp_m, percentage_of_total",
+      "material_disagreement": "Missing or extra non-zero LOB entries; amount differences > 0.5% relative. Zero-amount entries and subtotal rows are not material."
+    },
+    "currency": {
+      "description": "Reporting currency of the financial statements",
+      "type": "string",
+      "units": null,
+      "allowed_values": ["GBP", "USD", "EUR"],
+      "material_disagreement": "Any difference"
+    },
+    "data_quality_notes": {
+      "description": "Caveats about data availability or extraction uncertainty",
+      "type": "string",
+      "units": null,
+      "allowed_values": "Free text",
+      "material_disagreement": "Not material -- text differences tolerated"
+    }
+  }
+}
