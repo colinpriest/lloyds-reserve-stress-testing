@@ -520,6 +520,33 @@ def extract_with_openai(report_path, file_bytes, content_hash, syndicate_num, re
 # ---------------------------------------------------------------------------
 
 
+def _validate_triangle_structure(uw_years, rows, report_year):
+    """Check if the triangle has the expected staircase structure.
+
+    In a proper triangle, UW year columns should have development periods
+    that form a staircase: the oldest UW year has the most rows filled,
+    and each newer year has one fewer row. Returns a score 0.0-1.0.
+    """
+    n_cols = len(uw_years)
+    n_rows = len(rows)
+    if n_cols < 2 or n_rows < 2:
+        return 0.0
+
+    # Expected pattern: column 0 (oldest) should have most non-nulls,
+    # each subsequent column should have one fewer.
+    matches = 0
+    checks = 0
+    for col_idx in range(n_cols):
+        expected_filled = min(n_rows, n_cols - col_idx)
+        actual_filled = sum(1 for r in range(n_rows) if rows[r][col_idx] is not None)
+        checks += 1
+        # Allow ±1 tolerance (for summary rows or slight variations)
+        if abs(actual_filled - expected_filled) <= 1:
+            matches += 1
+
+    return matches / checks if checks > 0 else 0.0
+
+
 def compute_pyd_from_triangle(triangle_data, report_year):
     """Compute prior year development from extracted triangle data.
 
@@ -548,8 +575,32 @@ def compute_pyd_from_triangle(triangle_data, report_year):
     if not uw_years or not rows:
         return None, "missing triangle arrays"
 
+    # Validate: the most recent UW year should match the report year
+    try:
+        max_uw = max(int(y) for y in uw_years)
+    except (ValueError, TypeError):
+        return None, "cannot parse UW years"
+    if max_uw != report_year:
+        return None, (f"triangle max UW year ({max_uw}) != report year ({report_year}) "
+                     f"— likely misaligned extraction")
+
     n_cols = len(uw_years)
     n_rows = len(rows)
+
+    # Validate: number of rows should roughly equal number of columns
+    # (N UW years → N development periods in a square triangle)
+    if n_rows > n_cols + 1:
+        return None, (f"triangle has {n_rows} rows but only {n_cols} columns "
+                     f"— likely includes summary rows or is misaligned")
+
+    # Validate: oldest column should have the most filled rows.
+    # In a proper NxN triangle, column 0 should have ~N non-null values.
+    if n_rows >= 2 and n_cols >= 2:
+        col0_filled = sum(1 for r in range(n_rows) if rows[r][0] is not None)
+        expected_col0 = min(n_rows, n_cols)
+        if col0_filled < expected_col0:
+            return None, (f"oldest column has {col0_filled} filled rows, "
+                         f"expected {expected_col0} — likely shifted/misaligned")
 
     if n_rows < 2:
         return None, "triangle has fewer than 2 development rows"
@@ -564,30 +615,42 @@ def compute_pyd_from_triangle(triangle_data, report_year):
     # Detect and strip "Current estimate" summary row if LLM included it.
     # The summary row has a non-null value in every column, repeating
     # the last non-null value from each column's development rows.
+    # We work on a COPY to avoid mutating the original triangle data.
+    rows = [list(r) for r in rows]  # deep copy
     if n_rows >= 3:
         last_row = rows[-1]
-        is_summary = True
-        for col in range(n_cols):
-            if last_row[col] is None:
-                is_summary = False
-                break
-        if is_summary:
+        all_filled = all(last_row[col] is not None for col in range(n_cols))
+        if all_filled:
             # Check if last row values match the last non-null in each column
-            # from the development rows (excluding last row)
             matches = 0
+            mismatched_cols = []
             for col in range(n_cols):
                 for r in range(n_rows - 2, -1, -1):
                     if rows[r][col] is not None:
                         try:
                             if abs(float(rows[r][col]) - float(last_row[col])) < 0.01:
                                 matches += 1
+                            else:
+                                mismatched_cols.append(col)
                         except (ValueError, TypeError):
                             pass
                         break
-            # If most columns match, it's a summary row — strip it
             if matches >= n_cols * 0.7:
-                rows = rows[:-1]
-                n_rows -= 1
+                if 0 in mismatched_cols:
+                    # Col 0 has a DIFFERENT value from rows above — this last row
+                    # contains real development data for the oldest UW year merged
+                    # with the summary row. NULL out only the columns that matched
+                    # (those are summary duplicates), keep the mismatched ones.
+                    for col in range(n_cols):
+                        if col not in mismatched_cols:
+                            rows[-1][col] = None
+                else:
+                    # Pure summary row — strip it entirely
+                    rows = rows[:-1]
+                    n_rows -= 1
+
+    # Validate structure — proper triangles have a staircase pattern
+    structure_score = _validate_triangle_structure(uw_years, rows, report_year)
 
     # For each column, find the current estimate (last non-null)
     # and the previous diagonal (one row above the current)
@@ -662,61 +725,15 @@ def compute_pyd_from_triangle(triangle_data, report_year):
         return None, "loss ratio triangle -- needs premium data for conversion"
 
     total_pyd = round(total_pyd, 3)
+    details.append(f"  Structure score: {structure_score:.2f}")
     details_str = "\n".join(details) + f"\n  Total PYD = {total_pyd:+.3f}m ({used_years} UW years)"
     return total_pyd, details_str
 
 
-def verify_pyd_with_triangle(result, model_name, report_year):
-    """Check if the model's PYD matches a code-computed value from its triangle.
-
-    If the model extracted triangle data AND a PYD value, verify the arithmetic.
-    If they disagree, override with the code-computed value.
-
-    Returns the (possibly corrected) result dict and a log message, or (result, None) if no change.
-    """
-    triangle = result.get("_claims_triangle")
-    if not triangle or triangle.get("type") in ("none", None):
-        return result, None
-
-    computed_pyd, details = compute_pyd_from_triangle(triangle, report_year)
-    if computed_pyd is None:
-        return result, None
-
-    model_pyd = result.get("prior_year_development_gbp_m")
-
-    # If model returned null but we can compute, fill it in
-    if model_pyd is None:
-        result = dict(result)
-        result["prior_year_development_gbp_m"] = computed_pyd
-        result["prior_year_development_pct"] = (
-            round(computed_pyd / result["opening_reserves_gbp_m"] * 100, 2)
-            if result.get("opening_reserves_gbp_m")
-            else None
-        )
-        if computed_pyd < 0:
-            result["direction"] = "release"
-        elif computed_pyd > 0:
-            result["direction"] = "strengthening"
-        else:
-            result["direction"] = "flat"
-        msg = (f"  [{model_name}] Triangle verification: model returned null, "
-               f"code computed {computed_pyd:+.3f}m from triangle\n{details}")
-        return result, msg
-
-    # If model returned a value, check it
-    try:
-        model_pyd_f = float(model_pyd)
-    except (ValueError, TypeError):
-        return result, None
-
-    if abs(model_pyd_f - computed_pyd) < 0.5:
-        # Close enough — triangle confirms model
-        msg = f"  [{model_name}] Triangle verification: CONFIRMED (model={model_pyd_f}, code={computed_pyd})"
-        return result, msg
-
-    # Disagreement — override with code-computed value
+def _apply_triangle_pyd(result, computed_pyd, model_name, details, reason):
+    """Apply a code-computed PYD value to a result dict, updating direction and notes."""
     result = dict(result)
-    old_pyd = result["prior_year_development_gbp_m"]
+    old_pyd = result.get("prior_year_development_gbp_m")
     result["prior_year_development_gbp_m"] = computed_pyd
     result["prior_year_development_pct"] = (
         round(computed_pyd / result["opening_reserves_gbp_m"] * 100, 2)
@@ -729,14 +746,219 @@ def verify_pyd_with_triangle(result, model_name, report_year):
         result["direction"] = "strengthening"
     else:
         result["direction"] = "flat"
-    old_notes = result.get("data_quality_notes", "")
-    result["data_quality_notes"] = (
-        f"{old_notes} [CODE OVERRIDE: Model said PYD={old_pyd}, "
-        f"but code computed {computed_pyd} from triangle. Using code value.]"
-    )
-    msg = (f"  [{model_name}] Triangle verification: OVERRIDE "
+    if old_pyd is not None:
+        old_notes = result.get("data_quality_notes", "")
+        result["data_quality_notes"] = (
+            f"{old_notes} [CODE OVERRIDE: Model said PYD={old_pyd}, "
+            f"but code computed {computed_pyd} from triangle ({reason}). Using code value.]"
+        )
+    msg = (f"  [{model_name}] Triangle verification: {reason} "
            f"(model={old_pyd}, code={computed_pyd})\n{details}")
     return result, msg
+
+
+def verify_triangles(result_gemini, result_openai, gemini_name, openai_name, report_year):
+    """Cross-validate triangle extractions between models.
+
+    When both models extract triangles, compare the computed PYD values.
+    When they agree, use the value with high confidence.
+    When they disagree, trust the one with better structural validity.
+    When only one has a triangle, use it only if it passes sanity checks.
+
+    Returns updated (result_gemini, result_openai, messages_list).
+    """
+    tri_g = result_gemini.get("_claims_triangle")
+    tri_o = result_openai.get("_claims_triangle")
+    has_g = tri_g and tri_g.get("type") not in ("none", None)
+    has_o = tri_o and tri_o.get("type") not in ("none", None)
+
+    messages = []
+
+    if not has_g and not has_o:
+        return result_gemini, result_openai, messages
+
+    # Compute PYD from each available triangle
+    pyd_g, details_g = (None, "no triangle")
+    pyd_o, details_o = (None, "no triangle")
+    struct_g, struct_o = 0.0, 0.0
+
+    if has_g:
+        pyd_g, details_g = compute_pyd_from_triangle(tri_g, report_year)
+        uw_g = tri_g.get("underwriting_years", [])
+        rows_g = tri_g.get("development_rows", [])
+        if uw_g and rows_g:
+            struct_g = _validate_triangle_structure(uw_g, rows_g, report_year)
+
+    if has_o:
+        pyd_o, details_o = compute_pyd_from_triangle(tri_o, report_year)
+        uw_o = tri_o.get("underwriting_years", [])
+        rows_o = tri_o.get("development_rows", [])
+        if uw_o and rows_o:
+            struct_o = _validate_triangle_structure(uw_o, rows_o, report_year)
+
+    # Sanity check: PYD from triangle should be reasonable relative to reserves
+    opening_g = result_gemini.get("opening_reserves_gbp_m")
+    opening_o = result_openai.get("opening_reserves_gbp_m")
+    opening = None
+    if opening_g and opening_o:
+        try:
+            opening = (float(opening_g) + float(opening_o)) / 2
+        except (ValueError, TypeError):
+            pass
+    elif opening_g:
+        try:
+            opening = float(opening_g)
+        except (ValueError, TypeError):
+            pass
+    elif opening_o:
+        try:
+            opening = float(opening_o)
+        except (ValueError, TypeError):
+            pass
+
+    def _passes_sanity(pyd_val, struct_score):
+        """PYD should not exceed 50% of opening reserves, and structure should be OK."""
+        if pyd_val is None:
+            return False
+        if struct_score < 0.5:
+            return False
+        if opening and opening > 0:
+            pyd_pct = abs(pyd_val) / opening * 100
+            if pyd_pct > 50:
+                return False
+        return True
+
+    sane_g = _passes_sanity(pyd_g, struct_g)
+    sane_o = _passes_sanity(pyd_o, struct_o)
+
+    # Case 1: Both have valid triangles
+    if pyd_g is not None and pyd_o is not None:
+        if abs(pyd_g - pyd_o) < 1.0:
+            # Both agree — high confidence, use the value
+            agreed_pyd = round((pyd_g + pyd_o) / 2, 3)
+            messages.append(f"  Triangle cross-check: BOTH AGREE (Gemini={pyd_g}, GPT={pyd_o}, "
+                           f"struct_g={struct_g:.2f}, struct_o={struct_o:.2f})")
+            # Apply to both models
+            for result, model_name, details in [
+                (result_gemini, gemini_name, details_g),
+                (result_openai, openai_name, details_o),
+            ]:
+                model_pyd = result.get("prior_year_development_gbp_m")
+                if model_pyd is None:
+                    r, msg = _apply_triangle_pyd(result, agreed_pyd, model_name, details, "FILL from agreed triangles")
+                    if model_name == gemini_name:
+                        result_gemini = r
+                    else:
+                        result_openai = r
+                    messages.append(msg)
+                else:
+                    try:
+                        if abs(float(model_pyd) - agreed_pyd) < 0.5:
+                            messages.append(f"  [{model_name}] Triangle verification: CONFIRMED "
+                                          f"(model={model_pyd}, code={agreed_pyd})")
+                        else:
+                            r, msg = _apply_triangle_pyd(result, agreed_pyd, model_name, details,
+                                                        "OVERRIDE from agreed triangles")
+                            if model_name == gemini_name:
+                                result_gemini = r
+                            else:
+                                result_openai = r
+                            messages.append(msg)
+                    except (ValueError, TypeError):
+                        pass
+            return result_gemini, result_openai, messages
+
+        # Triangles disagree — use the one with better structure
+        messages.append(f"  Triangle cross-check: DISAGREE (Gemini={pyd_g} struct={struct_g:.2f}, "
+                       f"GPT={pyd_o} struct={struct_o:.2f})")
+        if sane_g and not sane_o:
+            best_pyd, best_details, best_name = pyd_g, details_g, "Gemini triangle"
+        elif sane_o and not sane_g:
+            best_pyd, best_details, best_name = pyd_o, details_o, "GPT triangle"
+        elif struct_g > struct_o + 0.1:
+            best_pyd, best_details, best_name = pyd_g, details_g, "Gemini triangle (better structure)"
+        elif struct_o > struct_g + 0.1:
+            best_pyd, best_details, best_name = pyd_o, details_o, "GPT triangle (better structure)"
+        else:
+            # Both have similar structure but disagree — don't trust either
+            messages.append("  Triangle cross-check: SKIPPED — triangles disagree and "
+                          "neither has clearly better structure. Keeping model values.")
+            return result_gemini, result_openai, messages
+
+        messages.append(f"  Using {best_name}: PYD={best_pyd}")
+        for result, model_name, details in [
+            (result_gemini, gemini_name, best_details),
+            (result_openai, openai_name, best_details),
+        ]:
+            model_pyd = result.get("prior_year_development_gbp_m")
+            if model_pyd is None:
+                r, msg = _apply_triangle_pyd(result, best_pyd, model_name, details,
+                                            f"FILL from {best_name}")
+                if model_name == gemini_name:
+                    result_gemini = r
+                else:
+                    result_openai = r
+                messages.append(msg)
+            else:
+                try:
+                    if abs(float(model_pyd) - best_pyd) >= 0.5:
+                        r, msg = _apply_triangle_pyd(result, best_pyd, model_name, details,
+                                                    f"OVERRIDE from {best_name}")
+                        if model_name == gemini_name:
+                            result_gemini = r
+                        else:
+                            result_openai = r
+                        messages.append(msg)
+                except (ValueError, TypeError):
+                    pass
+        return result_gemini, result_openai, messages
+
+    # Case 2: Only one model has a triangle
+    single_pyd = pyd_g if pyd_g is not None else pyd_o
+    single_details = details_g if pyd_g is not None else details_o
+    single_struct = struct_g if pyd_g is not None else struct_o
+    single_sane = sane_g if pyd_g is not None else sane_o
+    source_name = gemini_name if pyd_g is not None else openai_name
+
+    if not single_sane:
+        messages.append(f"  [{source_name}] Triangle verification: REJECTED — "
+                       f"computed PYD={single_pyd} fails sanity check "
+                       f"(struct={single_struct:.2f}, "
+                       f"opening={opening})\n{single_details}")
+        return result_gemini, result_openai, messages
+
+    # Single triangle passes sanity — apply to both models
+    messages.append(f"  [{source_name}] Triangle: PYD={single_pyd}, struct={single_struct:.2f}")
+    for result, model_name in [
+        (result_gemini, gemini_name),
+        (result_openai, openai_name),
+    ]:
+        model_pyd = result.get("prior_year_development_gbp_m")
+        if model_pyd is None:
+            r, msg = _apply_triangle_pyd(result, single_pyd, model_name, single_details,
+                                        f"FILL from {source_name} triangle")
+            if model_name == gemini_name:
+                result_gemini = r
+            else:
+                result_openai = r
+            messages.append(msg)
+        else:
+            try:
+                if abs(float(model_pyd) - single_pyd) < 0.5:
+                    messages.append(f"  [{model_name}] Triangle verification: CONFIRMED "
+                                  f"(model={model_pyd}, code={single_pyd})")
+                elif abs(float(model_pyd) - single_pyd) >= 0.5:
+                    r, msg = _apply_triangle_pyd(result, single_pyd, model_name, single_details,
+                                                f"OVERRIDE from {source_name} triangle")
+                    if model_name == gemini_name:
+                        result_gemini = r
+                    else:
+                        result_openai = r
+                    messages.append(msg)
+            except (ValueError, TypeError):
+                pass
+
+    return result_gemini, result_openai, messages
 
 
 # ---------------------------------------------------------------------------
@@ -1162,13 +1384,12 @@ def process_one_report(report_path):
     )
 
     # Triangle verification — cross-check LLM's PYD against code-computed value
-    # Only overrides when the triangle data is available AND the arithmetic disagrees
-    result_gemini, tri_msg_g = verify_pyd_with_triangle(result_gemini, GEMINI_MODEL, report_year)
-    result_openai, tri_msg_o = verify_pyd_with_triangle(result_openai, OPENAI_MODEL, report_year)
-    if tri_msg_g:
-        print(tri_msg_g)
-    if tri_msg_o:
-        print(tri_msg_o)
+    # Cross-validates between models; applies sanity checks before overriding
+    result_gemini, result_openai, tri_messages = verify_triangles(
+        result_gemini, result_openai, GEMINI_MODEL, OPENAI_MODEL, report_year
+    )
+    for msg in tri_messages:
+        print(msg)
 
     # Compare
     discrepancies = compare_results(result_gemini, result_openai, GEMINI_MODEL, OPENAI_MODEL)
