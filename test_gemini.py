@@ -22,12 +22,35 @@ import json
 import base64
 import hashlib
 import tempfile
+import zipfile
 from datetime import datetime, timezone
 from pathlib import Path
 from dotenv import load_dotenv
 from google import genai
 from google.genai.types import GenerateContentConfig
 from openai import OpenAI
+
+try:
+    import openpyxl
+    HAS_OPENPYXL = True
+except ImportError:
+    HAS_OPENPYXL = False
+
+try:
+    from adobe.pdfservices.operation.auth.service_principal_credentials import ServicePrincipalCredentials
+    from adobe.pdfservices.operation.pdf_services import PDFServices
+    from adobe.pdfservices.operation.pdf_services_media_type import PDFServicesMediaType
+    from adobe.pdfservices.operation.pdfjobs.jobs.extract_pdf_job import ExtractPDFJob
+    from adobe.pdfservices.operation.pdfjobs.params.extract_pdf.extract_pdf_params import ExtractPDFParams
+    from adobe.pdfservices.operation.pdfjobs.params.extract_pdf.extract_element_type import ExtractElementType
+    from adobe.pdfservices.operation.pdfjobs.params.extract_pdf.extract_renditions_element_type import ExtractRenditionsElementType
+    from adobe.pdfservices.operation.pdfjobs.params.extract_pdf.table_structure_type import TableStructureType
+    from adobe.pdfservices.operation.pdfjobs.result.extract_pdf_result import ExtractPDFResult
+    from adobe.pdfservices.operation.io.cloud_asset import CloudAsset
+    from adobe.pdfservices.operation.io.stream_asset import StreamAsset
+    HAS_ADOBE = True
+except ImportError:
+    HAS_ADOBE = False
 
 try:
     import fitz  # PyMuPDF
@@ -550,6 +573,704 @@ def extract_with_openai(report_path, file_bytes, content_hash, syndicate_num, re
 # ---------------------------------------------------------------------------
 # Page-level extraction — OCR + targeted page search (RAG-lite)
 # ---------------------------------------------------------------------------
+# Adobe PDF Extract — deterministic table extraction
+# ---------------------------------------------------------------------------
+
+ADOBE_OUTPUT_DIR = Path("pdf_extraction/adobe_output")
+
+
+def _clean_adobe_cell(val):
+    """Clean an Adobe-extracted cell value: strip _x000D_, commas, whitespace.
+
+    Handles accounting-style parenthesized negatives: (26.2) → -26.2
+    """
+    if val is None:
+        return None
+    s = str(val).replace("_x000D_", "").replace("\r", "").strip()
+    if not s:
+        return None
+    # Remove thousands commas and spaces
+    s_clean = s.replace(",", "").replace(" ", "")
+    # Handle accounting-style parenthesized negatives: (123.4) → -123.4
+    m = re.match(r'^\(([0-9.]+)\)$', s_clean)
+    if m:
+        try:
+            return -float(m.group(1))
+        except ValueError:
+            pass
+    try:
+        return float(s_clean)
+    except ValueError:
+        return s  # Return as string if not numeric
+
+
+def adobe_extract_pdf(pdf_path, output_dir=ADOBE_OUTPUT_DIR):
+    """Run Adobe PDF Extract API on a PDF. Returns path to output directory.
+
+    Caches results — if output already exists, skips extraction.
+    Full Adobe output (JSON, tables, figures) is retained as audit trail.
+    """
+    report_name = pdf_path.stem
+    report_out = output_dir / report_name
+
+    # Check cache
+    if (report_out / "structuredData.json").exists():
+        return report_out
+
+    if not HAS_ADOBE:
+        return None
+
+    client_id = os.getenv("PDF_SERVICES_CLIENT_ID")
+    client_secret = os.getenv("PDF_SERVICES_CLIENT_SECRET")
+    if not client_id or not client_secret:
+        return None
+
+    try:
+        credentials = ServicePrincipalCredentials(
+            client_id=client_id, client_secret=client_secret,
+        )
+        pdf_services = PDFServices(credentials=credentials)
+
+        with open(pdf_path, "rb") as f:
+            input_stream = f.read()
+
+        input_asset = pdf_services.upload(
+            input_stream=input_stream, mime_type=PDFServicesMediaType.PDF,
+        )
+
+        extract_params = ExtractPDFParams(
+            elements_to_extract=[ExtractElementType.TEXT, ExtractElementType.TABLES],
+            elements_to_extract_renditions=[
+                ExtractRenditionsElementType.TABLES,
+                ExtractRenditionsElementType.FIGURES,
+            ],
+            table_structure_type=TableStructureType.XLSX,
+        )
+
+        extract_job = ExtractPDFJob(
+            input_asset=input_asset, extract_pdf_params=extract_params,
+        )
+        location = pdf_services.submit(extract_job)
+        response = pdf_services.get_job_result(location, ExtractPDFResult)
+        result_asset: CloudAsset = response.get_result().get_resource()
+        stream_asset: StreamAsset = pdf_services.get_content(result_asset)
+
+        report_out.mkdir(parents=True, exist_ok=True)
+        zip_path = report_out / "extractResult.zip"
+        with open(zip_path, "wb") as f:
+            f.write(stream_asset.get_input_stream())
+
+        with zipfile.ZipFile(zip_path, "r") as zf:
+            zf.extractall(report_out)
+        zip_path.unlink()
+
+        return report_out
+
+    except Exception as e:
+        print(f"  [Adobe] Extract failed: {e}")
+        return None
+
+
+def find_triangle_in_adobe_output(adobe_dir, report_year):
+    """Search Adobe output for the GROSS claims development triangle.
+
+    Reads structuredData.json to find table elements mentioning 'claims development',
+    then parses the corresponding xlsx files to find the triangle.
+
+    Returns (triangle_dict, details_str) or (None, reason).
+    """
+    if not adobe_dir or not HAS_OPENPYXL:
+        return None, "no Adobe output or openpyxl not installed"
+
+    json_path = adobe_dir / "structuredData.json"
+    if not json_path.exists():
+        return None, "no structuredData.json"
+
+    with open(json_path, "r") as f:
+        data = json.load(f)
+
+    elements = data.get("elements", [])
+
+    # Find pages that mention claims development
+    triangle_pages = set()
+    for e in elements:
+        text = (e.get("Text") or "").lower()
+        if ("claims development" in text or "cumulative claims" in text
+                or "analysis of claims" in text):
+            page = e.get("Page")
+            if page is not None:
+                triangle_pages.add(page)
+
+    if not triangle_pages:
+        return None, "no claims development text found in Adobe output"
+
+    # Find table elements on those pages with xlsx files
+    candidate_xlsx = []
+    for e in elements:
+        path = e.get("Path", "")
+        if "/Table" in path and "/TR" not in path and "/TD" not in path and "/TH" not in path:
+            page = e.get("Page")
+            if page in triangle_pages:
+                fps = e.get("filePaths", [])
+                xlsx_files = [fp for fp in fps if fp.endswith(".xlsx")]
+                if xlsx_files:
+                    candidate_xlsx.append((page, xlsx_files[0]))
+
+    if not candidate_xlsx:
+        return None, "no table xlsx files on claims development pages"
+
+    # Try each candidate xlsx — look for triangle structure
+    for page, xlsx_rel in candidate_xlsx:
+        xlsx_path = adobe_dir / xlsx_rel
+        if not xlsx_path.exists():
+            continue
+
+        result = _parse_triangle_xlsx(xlsx_path, report_year)
+        if result is not None:
+            tri_data, details = result
+            return tri_data, details
+
+    return None, "no valid triangle found in candidate xlsx files"
+
+
+def _parse_triangle_xlsx(xlsx_path, report_year):
+    """Parse a single xlsx file and check if it's a claims development triangle.
+
+    Returns (triangle_dict, details_str) or None if not a triangle.
+    """
+    wb = openpyxl.load_workbook(xlsx_path, read_only=True, data_only=True)
+    ws = wb.active
+    rows_raw = list(ws.iter_rows(values_only=True))
+    wb.close()
+
+    if len(rows_raw) < 3:
+        return None
+
+    # Parse header row — look for underwriting years
+    header = [_clean_adobe_cell(c) for c in rows_raw[0]]
+    uw_years = []
+    uw_col_indices = []
+    for i, val in enumerate(header):
+        if val is None:
+            continue
+        # Try to parse as year
+        try:
+            year = int(float(val)) if isinstance(val, (int, float)) else None
+            if year is None:
+                # Try extracting year from string like "2011 "
+                m = re.search(r'\b(19|20)\d{2}\b', str(val))
+                if m:
+                    year = int(m.group())
+        except (ValueError, TypeError):
+            m = re.search(r'\b(19|20)\d{2}\b', str(val))
+            year = int(m.group()) if m else None
+
+        if year and 1990 <= year <= 2030:
+            # Skip "X and prior" columns
+            val_str = str(header[i]) if not isinstance(header[i], (int, float)) else ""
+            if "prior" in val_str.lower() or "&" in val_str:
+                continue
+            uw_years.append(year)
+            uw_col_indices.append(i)
+
+    if len(uw_years) < 3:
+        return None
+
+    # Check most recent year matches report year
+    if max(uw_years) != report_year:
+        return None
+
+    # Parse development rows — only keep rows with development period labels
+    # (e.g. "At end of underwriting year", "One year later", "Two years later")
+    # Skip: summary rows, payments, provisions, blank rows, year labels
+    skip_labels = [
+        "current estimate", "cumulative payment", "cumulative claim",
+        "outstanding", "provision", "gross outstanding", "net outstanding",
+    ]
+    # Only keep rows whose label looks like a development period
+    dev_period_patterns = [
+        r"at\s+end",           # "At end of underwriting year"
+        r"year\s+later",       # "One year later", "Two years later"
+        r"years?\s+later",     # variant
+        r"^\d+\s+year",        # "1 year later"
+        r"^(one|two|three|four|five|six|seven|eight|nine|ten)\b",  # word numbers
+    ]
+    dev_rows = []
+    for row_raw in rows_raw[1:]:
+        label = _clean_adobe_cell(row_raw[0])
+        if label is None:
+            continue
+        label_lower = str(label).lower().strip()
+
+        # Skip obvious non-development rows
+        if any(s in label_lower for s in skip_labels):
+            continue
+
+        # Only include rows that look like development periods
+        is_dev_row = any(re.search(p, label_lower) for p in dev_period_patterns)
+        if not is_dev_row:
+            continue
+
+        # Extract values for UW year columns
+        values = []
+        for col_idx in uw_col_indices:
+            if col_idx < len(row_raw):
+                val = _clean_adobe_cell(row_raw[col_idx])
+                values.append(val if isinstance(val, (int, float)) else None)
+            else:
+                values.append(None)
+        dev_rows.append(values)
+
+    if len(dev_rows) < 2:
+        return None
+
+    # Detect currency and units from header
+    header_text = str(rows_raw[0][0] or "").replace("_x000D_", "").replace("\r", "")
+    header_lower = header_text.lower()
+
+    currency = "USD"
+    if "gbp" in header_lower or chr(163) in header_text:
+        currency = "GBP"
+    elif "eur" in header_lower or chr(8364) in header_text:
+        currency = "EUR"
+
+    # Detect units: $'000, £000, $m, £'000, etc.
+    # Note: reports use both plain apostrophe (') and right single quote (\u2019)
+    units = "millions"
+    if re.search(r"[£$\u00a3]['\u2018\u2019]?000", header_lower) or "'000" in header_lower or "\u2019000" in header_lower:
+        units = "thousands"
+
+    # Build triangle dict
+    tri_data = {
+        "type": "gross",
+        "currency": currency,
+        "units": units,
+        "underwriting_years": uw_years,
+        "development_rows": dev_rows,
+    }
+
+    return tri_data, f"Adobe xlsx triangle: {len(uw_years)} UW years, {len(dev_rows)} dev rows"
+
+
+def find_lob_in_adobe_output(adobe_dir, report_year):
+    """Search Adobe output for the segmental analysis / LOB breakdown table.
+
+    Looks for tables containing "analysis of underwriting result" or
+    "segmental analysis" with the current report year.  Extracts gross
+    premiums written per LOB and gross claims incurred per LOB.
+
+    Returns dict with keys:
+        gross_premium_mix: list of {line_of_business, amount_gbp_m, percentage_of_total}
+        gross_premiums_written_gbp_m: total GWP
+        claims_incurred_by_lob: list of {line_of_business, amount_gbp_m}
+        currency: detected currency
+        method: "adobe"
+    or None if not found.
+    """
+    if not adobe_dir or not HAS_OPENPYXL:
+        return None
+
+    json_path = adobe_dir / "structuredData.json"
+    if not json_path.exists():
+        return None
+
+    with open(json_path, "r") as f:
+        data = json.load(f)
+
+    elements = data.get("elements", [])
+
+    # Find pages mentioning segmental analysis or underwriting result
+    lob_pages = set()
+    for e in elements:
+        text = (e.get("Text") or "").lower()
+        if any(kw in text for kw in [
+            "analysis of underwriting result",
+            "segmental analysis",
+            "class of business",
+            "analysis of net premiums",
+        ]):
+            page = e.get("Page")
+            if page is not None:
+                lob_pages.add(page)
+
+    if not lob_pages:
+        return None
+
+    # Find table xlsx files on those pages
+    candidate_xlsx = []
+    for e in elements:
+        path = e.get("Path", "")
+        if "/Table" in path and "/TR" not in path and "/TD" not in path and "/TH" not in path:
+            page = e.get("Page")
+            if page in lob_pages:
+                fps = e.get("filePaths", [])
+                xlsx_files = [fp for fp in fps if fp.endswith(".xlsx")]
+                if xlsx_files:
+                    candidate_xlsx.append((page, xlsx_files[0]))
+
+    if not candidate_xlsx:
+        return None
+
+    # Try each candidate — pick the one with the most LOB rows (prefer full segmental)
+    best_result = None
+    best_lob_count = 0
+    for page, xlsx_rel in candidate_xlsx:
+        xlsx_path = adobe_dir / xlsx_rel
+        if not xlsx_path.exists():
+            continue
+
+        result = _parse_lob_xlsx(xlsx_path, report_year)
+        if result is not None:
+            n_lobs = len(result["gross_premium_mix"])
+            if n_lobs > best_lob_count:
+                best_lob_count = n_lobs
+                best_result = result
+
+    return best_result
+
+
+def _parse_lob_xlsx(xlsx_path, report_year):
+    """Parse a segmental analysis xlsx for LOB breakdown.
+
+    Handles format variations across syndicates:
+    - Different column headers: "Gross written premiums", "Gross Premiums Written",
+      "Ceded Balance" vs "Reinsurance Balance", etc.
+    - Different currencies: GBP £000, USD $000, USD full integers, EUR
+    - Different units: thousands ($000, £000, £'000) vs millions ($m) vs full integers
+    - Different LOB names: statutory classes with syndicate-specific sub-divisions
+    - Section headers like "Direct Insurance:" with no numeric values
+    - Comparative year tables on the same page
+
+    Returns dict or None.
+    """
+    wb = openpyxl.load_workbook(xlsx_path, read_only=True, data_only=True)
+    ws = wb.active
+    rows_raw = list(ws.iter_rows(values_only=True))
+    wb.close()
+
+    if len(rows_raw) < 3:
+        return None
+
+    # --- Step 1: Detect currency and units from header/title text ---
+    header_text = " ".join(
+        str(c or "").replace("_x000D_", "").replace("\r", "")
+        for row in rows_raw[:2] for c in row
+    ).lower()
+
+    currency = "GBP"  # default
+    if "us$" in header_text or "usd" in header_text or "$" in header_text:
+        currency = "USD"
+    elif "eur" in header_text or chr(8364) in header_text:
+        currency = "EUR"
+
+    # Detect units: thousands, millions, or full integers
+    # Look for explicit unit markers: £'000, $000, £000, $m, £m, etc.
+    units_divisor = 1.0  # default: assume millions
+    if re.search(r"[£$]'?000", header_text):
+        units_divisor = 1000.0  # values are in thousands → divide by 1000 for millions
+    elif "$m" in header_text or "m " in header_text:
+        units_divisor = 1.0  # already in millions
+    # else: could be full integers — detect later from magnitude
+
+    # --- Step 2: Fuzzy column matching from header row ---
+    header = [_clean_adobe_cell(c) for c in rows_raw[0]]
+
+    # Match columns by keyword patterns (order of preference)
+    gwp_patterns = [
+        lambda s: "written" in s and "premium" in s,       # "Gross written premiums"
+        lambda s: "written" in s and "gross" in s,          # "Gross Written Premiums"
+        lambda s: "gross" in s and "premium" in s and "earned" not in s,  # "Gross Premiums" but not earned
+    ]
+    earned_patterns = [
+        lambda s: "earned" in s and "premium" in s,         # "Gross premiums earned"
+    ]
+    claims_patterns = [
+        lambda s: "claim" in s and ("gross" in s or "incurred" in s),  # "Gross claims incurred"
+        lambda s: "claim" in s,                              # "Claims incurred"
+    ]
+
+    def _find_col(patterns, header_vals):
+        """Find column index matching first successful pattern."""
+        for pat in patterns:
+            for i, val in enumerate(header_vals):
+                if val is not None and pat(str(val).lower()):
+                    return i
+        return None
+
+    gwp_col = _find_col(gwp_patterns, header)
+    earned_col = _find_col(earned_patterns, header)
+    claims_col = _find_col(claims_patterns, header)
+
+    # Prefer written premiums; fall back to earned
+    if gwp_col is None:
+        gwp_col = earned_col
+
+    # --- Step 3: Fallback — if no header keywords matched, try positional ---
+    if gwp_col is None and len(header) >= 5:
+        lob_keywords = [
+            "accident", "motor", "marine", "fire", "property", "liability",
+            "miscellaneous", "reinsurance", "energy", "casualty", "aviation",
+            "pecuniary", "credit", "suretyship", "specialty", "transport",
+        ]
+        has_lob_rows = any(
+            any(kw in str(row[0] or "").lower() for kw in lob_keywords)
+            for row in rows_raw[1:8]
+        )
+        if has_lob_rows:
+            gwp_col = 1
+            claims_col = 3 if len(header) >= 4 else None
+
+    if gwp_col is None:
+        return None
+
+    # --- Step 4: Check this table is for the report year (not a prior-year comparative) ---
+    title_text = " ".join(str(c or "") for c in rows_raw[0])
+    # If the title mentions a DIFFERENT year, skip this table
+    for yr in range(report_year - 10, report_year + 2):
+        if str(yr) in title_text:
+            if yr != report_year:
+                return None  # This is a comparative table for a different year
+            break  # Confirmed it's the report year
+
+    # --- Step 5: Parse LOB rows ---
+    # Labels to skip: section headers (no values) and subtotals/totals
+    section_headers_lower = {
+        "direct insurance", "direct insurance:", "direct",
+        "reinsurance acceptances", "reinsurance acceptances:",
+    }
+    total_labels_lower = {"total", "sub-total", "subtotal", "grand total"}
+
+    lob_entries = []
+    claims_entries = []
+    total_gwp = 0.0
+
+    for row in rows_raw[1:]:
+        label = _clean_adobe_cell(row[0])
+        if label is None:
+            continue
+        label_str = str(label).strip()
+        label_lower = label_str.lower().rstrip(":")
+
+        # Skip section headers (rows with a label but no numeric values)
+        if label_lower in section_headers_lower:
+            continue
+
+        # Detect subtotal rows ("Direct Insurance" subtotal with values)
+        is_subtotal = label_lower in total_labels_lower or (
+            label_lower.startswith("direct insurance") and not label_lower.startswith("direct insurance:")
+        )
+
+        if is_subtotal:
+            # Don't add as LOB, but capture total GWP from "Total" row
+            if "total" in label_lower and gwp_col < len(row):
+                val = _clean_adobe_cell(row[gwp_col])
+                if isinstance(val, (int, float)):
+                    total_gwp = abs(val)
+            continue
+
+        # Get GWP value
+        gwp_val = None
+        if gwp_col < len(row):
+            val = _clean_adobe_cell(row[gwp_col])
+            if isinstance(val, (int, float)):
+                gwp_val = abs(val)
+
+        # Get claims value
+        claims_val = None
+        if claims_col is not None and claims_col < len(row):
+            val = _clean_adobe_cell(row[claims_col])
+            if isinstance(val, (int, float)):
+                claims_val = val
+
+        if gwp_val is not None and gwp_val > 0:
+            lob_entries.append({
+                "line_of_business": label_str,
+                "amount_raw": gwp_val,
+            })
+        elif claims_val is not None:
+            # LOBs with near-zero GWP but active claims (e.g. Motor run-off)
+            lob_entries.append({
+                "line_of_business": label_str,
+                "amount_raw": 0.0,
+            })
+
+        if claims_val is not None:
+            claims_entries.append({
+                "line_of_business": label_str,
+                "amount_raw": claims_val,
+            })
+
+    if not lob_entries:
+        return None
+
+    # --- Step 6: Auto-detect units if not determined from header ---
+    if units_divisor == 1.0 and total_gwp == 0:
+        total_gwp = sum(e["amount_raw"] for e in lob_entries)
+
+    if total_gwp == 0 and lob_entries:
+        total_gwp = sum(e["amount_raw"] for e in lob_entries)
+
+    # Heuristic: if total GWP > 100,000 it's probably in thousands (£000/$000)
+    # if total GWP > 100,000,000 it's probably in full currency units
+    if total_gwp > 100_000_000:
+        units_divisor = 1_000_000.0  # full integers → millions
+    elif total_gwp > 100_000:
+        units_divisor = 1_000.0  # thousands → millions
+
+    # Apply units conversion and compute percentages
+    total_gwp_m = round(total_gwp / units_divisor, 1) if units_divisor != 1.0 else round(total_gwp, 1)
+
+    for e in lob_entries:
+        raw = e.pop("amount_raw")
+        e["amount_gbp_m"] = round(raw / units_divisor, 1) if units_divisor != 1.0 else round(raw, 1)
+        e["percentage_of_total"] = round(e["amount_gbp_m"] / total_gwp_m * 100, 1) if total_gwp_m > 0 else 0
+
+    for e in claims_entries:
+        raw = e.pop("amount_raw")
+        e["amount_gbp_m"] = round(raw / units_divisor, 1) if units_divisor != 1.0 else round(raw, 1)
+
+    return {
+        "gross_premium_mix": lob_entries,
+        "gross_premiums_written_gbp_m": total_gwp_m,
+        "claims_incurred_by_lob": claims_entries if claims_entries else None,
+        "currency": currency,
+        "method": "adobe",
+    }
+
+
+def find_provisions_movement_in_adobe(adobe_dir, report_year):
+    """Search Adobe output for the 'movement in claims provisions' table.
+
+    Extracts gross prior year development from the note that shows:
+    - Claims: prior underwriting years (gross / RI share / net)
+
+    Returns dict with keys:
+        gross_prior_year_claims: float (gross claims on prior UW years)
+        ri_share_prior_year: float (reinsurer's share)
+        net_prior_year_claims: float (net = gross - RI)
+    or None if not found.
+    """
+    if not adobe_dir or not HAS_OPENPYXL:
+        return None
+
+    json_path = adobe_dir / "structuredData.json"
+    if not json_path.exists():
+        return None
+
+    with open(json_path, "r") as f:
+        data = json.load(f)
+
+    elements = data.get("elements", [])
+
+    # Find pages mentioning claims provisions movement
+    provision_pages = set()
+    for e in elements:
+        text = (e.get("Text") or "").lower()
+        if any(kw in text for kw in [
+            "movement in claims",
+            "movement in provision",
+            "claims outstanding",
+            "provision for claims",
+        ]):
+            page = e.get("Page")
+            if page is not None:
+                provision_pages.add(page)
+
+    if not provision_pages:
+        return None
+
+    # Find table xlsx files on those pages
+    candidate_xlsx = []
+    for e in elements:
+        path = e.get("Path", "")
+        if "/Table" in path and "/TR" not in path and "/TD" not in path and "/TH" not in path:
+            page = e.get("Page")
+            if page in provision_pages:
+                fps = e.get("filePaths", [])
+                xlsx_files = [fp for fp in fps if fp.endswith(".xlsx")]
+                if xlsx_files:
+                    candidate_xlsx.append((page, xlsx_files[0]))
+
+    for page, xlsx_rel in candidate_xlsx:
+        xlsx_path = adobe_dir / xlsx_rel
+        if not xlsx_path.exists():
+            continue
+
+        result = _parse_provisions_xlsx(xlsx_path, report_year)
+        if result is not None:
+            return result
+
+    return None
+
+
+def _parse_provisions_xlsx(xlsx_path, report_year):
+    """Parse a claims provisions movement xlsx.
+
+    Looks for a row containing 'prior' (prior underwriting years claims).
+    Handles varying column headers and unit conventions across syndicates.
+    Returns dict or None.
+    """
+    wb = openpyxl.load_workbook(xlsx_path, read_only=True, data_only=True)
+    ws = wb.active
+    rows_raw = list(ws.iter_rows(values_only=True))
+    wb.close()
+
+    if len(rows_raw) < 3:
+        return None
+
+    # Detect units from header text
+    header_text = " ".join(
+        str(c or "").replace("_x000D_", "").replace("\r", "")
+        for c in rows_raw[0]
+    ).lower()
+    units_divisor = 1.0
+    if "'000" in header_text or (
+        "000" in header_text and "$m" not in header_text and "m " not in header_text
+    ):
+        units_divisor = 1000.0
+    # else assume millions or detect from magnitude later
+
+    # Detect column layout from header using fuzzy matching
+    header = rows_raw[0] if rows_raw else []
+    gross_col = ri_col = net_col = None
+    for i, cell in enumerate(header):
+        h = str(cell or "").lower()
+        if "gross" in h or "insurance liabilities" in h:
+            gross_col = i
+        elif "reinsur" in h or "share" in h or "ceded" in h:
+            ri_col = i
+        elif "net" in h:
+            net_col = i
+
+    # Fallback: assume positional (col1=gross, col2=RI, col3=net)
+    if gross_col is None and len(header) >= 4:
+        gross_col, ri_col, net_col = 1, 2, 3
+
+    # Look for rows mentioning "prior" year claims
+    for row in rows_raw:
+        label = str(row[0] or "").lower()
+        if "prior" in label and ("claim" in label or "underwriting" in label or "year" in label):
+            result = {}
+            for key, col in [
+                ("gross_prior_year_claims", gross_col),
+                ("ri_share_prior_year", ri_col),
+                ("net_prior_year_claims", net_col),
+            ]:
+                if col is not None and col < len(row):
+                    val = _clean_adobe_cell(row[col])
+                    if isinstance(val, (int, float)):
+                        converted = val / units_divisor if units_divisor != 1.0 else val
+                        result[key] = round(converted, 1)
+
+            if result:
+                return result
+
+    return None
+
+
+# ---------------------------------------------------------------------------
+# Page-level extraction — OCR + targeted page search (RAG-lite)
+# ---------------------------------------------------------------------------
 
 # Patterns that indicate a claims development triangle page
 TRIANGLE_PATTERNS = [
@@ -813,68 +1534,110 @@ def extract_triangle_with_retry(pdf_path, page_num, report_year, max_retries=3):
 def extract_pyd_from_relevant_pages(pdf_path, report_year):
     """RAG-lite: find relevant pages, extract triangle or reserve narrative.
 
-    1. Extract text from PDF (PyMuPDF / pdfplumber / OCR)
-    2. Find pages with triangle tables or reserve movement text
-    3. For triangle pages: render as image, send to LLM, validate, retry up to 3x
-    4. For reserve pages: return the text for the main extraction to use
+    Priority order:
+    1. Adobe PDF Extract (deterministic xlsx tables) — best for scanned PDFs
+    2. OCR + LLM vision on individual pages — fallback if Adobe unavailable
+    3. Reserve movement text — for reports without triangles
 
     Returns dict:
         'triangle': computed triangle data (dict) or None
         'pyd': computed PYD from triangle (float) or None
         'pyd_details': details string
         'reserve_text': concatenated reserve movement text from relevant pages
-        'method': how text was extracted (pymupdf/pdfplumber/ocr)
+        'method': how triangle was extracted (adobe/ocr_vision/none)
         'cost': total cost of page-level extractions
     """
     result = {
         "triangle": None, "pyd": None, "pyd_details": None,
         "reserve_text": "", "method": "none", "cost": 0,
+        "adobe_lob": None, "adobe_provisions": None,
+        "first_year_syndicate": False,
     }
 
-    # Step 1: Extract text from PDF
-    pages, method = extract_text_from_pdf(pdf_path)
-    result["method"] = method
+    # Step 1: Try Adobe PDF Extract (deterministic, best quality)
+    adobe_dir = adobe_extract_pdf(pdf_path)
+    if adobe_dir:
+        tri_data, details = find_triangle_in_adobe_output(adobe_dir, report_year)
+        if tri_data:
+            # Check if this is a new syndicate (too few UW years for PYD)
+            uw_years = tri_data.get("underwriting_years", [])
+            usable_years = [y for y in uw_years if int(y) <= report_year - 2]
+            if len(uw_years) <= 2 or len(usable_years) == 0:
+                oldest = min(uw_years) if uw_years else "?"
+                print(f"  [Adobe] NEW SYNDICATE: triangle spans {oldest}-{report_year} "
+                      f"({len(uw_years)} UW years, {len(usable_years)} usable) "
+                      f"-- no prior year development possible")
+                result["first_year_syndicate"] = True
+                return result
 
-    if not pages:
-        print(f"  [RAG] No text extracted from PDF (method={method})")
-        return result
-
-    print(f"  [RAG] Extracted {len(pages)} pages via {method}, "
-          f"total {sum(len(t) for _, t in pages):,} chars")
-
-    # Step 2: Find relevant pages
-    relevant = find_relevant_pages(pages, report_year)
-    tri_pages = relevant["triangle_pages"]
-    res_pages = relevant["reserve_pages"]
-
-    print(f"  [RAG] Found {len(tri_pages)} triangle page(s), "
-          f"{len(res_pages)} reserve movement page(s)")
-
-    # Step 3: Extract triangle from page images
-    if tri_pages and HAS_PDF2IMAGE:
-        for page_num, page_text in tri_pages[:2]:  # Try up to 2 triangle pages
-            # Check if this page has "gross" in it (prefer gross over net)
-            if "net" in page_text.lower() and "gross" not in page_text.lower():
-                print(f"    [page {page_num}] Skipping — appears to be NET triangle")
-                continue
-
-            print(f"  [RAG] Extracting triangle from page {page_num}...")
-            tri_data, pyd, details, cost = extract_triangle_with_retry(
-                pdf_path, page_num, report_year
-            )
-            result["cost"] += cost
-
+            pyd, pyd_details = compute_pyd_from_triangle(tri_data, report_year)
             if pyd is not None:
+                print(f"  [Adobe] Triangle PYD: {pyd:+.3f}m ({details})")
                 result["triangle"] = tri_data
                 result["pyd"] = pyd
-                result["pyd_details"] = details
-                break
+                result["pyd_details"] = pyd_details
+                result["method"] = "adobe"
+        else:
+            print(f"  [Adobe] No triangle found: {details}")
 
-    # Step 4: Collect reserve movement text
-    if res_pages:
-        result["reserve_text"] = "\n---\n".join(
-            f"[Page {pn}]\n{text}" for pn, text in res_pages
-        )
+        # Step 1b: Extract LOB breakdown from segmental analysis
+        lob_data = find_lob_in_adobe_output(adobe_dir, report_year)
+        if lob_data:
+            n_lobs = len(lob_data["gross_premium_mix"])
+            total = lob_data["gross_premiums_written_gbp_m"]
+            print(f"  [Adobe] LOB breakdown: {n_lobs} classes, GWP={total}m ({lob_data['currency']})")
+            result["adobe_lob"] = lob_data
+
+        # Step 1c: Extract claims provisions movement (gross PYD from note)
+        prov_data = find_provisions_movement_in_adobe(adobe_dir, report_year)
+        if prov_data:
+            gross = prov_data.get("gross_prior_year_claims")
+            net = prov_data.get("net_prior_year_claims")
+            parts = []
+            if gross is not None:
+                parts.append(f"gross={gross:+.1f}m")
+            if net is not None:
+                parts.append(f"net={net:+.1f}m")
+            if parts:
+                print(f"  [Adobe] Provisions movement: {', '.join(parts)}")
+            result["adobe_provisions"] = prov_data
+
+    # Step 2: Extract text for page search (needed for reserve text and LLM fallback)
+    pages, text_method = extract_text_from_pdf(pdf_path)
+
+    if pages:
+        total_chars = sum(len(t) for _, t in pages)
+        print(f"  [RAG] {len(pages)} pages via {text_method} ({total_chars:,} chars)")
+
+        relevant = find_relevant_pages(pages, report_year)
+        tri_pages = relevant["triangle_pages"]
+        res_pages = relevant["reserve_pages"]
+
+        # Step 3: If Adobe didn't find a triangle, try LLM vision on triangle pages
+        if result["pyd"] is None and tri_pages and HAS_PDF2IMAGE:
+            print(f"  [RAG] {len(tri_pages)} triangle page(s) found, trying LLM vision...")
+            for page_num, page_text in tri_pages[:2]:
+                if "net" in page_text.lower() and "gross" not in page_text.lower():
+                    continue
+                tri_data, pyd, details, cost = extract_triangle_with_retry(
+                    pdf_path, page_num, report_year
+                )
+                result["cost"] += cost
+                if pyd is not None:
+                    print(f"  [RAG] LLM vision triangle PYD: {pyd:+.3f}m")
+                    result["triangle"] = tri_data
+                    result["pyd"] = pyd
+                    result["pyd_details"] = details
+                    result["method"] = "ocr_vision"
+                    break
+
+        # Step 4: Collect reserve movement text
+        if res_pages:
+            result["reserve_text"] = "\n---\n".join(
+                f"[Page {pn}]\n{text}" for pn, text in res_pages
+            )
+            if result["pyd"] is None:
+                print(f"  [RAG] No triangle, but found {len(res_pages)} reserve text page(s)")
 
     return result
 
@@ -1082,6 +1845,17 @@ def compute_pyd_from_triangle(triangle_data, report_year):
 
     # Convert units
     units = triangle_data.get("units", "millions")
+
+    # Auto-detect: if units claim "millions" but values are clearly in thousands
+    # (typical triangle values in millions are 10-5000; in thousands they're 10,000-5,000,000)
+    if units == "millions":
+        # Check magnitude of the first non-null diagonal value
+        sample_vals = [rows[0][c] for c in range(min(3, n_cols))
+                       if rows[0][c] is not None and isinstance(rows[0][c], (int, float))]
+        if sample_vals and min(abs(v) for v in sample_vals) > 50_000:
+            units = "thousands"
+            details.append(f"  (auto-detected: values appear to be in thousands, not millions)")
+
     if units == "thousands":
         total_pyd = round(total_pyd / 1000, 3)
         details.append(f"  (converted from thousands to millions)")
@@ -1334,6 +2108,8 @@ SKIP_FIELDS = {
     "standardized_at", "standardization_model", "_extraction_meta",
     "_claims_triangle",
     "_rag_triangle",
+    "_adobe_lob",
+    "_adobe_provisions",
 }
 
 
@@ -1728,7 +2504,11 @@ def write_run_manifest(run_stats):
 
 
 def process_one_report(report_path):
-    """Process a single report with both models. Returns (output_data, passed, hard_failures)."""
+    """Process a single report with both models.
+
+    Returns (output_data, passed, discrepancies, hard_failures) or
+    None if the report should be skipped (e.g. first-year syndicate).
+    """
     syndicate_num, report_year = parse_report_filename(report_path)
 
     # Convert HTML to PDF if needed
@@ -1740,6 +2520,12 @@ def process_one_report(report_path):
         file_bytes = f.read()
     content_hash = hashlib.sha256(file_bytes).hexdigest()
 
+    # Early check: run RAG-lite first to detect first-year syndicates
+    # before spending money on LLM calls
+    rag_result = extract_pyd_from_relevant_pages(actual_path, report_year)
+    if rag_result.get("first_year_syndicate"):
+        return None  # Signal to caller: skip this report
+
     # Extract with both models (use converted PDF path but keep original as source)
     result_gemini = extract_with_gemini(
         actual_path, file_bytes, content_hash, syndicate_num, report_year
@@ -1748,10 +2534,8 @@ def process_one_report(report_path):
         actual_path, file_bytes, content_hash, syndicate_num, report_year
     )
 
-    # RAG-lite: page-level extraction for triangle and reserve narrative
-    # This runs OCR if needed, finds relevant pages, and extracts triangle
-    # data with retries. Much more reliable than full-PDF LLM extraction.
-    rag_result = extract_pyd_from_relevant_pages(actual_path, report_year)
+    # RAG-lite was already run above (before LLM calls) for early first-year detection.
+    # Use the cached result — no need to re-run.
     if rag_result["pyd"] is not None:
         # RAG found a valid triangle PYD — use it as ground truth
         rag_pyd = rag_result["pyd"]
@@ -1804,6 +2588,28 @@ def process_one_report(report_path):
         )
         for msg in tri_messages:
             print(msg)
+
+    # Apply Adobe LOB breakdown (deterministic override of LLM-extracted LOBs)
+    adobe_lob = rag_result.get("adobe_lob")
+    if adobe_lob:
+        for result, model_name in [
+            (result_gemini, GEMINI_MODEL),
+            (result_openai, OPENAI_MODEL),
+        ]:
+            result["gross_premium_mix"] = adobe_lob["gross_premium_mix"]
+            result["gross_premiums_written_gbp_m"] = adobe_lob["gross_premiums_written_gbp_m"]
+            result["gross_premium_confidence"] = 1.0
+            result["_adobe_lob"] = adobe_lob
+        print(f"  [Adobe] LOB breakdown applied to both models")
+
+    # Apply Adobe provisions movement as cross-check
+    adobe_prov = rag_result.get("adobe_provisions")
+    if adobe_prov:
+        for result, model_name in [
+            (result_gemini, GEMINI_MODEL),
+            (result_openai, OPENAI_MODEL),
+        ]:
+            result["_adobe_provisions"] = adobe_prov
 
     # Compare
     discrepancies = compare_results(result_gemini, result_openai, GEMINI_MODEL, OPENAI_MODEL)
@@ -1928,6 +2734,7 @@ if __name__ == "__main__":
     run_passed = 0
     run_failed = 0
     run_errored = 0
+    run_skipped_first_year = 0
 
     for i, report_path in enumerate(to_process, 1):
         syndicate_num, report_year = parse_report_filename(report_path)
@@ -1936,7 +2743,13 @@ if __name__ == "__main__":
         print(f"{'=' * 70}")
 
         try:
-            output_data, passed, discrepancies, hard_failures = process_one_report(report_path)
+            result = process_one_report(report_path)
+            if result is None:
+                # First-year syndicate — no prior year development possible
+                print(f"  SKIPPED: First/second-year syndicate — no prior year development data")
+                run_skipped_first_year += 1
+                continue
+            output_data, passed, discrepancies, hard_failures = result
         except Exception as e:
             print(f"  ERROR: {e}")
             print(f"  Skipping {report_path.name} and continuing...")
@@ -2195,6 +3008,7 @@ if __name__ == "__main__":
                                 "passed": run_passed,
                                 "failed": run_failed,
                                 "errored": run_errored,
+                                "skipped_first_year": run_skipped_first_year,
                                 "total_tokens": run_total_tokens,
                                 "total_cost": run_total_cost,
                                 "stopped_early": True,
@@ -2369,6 +3183,7 @@ if __name__ == "__main__":
                             "passed": run_passed,
                             "failed": run_failed,
                             "errored": run_errored,
+                            "skipped_first_year": run_skipped_first_year,
                             "total_tokens": run_total_tokens,
                             "total_cost": run_total_cost,
                             "stopped_early": True,
@@ -2506,6 +3321,7 @@ if __name__ == "__main__":
                             "passed": run_passed,
                             "failed": run_failed,
                             "errored": run_errored,
+                            "skipped_first_year": run_skipped_first_year,
                             "total_tokens": run_total_tokens,
                             "total_cost": run_total_cost,
                             "stopped_early": True,
@@ -2571,13 +3387,14 @@ if __name__ == "__main__":
     print(f"\n{'=' * 70}")
     print("RUN SUMMARY")
     print(f"{'=' * 70}")
-    print(f"  Processed:  {run_processed}")
-    print(f"  Passed:     {run_passed}")
-    print(f"  Failed:     {run_failed}")
-    print(f"  Errored:    {run_errored}")
-    print(f"  Remaining:  {len(to_process) - run_processed - run_errored}")
-    print(f"  Tokens:     {run_total_tokens:,}")
-    print(f"  Cost:       ${run_total_cost:.4f}")
+    print(f"  Processed:        {run_processed}")
+    print(f"  Passed:           {run_passed}")
+    print(f"  Failed:           {run_failed}")
+    print(f"  Errored:          {run_errored}")
+    print(f"  Skipped (1st yr): {run_skipped_first_year}")
+    print(f"  Remaining:        {len(to_process) - run_processed - run_errored - run_skipped_first_year}")
+    print(f"  Tokens:           {run_total_tokens:,}")
+    print(f"  Cost:             ${run_total_cost:.4f}")
 
     # Write run manifest
     write_run_manifest({
@@ -2587,6 +3404,7 @@ if __name__ == "__main__":
         "passed": run_passed,
         "failed": run_failed,
         "errored": run_errored,
+        "skipped_first_year": run_skipped_first_year,
         "total_tokens": run_total_tokens,
         "total_cost": run_total_cost,
     })
