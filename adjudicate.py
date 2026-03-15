@@ -65,13 +65,18 @@ def ask_human(prompt, valid_choices=None):
         print(f"    Invalid choice. Options: {', '.join(valid_choices)}")
 
 
-def present_adjudication(report_stem, field, gemini_val, gpt_val, adj_result, confidence, evidence, correct_model, reason):
+def present_adjudication(report_stem, field, gemini_val, gpt_val, adj_result, confidence, evidence, correct_model, reason, context_lines=None):
     """Present the adjudicator's finding and ask the human what to do.
+
+    Args:
+        context_lines: Optional list of strings showing supporting field values
+                       from both models (e.g. opening_reserves, pyd amounts).
 
     Returns one of:
         ("approve", correct_model)    -- accept adjudicator recommendation
         ("override", model_name)      -- use a specific model's value
         ("override_value", value)     -- use a custom value
+        ("exclude", reason)           -- exclude this report entirely
         ("stop", None)                -- halt the script
     """
     print()
@@ -80,9 +85,14 @@ def present_adjudication(report_stem, field, gemini_val, gpt_val, adj_result, co
     print(f"    {'~' * 60}")
     print(f"    Gemini says:      {gemini_val}")
     print(f"    GPT says:         {gpt_val}")
+    if context_lines:
+        print(f"    --- Supporting context (from both models) ---")
+        for line in context_lines:
+            print(f"    {line}")
+        print(f"    ---")
     print(f"    Adjudicator says: {adj_result}")
     print(f"    Confidence:       {confidence}")
-    print(f"    Evidence:         {evidence[:200]}")
+    print(f"    Evidence:         {evidence}")
     print(f"    Recommendation:   {correct_model} -- {reason}")
     print()
     print(f"    What would you like to do?")
@@ -90,10 +100,11 @@ def present_adjudication(report_stem, field, gemini_val, gpt_val, adj_result, co
     print(f"      [g] Override: use Gemini value")
     print(f"      [o] Override: use GPT value")
     print(f"      [v] Override: enter a custom value")
+    print(f"      [x] Exclude this report entirely")
     print(f"      [s] Stop script (to make substantive changes)")
     print()
 
-    choice = ask_human("    Your decision: ", ["a", "g", "o", "v", "s"])
+    choice = ask_human("    Your decision: ", ["a", "g", "o", "v", "x", "s"])
 
     if choice == "a":
         return ("approve", correct_model)
@@ -104,6 +115,9 @@ def present_adjudication(report_stem, field, gemini_val, gpt_val, adj_result, co
     elif choice == "v":
         custom = ask_human("    Enter custom value: ")
         return ("override_value", custom)
+    elif choice == "x":
+        reason = ask_human("    Reason for exclusion: ")
+        return ("exclude", reason)
     elif choice == "s":
         return ("stop", None)
 
@@ -215,6 +229,15 @@ def find_source_pdf(report_stem):
     return None
 
 
+CURRENCY_NOTE = (
+    "CURRENCY: Report all monetary amounts in the report's NATIVE currency "
+    "(GBP, USD, or EUR — whichever the financial statements use). "
+    "Do NOT convert to GBP. Do NOT return null just because the report uses USD or EUR. "
+    "The field name says 'gbp_m' but it accepts any currency — the 'currency' field "
+    "records which currency was used."
+)
+
+
 def build_verification_prompt(field, gemini_value, gpt_value, syndicate_num, report_year):
     """Build a targeted prompt to verify a specific disputed field."""
 
@@ -224,14 +247,32 @@ def build_verification_prompt(field, gemini_value, gpt_value, syndicate_num, rep
             f"Two LLMs disagree on the DIRECTION of prior year reserve development:\n"
             f"  - Model A says: {gemini_value}\n"
             f"  - Model B says: {gpt_value}\n\n"
-            f"Find the section discussing prior year reserve movement (usually in the "
-            f"'Movement in prior year's provision for claims outstanding' note, or in the "
-            f"Managing Agent's / Underwriter's Report). The key question:\n\n"
+            f"Find the section discussing prior year reserve movement. Look in THESE sources "
+            f"(in priority order):\n"
+            f"  1. The 'Movement in prior year's provision for claims outstanding' note\n"
+            f"  2. The Managing Agent's / Underwriter's Report narrative about prior year reserves\n"
+            f"  3. Year-of-account result breakdown: e.g. 'The result is a profit of £X, of which "
+            f"a loss of £Y is attributable to the {report_year} YOA, a profit of £Z is attributable "
+            f"to the {report_year - 1} YOA'. The non-current-year components ({report_year - 1} and "
+            f"prior) indicate prior year development direction.\n"
+            f"  4. Year of account closure language (e.g. 'profit for the closed year' or "
+            f"'improvement on forecast' = release; 'deterioration' = strengthening)\n\n"
             f"Did prior year reserves RELEASE (surplus -- reserves were more than needed) "
             f"or STRENGTHEN (deficit -- reserves were insufficient, additional provision needed)?\n\n"
+            f"If the report mentions 'mixed' or has BOTH releases and strengthenings across "
+            f"different lines of business, use 'mixed'.\n\n"
             f"IMPORTANT: If the report uses 'surplus/(deficit)' language:\n"
             f"  - Parenthesized numbers like (3.0) = deficit = STRENGTHENING\n"
             f"  - Unparenthesized numbers like 3.0 = surplus = RELEASE\n\n"
+            f"WRONG SOURCES (do NOT use these for determining prior year reserve direction):\n"
+            f"  - 'Claims incurred in prior underwriting years' from the P&L Technical Account "
+            f"(this is the net claims figure, not the reserve movement)\n"
+            f"  - 'Movement in provision' from Reserves Reconciliation (includes current + prior)\n"
+            f"  - Closing reserve balances (these are balance sheet figures, not movements)\n"
+            f"  - Current year loss ratios, catastrophe loss ratios, or combined ratios "
+            f"(these describe CURRENT year underwriting performance, NOT prior year reserves)\n"
+            f"  - Year-of-account PROFIT/LOSS results (e.g. 'a loss to capital providers of £17.7m') "
+            f"-- this is the overall profit result, not the reserve movement\n\n"
             f"Reply with ONLY valid JSON:\n"
             f'{{"field": "direction", "correct_value": "<release|strengthening|flat|mixed>", '
             f'"evidence": "<verbatim quote from document>", '
@@ -245,16 +286,69 @@ def build_verification_prompt(field, gemini_value, gpt_value, syndicate_num, rep
             f"Two LLMs disagree on the prior year development amount (in GBP/USD/EUR millions):\n"
             f"  - Model A says: {gemini_value}\n"
             f"  - Model B says: {gpt_value}\n\n"
-            f"Find the 'Movement in prior year's provision for claims outstanding' note, "
-            f"or the narrative text that explicitly states the prior year release/strengthening amount.\n\n"
+            f"Find the prior year development amount. Use the GROSS figure (insurance liabilities), "
+            f"NOT the net figure (after reinsurer's share). When a note shows 'Insurance liabilities', "
+            f"'Reinsurer's share', and 'Net liabilities' columns, use the 'Insurance liabilities' column. "
+            f"If a note only shows NET figures (e.g. 'increased net technical reserves by £X'), "
+            f"skip it and use the GROSS claims development triangle (source 4) instead.\n\n"
+            f"Look in THESE sources (STRICT priority order — "
+            f"use the FIRST source you find, but ONLY if it shows the GROSS figure):\n"
+            f"  1. 'Movement in prior year's provision for claims outstanding' note — or any note "
+            f"that explicitly states 'calendar year movements arising from prior years' provision "
+            f"(only if it shows the GROSS / Insurance liabilities figure)\n"
+            f"  2. Narrative text that explicitly states the amount (e.g. 'released £X in respect "
+            f"of prior periods')\n"
+            f"  3. Year-of-account result breakdown: e.g. 'The result is a profit of £X, of which "
+            f"a loss of £Y is attributable to {report_year} YOA, a profit of £Z is attributable to "
+            f"the {report_year - 1} YOA and a loss of £W is attributable to {report_year - 2} & "
+            f"prior'. Sum the non-current-year components: prior_year_development = Z + (-W). "
+            f"A net profit on prior years = release (negative sign).\n"
+            f"  4. LAST RESORT ONLY — GROSS Claims Development Table (triangle): Use ONLY if "
+            f"sources 1-3 are not available. Must use the GROSS triangle, NOT the net triangle. "
+            f"Compare each UW year's 'Current estimate' "
+            f"(bottom row) to its estimate from the previous diagonal (one row up in same column). "
+            f"EXCLUDE the two most recent UW years ({report_year} and {report_year - 1}). "
+            f"Sum the differences for UW years <= {report_year - 2}. "
+            f"Decrease = release (negative), increase = strengthening (positive). "
+            f"WORKED EXAMPLE (year-end 2022): "
+            f"2017 UW year: current=420.8, previous diagonal=422.6 → change=-1.8; "
+            f"2018: current=390.3, previous=394.1 → -3.8; "
+            f"2019: current=280.5, previous=277.6 → +2.9; "
+            f"2020: current=236.6, previous=228.8 → +7.8; "
+            f"Total = -1.8 + (-3.8) + 2.9 + 7.8 = +5.1 (strengthening). "
+            f"CAUTION: Exclude any 'X and prior' aggregate column — only use individual UW year columns. "
+            f"CAUTION: If RITC (Reinsurance to Close) of another syndicate occurred, "
+            f"the triangle is distorted — prefer narrative or movement notes instead.\n"
+            f"  5. Loss Ratio Development Table (fallback if no absolute claims triangle): "
+            f"If the report shows a GROSS loss ratio development table (percentages, not £m), "
+            f"compute Δ loss ratio for each UW year (current minus previous diagonal, excluding "
+            f"{report_year} and {report_year - 1}), then multiply each by that UW year's gross "
+            f"premiums to get £m. Sum across all older UW years. Example: if 2008 UW year "
+            f"loss ratio changed from 67% to 66% = -1%, and gross premiums were £100m, "
+            f"contribution = -1% × 100 = -£1.0m (release).\n\n"
             f"Sign convention:\n"
             f"  - NEGATIVE = release (reserves were sufficient, surplus returned)\n"
             f"  - POSITIVE = strengthening (reserves were insufficient, additional provision)\n\n"
             f"IMPORTANT: If the report uses 'surplus/(deficit)' language:\n"
             f"  - Parenthesized numbers like (3.0) = deficit = POSITIVE (strengthening)\n"
             f"  - Unparenthesized numbers like 3.0 = surplus = NEGATIVE (release)\n\n"
-            f"Do NOT use the 'Movement in provision' row from the Technical Reserves "
-            f"reconciliation table -- that includes current year movements.\n\n"
+            f"WRONG SOURCES (do NOT use these):\n"
+            f"  1. 'Claims incurred in prior underwriting years' from the P&L Technical Account "
+            f"-- this is the net claims figure, NOT the reserve movement\n"
+            f"  2. 'Movement in provision' from Reserves Reconciliation -- includes current + prior combined\n"
+            f"  3. Closing reserve balances / net technical provisions -- balance sheet figures, not movements\n"
+            f"  4. Changes in booked ultimates for specific named events -- this is one event's estimate change, "
+            f"not total portfolio prior year development\n"
+            f"  5. Year-of-account PROFIT/LOSS results -- e.g. 'a loss to capital providers from the "
+            f"2017 and Prior Years of Account of £17.7m, a negative 10.4% return'. This is the overall "
+            f"underwriting PROFIT result for the closed year of account, NOT the reserve movement. "
+            f"Profit results include premiums, claims, expenses, and investment returns combined. "
+            f"Only use YOA results when they explicitly break down INTO reserve/claims components.\n\n"
+            f"{CURRENCY_NOTE}\n\n"
+            f"CRITICAL: If you can compute a value from the triangle or any other source, "
+            f"you MUST return that value as correct_value — do NOT return null. "
+            f"Only return null if the document genuinely does not contain enough information "
+            f"to determine or compute the prior year development amount.\n\n"
             f"Reply with ONLY valid JSON:\n"
             f'{{"field": "prior_year_development_gbp_m", "correct_value": <signed number or null>, '
             f'"evidence": "<verbatim quote from document>", '
@@ -272,6 +366,7 @@ def build_verification_prompt(field, gemini_value, gpt_value, syndicate_num, rep
             f"If you can find both the prior year development amount and the opening gross claims "
             f"outstanding, compute the percentage. Sign convention matches the amount "
             f"(negative = release, positive = strengthening).\n\n"
+            f"{CURRENCY_NOTE}\n\n"
             f"Reply with ONLY valid JSON:\n"
             f'{{"field": "prior_year_development_pct", "correct_value": <signed number or null>, '
             f'"evidence": "<calculation showing amount / opening reserves>", '
@@ -305,6 +400,7 @@ def build_verification_prompt(field, gemini_value, gpt_value, syndicate_num, rep
             f"This is ONLY claims reserves -- do NOT include unearned premium provisions. "
             f"Look in the Technical Reserves note or Balance Sheet for 'Claims outstanding - gross amount' "
             f"or 'Gross claims outstanding'.\n\n"
+            f"{CURRENCY_NOTE}\n\n"
             f"Reply with ONLY valid JSON:\n"
             f'{{"field": "opening_reserves_gbp_m", "correct_value": <number or null>, '
             f'"evidence": "<verbatim quote from document>", '
@@ -320,6 +416,7 @@ def build_verification_prompt(field, gemini_value, gpt_value, syndicate_num, rep
             f"  - Model B says: {gpt_value}\n\n"
             f"Find the total gross premiums written in the Income Statement / "
             f"Profit and Loss Technical Account.\n\n"
+            f"{CURRENCY_NOTE}\n\n"
             f"Reply with ONLY valid JSON:\n"
             f'{{"field": "gross_premiums_written_gbp_m", "correct_value": <number>, '
             f'"evidence": "<verbatim quote from document>", '
@@ -337,6 +434,7 @@ def build_verification_prompt(field, gemini_value, gpt_value, syndicate_num, rep
             f"  - Model B says: {gpt_value}\n\n"
             f"Find the Segmental Analysis note (regulatory/statutory classes). "
             f"Look for the line of business '{lob_name}' and its {sub_field}.\n\n"
+            f"{CURRENCY_NOTE}\n\n"
             f"Reply with ONLY valid JSON:\n"
             f'{{"field": "{field}", "correct_value": <value>, '
             f'"evidence": "<verbatim quote from document>", '
@@ -359,19 +457,154 @@ def build_verification_prompt(field, gemini_value, gpt_value, syndicate_num, rep
     )
 
 
-def call_adjudicator(pdf_path, prompt):
-    """Send PDF + verification prompt to Claude for adjudication."""
+def _shrink_pdf(pdf_path, max_size_mb=20, max_pages=100, page_hints=None):
+    """Shrink a PDF to fit within Claude API limits.
+
+    Handles two constraints:
+    1. File size: compresses images if PDF > max_size_mb
+    2. Page count: trims to relevant pages if PDF > max_pages
+
+    If the PDF is already within both limits, returns it unchanged.
+
+    Args:
+        pdf_path: Path to the PDF file.
+        max_size_mb: Maximum file size in MB.
+        max_pages: Maximum number of pages (Claude API limit = 100).
+        page_hints: Optional list of 1-indexed page numbers to prioritize
+                     when trimming. A window of pages around hints is kept.
+
+    Returns:
+        bytes of the (possibly modified) PDF.
+    """
+    import fitz  # PyMuPDF
+
+    with open(pdf_path, "rb") as f:
+        pdf_bytes = f.read()
+
+    max_bytes = max_size_mb * 1024 * 1024
+
+    # Check page count first
+    doc = fitz.open(stream=pdf_bytes, filetype="pdf")
+    total_pages = len(doc)
+
+    if total_pages > max_pages:
+        print(f"    PDF has {total_pages} pages (limit {max_pages}), trimming...")
+        if page_hints:
+            # Keep ±5 pages around each hint, plus first 10 and last 10 pages
+            pages_to_keep = set(range(min(10, total_pages)))  # First 10
+            pages_to_keep.update(range(max(0, total_pages - 10), total_pages))  # Last 10
+            for p in page_hints:
+                p0 = p - 1  # Convert to 0-indexed
+                for offset in range(-5, 6):
+                    idx = p0 + offset
+                    if 0 <= idx < total_pages:
+                        pages_to_keep.add(idx)
+        else:
+            # No hints: take first 50 and last 50 pages
+            pages_to_keep = set(range(min(50, total_pages)))
+            pages_to_keep.update(range(max(0, total_pages - 50), total_pages))
+
+        pages_to_keep = sorted(pages_to_keep)[:max_pages]
+
+        new_doc = fitz.open()
+        for pg in pages_to_keep:
+            new_doc.insert_pdf(doc, from_page=pg, to_page=pg)
+
+        pdf_bytes = new_doc.tobytes(garbage=4, deflate=True)
+        print(f"    Trimmed to {len(pages_to_keep)} pages ({len(pdf_bytes) / (1024*1024):.1f} MB)")
+        new_doc.close()
+
+    doc.close()
+
+    if len(pdf_bytes) < max_bytes:
+        return pdf_bytes
+
+    original_mb = len(pdf_bytes) / (1024 * 1024)
+    doc = fitz.open(stream=pdf_bytes, filetype="pdf")
+
+    # Strategy 1: Remove images entirely (text is what matters for adjudication)
+    for page in doc:
+        image_list = page.get_images(full=True)
+        for img in image_list:
+            xref = img[0]
+            try:
+                # Replace image with a tiny 1x1 white pixel
+                doc.xref_set_key(xref, "Width", "1")
+                doc.xref_set_key(xref, "Height", "1")
+                doc.xref_set_key(xref, "BitsPerComponent", "8")
+                doc.xref_set_key(xref, "ColorSpace", "/DeviceGray")
+                doc.xref_set_key(xref, "Filter", "")
+                doc.update_stream(xref, b"\xff")  # Single white pixel
+            except Exception:
+                pass  # Skip images that can't be modified
+
+    # Save with garbage collection and deflation
+    compressed = doc.tobytes(
+        garbage=4,       # Maximum garbage collection
+        deflate=True,    # Compress streams
+        clean=True,      # Clean up redundant content
+    )
+    doc.close()
+
+    compressed_mb = len(compressed) / (1024 * 1024)
+    print(f"    PDF compressed: {original_mb:.1f} MB -> {compressed_mb:.1f} MB")
+
+    if len(compressed) < max_bytes:
+        return compressed
+
+    # Strategy 2: If still too large, remove all non-text content more aggressively
+    # by rebuilding with just text extracted per page
+    print(f"    Still too large ({compressed_mb:.1f} MB), trying text-only rebuild...")
+    doc = fitz.open(stream=pdf_bytes, filetype="pdf")
+    new_doc = fitz.open()
+
+    for page in doc:
+        # Create a new page with same dimensions
+        rect = page.rect
+        new_page = new_doc.new_page(width=rect.width, height=rect.height)
+        # Extract and insert text blocks
+        blocks = page.get_text("dict")["blocks"]
+        for block in blocks:
+            if block["type"] == 0:  # Text block
+                for line in block["lines"]:
+                    for span in line["spans"]:
+                        try:
+                            new_page.insert_text(
+                                fitz.Point(span["origin"][0], span["origin"][1]),
+                                span["text"],
+                                fontsize=span["size"],
+                            )
+                        except Exception:
+                            pass
+
+    rebuilt = new_doc.tobytes(garbage=4, deflate=True)
+    rebuilt_mb = len(rebuilt) / (1024 * 1024)
+    print(f"    Text-only rebuild: {rebuilt_mb:.1f} MB")
+    doc.close()
+    new_doc.close()
+    return rebuilt
+
+
+def call_adjudicator(pdf_path, prompt, page_hints=None):
+    """Send PDF + verification prompt to Claude for adjudication.
+
+    Args:
+        pdf_path: Path to the PDF file.
+        prompt: The verification prompt.
+        page_hints: Optional list of 1-indexed page numbers relevant to the
+                     disputed field (used to trim large/long PDFs).
+    """
     import anthropic
 
     client = anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
 
-    with open(pdf_path, "rb") as f:
-        pdf_bytes = f.read()
+    pdf_bytes = _shrink_pdf(pdf_path, page_hints=page_hints)
     pdf_b64 = base64.b64encode(pdf_bytes).decode("utf-8")
 
     response = client.messages.create(
         model=ADJUDICATOR_MODEL,
-        max_tokens=1024,
+        max_tokens=2048,
+        system="You are a financial data extraction validator. Reply with ONLY valid JSON — no reasoning, no explanation, no text before or after the JSON object.",
         messages=[
             {
                 "role": "user",
@@ -418,15 +651,40 @@ def call_adjudicator(pdf_path, prompt):
                 continue
 
     # Try to find JSON object anywhere in the response
-    brace_start = raw.find("{")
+    # Try both first { and last { in case the model outputs reasoning before JSON
+    import re
+    brace_positions = [m.start() for m in re.finditer(r'\{', raw)]
     brace_end = raw.rfind("}")
-    if brace_start != -1 and brace_end > brace_start:
+
+    for brace_start in brace_positions:
+        if brace_end <= brace_start:
+            continue
+        candidate = raw[brace_start:brace_end + 1]
+        # Direct parse
         try:
-            return json.loads(raw[brace_start:brace_end + 1]), tokens_in, tokens_out
+            return json.loads(candidate), tokens_in, tokens_out
+        except json.JSONDecodeError:
+            pass
+        # Fix trailing commas
+        fixed = re.sub(r',\s*([}\]])', r'\1', candidate)
+        try:
+            return json.loads(fixed), tokens_in, tokens_out
+        except json.JSONDecodeError:
+            pass
+        # Strip non-ASCII
+        cleaned = fixed.encode("ascii", "ignore").decode("ascii")
+        try:
+            return json.loads(cleaned), tokens_in, tokens_out
+        except json.JSONDecodeError:
+            pass
+        # Fix unescaped control characters
+        cleaned2 = re.sub(r'[\x00-\x1f\x7f]', ' ', cleaned)
+        try:
+            return json.loads(cleaned2), tokens_in, tokens_out
         except json.JSONDecodeError:
             pass
 
-    raise ValueError(f"Could not parse JSON from adjudicator response: {raw[:300]}")
+    raise ValueError(f"Could not parse JSON from adjudicator response: {raw[:500]}")
 
 
 def sanitize_for_json(obj):

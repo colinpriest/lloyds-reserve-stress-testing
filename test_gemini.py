@@ -91,7 +91,7 @@ GEMINI_MODEL = "gemini-2.5-flash"
 OPENAI_MODEL = "gpt-5-mini"
 
 # Frozen spec versions -- bump these when spec files change
-PROMPT_VERSION = "1.6"
+PROMPT_VERSION = "2.5"
 FIELD_DEFINITIONS_VERSION = "1.0"
 TOLERANCE_RULES_VERSION = "1.0"
 
@@ -150,9 +150,9 @@ Return this JSON structure:
   "opening_reserves_gbp_m": <opening GROSS CLAIMS OUTSTANDING (also called "gross claims reserves") at start of year, in millions as a number. This is ONLY the claims reserve — do NOT include provisions for unearned premiums. Look in the Technical Reserves note or Balance Sheet for "Gross claims outstanding" or "Claims outstanding - gross amount". null if not found>,
   "opening_reserves_page": <page number where found>,
   "opening_reserves_confidence": <0.0 to 1.0>,
-  "prior_year_development_gbp_m": <amount in millions as a SIGNED number: NEGATIVE for releases, POSITIVE for strengthenings/deteriorations. IMPORTANT: Use the figure from the "Movement in prior year's provision for claims outstanding" note or the narrative text that explicitly states the prior year release/strengthening amount (e.g. "released £77.4m of technical reserves in respect of prior periods"). Do NOT use the "Movement in provision" line from the Technical Reserves reconciliation table, which includes current year movements. null if not found>,
+  "prior_year_development_gbp_m": <GROSS amount in millions as a SIGNED number: NEGATIVE for releases, POSITIVE for strengthenings/deteriorations. MUST be the GROSS figure (insurance liabilities), NOT net of reinsurance. If the note shows Insurance liabilities / Reinsurer's share / Net columns, use the INSURANCE LIABILITIES column. Use the figure from the "Movement in prior year's provision for claims outstanding" note. Do NOT use narrative text that says "net releases of £X" or "net improvement of £X" — the word "net" means after reinsurance. Do NOT use the "Movement in provision" line from the Technical Reserves reconciliation table, which includes current year movements. null if not found>,
   "prior_year_development_pct": <as percentage of opening gross claims outstanding, NEGATIVE for releases, POSITIVE for strengthenings, null if not calculable>,
-  "direction": "<release|strengthening|flat|mixed>",
+  "direction": "<release|strengthening|flat|mixed — also consider year-of-account closure language: 'profit on closed year' or 'improvement on forecast' typically indicates release; 'deterioration' or 'loss on closed year' indicates strengthening; both directions across LOBs = mixed>",
   "prior_year_movement_page": <page number>,
   "prior_year_movement_confidence": <0.0 to 1.0>,
   "exact_reserve_text": "<copy VERBATIM the sentence(s) from the document that describe the prior year reserve movement>",
@@ -215,11 +215,50 @@ Rules:
 - Map causes to the standard causal categories where possible
 - For exact_reserve_text: copy verbatim, do not paraphrase
 - IMPORTANT — opening_reserves_gbp_m: Use ONLY gross claims outstanding (claims reserves). Do NOT include unearned premium provisions. These are different items in the balance sheet / technical reserves note.
-- IMPORTANT — prior_year_development_gbp_m: The correct source is the note titled "Movement in prior year's provision for claims outstanding" or the narrative text that explicitly quantifies the prior year release/strengthening (e.g. "released £X of technical reserves in respect of prior periods"). Do NOT use the "Movement in provision" row from the Technical Reserves reconciliation table — that row includes BOTH current year AND prior year movements combined.
+- IMPORTANT — prior_year_development_gbp_m: Use the GROSS figure (insurance liabilities), NOT the net figure (after reinsurer's share). When a "Movement in prior year claims" note shows columns for "Insurance liabilities", "Reinsurer's share", and "Net liabilities", use the "Insurance liabilities" column. Example: Insurance liabilities (69.6), Reinsurer's share 29.8, Net (39.8) → use -69.6, NOT -39.8. WARNING: Narrative text in the Underwriter's Report often quotes the NET figure (e.g. "prior period reserve releases of £22m" or "net releases of £39.8m"). Always cross-check against the movement note in the financial statements — the movement note's GROSS (Insurance liabilities) column is authoritative. If the narrative figure differs from the movement note's gross figure, use the movement note. IMPORTANT FALLBACK: If the movement note only shows NET figures (e.g. "increased net technical reserves by £8.8m in respect of prior years"), this is NOT the gross figure — fall back to the GROSS claims development triangle (source 4 below) to compute the gross prior year development. The correct source is the note titled "Movement in prior year's provision for claims outstanding" — but ONLY if it shows the GROSS (Insurance liabilities) figure. WRONG SOURCES TO AVOID: (1) Do NOT use the "Claims incurred in prior underwriting years" row from the Profit & Loss Technical Account -- that is the NET claims figure after reinsurance, not the prior year reserve movement. (2) Do NOT use the "Movement in provision" row from the Technical Reserves reconciliation table -- that includes BOTH current year AND prior year movements combined. (3) Do NOT use closing reserve balances or net technical provisions. (4) Do NOT use changes in booked ultimates for specific named events (e.g. "booked ultimates for these losses increased from $64.9m to $230.6m") -- this is the change in ultimate loss estimate for one event, NOT the total prior year reserve development across the portfolio. (5) Do NOT use year-of-account PROFIT/LOSS results -- e.g. "a loss to capital providers from the 2017 and Prior Years of Account of £17.7m, a negative 10.4% return" -- this is the overall underwriting PROFIT result for the closed year of account, which includes premiums, claims, expenses, and investment returns combined. It is NOT a reserve movement. Only use YOA results when they explicitly break down INTO reserve/claims components. Return null if no reliable aggregate prior year development figure is available.
 - IMPORTANT — sign convention for "surplus/(deficit)" language: When a report says "A surplus/(deficit) run-off deviation of (X) million", the PARENTHESES around the number indicate a DEFICIT. A deficit means prior reserves were INSUFFICIENT, which is ADVERSE development = STRENGTHENING (POSITIVE sign). Example: "surplus/(deficit) of (3.0) million" means a 3.0m deficit = prior_year_development_gbp_m: +3.0, direction: "strengthening". Conversely, an unparenthesized number means a surplus = release = NEGATIVE sign.
 - IMPORTANT — gross_premium_mix: Use the REGULATORY segmental analysis from the Notes to the Accounts. Copy the line of business names EXACTLY as printed (e.g. "Marine, aviation and transport", "Fire and other damage to property", "Third party liability", "Miscellaneous", "Reinsurance"). Do NOT rename them to standard Lloyd's LOB names. Do NOT split combined categories into separate entries. Do NOT use the underwriter's internal divisional breakdown.
 - IMPORTANT — gross_premium_mix with "Direct insurance" and "Reinsurance acceptances" sub-tables: Some segmental analysis notes split gross premiums into "Direct insurance" and "Reinsurance acceptances" sub-tables, each with their own LOB categories (e.g. both may have "Fire and other damage to property"). In this case, list the individual Direct insurance categories with their amounts, then add a SINGLE consolidated "Reinsurance acceptances" line with the total of all reinsurance accepted premiums. Do NOT list the individual reinsurance sub-categories separately (they would create duplicate LOB names). The total should still equal gross_premiums_written_gbp_m.
 - IMPORTANT — gross_premium_mix: prefer DIVISIONAL TOTALS over regulatory sub-categories. When the report contains BOTH a regulatory segmental analysis (with fine-grained statutory classes like "Marine, aviation and transport", "Fire and other damage to property") AND a divisional/business class summary (e.g. "Marine", "Property", "Specialty", "Political Lines", "Treaty"), use the DIVISIONAL summary. The divisional breakdown aggregates across direct and reinsurance business to give the TOTAL premium per business class, which is what we need. The regulatory segmental analysis often shows only the direct insurance component for each statutory class, understating the true LOB total. Each entry in gross_premium_mix should represent the TOTAL premium for that business class (direct + reinsurance combined). The amounts must still sum to gross_premiums_written_gbp_m.
+- IMPORTANT — year-of-account result breakdown: Many Lloyd's reports break down the overall result by year of account, e.g. "The result is a profit of £7,833,000, of which a loss of £5,556,000 is attributable to the {report_year} year of account, a profit of £14,806,000 is attributable to the {report_year - 1} year of account and a loss of £1,417,000 is attributable to the {report_year - 2} and prior years of account." In this example, the {report_year - 1} YOA profit (£14.806m) and the {report_year - 2} & prior YOA loss (-£1.417m) are BOTH prior year development. The NET prior year development = sum of all non-current-year components = £14.806m + (-£1.417m) = £13.389m. Since this is a net profit on prior years, direction = "release", prior_year_development_gbp_m = -13.389 (negative = release). This breakdown is a PRIMARY source for prior year development — look for it in the Managing Agent's Report or Underwriter's Report. Also look for "The [YYYY] & prior years of account is closing with a collectable loss/profit of £X" which indicates the closure result for older years.
+- IMPORTANT — Claims Development Table (triangle): LAST RESORT — only use this if the "Movement in prior year's provision" note, narrative text, and year-of-account result breakdown are all unavailable. Must use the GROSS claims development table, NOT the net. Most reports contain an "Analysis of claims development" or "Claims development table" showing cumulative gross claims by underwriting year across development periods. To extract the movement:
+  1. Look at the BOTTOM ROW ("Current estimate of cumulative claims") — these are the latest estimates for each underwriting year.
+  2. Compare each UW year's current estimate to its estimate from the PREVIOUS diagonal (one row up in the same column).
+  3. EXCLUDE the two most recent underwriting years ({report_year} and {report_year - 1}) — these are still in their initial development period and movements there are not "prior year development".
+  4. Sum the differences for all remaining UW years: total_pyd = SUM(current_estimate[uw_year] - previous_estimate[uw_year]) for uw_year <= {report_year - 2}.
+  5. A DECREASE in the cumulative estimate = favourable development = release (NEGATIVE sign).
+  6. An INCREASE = adverse development = strengthening (POSITIVE sign).
+  WORKED EXAMPLE: For a report year-end 2022 with this triangle (£m):
+    UW Year:            2017    2018    2019    2020    2021    2022
+    At end of UW year:  380.9   376.2   177.8   134.0   260.6   489.1
+    One year later:     412.5   434.0   263.0   228.8   321.4
+    Two years later:    426.9   409.8   277.6   236.6
+    Three years later:  433.1   394.1   280.5
+    Four years later:   422.6   390.3
+    Five years later:   420.8
+    Current estimate:   420.8   390.3   280.5   236.6   321.4   489.1
+  Exclude 2022 and 2021. For each remaining UW year, the "previous diagonal" is one row up in the same column:
+    2017: current=420.8, previous=422.6 (Four years later), change = 420.8-422.6 = -1.8
+    2018: current=390.3, previous=394.1 (Three years later), change = 390.3-394.1 = -3.8
+    2019: current=280.5, previous=277.6 (Two years later),   change = 280.5-277.6 = +2.9
+    2020: current=236.6, previous=228.8 (One year later),    change = 236.6-228.8 = +7.8
+  Total PYD = -1.8 + (-3.8) + 2.9 + 7.8 = +5.1 (net strengthening, positive sign).
+  CAUTION — "X and prior" aggregate column: If the triangle has a column like "2012 and prior" that aggregates multiple older UW years, EXCLUDE it from the diagonal comparison — you cannot compute a valid previous diagonal for an aggregate column. Only use individual UW year columns.
+  CAUTION — RITC distortions: If the report mentions "Reinsurance to Close" (RITC) of another syndicate during the year, the claims development triangle will be distorted. The RITC adds the absorbed syndicate's reserves to existing UW years, causing apparent large increases that are NOT genuine reserve deterioration. Look in the Technical Provisions note for an RITC line item. If RITC is present, the triangle is UNRELIABLE for computing prior year development — prefer other sources (narrative text, movement notes) or return null with a data_quality_note explaining the RITC distortion.
+  This is a CROSS-CHECK source — use it to verify the figure from the "Movement in prior year's provision" note or narrative. If the note is missing and no RITC distortion exists, this table may be the primary source.
+- IMPORTANT — Loss Ratio Development Table (fallback if no absolute claims triangle exists): Some reports show a GROSS loss ratio development table instead of absolute claims amounts. The table shows cumulative gross loss ratios (%) by underwriting year across development periods. To compute prior year development from this:
+  1. For each UW year (excluding the two most recent), find the change in loss ratio: current estimate minus previous diagonal (one row up).
+  2. Multiply the change in loss ratio by the GROSS PREMIUMS WRITTEN for that UW year to get the absolute £m amount.
+  3. Sum across all older UW years.
+  WORKED EXAMPLE (report year-end 2014):
+    UW Year:    2008  2009  2010  2011  2012
+    Current:     66%   43%   94%   68%   40%
+    Previous:    67%   45%   95%   71%   44%
+    Change:      -1%   -2%   -1%   -3%   -4%
+  If gross premiums for 2008 were £100m: 2008 contribution = -1% × 100 = -£1.0m (release).
+  Sum all UW year contributions for total PYD.
+  NOTE: You need the gross premiums per UW year — look in the premium development table, segmental analysis, or the premium line of the P&L Technical Account for each year. If premiums per UW year are not available, use the total gross premiums as an approximation with a data_quality_note.
+- IMPORTANT — year-of-account closure language: Lloyd's syndicates close years of account after 3 years. Phrases like "profit for the closed year of account", "improvement on forecast result", "return on capacity of X%" indicate favourable prior year development (release). Phrases like "deterioration on closed year", "loss on closed year of account" indicate adverse development (strengthening). The DIFFERENCE between the final result and the prior forecast is a useful cross-check for the prior year development amount (e.g. if profit improved from £40.1m forecast to £41.4m actual, the improvement of £1.3m suggests a release). Use this as supporting evidence alongside the primary reserve movement sources.
 - prior_year_events: List specific named events from years BEFORE the report year ({report_year}) that the document mentions as affecting claims or reserves. For a {report_year} report, any event from {report_year - 1} or earlier is a prior year event. Look in the Technical Reserves note for "{report_year - 1} events" subsections — these are prior year events. Also look in the Underwriter's Report for references to events from prior years (e.g. deterioration on older losses). Include both adverse and favourable impacts.
 - named_events: List ALL specific named catastrophe events, large losses, and significant incidents mentioned ANYWHERE in the document — including the Technical Reserves note (which often has "{report_year-1} events" and "{report_year} events" subsections), the Underwriter's Report divisional reviews, and the Managing Agent's Report. Include events from both the current year AND prior years. Look for: hurricanes, typhoons, earthquakes, floods, snowfall, hailstorms, tornadoes, vessel losses, industrial accidents, terrorist attacks, and any other specifically named loss events. Empty list only if genuinely no named events appear in the document."""
 
@@ -265,6 +304,38 @@ def parse_json_response(text):
     raw = text.strip()
     if raw.startswith("```"):
         raw = raw.split("\n", 1)[1].rsplit("```", 1)[0].strip()
+
+    # Try direct parse first
+    try:
+        return json.loads(raw)
+    except json.JSONDecodeError:
+        pass
+
+    # Try to find a complete JSON object between first { and last }
+    brace_start = raw.find("{")
+    brace_end = raw.rfind("}")
+    if brace_start != -1 and brace_end > brace_start:
+        candidate = raw[brace_start:brace_end + 1]
+        try:
+            return json.loads(candidate)
+        except json.JSONDecodeError:
+            pass
+
+        # Fix common LLM JSON errors:
+        # 1. Trailing commas before } or ]
+        fixed = re.sub(r',\s*([}\]])', r'\1', candidate)
+        # 2. Single-line // comments
+        fixed = re.sub(r'//[^\n]*', '', fixed)
+        # 3. Single quotes → double quotes (but not inside strings)
+        # Only do this if no double-quoted strings exist at all
+        if '"' not in fixed.replace('\\"', ''):
+            fixed = fixed.replace("'", '"')
+        try:
+            return json.loads(fixed)
+        except json.JSONDecodeError:
+            pass
+
+    # Re-raise with original text for debugging
     return json.loads(raw)
 
 
@@ -275,13 +346,42 @@ def extract_with_gemini(report_path, file_bytes, content_hash, syndicate_num, re
     uploaded_file = client.files.upload(file=report_path)
 
     print(f"  [{model}] Extracting...")
+    gemini_config = GenerateContentConfig(
+        temperature=0.0,
+        response_mime_type="application/json",
+    )
     response = client.models.generate_content(
         model=model,
         contents=[uploaded_file, build_prompt(syndicate_num, report_year)],
-        config=GenerateContentConfig(temperature=0.0),
+        config=gemini_config,
     )
 
-    data = sanitize_ascii(parse_json_response(response.text))
+    # Retry up to twice on malformed JSON
+    try:
+        data = sanitize_ascii(parse_json_response(response.text))
+    except json.JSONDecodeError as e:
+        print(f"  [{model}] Malformed JSON ({e}), retrying (attempt 2)...")
+        response = client.models.generate_content(
+            model=model,
+            contents=[uploaded_file, build_prompt(syndicate_num, report_year)],
+            config=gemini_config,
+        )
+        try:
+            data = sanitize_ascii(parse_json_response(response.text))
+        except json.JSONDecodeError as e2:
+            print(f"  [{model}] Still malformed ({e2}), retrying with JSON fix prompt (attempt 3)...")
+            fix_prompt = (
+                "Your previous response was not valid JSON. "
+                "Please re-output ONLY the JSON object, with no comments, "
+                "no trailing commas, and no text outside the JSON braces. "
+                "Here is what you output:\n\n" + response.text[:3000]
+            )
+            response = client.models.generate_content(
+                model=model,
+                contents=[uploaded_file, fix_prompt],
+                config=gemini_config,
+            )
+            data = sanitize_ascii(parse_json_response(response.text))
     data = add_metadata(data, model, report_path, content_hash)
 
     usage = response.usage_metadata
@@ -318,6 +418,7 @@ def extract_with_openai(report_path, file_bytes, content_hash, syndicate_num, re
 
     response = client.responses.create(
         model=model,
+        max_output_tokens=16384,
         input=[
             {
                 "role": "user",
@@ -336,7 +437,35 @@ def extract_with_openai(report_path, file_bytes, content_hash, syndicate_num, re
         ],
     )
 
-    data = sanitize_ascii(parse_json_response(response.output_text))
+    # Check for truncation and retry once with larger limit
+    try:
+        data = sanitize_ascii(parse_json_response(response.output_text))
+    except json.JSONDecodeError as e:
+        if "Unterminated" in str(e) or "Expecting" in str(e):
+            print(f"  [{model}] Response truncated ({response.usage.output_tokens} tokens), retrying with larger limit...")
+            response = client.responses.create(
+                model=model,
+                max_output_tokens=32768,
+                input=[
+                    {
+                        "role": "user",
+                        "content": [
+                            {
+                                "type": "input_file",
+                                "filename": report_path.name,
+                                "file_data": f"data:{mime};base64,{file_b64}",
+                            },
+                            {
+                                "type": "input_text",
+                                "text": build_prompt(syndicate_num, report_year),
+                            },
+                        ],
+                    }
+                ],
+            )
+            data = sanitize_ascii(parse_json_response(response.output_text))
+        else:
+            raise
     data = add_metadata(data, model, report_path, content_hash)
 
     input_tokens = response.usage.input_tokens
@@ -477,14 +606,13 @@ def resolve_computed_fields(hard_failures, result_a, result_b, model_a, model_b)
     return remaining, resolved
 
 
-def _print_field_context(field, gem_data, gpt_data):
-    """Print supporting fields from both models to give the human context.
+def _get_field_context(field, gem_data, gpt_data):
+    """Build supporting context lines for a disputed field.
 
-    For example, if the disputed field is prior_year_development_pct, show
-    both models' opening_reserves and prior_year_development_gbp_m so the
-    human can verify the calculation.
+    Returns a list of formatted strings showing related fields from both
+    models (e.g. opening_reserves and prior_year_development_gbp_m when
+    the disputed field is prior_year_development_pct).
     """
-    # Map disputed fields to the related fields the human needs to see
     context_map = {
         "prior_year_development_pct": [
             "opening_reserves_gbp_m",
@@ -508,26 +636,30 @@ def _print_field_context(field, gem_data, gpt_data):
 
     related = context_map.get(field) or context_map.get(field_base)
     if not related:
-        return
+        return []
 
-    print(f"    --- Supporting context ---")
+    lines = []
     for rf in related:
         g_val = gem_data.get(rf)
         o_val = gpt_data.get(rf)
         agree = ""
         if g_val is not None and o_val is not None:
+            g_lower = str(g_val).strip().lower()
+            o_lower = str(o_val).strip().lower()
             if _is_numeric_near(g_val, o_val):
                 agree = " (AGREE)"
-            elif str(g_val).strip().lower() == str(o_val).strip().lower():
+            elif g_lower == o_lower:
+                agree = " (AGREE)"
+            elif g_lower in o_lower or o_lower in g_lower:
                 agree = " (AGREE)"
             else:
                 agree = " (DISAGREE)"
-        # Truncate long text fields
-        g_str = str(g_val)[:120] if g_val is not None else "null"
-        o_str = str(o_val)[:120] if o_val is not None else "null"
-        print(f"    {rf}{agree}:")
-        print(f"      Gemini: {g_str}")
-        print(f"      GPT:    {o_str}")
+        g_str = str(g_val) if g_val is not None else "null"
+        o_str = str(o_val) if o_val is not None else "null"
+        lines.append(f"{rf}{agree}:")
+        lines.append(f"  Gemini: {g_str}")
+        lines.append(f"  GPT:    {o_str}")
+    return lines
     print(f"    ---")
 
 
@@ -705,8 +837,8 @@ def append_to_disagreement_log(report_stem, hard_failures):
 
 
 def write_run_manifest(run_stats):
-    """Write the final run manifest summarising this extraction run."""
-    manifest = {
+    """Append this run's stats to the cumulative run manifest log."""
+    entry = {
         "run_id": datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ"),
         "run_timestamp": datetime.now(timezone.utc).isoformat(),
         "spec": {
@@ -732,12 +864,27 @@ def write_run_manifest(run_stats):
             "total_cost_usd": round(run_stats["total_cost"], 4),
         },
         "output_dir": str(OUTPUT_DIR),
+        "stopped_early": run_stats.get("stopped_early", False),
     }
 
     manifest_path = AUDIT_DIR / "run_manifest.json"
+
+    # Load existing runs or start fresh
+    if manifest_path.exists():
+        with open(manifest_path, "r") as f:
+            manifest = json.load(f)
+    else:
+        manifest = {"runs": []}
+
+    # Migrate from old single-run format to runs list
+    if "runs" not in manifest:
+        manifest = {"runs": [manifest]}
+
+    manifest["runs"].append(entry)
+
     with open(manifest_path, "w") as f:
         json.dump(manifest, f, indent=2)
-    print(f"  Run manifest written: {manifest_path}")
+    print(f"  Run manifest updated: {manifest_path} ({len(manifest['runs'])} runs total)")
 
 
 def process_one_report(report_path):
@@ -838,6 +985,13 @@ if __name__ == "__main__":
     reports = discover_reports()
     print(f"Found {len(reports)} reports in {REPORTS_DIR}")
 
+    # --single flag: process only the named report (e.g. --single syndicate_1856_2024)
+    single_arg = None
+    for idx, arg in enumerate(sys.argv):
+        if arg == "--single" and idx + 1 < len(sys.argv):
+            single_arg = sys.argv[idx + 1]
+            break
+
     # --clean flag: delete all existing outputs to force re-run under current spec
     if "--clean" in sys.argv:
         existing = list(OUTPUT_DIR.glob("syndicate_*.json"))
@@ -847,10 +1001,24 @@ if __name__ == "__main__":
                 f.unlink()
             print(f"  Deleted. All reports will be re-processed.")
 
-    # Skip already-processed reports
-    already_done = {f.stem for f in OUTPUT_DIR.glob("syndicate_*.json")}
-    to_process = [r for r in reports if r.stem not in already_done]
-    print(f"Already processed: {len(already_done)}, remaining: {len(to_process)}")
+    if single_arg:
+        # Filter to just the named report, and remove existing output to force re-run
+        to_process = [r for r in reports if r.stem == single_arg]
+        if not to_process:
+            print(f"Report '{single_arg}' not found in {REPORTS_DIR}")
+            sys.exit(1)
+        # Delete existing output so it will be re-processed
+        existing_output = OUTPUT_DIR / f"{single_arg}.json"
+        if existing_output.exists():
+            existing_output.unlink()
+            print(f"  Deleted existing output: {existing_output}")
+        already_done = set()
+        print(f"Single report mode: {single_arg}")
+    else:
+        # Skip already-processed reports
+        already_done = {f.stem for f in OUTPUT_DIR.glob("syndicate_*.json")}
+        to_process = [r for r in reports if r.stem not in already_done]
+        print(f"Already processed: {len(already_done)}, remaining: {len(to_process)}")
 
     if not to_process:
         print("Nothing to do.")
@@ -922,6 +1090,7 @@ if __name__ == "__main__":
                         actual_pdf = cached
 
                 report_results = []
+                report_excluded = False
                 stopped = False
 
                 for d in output_data["validation"]["hard_failure_details"]:
@@ -939,29 +1108,185 @@ if __name__ == "__main__":
                         print(f"\n  [{field}] Already adjudicated, skipping")
                         continue
 
+                    # Auto-accept immaterial differences
+                    # Core reserve fields: monetary < 0.2m, pct < 2pp
+                    # Gross premium mix fields: amount_gbp_m < 2m, percentage_of_total < 2pp
+                    core_monetary = (
+                        "opening_reserves_gbp_m",
+                        "prior_year_development_gbp_m",
+                        "gross_premiums_written_gbp_m",
+                    )
+                    is_core_monetary = field in core_monetary
+                    is_mix_monetary = field.startswith("gross_premium_mix") and ".amount_gbp_m" in field
+                    is_monetary = is_core_monetary or is_mix_monetary
+                    is_pct = (
+                        field == "prior_year_development_pct"
+                        or (field.startswith("gross_premium_mix") and ".percentage_of_total" in field)
+                    )
+                    if is_monetary or is_pct:
+                        if is_core_monetary:
+                            threshold = 0.2
+                        elif is_mix_monetary:
+                            threshold = 2.0
+                        else:
+                            threshold = 2.0  # percentage fields
+                        unit = "m" if is_monetary else "pp"
+                        try:
+                            g_num = float(gemini_val) if gemini_val not in (None, "None", "") else None
+                            o_num = float(gpt_val) if gpt_val not in (None, "None", "") else None
+                            if g_num is not None and o_num is not None and abs(g_num - o_num) < threshold:
+                                # Priority: adjudicator (if available) > Gemini > GPT
+                                picked_val = g_num
+                                picked_model = GEMINI_MODEL
+                                print(f"\n  [{field}]")
+                                print(f"    Gemini: {gemini_val}")
+                                print(f"    GPT:    {gpt_val}")
+                                print(f"    Auto-accepted: immaterial difference "
+                                      f"({abs(g_num - o_num):.3f}{unit} < {threshold}{unit}), using {picked_model}: {picked_val}")
+                                report_results.append({
+                                    "field": field,
+                                    "decision_type": "auto_accept",
+                                    "final_model": picked_model,
+                                    "final_value": picked_val,
+                                    "adjudicator_value": picked_val,
+                                    "adjudicator_confidence": 1.0,
+                                    "evidence": f"Immaterial difference: {g_num} vs {o_num}, diff={abs(g_num - o_num):.3f}{unit}",
+                                })
+                                now = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+                                next_adj_num = max(
+                                    (int(e["id"].split("-")[1])
+                                     for e in dis_log["entries"]
+                                     if e["id"].startswith("ADJ-")),
+                                    default=0,
+                                ) + 1
+                                dis_log["entries"].append({
+                                    "id": f"ADJ-{next_adj_num:04d}",
+                                    "report": report_path.stem,
+                                    "field": field,
+                                    "gemini_value": sanitize_for_json(str(gemini_val)),
+                                    "gpt_value": sanitize_for_json(str(gpt_val)),
+                                    "adjudicator_value": picked_val,
+                                    "adjudicator_confidence": 1.0,
+                                    "adjudicator_evidence": f"Immaterial difference: {g_num} vs {o_num}",
+                                    "final_model": picked_model,
+                                    "final_value": picked_val,
+                                    "human_decision": f"Auto-accepted: immaterial difference ({abs(g_num - o_num):.3f}{unit} < {threshold}{unit})",
+                                    "status": "resolved_auto_accept",
+                                    "prompt_version": PROMPT_VERSION,
+                                    "date": now,
+                                })
+                                save_disagreement_log(dis_log)
+                                continue
+                        except (ValueError, TypeError):
+                            pass
+
                     print(f"\n  [{field}]")
                     print(f"    Gemini: {gemini_val}")
                     print(f"    GPT:    {gpt_val}")
 
-                    # Show supporting context from both models
+                    # Build supporting context from both models
                     gem_data = output_data["models"][GEMINI_MODEL]
                     gpt_data = output_data["models"][OPENAI_MODEL]
-                    _print_field_context(field, gem_data, gpt_data)
+                    context_lines = _get_field_context(field, gem_data, gpt_data)
+
+                    # Auto-compute prior_year_development_pct from amount / opening reserves
+                    if field == "prior_year_development_pct":
+                        # Get best available values (from resolved results or agreed model values)
+                        pyd_val = None
+                        reserves_val = None
+
+                        # Check if prior_year_development_gbp_m was already resolved
+                        for r in report_results:
+                            if r["field"] == "prior_year_development_gbp_m":
+                                pyd_val = r.get("final_value")
+                                break
+                        if pyd_val is None:
+                            # Models agreed — use either
+                            pyd_val = gem_data.get("prior_year_development_gbp_m")
+
+                        # Check if opening_reserves_gbp_m was already resolved
+                        for r in report_results:
+                            if r["field"] == "opening_reserves_gbp_m":
+                                reserves_val = r.get("final_value")
+                                break
+                        if reserves_val is None:
+                            reserves_val = gem_data.get("opening_reserves_gbp_m")
+
+                        # Convert to float
+                        try:
+                            pyd_float = float(pyd_val) if pyd_val is not None else None
+                            res_float = float(reserves_val) if reserves_val is not None else None
+                        except (ValueError, TypeError):
+                            pyd_float = None
+                            res_float = None
+
+                        if pyd_float is not None and res_float and res_float != 0:
+                            computed_pct = round(pyd_float / res_float * 100, 2)
+                            print(f"    Auto-computed: {pyd_float} / {res_float} * 100 = {computed_pct}%")
+                            report_results.append({
+                                "field": field,
+                                "decision_type": "auto_accept",
+                                "final_model": "computed",
+                                "final_value": computed_pct,
+                                "adjudicator_value": computed_pct,
+                                "adjudicator_confidence": 1.0,
+                                "evidence": f"Computed: {pyd_float} / {res_float} * 100 = {computed_pct}",
+                            })
+                            now = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+                            next_adj_num = max(
+                                (int(e["id"].split("-")[1])
+                                 for e in dis_log["entries"]
+                                 if e["id"].startswith("ADJ-")),
+                                default=0,
+                            ) + 1
+                            dis_log["entries"].append({
+                                "id": f"ADJ-{next_adj_num:04d}",
+                                "report": report_path.stem,
+                                "field": field,
+                                "gemini_value": sanitize_for_json(str(gemini_val)),
+                                "gpt_value": sanitize_for_json(str(gpt_val)),
+                                "adjudicator_value": computed_pct,
+                                "adjudicator_confidence": 1.0,
+                                "adjudicator_evidence": f"Computed: {pyd_float} / {res_float} * 100 = {computed_pct}",
+                                "final_model": "computed",
+                                "final_value": computed_pct,
+                                "human_decision": "Auto-computed from prior_year_development_gbp_m / opening_reserves_gbp_m",
+                                "status": "resolved_auto_accept",
+                                "prompt_version": PROMPT_VERSION,
+                                "date": now,
+                            })
+                            save_disagreement_log(dis_log)
+                            continue
 
                     prompt = build_verification_prompt(
                         field, gemini_val, gpt_val, syndicate_num, report_year
                     )
                     print(f"    Sending to {ADJUDICATOR_MODEL}...")
 
+                    # Collect page hints from both models for trimming large PDFs
+                    page_hints = []
+                    for page_field in (
+                        "opening_reserves_page", "prior_year_movement_page",
+                        "gross_premium_page",
+                    ):
+                        for model_data in (gem_data, gpt_data):
+                            pg = model_data.get(page_field)
+                            if isinstance(pg, (int, float)) and pg > 0:
+                                page_hints.append(int(pg))
+
                     try:
-                        result, tokens_in, tokens_out = call_adjudicator(actual_pdf, prompt)
+                        result, tokens_in, tokens_out = call_adjudicator(
+                            actual_pdf, prompt, page_hints=page_hints or None
+                        )
                     except Exception as e:
                         print(f"    ERROR calling adjudicator: {e}")
                         print(f"    You can still make a manual decision.")
                         print(f"      [g] Use Gemini value")
                         print(f"      [o] Use GPT value")
+                        print(f"      [v] Enter a custom value")
+                        print(f"      [x] Exclude this report entirely")
                         print(f"      [s] Stop script")
-                        choice = ask_human("    Your decision: ", ["g", "o", "s"])
+                        choice = ask_human("    Your decision: ", ["g", "o", "v", "x", "s"])
                         if choice == "s":
                             save_disagreement_log(dis_log)
                             save_rejection_log(rej_log)
@@ -978,8 +1303,39 @@ if __name__ == "__main__":
                                 "stopped_early": True,
                             })
                             sys.exit(0)
-                        final_model = GEMINI_MODEL if choice == "g" else OPENAI_MODEL
-                        final_value = gemini_val if choice == "g" else gpt_val
+                        if choice == "x":
+                            reason = ask_human("    Reason for exclusion: ")
+                            now = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+                            rej_log["entries"] = [
+                                e for e in rej_log["entries"]
+                                if e["report"] != report_path.stem
+                            ]
+                            rej_log["entries"].append({
+                                "report": report_path.stem,
+                                "syndicate": syndicate_num,
+                                "year": report_year,
+                                "rejected": True,
+                                "reason": reason,
+                                "date": now,
+                            })
+                            save_rejection_log(rej_log)
+                            save_disagreement_log(dis_log)
+                            output_data["excluded"] = True
+                            output_data["exclusion_reason"] = reason
+                            output_data["exclusion_date"] = now
+                            output_file = OUTPUT_DIR / f"{report_path.stem}.json"
+                            with open(output_file, "w") as f:
+                                json.dump(output_data, f, indent=2)
+                            print(f"    Report excluded: {reason}")
+                            report_excluded = True
+                            break
+                        if choice == "v":
+                            custom = ask_human("    Enter custom value: ")
+                            final_model = "human"
+                            final_value = custom
+                        else:
+                            final_model = GEMINI_MODEL if choice == "g" else OPENAI_MODEL
+                            final_value = gemini_val if choice == "g" else gpt_val
                         report_results.append({
                             "field": field,
                             "decision_type": "override",
@@ -1000,9 +1356,109 @@ if __name__ == "__main__":
                         field, adj_value, gemini_val, gpt_val
                     )
 
+                    # Auto-accept rule 1: one model null, adjudicator returns a value.
+                    # Trust the adjudicator whether it agrees with the non-null model
+                    # or computes its own value from the PDF.
+                    gemini_is_null = gemini_val is None or gemini_val == "None" or gemini_val == ""
+                    gpt_is_null = gpt_val is None or gpt_val == "None" or gpt_val == ""
+                    one_null_one_value = (gemini_is_null != gpt_is_null)
+                    adj_resolves_null = (
+                        one_null_one_value
+                        and adj_value is not None
+                    )
+                    if adj_resolves_null:
+                        final = correct_model if correct_model not in ("neither", None) else "adjudicator"
+                        if correct_model not in ("neither", None):
+                            reason_text = f"Auto-accepted: one model null, adjudicator confirms {final}"
+                        else:
+                            reason_text = f"Auto-accepted: one model null, adjudicator computed own value"
+                        print(f"    {reason_text} (confidence {confidence})")
+                        print(f"    Value: {adj_value}")
+                        print(f"    Evidence: {evidence}")
+                        report_results.append({
+                            "field": field,
+                            "decision_type": "auto_accept",
+                            "final_model": final,
+                            "final_value": adj_value,
+                            "adjudicator_value": adj_value,
+                            "adjudicator_confidence": confidence,
+                            "evidence": evidence,
+                        })
+                        now = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+                        next_adj_num = max(
+                            (int(e["id"].split("-")[1])
+                             for e in dis_log["entries"]
+                             if e["id"].startswith("ADJ-")),
+                            default=0,
+                        ) + 1
+                        dis_log["entries"].append({
+                            "id": f"ADJ-{next_adj_num:04d}",
+                            "report": report_path.stem,
+                            "field": field,
+                            "gemini_value": sanitize_for_json(str(gemini_val)),
+                            "gpt_value": sanitize_for_json(str(gpt_val)),
+                            "adjudicator_value": sanitize_for_json(str(adj_value)),
+                            "adjudicator_confidence": confidence,
+                            "adjudicator_evidence": evidence,
+                            "final_model": final,
+                            "final_value": sanitize_for_json(str(adj_value)),
+                            "human_decision": reason_text,
+                            "status": "resolved_auto_accept",
+                            "prompt_version": PROMPT_VERSION,
+                            "date": now,
+                        })
+                        save_disagreement_log(dis_log)
+                        continue
+
+                    # Auto-accept rule 2 (general): adjudicator agrees with either model
+                    adj_picks_side = (
+                        correct_model not in ("neither", None)
+                        and adj_value is not None
+                    )
+                    if adj_picks_side:
+                        print(f"    Auto-accepted: adjudicator agrees with "
+                              f"{correct_model} (confidence {confidence})")
+                        print(f"    Value: {adj_value}")
+                        print(f"    Evidence: {evidence}")
+                        report_results.append({
+                            "field": field,
+                            "decision_type": "auto_accept",
+                            "final_model": correct_model,
+                            "final_value": adj_value,
+                            "adjudicator_value": adj_value,
+                            "adjudicator_confidence": confidence,
+                            "evidence": evidence,
+                        })
+                        now = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+                        next_adj_num = max(
+                            (int(e["id"].split("-")[1])
+                             for e in dis_log["entries"]
+                             if e["id"].startswith("ADJ-")),
+                            default=0,
+                        ) + 1
+                        dis_log["entries"].append({
+                            "id": f"ADJ-{next_adj_num:04d}",
+                            "report": report_path.stem,
+                            "field": field,
+                            "gemini_value": sanitize_for_json(str(gemini_val)),
+                            "gpt_value": sanitize_for_json(str(gpt_val)),
+                            "adjudicator_value": sanitize_for_json(str(adj_value)),
+                            "adjudicator_confidence": confidence,
+                            "adjudicator_evidence": evidence,
+                            "final_model": correct_model,
+                            "final_value": sanitize_for_json(str(adj_value)),
+                            "human_decision": f"Auto-accepted: adjudicator agrees with {correct_model}",
+                            "status": "resolved_auto_accept",
+                            "prompt_version": PROMPT_VERSION,
+                            "date": now,
+                        })
+                        save_disagreement_log(dis_log)
+                        continue
+
                     decision_type, decision_data = present_adjudication(
                         report_path.stem, field, gemini_val, gpt_val,
                         adj_value, confidence, evidence, correct_model, reason,
+                        context_lines=context_lines,
                     )
 
                     if decision_type == "stop":
@@ -1021,6 +1477,34 @@ if __name__ == "__main__":
                             "stopped_early": True,
                         })
                         sys.exit(0)
+
+                    if decision_type == "exclude":
+                        # Record exclusion immediately and skip remaining fields
+                        now = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+                        rej_log["entries"] = [
+                            e for e in rej_log["entries"]
+                            if e["report"] != report_path.stem
+                        ]
+                        rej_log["entries"].append({
+                            "report": report_path.stem,
+                            "syndicate": syndicate_num,
+                            "year": report_year,
+                            "rejected": True,
+                            "reason": decision_data,
+                            "date": now,
+                        })
+                        save_rejection_log(rej_log)
+                        save_disagreement_log(dis_log)
+                        # Update the output JSON with exclusion flag
+                        output_data["excluded"] = True
+                        output_data["exclusion_reason"] = decision_data
+                        output_data["exclusion_date"] = now
+                        output_file = OUTPUT_DIR / f"{report_path.stem}.json"
+                        with open(output_file, "w") as f:
+                            json.dump(output_data, f, indent=2)
+                        print(f"    Report excluded: {decision_data}")
+                        report_excluded = True
+                        break
 
                     # Determine final model/value
                     if decision_type == "approve":
@@ -1099,11 +1583,20 @@ if __name__ == "__main__":
                     save_disagreement_log(dis_log)
                     print(f"    Recorded: {human_reason}")
 
-                # Report-level decision (if any fields were adjudicated)
-                if report_results:
-                    report_decision, report_data = present_report_decision(
-                        report_path.stem, syndicate_num, report_year, report_results
+                # Report-level decision (if any fields were adjudicated and not already excluded)
+                if report_results and not report_excluded:
+                    # Auto-include if every disagreement was auto-accepted
+                    all_auto = all(
+                        r.get("decision_type") == "auto_accept"
+                        for r in report_results
                     )
+                    if all_auto:
+                        report_decision, report_data = "include", None
+                        print(f"    Auto-included: all {len(report_results)} disagreement(s) were auto-accepted")
+                    else:
+                        report_decision, report_data = present_report_decision(
+                            report_path.stem, syndicate_num, report_year, report_results
+                        )
 
                     if report_decision == "stop":
                         save_disagreement_log(dis_log)
@@ -1137,15 +1630,20 @@ if __name__ == "__main__":
                                 "model": r.get("final_model"),
                                 "value": sanitize_for_json(str(r.get("final_value", ""))),
                             }
+                        include_reason = (
+                            "Auto-included: all disagreements auto-accepted"
+                            if all_auto else
+                            "Included with human-approved overrides for disputed fields"
+                        )
                         rej_log["entries"].append({
                             "report": report_path.stem,
                             "syndicate": syndicate_num,
                             "year": report_year,
                             "rejected": False,
-                            "reason": "Included with human-approved overrides for disputed fields",
+                            "reason": include_reason,
                             "overrides": overrides,
-                            "status": "included_with_override",
-                            "human_approved": True,
+                            "status": "included_auto_accept" if all_auto else "included_with_override",
+                            "human_approved": not all_auto,
                             "date": now,
                         })
                     elif report_decision == "exclude":
@@ -1159,6 +1657,13 @@ if __name__ == "__main__":
                             "human_approved": True,
                             "date": now,
                         })
+                        # Update the output JSON with exclusion flag
+                        output_data["excluded"] = True
+                        output_data["exclusion_reason"] = report_data
+                        output_data["exclusion_date"] = now
+                        output_file = OUTPUT_DIR / f"{report_path.stem}.json"
+                        with open(output_file, "w") as f:
+                            json.dump(output_data, f, indent=2)
 
                     save_rejection_log(rej_log)
                     print(f"  Rejection log updated for {report_path.stem}")

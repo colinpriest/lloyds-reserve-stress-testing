@@ -58,6 +58,78 @@
       "changes": "Added instruction: When the report contains BOTH a regulatory segmental analysis (fine-grained statutory classes) AND a divisional/business class summary, use the DIVISIONAL summary. The divisional breakdown gives TOTAL premium per business class (direct + reinsurance combined). The regulatory segmental analysis often shows only the direct insurance component, understating the true LOB total.",
       "trigger": "syndicate_1183_2015: GPT and Claude both extracted Marine premium as 70.3 (direct-only from regulatory segmental analysis). Gemini correctly extracted 302.9 (total Marine division including direct + reinsurance). The regulatory 'Marine' line only covers direct business; the divisional 'Marine' total aggregates across direct and reinsurance to give the full 302.9. Same pattern for percentage_of_total (6.9% vs 29.73%).",
       "reports_triggering_change": ["syndicate_1183_2015"]
+    },
+    {
+      "version": "1.7",
+      "date": "2026-03-12",
+      "description": "Strengthen prior_year_development_gbp_m source guidance -- exclude Technical Account rows and closing balances",
+      "changes": "Expanded WRONG SOURCES list: (1) 'Claims incurred in prior underwriting years' from Profit & Loss Technical Account is the net claims figure, not the reserve movement. (2) 'Movement in provision' from Reserves Reconciliation includes current+prior combined. (3) Closing reserve balances / net technical provisions are balance sheet figures, not movements.",
+      "trigger": "Systematic pattern across multiple syndicates: Gemini (and sometimes the adjudicator) confuse the 'Claims incurred in prior underwriting years' row from the Technical Account with the actual prior year reserve movement. The Technical Account row shows gross/reinsurance/net claims totals, not the isolated prior year reserve adjustment. Reports affected: syndicate_1110_2020 (Gemini: 11.37 vs correct -3.5), syndicate_1200_2016 (Gemini: 105.1 vs correct -1.6), syndicate_1200_2021 (Gemini: 120.2), syndicate_1200_2022 (Gemini: -121.3 vs correct -9.9).",
+      "reports_triggering_change": ["syndicate_1200_2022", "syndicate_1200_2021", "syndicate_1200_2016", "syndicate_1110_2020"]
+    },
+    {
+      "version": "1.8",
+      "date": "2026-03-12",
+      "description": "Add year-of-account closure language as source for direction and prior year development",
+      "changes": "Added guidance: Lloyd's syndicates close years of account after 3 years. Phrases like 'profit for the closed year of account', 'improvement on forecast result', 'return on capacity of X%' indicate release. 'Deterioration on closed year', 'loss on closed year' indicate strengthening. The difference between final result and prior forecast is a cross-check for prior year development amount. Also updated adjudicator prompts for direction and prior_year_development_gbp_m to include full v1.7 wrong-source exclusions and year-of-account result language.",
+      "trigger": "syndicate_1200_2024: Adjudicator (Claude) and Gemini both used 'Claims incurred in prior underwriting years' from Technical Account (GBP 80.99m) instead of finding the year-of-account result narrative showing profit improvement of £1.3m (£41.4m actual vs £40.1m forecast). GPT said 'mixed' but adjudicator agreed with Gemini's 'strengthening' based on the wrong source.",
+      "reports_triggering_change": ["syndicate_1200_2024"]
+    },
+    {
+      "version": "1.9",
+      "date": "2026-03-13",
+      "description": "Add year-of-account result breakdown as primary source for prior year development",
+      "changes": "Added detailed guidance for extracting prior year development from YOA result breakdowns: 'The result is a profit of £X, of which £Y is attributable to the current YOA, £Z to prior YOA, £W to older YOAs'. Sum non-current-year components to get prior year development. Worked example: £14.806m profit on 2018 YOA + (-£1.417m) loss on 2017 & prior = net -£13.389m release. Updated both extraction and adjudicator prompts (direction and prior_year_development_gbp_m) with this pattern.",
+      "trigger": "syndicate_1492_2019: All three models (Gemini, GPT, Claude adjudicator) missed the YOA result breakdown which explicitly stated profit/loss by year of account. The text 'a profit of £14,806,000 is attributable to the 2018 year of account and a loss of £1,417,000 is attributable to the 2017 and prior years of account' was the key prior year development source but no model extracted it.",
+      "reports_triggering_change": ["syndicate_1492_2019"]
+    },
+    {
+      "version": "2.0",
+      "date": "2026-03-14",
+      "description": "Add Claims Development Table (triangle) as source for prior year development",
+      "changes": "Added detailed guidance for extracting prior year development from the 'Analysis of claims development' triangle table. Method: compare each UW year's current estimate (bottom row) to its previous diagonal estimate (one row up). EXCLUDE the two most recent UW years (report_year and report_year-1) as these are still in initial development. Sum differences for all older UW years. Decrease = release (negative), increase = strengthening (positive). Added to both extraction prompt and adjudicator prior_year_development_gbp_m prompt. Also added CURRENCY_NOTE to all monetary adjudicator prompts to prevent null returns on USD/EUR reports.",
+      "trigger": "syndicate_1686_2016: Adjudicator returned null for prior_year_development_pct because report was in USD, refusing to report values. Also identified claims development triangle as underutilised source across multiple reports where other sources were ambiguous.",
+      "reports_triggering_change": ["syndicate_1686_2016"]
+    },
+    {
+      "version": "2.1",
+      "date": "2026-03-14",
+      "description": "Add RITC distortion warning for claims development triangle",
+      "changes": "Added caution to both extraction prompt and adjudicator: if a Reinsurance to Close (RITC) of another syndicate occurred during the year, the claims development triangle is distorted — the absorbed syndicate's reserves inflate prior UW year estimates, creating apparent large increases that are not genuine reserve deterioration. When RITC is present, prefer narrative text or movement notes over the triangle, or return null with a data_quality_note.",
+      "trigger": "syndicate_1856_2024: Gemini reported prior_year_development_gbp_m as 165.7, GPT as 9.474, adjudicator returned null. The 2021 UW year showed +$150.6m increase in the triangle, but this was almost entirely due to the RITC of Syndicate 3268 ($96.6m gross) being absorbed into Syndicate 1856 effective 1 January 2024. Neither model identified the RITC distortion.",
+      "reports_triggering_change": ["syndicate_1856_2024"]
+    },
+    {
+      "version": "2.2",
+      "date": "2026-03-14",
+      "description": "Exclude changes in event-specific booked ultimates as wrong source for prior year development",
+      "changes": "Added wrong source #4: Do NOT use changes in booked ultimates for specific named events (e.g. 'booked ultimates for these losses increased from $64.9m to $230.6m') — this is the change in ultimate loss estimate for one event, NOT the total prior year reserve development across the portfolio. Return null if no reliable aggregate prior year development figure is available.",
+      "trigger": "syndicate_1856_2024 re-test: After v2.1, Gemini correctly identified the RITC distortion in the triangle but then used the Russia-Ukraine conflict ultimate increase ($230.6m - $64.9m = $165.7m) as the prior year development figure. This is wrong — it's an event-specific estimate change, not aggregate prior year development. After v2.2, both models correctly return null with appropriate data_quality_notes.",
+      "reports_triggering_change": ["syndicate_1856_2024"]
+    },
+    {
+      "version": "2.3",
+      "date": "2026-03-14",
+      "description": "Exclude YOA profit/loss results as wrong source; enforce source priority order; require GROSS triangle",
+      "changes": "Added wrong source #5: Year-of-account PROFIT/LOSS results (e.g. 'a loss to capital providers of £17.7m, a negative 10.4% return') are NOT reserve movements — they include premiums, claims, expenses, and investment returns combined. Also strengthened source priority: sources 1-3 (explicit notes/narrative/YOA breakdown) must be used before source 4 (triangle). Triangle is now 'LAST RESORT ONLY' and must use GROSS triangle, not NET.",
+      "trigger": "syndicate_1910_2019: Adjudicator confused YOA profit/loss result ('loss to capital providers from the 2017 and Prior Years of Account of £17.7m') with prior year reserve development. Also syndicate_1882_2015: adjudicator used NET claims development triangle (-22.3) instead of explicit Note 4 figure (-0.231).",
+      "reports_triggering_change": ["syndicate_1910_2019", "syndicate_1882_2015"]
+    },
+    {
+      "version": "2.4",
+      "date": "2026-03-15",
+      "description": "Prefer GROSS over NET of reinsurance for prior year development",
+      "changes": "Added explicit instruction: use the GROSS figure (insurance liabilities column), NOT the net figure (after reinsurer's share). When a 'Movement in prior year claims' note shows columns for Insurance liabilities / Reinsurer's share / Net liabilities, use the Insurance liabilities column. Example: Insurance liabilities (69.6), Reinsurer's share 29.8, Net (39.8) → use -69.6, NOT -39.8.",
+      "trigger": "syndicate_2001_2016: GPT used the net figure (-39.8) instead of the gross figure (-69.6). The note showed Insurance liabilities (69.6), Reinsurer's share 29.8, Net (39.8). Adjudicator correctly identified the gross figure.",
+      "reports_triggering_change": ["syndicate_2001_2016"]
+    },
+    {
+      "version": "2.5",
+      "date": "2026-03-15",
+      "description": "Add loss ratio development table as fallback source for prior year development",
+      "changes": "Added source #5: Loss Ratio Development Table. When no absolute claims triangle exists but a gross loss ratio development table is available, compute Δ loss ratio for each UW year (current vs previous diagonal, excluding two most recent), then multiply by gross premiums for that UW year to get £m amount. Includes worked example showing the calculation.",
+      "trigger": "syndicate_2010_2014: Report contains loss ratio development tables (percentages) but no absolute claims triangle. Adjudicator returned null because it only knew how to read absolute triangles. Gemini extracted -14.262 from 'Gross claims incurred' text but adjudicator couldn't verify.",
+      "reports_triggering_change": ["syndicate_2010_2014"]
     }
   ]
 }
