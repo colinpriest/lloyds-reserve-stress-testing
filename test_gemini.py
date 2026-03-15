@@ -91,7 +91,7 @@ GEMINI_MODEL = "gemini-2.5-flash"
 OPENAI_MODEL = "gpt-5-mini"
 
 # Frozen spec versions -- bump these when spec files change
-PROMPT_VERSION = "2.5"
+PROMPT_VERSION = "2.6"
 FIELD_DEFINITIONS_VERSION = "1.0"
 TOLERANCE_RULES_VERSION = "1.0"
 
@@ -150,12 +150,12 @@ Return this JSON structure:
   "opening_reserves_gbp_m": <opening GROSS CLAIMS OUTSTANDING (also called "gross claims reserves") at start of year, in millions as a number. This is ONLY the claims reserve — do NOT include provisions for unearned premiums. Look in the Technical Reserves note or Balance Sheet for "Gross claims outstanding" or "Claims outstanding - gross amount". null if not found>,
   "opening_reserves_page": <page number where found>,
   "opening_reserves_confidence": <0.0 to 1.0>,
-  "prior_year_development_gbp_m": <GROSS amount in millions as a SIGNED number: NEGATIVE for releases, POSITIVE for strengthenings/deteriorations. MUST be the GROSS figure (insurance liabilities), NOT net of reinsurance. If the note shows Insurance liabilities / Reinsurer's share / Net columns, use the INSURANCE LIABILITIES column. Use the figure from the "Movement in prior year's provision for claims outstanding" note. Do NOT use narrative text that says "net releases of £X" or "net improvement of £X" — the word "net" means after reinsurance. Do NOT use the "Movement in provision" line from the Technical Reserves reconciliation table, which includes current year movements. null if not found>,
+  "prior_year_development_gbp_m": <GROSS amount in millions as a SIGNED number: NEGATIVE for releases, POSITIVE for strengthenings/deteriorations. MUST be the GROSS figure (insurance liabilities), NOT net of reinsurance. If the note shows Insurance liabilities / Reinsurer's share / Net columns, use the INSURANCE LIABILITIES column. Use the figure from the "Movement in prior year's provision for claims outstanding" note. CRITICAL: Do NOT use the "Claims incurred in prior underwriting years" row from the Profit and Loss Account Technical Account — this is GROSS CLAIMS INCURRED (premiums earned minus claims paid minus reserve changes), NOT the reserve movement. It is a completely different accounting concept. Do NOT use narrative text that says "net releases of £X" or "net improvement of £X" — the word "net" means after reinsurance. Do NOT use the "Movement in provision" line from the Technical Reserves reconciliation table, which includes current year movements. null if not found>,
   "prior_year_development_pct": <as percentage of opening gross claims outstanding, NEGATIVE for releases, POSITIVE for strengthenings, null if not calculable>,
   "direction": "<release|strengthening|flat|mixed — also consider year-of-account closure language: 'profit on closed year' or 'improvement on forecast' typically indicates release; 'deterioration' or 'loss on closed year' indicates strengthening; both directions across LOBs = mixed>",
   "prior_year_movement_page": <page number>,
   "prior_year_movement_confidence": <0.0 to 1.0>,
-  "exact_reserve_text": "<copy VERBATIM the sentence(s) from the document that describe the prior year reserve movement>",
+  "exact_reserve_text": "<copy VERBATIM the sentence(s) from the document that describe the prior year reserve movement. Do NOT copy rows from the Profit & Loss Technical Account (e.g. 'Claims incurred in relation to prior underwriting years 789.7 (617.6) 172.1') — these are claims incurred figures, not reserve movements>",
   "primary_causes": ["<map each cause to the closest standard causal category above>"],
   "specific_events": ["<named events e.g. 'Hurricane Ian 2022', empty list if none>"],
   "specific_years_affected": [<list of prior accident years mentioned as affected, empty list if none>],
@@ -203,7 +203,22 @@ Return this JSON structure:
   "gross_premium_page": <page number>,
   "gross_premium_confidence": <0.0 to 1.0>,
   "currency": "<GBP, USD, or EUR - whichever the report's financial statements are denominated in. Report the amounts in the NATIVE currency, do NOT convert to GBP>",
-  "data_quality_notes": "<any caveats about data availability or extraction uncertainty>"
+  "data_quality_notes": "<any caveats about data availability or extraction uncertainty>",
+  "_claims_triangle": {{
+    "type": "<gross|net|loss_ratio|none — 'gross' if the report has a GROSS claims development triangle, 'net' if only NET, 'loss_ratio' if only loss ratio percentages, 'none' if no triangle>",
+    "currency": "<GBP, USD, or EUR>",
+    "units": "<millions|thousands|percentage — the unit used in the triangle>",
+    "page": <page number where found, null if none>,
+    "underwriting_years": [<list of ALL individual UW year column headers as integers, e.g. [2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018]. CRITICAL: EXCLUDE any 'X and prior' aggregate column (e.g. '2010 and prior', '2010 & prior'). These aggregate columns do NOT have proper development rows — they must be omitted entirely. Include ALL individual year columns including the most recent>],
+    "development_rows": [
+      [<Row 0: 'At end of underwriting year' — one number per UW year column, null if cell is blank>],
+      [<Row 1: 'One year later' — one number per UW year column, null if blank>],
+      [<Row 2: 'Two years later' — one number per UW year column, null if blank>],
+      [<Row 3: 'Three years later' — etc.>],
+      [<...continue for ALL development period rows...>]
+    ]
+    IMPORTANT: Include ONLY the development period rows (At end of UW year, One year later, Two years later, etc.). Do NOT include the 'Current estimate of cumulative claims incurred' summary row — that row just repeats the last value from each column and is NOT a development period. Do NOT include the 'Cumulative payments' or 'Gross outstanding claims provision' rows.
+  }}
 }}
 
 Rules:
@@ -215,7 +230,20 @@ Rules:
 - Map causes to the standard causal categories where possible
 - For exact_reserve_text: copy verbatim, do not paraphrase
 - IMPORTANT — opening_reserves_gbp_m: Use ONLY gross claims outstanding (claims reserves). Do NOT include unearned premium provisions. These are different items in the balance sheet / technical reserves note.
-- IMPORTANT — prior_year_development_gbp_m: Use the GROSS figure (insurance liabilities), NOT the net figure (after reinsurer's share). When a "Movement in prior year claims" note shows columns for "Insurance liabilities", "Reinsurer's share", and "Net liabilities", use the "Insurance liabilities" column. Example: Insurance liabilities (69.6), Reinsurer's share 29.8, Net (39.8) → use -69.6, NOT -39.8. WARNING: Narrative text in the Underwriter's Report often quotes the NET figure (e.g. "prior period reserve releases of £22m" or "net releases of £39.8m"). Always cross-check against the movement note in the financial statements — the movement note's GROSS (Insurance liabilities) column is authoritative. If the narrative figure differs from the movement note's gross figure, use the movement note. IMPORTANT FALLBACK: If the movement note only shows NET figures (e.g. "increased net technical reserves by £8.8m in respect of prior years"), this is NOT the gross figure — fall back to the GROSS claims development triangle (source 4 below) to compute the gross prior year development. The correct source is the note titled "Movement in prior year's provision for claims outstanding" — but ONLY if it shows the GROSS (Insurance liabilities) figure. WRONG SOURCES TO AVOID: (1) Do NOT use the "Claims incurred in prior underwriting years" row from the Profit & Loss Technical Account -- that is the NET claims figure after reinsurance, not the prior year reserve movement. (2) Do NOT use the "Movement in provision" row from the Technical Reserves reconciliation table -- that includes BOTH current year AND prior year movements combined. (3) Do NOT use closing reserve balances or net technical provisions. (4) Do NOT use changes in booked ultimates for specific named events (e.g. "booked ultimates for these losses increased from $64.9m to $230.6m") -- this is the change in ultimate loss estimate for one event, NOT the total prior year reserve development across the portfolio. (5) Do NOT use year-of-account PROFIT/LOSS results -- e.g. "a loss to capital providers from the 2017 and Prior Years of Account of £17.7m, a negative 10.4% return" -- this is the overall underwriting PROFIT result for the closed year of account, which includes premiums, claims, expenses, and investment returns combined. It is NOT a reserve movement. Only use YOA results when they explicitly break down INTO reserve/claims components. Return null if no reliable aggregate prior year development figure is available.
+- IMPORTANT — prior_year_development_gbp_m — WRONG SOURCES TO REJECT FIRST:
+  ✗ "Claims incurred in prior underwriting years" or "Claims incurred in relation to prior underwriting years" from the Profit & Loss Account / Technical Account. Despite containing the words "prior underwriting years", this is CLAIMS INCURRED (a P&L accounting line), NOT the prior year reserve movement. Example to REJECT: "Claims incurred in relation to prior underwriting years 789.7 (617.6) 172.1" — these are gross/reinsurance/net CLAIMS INCURRED, not reserve movements. IGNORE THIS COMPLETELY.
+  ✗ "Movement in provision" from Technical Reserves reconciliation — includes BOTH current + prior year combined.
+  ✗ Closing reserve balances or net technical provisions — balance sheet figures, not movements.
+  ✗ Changes in booked ultimates for specific named events — one event's estimate change, not total portfolio PYD.
+  ✗ Year-of-account PROFIT/LOSS results — e.g. "a loss to capital providers of £17.7m" — this is the overall underwriting profit/loss, NOT a reserve movement.
+- IMPORTANT — prior_year_development_gbp_m — CORRECT SOURCES (use FIRST found, must be GROSS):
+  Use the GROSS figure (insurance liabilities), NOT the net figure (after reinsurer's share). When a "Movement in prior year claims" note shows columns for "Insurance liabilities", "Reinsurer's share", and "Net liabilities", use the "Insurance liabilities" column. Example: Insurance liabilities (69.6), Reinsurer's share 29.8, Net (39.8) → use -69.6, NOT -39.8. WARNING: Narrative text often quotes the NET figure (e.g. "net releases of £39.8m"). Always cross-check against the movement note — the GROSS (Insurance liabilities) column is authoritative.
+  Source 1: "Movement in prior year's provision for claims outstanding" note (ONLY if it shows GROSS figure).
+  Source 2: Narrative text explicitly stating GROSS amount (e.g. "released £X in respect of prior periods").
+  Source 3: Year-of-account result breakdown summing non-current-year components.
+  Source 4: GROSS claims development triangle — compare bottom row to previous diagonal for UW years older than 2 most recent.
+  Source 5: Loss ratio development table × premiums (fallback if no absolute triangle).
+  IMPORTANT FALLBACK: If the movement note only shows NET figures, fall back to the GROSS claims development triangle (source 4). Return null if no reliable aggregate prior year development figure is available.
 - IMPORTANT — sign convention for "surplus/(deficit)" language: When a report says "A surplus/(deficit) run-off deviation of (X) million", the PARENTHESES around the number indicate a DEFICIT. A deficit means prior reserves were INSUFFICIENT, which is ADVERSE development = STRENGTHENING (POSITIVE sign). Example: "surplus/(deficit) of (3.0) million" means a 3.0m deficit = prior_year_development_gbp_m: +3.0, direction: "strengthening". Conversely, an unparenthesized number means a surplus = release = NEGATIVE sign.
 - IMPORTANT — gross_premium_mix: Use the REGULATORY segmental analysis from the Notes to the Accounts. Copy the line of business names EXACTLY as printed (e.g. "Marine, aviation and transport", "Fire and other damage to property", "Third party liability", "Miscellaneous", "Reinsurance"). Do NOT rename them to standard Lloyd's LOB names. Do NOT split combined categories into separate entries. Do NOT use the underwriter's internal divisional breakdown.
 - IMPORTANT — gross_premium_mix with "Direct insurance" and "Reinsurance acceptances" sub-tables: Some segmental analysis notes split gross premiums into "Direct insurance" and "Reinsurance acceptances" sub-tables, each with their own LOB categories (e.g. both may have "Fire and other damage to property"). In this case, list the individual Direct insurance categories with their amounts, then add a SINGLE consolidated "Reinsurance acceptances" line with the total of all reinsurance accepted premiums. Do NOT list the individual reinsurance sub-categories separately (they would create duplicate LOB names). The total should still equal gross_premiums_written_gbp_m.
@@ -488,12 +516,237 @@ def extract_with_openai(report_path, file_bytes, content_hash, syndicate_num, re
 
 
 # ---------------------------------------------------------------------------
+# Triangle verification — compute PYD from raw triangle data in Python
+# ---------------------------------------------------------------------------
+
+
+def compute_pyd_from_triangle(triangle_data, report_year):
+    """Compute prior year development from extracted triangle data.
+
+    The LLM extracts the raw triangle table (all development rows).
+    Python finds the diagonals: for each UW year column, the current estimate
+    is the last non-null value, and the previous diagonal is one row above that.
+
+    Args:
+        triangle_data: dict with keys: type, units, underwriting_years,
+                       development_rows (list of lists)
+        report_year: int
+
+    Returns:
+        (pyd_value, details_str) or (None, reason_str)
+    """
+    if not triangle_data or not isinstance(triangle_data, dict):
+        return None, "no triangle data"
+
+    tri_type = triangle_data.get("type", "none")
+    if tri_type == "none" or tri_type is None:
+        return None, "no triangle in report"
+
+    uw_years = triangle_data.get("underwriting_years")
+    rows = triangle_data.get("development_rows")
+
+    if not uw_years or not rows:
+        return None, "missing triangle arrays"
+
+    n_cols = len(uw_years)
+    n_rows = len(rows)
+
+    if n_rows < 2:
+        return None, "triangle has fewer than 2 development rows"
+
+    # Validate row lengths — pad short rows with None
+    for i in range(n_rows):
+        if not isinstance(rows[i], list):
+            rows[i] = []
+        while len(rows[i]) < n_cols:
+            rows[i].append(None)
+
+    # Detect and strip "Current estimate" summary row if LLM included it.
+    # The summary row has a non-null value in every column, repeating
+    # the last non-null value from each column's development rows.
+    if n_rows >= 3:
+        last_row = rows[-1]
+        is_summary = True
+        for col in range(n_cols):
+            if last_row[col] is None:
+                is_summary = False
+                break
+        if is_summary:
+            # Check if last row values match the last non-null in each column
+            # from the development rows (excluding last row)
+            matches = 0
+            for col in range(n_cols):
+                for r in range(n_rows - 2, -1, -1):
+                    if rows[r][col] is not None:
+                        try:
+                            if abs(float(rows[r][col]) - float(last_row[col])) < 0.01:
+                                matches += 1
+                        except (ValueError, TypeError):
+                            pass
+                        break
+            # If most columns match, it's a summary row — strip it
+            if matches >= n_cols * 0.7:
+                rows = rows[:-1]
+                n_rows -= 1
+
+    # For each column, find the current estimate (last non-null)
+    # and the previous diagonal (one row above the current)
+    details = []
+    total_pyd = 0.0
+    used_years = 0
+
+    for col_idx, uw_year in enumerate(uw_years):
+        try:
+            uw_year = int(uw_year)
+        except (ValueError, TypeError):
+            continue
+
+        # Exclude two most recent UW years
+        if uw_year >= report_year - 1:
+            continue
+
+        # Find last non-null value in this column (= current estimate)
+        current_row_idx = None
+        current_val = None
+        for row_idx in range(n_rows - 1, -1, -1):
+            val = rows[row_idx][col_idx]
+            if val is not None:
+                try:
+                    current_val = float(val)
+                    current_row_idx = row_idx
+                    break
+                except (ValueError, TypeError):
+                    continue
+
+        if current_val is None or current_row_idx is None:
+            details.append(f"  {uw_year}: skipped (no current estimate)")
+            continue
+
+        # Previous diagonal = one row above in same column
+        if current_row_idx == 0:
+            details.append(f"  {uw_year}: skipped (only 1 development period)")
+            continue
+
+        prev_val = None
+        prev_row_idx = current_row_idx - 1
+        val = rows[prev_row_idx][col_idx]
+        if val is not None:
+            try:
+                prev_val = float(val)
+            except (ValueError, TypeError):
+                pass
+
+        if prev_val is None:
+            details.append(f"  {uw_year}: skipped (no previous diagonal at row {prev_row_idx})")
+            continue
+
+        change = round(current_val - prev_val, 3)
+        total_pyd += change
+        used_years += 1
+        row_labels = ["End of UW yr", "1yr later", "2yr later", "3yr later",
+                       "4yr later", "5yr later", "6yr later", "7yr later",
+                       "8yr later", "9yr later", "10yr later"]
+        cur_label = row_labels[current_row_idx] if current_row_idx < len(row_labels) else f"row{current_row_idx}"
+        prev_label = row_labels[prev_row_idx] if prev_row_idx < len(row_labels) else f"row{prev_row_idx}"
+        details.append(f"  {uw_year}: {current_val} ({cur_label}) - {prev_val} ({prev_label}) = {change:+.3f}")
+
+    if used_years == 0:
+        return None, "no usable UW years in triangle"
+
+    # Convert units
+    units = triangle_data.get("units", "millions")
+    if units == "thousands":
+        total_pyd = round(total_pyd / 1000, 3)
+        details.append(f"  (converted from thousands to millions)")
+    elif units == "percentage":
+        return None, "loss ratio triangle -- needs premium data for conversion"
+
+    total_pyd = round(total_pyd, 3)
+    details_str = "\n".join(details) + f"\n  Total PYD = {total_pyd:+.3f}m ({used_years} UW years)"
+    return total_pyd, details_str
+
+
+def verify_pyd_with_triangle(result, model_name, report_year):
+    """Check if the model's PYD matches a code-computed value from its triangle.
+
+    If the model extracted triangle data AND a PYD value, verify the arithmetic.
+    If they disagree, override with the code-computed value.
+
+    Returns the (possibly corrected) result dict and a log message, or (result, None) if no change.
+    """
+    triangle = result.get("_claims_triangle")
+    if not triangle or triangle.get("type") in ("none", None):
+        return result, None
+
+    computed_pyd, details = compute_pyd_from_triangle(triangle, report_year)
+    if computed_pyd is None:
+        return result, None
+
+    model_pyd = result.get("prior_year_development_gbp_m")
+
+    # If model returned null but we can compute, fill it in
+    if model_pyd is None:
+        result = dict(result)
+        result["prior_year_development_gbp_m"] = computed_pyd
+        result["prior_year_development_pct"] = (
+            round(computed_pyd / result["opening_reserves_gbp_m"] * 100, 2)
+            if result.get("opening_reserves_gbp_m")
+            else None
+        )
+        if computed_pyd < 0:
+            result["direction"] = "release"
+        elif computed_pyd > 0:
+            result["direction"] = "strengthening"
+        else:
+            result["direction"] = "flat"
+        msg = (f"  [{model_name}] Triangle verification: model returned null, "
+               f"code computed {computed_pyd:+.3f}m from triangle\n{details}")
+        return result, msg
+
+    # If model returned a value, check it
+    try:
+        model_pyd_f = float(model_pyd)
+    except (ValueError, TypeError):
+        return result, None
+
+    if abs(model_pyd_f - computed_pyd) < 0.5:
+        # Close enough — triangle confirms model
+        msg = f"  [{model_name}] Triangle verification: CONFIRMED (model={model_pyd_f}, code={computed_pyd})"
+        return result, msg
+
+    # Disagreement — override with code-computed value
+    result = dict(result)
+    old_pyd = result["prior_year_development_gbp_m"]
+    result["prior_year_development_gbp_m"] = computed_pyd
+    result["prior_year_development_pct"] = (
+        round(computed_pyd / result["opening_reserves_gbp_m"] * 100, 2)
+        if result.get("opening_reserves_gbp_m")
+        else None
+    )
+    if computed_pyd < 0:
+        result["direction"] = "release"
+    elif computed_pyd > 0:
+        result["direction"] = "strengthening"
+    else:
+        result["direction"] = "flat"
+    old_notes = result.get("data_quality_notes", "")
+    result["data_quality_notes"] = (
+        f"{old_notes} [CODE OVERRIDE: Model said PYD={old_pyd}, "
+        f"but code computed {computed_pyd} from triangle. Using code value.]"
+    )
+    msg = (f"  [{model_name}] Triangle verification: OVERRIDE "
+           f"(model={old_pyd}, code={computed_pyd})\n{details}")
+    return result, msg
+
+
+# ---------------------------------------------------------------------------
 # Comparison logic
 # ---------------------------------------------------------------------------
 
 SKIP_FIELDS = {
     "source_type", "source_file", "content_hash",
     "standardized_at", "standardization_model", "_extraction_meta",
+    "_claims_triangle",
 }
 
 
@@ -907,6 +1160,15 @@ def process_one_report(report_path):
     result_openai = extract_with_openai(
         actual_path, file_bytes, content_hash, syndicate_num, report_year
     )
+
+    # Triangle verification — cross-check LLM's PYD against code-computed value
+    # Only overrides when the triangle data is available AND the arithmetic disagrees
+    result_gemini, tri_msg_g = verify_pyd_with_triangle(result_gemini, GEMINI_MODEL, report_year)
+    result_openai, tri_msg_o = verify_pyd_with_triangle(result_openai, OPENAI_MODEL, report_year)
+    if tri_msg_g:
+        print(tri_msg_g)
+    if tri_msg_o:
+        print(tri_msg_o)
 
     # Compare
     discrepancies = compare_results(result_gemini, result_openai, GEMINI_MODEL, OPENAI_MODEL)

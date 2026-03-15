@@ -130,6 +130,22 @@
       "changes": "Added source #5: Loss Ratio Development Table. When no absolute claims triangle exists but a gross loss ratio development table is available, compute Δ loss ratio for each UW year (current vs previous diagonal, excluding two most recent), then multiply by gross premiums for that UW year to get £m amount. Includes worked example showing the calculation.",
       "trigger": "syndicate_2010_2014: Report contains loss ratio development tables (percentages) but no absolute claims triangle. Adjudicator returned null because it only knew how to read absolute triangles. Gemini extracted -14.262 from 'Gross claims incurred' text but adjudicator couldn't verify.",
       "reports_triggering_change": ["syndicate_2010_2014"]
+    },
+    {
+      "version": "2.6",
+      "date": "2026-03-15",
+      "description": "Strengthen rejection of Technical Account 'Claims incurred in prior underwriting years' as wrong source",
+      "changes": "Made wrong source #1 rejection much more prominent: added CRITICAL warning in field definition, clarified that 'Claims incurred in prior/relation to prior underwriting years' is a P&L item (claims incurred = premiums earned minus claims paid minus reserve changes), NOT the reserve movement. Added concrete example to reject: '789.7 (617.6) 172.1'. Updated extraction prompt, adjudicator direction prompt, and adjudicator prior_year_development_gbp_m prompt. Also added rejection guidance to exact_reserve_text field definition.",
+      "trigger": "syndicate_2987_2018: All three models (Gemini, GPT, adjudicator) used 'Claims incurred in relation to prior underwriting years 789.7 (617.6) 172.1' from the Technical Account instead of computing PYD from the GROSS claims development triangle. The correct answer from the triangle is +71.4 (strengthening), driven by a large +124.8 increase on 2016 UW year.",
+      "reports_triggering_change": ["syndicate_2987_2018"]
+    },
+    {
+      "version": "2.7",
+      "date": "2026-03-15",
+      "description": "Add code-based triangle verification and full triangle extraction",
+      "changes": "Changed extraction to request full claims development triangle as structured data (_claims_triangle field with development_rows matrix). Python code then computes PYD from diagonals, cross-checking or overriding LLM values. Summary row detection strips 'Current estimate' rows. Aggregate columns ('X and prior') explicitly excluded from extraction. Triangle verification fills null PYD when computable, overrides wrong PYD with code-computed value.",
+      "trigger": "syndicate_2987_2018: LLMs made arithmetic errors computing PYD from triangle diagonals (Gemini: 193.7, GPT: 803.9 due to aggregate column misalignment). Moving triangle computation to Python eliminates arithmetic errors. GPT now correctly extracts the full triangle table, code computes +71.4 matching the expected value.",
+      "reports_triggering_change": ["syndicate_2987_2018"]
     }
   ]
 }
