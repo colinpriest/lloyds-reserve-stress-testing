@@ -29,6 +29,38 @@ from google import genai
 from google.genai.types import GenerateContentConfig
 from openai import OpenAI
 
+try:
+    import fitz  # PyMuPDF
+except ImportError:
+    fitz = None
+
+try:
+    from pdf2image import convert_from_path
+    from PIL import Image
+    import io
+    HAS_PDF2IMAGE = True
+except ImportError:
+    HAS_PDF2IMAGE = False
+
+try:
+    import pytesseract
+    # Try common Windows install locations if not on PATH
+    _tesseract_paths = [
+        r"C:\Users\colin\AppData\Local\Programs\Tesseract-OCR\tesseract.exe",
+        r"C:\Program Files\Tesseract-OCR\tesseract.exe",
+    ]
+    try:
+        pytesseract.get_tesseract_version()
+    except pytesseract.TesseractNotFoundError:
+        for tp in _tesseract_paths:
+            if os.path.exists(tp):
+                pytesseract.pytesseract.tesseract_cmd = tp
+                break
+    pytesseract.get_tesseract_version()
+    HAS_TESSERACT = True
+except Exception:
+    HAS_TESSERACT = False
+
 from adjudicate import (
     ask_human,
     build_verification_prompt,
@@ -516,6 +548,338 @@ def extract_with_openai(report_path, file_bytes, content_hash, syndicate_num, re
 
 
 # ---------------------------------------------------------------------------
+# Page-level extraction — OCR + targeted page search (RAG-lite)
+# ---------------------------------------------------------------------------
+
+# Patterns that indicate a claims development triangle page
+TRIANGLE_PATTERNS = [
+    r"claims?\s+development",
+    r"analysis\s+of\s+claims",
+    r"cumulative\s+claims?\s+incurred",
+    r"underwriting\s+year.*later",
+    r"end\s+of\s+underwriting\s+year",
+    r"at\s+end\s+of\s+.*year",
+    r"one\s+year\s+later",
+    r"two\s+years?\s+later",
+    r"three\s+years?\s+later",
+]
+
+# Patterns that indicate prior year reserve movement text
+RESERVE_MOVEMENT_PATTERNS = [
+    r"prior\s+year\s+(reserve|claim|development|movement|provision)",
+    r"movement\s+in\s+prior\s+year",
+    r"prior\s+underwriting\s+year",
+    r"reserve\s+(release|strengthen|deteriorat|surplus|deficit)",
+    r"run.?off\s+(surplus|deficit|deviation|result)",
+    r"favourable.*development",
+    r"adverse.*development",
+    r"prior\s+year.*release",
+    r"prior\s+year.*strengthen",
+]
+
+
+def extract_text_from_pdf(pdf_path):
+    """Extract text from PDF, page by page. Returns list of (page_num, text).
+
+    Tries PyMuPDF first, then pdfplumber, then OCR via Tesseract.
+    """
+    pages = []
+
+    # Try PyMuPDF
+    if fitz:
+        try:
+            doc = fitz.open(str(pdf_path))
+            for i, page in enumerate(doc):
+                text = page.get_text()
+                pages.append((i + 1, text.strip()))
+            doc.close()
+            # Check if we got meaningful text — need at least 100 chars/page average
+            total_chars = sum(len(t) for _, t in pages)
+            if len(pages) > 0 and total_chars / len(pages) > 100:
+                return pages, "pymupdf"
+        except Exception:
+            pass
+
+    # Try pdfplumber
+    try:
+        import pdfplumber
+        with pdfplumber.open(str(pdf_path)) as pdf:
+            pages = []
+            for i, page in enumerate(pdf.pages):
+                text = page.extract_text() or ""
+                pages.append((i + 1, text.strip()))
+            total_chars = sum(len(t) for _, t in pages)
+            if len(pages) > 0 and total_chars / len(pages) > 100:
+                return pages, "pdfplumber"
+    except Exception:
+        pass
+
+    # OCR with Tesseract — cache results to avoid re-running
+    if HAS_PDF2IMAGE and HAS_TESSERACT:
+        ocr_cache_path = Path("pdf_extraction/ocr_page_cache")
+        ocr_cache_path.mkdir(parents=True, exist_ok=True)
+        cache_file = ocr_cache_path / f"{pdf_path.stem}.json"
+
+        if cache_file.exists():
+            try:
+                with open(cache_file, "r") as f:
+                    cached = json.load(f)
+                pages = [(p["page"], p["text"]) for p in cached]
+                return pages, "ocr_cache"
+            except Exception:
+                pass
+
+        try:
+            images = convert_from_path(str(pdf_path), dpi=200)
+            pages = []
+            for i, img in enumerate(images):
+                text = pytesseract.image_to_string(img)
+                pages.append((i + 1, text.strip()))
+            # Cache the OCR results
+            with open(cache_file, "w") as f:
+                json.dump([{"page": p, "text": t} for p, t in pages], f)
+            return pages, "ocr"
+        except Exception as e:
+            print(f"  [OCR] Failed: {e}")
+
+    return pages, "none"
+
+
+def find_relevant_pages(pages, report_year):
+    """Search page text for triangle tables and reserve movement narratives.
+
+    Returns dict with keys:
+        'triangle_pages': list of (page_num, text) for pages with triangle data
+        'reserve_pages': list of (page_num, text) for pages with reserve movement text
+    """
+    triangle_pages = []
+    reserve_pages = []
+
+    for page_num, text in pages:
+        if not text:
+            continue
+        text_lower = text.lower()
+
+        # Check for triangle
+        triangle_score = sum(1 for p in TRIANGLE_PATTERNS
+                           if re.search(p, text_lower))
+        if triangle_score >= 2:
+            triangle_pages.append((page_num, text))
+
+        # Check for reserve movement narrative
+        reserve_score = sum(1 for p in RESERVE_MOVEMENT_PATTERNS
+                          if re.search(p, text_lower))
+        if reserve_score >= 2:
+            reserve_pages.append((page_num, text))
+
+    return {
+        "triangle_pages": triangle_pages,
+        "reserve_pages": reserve_pages,
+    }
+
+
+def render_page_as_image_b64(pdf_path, page_num):
+    """Render a single PDF page as a base64-encoded PNG image."""
+    if not HAS_PDF2IMAGE:
+        return None
+    try:
+        images = convert_from_path(str(pdf_path), dpi=250,
+                                   first_page=page_num, last_page=page_num)
+        if images:
+            buf = io.BytesIO()
+            images[0].save(buf, format="PNG")
+            return base64.b64encode(buf.getvalue()).decode("utf-8")
+    except Exception as e:
+        print(f"  [render] Failed to render page {page_num}: {e}")
+    return None
+
+
+TRIANGLE_EXTRACT_PROMPT = """Extract the claims development triangle from this page.
+
+This is a table showing cumulative gross incurred claims by underwriting year.
+Return ONLY valid JSON with this structure:
+
+{{
+  "type": "<gross|net|loss_ratio|none>",
+  "currency": "<GBP|USD|EUR>",
+  "units": "<millions|thousands|percentage>",
+  "underwriting_years": [<list of individual UW year integers, e.g. [2011, 2012, 2013, ...]. EXCLUDE any 'X and prior' aggregate column>],
+  "development_rows": [
+    [<Row 0: values for each UW year, null if cell is blank>],
+    [<Row 1: next development period>],
+    ...
+  ]
+}}
+
+CRITICAL RULES:
+- EXCLUDE any 'X and prior' aggregate column (e.g. '2010 and prior')
+- EXCLUDE 'Current estimate of cumulative claims' summary row
+- EXCLUDE 'Cumulative payments' and 'Outstanding claims provision' rows
+- Include ONLY development period rows (At end of UW year, One year later, Two years later, etc.)
+- Use null for empty cells
+- The most recent UW year column should be {report_year}
+- The oldest UW year should have the most filled development rows
+"""
+
+
+def extract_triangle_from_page(pdf_path, page_num, report_year, model="gemini-2.5-flash"):
+    """Send a single page image to an LLM to extract the triangle table.
+
+    Returns (triangle_dict, cost) or (None, 0) on failure.
+    """
+    img_b64 = render_page_as_image_b64(pdf_path, page_num)
+    if not img_b64:
+        return None, 0
+
+    prompt = TRIANGLE_EXTRACT_PROMPT.replace("{report_year}", str(report_year))
+
+    if model.startswith("gemini"):
+        client = genai.Client(api_key=os.getenv("GOOGLE_API_KEY"))
+        config = GenerateContentConfig(
+            temperature=0.0,
+            response_mime_type="application/json",
+        )
+        # Send image as inline data
+        response = client.models.generate_content(
+            model=model,
+            contents=[
+                {"inline_data": {"mime_type": "image/png",
+                                 "data": base64.b64decode(img_b64)}},
+                prompt,
+            ],
+            config=config,
+        )
+        try:
+            data = parse_json_response(response.text)
+            usage = response.usage_metadata
+            cost = (usage.prompt_token_count * PRICING[model]["input"] / 1_000_000 +
+                    usage.candidates_token_count * PRICING[model]["output"] / 1_000_000)
+            return data, cost
+        except (json.JSONDecodeError, Exception) as e:
+            return None, 0
+    else:
+        # OpenAI
+        client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+        response = client.responses.create(
+            model=model,
+            max_output_tokens=8192,
+            input=[{
+                "role": "user",
+                "content": [
+                    {"type": "input_image",
+                     "image_url": f"data:image/png;base64,{img_b64}"},
+                    {"type": "input_text", "text": prompt},
+                ],
+            }],
+        )
+        try:
+            data = parse_json_response(response.output_text)
+            cost = (response.usage.input_tokens * PRICING[model]["input"] / 1_000_000 +
+                    response.usage.output_tokens * PRICING[model]["output"] / 1_000_000)
+            return data, cost
+        except (json.JSONDecodeError, Exception) as e:
+            return None, 0
+
+
+def extract_triangle_with_retry(pdf_path, page_num, report_year, max_retries=3):
+    """Extract triangle from a page, validating and retrying up to max_retries times.
+
+    Uses Gemini for extraction (cheapest vision model). Validates structure after each attempt.
+
+    Returns (triangle_dict, computed_pyd, details, total_cost) or (None, None, None, total_cost).
+    """
+    total_cost = 0
+    model = "gemini-2.5-flash"
+
+    for attempt in range(1, max_retries + 1):
+        tri_data, cost = extract_triangle_from_page(pdf_path, page_num, report_year, model)
+        total_cost += cost
+
+        if not tri_data:
+            print(f"    [page {page_num}] Attempt {attempt}: no data returned")
+            continue
+
+        # Validate and compute PYD
+        pyd, details = compute_pyd_from_triangle(tri_data, report_year)
+        if pyd is not None:
+            print(f"    [page {page_num}] Attempt {attempt}: PYD={pyd:+.3f}m OK")
+            return tri_data, pyd, details, total_cost
+
+        print(f"    [page {page_num}] Attempt {attempt}: validation failed — {details}")
+
+    return None, None, None, total_cost
+
+
+def extract_pyd_from_relevant_pages(pdf_path, report_year):
+    """RAG-lite: find relevant pages, extract triangle or reserve narrative.
+
+    1. Extract text from PDF (PyMuPDF / pdfplumber / OCR)
+    2. Find pages with triangle tables or reserve movement text
+    3. For triangle pages: render as image, send to LLM, validate, retry up to 3x
+    4. For reserve pages: return the text for the main extraction to use
+
+    Returns dict:
+        'triangle': computed triangle data (dict) or None
+        'pyd': computed PYD from triangle (float) or None
+        'pyd_details': details string
+        'reserve_text': concatenated reserve movement text from relevant pages
+        'method': how text was extracted (pymupdf/pdfplumber/ocr)
+        'cost': total cost of page-level extractions
+    """
+    result = {
+        "triangle": None, "pyd": None, "pyd_details": None,
+        "reserve_text": "", "method": "none", "cost": 0,
+    }
+
+    # Step 1: Extract text from PDF
+    pages, method = extract_text_from_pdf(pdf_path)
+    result["method"] = method
+
+    if not pages:
+        print(f"  [RAG] No text extracted from PDF (method={method})")
+        return result
+
+    print(f"  [RAG] Extracted {len(pages)} pages via {method}, "
+          f"total {sum(len(t) for _, t in pages):,} chars")
+
+    # Step 2: Find relevant pages
+    relevant = find_relevant_pages(pages, report_year)
+    tri_pages = relevant["triangle_pages"]
+    res_pages = relevant["reserve_pages"]
+
+    print(f"  [RAG] Found {len(tri_pages)} triangle page(s), "
+          f"{len(res_pages)} reserve movement page(s)")
+
+    # Step 3: Extract triangle from page images
+    if tri_pages and HAS_PDF2IMAGE:
+        for page_num, page_text in tri_pages[:2]:  # Try up to 2 triangle pages
+            # Check if this page has "gross" in it (prefer gross over net)
+            if "net" in page_text.lower() and "gross" not in page_text.lower():
+                print(f"    [page {page_num}] Skipping — appears to be NET triangle")
+                continue
+
+            print(f"  [RAG] Extracting triangle from page {page_num}...")
+            tri_data, pyd, details, cost = extract_triangle_with_retry(
+                pdf_path, page_num, report_year
+            )
+            result["cost"] += cost
+
+            if pyd is not None:
+                result["triangle"] = tri_data
+                result["pyd"] = pyd
+                result["pyd_details"] = details
+                break
+
+    # Step 4: Collect reserve movement text
+    if res_pages:
+        result["reserve_text"] = "\n---\n".join(
+            f"[Page {pn}]\n{text}" for pn, text in res_pages
+        )
+
+    return result
+
+
+# ---------------------------------------------------------------------------
 # Triangle verification — compute PYD from raw triangle data in Python
 # ---------------------------------------------------------------------------
 
@@ -969,6 +1333,7 @@ SKIP_FIELDS = {
     "source_type", "source_file", "content_hash",
     "standardized_at", "standardization_model", "_extraction_meta",
     "_claims_triangle",
+    "_rag_triangle",
 }
 
 
@@ -1383,13 +1748,62 @@ def process_one_report(report_path):
         actual_path, file_bytes, content_hash, syndicate_num, report_year
     )
 
-    # Triangle verification — cross-check LLM's PYD against code-computed value
-    # Cross-validates between models; applies sanity checks before overriding
-    result_gemini, result_openai, tri_messages = verify_triangles(
-        result_gemini, result_openai, GEMINI_MODEL, OPENAI_MODEL, report_year
-    )
-    for msg in tri_messages:
-        print(msg)
+    # RAG-lite: page-level extraction for triangle and reserve narrative
+    # This runs OCR if needed, finds relevant pages, and extracts triangle
+    # data with retries. Much more reliable than full-PDF LLM extraction.
+    rag_result = extract_pyd_from_relevant_pages(actual_path, report_year)
+    if rag_result["pyd"] is not None:
+        # RAG found a valid triangle PYD — use it as ground truth
+        rag_pyd = rag_result["pyd"]
+        rag_details = rag_result["pyd_details"]
+        print(f"  [RAG] Triangle PYD: {rag_pyd:+.3f}m")
+
+        # Apply to both models
+        for result, model_name in [
+            (result_gemini, GEMINI_MODEL),
+            (result_openai, OPENAI_MODEL),
+        ]:
+            model_pyd = result.get("prior_year_development_gbp_m")
+            if model_pyd is None:
+                result["prior_year_development_gbp_m"] = rag_pyd
+                if result.get("opening_reserves_gbp_m"):
+                    result["prior_year_development_pct"] = round(
+                        rag_pyd / result["opening_reserves_gbp_m"] * 100, 2
+                    )
+                result["direction"] = "release" if rag_pyd < 0 else "strengthening" if rag_pyd > 0 else "flat"
+                print(f"  [{model_name}] PYD filled from RAG triangle: {rag_pyd:+.3f}m")
+            else:
+                try:
+                    if abs(float(model_pyd) - rag_pyd) >= 0.5:
+                        old_pyd = model_pyd
+                        result["prior_year_development_gbp_m"] = rag_pyd
+                        if result.get("opening_reserves_gbp_m"):
+                            result["prior_year_development_pct"] = round(
+                                rag_pyd / result["opening_reserves_gbp_m"] * 100, 2
+                            )
+                        result["direction"] = "release" if rag_pyd < 0 else "strengthening" if rag_pyd > 0 else "flat"
+                        old_notes = result.get("data_quality_notes", "") or ""
+                        result["data_quality_notes"] = (
+                            f"{old_notes} [RAG OVERRIDE: Model said PYD={old_pyd}, "
+                            f"RAG triangle computed {rag_pyd}. Using RAG value.]"
+                        )
+                        print(f"  [{model_name}] PYD overridden by RAG triangle: {old_pyd} → {rag_pyd:+.3f}m")
+                    else:
+                        print(f"  [{model_name}] PYD confirmed by RAG triangle: {model_pyd}")
+                except (ValueError, TypeError):
+                    pass
+
+        # Store RAG triangle in both results for reference
+        if rag_result["triangle"]:
+            result_gemini["_rag_triangle"] = rag_result["triangle"]
+            result_openai["_rag_triangle"] = rag_result["triangle"]
+    else:
+        # No triangle from RAG — fall back to LLM-extracted triangles
+        result_gemini, result_openai, tri_messages = verify_triangles(
+            result_gemini, result_openai, GEMINI_MODEL, OPENAI_MODEL, report_year
+        )
+        for msg in tri_messages:
+            print(msg)
 
     # Compare
     discrepancies = compare_results(result_gemini, result_openai, GEMINI_MODEL, OPENAI_MODEL)
