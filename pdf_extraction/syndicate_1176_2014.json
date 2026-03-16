@@ -1,26 +1,33 @@
 {
-  "extraction_timestamp": "2026-03-12T00:38:29.991980+00:00",
+  "extraction_timestamp": "2026-03-15T23:19:27.954474+00:00",
+  "spec": {
+    "prompt_version": "2.6",
+    "field_definitions_version": "1.0",
+    "tolerance_rules_version": "1.0"
+  },
   "source_file": "syndicate_reports\\pdfs\\syndicate_1176_2014.pdf",
   "models": {
     "gemini-2.5-flash": {
       "syndicate": 1176,
       "year": 2014,
       "opening_reserves_gbp_m": 39.487,
-      "opening_reserves_page": 16,
+      "opening_reserves_page": 15,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": -9.5,
       "prior_year_development_pct": -24.06,
       "direction": "release",
-      "prior_year_movement_page": 22,
-      "prior_year_movement_confidence": 1.0,
+      "prior_year_movement_page": 21,
       "exact_reserve_text": "During the year, the Syndicate released GBP 9.5m of technical reserves in respect of prior periods (2013: GBP 7.1m).",
       "primary_causes": [
         "Favorable claims development",
-        "Economic inflation / claims cost inflation"
+        "Economic inflation / claims cost inflation",
+        "Reinsurance recoveries"
       ],
       "specific_events": [
         "Hamaoka nuclear plant claim",
-        "Medical isotope plant loss South Africa"
+        "South Africa medical isotope plant loss",
+        "Urenco fuel fabrication plant loss",
+        "China material damage loss"
       ],
       "specific_years_affected": [
         2012,
@@ -29,8 +36,8 @@
       "prior_year_events": [
         {
           "event_name": "Hamaoka nuclear plant claim",
-          "event_year": 2012,
-          "impact_description": "The loss is reserved in Yen, which has depreciated against sterling, the loss has reduced; although this reduction is matched by a loss on Yen cash held to hedge against the claim.",
+          "event_year": 2011,
+          "impact_description": "loss reduced due to Yen depreciation against sterling",
           "lobs_affected": [
             "Property"
           ],
@@ -38,26 +45,45 @@
           "confidence": 0.8
         },
         {
-          "event_name": "Medical isotope plant loss South Africa",
+          "event_name": "South Africa medical isotope plant loss",
           "event_year": 2013,
-          "impact_description": "The reserve last year was some GBP 4m; although the claim was settled at less than this, at GBP 1.7m.",
+          "impact_description": "claim was settled at less than reserve (from GBP 4m to GBP 1.7m)",
           "lobs_affected": [
             "Property"
           ],
           "amount_gbp_m": -2.3,
           "confidence": 1.0
+        },
+        {
+          "event_name": "Urenco fuel fabrication plant loss",
+          "event_year": 2013,
+          "impact_description": "Syndicate paid GBP 1.5m",
+          "lobs_affected": [
+            "Property"
+          ],
+          "amount_gbp_m": 1.5,
+          "confidence": 1.0
+        },
+        {
+          "event_name": "China material damage loss",
+          "event_year": 2013,
+          "impact_description": "established a recent reserve of GBP 1.4m",
+          "lobs_affected": [
+            "Property"
+          ],
+          "amount_gbp_m": 1.4,
+          "confidence": 1.0
         }
       ],
       "named_events": [
         {
-          "event_name": "Three Mile Island",
-          "event_year": 1979,
-          "event_type": "man_made",
+          "event_name": "Fukushima accident",
+          "event_year": 2011,
+          "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "only one significant insured nuclear event",
+          "loss_description": "extensive review of the Syndicate's potential catastrophe exposure was undertaken, and exposure is considered to be very limited.",
           "lobs_affected": [
-            "Property",
-            "Casualty"
+            "Property"
           ],
           "page": 4,
           "confidence": 0.8
@@ -67,42 +93,29 @@
           "event_year": 1992,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "largest insured windstorm loss to date was from a spares warehouse on a nuclear site from Hurricane Andrew in 1992. While the warehouse was damaged, with losses in the region of $200m, there was no damage to the nuclear unit.",
+          "loss_description": "Largest insured windstorm loss to date was from a spares warehouse on a nuclear site from Hurricane Andrew in 1992. While the warehouse was damaged, with losses in the region of $200m, there was no damage to the nuclear unit.",
           "lobs_affected": [
             "Property"
-          ],
-          "page": 4,
-          "confidence": 0.8
-        },
-        {
-          "event_name": "Fukushima accident",
-          "event_year": 2011,
-          "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": null,
-          "loss_description": "an extensive review of the Syndicate's potential catastrophe exposure was undertaken",
-          "lobs_affected": [
-            "Property",
-            "Casualty"
           ],
           "page": 4,
           "confidence": 0.8
         },
         {
           "event_name": "Hamaoka nuclear plant claim",
-          "event_year": 2012,
+          "event_year": 2011,
           "event_type": "man_made",
           "net_loss_gbp_m": null,
-          "loss_description": "a pipe burst resulting in an inundation of seawater into the reactor systems. The Syndicate has reserved the claim in line with estimates at a cost of Yen 686m. Because the loss is reserved in Yen, which has depreciated against sterling, the loss has reduced.",
+          "loss_description": "Following the earthquake in Japan, safety tests were undertaken at all sites. During this work at one of the sites, a pipe burst resulting in an inundation of seawater into the reactor systems. The Syndicate has reserved the claim in line with estimates at a cost of Yen 686m. Because the loss is reserved in Yen, which has depreciated against sterling, the loss has reduced",
           "lobs_affected": [
             "Property"
           ],
           "page": 6,
-          "confidence": 0.9
+          "confidence": 1.0
         },
         {
-          "event_name": "Medical isotope plant loss South Africa",
+          "event_name": "South Africa medical isotope plant loss",
           "event_year": 2013,
-          "event_type": "other",
+          "event_type": "man_made",
           "net_loss_gbp_m": 1.7,
           "loss_description": "The reserve last year was some GBP 4m; although the claim was settled at less than this, at GBP 1.7m.",
           "lobs_affected": [
@@ -112,9 +125,9 @@
           "confidence": 1.0
         },
         {
-          "event_name": "Urenco fuel fabrication plant loss UK",
+          "event_name": "Urenco fuel fabrication plant loss",
           "event_year": 2013,
-          "event_type": "other",
+          "event_type": "man_made",
           "net_loss_gbp_m": 1.5,
           "loss_description": "An additional loss was experienced at the Urenco fuel fabrication plant in the UK, which the Syndicate paid GBP 1.5m.",
           "lobs_affected": [
@@ -124,9 +137,9 @@
           "confidence": 1.0
         },
         {
-          "event_name": "Material damage loss China",
+          "event_name": "China material damage loss",
           "event_year": 2013,
-          "event_type": "other",
+          "event_type": "man_made",
           "net_loss_gbp_m": 1.4,
           "loss_description": "The Syndicate has also established a recent reserve of GBP 1.4m as a result of a possible material damage loss in China.",
           "lobs_affected": [
@@ -136,13 +149,17 @@
           "confidence": 1.0
         }
       ],
-      "standardized_narrative": "Syndicate 1176 reported a release of GBP 9.5 million in technical reserves for prior periods in 2014. This release was primarily driven by favorable claims development, including low loss experience for the 2012 underwriting year and the settlement of a 2013 medical isotope plant loss in South Africa for less than initially reserved. Additionally, the depreciation of the Yen against Sterling contributed to a reduction in the GBP value of the Hamaoka nuclear plant claim from the 2012 year of account, although this currency effect was largely offset by hedging activities.",
+      "standardized_narrative": "The Syndicate reported a release of GBP 9.5 million in technical reserves for prior periods in 2014. This favorable development was primarily driven by low loss experience for the 2012 year of account and a reduction in a Yen-denominated claim for the Hamaoka nuclear plant due to currency depreciation. Additionally, a loss at a South Africa medical isotope plant settled for less than initially reserved. However, new reserves were established for a Urenco fuel fabrication plant loss in the UK and a material damage loss in China, indicating some adverse development on specific prior year events.",
       "raw_causal_phrases": [
         "released GBP 9.5m of technical reserves in respect of prior periods",
-        "The 2012 underwriting year has performed well, reflecting low loss experience",
-        "the decision not to buy reinsurance for the Syndicate",
+        "The 2012 underwriting year has performed well, reflecting low loss experience and the decision not to buy reinsurance for the Syndicate. This, coupled with other improvements, has resulted in a profit for the 2012 underwriting year of 62.4% of capacity.",
+        "Because the loss is reserved in Yen, which has depreciated against sterling, the loss has reduced",
         "the claim was settled at less than this, at GBP 1.7m",
-        "Because the loss is reserved in Yen, which has depreciated against sterling, the loss has reduced"
+        "An additional loss was experienced at the Urenco fuel fabrication plant in the UK, which the Syndicate paid GBP 1.5m.",
+        "The Syndicate has also established a recent reserve of GBP 1.4m as a result of a possible material damage loss in China.",
+        "exchange rate fluctuations",
+        "sterling's strength",
+        "impact of foreign currency exchange rate fluctuation on the value of technical provisions"
       ],
       "lob_movements": [
         {
@@ -150,42 +167,106 @@
           "direction": "release",
           "amount_gbp_m": -9.5,
           "percentage": null,
-          "confidence": 0.8
+          "confidence": 0.5
         }
       ],
-      "gross_premiums_written_gbp_m": 24.285,
+      "gross_premiums_written_gbp_m": 42.6,
       "gross_premium_mix": [
         {
           "line_of_business": "Fire and other damage to property",
-          "amount_gbp_m": 3.56,
-          "percentage_of_total": 14.66
+          "amount_gbp_m": 3.6,
+          "percentage_of_total": 8.5
         },
         {
           "line_of_business": "Third party liability",
-          "amount_gbp_m": 1.55,
-          "percentage_of_total": 6.38
+          "amount_gbp_m": 1.6,
+          "percentage_of_total": 3.8
         },
         {
           "line_of_business": "Reinsurance",
-          "amount_gbp_m": 19.175,
-          "percentage_of_total": 78.96
+          "amount_gbp_m": 19.2,
+          "percentage_of_total": 45.1
+        },
+        {
+          "line_of_business": "Third party liability",
+          "amount_gbp_m": 2.0,
+          "percentage_of_total": 4.7
+        },
+        {
+          "line_of_business": "Reinsurance",
+          "amount_gbp_m": 16.4,
+          "percentage_of_total": 38.5
         }
       ],
-      "gross_premium_page": 21,
+      "gross_premium_page": 20,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The specific breakdown of the GBP 9.5m prior year release by line of business is not explicitly provided, but the narrative points to property-related events.",
+      "data_quality_notes": "The overall prior year development figure is explicitly stated as a gross release. The LOB breakdown for this overall figure is not explicitly provided, but the specific events mentioned as contributing to prior year movements are all property-related, and the syndicate's business is predominantly property and liability.",
       "source_type": "syndicate",
       "source_file": "syndicate_reports\\pdfs\\syndicate_1176_2014.pdf",
       "content_hash": "6bc09bae4b6d3dd46131eacc1b4de7db921f949a2bece61caaa95b88b72f66fc",
-      "standardized_at": "2026-03-12T00:37:08.567414+00:00",
+      "standardized_at": "2026-03-15T23:18:04.014530+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 10163,
-        "output_tokens": 2049,
-        "total_tokens": 15456,
-        "cost_usd": 0.008171
+        "input_tokens": 13366,
+        "output_tokens": 2262,
+        "total_tokens": 25577,
+        "cost_usd": 0.009665
+      },
+      "_adobe_lob": {
+        "gross_premium_mix": [
+          {
+            "line_of_business": "Fire and other damage to property",
+            "amount_gbp_m": 3.6,
+            "percentage_of_total": 8.5
+          },
+          {
+            "line_of_business": "Third party liability",
+            "amount_gbp_m": 1.6,
+            "percentage_of_total": 3.8
+          },
+          {
+            "line_of_business": "Reinsurance",
+            "amount_gbp_m": 19.2,
+            "percentage_of_total": 45.1
+          },
+          {
+            "line_of_business": "Third party liability",
+            "amount_gbp_m": 2.0,
+            "percentage_of_total": 4.7
+          },
+          {
+            "line_of_business": "Reinsurance",
+            "amount_gbp_m": 16.4,
+            "percentage_of_total": 38.5
+          }
+        ],
+        "gross_premiums_written_gbp_m": 42.6,
+        "claims_incurred_by_lob": [
+          {
+            "line_of_business": "Fire and other damage to property",
+            "amount_gbp_m": 1.0
+          },
+          {
+            "line_of_business": "Third party liability",
+            "amount_gbp_m": 0.5
+          },
+          {
+            "line_of_business": "Reinsurance",
+            "amount_gbp_m": -0.3
+          },
+          {
+            "line_of_business": "Third party liability",
+            "amount_gbp_m": -1.2
+          },
+          {
+            "line_of_business": "Reinsurance",
+            "amount_gbp_m": -3.0
+          }
+        ],
+        "currency": "GBP",
+        "method": "adobe"
       }
     },
     "gpt-5-mini": {
@@ -195,10 +276,10 @@
       "opening_reserves_page": 22,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": -9.5,
-      "prior_year_development_pct": -24.1,
+      "prior_year_development_pct": -24.06,
       "direction": "release",
       "prior_year_movement_page": 19,
-      "prior_year_movement_confidence": 1.0,
+      "prior_year_movement_confidence": 0.5,
       "exact_reserve_text": "During the year, the Syndicate released GBP 9.5m of technical reserves in respect of prior periods (2013: GBP 7.1m).",
       "primary_causes": [
         "Favorable claims development"
@@ -209,168 +290,240 @@
         {
           "event_name": "Medical isotope plant (South Africa)",
           "event_year": 2013,
-          "impact_description": "Reserve last year was some GBP 4m; although the claim was settled at less than this, the Syndicate paid GBP 1.7m.",
+          "impact_description": "Reserve last year was some GBP 4m; claim was settled at less than this, at GBP 1.7m (reducing the prior year exposure).",
           "lobs_affected": [
-            "Property"
+            "Energy"
           ],
           "amount_gbp_m": 1.7,
-          "confidence": 0.9
-        },
-        {
-          "event_name": "Urenco fuel fabrication plant (UK)",
-          "event_year": 2013,
-          "impact_description": "An additional loss was experienced at the Urenco fuel fabrication plant in the UK, which the Syndicate paid GBP 1.5m.",
-          "lobs_affected": [
-            "Property"
-          ],
-          "amount_gbp_m": 1.5,
-          "confidence": 0.9
-        },
-        {
-          "event_name": "Possible material damage loss (China)",
-          "event_year": 2013,
-          "impact_description": "The Syndicate has established a recent reserve of GBP 1.4m as a result of a possible material damage loss in China.",
-          "lobs_affected": [
-            "Property"
-          ],
-          "amount_gbp_m": 1.4,
           "confidence": 0.8
         },
         {
-          "event_name": "Hamaoka nuclear plant claim (Japan)",
-          "event_year": 2011,
-          "impact_description": "Holding a reserve in the Reinsurance to Close for a significant claim on the Hamaoka nuclear plant; reserved in Yen (Yen 686m) and matched by a loss on Yen cash held to hedge.",
+          "event_name": "Urenco fuel fabrication plant loss",
+          "event_year": 2013,
+          "impact_description": "An additional loss was experienced at the Urenco fuel fabrication plant in the UK which the Syndicate paid GBP 1.5m.",
           "lobs_affected": [
-            "Property"
+            "Energy"
+          ],
+          "amount_gbp_m": 1.5,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Hamaoka nuclear plant (reserve related to earthquake work)",
+          "event_year": 2011,
+          "impact_description": "A reserve was held in respect of a significant claim on the Hamaoka plant; reserved in Yen at an estimate of Yen 686m (reserve movement affected by sterling/yen FX).",
+          "lobs_affected": [
+            "Energy"
           ],
           "amount_gbp_m": null,
-          "confidence": 0.7
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Fukushima accident",
+          "event_year": 2011,
+          "impact_description": "Following the Fukushima accident exposure was reviewed; exposure and potential catastrophe exposure was limited and the Syndicate considers exposure to be very limited.",
+          "lobs_affected": [
+            "Energy"
+          ],
+          "amount_gbp_m": null,
+          "confidence": 0.8
         }
       ],
       "named_events": [
         {
-          "event_name": "Fukushima nuclear accident",
+          "event_name": "Medical isotope plant (South Africa)",
+          "event_year": 2013,
+          "event_type": "man_made",
+          "net_loss_gbp_m": 1.7,
+          "loss_description": "Claim settled at less than previous reserve; reserve last year was some GBP 4m; settled at GBP 1.7m.",
+          "lobs_affected": [
+            "Energy"
+          ],
+          "page": 3,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Urenco fuel fabrication plant",
+          "event_year": 2013,
+          "event_type": "man_made",
+          "net_loss_gbp_m": 1.5,
+          "loss_description": "An additional loss was experienced at the Urenco fuel fabrication plant in the UK which the Syndicate paid GBP 1.5m.",
+          "lobs_affected": [
+            "Energy"
+          ],
+          "page": 3,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Hamaoka nuclear plant inundation (reserve)",
+          "event_year": 2011,
+          "event_type": "man_made",
+          "net_loss_gbp_m": null,
+          "loss_description": "Syndicate reserved the claim in line with estimates at a cost of Yen 686m; FX movements reduced the sterling value but matched by loss on Yen cash held to hedge.",
+          "lobs_affected": [
+            "Energy"
+          ],
+          "page": 3,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Fukushima accident",
           "event_year": 2011,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "Following the Fukushima accident in March 2011, an extensive review of potential catastrophe exposures was undertaken and exposure is considered to be very limited.",
+          "loss_description": "Extensive review undertaken; exposure and potential catastrophe exposure considered to be very limited for the Syndicate.",
           "lobs_affected": [
-            "Property"
+            "Energy"
           ],
           "page": 2,
-          "confidence": 1.0
+          "confidence": 0.8
         },
         {
           "event_name": "Three Mile Island",
           "event_year": 1979,
           "event_type": "man_made",
           "net_loss_gbp_m": null,
-          "loss_description": "Referenced as the only other significant insured nuclear event prior to Fukushima.",
+          "loss_description": "Historical reference - only one significant insured nuclear event noted was Three Mile Island in the US in 1979.",
           "lobs_affected": [
-            "Property"
+            "Energy"
           ],
           "page": 2,
-          "confidence": 0.8
+          "confidence": 0.5
         },
         {
-          "event_name": "Hurricane Andrew",
+          "event_name": "Hurricane Andrew (warehouse damage referenced)",
           "event_year": 1992,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "Largest insured windstorm loss to date was from a spares warehouse on a nuclear site from Hurricane Andrew in 1992; while the warehouse was damaged, there was no damage to the nuclear unit.",
+          "loss_description": "Referenced historical largest insured windstorm loss to date from a spares warehouse on a nuclear site (Hurricane Andrew 1992) with losses in the region of $200m but no damage to the nuclear unit.",
           "lobs_affected": [
             "Property"
           ],
           "page": 2,
-          "confidence": 0.8
-        },
-        {
-          "event_name": "Medical isotope plant (South Africa)",
-          "event_year": 2013,
-          "event_type": "man_made",
-          "net_loss_gbp_m": 1.7,
-          "loss_description": "Claim settled at less than reserve; Syndicate paid GBP 1.7m.",
-          "lobs_affected": [
-            "Property"
-          ],
-          "page": 3,
-          "confidence": 0.9
-        },
-        {
-          "event_name": "Urenco fuel fabrication plant (UK)",
-          "event_year": 2013,
-          "event_type": "man_made",
-          "net_loss_gbp_m": 1.5,
-          "loss_description": "Additional loss experienced and Syndicate paid GBP 1.5m.",
-          "lobs_affected": [
-            "Property"
-          ],
-          "page": 3,
-          "confidence": 0.9
-        },
-        {
-          "event_name": "Hamaoka nuclear plant (Japan)",
-          "event_year": 2011,
-          "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": null,
-          "loss_description": "Significant claim reserved in Yen (Yen 686m) following the Japan earthquake; the loss is matched by a loss on Yen cash held to hedge.",
-          "lobs_affected": [
-            "Property"
-          ],
-          "page": 3,
-          "confidence": 0.7
+          "confidence": 0.5
         }
       ],
-      "standardized_narrative": "During 2014 the Syndicate recorded a priorperiod release of technical reserves totalling GBP 9.5m (a release of c.24.1% of opening gross claims outstanding of GBP 39.487m). Management attributes this primarily to favourable claims development and runoff of prior years' exposures. Prior years included a number of individually quantified payments and reserves (medical isotope plant settlement GBP 1.7m; Urenco payment GBP 1.5m; recent reserve for a possible China material damage loss GBP 1.4m) and ongoing nuclearrelated exposures (e.g. Hamaoka, Fukushima) which management continue to monitor.",
+      "standardized_narrative": "The syndicate opened 2014 with gross claims outstanding of GBP 39.487m. During 2014 the syndicate reports a release of technical reserves of GBP 9.5m in respect of prior periods (direction: release). The movement is explained primarily by favourable claims development and settlements (including the settlement of a medical isotope plant claim and a smaller Urenco plant loss) and by FX movements on foreign currencydenominated nuclear reserves. The release figure quoted is for technical reserves overall in the note and the report does not provide a single explicit gross claimsonly prior year claims movement, so the reserve movement has been interpreted from the disclosed narrative.",
       "raw_causal_phrases": [
         "During the year, the Syndicate released GBP 9.5m of technical reserves in respect of prior periods (2013: GBP 7.1m).",
-        "The reserve last year was some GBP 4m; although the claim was settled at less than this, the Syndicate paid GBP 1.7m.",
-        "An additional loss was experienced at the Urenco fuel fabrication plant in the UK, which the Syndicate paid GBP 1.5m.",
-        "The Syndicate has also established a recent reserve of GBP 1.4m as a result of a possible material damage loss in China."
+        "The 2012 underwriting year has performed well, reflecting low loss experience and the decision not to buy reinsurance for the Syndicate.",
+        "The reserve last year was some GBP 4m; although the claim was settled at less than this, at GBP 1.7m.",
+        "Because this loss is reserved in Yen, which has depreciated against sterling, the loss has reduced; although this reduction is matched by a loss on Yen cash held to hedge against the claim."
       ],
       "lob_movements": [],
-      "gross_premiums_written_gbp_m": 24.285,
+      "gross_premiums_written_gbp_m": 42.6,
       "gross_premium_mix": [
         {
           "line_of_business": "Fire and other damage to property",
-          "amount_gbp_m": 3.56,
-          "percentage_of_total": 14.64
+          "amount_gbp_m": 3.6,
+          "percentage_of_total": 8.5
         },
         {
           "line_of_business": "Third party liability",
-          "amount_gbp_m": 1.55,
-          "percentage_of_total": 6.39
+          "amount_gbp_m": 1.6,
+          "percentage_of_total": 3.8
         },
         {
-          "line_of_business": "Reinsurance acceptances",
-          "amount_gbp_m": 19.175,
-          "percentage_of_total": 79.0
+          "line_of_business": "Reinsurance",
+          "amount_gbp_m": 19.2,
+          "percentage_of_total": 45.1
+        },
+        {
+          "line_of_business": "Third party liability",
+          "amount_gbp_m": 2.0,
+          "percentage_of_total": 4.7
+        },
+        {
+          "line_of_business": "Reinsurance",
+          "amount_gbp_m": 16.4,
+          "percentage_of_total": 38.5
         }
       ],
       "gross_premium_page": 18,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Monetary amounts were taken from notes presented in GBP 000 and converted to millions. Page numbers are taken from the document footers as visible in the scanned images; small uncertainty may exist in mapping some narrative statements to exact pages. Prior year release value is explicitly stated in the notes and used directly. LOB reserve movements by class were not separately disclosed, so lob_movements is empty.",
+      "data_quality_notes": "The disclosed 'GBP 9.5m released' figure is stated as a release of technical reserves (not explicitly 'gross claims outstanding' only). The requirement asks for a GROSS claims outstanding prioryear movement; the note gives a technical reserves release encompassing more than claims outstanding. No explicit gross 'movement in prior year's provision for claims outstanding' (claims-only) figure is separately reported. Hence the prior year development value is taken from the narrative 'Movement in prior year's provision' statement and interpreted as a gross release of technical reserves. Confidence is reduced accordingly. No gross claims development triangle is provided in the accounts.",
+      "_claims_triangle": {
+        "type": "none",
+        "currency": "GBP",
+        "units": "millions",
+        "page": null,
+        "underwriting_years": [],
+        "development_rows": []
+      },
       "source_type": "syndicate",
       "source_file": "syndicate_reports\\pdfs\\syndicate_1176_2014.pdf",
       "content_hash": "6bc09bae4b6d3dd46131eacc1b4de7db921f949a2bece61caaa95b88b72f66fc",
-      "standardized_at": "2026-03-12T00:38:29.991980+00:00",
+      "standardized_at": "2026-03-15T23:19:27.953476+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 30288,
-        "output_tokens": 5659,
-        "total_tokens": 35947,
-        "cost_usd": 0.01889
+        "input_tokens": 33244,
+        "output_tokens": 6192,
+        "total_tokens": 39436,
+        "cost_usd": 0.020695
+      },
+      "_adobe_lob": {
+        "gross_premium_mix": [
+          {
+            "line_of_business": "Fire and other damage to property",
+            "amount_gbp_m": 3.6,
+            "percentage_of_total": 8.5
+          },
+          {
+            "line_of_business": "Third party liability",
+            "amount_gbp_m": 1.6,
+            "percentage_of_total": 3.8
+          },
+          {
+            "line_of_business": "Reinsurance",
+            "amount_gbp_m": 19.2,
+            "percentage_of_total": 45.1
+          },
+          {
+            "line_of_business": "Third party liability",
+            "amount_gbp_m": 2.0,
+            "percentage_of_total": 4.7
+          },
+          {
+            "line_of_business": "Reinsurance",
+            "amount_gbp_m": 16.4,
+            "percentage_of_total": 38.5
+          }
+        ],
+        "gross_premiums_written_gbp_m": 42.6,
+        "claims_incurred_by_lob": [
+          {
+            "line_of_business": "Fire and other damage to property",
+            "amount_gbp_m": 1.0
+          },
+          {
+            "line_of_business": "Third party liability",
+            "amount_gbp_m": 0.5
+          },
+          {
+            "line_of_business": "Reinsurance",
+            "amount_gbp_m": -0.3
+          },
+          {
+            "line_of_business": "Third party liability",
+            "amount_gbp_m": -1.2
+          },
+          {
+            "line_of_business": "Reinsurance",
+            "amount_gbp_m": -3.0
+          }
+        ],
+        "currency": "GBP",
+        "method": "adobe"
       }
     }
   },
-  "total_cost_usd": 0.027061,
-  "total_tokens": 51403,
+  "total_cost_usd": 0.03036,
+  "total_tokens": 65013,
   "validation": {
     "passed": true,
-    "total_discrepancies": 27,
-    "within_tolerance": 27,
+    "total_discrepancies": 30,
+    "within_tolerance": 30,
     "hard_failures": 0,
     "hard_failure_details": []
   }

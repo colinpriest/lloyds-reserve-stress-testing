@@ -1,228 +1,37 @@
 {
-  "extraction_timestamp": "2026-03-14T03:28:23.258333+00:00",
+  "extraction_timestamp": "2026-03-16T01:23:00.773755+00:00",
   "spec": {
-    "prompt_version": "2.2",
+    "prompt_version": "2.6",
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
   "source_file": "syndicate_reports\\pdfs\\syndicate_1880_2014.pdf",
-  "models": {
-    "gemini-2.5-flash": {
-      "syndicate": 1880,
-      "year": 2014,
-      "opening_reserves_gbp_m": 174.135,
-      "opening_reserves_page": 17,
-      "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": -8.3,
-      "prior_year_development_pct": -4.77,
-      "direction": "release",
-      "prior_year_movement_page": 26,
-      "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "Within the calendar year technical result, a surplus of GBP 8.3m (2013: GBP 71.6m) relates to the reassessment of net claims incurred for previous accident years.",
-      "primary_causes": [
-        "Favorable claims development",
-        "Natural catastrophe events"
-      ],
-      "specific_events": [
-        "Thai Floods"
-      ],
-      "specific_years_affected": [
-        2011
-      ],
-      "prior_year_events": [
-        {
-          "event_name": "Thai Floods",
-          "event_year": 2011,
-          "impact_description": "further reduction to the reserves held for the 2011 Thai Flood event, due to claims settling for less than their reserves",
-          "lobs_affected": [
-            "Property"
-          ],
-          "amount_gbp_m": -63.291,
-          "confidence": 0.9
-        }
-      ],
-      "named_events": [
-        {
-          "event_name": "Thai Floods",
-          "event_year": 2011,
-          "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": null,
-          "loss_description": "further reduction to the reserves held for the 2011 Thai Flood event, due to claims settling for less than their reserves",
-          "lobs_affected": [
-            "Property"
-          ],
-          "page": 6,
-          "confidence": 0.9
-        }
-      ],
-      "standardized_narrative": "Syndicate 1880 reported a prior year reserve release of GBP 8.3 million in 2014, representing a 4.77% reduction of its opening gross claims outstanding. This favorable development was primarily driven by the reassessment of net claims incurred for previous accident years, notably a significant release of reserves related to the 2011 Thai Floods event as claims settled for less than their initial reserves.",
-      "raw_causal_phrases": [
-        "reassessment of net claims incurred for previous accident years",
-        "release of reserves on Thai Floods",
-        "claims settling for less than their reserves"
-      ],
-      "lob_movements": [],
-      "gross_premiums_written_gbp_m": 146.974,
-      "gross_premium_mix": [
-        {
-          "line_of_business": "Accident and health",
-          "amount_gbp_m": 4.157,
-          "percentage_of_total": 2.83
-        },
-        {
-          "line_of_business": "Marine, aviation and transport",
-          "amount_gbp_m": 4.609,
-          "percentage_of_total": 3.14
-        },
-        {
-          "line_of_business": "Fire and other damage to property",
-          "amount_gbp_m": 79.065,
-          "percentage_of_total": 53.79
-        },
-        {
-          "line_of_business": "Third party liability",
-          "amount_gbp_m": 3.562,
-          "percentage_of_total": 2.42
-        },
-        {
-          "line_of_business": "Reinsurance acceptances",
-          "amount_gbp_m": 55.581,
-          "percentage_of_total": 37.82
-        }
-      ],
-      "gross_premium_page": 25,
-      "gross_premium_confidence": 1.0,
-      "currency": "GBP",
-      "data_quality_notes": "The specific amount for Thai Floods was converted from US$104.1m to GBP using the average 2014 exchange rate of 1.65, resulting in GBP 63.091m, which was then added to the stated GBP 0.2m for a total release of GBP 63.291m related to this event.",
-      "source_type": "syndicate",
-      "source_file": "syndicate_reports\\pdfs\\syndicate_1880_2014.pdf",
-      "content_hash": "4fa79acb11d79ee1630492ef5d9bb899aee3a6f3ad8ec469be3a04a7c12b5b1c",
-      "standardized_at": "2026-03-14T03:27:24.069346+00:00",
-      "standardization_model": "gemini-2.5-flash",
-      "_extraction_meta": {
-        "model": "gemini-2.5-flash",
-        "input_tokens": 13569,
-        "output_tokens": 1120,
-        "total_tokens": 18115,
-        "cost_usd": 0.006871
-      }
+  "first_year_syndicate": true,
+  "reason": "Syndicate too new \u2014 insufficient underwriting years for prior year development analysis",
+  "syndicate": 1880,
+  "year": 2014,
+  "gross_premium_mix": [
+    {
+      "line_of_business": "Accident and health",
+      "amount_gbp_m": 4.2,
+      "percentage_of_total": 4.6
     },
-    "gpt-5-mini": {
-      "syndicate": 1880,
-      "year": 2014,
-      "opening_reserves_gbp_m": 174.135,
-      "opening_reserves_page": 16,
-      "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": -8.3,
-      "prior_year_development_pct": -4.77,
-      "direction": "release",
-      "prior_year_movement_page": 24,
-      "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "Within the calendar year technical result, a surplus of GBP 8.3m (2013: GBP 71.6m) relates to the reassessment of net claims incurred for previous accident years. Of the prior year surplus, US$104.1m and GBP 0.2m related to the release of reserves on Thai Floods.",
-      "primary_causes": [
-        "Natural catastrophe events",
-        "Favorable claims development"
-      ],
-      "specific_events": [
-        "2011 Thai Floods"
-      ],
-      "specific_years_affected": [
-        2011
-      ],
-      "prior_year_events": [
-        {
-          "event_name": "Thai Floods",
-          "event_year": 2011,
-          "impact_description": "Release of reserves; claims settled for less than their reserves; part of the prior year surplus related to the release of reserves on Thai Floods.",
-          "lobs_affected": [
-            "Property"
-          ],
-          "amount_gbp_m": -0.2,
-          "confidence": 0.8
-        }
-      ],
-      "named_events": [
-        {
-          "event_name": "Thai Floods",
-          "event_year": 2011,
-          "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": null,
-          "loss_description": "Release of reserves on Thai Floods; claims settled for less than their reserves; part of prior year surplus related to this event.",
-          "lobs_affected": [
-            "Property"
-          ],
-          "page": 24,
-          "confidence": 0.8
-        }
-      ],
-      "standardized_narrative": "The syndicate opened 2014 with gross claims outstanding of GBP 174.135m. During 2014 there was a net prior-year surplus of GBP 8.3m (release), primarily driven by favourable development on prior years including reductions to reserves held for the 2011 Thai Flood event where claims settled for less than prior reserves. The movement is described as a reassessment of net claims incurred for previous accident years and includes explicit releases related to the Thai Floods.",
-      "raw_causal_phrases": [
-        "Within the calendar year technical result, a surplus of GBP 8.3m (2013: GBP 71.6m) relates to the reassessment of net claims incurred for previous accident years.",
-        "Of the prior year surplus, US$104.1m and GBP 0.2m related to the release of reserves on Thai Floods.",
-        "As was the case last year, during 2014 there has been a further reduction to the reserves held for the 2011 Thai Flood event, due to claims settling for less than their reserves."
-      ],
-      "lob_movements": [
-        {
-          "line_of_business": "Property",
-          "direction": "release",
-          "amount_gbp_m": -0.2,
-          "percentage": null,
-          "confidence": 0.8
-        }
-      ],
-      "gross_premiums_written_gbp_m": 146.974,
-      "gross_premium_mix": [
-        {
-          "line_of_business": "Accident and health",
-          "amount_gbp_m": 4.157,
-          "percentage_of_total": 2.83
-        },
-        {
-          "line_of_business": "Marine, aviation and transport",
-          "amount_gbp_m": 4.609,
-          "percentage_of_total": 3.14
-        },
-        {
-          "line_of_business": "Fire and other damage to property",
-          "amount_gbp_m": 79.065,
-          "percentage_of_total": 53.8
-        },
-        {
-          "line_of_business": "Third party liability",
-          "amount_gbp_m": 3.562,
-          "percentage_of_total": 2.42
-        },
-        {
-          "line_of_business": "Reinsurance acceptances",
-          "amount_gbp_m": 55.581,
-          "percentage_of_total": 37.81
-        }
-      ],
-      "gross_premium_page": 23,
-      "gross_premium_confidence": 1.0,
-      "currency": "GBP",
-      "data_quality_notes": "Opening reserves taken as the 31 Dec 2013 closing gross claims outstanding. Prior year development figure (GBP 8.3m) is explicitly stated as a net surplus (favourable movement) and is net of reinsurance; gross prior-year development by line is not provided. The Thai Floods release is reported partly in USD (US$104.1m) and partly in GBP (GBP 0.2m); only the GBP amount is recorded here. Some figures in notes are reported in multiple currencies; no currency conversions were performed beyond using reported GBP values. Page numbering is taken from the report sections where the items appear; slight variations may exist depending on PDF pagination.",
-      "source_type": "syndicate",
-      "source_file": "syndicate_reports\\pdfs\\syndicate_1880_2014.pdf",
-      "content_hash": "4fa79acb11d79ee1630492ef5d9bb899aee3a6f3ad8ec469be3a04a7c12b5b1c",
-      "standardized_at": "2026-03-14T03:28:23.257326+00:00",
-      "standardization_model": "gpt-5-mini",
-      "_extraction_meta": {
-        "model": "gpt-5-mini",
-        "input_tokens": 39083,
-        "output_tokens": 4374,
-        "total_tokens": 43457,
-        "cost_usd": 0.018519
-      }
+    {
+      "line_of_business": "Marine, aviation and transport",
+      "amount_gbp_m": 4.6,
+      "percentage_of_total": 5.0
+    },
+    {
+      "line_of_business": "Fire and other damage to property",
+      "amount_gbp_m": 79.1,
+      "percentage_of_total": 86.5
+    },
+    {
+      "line_of_business": "Third party liability",
+      "amount_gbp_m": 3.6,
+      "percentage_of_total": 3.9
     }
-  },
-  "total_cost_usd": 0.02539,
-  "total_tokens": 61572,
-  "validation": {
-    "passed": true,
-    "total_discrepancies": 19,
-    "within_tolerance": 19,
-    "hard_failures": 0,
-    "hard_failure_details": []
-  }
+  ],
+  "gross_premiums_written_gbp_m": 91.4,
+  "currency": "GBP"
 }

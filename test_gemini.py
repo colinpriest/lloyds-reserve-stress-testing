@@ -13,6 +13,9 @@ Usage:
     python test_gemini.py              # run with inline adjudication on failures
     python test_gemini.py --clean      # wipe outputs, re-run from scratch
     python test_gemini.py --batch      # old behaviour: no interactive adjudication
+    python test_gemini.py --table-backend nutrient  # use Nutrient.io (default)
+    python test_gemini.py --table-backend adobe     # use Adobe PDF Extract
+    python test_gemini.py --table-backend azure     # use Azure Document Intelligence
 """
 
 import os
@@ -21,6 +24,7 @@ import sys
 import json
 import base64
 import hashlib
+import signal
 import tempfile
 import zipfile
 from datetime import datetime, timezone
@@ -98,8 +102,12 @@ from adjudicate import (
     save_rejection_log,
     ADJUDICATOR_MODEL,
 )
+from table_extraction import extract_tables, TableBackend
 
 load_dotenv()
+
+# Table extraction backend (can be overridden with --table-backend)
+TABLE_BACKEND = TableBackend.NUTRIENT
 
 # Pricing per 1M tokens (USD)
 PRICING = {
@@ -667,6 +675,11 @@ def adobe_extract_pdf(pdf_path, output_dir=ADOBE_OUTPUT_DIR):
         return report_out
 
     except Exception as e:
+        err_str = str(e)
+        if "QUOTA_EXCEEDED" in err_str or "quota" in err_str.lower():
+            print(f"  [Adobe] QUOTA EXCEEDED — stopping script.")
+            print(f"  Re-run later to continue (cached outputs will be reused).")
+            sys.exit(1)
         print(f"  [Adobe] Extract failed: {e}")
         return None
 
@@ -720,15 +733,24 @@ def find_triangle_in_adobe_output(adobe_dir, report_year):
         return None, "no table xlsx files on claims development pages"
 
     # Try each candidate xlsx — look for triangle structure
+    new_syndicate_details = None
     for page, xlsx_rel in candidate_xlsx:
         xlsx_path = adobe_dir / xlsx_rel
         if not xlsx_path.exists():
             continue
 
         result = _parse_triangle_xlsx(xlsx_path, report_year)
-        if result is not None:
-            tri_data, details = result
-            return tri_data, details
+        if result is None:
+            continue
+        tri_data, details = result
+        if tri_data == "new_syndicate":
+            # Triangle exists but too few UW years — remember this
+            new_syndicate_details = details
+            continue
+        return tri_data, details
+
+    if new_syndicate_details:
+        return "new_syndicate", new_syndicate_details
 
     return None, "no valid triangle found in candidate xlsx files"
 
@@ -774,6 +796,9 @@ def _parse_triangle_xlsx(xlsx_path, report_year):
             uw_col_indices.append(i)
 
     if len(uw_years) < 3:
+        # Check if this looks like a new syndicate triangle (has years but too few)
+        if len(uw_years) >= 1 and max(uw_years) == report_year:
+            return "new_syndicate", f"{len(uw_years)} UW year(s) ({min(uw_years)}-{report_year})"
         return None
 
     # Check most recent year matches report year
@@ -824,21 +849,32 @@ def _parse_triangle_xlsx(xlsx_path, report_year):
     if len(dev_rows) < 2:
         return None
 
-    # Detect currency and units from header
-    header_text = str(rows_raw[0][0] or "").replace("_x000D_", "").replace("\r", "")
-    header_lower = header_text.lower()
+    # Detect currency and units from header row(s)
+    # Scan ALL cells in the header row AND a possible second row (some tables
+    # put units in a separate row beneath the year headers)
+    scan_rows = rows_raw[:min(3, len(rows_raw))]
+    all_header_text = " ".join(
+        str(cell or "").replace("_x000D_", "").replace("\r", "")
+        for row in scan_rows for cell in row
+    )
+    all_header_lower = all_header_text.lower()
 
     currency = "USD"
-    if "gbp" in header_lower or chr(163) in header_text:
+    if "gbp" in all_header_lower or chr(163) in all_header_text:
         currency = "GBP"
-    elif "eur" in header_lower or chr(8364) in header_text:
+    elif "eur" in all_header_lower or chr(8364) in all_header_text:
         currency = "EUR"
 
     # Detect units: $'000, £000, $m, £'000, etc.
     # Note: reports use both plain apostrophe (') and right single quote (\u2019)
     units = "millions"
-    if re.search(r"[£$\u00a3]['\u2018\u2019]?000", header_lower) or "'000" in header_lower or "\u2019000" in header_lower:
+    if (re.search(r"[£$\u00a3]['\u2018\u2019]?000", all_header_text)
+            or "'000" in all_header_lower or "\u2019000" in all_header_text):
         units = "thousands"
+    elif re.search(r"[£$\u00a3]m\b", all_header_lower):
+        units = "millions"
+    # else: "millions" is default — auto-detect in compute_pyd_from_triangle
+    # will catch full-integer tables from value magnitudes
 
     # Build triangle dict
     tri_data = {
@@ -965,10 +1001,12 @@ def _parse_lob_xlsx(xlsx_path, report_year):
 
     # Detect units: thousands, millions, or full integers
     # Look for explicit unit markers: £'000, $000, £000, $m, £m, etc.
+    # Note: Adobe xlsx uses right single quote (\u2019) not plain apostrophe
     units_divisor = 1.0  # default: assume millions
-    if re.search(r"[£$]'?000", header_text):
+    if (re.search(r"[£$\u00a3]['\u2018\u2019]?000", header_text)
+            or "'000" in header_text or "\u2019000" in header_text):
         units_divisor = 1000.0  # values are in thousands → divide by 1000 for millions
-    elif "$m" in header_text or "m " in header_text:
+    elif "$m" in header_text or "£m" in header_text:
         units_divisor = 1.0  # already in millions
     # else: could be full integers — detect later from magnitude
 
@@ -1104,17 +1142,16 @@ def _parse_lob_xlsx(xlsx_path, report_year):
         return None
 
     # --- Step 6: Auto-detect units if not determined from header ---
-    if units_divisor == 1.0 and total_gwp == 0:
-        total_gwp = sum(e["amount_raw"] for e in lob_entries)
-
     if total_gwp == 0 and lob_entries:
         total_gwp = sum(e["amount_raw"] for e in lob_entries)
 
-    # Heuristic: if total GWP > 100,000 it's probably in thousands (£000/$000)
-    # if total GWP > 100,000,000 it's probably in full currency units
-    if total_gwp > 100_000_000:
+    # No Lloyd's syndicate has GWP > £10bn, so magnitude tells us the units:
+    #   > 10,000,000 → full currency units (divide by 1M)
+    #   > 10,000     → thousands (divide by 1K)
+    #   ≤ 10,000     → already millions
+    if units_divisor == 1.0 and total_gwp > 10_000_000:
         units_divisor = 1_000_000.0  # full integers → millions
-    elif total_gwp > 100_000:
+    elif units_divisor == 1.0 and total_gwp > 10_000:
         units_divisor = 1_000.0  # thousands → millions
 
     # Apply units conversion and compute percentages
@@ -1218,15 +1255,14 @@ def _parse_provisions_xlsx(xlsx_path, report_year):
     if len(rows_raw) < 3:
         return None
 
-    # Detect units from header text
+    # Detect units from header text (scan first 2 rows — some tables split title/units)
     header_text = " ".join(
         str(c or "").replace("_x000D_", "").replace("\r", "")
-        for c in rows_raw[0]
-    ).lower()
+        for row in rows_raw[:min(2, len(rows_raw))] for c in row
+    )
     units_divisor = 1.0
-    if "'000" in header_text or (
-        "000" in header_text and "$m" not in header_text and "m " not in header_text
-    ):
+    if (re.search(r"[£$\u00a3]['\u2018\u2019]?000", header_text)
+            or "'000" in header_text or "\u2019000" in header_text):
         units_divisor = 1000.0
     # else assume millions or detect from magnitude later
 
@@ -1251,6 +1287,7 @@ def _parse_provisions_xlsx(xlsx_path, report_year):
         label = str(row[0] or "").lower()
         if "prior" in label and ("claim" in label or "underwriting" in label or "year" in label):
             result = {}
+            raw_vals = []
             for key, col in [
                 ("gross_prior_year_claims", gross_col),
                 ("ri_share_prior_year", ri_col),
@@ -1259,11 +1296,25 @@ def _parse_provisions_xlsx(xlsx_path, report_year):
                 if col is not None and col < len(row):
                     val = _clean_adobe_cell(row[col])
                     if isinstance(val, (int, float)):
-                        converted = val / units_divisor if units_divisor != 1.0 else val
-                        result[key] = round(converted, 1)
+                        raw_vals.append(abs(val))
+                        result[key] = val
 
-            if result:
-                return result
+            if not result:
+                continue
+
+            # Auto-detect units from value magnitudes if header was ambiguous
+            effective_divisor = units_divisor
+            if effective_divisor == 1.0 and raw_vals:
+                max_val = max(raw_vals)
+                if max_val > 1_000_000:
+                    effective_divisor = 1_000_000.0
+                elif max_val > 10_000:
+                    effective_divisor = 1_000.0
+
+            for key in result:
+                result[key] = round(result[key] / effective_divisor, 1) if effective_divisor != 1.0 else result[key]
+
+            return result
 
     return None
 
@@ -1512,22 +1563,29 @@ def extract_triangle_with_retry(pdf_path, page_num, report_year, max_retries=3):
     total_cost = 0
     model = "gemini-2.5-flash"
 
+    last_details = None
     for attempt in range(1, max_retries + 1):
         tri_data, cost = extract_triangle_from_page(pdf_path, page_num, report_year, model)
         total_cost += cost
 
         if not tri_data:
-            print(f"    [page {page_num}] Attempt {attempt}: no data returned")
+            last_details = "no triangle data on this page"
             continue
 
         # Validate and compute PYD
         pyd, details = compute_pyd_from_triangle(tri_data, report_year)
         if pyd is not None:
-            print(f"    [page {page_num}] Attempt {attempt}: PYD={pyd:+.3f}m OK")
+            print(f"    [page {page_num}] PYD={pyd:+.3f}m OK (attempt {attempt})")
             return tri_data, pyd, details, total_cost
 
-        print(f"    [page {page_num}] Attempt {attempt}: validation failed — {details}")
+        # New/young syndicate — triangle is structurally correct but too small for PYD
+        if details and "fewer than 2 development rows" in details:
+            return tri_data, None, "new_syndicate", total_cost
 
+        last_details = details
+
+    # Only print one summary line for pages that didn't yield a triangle
+    print(f"    [page {page_num}] No usable triangle ({last_details})")
     return None, None, None, total_cost
 
 
@@ -1554,53 +1612,60 @@ def extract_pyd_from_relevant_pages(pdf_path, report_year):
         "first_year_syndicate": False,
     }
 
-    # Step 1: Try Adobe PDF Extract (deterministic, best quality)
-    adobe_dir = adobe_extract_pdf(pdf_path)
-    if adobe_dir:
-        tri_data, details = find_triangle_in_adobe_output(adobe_dir, report_year)
-        if tri_data:
-            # Check if this is a new syndicate (too few UW years for PYD)
-            uw_years = tri_data.get("underwriting_years", [])
-            usable_years = [y for y in uw_years if int(y) <= report_year - 2]
-            if len(uw_years) <= 2 or len(usable_years) == 0:
-                oldest = min(uw_years) if uw_years else "?"
-                print(f"  [Adobe] NEW SYNDICATE: triangle spans {oldest}-{report_year} "
-                      f"({len(uw_years)} UW years, {len(usable_years)} usable) "
-                      f"-- no prior year development possible")
-                result["first_year_syndicate"] = True
-                return result
+    # Step 1: Table extraction (deterministic, best quality)
+    backend_name = TABLE_BACKEND.value.capitalize()
+    extraction = extract_tables(pdf_path, report_year, backend=TABLE_BACKEND)
 
+    if extraction.triangle:
+        tri_data = extraction.triangle.to_dict()
+        uw_years = tri_data.get("underwriting_years", [])
+        usable_years = [y for y in uw_years if int(y) <= report_year - 2]
+        if len(uw_years) <= 2 or len(usable_years) == 0:
+            oldest = min(uw_years) if uw_years else "?"
+            print(f"  [{backend_name}] NEW SYNDICATE: triangle spans {oldest}-{report_year} "
+                  f"({len(uw_years)} UW years, {len(usable_years)} usable) "
+                  f"-- no prior year development possible")
+            result["first_year_syndicate"] = True
+        else:
             pyd, pyd_details = compute_pyd_from_triangle(tri_data, report_year)
             if pyd is not None:
-                print(f"  [Adobe] Triangle PYD: {pyd:+.3f}m ({details})")
+                print(f"  [{backend_name}] Triangle PYD: {pyd:+.3f}m ({extraction.triangle_details})")
                 result["triangle"] = tri_data
                 result["pyd"] = pyd
                 result["pyd_details"] = pyd_details
-                result["method"] = "adobe"
-        else:
-            print(f"  [Adobe] No triangle found: {details}")
+                result["method"] = extraction.method
+    elif extraction.first_year_syndicate:
+        print(f"  [{backend_name}] NEW SYNDICATE: {extraction.triangle_details} "
+              f"-- no prior year development possible")
+        result["first_year_syndicate"] = True
+    elif extraction.triangle_details:
+        print(f"  [{backend_name}] No triangle found: {extraction.triangle_details}")
 
-        # Step 1b: Extract LOB breakdown from segmental analysis
-        lob_data = find_lob_in_adobe_output(adobe_dir, report_year)
-        if lob_data:
-            n_lobs = len(lob_data["gross_premium_mix"])
-            total = lob_data["gross_premiums_written_gbp_m"]
-            print(f"  [Adobe] LOB breakdown: {n_lobs} classes, GWP={total}m ({lob_data['currency']})")
-            result["adobe_lob"] = lob_data
+    # Step 1b: Extract LOB breakdown from segmental analysis
+    if extraction.lob:
+        lob_data = extraction.lob.to_dict()
+        n_lobs = len(lob_data["gross_premium_mix"])
+        total = lob_data["gross_premiums_written_gbp_m"]
+        print(f"  [{backend_name}] LOB breakdown: {n_lobs} classes, GWP={total}m ({lob_data['currency']})")
+        result["adobe_lob"] = lob_data  # key kept for backwards compatibility
 
-        # Step 1c: Extract claims provisions movement (gross PYD from note)
-        prov_data = find_provisions_movement_in_adobe(adobe_dir, report_year)
-        if prov_data:
-            gross = prov_data.get("gross_prior_year_claims")
-            net = prov_data.get("net_prior_year_claims")
-            parts = []
-            if gross is not None:
-                parts.append(f"gross={gross:+.1f}m")
-            if net is not None:
-                parts.append(f"net={net:+.1f}m")
-            if parts:
-                print(f"  [Adobe] Provisions movement: {', '.join(parts)}")
-            result["adobe_provisions"] = prov_data
+    # Step 1c: Extract claims provisions movement (gross PYD from note)
+    if extraction.provisions:
+        prov_data = extraction.provisions.to_dict()
+        gross = prov_data.get("gross_prior_year_claims")
+        net = prov_data.get("net_prior_year_claims")
+        parts = []
+        if gross is not None:
+            parts.append(f"gross={gross:+.1f}m")
+        if net is not None:
+            parts.append(f"net={net:+.1f}m")
+        if parts:
+            print(f"  [{backend_name}] Provisions movement: {', '.join(parts)}")
+        result["adobe_provisions"] = prov_data  # key kept for backwards compatibility
+
+    # If confirmed first-year syndicate, no need for further extraction
+    if result["first_year_syndicate"]:
+        return result
 
     # Step 2: Extract text for page search (needed for reserve text and LLM fallback)
     pages, text_method = extract_text_from_pdf(pdf_path)
@@ -1614,7 +1679,7 @@ def extract_pyd_from_relevant_pages(pdf_path, report_year):
         res_pages = relevant["reserve_pages"]
 
         # Step 3: If Adobe didn't find a triangle, try LLM vision on triangle pages
-        if result["pyd"] is None and tri_pages and HAS_PDF2IMAGE:
+        if result["pyd"] is None and not result["first_year_syndicate"] and tri_pages and HAS_PDF2IMAGE:
             print(f"  [RAG] {len(tri_pages)} triangle page(s) found, trying LLM vision...")
             for page_num, page_text in tri_pages[:2]:
                 if "net" in page_text.lower() and "gross" not in page_text.lower():
@@ -1623,6 +1688,15 @@ def extract_pyd_from_relevant_pages(pdf_path, report_year):
                     pdf_path, page_num, report_year
                 )
                 result["cost"] += cost
+                if details == "new_syndicate":
+                    uw_years = tri_data.get("underwriting_years", []) if tri_data else []
+                    n_uw = len(uw_years)
+                    oldest = min(uw_years) if uw_years else report_year
+                    print(f"  [RAG] NEW SYNDICATE: triangle has {n_uw} UW year(s) "
+                          f"({oldest}-{report_year}) — no prior year development possible")
+                    result["first_year_syndicate"] = True
+                    result["triangle"] = tri_data
+                    break
                 if pyd is not None:
                     print(f"  [RAG] LLM vision triangle PYD: {pyd:+.3f}m")
                     result["triangle"] = tri_data
@@ -1846,17 +1920,26 @@ def compute_pyd_from_triangle(triangle_data, report_year):
     # Convert units
     units = triangle_data.get("units", "millions")
 
-    # Auto-detect: if units claim "millions" but values are clearly in thousands
-    # (typical triangle values in millions are 10-5000; in thousands they're 10,000-5,000,000)
+    # Auto-detect units from value magnitudes when header detection was ambiguous.
+    # Lloyd's syndicate cumulative claims typically range:
+    #   Full integers: 1,000,000 - 500,000,000  (individual pounds)
+    #   Thousands:     1,000 - 500,000           (£000)
+    #   Millions:      1 - 500                   (£m)
     if units == "millions":
-        # Check magnitude of the first non-null diagonal value
-        sample_vals = [rows[0][c] for c in range(min(3, n_cols))
-                       if rows[0][c] is not None and isinstance(rows[0][c], (int, float))]
-        if sample_vals and min(abs(v) for v in sample_vals) > 50_000:
-            units = "thousands"
-            details.append(f"  (auto-detected: values appear to be in thousands, not millions)")
+        sample_vals = [rows[r][c] for r in range(min(2, n_rows)) for c in range(n_cols)
+                       if rows[r][c] is not None and isinstance(rows[r][c], (int, float))]
+        if sample_vals:
+            max_val = max(abs(v) for v in sample_vals)
+            if max_val > 1_000_000:
+                units = "full"
+                details.append(f"  (auto-detected: values up to {max_val:,.0f} — treating as full currency units)")
+            elif max_val > 10_000:
+                units = "thousands"
+                details.append(f"  (auto-detected: values up to {max_val:,.0f} — treating as thousands)")
 
-    if units == "thousands":
+    if units == "full":
+        total_pyd = round(total_pyd / 1_000_000, 3)
+    elif units == "thousands":
         total_pyd = round(total_pyd / 1000, 3)
         details.append(f"  (converted from thousands to millions)")
     elif units == "percentage":
@@ -2524,7 +2607,26 @@ def process_one_report(report_path):
     # before spending money on LLM calls
     rag_result = extract_pyd_from_relevant_pages(actual_path, report_year)
     if rag_result.get("first_year_syndicate"):
-        return None  # Signal to caller: skip this report
+        # Build minimal audit-trail JSON for first-year syndicates
+        first_year_output = {
+            "extraction_timestamp": datetime.now(timezone.utc).isoformat(),
+            "spec": {
+                "prompt_version": PROMPT_VERSION,
+                "field_definitions_version": FIELD_DEFINITIONS_VERSION,
+                "tolerance_rules_version": TOLERANCE_RULES_VERSION,
+            },
+            "source_file": str(report_path),
+            "first_year_syndicate": True,
+            "reason": "Syndicate too new — insufficient underwriting years for prior year development analysis",
+            "syndicate": syndicate_num,
+            "year": report_year,
+        }
+        adobe_lob = rag_result.get("adobe_lob")
+        if adobe_lob:
+            first_year_output["gross_premium_mix"] = adobe_lob["gross_premium_mix"]
+            first_year_output["gross_premiums_written_gbp_m"] = adobe_lob["gross_premiums_written_gbp_m"]
+            first_year_output["currency"] = adobe_lob.get("currency", "GBP")
+        return "first_year", first_year_output
 
     # Extract with both models (use converted PDF path but keep original as source)
     result_gemini = extract_with_gemini(
@@ -2688,6 +2790,19 @@ if __name__ == "__main__":
     reports = discover_reports()
     print(f"Found {len(reports)} reports in {REPORTS_DIR}")
 
+    # --table-backend flag: select table extraction backend (nutrient/adobe/azure)
+    for idx, arg in enumerate(sys.argv):
+        if arg == "--table-backend" and idx + 1 < len(sys.argv):
+            backend_name = sys.argv[idx + 1].lower()
+            try:
+                TABLE_BACKEND = TableBackend(backend_name)
+            except ValueError:
+                print(f"Unknown table backend: {backend_name}. "
+                      f"Use: nutrient, adobe, or azure")
+                sys.exit(1)
+            break
+    print(f"Table extraction backend: {TABLE_BACKEND.value}")
+
     # --single flag: process only the named report (e.g. --single syndicate_1856_2024)
     single_arg = None
     for idx, arg in enumerate(sys.argv):
@@ -2736,6 +2851,9 @@ if __name__ == "__main__":
     run_errored = 0
     run_skipped_first_year = 0
 
+    # Enable Ctrl+C to interrupt blocking API calls on Windows
+    signal.signal(signal.SIGINT, signal.default_int_handler)
+
     for i, report_path in enumerate(to_process, 1):
         syndicate_num, report_year = parse_report_filename(report_path)
         print(f"\n{'=' * 70}")
@@ -2744,12 +2862,37 @@ if __name__ == "__main__":
 
         try:
             result = process_one_report(report_path)
-            if result is None:
-                # First-year syndicate — no prior year development possible
-                print(f"  SKIPPED: First/second-year syndicate — no prior year development data")
+            if isinstance(result, tuple) and len(result) == 2 and result[0] == "first_year":
+                # First-year syndicate — write audit-trail JSON and skip further processing
+                first_year_data = result[1]
+                output_file = OUTPUT_DIR / f"{report_path.stem}.json"
+                with open(output_file, "w") as f:
+                    json.dump(first_year_data, f, indent=2)
+                print(f"  First/second-year syndicate — no prior year development possible")
+                print(f"  Audit JSON written: {output_file.name}")
                 run_skipped_first_year += 1
                 continue
             output_data, passed, discrepancies, hard_failures = result
+        except KeyboardInterrupt:
+            print(f"\n\n  Ctrl+C — stopping after {run_processed} reports.")
+            print(f"  Saving logs and manifest...")
+            save_disagreement_log(dis_log)
+            save_rejection_log(rej_log)
+            write_run_manifest({
+                "total_found": len(reports),
+                "already_done": len(already_done),
+                "processed": run_processed,
+                "passed": run_passed,
+                "failed": run_failed,
+                "errored": run_errored,
+                "skipped_first_year": run_skipped_first_year,
+                "total_tokens": run_total_tokens,
+                "total_cost": run_total_cost,
+                "stopped_early": True,
+                "stop_reason": "keyboard_interrupt",
+            })
+            print(f"  Done. Re-run to continue from where you left off.")
+            sys.exit(130)
         except Exception as e:
             print(f"  ERROR: {e}")
             print(f"  Skipping {report_path.name} and continuing...")

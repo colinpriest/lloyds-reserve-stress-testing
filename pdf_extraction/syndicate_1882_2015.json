@@ -1,7 +1,7 @@
 {
-  "extraction_timestamp": "2026-03-14T04:55:05.511323+00:00",
+  "extraction_timestamp": "2026-03-16T01:09:10.316610+00:00",
   "spec": {
-    "prompt_version": "2.2",
+    "prompt_version": "2.6",
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -11,23 +11,23 @@
       "syndicate": 1882,
       "year": 2015,
       "opening_reserves_gbp_m": 130.264,
-      "opening_reserves_page": 15,
+      "opening_reserves_page": 25,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": -0.231,
-      "prior_year_development_pct": -0.177,
-      "direction": "release",
+      "prior_year_development_gbp_m": 12863.0,
+      "prior_year_development_pct": 9874.56,
+      "direction": "strengthening",
       "prior_year_movement_page": 30,
-      "prior_year_movement_confidence": 1.0,
+      "prior_year_movement_confidence": 0.5,
       "exact_reserve_text": "Claims incurred includes the following calendar year movements arising from favourable / (unfavourable) developments in the prior years' net provision for claims outstanding: (231)",
       "primary_causes": [
-        "Favorable claims development",
+        "Favourable claims development",
         "Adverse claims development"
       ],
       "specific_events": [],
       "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "The syndicate reported a net prior year reserve release of GBP 0.231 million for 2015, representing a 0.18% release of opening gross claims outstanding. This was driven by favourable development in Marine and Reinsurance business, partially offset by unfavourable development in Fire & other damage to property and Third-party liability lines.",
+      "standardized_narrative": "The syndicate experienced mixed prior year development in 2015. The Marine business saw favourable prior period development, while the Fire and other damage to property and Third-party liability lines experienced unfavourable development. The net prior year movement was a release of GBP 0.231 million.",
       "raw_causal_phrases": [
         "favourable prior period development",
         "unfavourable development"
@@ -38,28 +38,28 @@
           "direction": "release",
           "amount_gbp_m": -3.343,
           "percentage": null,
-          "confidence": 1.0
+          "confidence": 0.8
         },
         {
           "line_of_business": "Property",
           "direction": "strengthening",
           "amount_gbp_m": 2.407,
           "percentage": null,
-          "confidence": 1.0
+          "confidence": 0.8
         },
         {
           "line_of_business": "Casualty",
           "direction": "strengthening",
           "amount_gbp_m": 3.017,
           "percentage": null,
-          "confidence": 1.0
+          "confidence": 0.8
         },
         {
-          "line_of_business": "Treaty",
+          "line_of_business": "Reinsurance - Specialty",
           "direction": "release",
           "amount_gbp_m": -1.85,
           "percentage": null,
-          "confidence": 1.0
+          "confidence": 0.8
         }
       ],
       "gross_premiums_written_gbp_m": 98.275,
@@ -67,7 +67,7 @@
         {
           "line_of_business": "Accident and Health",
           "amount_gbp_m": -0.075,
-          "percentage_of_total": -0.08
+          "percentage_of_total": 0.0
         },
         {
           "line_of_business": "Marine, aviation and transport",
@@ -93,32 +93,131 @@
       "gross_premium_page": 29,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The aggregate prior year development figure is taken from Note 4, which explicitly states the 'calendar year movements arising from favourable / (unfavourable) developments in the prior years' net provision for claims outstanding'. This figure is prioritized over a calculation from the claims development table due to its explicit nature.",
+      "data_quality_notes": "The gross prior year development figure could not be explicitly identified. The LOB movements for prior year development are reported as net of reinsurance, as only net figures were available in the detailed breakdown.",
+      "_claims_triangle": {
+        "type": "net",
+        "currency": "GBP",
+        "units": "thousands",
+        "page": 23,
+        "underwriting_years": [
+          2011,
+          2012,
+          2013,
+          2014,
+          2015
+        ],
+        "development_rows": [
+          [
+            29297,
+            35025,
+            25471,
+            26854,
+            38016
+          ],
+          [
+            57461,
+            51846,
+            42957,
+            48974,
+            null
+          ],
+          [
+            62922,
+            54883,
+            40556,
+            null,
+            null
+          ],
+          [
+            59661,
+            57139,
+            null,
+            null,
+            null
+          ],
+          [
+            72669,
+            null,
+            null,
+            null,
+            null
+          ]
+        ]
+      },
       "source_type": "syndicate",
       "source_file": "syndicate_reports\\pdfs\\syndicate_1882_2015.pdf",
       "content_hash": "d744531053078077349eb9e1c53060ce30ff03384998d8f6e2bec1ab638adc7b",
-      "standardized_at": "2026-03-14T04:54:10.274130+00:00",
+      "standardized_at": "2026-03-16T01:07:20.180076+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 13053,
-        "output_tokens": 1034,
-        "total_tokens": 16992,
-        "cost_usd": 0.006501
+        "input_tokens": 14914,
+        "output_tokens": 1226,
+        "total_tokens": 19426,
+        "cost_usd": 0.007539
+      },
+      "_rag_triangle": {
+        "type": "gross",
+        "currency": "USD",
+        "units": "millions",
+        "underwriting_years": [
+          2011,
+          2012,
+          2013,
+          2014,
+          2015
+        ],
+        "development_rows": [
+          [
+            29297.0,
+            35025.0,
+            25471.0,
+            26854.0,
+            38016.0
+          ],
+          [
+            57461.0,
+            51846.0,
+            42957.0,
+            48974.0,
+            null
+          ],
+          [
+            62922.0,
+            54883.0,
+            40556.0,
+            null,
+            null
+          ],
+          [
+            59661.0,
+            57139.0,
+            null,
+            null,
+            null
+          ],
+          [
+            72669.0,
+            null,
+            null,
+            null,
+            null
+          ]
+        ]
       }
     },
     "gpt-5-mini": {
       "syndicate": 1882,
       "year": 2015,
-      "opening_reserves_gbp_m": 130.264,
-      "opening_reserves_page": 20,
+      "opening_reserves_gbp_m": 23.25,
+      "opening_reserves_page": 10,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": null,
-      "prior_year_development_pct": null,
-      "direction": "mixed",
-      "prior_year_movement_page": 25,
-      "prior_year_movement_confidence": 0.5,
-      "exact_reserve_text": "The Marine business saw favourable prior period development with the Fire and other damage to property and third party liability lines seeing unfavourable development.",
+      "prior_year_development_gbp_m": 12863.0,
+      "prior_year_development_pct": 55324.73,
+      "direction": "strengthening",
+      "prior_year_movement_page": 2,
+      "prior_year_movement_confidence": 0.8,
+      "exact_reserve_text": "The Marine business saw favourable prior period development with the Fire and other damage to property and third-party liability lines seeing unfavourable development.",
       "primary_causes": [
         "Favorable claims development",
         "Adverse claims development"
@@ -127,39 +226,32 @@
       "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "Prior year reserve development in 2015 was mixed. The syndicate recorded favourable prior period development in its Marine, aviation and transport business, while the Fire & other damage to property and Third-party liability lines experienced unfavourable prior period development. The report does not provide a single explicit aggregate prior-year movement figure for the total gross claims outstanding; movements are described by line and shown in the claims/prior-year movement table.",
+      "standardized_narrative": "The syndicate's prior period development was mixed: Marine experienced favourable prior period development while Fire & other damage to property and Third-party liability experienced unfavourable development. No explicit aggregate gross prior-year reserve movement amount was disclosed in the required 'movement in prior year provision' format; the report provides narrative of favourable/adverse development by class and a net claims development table (net basis).",
       "raw_causal_phrases": [
         "favourable prior period development",
         "unfavourable development"
       ],
       "lob_movements": [
         {
-          "line_of_business": "Marine, aviation and transport",
+          "line_of_business": "Marine",
           "direction": "release",
-          "amount_gbp_m": -3.343,
+          "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.8
+          "confidence": 0.5
         },
         {
-          "line_of_business": "Fire & other damage to property",
+          "line_of_business": "Property",
           "direction": "strengthening",
-          "amount_gbp_m": 2.407,
+          "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.8
+          "confidence": 0.5
         },
         {
-          "line_of_business": "Third-party liability",
+          "line_of_business": "Casualty",
           "direction": "strengthening",
-          "amount_gbp_m": 3.017,
+          "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.8
-        },
-        {
-          "line_of_business": "Reinsurance acceptances",
-          "direction": "release",
-          "amount_gbp_m": -1.85,
-          "percentage": null,
-          "confidence": 0.7
+          "confidence": 0.5
         }
       ],
       "gross_premiums_written_gbp_m": 98.275,
@@ -167,102 +259,171 @@
         {
           "line_of_business": "Accident and Health",
           "amount_gbp_m": -0.075,
-          "percentage_of_total": null
+          "percentage_of_total": -0.076
         },
         {
           "line_of_business": "Marine, aviation and transport",
           "amount_gbp_m": 25.452,
-          "percentage_of_total": null
+          "percentage_of_total": 25.92
         },
         {
           "line_of_business": "Fire & other damage to property",
           "amount_gbp_m": 8.555,
-          "percentage_of_total": null
+          "percentage_of_total": 8.71
         },
         {
           "line_of_business": "Third-party liability",
           "amount_gbp_m": 15.099,
-          "percentage_of_total": null
+          "percentage_of_total": 15.37
         },
         {
           "line_of_business": "Reinsurance acceptances",
           "amount_gbp_m": 49.244,
-          "percentage_of_total": null
+          "percentage_of_total": 50.06
         }
       ],
       "gross_premium_page": 24,
-      "gross_premium_confidence": 0.9,
+      "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Opening gross claims outstanding taken from Note 'Provision for claims outstanding' (At 1 January 2015 = GBP 130,264k). No single explicit aggregate prior-year development figure is stated in the report; only line-by-line prior year movements are shown in the claims/prior-year movement table and a narrative sentence describes directions by line. The small prior-year movement amounts were read from the claims/prior-year movement table (legibility limited); therefore the aggregate prior_year_development_gbp_m is set to null per instructions. Some amounts (e.g. Accident and Health negative premium) reflect the report's presented figures and may be adjustments. Confidence levels reflect availability and legibility of the scanned figures.",
+      "data_quality_notes": "No explicit GROSS 'movement in prior year's provision for claims outstanding' figure was found in the report in the required format. The report contains a reconciliations table showing total change in gross provision (which includes current-year development) and a claims development table presented on a NET basis. Therefore an authoritative gross prior-year development figure could not be extracted; prior-year movement is reported narratively by LOB only. Claims development triangle is available but is net rather than gross; this limits ability to compute gross PYD reliably.",
+      "_claims_triangle": {
+        "type": "net",
+        "currency": "GBP",
+        "units": "thousands",
+        "page": 18,
+        "underwriting_years": [
+          2011,
+          2012,
+          2013,
+          2014,
+          2015
+        ],
+        "development_rows": [
+          [
+            29297,
+            35025,
+            25471,
+            26854,
+            38016
+          ],
+          [
+            57461,
+            51846,
+            42957,
+            48974,
+            null
+          ],
+          [
+            62922,
+            54883,
+            40556,
+            null,
+            null
+          ],
+          [
+            null,
+            57139,
+            null,
+            null,
+            null
+          ],
+          [
+            72669,
+            57139,
+            40556,
+            48974,
+            38016
+          ]
+        ]
+      },
       "source_type": "syndicate",
       "source_file": "syndicate_reports\\pdfs\\syndicate_1882_2015.pdf",
       "content_hash": "d744531053078077349eb9e1c53060ce30ff03384998d8f6e2bec1ab638adc7b",
-      "standardized_at": "2026-03-14T04:55:05.511323+00:00",
+      "standardized_at": "2026-03-16T01:09:10.316610+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 37143,
-        "output_tokens": 4125,
-        "total_tokens": 41268,
-        "cost_usd": 0.017536
+        "input_tokens": 38842,
+        "output_tokens": 6157,
+        "total_tokens": 44999,
+        "cost_usd": 0.022025
+      },
+      "_rag_triangle": {
+        "type": "gross",
+        "currency": "USD",
+        "units": "millions",
+        "underwriting_years": [
+          2011,
+          2012,
+          2013,
+          2014,
+          2015
+        ],
+        "development_rows": [
+          [
+            29297.0,
+            35025.0,
+            25471.0,
+            26854.0,
+            38016.0
+          ],
+          [
+            57461.0,
+            51846.0,
+            42957.0,
+            48974.0,
+            null
+          ],
+          [
+            62922.0,
+            54883.0,
+            40556.0,
+            null,
+            null
+          ],
+          [
+            59661.0,
+            57139.0,
+            null,
+            null,
+            null
+          ],
+          [
+            72669.0,
+            null,
+            null,
+            null,
+            null
+          ]
+        ]
       }
     }
   },
-  "total_cost_usd": 0.024037,
-  "total_tokens": 58260,
+  "total_cost_usd": 0.029564,
+  "total_tokens": 64425,
   "validation": {
     "passed": false,
-    "total_discrepancies": 24,
-    "within_tolerance": 16,
-    "hard_failures": 8,
+    "total_discrepancies": 23,
+    "within_tolerance": 20,
+    "hard_failures": 3,
     "hard_failure_details": [
-      {
-        "field": "direction",
-        "type": "value_mismatch",
-        "gemini-2.5-flash": "release",
-        "gpt-5-mini": "mixed"
-      },
       {
         "field": "gross_premium_mix[Accident and Health].percentage_of_total",
         "type": "value_mismatch",
-        "gemini-2.5-flash": -0.08,
-        "gpt-5-mini": null
+        "gemini-2.5-flash": 0.0,
+        "gpt-5-mini": -0.076
       },
       {
-        "field": "gross_premium_mix[Fire & other damage to property].percentage_of_total",
+        "field": "opening_reserves_gbp_m",
         "type": "value_mismatch",
-        "gemini-2.5-flash": 8.7,
-        "gpt-5-mini": null
-      },
-      {
-        "field": "gross_premium_mix[Marine, aviation and transport].percentage_of_total",
-        "type": "value_mismatch",
-        "gemini-2.5-flash": 25.9,
-        "gpt-5-mini": null
-      },
-      {
-        "field": "gross_premium_mix[Reinsurance acceptances].percentage_of_total",
-        "type": "value_mismatch",
-        "gemini-2.5-flash": 50.1,
-        "gpt-5-mini": null
-      },
-      {
-        "field": "gross_premium_mix[Third-party liability].percentage_of_total",
-        "type": "value_mismatch",
-        "gemini-2.5-flash": 15.4,
-        "gpt-5-mini": null
-      },
-      {
-        "field": "prior_year_development_gbp_m",
-        "type": "value_mismatch",
-        "gemini-2.5-flash": -0.231,
-        "gpt-5-mini": null
+        "gemini-2.5-flash": 130.264,
+        "gpt-5-mini": 23.25
       },
       {
         "field": "prior_year_development_pct",
         "type": "value_mismatch",
-        "gemini-2.5-flash": -0.177,
-        "gpt-5-mini": null
+        "gemini-2.5-flash": 9874.56,
+        "gpt-5-mini": 55324.73
       }
     ]
   }
