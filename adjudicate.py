@@ -25,6 +25,7 @@ import re
 import sys
 import json
 import base64
+import hashlib
 from collections import defaultdict
 from datetime import datetime, timezone
 from pathlib import Path
@@ -41,6 +42,61 @@ SPEC_DIR = Path("pdf_extraction/spec")
 GEMINI_MODEL = "gemini-2.5-flash"
 OPENAI_MODEL = "gpt-5-mini"
 ADJUDICATOR_MODEL = "claude-sonnet-4-6"
+
+# ---------------------------------------------------------------------------
+# Adjudicator LLM output caching
+# ---------------------------------------------------------------------------
+ADJ_CACHE_DIR = Path("pdf_extraction/llm_cache")
+
+
+def _adj_cache_key(syndicate_num: int, report_year: int,
+                   field: str, prompt_text: str) -> str:
+    """Build a deterministic cache key for adjudicator calls.
+
+    Hash = SHA-256 of (ADJUDICATOR_MODEL, syndicate, year, field, prompt).
+    """
+    parts = [ADJUDICATOR_MODEL, str(syndicate_num), str(report_year),
+             field, prompt_text]
+    blob = "|".join(parts).encode("utf-8")
+    return "adj_" + hashlib.sha256(blob).hexdigest()
+
+
+def _adj_cache_load(cache_key: str):
+    """Load cached adjudicator result. Returns (data, tokens_in, tokens_out, True) or (None, 0, 0, False)."""
+    path = ADJ_CACHE_DIR / f"{cache_key}.json"
+    if path.exists():
+        try:
+            with open(path, "r", encoding="utf-8") as f:
+                envelope = json.load(f)
+            meta = envelope.get("_cache_meta", {})
+            return (envelope["data"],
+                    meta.get("tokens_in", 0),
+                    meta.get("tokens_out", 0),
+                    True)
+        except (json.JSONDecodeError, OSError, KeyError):
+            pass
+    return None, 0, 0, False
+
+
+def _adj_cache_save(cache_key: str, data, tokens_in: int, tokens_out: int,
+                    *, syndicate_num: int = 0, report_year: int = 0,
+                    field: str = ""):
+    """Persist adjudicator result to cache."""
+    ADJ_CACHE_DIR.mkdir(parents=True, exist_ok=True)
+    envelope = {
+        "_cache_meta": {
+            "model": ADJUDICATOR_MODEL,
+            "syndicate": syndicate_num,
+            "year": report_year,
+            "field": field,
+            "tokens_in": tokens_in,
+            "tokens_out": tokens_out,
+            "cached_at": datetime.now(timezone.utc).isoformat(),
+        },
+        "data": data,
+    }
+    with open(ADJ_CACHE_DIR / f"{cache_key}.json", "w", encoding="utf-8") as f:
+        json.dump(envelope, f, indent=2, ensure_ascii=True)
 
 
 # ---------------------------------------------------------------------------
@@ -592,7 +648,8 @@ def _shrink_pdf(pdf_path, max_size_mb=20, max_pages=100, page_hints=None):
     return rebuilt
 
 
-def call_adjudicator(pdf_path, prompt, page_hints=None):
+def call_adjudicator(pdf_path, prompt, page_hints=None,
+                     syndicate_num=0, report_year=0, field=""):
     """Send PDF + verification prompt to Claude for adjudication.
 
     Args:
@@ -600,7 +657,23 @@ def call_adjudicator(pdf_path, prompt, page_hints=None):
         prompt: The verification prompt.
         page_hints: Optional list of 1-indexed page numbers relevant to the
                      disputed field (used to trim large/long PDFs).
+        syndicate_num: Syndicate number (for cache key).
+        report_year: Report year (for cache key).
+        field: Field name being adjudicated (for cache key).
+
+    Results are cached in pdf_extraction/llm_cache/ keyed by
+    (ADJUDICATOR_MODEL, syndicate, year, field, prompt_text).
     """
+    # Check cache first
+    if syndicate_num and report_year and field:
+        cache_key = _adj_cache_key(syndicate_num, report_year, field, prompt)
+        cached_data, cached_in, cached_out, hit = _adj_cache_load(cache_key)
+        if hit:
+            print(f"    [{ADJUDICATOR_MODEL}] Cache hit for {field}")
+            return cached_data, cached_in, cached_out
+    else:
+        cache_key = None
+
     import anthropic
 
     client = anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
@@ -637,9 +710,17 @@ def call_adjudicator(pdf_path, prompt, page_hints=None):
     tokens_in = response.usage.input_tokens
     tokens_out = response.usage.output_tokens
 
+    def _return_and_cache(parsed):
+        """Save to cache (if key available) and return."""
+        if cache_key:
+            _adj_cache_save(cache_key, parsed, tokens_in, tokens_out,
+                            syndicate_num=syndicate_num, report_year=report_year,
+                            field=field)
+        return parsed, tokens_in, tokens_out
+
     # Try direct parse first
     try:
-        return json.loads(raw), tokens_in, tokens_out
+        return _return_and_cache(json.loads(raw))
     except json.JSONDecodeError:
         pass
 
@@ -653,7 +734,7 @@ def call_adjudicator(pdf_path, prompt, page_hints=None):
             if candidate.lower().startswith("json"):
                 candidate = candidate[4:].strip()
             try:
-                return json.loads(candidate), tokens_in, tokens_out
+                return _return_and_cache(json.loads(candidate))
             except json.JSONDecodeError:
                 continue
 
@@ -669,25 +750,25 @@ def call_adjudicator(pdf_path, prompt, page_hints=None):
         candidate = raw[brace_start:brace_end + 1]
         # Direct parse
         try:
-            return json.loads(candidate), tokens_in, tokens_out
+            return _return_and_cache(json.loads(candidate))
         except json.JSONDecodeError:
             pass
         # Fix trailing commas
         fixed = re.sub(r',\s*([}\]])', r'\1', candidate)
         try:
-            return json.loads(fixed), tokens_in, tokens_out
+            return _return_and_cache(json.loads(fixed))
         except json.JSONDecodeError:
             pass
         # Strip non-ASCII
         cleaned = fixed.encode("ascii", "ignore").decode("ascii")
         try:
-            return json.loads(cleaned), tokens_in, tokens_out
+            return _return_and_cache(json.loads(cleaned))
         except json.JSONDecodeError:
             pass
         # Fix unescaped control characters
         cleaned2 = re.sub(r'[\x00-\x1f\x7f]', ' ', cleaned)
         try:
-            return json.loads(cleaned2), tokens_in, tokens_out
+            return _return_and_cache(json.loads(cleaned2))
         except json.JSONDecodeError:
             pass
 
@@ -885,7 +966,11 @@ def adjudicate_all(filter_report=None, dry_run=False):
 
             print(f"    Sending to {ADJUDICATOR_MODEL}...")
             try:
-                result, tokens_in, tokens_out = call_adjudicator(pdf_path, prompt)
+                result, tokens_in, tokens_out = call_adjudicator(
+                    pdf_path, prompt,
+                    syndicate_num=syndicate_num, report_year=report_year,
+                    field=field,
+                )
             except Exception as e:
                 print(f"    ERROR calling adjudicator: {e}")
                 print(f"    You can still make a manual decision.")

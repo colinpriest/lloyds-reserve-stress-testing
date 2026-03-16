@@ -13,9 +13,14 @@ Usage:
     python test_gemini.py              # run with inline adjudication on failures
     python test_gemini.py --clean      # wipe outputs, re-run from scratch
     python test_gemini.py --batch      # old behaviour: no interactive adjudication
-    python test_gemini.py --table-backend nutrient  # use Nutrient.io (default)
+    python test_gemini.py --table-backend azure     # use Azure Document Intelligence (default)
+    python test_gemini.py --table-backend nutrient  # use Nutrient.io
     python test_gemini.py --table-backend adobe     # use Adobe PDF Extract
-    python test_gemini.py --table-backend azure     # use Azure Document Intelligence
+
+LLM outputs are cached in pdf_extraction/llm_cache/ using a SHA-256 hash of
+(model_name, prompt_version, prompt_text, syndicate_num, report_year[, page_num]).
+Changing the prompt wording or bumping PROMPT_VERSION auto-invalidates the cache.
+Delete the llm_cache/ directory to force re-extraction from all LLMs.
 """
 
 import os
@@ -107,7 +112,89 @@ from table_extraction import extract_tables, TableBackend
 load_dotenv()
 
 # Table extraction backend (can be overridden with --table-backend)
-TABLE_BACKEND = TableBackend.NUTRIENT
+# Priority: azure (default) > nutrient > adobe
+TABLE_BACKEND = TableBackend.AZURE
+
+
+# ---------------------------------------------------------------------------
+# Unicode-to-ASCII sanitiser — applied to all JSON output
+# ---------------------------------------------------------------------------
+
+# Common Unicode -> ASCII replacements for financial/PDF text
+_UNICODE_MAP = {
+    "\u2014": "-",       # em dash
+    "\u2013": "-",       # en dash
+    "\u2012": "-",       # figure dash
+    "\u2015": "-",       # horizontal bar
+    "\u2018": "'",       # left single quote
+    "\u2019": "'",       # right single quote / apostrophe
+    "\u201c": '"',       # left double quote
+    "\u201d": '"',       # right double quote
+    "\u2026": "...",     # ellipsis
+    "\u00a3": "GBP ",    # pound sign
+    "\u20ac": "EUR ",    # euro sign
+    "\u00a0": " ",       # non-breaking space
+    "\u00ad": "",         # soft hyphen
+    "\u00b7": ".",       # middle dot
+    "\u2022": "-",       # bullet
+    "\u2023": "-",       # triangular bullet
+    "\u00d7": "x",       # multiplication sign
+    "\u00f7": "/",       # division sign
+    "\u2264": "<=",      # less than or equal
+    "\u2265": ">=",      # greater than or equal
+    "\u00b1": "+/-",     # plus-minus
+    "\u0141": "",         # L-stroke (PDF garbage)
+    "\u0142": "",         # l-stroke (PDF garbage)
+    "\ufb01": "fi",      # fi ligature
+    "\ufb02": "fl",      # fl ligature
+    "\u2019s": "'s",     # possessive
+}
+
+# Double-encoded UTF-8 patterns (e.g. \u00c2\u00a3 = double-encoded £)
+_DOUBLE_ENCODED = {
+    "\u00c2\u00a3": "GBP ",   # double-encoded £
+    "\u00c3\u00a9": "e",       # double-encoded e-acute
+    "\u00c3\u00a8": "e",       # double-encoded e-grave
+    "\u00c3\u00bc": "u",       # double-encoded u-umlaut
+    "\u00c3\u00b6": "o",       # double-encoded o-umlaut
+}
+
+
+def _sanitize_ascii(s):
+    """Replace Unicode characters with nearest ASCII equivalents."""
+    if not isinstance(s, str):
+        return s
+
+    # Fix double-encoded sequences first
+    for pattern, replacement in _DOUBLE_ENCODED.items():
+        s = s.replace(pattern, replacement)
+
+    # Apply known replacements
+    for char, replacement in _UNICODE_MAP.items():
+        s = s.replace(char, replacement)
+
+    # Strip any remaining non-ASCII characters
+    s = s.encode("ascii", errors="ignore").decode("ascii")
+
+    # Clean up double spaces from replacements
+    while "  " in s:
+        s = s.replace("  ", " ")
+
+    return s
+
+
+def sanitize_json_ascii(obj):
+    """Recursively replace Unicode characters with ASCII in a JSON-serializable object."""
+    if isinstance(obj, str):
+        return _sanitize_ascii(obj)
+    elif isinstance(obj, dict):
+        return {_sanitize_ascii(k) if isinstance(k, str) else k:
+                sanitize_json_ascii(v) for k, v in obj.items()}
+    elif isinstance(obj, list):
+        return [sanitize_json_ascii(item) for item in obj]
+    else:
+        return obj
+
 
 # Pricing per 1M tokens (USD)
 PRICING = {
@@ -157,6 +244,63 @@ OPENAI_MODEL = "gpt-5-mini"
 PROMPT_VERSION = "2.6"
 FIELD_DEFINITIONS_VERSION = "1.0"
 TOLERANCE_RULES_VERSION = "1.0"
+
+# ---------------------------------------------------------------------------
+# LLM output caching
+# ---------------------------------------------------------------------------
+LLM_CACHE_DIR = Path("pdf_extraction/llm_cache")
+
+
+def _llm_cache_key(model: str, prompt_text: str, syndicate_num: int,
+                   report_year: int, page_num: int = None) -> str:
+    """Build a deterministic cache key from model + prompt + context.
+
+    Hash = SHA-256 of (model_name, PROMPT_VERSION, prompt_text, syndicate,
+    year[, page]).  Returns hex digest used as the cache filename stem.
+    """
+    parts = [model, PROMPT_VERSION, prompt_text, str(syndicate_num), str(report_year)]
+    if page_num is not None:
+        parts.append(str(page_num))
+    blob = "|".join(parts).encode("utf-8")
+    return hashlib.sha256(blob).hexdigest()
+
+
+def _llm_cache_path(cache_key: str) -> Path:
+    """Return the filesystem path for a given cache key."""
+    return LLM_CACHE_DIR / f"{cache_key}.json"
+
+
+def _llm_cache_load(cache_key: str):
+    """Load cached LLM result. Returns (data_dict, True) or (None, False)."""
+    path = _llm_cache_path(cache_key)
+    if path.exists():
+        try:
+            with open(path, "r", encoding="utf-8") as f:
+                return json.load(f), True
+        except (json.JSONDecodeError, OSError):
+            pass
+    return None, False
+
+
+def _llm_cache_save(cache_key: str, data, *, model: str = "",
+                    syndicate_num: int = 0, report_year: int = 0,
+                    page_num: int = None):
+    """Persist LLM result to cache."""
+    LLM_CACHE_DIR.mkdir(parents=True, exist_ok=True)
+    envelope = {
+        "_cache_meta": {
+            "model": model,
+            "prompt_version": PROMPT_VERSION,
+            "syndicate": syndicate_num,
+            "year": report_year,
+            "cached_at": datetime.now(timezone.utc).isoformat(),
+        },
+        "data": data,
+    }
+    if page_num is not None:
+        envelope["_cache_meta"]["page"] = page_num
+    with open(_llm_cache_path(cache_key), "w", encoding="utf-8") as f:
+        json.dump(envelope, f, indent=2, ensure_ascii=True)
 
 
 def convert_html_to_pdf(html_path):
@@ -432,6 +576,13 @@ def parse_json_response(text):
 
 def extract_with_gemini(report_path, file_bytes, content_hash, syndicate_num, report_year, model=GEMINI_MODEL):
     """Extract using Google Gemini."""
+    prompt_text = build_prompt(syndicate_num, report_year)
+    cache_key = _llm_cache_key(model, prompt_text, syndicate_num, report_year)
+    cached, hit = _llm_cache_load(cache_key)
+    if hit:
+        print(f"  [{model}] Cache hit — skipping API call")
+        return cached["data"]
+
     print(f"  [{model}] Uploading {report_path.name}...")
     client = genai.Client(api_key=os.getenv("GOOGLE_API_KEY"))
     uploaded_file = client.files.upload(file=report_path)
@@ -492,11 +643,20 @@ def extract_with_gemini(report_path, file_bytes, content_hash, syndicate_num, re
     }
 
     print(f"  [{model}] Done. {input_tokens:,} in / {output_tokens:,} out. ${cost:.6f}")
+    _llm_cache_save(cache_key, data, model=model,
+                    syndicate_num=syndicate_num, report_year=report_year)
     return data
 
 
 def extract_with_openai(report_path, file_bytes, content_hash, syndicate_num, report_year, model=OPENAI_MODEL):
     """Extract using OpenAI GPT with file upload."""
+    prompt_text = build_prompt(syndicate_num, report_year)
+    cache_key = _llm_cache_key(model, prompt_text, syndicate_num, report_year)
+    cached, hit = _llm_cache_load(cache_key)
+    if hit:
+        print(f"  [{model}] Cache hit — skipping API call")
+        return cached["data"]
+
     print(f"  [{model}] Sending {report_path.name}...")
     client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
@@ -575,6 +735,8 @@ def extract_with_openai(report_path, file_bytes, content_hash, syndicate_num, re
     }
 
     print(f"  [{model}] Done. {input_tokens:,} in / {output_tokens:,} out. ${cost:.6f}")
+    _llm_cache_save(cache_key, data, model=model,
+                    syndicate_num=syndicate_num, report_year=report_year)
     return data
 
 
@@ -1499,11 +1661,19 @@ def extract_triangle_from_page(pdf_path, page_num, report_year, model="gemini-2.
 
     Returns (triangle_dict, cost) or (None, 0) on failure.
     """
+    prompt = TRIANGLE_EXTRACT_PROMPT.replace("{report_year}", str(report_year))
+
+    # Parse syndicate number from filename for cache key
+    _parts = Path(pdf_path).stem.split("_")
+    _syn = int(_parts[1]) if len(_parts) >= 3 else 0
+    cache_key = _llm_cache_key(model, prompt, _syn, report_year, page_num=page_num)
+    cached, hit = _llm_cache_load(cache_key)
+    if hit:
+        return cached["data"], 0  # cost=0 for cached results
+
     img_b64 = render_page_as_image_b64(pdf_path, page_num)
     if not img_b64:
         return None, 0
-
-    prompt = TRIANGLE_EXTRACT_PROMPT.replace("{report_year}", str(report_year))
 
     if model.startswith("gemini"):
         client = genai.Client(api_key=os.getenv("GOOGLE_API_KEY"))
@@ -1526,6 +1696,9 @@ def extract_triangle_from_page(pdf_path, page_num, report_year, model="gemini-2.
             usage = response.usage_metadata
             cost = (usage.prompt_token_count * PRICING[model]["input"] / 1_000_000 +
                     usage.candidates_token_count * PRICING[model]["output"] / 1_000_000)
+            _llm_cache_save(cache_key, data, model=model,
+                            syndicate_num=_syn, report_year=report_year,
+                            page_num=page_num)
             return data, cost
         except (json.JSONDecodeError, Exception) as e:
             return None, 0
@@ -1548,6 +1721,9 @@ def extract_triangle_from_page(pdf_path, page_num, report_year, model="gemini-2.
             data = parse_json_response(response.output_text)
             cost = (response.usage.input_tokens * PRICING[model]["input"] / 1_000_000 +
                     response.usage.output_tokens * PRICING[model]["output"] / 1_000_000)
+            _llm_cache_save(cache_key, data, model=model,
+                            syndicate_num=_syn, report_year=report_year,
+                            page_num=page_num)
             return data, cost
         except (json.JSONDecodeError, Exception) as e:
             return None, 0
@@ -2532,7 +2708,7 @@ def append_to_disagreement_log(report_stem, hard_failures):
         next_num += 1
 
     with open(log_path, "w") as f:
-        json.dump(log, f, indent=2)
+        json.dump(sanitize_json_ascii(log), f, indent=2, ensure_ascii=True)
 
 
 def write_run_manifest(run_stats):
@@ -2582,7 +2758,7 @@ def write_run_manifest(run_stats):
     manifest["runs"].append(entry)
 
     with open(manifest_path, "w") as f:
-        json.dump(manifest, f, indent=2)
+        json.dump(sanitize_json_ascii(manifest), f, indent=2, ensure_ascii=True)
     print(f"  Run manifest updated: {manifest_path} ({len(manifest['runs'])} runs total)")
 
 
@@ -2867,9 +3043,10 @@ if __name__ == "__main__":
                 first_year_data = result[1]
                 output_file = OUTPUT_DIR / f"{report_path.stem}.json"
                 with open(output_file, "w") as f:
-                    json.dump(first_year_data, f, indent=2)
-                print(f"  First/second-year syndicate — no prior year development possible")
+                    json.dump(sanitize_json_ascii(first_year_data), f, indent=2, ensure_ascii=True)
+                print(f"  SKIP: First/second-year syndicate - no prior year development possible")
                 print(f"  Audit JSON written: {output_file.name}")
+                print(f"  >> RESULT: Report not used (insufficient underwriting history)")
                 run_skipped_first_year += 1
                 continue
             output_data, passed, discrepancies, hard_failures = result
@@ -2906,11 +3083,28 @@ if __name__ == "__main__":
         # Write output JSON
         output_file = OUTPUT_DIR / f"{report_path.stem}.json"
         with open(output_file, "w") as f:
-            json.dump(output_data, f, indent=2)
+            json.dump(sanitize_json_ascii(output_data), f, indent=2, ensure_ascii=True)
 
         status = "PASSED" if passed else "FAILED"
         print(f"  Validation: {status}  ({len(discrepancies)} discrepancies, {len(hard_failures)} hard failures)")
         print(f"  Written: {output_file}")
+
+        # Console summary: PYD amount + % of reserves
+        _any_model = output_data.get("models", {})
+        _first_model_data = next(iter(_any_model.values()), {}) if _any_model else {}
+        _pyd_gbp = _first_model_data.get("prior_year_development_gbp_m")
+        _pyd_pct = _first_model_data.get("prior_year_development_pct")
+        _opening = _first_model_data.get("opening_reserves_gbp_m")
+        if _pyd_gbp is not None and _pyd_pct is not None:
+            _dir = "release" if _pyd_gbp < 0 else "strengthening" if _pyd_gbp > 0 else "flat"
+            _currency = _first_model_data.get("currency", "GBP")
+            print(f"  >> RESULT: PYD = {_pyd_gbp:+.1f}m {_currency} ({_pyd_pct:+.1f}% of "
+                  f"{_opening:.0f}m reserves) [{_dir}]")
+        elif _pyd_gbp is not None:
+            _dir = "release" if _pyd_gbp < 0 else "strengthening" if _pyd_gbp > 0 else "flat"
+            print(f"  >> RESULT: PYD = {_pyd_gbp:+.1f}m [{_dir}]")
+        else:
+            print(f"  >> RESULT: No prior year development extracted")
 
         if not passed:
             run_failed += 1
@@ -3129,7 +3323,9 @@ if __name__ == "__main__":
 
                     try:
                         result, tokens_in, tokens_out = call_adjudicator(
-                            actual_pdf, prompt, page_hints=page_hints or None
+                            actual_pdf, prompt, page_hints=page_hints or None,
+                            syndicate_num=syndicate_num, report_year=report_year,
+                            field=field,
                         )
                     except Exception as e:
                         print(f"    ERROR calling adjudicator: {e}")
@@ -3179,7 +3375,7 @@ if __name__ == "__main__":
                             output_data["exclusion_date"] = now
                             output_file = OUTPUT_DIR / f"{report_path.stem}.json"
                             with open(output_file, "w") as f:
-                                json.dump(output_data, f, indent=2)
+                                json.dump(sanitize_json_ascii(output_data), f, indent=2, ensure_ascii=True)
                             print(f"    Report excluded: {reason}")
                             report_excluded = True
                             break
@@ -3356,7 +3552,7 @@ if __name__ == "__main__":
                         output_data["exclusion_date"] = now
                         output_file = OUTPUT_DIR / f"{report_path.stem}.json"
                         with open(output_file, "w") as f:
-                            json.dump(output_data, f, indent=2)
+                            json.dump(sanitize_json_ascii(output_data), f, indent=2, ensure_ascii=True)
                         print(f"    Report excluded: {decision_data}")
                         report_excluded = True
                         break
@@ -3519,7 +3715,7 @@ if __name__ == "__main__":
                         output_data["exclusion_date"] = now
                         output_file = OUTPUT_DIR / f"{report_path.stem}.json"
                         with open(output_file, "w") as f:
-                            json.dump(output_data, f, indent=2)
+                            json.dump(sanitize_json_ascii(output_data), f, indent=2, ensure_ascii=True)
 
                     save_rejection_log(rej_log)
                     print(f"  Rejection log updated for {report_path.stem}")

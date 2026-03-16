@@ -1,9 +1,9 @@
 """Unified table extraction from Lloyd's syndicate report PDFs.
 
-Supports multiple backends:
-  - nutrient: Nutrient.io API (default) — targeted page extraction
+Supports multiple backends (priority order):
+  - azure: Azure AI Document Intelligence (default) — prebuilt-layout model
+  - nutrient: Nutrient.io API — targeted page extraction
   - adobe: Adobe PDF Extract API — full document extraction with xlsx tables
-  - azure: Azure AI Document Intelligence (stub, for future implementation)
 
 Each backend extracts:
   1. Claims development triangle (gross and/or net)
@@ -117,7 +117,7 @@ class ExtractionResult:
 def extract_tables(
     pdf_path: Path,
     report_year: int,
-    backend: TableBackend = TableBackend.NUTRIENT,
+    backend: TableBackend = TableBackend.AZURE,
     cache_dir: Optional[Path] = None,
 ) -> ExtractionResult:
     """Extract triangle, LOB, and provisions tables from a syndicate report PDF.
@@ -677,7 +677,7 @@ def _extract_nutrient(pdf_path: Path, report_year: int, cache_dir: Path) -> Extr
         try:
             nutrient_result = _call_nutrient_api(slim_pdf, api_key)
             with open(cache_file, "w") as f:
-                json.dump(nutrient_result, f, indent=2)
+                json.dump(nutrient_result, f, indent=2, ensure_ascii=True)
             print(f"  [Nutrient] API completed")
         except Exception as e:
             print(f"  [Nutrient] API failed: {e}")
@@ -972,48 +972,68 @@ def _extract_azure(pdf_path: Path, report_year: int, cache_dir: Path) -> Extract
     batch_size = 2  # Azure F0 tier limit
     batches = [sorted_pages[i:i+batch_size] for i in range(0, len(sorted_pages), batch_size)]
 
-    # Collect all tables across batches
+    # Check for cached Azure results
+    cache_file = cache_dir / f"{pdf_path.stem}_azure.json"
     all_grids = []  # (grid, orig_page, categories)
 
-    for batch_idx, batch_pages in enumerate(batches):
-        batch_cats = set()
-        for p in batch_pages:
-            batch_cats.update(page_matches[p])
-        cat_str = ", ".join(sorted(batch_cats))
+    if cache_file.exists():
+        print(f"  [Azure] Using cached result")
+        with open(cache_file) as f:
+            cached = json.load(f)
+        for entry in cached:
+            grid = entry["grid"]
+            orig_page = entry["orig_page"]
+            cats = set(entry["categories"])
+            all_grids.append((grid, orig_page, cats))
+    else:
+        # Send pages to Azure API in batches of 2
+        for batch_idx, batch_pages in enumerate(batches):
+            batch_cats = set()
+            for p in batch_pages:
+                batch_cats.update(page_matches[p])
+            cat_str = ", ".join(sorted(batch_cats))
 
-        slim_pdf = cache_dir / f"{pdf_path.stem}_slim_b{batch_idx}.pdf"
-        _extract_pages_to_pdf(pdf_path, batch_pages, slim_pdf)
-        pages_str = ", ".join(str(p+1) for p in batch_pages)
-        print(f"  [Azure] Batch {batch_idx+1}/{len(batches)}: pages {pages_str} [{cat_str}]")
+            slim_pdf = cache_dir / f"{pdf_path.stem}_slim_b{batch_idx}.pdf"
+            _extract_pages_to_pdf(pdf_path, batch_pages, slim_pdf)
+            pages_str = ", ".join(str(p+1) for p in batch_pages)
+            print(f"  [Azure] Batch {batch_idx+1}/{len(batches)}: pages {pages_str} [{cat_str}]")
 
-        try:
-            azure_result = _call_azure_api(slim_pdf, endpoint, api_key)
-            n_tables = len(azure_result.tables) if azure_result.tables else 0
-            print(f"    {n_tables} tables found")
+            try:
+                azure_result = _call_azure_api(slim_pdf, endpoint, api_key)
+                n_tables = len(azure_result.tables) if azure_result.tables else 0
+                print(f"    {n_tables} tables found")
 
-            if azure_result.tables:
-                for table in azure_result.tables:
-                    grid = _azure_table_to_grid(table)
-                    if len(grid) < 2:
-                        continue
-                    # Map slim page to original
-                    orig_page = batch_pages[0]
-                    if table.bounding_regions:
-                        for br in table.bounding_regions:
-                            slim_idx = br.page_number - 1
-                            if slim_idx < len(batch_pages):
-                                orig_page = batch_pages[slim_idx]
-                                break
+                if azure_result.tables:
+                    for table in azure_result.tables:
+                        grid = _azure_table_to_grid(table)
+                        if len(grid) < 2:
+                            continue
+                        # Map slim page to original
+                        orig_page = batch_pages[0]
+                        if table.bounding_regions:
+                            for br in table.bounding_regions:
+                                slim_idx = br.page_number - 1
+                                if slim_idx < len(batch_pages):
+                                    orig_page = batch_pages[slim_idx]
+                                    break
 
-                    page_cats = page_matches.get(orig_page, set())
-                    content_cats = _classify_table_content(grid)
-                    combined_cats = page_cats | content_cats
-                    all_grids.append((grid, orig_page, combined_cats))
+                        page_cats = page_matches.get(orig_page, set())
+                        content_cats = _classify_table_content(grid)
+                        combined_cats = page_cats | content_cats
+                        all_grids.append((grid, orig_page, combined_cats))
 
-        except Exception as e:
-            print(f"    FAILED: {e}")
+            except Exception as e:
+                print(f"    FAILED: {e}")
 
-        slim_pdf.unlink(missing_ok=True)
+            slim_pdf.unlink(missing_ok=True)
+
+        # Cache extracted grids for reuse
+        cache_data = [
+            {"grid": grid, "orig_page": orig_page, "categories": sorted(cats)}
+            for grid, orig_page, cats in all_grids
+        ]
+        with open(cache_file, "w") as f:
+            json.dump(cache_data, f, indent=2, ensure_ascii=True)
 
     # Step 3: Parse tables
     best_triangle = None
