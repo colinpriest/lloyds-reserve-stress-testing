@@ -4,18 +4,20 @@ A comprehensive Python toolkit for collecting and analyzing Lloyd's of London re
 
 ## Overview
 
-This toolkit provides two complementary data collection pipelines:
+This toolkit provides three complementary pipelines:
 
 1. **Syndicate Report Scraper** - Downloads and classifies quality of individual syndicate annual reports (2014-2024)
 2. **Market Commentary Scraper & Analyzer** - Discovers, scrapes, and standardizes market-wide reserve commentary from multiple sources
+3. **PDF Extraction Pipeline** - Extracts structured reserve data (prior year development, LOB breakdowns, claims triangles) from syndicate PDFs using a RAG-lite approach combining deterministic table extraction with dual-LLM verification
 
 Together, these tools enable research on using LLMs with EVT for insurance reserve stress testing by providing:
 - **Syndicate-level data**: Detailed line-of-business breakdowns and causal explanations from individual syndicate reports
 - **Market-level data**: Standardized reserve movements and causal narratives from official reports, rating agencies, and trade press
+- **Structured numerical data**: Claims development triangles with computed prior year development, extracted deterministically and cross-validated against LLM outputs
 
 ## Architecture
 
-**Two-LLM Design for Market Commentary:**
+### Two-LLM Design for Market Commentary
 
 - **Perplexity** → Source Discovery (web search with citations)
 - **ChatGPT** → Summarization & Standardization (consistent text generation)
@@ -23,6 +25,58 @@ Together, these tools enable research on using LLMs with EVT for insurance reser
 This separation leverages each LLM's strengths:
 - Perplexity excels at finding current sources with real-time web search
 - ChatGPT excels at consistent formatting and structured extraction
+
+### RAG-lite PDF Extraction Pipeline
+
+The PDF extraction pipeline (`test_gemini.py` + `table_extraction.py`) uses a layered approach to maximize accuracy:
+
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│                    PDF EXTRACTION PIPELINE                           │
+├─────────────────────────────────────────────────────────────────────┤
+│                                                                     │
+│  Step 1: Page Classification (PyMuPDF / Tesseract OCR)              │
+│  ├── Scan all pages for keyword signals                             │
+│  ├── Classify pages: claims_triangle, premium_mix, pl_account,      │
+│  │   provisions, reserve_commentary                                 │
+│  └── Only send relevant pages to API backends (cost saving)         │
+│                                                                     │
+│  Step 2: Deterministic Table Extraction                             │
+│  ├── Backend selection: Azure / Nutrient / Adobe                    │
+│  ├── Extract claims development triangle (gross preferred)          │
+│  ├── Extract LOB premium/claims breakdown                           │
+│  ├── Extract claims provisions movement note                        │
+│  └── Text-based triangle fallback for columnar PDF layouts          │
+│                                                                     │
+│  Step 3: Triangle Post-Processing (Python)                          │
+│  ├── Validate triangle structure (UW years, row counts)             │
+│  ├── Handle run-off syndicates (max UW year < report year)          │
+│  ├── Detect and strip summary rows                                  │
+│  ├── Compute PYD from diagonal differences                          │
+│  └── Apply unit conversion (thousands → millions)                   │
+│                                                                     │
+│  Step 4: LLM Extraction (Gemini + GPT)                              │
+│  ├── Independent extraction of all reserve fields                   │
+│  ├── Field-by-field comparison with tolerance rules                 │
+│  ├── RAG triangle PYD overrides LLM when available                  │
+│  └── Interactive adjudication for unresolved discrepancies          │
+│                                                                     │
+│  Step 5: Report Classification                                      │
+│  ├── first_year_syndicate: <3 UW years, no PYD possible             │
+│  ├── no_triangle_data: no triangle or reserve text found            │
+│  └── Normal: full extraction with cross-validated PYD               │
+│                                                                     │
+│  Output: pdf_extraction/syndicate_NNNN_YYYY.json                    │
+│                                                                     │
+└─────────────────────────────────────────────────────────────────────┘
+```
+
+**Key design decisions:**
+
+- **Deterministic-first**: Claims development triangles are extracted by table parsing APIs (not LLMs), then PYD is computed in Python. This eliminates LLM arithmetic errors.
+- **LLM as fallback**: When table extraction fails, LLM vision can read triangles from page images, or LLM text extraction reads PYD from reserve narrative text.
+- **Dual-LLM verification**: Two independent LLMs (Gemini and GPT) extract the same fields. Disagreements trigger adjudication, either automated (Claude verification) or human review.
+- **RAG triangle authority**: When a valid triangle is extracted deterministically, its computed PYD overrides any LLM-extracted value, with the override recorded in the audit trail.
 
 ## Installation
 
@@ -39,7 +93,7 @@ pip install -r requirements.txt
 
 ### OCR Dependencies (for Scanned PDFs)
 
-The syndicate classifier includes OCR support for scanned PDFs that cannot be processed with standard text extraction. To enable OCR:
+The syndicate classifier and page scanner include OCR support for scanned PDFs. To enable OCR:
 
 1. **Install Tesseract OCR:**
    - **Windows**: Download from [GitHub releases](https://github.com/UB-Mannheim/tesseract/wiki) or use conda: `conda install -c conda-forge tesseract`
@@ -63,8 +117,16 @@ Create a `.env` file in the project root with your API keys:
 # Required for market commentary source discovery
 PERPLEXITY_API_KEY=your-perplexity-api-key
 
-# Required for summarization
+# Required for LLM extraction and summarization
 OPENAI_API_KEY=your-openai-api-key
+GEMINI_API_KEY=your-gemini-api-key
+
+# Required for table extraction (choose one or more backends)
+AZURE_DOCUMENT_INTELLIGENCE_ENDPOINT=your-azure-endpoint
+AZURE_DOCUMENT_INTELLIGENCE_KEY=your-azure-key
+NUTRIENT_API_KEY=your-nutrient-api-key
+ADOBE_PDF_SERVICES_CLIENT_ID=your-adobe-client-id
+ADOBE_PDF_SERVICES_CLIENT_SECRET=your-adobe-client-secret
 
 # Optional: For enhanced Google search discovery
 GOOGLE_API_KEY=your-google-api-key
@@ -77,37 +139,41 @@ GOOGLE_CSE_ID=your-custom-search-engine-id
 
 ### Syndicate Reports Pipeline
 
-#### 1. Test with a few syndicates
+#### 1. Download syndicate reports
 
 ```bash
-# Test with known HIGH quality syndicate (1209) from feasibility assessment
-python scripts/syndicate_scraper.py --syndicates 1209,2488,1274 --output ./syndicate_reports
+# Test with a few syndicates
+python scripts/lloyds_scraper.py --syndicates 1209,2488,1274 --output ./syndicate_reports
 
-# Check results
-cat ./syndicate_reports/metadata/summary.json
-```
-
-#### 2. Full scrape of all syndicates
-
-```bash
 # Download all available reports (takes 2-4 hours)
-python scripts/syndicate_scraper.py --all --output ./syndicate_reports --delay 1.5
-
-# This will:
-# - Check ~300 syndicates
-# - Attempt to download ~11 years per syndicate (2014-2024)
-# - Save PDFs to ./syndicate_reports/pdfs/
-# - Save metadata to ./syndicate_reports/metadata/
+python scripts/lloyds_scraper.py --all --output ./syndicate_reports --delay 1.5
 ```
 
-#### 3. Classify quality of downloaded reports
+#### 2. Classify quality of downloaded reports
 
 ```bash
-# After downloading, classify quality
-python scripts/syndicate_quality_classifier.py --pdf-dir ./syndicate_reports/pdfs --output ./syndicate_reports/quality_report.json
+python scripts/quality_classifier.py --pdf-dir ./syndicate_reports/pdfs --output ./syndicate_reports/quality_report.json
+```
 
-# View summary
-cat ./syndicate_reports/quality_report.json | python -m json.tool | head -50
+#### 3. Extract structured data from reports
+
+```bash
+# Run the extraction pipeline (default: Azure Document Intelligence backend)
+python test_gemini.py
+
+# Choose a specific table extraction backend
+python test_gemini.py --table-backend azure     # Azure Document Intelligence (default)
+python test_gemini.py --table-backend nutrient   # Nutrient.io
+python test_gemini.py --table-backend adobe      # Adobe PDF Extract
+
+# Process specific syndicates/years
+python test_gemini.py --syndicates 1110 --years 2022
+
+# Non-interactive batch mode (no human adjudication)
+python test_gemini.py --batch
+
+# Clean and re-run from scratch
+python test_gemini.py --clean
 ```
 
 ### Market Commentary Pipeline
@@ -115,47 +181,225 @@ cat ./syndicate_reports/quality_report.json | python -m json.tool | head -50
 #### Step 1: Discover Sources (Perplexity)
 
 ```bash
-# Discover sources for specific years
 python scripts/perplexity_discovery.py --years 2022 2023 2024
-
-# Discover sources for a specific LOB
-python scripts/perplexity_discovery.py --years 2023 --lob "casualty_reinsurance"
-
-# Output: market_commentary/discovered_sources.json, market_commentary/discovered_sources_urls.json
 ```
 
 #### Step 2: Scrape Discovered Sources
 
 ```bash
-# Scrape all sources (uses discovered URLs + known URLs)
-python scripts/market_scraper.py --years 2022 2023 2024
-
-# Or provide discovered URLs explicitly
-python scripts/market_scraper.py --urls market_commentary/discovered_sources_urls.json
+python scripts/market_commentary_scraper.py --years 2022 2023 2024
 ```
 
 #### Step 3: Summarize with ChatGPT
 
 ```bash
-# Standardize and summarize scraped data
-python scripts/market_summarizer.py --input market_commentary/market_commentary.json --year 2023
-
-# Generate stress test training data
-python scripts/market_summarizer.py --input market_commentary/market_commentary.json --year 2023 --generate-training
-
-# Output: results/market/standardized_movements_2023.json, results/market/lob_summaries_2023.json, results/market/market_report_2023.md
+python scripts/chatgpt_summarizer.py --input market_commentary/market_commentary.json --year 2023
 ```
 
-### Full Pipeline
+## PDF Extraction Pipeline — Detailed
 
-```bash
-# Run complete pipeline
-./scripts/run_pipeline.sh --years 2023 --discover --summarize
+### Overview
 
-# Or step by step:
-python scripts/perplexity_discovery.py --years 2023 --output market_commentary/discovered.json
-python scripts/market_scraper.py --years 2023 --output-dir ./market_commentary
-python scripts/market_summarizer.py --input ./market_commentary/market_commentary.json --year 2023 --output-dir ./results/market
+The extraction pipeline (`test_gemini.py`) processes each syndicate PDF through multiple extraction layers, cross-validates results, and produces structured JSON output with complete audit trails.
+
+### Table Extraction Backends
+
+Three backends are supported for deterministic table extraction (`table_extraction.py`):
+
+| Backend | Method | Speed | Accuracy | Cost |
+|---------|--------|-------|----------|------|
+| **Azure** | Azure AI Document Intelligence prebuilt-layout | Fast (2-5s/batch) | High | ~$0.01/page |
+| **Nutrient** | Nutrient.io API with targeted pages | Medium (5-10s) | High | ~$0.05/doc |
+| **Adobe** | Adobe PDF Extract API with full document | Slow (30-60s) | High | ~$0.05/doc |
+
+All backends extract the same three data types:
+
+1. **Claims Development Triangle** — the NxN matrix of cumulative claims by underwriting year and development period
+2. **LOB Breakdown** — gross written premiums and claims incurred by line of business (from segmental analysis)
+3. **Claims Provisions Movement** — prior year claims development from the provisions note
+
+### Page Classification
+
+Before sending pages to expensive APIs, the pipeline scans all pages using PyMuPDF (or Tesseract OCR for scanned PDFs) and classifies them by keyword signals:
+
+| Tag | Keywords | Purpose |
+|-----|----------|---------|
+| `claims_triangle` | "claims development", "years later", "cumulative claims", "outstanding claims provision" | Find the claims development triangle |
+| `premium_mix` | "segmental analysis", "gross premiums written", "by class of business" | Find LOB premium/claims breakdown |
+| `pl_account` | "technical account", "profit and loss", "claims incurred" | Find income statement data |
+| `provisions` | "claims outstanding", "prior year", "movement in provision" | Find provisions movement note |
+
+Only pages matching relevant tags are sent to the API backend, reducing cost by 80-90%.
+
+### Claims Development Triangle Extraction
+
+The triangle is the primary source of truth for prior year development. The extraction follows this priority chain:
+
+1. **API table detection** — Azure/Nutrient/Adobe detects table structure from the PDF
+2. **Text-based parsing** — Fallback when API doesn't detect the table; parses raw page text from PyMuPDF, handling both inline and columnar layouts
+3. **LLM vision** — Last resort; sends a page image to Gemini for structured triangle extraction
+
+#### Triangle Validation
+
+Extracted triangles undergo structural validation before PYD computation:
+
+- **UW year range**: Max underwriting year must be within 2 years of the report year (accommodates run-off syndicates)
+- **Row/column ratio**: Number of development rows must be consistent with number of UW year columns, accounting for extra development rows in run-off triangles
+- **Column fill pattern**: Oldest column must have the most non-null values (upper-left triangle shape)
+- **Gross vs net**: Gross triangles are preferred; net-only triangles are used as fallback
+- **Sensitivity table exclusion**: Tables containing "change in assumptions", "impact on", "severity" are excluded
+
+#### Run-Off Syndicate Handling
+
+Run-off syndicates (e.g., syndicate 1110) stopped writing new business but their claims continue developing. Their triangles have:
+- Fewer UW year columns than a normal active syndicate
+- More development rows than columns (claims continue developing after last UW year)
+- Max UW year earlier than the report year (e.g., max UW year 2022 in a 2023 report)
+
+The pipeline handles this by:
+- Accepting triangles where `max_uw_year` is within 2 years of `report_year` (not requiring exact match)
+- Computing `extra_dev_years = report_year - max_uw_year` to adjust row count validation
+- Using `report_year - uw_year >= dev_period` for row sizing in the text-based parser
+
+#### Text-Based Triangle Parser
+
+When the API backend doesn't detect a table (common with certain PDF layouts), the text-based parser (`_parse_triangle_from_text`) extracts the triangle from raw PyMuPDF page text:
+
+1. **Year detection**: Two strategies — years on a single header line, or years on consecutive lines (columnar PyMuPDF output)
+2. **Label detection**: Identifies development period rows ("12 months later", "2 years later", etc.) and skips them during number collection
+3. **Row grouping**: For each development period d, expects `count(UW years where report_year - year >= d)` values — correctly handles year gaps
+4. **Stop detection**: Recognises summary rows ("current year estimate", "less amounts paid", "provision for claims outstanding") to stop collecting triangle data
+
+### Prior Year Development (PYD) Computation
+
+PYD is computed from the triangle in Python, not by LLMs, to avoid arithmetic errors:
+
+```
+For each underwriting year column:
+  current_estimate  = last non-null value in the column (current diagonal)
+  previous_estimate = value one row above (previous diagonal)
+  pyd_for_year = current_estimate - previous_estimate
+
+Total PYD = sum of pyd_for_year across all columns except the most recent
+```
+
+The most recent UW year column is excluded because it has only one development period — there is no "previous" estimate to compare against.
+
+**Unit handling**: If the triangle is in thousands (£000), the total PYD is divided by 1000 to convert to millions (£m). This is detected from page text keywords ("£000", "£'000", "thousands").
+
+**Summary row stripping**: If the LLM or API includes a "current estimate" summary row at the bottom of the triangle (where every column has a value), it is detected and removed before computation. This prevents double-counting.
+
+### First-Year Syndicate Detection
+
+Syndicates in their first or second year of operation have fewer than 3 underwriting years in their triangle. These are automatically detected and skipped:
+
+- A triangle with < 3 UW years means premiums are still earning through — prior year development cannot be meaningfully separated from current year activity
+- The pipeline writes a minimal audit JSON with `"first_year_syndicate": true` and skips LLM extraction entirely (saving API costs)
+- LOB breakdown is still extracted if available
+
+### No-Triangle-Data Exclusion
+
+Reports where no claims triangle and no reserve movement text can be found are flagged with `"no_triangle_data": true` and recommended for non-inclusion in downstream analysis:
+
+- The pipeline writes an exclusion JSON with `"excluded": true` and `"exclusion_reason"`
+- LLM extraction is skipped (saving API costs)
+- LOB breakdown is still extracted if available
+- This commonly occurs in run-off syndicate reports from years when no triangle was published
+
+### Dual-LLM Extraction and Cross-Validation
+
+After deterministic table extraction, the pipeline runs two independent LLMs on the full PDF:
+
+1. **Gemini** (gemini-2.5-flash) — extracts all structured fields
+2. **GPT** (gpt-4.1-mini) — independently extracts the same fields
+
+The outputs are compared field-by-field with tolerance rules:
+
+| Field | Tolerance |
+|-------|-----------|
+| `prior_year_development_gbp_m` | Within ±2.0m or ±5% |
+| `opening_reserves_gbp_m` | Within ±5% |
+| `gross_premiums_written_gbp_m` | Within ±5% |
+| `prior_year_development_pct` | Within ±1.0pp |
+| `direction` | Must match exactly |
+| `gross_premium_mix` | LOB names fuzzy-matched, amounts within ±10% |
+
+When the deterministic RAG triangle PYD is available, it takes precedence over both LLMs:
+- If an LLM agrees with the RAG value (within ±0.5m), the LLM value is confirmed
+- If an LLM disagrees, the RAG value overrides and the override is recorded in `data_quality_notes`
+
+### LLM Output Caching
+
+All LLM API calls are cached in `pdf_extraction/llm_cache/` using SHA-256 hashes of `(model, prompt_version, prompt_text, syndicate, year[, page])`. This means:
+- Re-running the pipeline does not re-call LLMs for already-processed reports
+- Changing the prompt wording or bumping `PROMPT_VERSION` auto-invalidates affected caches
+- Table extraction caches use a separate `_CACHE_VERSION` counter — bump it when extraction logic changes
+
+### Output Format
+
+Each processed report produces a JSON file in `pdf_extraction/`:
+
+```json
+{
+  "extraction_timestamp": "2025-03-15T10:30:00+00:00",
+  "spec": {
+    "prompt_version": "2025-03-10-v3",
+    "field_definitions_version": "2025-03-08-v2",
+    "tolerance_rules_version": "2025-03-08-v1"
+  },
+  "source_file": "syndicate_reports/pdfs/syndicate_1110_2022.pdf",
+  "models": {
+    "gemini-2.5-flash": {
+      "syndicate_number": 1110,
+      "report_year": 2022,
+      "opening_reserves_gbp_m": 850.2,
+      "prior_year_development_gbp_m": 9.082,
+      "prior_year_development_pct": 1.07,
+      "direction": "strengthening",
+      "gross_premiums_written_gbp_m": 333.4,
+      "gross_premium_mix": [
+        {"line_of_business": "Reinsurance", "amount_gbp_m": 248.2, "percentage_of_total": 74.4},
+        {"line_of_business": "Third party liability", "amount_gbp_m": 72.8, "percentage_of_total": 21.8}
+      ],
+      "_rag_triangle": {
+        "type": "gross",
+        "currency": "GBP",
+        "units": "thousands",
+        "underwriting_years": [2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2022],
+        "development_rows": [["...NxN matrix..."]]
+      }
+    },
+    "gpt-4.1-mini": { "...same fields..." }
+  },
+  "validation": {
+    "passed": true,
+    "total_discrepancies": 2,
+    "within_tolerance": 2,
+    "hard_failures": 0
+  }
+}
+```
+
+For first-year syndicates:
+```json
+{
+  "first_year_syndicate": true,
+  "reason": "Syndicate too new -- insufficient underwriting years for prior year development analysis",
+  "syndicate": 1322,
+  "year": 2023,
+  "gross_premium_mix": ["...if available..."]
+}
+```
+
+For reports with no usable data:
+```json
+{
+  "no_triangle_data": true,
+  "excluded": true,
+  "exclusion_reason": "No claims development triangle or reserve movement text found in report -- recommend non-inclusion in analysis",
+  "syndicate": 1110,
+  "year": 2019
+}
 ```
 
 ## File Structure
@@ -163,42 +407,49 @@ python scripts/market_summarizer.py --input ./market_commentary/market_commentar
 ```
 lloyds_reserve_stress_testing/
 │
-├── .env                                    # API keys
+├── .env                                    # API keys (gitignored)
 ├── .gitignore
 ├── requirements.txt                        # Python dependencies
 ├── README.md
+├── CLAUDE.md                               # Project documentation for AI assistants
+├── table_extraction.py                     # Deterministic table extraction (triangle, LOB, provisions)
+├── test_gemini.py                          # Main extraction pipeline (RAG-lite + dual-LLM)
 │
 ├── data/
 │   ├── syndicate_numbers.py                # List of syndicate numbers to scrape
 │   └── __init__.py
 │
-├── syndicate_reports/                      # Syndicate report outputs
-│   ├── pdfs/                               # Downloaded PDF files
-│   │   ├── syndicate_1209_2016.pdf
-│   │   ├── syndicate_1209_2017.pdf
-│   │   └── ...
+├── syndicate_reports/                      # Syndicate report outputs (gitignored)
+│   ├── pdfs/                               # Downloaded PDF and HTML files (~600+)
 │   ├── metadata/
 │   │   ├── reports.json                    # Metadata for all found reports
 │   │   ├── errors.json                     # Any errors encountered
 │   │   └── summary.json                    # Summary statistics
-│   ├── ocr_cache.json
 │   └── quality_report.json                 # Quality classification results
+│
+├── pdf_extraction/                         # Extraction pipeline outputs
+│   ├── syndicate_NNNN_YYYY.json            # Structured extraction results
+│   ├── audit/
+│   │   ├── disagreement_log.json           # LLM disagreements and resolutions
+│   │   ├── rejection_log.json              # Reports rejected by adjudication
+│   │   └── run_manifest.json               # Run statistics and metadata
+│   ├── adobe_output/                       # Adobe PDF Extract API raw outputs
+│   │   └── syndicate_NNNN_YYYY/            # Per-report: structuredData.json, tables/*.xlsx
+│   ├── azure_output/                       # Azure Document Intelligence cached results
+│   │   └── syndicate_NNNN_YYYY_azure.json
+│   ├── nutrient_output/                    # Nutrient.io cached page extractions
+│   ├── llm_cache/                          # LLM response cache (SHA-256 keyed)
+│   └── ocr_page_cache/                     # Tesseract OCR results per page
 │
 ├── market_commentary/                      # Market commentary outputs
 │   ├── pdfs/
-│   │   ├── lloyds_official/
-│   │   │   ├── lloyds_annual_report_2024.pdf
-│   │   │   └── ...
-│   │   └── am_best/
-│   │       └── ...
+│   │   ├── lloyds_official/                # Lloyd's official annual reports
+│   │   └── am_best/                        # AM Best rating reports
 │   ├── full_text/                          # Full extracted text (audit trail)
-│   │   ├── lloyds_official/
-│   │   ├── am_best/
-│   │   └── trade_press/
 │   ├── market_commentary.json              # Main scraped data
 │   ├── audit_manifest.json                 # File manifest with hashes
-│   ├── discovered_sources.json
-│   └── discovered_sources_urls.json
+│   ├── discovered_sources.json             # Perplexity discovery results
+│   └── discovered_sources_urls.json        # Extracted URLs from discovery
 │
 ├── results/
 │   ├── market/                             # ChatGPT market commentary outputs
@@ -206,50 +457,41 @@ lloyds_reserve_stress_testing/
 │   │   ├── lob_summaries_YYYY.json
 │   │   └── market_report_YYYY.md
 │   ├── syndicate/                          # ChatGPT syndicate outputs
-│   │   ├── standardized_movements.json
-│   │   └── audit_manifest.json
-│   └── combined/                           # Merged for embedding (future)
+│   │   ├── standardized_syndicate_movements.json
+│   │   └── syndicate_summary.json
+│   ├── combined/                           # Unified corpus for stress testing
+│   │   ├── unified_corpus.json
+│   │   └── corpus_summary.json
+│   └── stress_test/                        # Stress test outputs
+│       └── validated_scenario_library.json
 │
 ├── scripts/
-│   ├── syndicate_scraper.py                # Main scraper for downloading PDFs
-│   ├── syndicate_quality_classifier.py     # Quality classification of reserve commentary
-│   ├── syndicate_ocr.py                    # OCR processing for scanned PDFs
-│   ├── syndicate_summarizer.py             # ChatGPT summarization for syndicates
-│   ├── market_scraper.py                   # Market commentary scraper
-│   ├── market_summarizer.py                # ChatGPT summarization for market commentary
+│   ├── lloyds_scraper.py                   # Syndicate report downloader
+│   ├── quality_classifier.py               # Reserve commentary quality classifier
+│   ├── ocr_scanned_pdfs.py                 # OCR processing for scanned PDFs
+│   ├── syndicate_summarizer.py             # ChatGPT syndicate summarization
+│   ├── market_commentary_scraper.py        # Market commentary scraper
+│   ├── chatgpt_summarizer.py               # ChatGPT market summarization
 │   ├── perplexity_discovery.py             # Source discovery via Perplexity
-│   └── run_pipeline.sh                     # Full pipeline script
+│   ├── merge_corpus.py                     # Merge market + syndicate data
+│   ├── embedding_retrieval.py              # Embedding and retrieval
+│   ├── portfolio_query.py                  # Portfolio-specific queries
+│   ├── analyse_strengthenings.py           # Analysis utilities
+│   └── stress_test/                        # Stress testing pipeline
+│       ├── pipeline.py                     # Main orchestrator
+│       ├── config.py                       # Constants and config
+│       ├── data_preparation.py             # Severity/complexity scoring
+│       ├── joint_embedding.py              # Semantic-numeric embedding
+│       ├── evt_threshold.py                # GPD threshold selection
+│       ├── synthetic_generation.py         # LLM scenario generation
+│       ├── importance_sampling.py          # GPD-weighted sampling
+│       ├── coherence_validation.py         # Scenario validation
+│       ├── coverage_validation.py          # Coverage validation
+│       ├── visualization.py               # Diagnostic plots
+│       └── evt_visualization.py           # EVT-specific plots
 │
-└── analysis/                               # Analysis outputs
+└── analysis/                               # Analysis outputs (gitignored)
     └── quality.json
-```
-
-## Usage Examples
-
-### Syndicate Scraper Options
-
-```bash
-# Specific syndicates only
-python scripts/syndicate_scraper.py --syndicates 1209,2488,1274,2232
-
-# Specific years only
-python scripts/syndicate_scraper.py --all --years 2020,2021,2022,2023
-
-# Custom delay between requests (seconds)
-python scripts/syndicate_scraper.py --all --delay 2.0
-
-# Custom output directory
-python scripts/syndicate_scraper.py --all --output /path/to/output
-```
-
-### Syndicate Classifier Options
-
-```bash
-# Classify single file
-python scripts/syndicate_quality_classifier.py --pdf-dir ./syndicate_reports/pdfs --single-file ./syndicate_reports/pdfs/syndicate_1209_2016.pdf
-
-# Full classification with custom output
-python scripts/syndicate_quality_classifier.py --pdf-dir ./syndicate_reports/pdfs --output ./analysis/quality.json
 ```
 
 ## Quality Classification Criteria
@@ -272,8 +514,6 @@ The syndicate classifier uses a 4-tier system based on line-of-business (LoB) br
 
 ### Syndicate Reports
 
-Based on feasibility assessment (13 reports sampled):
-
 | Metric                             | Estimate                                                        |
 | ---------------------------------- | --------------------------------------------------------------- |
 | Total syndicates to check          | ~300                                                            |
@@ -282,10 +522,6 @@ Based on feasibility assessment (13 reports sampled):
 | Expected downloads                 | 500-800 (not all syndicates active all years)                   |
 | Usable reports (HIGH or VERY_HIGH) | ~85-140 (reports with LoB breakdown)                            |
 | VERY_HIGH quality rate             | ~5-10% (reports with LoB breakdown + clear causal descriptions) |
-
-With pre-2014 data from Lloyd's (if obtained):
-- Additional 20-30 years potentially available
-- Could increase HIGH quality count to 200-500
 
 ### Market Commentary
 
@@ -299,157 +535,19 @@ With pre-2014 data from Lloyd's (if obtained):
 | LOB-specific movements  | Lloyd's Annual Report | 2017-2024    |
 | Causal narratives       | Multiple sources      | Variable     |
 
-## Output Formats
-
-### Syndicate Quality Report
-
-```json
-{
-  "summary": {
-    "total_assessed": 500,
-    "by_quality": {
-      "VERY_HIGH": 25,
-      "HIGH": 60,
-      "MEDIUM": 200,
-      "LOW": 200,
-      "ERROR": 15
-    },
-    "usable_reports": 85,
-    "usable_rate": 0.17,
-    "good_quality_syndicates": [
-      {
-        "syndicate": 1209,
-        "very_high_reports": 3,
-        "high_reports": 5,
-        "total_reports": 10,
-        "years": [2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023]
-      }
-    ]
-  },
-  "assessments": [
-    {
-      "syndicate": 1209,
-      "year": 2016,
-      "quality": "VERY_HIGH",
-      "confidence": 0.85,
-      "has_dedicated_section": true,
-      "has_strategic_report": true,
-      "class_breakdown_found": true,
-      "causal_language_found": true,
-      "quantified_movements": true,
-      "has_specific_causes": true,
-      "classes_mentioned": ["marine", "aviation", "property", "third party liability"],
-      "causal_phrases": ["favourable experience", "IBNR reductions", "adverse development"],
-      "monetary_amounts": ["£37.6m", "£54.7m", "£5.3m", "£23.4m"],
-      "specific_causal_terms": ["IBNR reductions", "inflation"],
-      "extraction_method": "pymupdf",
-      "total_pages": 45
-    }
-  ]
-}
-```
-
-### Market Commentary Data Schema
-
-#### CommentarySource
-
-```json
-{
-  "source_type": "lloyds_official|am_best|trade_press|broker|rating_agency",
-  "source_name": "Lloyd's Annual Report 2023",
-  "url": "https://...",
-  "year": 2023,
-  "period": "annual|interim|quarterly|article",
-  "content": "...",
-  "extracted_at": "2024-01-15T10:30:00",
-  "content_hash": "md5hash",
-  "lines_of_business": {
-    "Casualty": ["relevant excerpts..."],
-    "Property": ["relevant excerpts..."]
-  },
-  "reserve_movements": [
-    {
-      "match": "prior year release of 3.6%",
-      "value": "3.6",
-      "context": "surrounding text..."
-    }
-  ],
-  "causal_statements": [
-    "driven by favourable claims experience...",
-    "strengthening reflecting social inflation concerns..."
-  ]
-}
-```
-
-#### ReserveMovementSummary
-
-```json
-{
-  "line_of_business": "Reinsurance Casualty",
-  "year": 2023,
-  "direction": "release|strengthening|mixed",
-  "percentage": 2.9,
-  "amount_gbp_m": 322.0,
-  "causal_factors": [
-    "Social inflation / litigation trends",
-    "Economic / claims inflation"
-  ],
-  "specific_events": [
-    "Hurricane Ian (2022)",
-    "Ukraine conflict"
-  ],
-  "forward_looking_concerns": [
-    "US liability exposure remains elevated..."
-  ],
-  "confidence": "high|medium|low",
-  "sources": [
-    {"url": "https://lloyds.com/..."}
-  ]
-}
-```
-
 ## Audit Trail
 
-The scrapers maintain complete audit trails:
+The pipeline maintains complete audit trails at every stage:
 
-1. **Original PDFs**: Stored in respective `pdfs/` directories, unchanged
-2. **Full Text**: Complete extracted text stored in `full_text/` with headers:
-   ```
-   # Source: https://...
-   # Extracted: 2024-01-15T10:30:00
-   # PDF: pdfs/lloyds_official/lloyds_annual_report_2023.pdf
-   # Length: 245000 characters
-   #======================================================================
+1. **Original PDFs**: Stored in `syndicate_reports/pdfs/`, unchanged
+2. **Table extraction caches**: Raw API responses cached in `pdf_extraction/azure_output/`, `nutrient_output/`, `adobe_output/` — keyed by `_CACHE_VERSION` for automatic invalidation when extraction logic changes
+3. **LLM response caches**: All LLM calls cached in `pdf_extraction/llm_cache/` — keyed by SHA-256 of prompt content for automatic invalidation when prompts change
+4. **Extraction results**: Full structured JSON per report in `pdf_extraction/syndicate_NNNN_YYYY.json`, including both LLM outputs, RAG triangle data, and validation results
+5. **Disagreement log**: All LLM disagreements and resolutions recorded in `pdf_extraction/audit/disagreement_log.json`
+6. **Rejection log**: Reports rejected during adjudication in `pdf_extraction/audit/rejection_log.json`
+7. **Run manifest**: Per-run statistics (processed/passed/failed/skipped counts, cost, tokens) in `pdf_extraction/audit/run_manifest.json`
 
-   [full extracted text]
-   ```
-3. **Content Hashes**: SHA256 hash of full content for verification
-4. **Audit Manifest**: `audit_manifest.json` with all files and hashes
-
-### Standardization Audit Trail
-
-The ChatGPT summarizers preserve source references:
-
-```json
-{
-  "line_of_business": "Reinsurance - Casualty",
-  "year": 2023,
-  "direction": "release",
-  "percentage": 2.9,
-  "standardized_narrative": "...",
-  "raw_extracts": ["full extract 1...", "full extract 2..."],
-  "source_files": ["full_text/lloyds_official/...", "full_text/am_best/..."],
-  "source_hashes": ["sha256:abc...", "sha256:def..."],
-  "source_urls": ["https://...", "https://..."],
-  "standardized_at": "2024-01-15T10:30:00",
-  "standardization_model": "gpt-4-turbo"
-}
-```
-
-This allows you to:
-- Verify content hasn't changed (hash comparison)
-- Trace any standardized output back to original text
-- Reproduce the analysis with the exact same inputs
+For market commentary, full extracted text is stored in `market_commentary/full_text/` with SHA-256 content hashes in `audit_manifest.json`.
 
 ## Source Categories (Market Commentary)
 
@@ -504,13 +602,25 @@ The system identifies these causal categories:
 
 - Some older PDFs may be scanned images requiring OCR
 - Ensure Tesseract OCR and Poppler are installed (see Installation section)
-- The classifier automatically attempts OCR when standard text extraction fails
-- Check the `extraction_method` field in the assessment output to see which method was used
+- The pipeline automatically attempts OCR when standard text extraction fails
 
-**Low quality classification on known-good reports**
+**"No triangle found" or "no_triangle_data"**
 
-- Check if text extraction worked (view `reserve_section_text` in output)
-- Some syndicates use non-standard section titles
+- Some syndicate reports (especially run-off years) genuinely lack a claims triangle
+- Check the Azure/Nutrient cached output to see what tables were detected
+- The text-based fallback parser handles columnar PDF layouts that API backends miss
+
+**Triangle PYD disagrees with LLM**
+
+- The RAG triangle PYD is authoritative when available — LLM overrides are logged
+- Check `data_quality_notes` in the output JSON for override details
+- Common causes: LLM reading net instead of gross triangle, or including summary rows
+
+**Stale extraction cache**
+
+- Bump `_CACHE_VERSION` in `table_extraction.py` to invalidate all cached table extractions
+- Delete `pdf_extraction/llm_cache/` to force re-extraction from all LLMs
+- Old caches with wrong version numbers are automatically re-extracted
 
 **Network Issues**
 
@@ -519,12 +629,8 @@ The system identifies these causal categories:
 **API Limits**
 
 - Perplexity has rate limits (~100 requests/day on free tier)
-- Consider batching requests or upgrading API tier
-
-**Paywall Content**
-
-- Some trade press requires subscriptions
-- The scraper will log which sources require authentication
+- Azure Document Intelligence: 15 requests/second
+- Adobe PDF Extract: rate-limited per plan
 
 ## Pre-2014 Data
 
@@ -550,56 +656,62 @@ This data enables:
 
 ### Suggested Workflow
 
-1. **Scrape syndicate reports**:
+1. **Download syndicate reports**:
    ```bash
-   python scripts/syndicate_scraper.py --all --output ./syndicate_reports
-   python scripts/syndicate_quality_classifier.py --pdf-dir ./syndicate_reports/pdfs
+   python scripts/lloyds_scraper.py --all --output ./syndicate_reports
+   python scripts/quality_classifier.py --pdf-dir ./syndicate_reports/pdfs
    ```
 
-2. **Scrape market commentary**:
+2. **Extract structured data**:
    ```bash
-   python scripts/market_scraper.py --years 2014 2015 2016 2017 2018 2019 2020 2021 2022 2023 2024
+   python test_gemini.py --table-backend azure
    ```
 
-3. **Generate summaries**:
+3. **Scrape market commentary**:
    ```bash
-   python scripts/market_summarizer.py --input market_commentary/market_commentary.json --year 2023
+   python scripts/market_commentary_scraper.py --years 2014 2015 2016 2017 2018 2019 2020 2021 2022 2023 2024
    ```
 
-4. **Identify usable syndicates** from `quality_report.json` (look for `good_quality_syndicates` with HIGH or VERY_HIGH reports)
+4. **Generate summaries**:
+   ```bash
+   python scripts/chatgpt_summarizer.py --input market_commentary/market_commentary.json --year 2023
+   ```
 
-5. **Filter to consistent performers** - syndicates with LoB breakdown (HIGH/VERY_HIGH) across multiple years
+5. **Merge and build stress test library**:
+   ```bash
+   python scripts/merge_corpus.py --syndicate results/syndicate/ --market results/market/
+   python scripts/stress_test/pipeline.py build --corpus results/combined/unified_corpus.json
+   ```
 
-6. **Prioritize VERY_HIGH reports** - these have both LoB breakdown and clear causal descriptions
-
-7. **Extract reserve commentary** using the `reserve_section_text` and `strategic_report_text` fields
-
-8. **Process for your methodology** - joint semantic-numeric embedding
-
-**Note**: Reports classified as HIGH or VERY_HIGH have line-of-business breakdowns, which is the primary requirement. VERY_HIGH reports additionally have clear causal descriptions, but HIGH reports can be supplemented with annual market commentaries for causal context.
-
-### Key Syndicates from Feasibility Assessment
-
-- **Syndicate 1209**: Consistently HIGH/VERY_HIGH quality with detailed LoB breakdown and causal explanations
-- **Syndicate 2488**: HIGH quality (LoB breakdown but may need market commentary for causal context)
-- **Syndicate 1274**: MEDIUM quality (some reserve commentary but no clear LoB breakdown)
-- **Syndicate 2232**: LOW quality (embedded commentary without structure)
+6. **Query for specific portfolio**:
+   ```bash
+   python scripts/stress_test/pipeline.py query \
+     --library results/stress_test/validated_scenario_library.json \
+     --reserves 200 --return-period 100 --lobs Property Casualty
+   ```
 
 ## Limitations
 
 - **Paywall content**: Some trade press requires subscriptions
-- **PDF quality**: OCR errors possible in older reports
+- **PDF quality**: OCR errors possible in older reports; some syndicates have scanned-only PDFs
 - **Causal depth**: Most sources provide thematic rather than specific causation
-- **Timeliness**: Some sources update quarterly, not continuously
-- **API limits**: Perplexity has rate limits (~100 requests/day on free tier)
+- **Run-off syndicates**: Triangle may be missing from some report years
+- **API limits**: Perplexity (~100/day free), Azure DI (15/second), Adobe (plan-dependent)
+- **Triangle format variation**: Some syndicates present triangles in non-standard formats that require text-based fallback parsing
 
 ## Contributing
 
 To add new sources:
 
-1. Add URL patterns to `SourceRegistry` in `market_scraper.py`
+1. Add URL patterns to `SourceRegistry` in `market_commentary_scraper.py`
 2. Add extraction patterns for new source formats
 3. Update `CURATED_SOURCES` in `perplexity_discovery.py`
+
+To add a new table extraction backend:
+
+1. Add the backend to `TableBackend` enum in `table_extraction.py`
+2. Implement `_extract_<backend>()` following the existing pattern
+3. Return an `ExtractionResult` with `triangle`, `lob`, and `provisions` fields
 
 ## License
 

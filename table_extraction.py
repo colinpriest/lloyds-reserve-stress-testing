@@ -260,13 +260,31 @@ def _find_pages_ocr(pdf_path: Path) -> tuple[dict, dict, str]:
 
 def _extract_pages_to_pdf(pdf_path: Path, page_numbers: list[int], output_path: Path):
     """Create a new PDF containing only the specified pages."""
+    import tempfile
+    # Write to a temp file first, then rename — avoids fitz.save failure
+    # on Windows when the target path is locked by another process.
+    try:
+        output_path.unlink(missing_ok=True)
+    except OSError:
+        pass
     src = fitz.open(pdf_path)
     dst = fitz.open()
     for page_num in sorted(page_numbers):
         dst.insert_pdf(src, from_page=page_num, to_page=page_num)
-    dst.save(str(output_path))
-    dst.close()
-    src.close()
+    # Save to temp file in the same directory, then rename (atomic on same FS)
+    fd, tmp_path = tempfile.mkstemp(suffix=".pdf", dir=str(output_path.parent))
+    os.close(fd)
+    try:
+        dst.save(tmp_path)
+        dst.close()
+        src.close()
+        # Replace any existing file with the new one
+        Path(tmp_path).replace(output_path)
+    except Exception:
+        dst.close()
+        src.close()
+        Path(tmp_path).unlink(missing_ok=True)
+        raise
 
 
 def _call_nutrient_api(pdf_path: Path, api_key: str) -> dict:
@@ -1258,6 +1276,13 @@ def _extract_azure(pdf_path: Path, report_year: int, cache_dir: Path) -> Extract
                 all_grids.append((grid, orig_page, cats))
 
     if not cache_valid:
+        # Clean up any leftover slim PDFs from previous interrupted runs
+        for stale in cache_dir.glob(f"{pdf_path.stem}_slim*.pdf"):
+            try:
+                stale.unlink()
+            except OSError:
+                pass
+
         # Send pages to Azure API in batches of 2
         for batch_idx, batch_pages in enumerate(batches):
             batch_cats = set()
@@ -1301,7 +1326,17 @@ def _extract_azure(pdf_path: Path, report_year: int, cache_dir: Path) -> Extract
             except Exception as e:
                 print(f"    FAILED: {e}")
 
-            slim_pdf.unlink(missing_ok=True)
+            # Clean up temp PDF; on Windows the Azure SDK may still hold a
+            # handle briefly, so retry once after a short delay.
+            try:
+                slim_pdf.unlink(missing_ok=True)
+            except PermissionError:
+                import time
+                time.sleep(0.5)
+                try:
+                    slim_pdf.unlink(missing_ok=True)
+                except PermissionError:
+                    pass  # will be cleaned up on next run or manually
 
         # Cache extracted grids for reuse (versioned)
         cache_data = {
