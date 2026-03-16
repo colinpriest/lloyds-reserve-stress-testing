@@ -35,6 +35,9 @@ load_dotenv()
 
 logger = logging.getLogger(__name__)
 
+# Bump this when extraction logic changes to invalidate cached table grids
+_CACHE_VERSION = 3
+
 
 # ── Data structures ───────────────────────────────────────────────────────
 
@@ -153,6 +156,9 @@ _PAGE_KEYWORDS = {
     "claims_triangle": [
         "claims development", "development table",
         "gross ultimate claims", "underwriting year",
+        "cumulative claims incurred", "cumulative gross claims",
+        "outstanding claims provision",
+        "year later", "years later", "months later",
     ],
     "provisions": [
         "provision for claims", "claims outstanding",
@@ -331,6 +337,203 @@ def _grid_text_lower(grid: list[list[str]]) -> str:
     return " ".join(" ".join(row) for row in grid).lower()
 
 
+# ── Text-based triangle parser (fallback when API misses the table) ──────
+
+def _extract_numbers(num_strings: list[str]) -> list[float]:
+    """Convert string number matches to floats, handling commas and parens."""
+    values = []
+    for num_str in num_strings:
+        neg = num_str.startswith("(") or num_str.startswith("-(")
+        clean = num_str.replace("(", "").replace(")", "").replace(",", "")
+        if clean.startswith("-"):
+            neg = True
+            clean = clean[1:]
+        try:
+            val = float(clean)
+            if neg:
+                val = -val
+            values.append(val)
+        except ValueError:
+            continue
+    return values
+
+
+def _parse_triangle_from_text(text: str, report_year: int):
+    """Parse a claims development triangle from raw page text.
+
+    Fallback for when Azure/Nutrient API doesn't detect the table structure.
+    Looks for a row of UW years followed by rows of numeric development values.
+
+    Returns (TriangleData, details_str) or (None, reason).
+    """
+    lines = text.split("\n")
+    lines = [l.strip() for l in lines if l.strip()]
+
+    # Step 1: Find UW years — either all on one line or on consecutive lines
+    header_idx = None
+    header_end_idx = None
+    uw_years = []
+
+    # Strategy A: years on one line (e.g., "2014  2015  2016  2017")
+    for i, line in enumerate(lines):
+        years_on_line = re.findall(r'\b((?:19|20)\d{2})\b', line)
+        years_on_line = [int(y) for y in years_on_line
+                         if 1990 <= int(y) <= 2030
+                         and "prior" not in line[max(0, line.find(str(y))-10):line.find(str(y))].lower()]
+        seen = set()
+        unique_years = []
+        for y in years_on_line:
+            if y not in seen:
+                seen.add(y)
+                unique_years.append(y)
+        if len(unique_years) >= 3:
+            header_idx = i
+            header_end_idx = i
+            uw_years = sorted(unique_years)
+            break
+
+    # Strategy B: years on consecutive lines (PyMuPDF columnar extraction)
+    if not uw_years:
+        for i, line in enumerate(lines):
+            m = re.match(r'^(19|20)\d{2}$', line)
+            if m:
+                # Found a year on its own line — collect consecutive year lines
+                year_run = [int(line)]
+                j = i + 1
+                while j < len(lines):
+                    m2 = re.match(r'^(19|20)\d{2}$', lines[j])
+                    if m2:
+                        year_run.append(int(lines[j]))
+                        j += 1
+                    elif lines[j].lower() == "total":
+                        j += 1  # skip "Total" column header
+                        break
+                    else:
+                        break
+                if len(year_run) >= 3:
+                    uw_years = sorted(year_run)
+                    header_idx = i
+                    header_end_idx = j - 1
+                    break
+
+    if not uw_years or len(uw_years) < 3:
+        return None, "no UW year header found in page text"
+
+    # Check max year is within range
+    if max(uw_years) > report_year or max(uw_years) < report_year - 2:
+        return None, f"max UW year {max(uw_years)} outside range for report year {report_year}"
+
+    n_cols = len(uw_years)
+
+    # Step 2: Parse development rows after the header
+    # Each row should have a label + numeric values aligned with the year columns
+    dev_period_patterns = [
+        r"at\s+end", r"at\s+the\s+end", r"end\s+of\s+underwriting",
+        r"year\s+later", r"years?\s+later",
+        r"after\s+\w+\s+years?",
+        r"\d+\s+months?\s+later",
+        r"^(one|two|three|four|five|six|seven|eight|nine|ten)\b",
+        r"^\d+\s+year",
+    ]
+    # Labels that signal the END of development rows (summary/total section)
+    stop_labels = [
+        "current estimate of cum",     # "Current estimate of cumulative claims incurred"
+        "cumulative .* payment",        # "Cumulative gross claims payments to date"
+        "less gross claims paid",
+        "less net claims paid",
+        "less claims paid",
+        "gross outstanding claims",
+        "net outstanding claims",
+        "outstanding .* provision",     # but NOT "outstanding claims provision" in title
+    ]
+
+    # Step 3: Collect all numeric values after the year headers.
+    # In columnar PDF text, values appear one per line. We collect them
+    # sequentially and group into rows of n_cols. Stop at summary keywords.
+    # Dev period label patterns — lines matching these are labels, not values
+    label_patterns = dev_period_patterns + [
+        r"estimate\s+(of\s+)?cumulative",
+    ]
+
+    all_values = []
+    for line in lines[header_end_idx + 1:]:
+        line_lower = line.lower().strip()
+        if not line_lower:
+            continue
+        # Stop at summary/total rows
+        if any(re.search(p, line_lower) for p in stop_labels):
+            break
+        # Skip development period labels (e.g., "12 months later")
+        if any(re.search(p, line_lower) for p in label_patterns):
+            continue
+        # Skip non-numeric text lines (continuation of multi-line labels)
+        if re.match(r'^[a-z]', line_lower) and not re.search(r'\d{2,}', line):
+            continue
+        # Extract numbers from this line
+        nums = re.findall(r'[\-]?[\d,]+\.?\d*|\([\d,]+\.?\d*\)', line)
+        new_vals = _extract_numbers(nums)
+        all_values.extend(new_vals)
+
+    # Group values into rows. Development period d (0 = end of UW year) has
+    # a value for each UW year Y where (report_year - Y) >= d.
+    # This correctly handles gaps in UW years (e.g., missing 2021).
+    max_dev_periods = report_year - min(uw_years) + 1
+    dev_rows = []
+    idx = 0
+    for d in range(max_dev_periods):
+        expected = sum(1 for y in uw_years if report_year - y >= d)
+        if expected < 1:
+            break
+        if idx + expected > len(all_values):
+            remaining = len(all_values) - idx
+            if remaining > 0:
+                row_vals = list(all_values[idx:idx + remaining])
+                # Right-align: these are the OLDEST years' values
+                row = [None] * (n_cols - len(row_vals)) + row_vals \
+                      if len(row_vals) < n_cols else row_vals[:n_cols]
+                # Actually left-align: values correspond to oldest→newest
+                row = list(all_values[idx:idx + remaining])
+                row += [None] * (n_cols - len(row))
+                dev_rows.append(row[:n_cols])
+                idx += remaining
+            break
+        row = list(all_values[idx:idx + expected])
+        row += [None] * (n_cols - len(row))
+        dev_rows.append(row[:n_cols])
+        idx += expected
+
+    if len(dev_rows) < 2:
+        return None, f"only {len(dev_rows)} development rows found in text"
+
+    # Detect currency and units
+    text_lower = text.lower()
+    currency = "USD"
+    if "gbp" in text_lower or "£" in text_lower:
+        currency = "GBP"
+    elif "eur" in text_lower or "€" in text_lower:
+        currency = "EUR"
+
+    units = "millions"
+    if "£'000" in text_lower or "£000" in text_lower or "'000" in text_lower:
+        units = "thousands"
+
+    # Detect type (gross vs net)
+    tri_type = "gross" if "gross" in text_lower else "net"
+
+    triangle = TriangleData(
+        type=tri_type,
+        currency=currency,
+        units=units,
+        underwriting_years=[str(y) for y in uw_years],
+        development_rows=dev_rows,
+    )
+
+    details = (f"{tri_type} {len(uw_years)} UW years "
+               f"({min(uw_years)}-{max(uw_years)}), "
+               f"{len(dev_rows)} dev rows, {units}, {currency}")
+    return triangle, details
+
+
 # ── Nutrient: parse triangle ─────────────────────────────────────────────
 
 def _parse_nutrient_triangle(grid: list[list[str]], report_year: int):
@@ -362,16 +565,24 @@ def _parse_nutrient_triangle(grid: list[list[str]], report_year: int):
     uw_years = [p[0] for p in pairs]
     uw_col_indices = [p[1] for p in pairs]
 
-    if max(uw_years) != report_year:
-        return None, f"max UW year {max(uw_years)} != report year {report_year}"
+    # Max UW year must be recent (within 2 years of report year) but need not
+    # equal it — run-off syndicates stop writing new business before the report date.
+    if max(uw_years) > report_year:
+        return None, f"max UW year {max(uw_years)} > report year {report_year}"
+    if max(uw_years) < report_year - 2:
+        return None, f"max UW year {max(uw_years)} too old for report year {report_year}"
 
     if len(uw_years) < 3:
-        return "new_syndicate", f"{len(uw_years)} UW year(s) ({min(uw_years)}-{report_year})"
+        return "new_syndicate", f"{len(uw_years)} UW year(s) ({min(uw_years)}-{max(uw_years)})"
 
     # Parse development rows — only keep rows that look like development periods
     dev_period_patterns = [
-        r"at\s+end", r"year\s+later", r"years?\s+later",
+        r"at\s+end", r"at\s+the\s+end", r"end\s+of\s+underwriting",
+        r"year\s+later", r"years?\s+later",
         r"^\d+\s+year", r"^(one|two|three|four|five|six|seven|eight|nine|ten)\b",
+        r"after\s+\w+\s+years?",               # "After one year", "After two years"
+        r"\d+\s+months?\s+later",               # "12 months later", "24 months later"
+        r"estimate.*end\s+of\s+underwriting",   # "Estimate of cumulative...end of underwriting year"
     ]
     skip_labels = [
         "current estimate", "cumulative payment", "cumulative claim",
@@ -737,10 +948,31 @@ def _extract_nutrient(pdf_path: Path, report_year: int, cache_dir: Path) -> Extr
                 if prov:
                     best_provisions = prov
 
+    # Text-based triangle fallback
+    if best_triangle is None:
+        for page_num in sorted(page_matches):
+            if "claims_triangle" not in page_matches[page_num]:
+                continue
+            text = page_texts.get(page_num, "")
+            if not text:
+                continue
+            tri_result, details = _parse_triangle_from_text(text, report_year)
+            if isinstance(tri_result, TriangleData):
+                n_years = len(tri_result.underwriting_years)
+                if (best_triangle is None
+                        or (tri_result.type == "gross" and best_triangle.type != "gross")
+                        or n_years > len(best_triangle.underwriting_years)):
+                    best_triangle = tri_result
+                    best_triangle_details = f"{details} (from page text)"
+                    print(f"  [Nutrient] Text fallback triangle: {details}")
+
     result.triangle = best_triangle
     result.triangle_details = best_triangle_details or result.triangle_details
     result.lob = best_lob
     result.provisions = best_provisions
+    # Valid triangle trumps new_syndicate flag from a partial/different table
+    if best_triangle is not None:
+        result.first_year_syndicate = False
     result.elapsed_s = time.time() - t0
 
     # Summary
@@ -897,22 +1129,46 @@ def _call_azure_api(pdf_path: Path, endpoint: str, api_key: str):
 
 
 def _classify_table_content(grid: list[list[str]]) -> set[str]:
-    """Classify a table by its cell content (keywords)."""
+    """Classify a table by its cell content (keywords and structure)."""
     flat = _grid_text_lower(grid)
     cats = set()
 
-    # Claims triangle: has UW years + development periods
+    # ── Claims triangle detection ───────────────────────────────────────
+    # Detect from: (a) year count + dev periods, (b) title keywords, (c) row labels
     uw_years = re.findall(r'\b(19|20)\d{2}\b', flat)
-    dev_patterns = ["at end", "year later", "years later", "one year", "two year"]
-    if len(uw_years) >= 3 and any(p in flat for p in dev_patterns):
+    dev_patterns = [
+        "at end", "year later", "years later", "one year", "two year",
+        "after one", "after two", "after three", "after four", "after five",
+        "months later", "month later",
+    ]
+    # Title/header keywords that strongly indicate a triangle
+    triangle_title_kw = [
+        "claims development", "cumulative claims incurred",
+        "cumulative gross claims", "cumulative net claims",
+        "development table", "development triangle",
+        "outstanding claims provision",
+    ]
+    has_dev_periods = any(p in flat for p in dev_patterns)
+    has_triangle_title = any(kw in flat for kw in triangle_title_kw)
+
+    if len(uw_years) >= 3 and (has_dev_periods or has_triangle_title):
+        cats.add("claims_triangle")
+    elif has_triangle_title and len(uw_years) >= 1:
+        # Title is strong evidence even with fewer detected years
         cats.add("claims_triangle")
 
-    # LOB / premium mix
+    # Negative: sensitivity/assumption tables are NOT triangles
+    sensitivity_kw = ["change in assumptions", "impact on", "severity", "frequency"]
+    if sum(1 for kw in sensitivity_kw if kw in flat) >= 2:
+        cats.discard("claims_triangle")
+        cats.add("_not_triangle")  # prevent page-level tag from overriding
+
+    # ── LOB / premium mix ───────────────────────────────────────────────
     lob_hits = sum(1 for kw in _LOB_KEYWORDS if kw in flat)
     if lob_hits >= 3:
         cats.add("premium_mix")
 
-    # Provisions
+    # ── Provisions ──────────────────────────────────────────────────────
     if "prior" in flat and ("claim" in flat or "provision" in flat):
         if any(kw in flat for kw in ["gross", "net", "reinsur"]):
             cats.add("provisions")
@@ -972,20 +1228,36 @@ def _extract_azure(pdf_path: Path, report_year: int, cache_dir: Path) -> Extract
     batch_size = 2  # Azure F0 tier limit
     batches = [sorted_pages[i:i+batch_size] for i in range(0, len(sorted_pages), batch_size)]
 
-    # Check for cached Azure results
+    # Check for cached Azure results — cache key includes relevant pages
+    # so cache invalidates if page classification changes
+    pages_hash = "_".join(str(p) for p in sorted(relevant_pages))
     cache_file = cache_dir / f"{pdf_path.stem}_azure.json"
     all_grids = []  # (grid, orig_page, categories)
 
+    cache_valid = False
     if cache_file.exists():
-        print(f"  [Azure] Using cached result")
         with open(cache_file) as f:
             cached = json.load(f)
-        for entry in cached:
-            grid = entry["grid"]
-            orig_page = entry["orig_page"]
-            cats = set(entry["categories"])
-            all_grids.append((grid, orig_page, cats))
-    else:
+        # Validate cache: must match code version and page set
+        cached_ver = cached.get("_cache_version") if isinstance(cached, dict) else None
+        cached_pages = cached.get("_pages_hash") if isinstance(cached, dict) else None
+        if not isinstance(cached, dict) or cached_ver != _CACHE_VERSION:
+            cache_file.unlink()
+            reason = "legacy format" if not isinstance(cached, dict) else "code changed"
+            print(f"  [Azure] Cache invalidated ({reason}) — re-extracting")
+        elif cached_pages != pages_hash:
+            cache_file.unlink()
+            print(f"  [Azure] Cache invalidated (page set changed) — re-extracting")
+        else:
+            cache_valid = True
+            print(f"  [Azure] Using cached result")
+            for entry in cached.get("tables", []):
+                grid = entry["grid"]
+                orig_page = entry["orig_page"]
+                cats = set(entry["categories"])
+                all_grids.append((grid, orig_page, cats))
+
+    if not cache_valid:
         # Send pages to Azure API in batches of 2
         for batch_idx, batch_pages in enumerate(batches):
             batch_cats = set()
@@ -1020,6 +1292,10 @@ def _extract_azure(pdf_path: Path, report_year: int, cache_dir: Path) -> Extract
                         page_cats = page_matches.get(orig_page, set())
                         content_cats = _classify_table_content(grid)
                         combined_cats = page_cats | content_cats
+                        # Content-level negative signals override page-level tags
+                        if "_not_triangle" in content_cats:
+                            combined_cats.discard("claims_triangle")
+                            combined_cats.discard("_not_triangle")
                         all_grids.append((grid, orig_page, combined_cats))
 
             except Exception as e:
@@ -1027,11 +1303,15 @@ def _extract_azure(pdf_path: Path, report_year: int, cache_dir: Path) -> Extract
 
             slim_pdf.unlink(missing_ok=True)
 
-        # Cache extracted grids for reuse
-        cache_data = [
-            {"grid": grid, "orig_page": orig_page, "categories": sorted(cats)}
-            for grid, orig_page, cats in all_grids
-        ]
+        # Cache extracted grids for reuse (versioned)
+        cache_data = {
+            "_cache_version": _CACHE_VERSION,
+            "_pages_hash": pages_hash,
+            "tables": [
+                {"grid": grid, "orig_page": orig_page, "categories": sorted(cats)}
+                for grid, orig_page, cats in all_grids
+            ],
+        }
         with open(cache_file, "w") as f:
             json.dump(cache_data, f, indent=2, ensure_ascii=True)
 
@@ -1068,10 +1348,32 @@ def _extract_azure(pdf_path: Path, report_year: int, cache_dir: Path) -> Extract
             if prov:
                 best_provisions = prov
 
+    # Step 4: Text-based triangle fallback — if Azure didn't find a triangle
+    # table, try parsing from the raw page text on claims_triangle pages
+    if best_triangle is None:
+        for page_num in sorted(page_matches):
+            if "claims_triangle" not in page_matches[page_num]:
+                continue
+            text = page_texts.get(page_num, "")
+            if not text:
+                continue
+            tri_result, details = _parse_triangle_from_text(text, report_year)
+            if isinstance(tri_result, TriangleData):
+                n_years = len(tri_result.underwriting_years)
+                if (best_triangle is None
+                        or (tri_result.type == "gross" and best_triangle.type != "gross")
+                        or n_years > len(best_triangle.underwriting_years)):
+                    best_triangle = tri_result
+                    best_triangle_details = f"{details} (from page text)"
+                    print(f"  [Azure] Text fallback triangle: {details}")
+
     result.triangle = best_triangle
     result.triangle_details = best_triangle_details or result.triangle_details
     result.lob = best_lob
     result.provisions = best_provisions
+    # Valid triangle trumps new_syndicate flag from a partial/different table
+    if best_triangle is not None:
+        result.first_year_syndicate = False
     result.elapsed_s = time.time() - t0
 
     # Summary

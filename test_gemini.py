@@ -963,8 +963,8 @@ def _parse_triangle_xlsx(xlsx_path, report_year):
             return "new_syndicate", f"{len(uw_years)} UW year(s) ({min(uw_years)}-{report_year})"
         return None
 
-    # Check most recent year matches report year
-    if max(uw_years) != report_year:
+    # Max UW year must be recent but need not equal report year (run-off syndicates)
+    if max(uw_years) > report_year or max(uw_years) < report_year - 2:
         return None
 
     # Parse development rows — only keep rows with development period labels
@@ -977,10 +977,15 @@ def _parse_triangle_xlsx(xlsx_path, report_year):
     # Only keep rows whose label looks like a development period
     dev_period_patterns = [
         r"at\s+end",           # "At end of underwriting year"
+        r"at\s+the\s+end",     # "At the end of underwriting year"
+        r"end\s+of\s+underwriting",  # "End of underwriting year"
         r"year\s+later",       # "One year later", "Two years later"
         r"years?\s+later",     # variant
         r"^\d+\s+year",        # "1 year later"
         r"^(one|two|three|four|five|six|seven|eight|nine|ten)\b",  # word numbers
+        r"after\s+\w+\s+years?",               # "After one year", "After two years"
+        r"\d+\s+months?\s+later",              # "12 months later", "24 months later"
+        r"estimate.*end\s+of\s+underwriting",  # "Estimate of cumulative...end of underwriting year"
     ]
     dev_rows = []
     for row_raw in rows_raw[1:]:
@@ -1786,6 +1791,7 @@ def extract_pyd_from_relevant_pages(pdf_path, report_year):
         "reserve_text": "", "method": "none", "cost": 0,
         "adobe_lob": None, "adobe_provisions": None,
         "first_year_syndicate": False,
+        "no_triangle_data": False,
     }
 
     # Step 1: Table extraction (deterministic, best quality)
@@ -1811,9 +1817,12 @@ def extract_pyd_from_relevant_pages(pdf_path, report_year):
                 result["pyd_details"] = pyd_details
                 result["method"] = extraction.method
     elif extraction.first_year_syndicate:
-        print(f"  [{backend_name}] NEW SYNDICATE: {extraction.triangle_details} "
-              f"-- no prior year development possible")
-        result["first_year_syndicate"] = True
+        # Table extraction found a table with < 3 UW years but couldn't find a
+        # full triangle.  Don't trust this — the parser may have found a partial
+        # or net triangle while the full gross triangle exists elsewhere in the PDF.
+        # Fall through to LLM extraction which can read PYD from the narrative.
+        print(f"  [{backend_name}] Possible new syndicate ({extraction.triangle_details}) "
+              f"-- table extraction inconclusive, will try LLM extraction")
     elif extraction.triangle_details:
         print(f"  [{backend_name}] No triangle found: {extraction.triangle_details}")
 
@@ -1889,6 +1898,15 @@ def extract_pyd_from_relevant_pages(pdf_path, report_year):
             if result["pyd"] is None:
                 print(f"  [RAG] No triangle, but found {len(res_pages)} reserve text page(s)")
 
+    # If after all attempts we have no PYD, no triangle, no reserve text,
+    # and it's not a first-year syndicate, flag as "no triangle data" —
+    # this report has no usable reserve development information and should
+    # be excluded from downstream analysis.
+    if (result["pyd"] is None
+            and not result["first_year_syndicate"]
+            and not result["reserve_text"]):
+        result["no_triangle_data"] = True
+
     return result
 
 
@@ -1957,16 +1975,20 @@ def compute_pyd_from_triangle(triangle_data, report_year):
         max_uw = max(int(y) for y in uw_years)
     except (ValueError, TypeError):
         return None, "cannot parse UW years"
-    if max_uw != report_year:
-        return None, (f"triangle max UW year ({max_uw}) != report year ({report_year}) "
+    if max_uw > report_year or max_uw < report_year - 2:
+        return None, (f"triangle max UW year ({max_uw}) outside range for report year ({report_year}) "
                      f"— likely misaligned extraction")
 
     n_cols = len(uw_years)
     n_rows = len(rows)
 
-    # Validate: number of rows should roughly equal number of columns
-    # (N UW years → N development periods in a square triangle)
-    if n_rows > n_cols + 1:
+    # Validate: number of rows should roughly equal number of columns.
+    # For a standard NxN triangle, n_rows ≈ n_cols.
+    # For run-off syndicates (max UW year < report year), extra development
+    # rows exist because claims continue developing after new writing stops.
+    extra_dev_years = report_year - max_uw  # 0 for active, 1+ for run-off
+    expected_max_rows = n_cols + extra_dev_years + 1
+    if n_rows > expected_max_rows:
         return None, (f"triangle has {n_rows} rows but only {n_cols} columns "
                      f"— likely includes summary rows or is misaligned")
 
@@ -2804,6 +2826,30 @@ def process_one_report(report_path):
             first_year_output["currency"] = adobe_lob.get("currency", "GBP")
         return "first_year", first_year_output
 
+    if rag_result.get("no_triangle_data"):
+        # No triangle, no reserve text — report has no usable reserve
+        # development data.  Skip expensive LLM calls and recommend exclusion.
+        no_data_output = {
+            "extraction_timestamp": datetime.now(timezone.utc).isoformat(),
+            "spec": {
+                "prompt_version": PROMPT_VERSION,
+                "field_definitions_version": FIELD_DEFINITIONS_VERSION,
+                "tolerance_rules_version": TOLERANCE_RULES_VERSION,
+            },
+            "source_file": str(report_path),
+            "no_triangle_data": True,
+            "excluded": True,
+            "exclusion_reason": "No claims development triangle or reserve movement text found in report — recommend non-inclusion in analysis",
+            "syndicate": syndicate_num,
+            "year": report_year,
+        }
+        adobe_lob = rag_result.get("adobe_lob")
+        if adobe_lob:
+            no_data_output["gross_premium_mix"] = adobe_lob["gross_premium_mix"]
+            no_data_output["gross_premiums_written_gbp_m"] = adobe_lob["gross_premiums_written_gbp_m"]
+            no_data_output["currency"] = adobe_lob.get("currency", "GBP")
+        return "no_triangle_data", no_data_output
+
     # Extract with both models (use converted PDF path but keep original as source)
     result_gemini = extract_with_gemini(
         actual_path, file_bytes, content_hash, syndicate_num, report_year
@@ -3026,6 +3072,7 @@ if __name__ == "__main__":
     run_failed = 0
     run_errored = 0
     run_skipped_first_year = 0
+    run_skipped_no_data = 0
 
     # Enable Ctrl+C to interrupt blocking API calls on Windows
     signal.signal(signal.SIGINT, signal.default_int_handler)
@@ -3049,6 +3096,17 @@ if __name__ == "__main__":
                 print(f"  >> RESULT: Report not used (insufficient underwriting history)")
                 run_skipped_first_year += 1
                 continue
+            if isinstance(result, tuple) and len(result) == 2 and result[0] == "no_triangle_data":
+                # No triangle or reserve text — write audit JSON and skip LLM calls
+                no_data = result[1]
+                output_file = OUTPUT_DIR / f"{report_path.stem}.json"
+                with open(output_file, "w") as f:
+                    json.dump(sanitize_json_ascii(no_data), f, indent=2, ensure_ascii=True)
+                print(f"  SKIP: No claims development triangle or reserve text in report")
+                print(f"  Audit JSON written: {output_file.name}")
+                print(f"  >> RESULT: Recommend non-inclusion in analysis (no usable reserve data)")
+                run_skipped_no_data += 1
+                continue
             output_data, passed, discrepancies, hard_failures = result
         except KeyboardInterrupt:
             print(f"\n\n  Ctrl+C — stopping after {run_processed} reports.")
@@ -3063,6 +3121,7 @@ if __name__ == "__main__":
                 "failed": run_failed,
                 "errored": run_errored,
                 "skipped_first_year": run_skipped_first_year,
+                "skipped_no_data": run_skipped_no_data,
                 "total_tokens": run_total_tokens,
                 "total_cost": run_total_cost,
                 "stopped_early": True,
@@ -3348,6 +3407,7 @@ if __name__ == "__main__":
                                 "failed": run_failed,
                                 "errored": run_errored,
                                 "skipped_first_year": run_skipped_first_year,
+                "skipped_no_data": run_skipped_no_data,
                                 "total_tokens": run_total_tokens,
                                 "total_cost": run_total_cost,
                                 "stopped_early": True,
@@ -3523,6 +3583,7 @@ if __name__ == "__main__":
                             "failed": run_failed,
                             "errored": run_errored,
                             "skipped_first_year": run_skipped_first_year,
+                "skipped_no_data": run_skipped_no_data,
                             "total_tokens": run_total_tokens,
                             "total_cost": run_total_cost,
                             "stopped_early": True,
@@ -3661,6 +3722,7 @@ if __name__ == "__main__":
                             "failed": run_failed,
                             "errored": run_errored,
                             "skipped_first_year": run_skipped_first_year,
+                "skipped_no_data": run_skipped_no_data,
                             "total_tokens": run_total_tokens,
                             "total_cost": run_total_cost,
                             "stopped_early": True,
@@ -3731,7 +3793,8 @@ if __name__ == "__main__":
     print(f"  Failed:           {run_failed}")
     print(f"  Errored:          {run_errored}")
     print(f"  Skipped (1st yr): {run_skipped_first_year}")
-    print(f"  Remaining:        {len(to_process) - run_processed - run_errored - run_skipped_first_year}")
+    print(f"  Skipped (no tri): {run_skipped_no_data}")
+    print(f"  Remaining:        {len(to_process) - run_processed - run_errored - run_skipped_first_year - run_skipped_no_data}")
     print(f"  Tokens:           {run_total_tokens:,}")
     print(f"  Cost:             ${run_total_cost:.4f}")
 
@@ -3744,6 +3807,7 @@ if __name__ == "__main__":
         "failed": run_failed,
         "errored": run_errored,
         "skipped_first_year": run_skipped_first_year,
+                "skipped_no_data": run_skipped_no_data,
         "total_tokens": run_total_tokens,
         "total_cost": run_total_cost,
     })

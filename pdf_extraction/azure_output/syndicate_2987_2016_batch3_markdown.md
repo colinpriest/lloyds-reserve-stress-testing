@@ -1,0 +1,39 @@
+Notes to the Accounts For the year ended 31 December 2016
+1
+Accounting policies, statement of compliance and basis of preparation (continued)
+Reinsurance assets include amounts recoverable from reinsurance companies for paid and unpaid losses and loss adjustment expenses, and ceded unearned premiums. Amounts recoverable from reinsurers are calculated with reference to the claims liability associated with the reinsured risks. Revenues and expenses arising from reinsurance agreements are therefore recognised with the underlying risk of the business reinsured.
+Gains or losses on buying reinsurance are recognised immediately in the Technical Account and not subject to amortisation.
+If a reinsurance asset is impaired the Syndicate reduces its carrying amount accordingly, and will immediately recognise the impairment loss in the Technical Account. A reinsurance asset will be deemed to be impaired if there is objective evidence, as a result of an event that occurred after initial recognition of that asset, that the Syndicate may not receive all amounts due to it under the terms of the contract, and that the event has a reliably measurable impact on the amounts that the Syndicate will receive from the reinsurer.
+h. Expenses
+The Managing Agent has charged the Syndicate a fixed fee and has borne all the management expenses of the Syndicate, other than those related to the direct cost of underwriting and investment managing charges. Investment management charges are netted off against investment return, as disclosed in note 8. Any internal or external claims adjustment or settlement costs are included within gross claims paid.
+1.4.2 Investments
+a. Financial investments
+The Syndicate has designated on initial recognition its financial assets held for investment purposes (investments) at fair value through profit or loss (FVTPL). This is in accordance with the Syndicate's documented investment strategy and consistent with investment risk being assessed on a portfolio basis. Information relating to investments is provided internally to the directors of the Managing Agent and key managers on a fair value basis.
+Fair value is the price that would be received to sell an asset or paid to transfer a liability in an orderly transaction between market participants at the measurement date. The fair value of financial assets and liabilities traded in active markets (which are the principal markets or the most advantageous markets that maximise the amount that would be received to sell the asset or minimises the amount that would be paid to transfer the liability) are based on quoted market bid and ask price for both financial assets and financial liabilities respectively.
+The fair value of financial assets and liabilities that are not traded in an active market, including over-the-counter derivatives, is determined using valuation techniques. The Syndicate uses a variety of methods and makes assumptions that are based on market conditions existing at each reporting date. Valuation techniques include the use of comparable recent arm's length transactions, reference to other instruments that are substantially the same, discounted cash flow analysis, option pricing models and others commonly used by market participants and which make the maximum use of observable inputs.
+Gains and losses on investments designated as FVTPL are recognised through the income statement.
+b. Investment return
+Investment return comprises all investment income, realised investment gains and losses and movements in unrealised gains and losses and interest.
+Realised gains and losses on investments carried at market value are calculated as the difference between sale proceeds and purchase price and are recognised when the sale transaction occurs. Unrealised gains and losses on investments represent the difference between the valuation at the date of the statement of financial position and their valuation at the previous statement of financial position, or purchase price if acquired during the year, together with the reversal of unrealised gains and losses recognised in earlier accounting periods in respect of investment disposals in the current period.
+Brit Syndicate 2987 Annual Report 2016
+17
+Notes to the Accounts For the year ended 31 December 2016
+1 Accounting policies, statement of compliance and basis of preparation (continued)
+Investment return is initially recorded in the non-technical account. A transfer is made from the non-technical account to the general business technical account to reflect the investment return on funds supporting underwriting business. All investment return is considered to arise on such funds except to the extent that investment income arises on Funds at Lloyd's retained at the Syndicate level; that income remains in the non- technical account.
+1.4.3 Measurement of other financial assets and financial liabilities
+Other financial assets and financial liabilities are initially recognised at transaction price and subsequently measured at amortised cost using the effective interest rate method.
+1.4.4 Recognition and derecognition of financial assets and financial liabilities
+Financial assets and financial liabilities are recognised when the Syndicate becomes a party to the contractual provisions of the contract. A financial asset is derecognised when either the contractual rights to the asset's cash flows expire, or the asset is transferred and the transfer qualifies for derecognition under a combination of risks and rewards and control tests.
+A financial liability is derecognised when it is extinguished which is when the obligation in the contract is discharged, cancelled or expired.
+All 'regular way purchases and sales' of financial assets are recognised on the trade date, i.e. the date that the Syndicate commits to purchase or sell the asset. Regular way purchases and sales are purchases and sales of financial assets that require delivery of assets within the time frame generally established by regulation or convention in the marketplace.
+If the carrying value of an asset is impaired, it is reduced to the recoverable amount by an immediate charge to the profit and loss account. The recoverable amount is the higher of an asset's fair value less costs to sell and value in use.
+1.4.5 Derivatives
+Derivative financial instruments typically include currency forward contracts, equity options, inflation options, futures, put options and interest rate swaps. Derivatives are initially and subsequently measured at their fair value with movements in the fair value being immediately recognised in the income statement. Fair values are obtained from quoted market prices, discounted cash flow models, risk models and option pricing models as appropriate. All derivatives are carried as assets when the fair values are positive and as liabilities when the fair values are negative.
+1.4.6 Taxation
+Under Schedule 19 of the Finance Act 1993, Managing Agents are not required to deduct basic rate income tax from trading income. In addition, all UK basic rate income tax deducted from Syndicate investment income is recoverable by Managing Agents and consequently the distribution made to member or their members agents is gross of tax. Capital appreciation falls within trading income and is also distributed gross of tax.
+No provision has been made for any United States Federal Income Tax payable on underwriting results or investment earnings. Any payments on account made by the Syndicate during the year are included in the balance sheet under the heading 'Member's balance'.
+No provision has been made for any overseas tax payable by member on underwriting results.
+1.4.7 Pension costs
+Brit Group Services operates a defined contribution pension scheme on behalf of the Managing Agent. Contributions are charged to the Syndicate within the fixed fee.
+Brit Syndicate 2987 Annual Report 2016
+18

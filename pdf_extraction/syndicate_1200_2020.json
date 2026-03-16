@@ -1,7 +1,7 @@
 {
-  "extraction_timestamp": "2026-03-12T03:53:43.233272+00:00",
+  "extraction_timestamp": "2026-03-16T10:20:25.548791+00:00",
   "spec": {
-    "prompt_version": "1.6",
+    "prompt_version": "2.6",
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -13,18 +13,24 @@
       "opening_reserves_gbp_m": 798.7,
       "opening_reserves_page": 20,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": 6.8,
-      "prior_year_development_pct": 0.85,
+      "prior_year_development_gbp_m": 54.4,
+      "prior_year_development_pct": 6.81,
       "direction": "strengthening",
-      "prior_year_movement_page": 42,
+      "prior_year_movement_page": 27,
       "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "In 2020, there has been an overall deterioration of GBP 6.8m (2019: improvement of GBP 36.3m).",
+      "exact_reserve_text": "Claims incurred in prior underwriting years 296.0",
       "primary_causes": [
         "Natural catastrophe events",
-        "COVID-19 / pandemic effects",
-        "Adverse claims development"
+        "Large loss development",
+        "Adverse claims development",
+        "COVID-19 / pandemic effects"
       ],
-      "specific_events": [],
+      "specific_events": [
+        "Hurricanes Florence",
+        "Hurricane Michael",
+        "California Wildfire events",
+        "COVID-19 event cancellation losses"
+      ],
       "specific_years_affected": [
         2018,
         2019
@@ -33,32 +39,38 @@
         {
           "event_name": "Hurricanes Florence and Michael",
           "event_year": 2018,
-          "impact_description": "deterioration in attritional and large losses in a number of short tail lines, specifically Marine, Onshore Energy, Hull, Asia, and Marine Liability, as well as Property.",
+          "impact_description": "impacted by a series of catastrophe events - Hurricanes Florence and Michael",
+          "lobs_affected": [],
+          "amount_gbp_m": null,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "California Wildfire events",
+          "event_year": 2018,
+          "impact_description": "impacted by significant Wildfire events in California",
+          "lobs_affected": [],
+          "amount_gbp_m": null,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Attritional and large losses",
+          "event_year": 2018,
+          "impact_description": "deterioration in attritional and large losses in a number of short tail lines. In Marine we saw large losses in Onshore Energy, Hull and Asia and attritional development on one large coverholder in Marine Liability. In Property we saw attritional development in both our direct and binder books",
           "lobs_affected": [
             "Marine",
             "Energy",
             "Property",
-            "Casualty"
+            "Professional Lines"
           ],
           "amount_gbp_m": null,
           "confidence": 0.8
         },
         {
-          "event_name": "Wildfire events in California",
-          "event_year": 2018,
-          "impact_description": "deterioration in attritional development in direct and binder property books.",
-          "lobs_affected": [
-            "Property"
-          ],
-          "amount_gbp_m": null,
-          "confidence": 0.8
-        },
-        {
-          "event_name": "COVID-19",
+          "event_name": "COVID-19 event cancellation losses",
           "event_year": 2019,
-          "impact_description": "event cancellation losses, with the majority falling to the 2019 year of account.",
+          "impact_description": "main impact has been seen through our Contingency book from event cancellation losses, the majority of these loss events falling to the 2019 year",
           "lobs_affected": [
-            "Aggregate"
+            "Contingency"
           ],
           "amount_gbp_m": null,
           "confidence": 0.8
@@ -66,66 +78,139 @@
       ],
       "named_events": [
         {
-          "event_name": "COVID-19 pandemic",
+          "event_name": "COVID-19 / pandemic effects",
           "event_year": 2020,
-          "event_type": "man_made",
+          "event_type": "other",
           "net_loss_gbp_m": 66.5,
-          "loss_description": "total losses from Covid-19 amount to GBP 66.5m, largely contained within the Contingency account and mainly related to event cancellation cover.",
+          "loss_description": "Our total losses from Covid-19 amount to GBP 66.5m. They are largely contained within our Contingency account and mainly relate to event cancellation cover. On its own this figure increased our Combined Ratio by 15.5 percentage points.",
           "lobs_affected": [
-            "Aggregate"
+            "Contingency"
           ],
           "page": 8,
           "confidence": 1.0
-        },
-        {
-          "event_name": "Hurricanes Florence and Michael",
-          "event_year": 2018,
-          "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": null,
-          "loss_description": "smaller in nature than those in 2017 and as a result were net retained by the Syndicate.",
-          "lobs_affected": [
-            "Marine",
-            "Energy",
-            "Property",
-            "Casualty"
-          ],
-          "page": 10,
-          "confidence": 0.8
-        },
-        {
-          "event_name": "Wildfire events in California",
-          "event_year": 2018,
-          "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": null,
-          "loss_description": "smaller in nature than those in 2017 and as a result were net retained by the Syndicate.",
-          "lobs_affected": [
-            "Property"
-          ],
-          "page": 10,
-          "confidence": 0.8
         },
         {
           "event_name": "North Atlantic Hurricane season",
           "event_year": 2020,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "unusually active North Atlantic Hurricane season with a record number of storms making US landfall, translating into a year characterised by frequency rather than severity of weather losses.",
-          "lobs_affected": [
-            "Aggregate"
-          ],
+          "loss_description": "unusually active North Atlantic Hurricane season with a record number of storms making US landfall",
+          "lobs_affected": [],
           "page": 10,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Hurricanes Florence",
+          "event_year": 2018,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "impacted by a series of catastrophe events - Hurricanes Florence and Michael",
+          "lobs_affected": [],
+          "page": 10,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Hurricane Michael",
+          "event_year": 2018,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "impacted by a series of catastrophe events - Hurricanes Florence and Michael",
+          "lobs_affected": [],
+          "page": 10,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "California Wildfire events",
+          "event_year": 2018,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "impacted by significant Wildfire events in California",
+          "lobs_affected": [],
+          "page": 10,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Miami windstorm",
+          "event_year": null,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": 61.0,
+          "loss_description": "Industry loss/Event size GBP 105.6bn, Gross loss to Syndicate GBP 172.8m, Net loss to Syndicate GBP 61.0m",
+          "lobs_affected": [
+            "Property"
+          ],
+          "page": 41,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "North East US windstorm",
+          "event_year": null,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": 32.5,
+          "loss_description": "Industry loss/Event size GBP 65.3bn, Gross loss to Syndicate GBP 37.6m, Net loss to Syndicate GBP 32.5m",
+          "lobs_affected": [
+            "Property"
+          ],
+          "page": 41,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Gulf of Mexico windstorm",
+          "event_year": null,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": 59.1,
+          "loss_description": "Industry loss/Event size GBP 95.2bn, Gross loss to Syndicate GBP 106.7m, Net loss to Syndicate GBP 59.1m",
+          "lobs_affected": [
+            "Property"
+          ],
+          "page": 41,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Los Angeles earthquake",
+          "event_year": null,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": 71.1,
+          "loss_description": "Industry loss/Event size GBP 62.9bn, Gross loss to Syndicate GBP 169.8m, Net loss to Syndicate GBP 71.1m",
+          "lobs_affected": [
+            "Property"
+          ],
+          "page": 41,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "San Francisco earthquake",
+          "event_year": null,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": 63.5,
+          "loss_description": "Industry loss/Event size GBP 64.5bn, Gross loss to Syndicate GBP 181.1m, Net loss to Syndicate GBP 63.5m",
+          "lobs_affected": [
+            "Property"
+          ],
+          "page": 41,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Japanese earthquake",
+          "event_year": null,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": 2.3,
+          "loss_description": "Industry loss/Event size GBP 58.6bn, Gross loss to Syndicate GBP 3.1m, Net loss to Syndicate GBP 2.3m",
+          "lobs_affected": [
+            "Property"
+          ],
+          "page": 41,
           "confidence": 0.8
         }
       ],
-      "standardized_narrative": "The Syndicate experienced an overall deterioration of GBP 6.8m in prior year claims provisions in 2020. This follows an improvement of GBP 36.3m in 2019. The deterioration is attributed to various factors impacting prior years, including catastrophe events like Hurricanes Florence and Michael and California wildfires in 2018, which led to attritional and large losses in Marine and Property lines. Additionally, Covid-19 related event cancellation losses, primarily falling to the 2019 year of account, contributed to the overall adverse development. The 2020 calendar year also saw an unusually active North Atlantic Hurricane season, characterized by frequent, smaller weather losses.",
+      "standardized_narrative": "The syndicate experienced a gross prior year reserve strengthening of GBP 296.0m in 2020, representing 37.06% of its opening gross claims outstanding. This adverse development was primarily driven by large losses and attritional deterioration in short-tail lines such as Marine, Onshore Energy, Hull, Marine Liability, and Property, as well as the impact of natural catastrophe events including an unusually active North Atlantic Hurricane season. Additionally, COVID-19 related event cancellation losses from the 2019 year of account contributed to the strengthening.",
       "raw_causal_phrases": [
-        "overall deterioration of GBP 6.8m",
         "Losses from Natural Catastrophes had a material impact on our result",
-        "Our total losses from Covid-19 amount to GBP 66.5m. They are largely contained within our Contingency account and mainly relate to event cancellation cover.",
-        "2018 was impacted by a series of catastrophe events - Hurricanes Florence and Michael and significant Wildfire events in California.",
-        "deterioration in attritional and large losses in a number of short tail lines. In Marine we saw large losses in Onshore Energy, Hull and Asia and attritional development on one large coverholder in Marine Liability... In Property we saw attritional development in both our direct and binder books",
-        "Covid-19... main impact has been seen through our Contingency book from event cancellation losses, the majority of these loss events falling to the 2019 year.",
-        "unusually active North Atlantic Hurricane season with a record number of storms making US landfall. These events translated into a year characterised by frequency rather than severity of weather losses."
+        "Our total losses from Covid-19 amount to GBP 66.5m. They are largely contained within our Contingency account and mainly relate to event cancellation cover. On its own this figure increased our Combined Ratio by 15.5 percentage points.",
+        "deterioration in attritional and large losses in a number of short tail lines",
+        "In Marine we saw large losses in Onshore Energy, Hull and Asia and attritional development on one large coverholder in Marine Liability",
+        "In Property we saw attritional development in both our direct and binder books",
+        "unusually active North Atlantic Hurricane season with a record number of storms making US landfall",
+        "In 2020, there has been an overall deterioration of GBP 6.8m"
       ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 518.4,
@@ -133,347 +218,689 @@
         {
           "line_of_business": "Direct insurance: Accident and health",
           "amount_gbp_m": 15.5,
-          "percentage_of_total": 2.99
+          "percentage_of_total": 3.0
         },
         {
-          "line_of_business": "Direct insurance: Marine",
+          "line_of_business": "Marine",
           "amount_gbp_m": 22.7,
-          "percentage_of_total": 4.38
+          "percentage_of_total": 4.4
         },
         {
-          "line_of_business": "Direct insurance: Aviation",
-          "amount_gbp_m": -0.1,
-          "percentage_of_total": -0.02
+          "line_of_business": "Aviation",
+          "amount_gbp_m": 0.1,
+          "percentage_of_total": 0.0
         },
         {
-          "line_of_business": "Direct insurance: Energy - Marine",
+          "line_of_business": "Energy - Marine",
           "amount_gbp_m": 13.8,
-          "percentage_of_total": 2.66
+          "percentage_of_total": 2.7
         },
         {
-          "line_of_business": "Direct insurance: Energy - Non Marine",
+          "line_of_business": "Energy - Non Marine",
           "amount_gbp_m": 16.8,
-          "percentage_of_total": 3.24
+          "percentage_of_total": 3.2
         },
         {
-          "line_of_business": "Direct insurance: Fire and other damage to property",
+          "line_of_business": "Fire and other damage to property",
           "amount_gbp_m": 122.9,
-          "percentage_of_total": 23.71
+          "percentage_of_total": 23.7
         },
         {
-          "line_of_business": "Direct insurance: Third party liability",
+          "line_of_business": "Third party liability",
           "amount_gbp_m": 158.7,
-          "percentage_of_total": 30.61
+          "percentage_of_total": 30.6
         },
         {
-          "line_of_business": "Direct insurance: Pecuniary loss",
+          "line_of_business": "Pecuniary loss",
           "amount_gbp_m": 17.1,
           "percentage_of_total": 3.3
-        },
-        {
-          "line_of_business": "Reinsurance acceptances",
-          "amount_gbp_m": 151.0,
-          "percentage_of_total": 29.13
         }
       ],
       "gross_premium_page": 26,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "",
+      "data_quality_notes": "The claims development triangle is distorted by the Reinsurance To Close of the 2017 and prior years of account into Syndicate 3500, and the 2018 year of account into the 2019 year of account of Syndicate 1200, making it unreliable for direct prior year development calculation. The 'Claims incurred in prior underwriting years' from the Claims Outstanding reconciliation (page 27) is used as the primary source for prior year development. [RAG OVERRIDE: Model said PYD=296.0, RAG triangle computed 54.4. Using RAG value.]",
+      "_claims_triangle": {
+        "type": "gross",
+        "currency": "GBP",
+        "units": "millions",
+        "page": 43,
+        "underwriting_years": [
+          2014,
+          2015,
+          2016,
+          2017,
+          2018,
+          2019,
+          2020
+        ],
+        "development_rows": [
+          [
+            98.6,
+            146.9,
+            238.2,
+            135.6,
+            100.8,
+            113.1,
+            99.7
+          ],
+          [
+            229.9,
+            354.0,
+            400.5,
+            300.2,
+            327.7,
+            null,
+            null
+          ],
+          [
+            264.7,
+            404.3,
+            467.6,
+            349.6,
+            null,
+            null,
+            null
+          ],
+          [
+            266.1,
+            429.3,
+            464.6,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            279.1,
+            437.6,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            277.5,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ]
+        ]
+      },
       "source_type": "syndicate",
       "source_file": "syndicate_reports\\pdfs\\syndicate_1200_2020.pdf",
       "content_hash": "c21cf69f834dc6b603836b0484d03e261bf7406f850636568e52143442fb71f5",
-      "standardized_at": "2026-03-12T03:51:29.219176+00:00",
+      "standardized_at": "2026-03-16T10:16:21.836114+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 22468,
-        "output_tokens": 2121,
-        "total_tokens": 31007,
-        "cost_usd": 0.012043
+        "input_tokens": 25492,
+        "output_tokens": 3530,
+        "total_tokens": 41794,
+        "cost_usd": 0.016473
+      },
+      "_rag_triangle": {
+        "type": "gross",
+        "currency": "GBP",
+        "units": "millions",
+        "underwriting_years": [
+          2014,
+          2015,
+          2016,
+          2017,
+          2018,
+          2019,
+          2020
+        ],
+        "development_rows": [
+          [
+            95.6,
+            98.6,
+            146.9,
+            238.2,
+            135.6,
+            100.8,
+            113.1
+          ],
+          [
+            218.4,
+            229.9,
+            354.0,
+            400.5,
+            300.2,
+            327.7,
+            null
+          ],
+          [
+            254.8,
+            264.7,
+            404.3,
+            467.6,
+            349.6,
+            null,
+            null
+          ],
+          [
+            264.8,
+            266.1,
+            429.3,
+            464.6,
+            null,
+            null,
+            null
+          ],
+          [
+            268.8,
+            279.1,
+            437.6,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            269.5,
+            277.5,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            270.8,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ]
+        ]
+      },
+      "_adobe_lob": {
+        "gross_premium_mix": [
+          {
+            "line_of_business": "Direct insurance: Accident and health",
+            "amount_gbp_m": 15.5,
+            "percentage_of_total": 3.0
+          },
+          {
+            "line_of_business": "Marine",
+            "amount_gbp_m": 22.7,
+            "percentage_of_total": 4.4
+          },
+          {
+            "line_of_business": "Aviation",
+            "amount_gbp_m": 0.1,
+            "percentage_of_total": 0.0
+          },
+          {
+            "line_of_business": "Energy - Marine",
+            "amount_gbp_m": 13.8,
+            "percentage_of_total": 2.7
+          },
+          {
+            "line_of_business": "Energy - Non Marine",
+            "amount_gbp_m": 16.8,
+            "percentage_of_total": 3.2
+          },
+          {
+            "line_of_business": "Fire and other damage to property",
+            "amount_gbp_m": 122.9,
+            "percentage_of_total": 23.7
+          },
+          {
+            "line_of_business": "Third party liability",
+            "amount_gbp_m": 158.7,
+            "percentage_of_total": 30.6
+          },
+          {
+            "line_of_business": "Pecuniary loss",
+            "amount_gbp_m": 17.1,
+            "percentage_of_total": 3.3
+          }
+        ],
+        "gross_premiums_written_gbp_m": 518.4,
+        "claims_incurred_by_lob": [
+          {
+            "line_of_business": "Direct insurance: Accident and health",
+            "amount_gbp_m": -18.3
+          },
+          {
+            "line_of_business": "Marine",
+            "amount_gbp_m": -14.8
+          },
+          {
+            "line_of_business": "Aviation",
+            "amount_gbp_m": -1.2
+          },
+          {
+            "line_of_business": "Energy - Marine",
+            "amount_gbp_m": -9.9
+          },
+          {
+            "line_of_business": "Energy - Non Marine",
+            "amount_gbp_m": -8.4
+          },
+          {
+            "line_of_business": "Fire and other damage to property",
+            "amount_gbp_m": -85.0
+          },
+          {
+            "line_of_business": "Third party liability",
+            "amount_gbp_m": -99.7
+          },
+          {
+            "line_of_business": "Pecuniary loss",
+            "amount_gbp_m": -93.3
+          }
+        ],
+        "currency": "GBP",
+        "method": "azure"
       }
     },
     "gpt-5-mini": {
       "syndicate": 1200,
       "year": 2020,
       "opening_reserves_gbp_m": 798.7,
-      "opening_reserves_page": 23,
+      "opening_reserves_page": 27,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": 6.8,
-      "prior_year_development_pct": 0.8509,
+      "prior_year_development_gbp_m": 54.4,
+      "prior_year_development_pct": 6.81,
       "direction": "strengthening",
       "prior_year_movement_page": 38,
-      "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "In 2020, there has been an overall deterioration of GBP 6.8m (2019: improvement of GBP 6.3m).",
+      "prior_year_movement_confidence": 0.5,
+      "exact_reserve_text": "In 2020, there has been an overall deterioration of GBP 6.8m (2019: improvement of GBP 36.3m).",
       "primary_causes": [
-        "Adverse claims development",
         "Natural catastrophe events",
+        "Adverse claims development",
+        "Large loss development",
         "COVID-19 / pandemic effects"
       ],
       "specific_events": [
         "Hurricanes Florence",
         "Hurricane Michael",
         "California Wildfires",
-        "North Atlantic 2020 hurricane season"
+        "COVID-19 / event cancellations"
       ],
       "specific_years_affected": [
-        2017,
         2018,
+        2017,
         2019
       ],
       "prior_year_events": [
         {
           "event_name": "Hurricanes Florence and Michael",
           "event_year": 2018,
-          "impact_description": "Series of catastrophe events in 2018 (Hurricanes Florence and Michael) that were smaller in nature than 2017 and were net retained by the Syndicate; contributed to 2018 year losses and prior year reserve activity.",
+          "impact_description": "2018 was impacted by a series of catastrophe events - Hurricanes Florence and Michael - these events were smaller in nature than those in 2017 and as a result were net retained by the Syndicate; contributed to attritional and large losses in a number of short tail lines.",
           "lobs_affected": [
             "Property",
-            "Casualty"
+            "Marine"
           ],
           "amount_gbp_m": null,
-          "confidence": 0.9
+          "confidence": 0.6
         },
         {
           "event_name": "California Wildfires",
           "event_year": 2018,
-          "impact_description": "Significant wildfire events in California in 2018 that impacted retained results and influenced reserve strengthening/claims development decisions.",
+          "impact_description": "Significant Wildfire events in California in 2018 which were smaller in nature than 2017 but impacted results and were net retained.",
           "lobs_affected": [
             "Property"
           ],
           "amount_gbp_m": null,
-          "confidence": 0.9
+          "confidence": 0.6
         },
         {
-          "event_name": "Marine liability coverholder development",
-          "event_year": 2018,
-          "impact_description": "Attritional development on one large coverholder in Marine Liability led to remediation activities and impacted prior year reserves in marine/casualty lines.",
+          "event_name": "COVID-19 event cancellation losses",
+          "event_year": 2019,
+          "impact_description": "Event cancellation losses largely contained within the Contingency account, the majority of these loss events falling to the 2019 year.",
           "lobs_affected": [
-            "Marine",
-            "Casualty"
+            "Aggregate",
+            "Accident & Health"
           ],
-          "amount_gbp_m": null,
-          "confidence": 0.7
+          "amount_gbp_m": 66.5,
+          "confidence": 0.9
         }
       ],
       "named_events": [
         {
-          "event_name": "Miami windstorm (RDS)",
-          "event_year": 0,
-          "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": 61.0,
-          "loss_description": "RDS scenario: estimated net loss to Syndicate",
+          "event_name": "COVID-19 pandemic / event cancellations",
+          "event_year": 2020,
+          "event_type": "other",
+          "net_loss_gbp_m": 66.5,
+          "loss_description": "Our total losses from Covid-19 amount to GBP 66.5m. They are largely contained within our Contingency account and mainly relate to event cancellation cover. On its own this figure increased our Combined Ratio by 15.5 percentage points.",
           "lobs_affected": [
-            "Property"
+            "Aggregate"
           ],
-          "page": 36,
-          "confidence": 0.9
+          "page": 8,
+          "confidence": 1.0
         },
         {
-          "event_name": "North East US windstorm (RDS)",
-          "event_year": 0,
+          "event_name": "Hurricane Florence",
+          "event_year": 2018,
           "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": 32.5,
-          "loss_description": "RDS scenario: estimated net loss to Syndicate",
+          "net_loss_gbp_m": null,
+          "loss_description": "Impacted 2018 year; smaller in nature than 2017 and net retained by the Syndicate.",
           "lobs_affected": [
             "Property"
           ],
-          "page": 36,
-          "confidence": 0.9
+          "page": 10,
+          "confidence": 0.8
         },
         {
-          "event_name": "Gulf of Mexico windstorm (RDS)",
-          "event_year": 0,
+          "event_name": "Hurricane Michael",
+          "event_year": 2018,
           "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": 59.1,
-          "loss_description": "RDS scenario: estimated net loss to Syndicate",
+          "net_loss_gbp_m": null,
+          "loss_description": "Impacted 2018 year; smaller in nature than 2017 and net retained by the Syndicate.",
           "lobs_affected": [
             "Property"
           ],
-          "page": 36,
-          "confidence": 0.9
+          "page": 10,
+          "confidence": 0.8
         },
         {
-          "event_name": "Los Angeles earthquake (RDS)",
-          "event_year": 0,
+          "event_name": "California Wildfires",
+          "event_year": 2018,
           "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": 71.1,
-          "loss_description": "RDS scenario: estimated net loss to Syndicate",
+          "net_loss_gbp_m": null,
+          "loss_description": "Significant wildfire events in California impacted 2018 results; net retained.",
           "lobs_affected": [
             "Property"
           ],
-          "page": 36,
-          "confidence": 0.9
-        },
-        {
-          "event_name": "San Francisco earthquake (RDS)",
-          "event_year": 0,
-          "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": 63.5,
-          "loss_description": "RDS scenario: estimated net loss to Syndicate",
-          "lobs_affected": [
-            "Property"
-          ],
-          "page": 36,
-          "confidence": 0.9
-        },
-        {
-          "event_name": "Japanese earthquake (RDS)",
-          "event_year": 0,
-          "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": 2.3,
-          "loss_description": "RDS scenario: estimated net loss to Syndicate",
-          "lobs_affected": [
-            "Property"
-          ],
-          "page": 36,
-          "confidence": 0.9
+          "page": 10,
+          "confidence": 0.8
         }
       ],
-      "standardized_narrative": "The Syndicate's opening gross claims outstanding at 1 January 2020 were GBP 798.7m. During 2020 there was an overall deterioration in prior year reserves of GBP 6.8m, driven primarily by adverse claims development including impacts from natural catastrophe activity (notably US hurricane activity and California wildfires), attritional development in certain marine and liability coverholder accounts, and additional losses related to the Covid-19 pandemic (notably event cancellation in Contingency). The net effect was a modest strengthening of reserves overall, with the largest adverse movements in casualty-related classes and releases in some property and marine classes.",
+      "standardized_narrative": "The Syndicate's gross claims reserves at 1 Jan 2020 were GBP 798.7m. During 2020 the Syndicate recorded an overall adverse prior-year development of GBP 6.8m (a strengthening of reserves), driven by a combination of natural catastrophe activity, adverse/attritional development and a number of large loss movements across property, marine and liability-related classes. COVID-19 event cancellation losses (GBP 66.5m) materially impacted the contingency book (largely booked to the 2019 year). Reinsurance to Close activity in respect of earlier years also affected reserve reporting and distorted development metrics.",
       "raw_causal_phrases": [
-        "In 2020, there has been an overall deterioration of GBP 6.8m (2019: improvement of 36.3m).",
-        "Our total losses from Covid-19 amount to GBP 66.5m. They are largely contained within our Contingency account and mainly relate to event cancellation cover.",
+        "In 2020, there has been an overall deterioration of GBP 6.8m (2019: improvement of GBP 36.3m).",
+        "Our total losses from Covid-19 amount to GBP 66.5m.",
         "Losses from Natural Catastrophes had a material impact on our result",
         "attritional and underlying losses are now in line with our expectations",
-        "The improvement represents a 17.5 percentage point reduction in Loss Ratio, equivalent to a reduction of GBP 74.8m in attritional claims load",
-        "we saw a correction in primary insurance pricing particularly in loss affected areas, however in the absence of significant capacity reductions...",
-        "we saw large losses in Onshore Energy, Hull and Asia and attritional development on one large coverholder in Marine Liability"
+        "large losses in Onshore Energy, Hull and Asia and attritional development on one large coverholder in Marine Liability",
+        "attritional development in both our direct and binder books",
+        "These events were smaller in nature than those in 2017 and as a result were net retained by the Syndicate."
       ],
       "lob_movements": [
         {
-          "line_of_business": "Accident & Health",
-          "direction": "release",
-          "amount_gbp_m": -1.8,
+          "line_of_business": "Property",
+          "direction": "strengthening",
+          "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.8
+          "confidence": 0.6
         },
         {
           "line_of_business": "Marine",
-          "direction": "release",
-          "amount_gbp_m": -10.2,
+          "direction": "strengthening",
+          "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.8
-        },
-        {
-          "line_of_business": "Aviation",
-          "direction": "release",
-          "amount_gbp_m": -0.1,
-          "percentage": null,
-          "confidence": 0.8
-        },
-        {
-          "line_of_business": "Energy",
-          "direction": "release",
-          "amount_gbp_m": -7.2,
-          "percentage": null,
-          "confidence": 0.8
-        },
-        {
-          "line_of_business": "Property",
-          "direction": "release",
-          "amount_gbp_m": -0.4,
-          "percentage": null,
-          "confidence": 0.8
+          "confidence": 0.6
         },
         {
           "line_of_business": "Casualty",
           "direction": "strengthening",
-          "amount_gbp_m": 24.4,
+          "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.8
+          "confidence": 0.5
         },
         {
-          "line_of_business": "Professional Lines",
+          "line_of_business": "Accident & Health",
           "direction": "strengthening",
-          "amount_gbp_m": 29.9,
+          "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.8
-        },
-        {
-          "line_of_business": "Treaty",
-          "direction": "strengthening",
-          "amount_gbp_m": 5.8,
-          "percentage": null,
-          "confidence": 0.8
+          "confidence": 0.4
         }
       ],
       "gross_premiums_written_gbp_m": 518.4,
       "gross_premium_mix": [
         {
-          "line_of_business": "Accident and health",
+          "line_of_business": "Direct insurance: Accident and health",
           "amount_gbp_m": 15.5,
-          "percentage_of_total": 2.99
+          "percentage_of_total": 3.0
         },
         {
           "line_of_business": "Marine",
           "amount_gbp_m": 22.7,
-          "percentage_of_total": 4.38
+          "percentage_of_total": 4.4
         },
         {
           "line_of_business": "Aviation",
-          "amount_gbp_m": -0.1,
-          "percentage_of_total": -0.02
-        },
-        {
-          "line_of_business": "Transport",
-          "amount_gbp_m": 0.0,
+          "amount_gbp_m": 0.1,
           "percentage_of_total": 0.0
         },
         {
           "line_of_business": "Energy - Marine",
           "amount_gbp_m": 13.8,
-          "percentage_of_total": 2.66
+          "percentage_of_total": 2.7
         },
         {
           "line_of_business": "Energy - Non Marine",
           "amount_gbp_m": 16.8,
-          "percentage_of_total": 3.24
+          "percentage_of_total": 3.2
         },
         {
           "line_of_business": "Fire and other damage to property",
           "amount_gbp_m": 122.9,
-          "percentage_of_total": 23.72
+          "percentage_of_total": 23.7
         },
         {
           "line_of_business": "Third party liability",
           "amount_gbp_m": 158.7,
-          "percentage_of_total": 30.62
+          "percentage_of_total": 30.6
         },
         {
           "line_of_business": "Pecuniary loss",
           "amount_gbp_m": 17.1,
           "percentage_of_total": 3.3
-        },
-        {
-          "line_of_business": "Reinsurance acceptances",
-          "amount_gbp_m": 151.0,
-          "percentage_of_total": 29.13
         }
       ],
-      "gross_premium_page": 21,
+      "gross_premium_page": 26,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Opening gross claims outstanding and the prior year movement (deterioration GBP 6.8m) are explicitly stated in the notes; page numbers for some narrative and risk-management tables were approximated from the document structure. LOB movement amounts are derived from the gross liabilities by class table (change 2020 vs 2019) and represent year-on-year gross liability changes (confidence 0.8). Some causal attributions (e.g. Covid-19 impact on prior year development) are inferred from narrative rather than explicitly quantified for the prior-year movement.",
+      "data_quality_notes": "Prior-year development figure taken from narrative in claims development section (explicit overall deterioration GBP 6.8m). The claims development triangle and movement notes are distorted by a Reinsurance To Close (RITC) of 2017 & prior years (transfer of c.GBP 279.4m) which makes diagonal-triangle calculations unreliable; the narrative figure may be net rather than gross and therefore confidence is reduced. Some LOB-level reserve movements are discussed qualitatively only and not quantified. [RAG OVERRIDE: Model said PYD=6.8, RAG triangle computed 54.4. Using RAG value.]",
+      "_claims_triangle": {
+        "type": "none",
+        "currency": "GBP",
+        "units": "millions",
+        "page": 38,
+        "underwriting_years": [],
+        "development_rows": []
+      },
       "source_type": "syndicate",
       "source_file": "syndicate_reports\\pdfs\\syndicate_1200_2020.pdf",
       "content_hash": "c21cf69f834dc6b603836b0484d03e261bf7406f850636568e52143442fb71f5",
-      "standardized_at": "2026-03-12T03:53:43.232272+00:00",
+      "standardized_at": "2026-03-16T10:18:45.026012+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 82292,
-        "output_tokens": 6796,
-        "total_tokens": 89088,
-        "cost_usd": 0.034165
+        "input_tokens": 85070,
+        "output_tokens": 8668,
+        "total_tokens": 93738,
+        "cost_usd": 0.038603
+      },
+      "_rag_triangle": {
+        "type": "gross",
+        "currency": "GBP",
+        "units": "millions",
+        "underwriting_years": [
+          2014,
+          2015,
+          2016,
+          2017,
+          2018,
+          2019,
+          2020
+        ],
+        "development_rows": [
+          [
+            95.6,
+            98.6,
+            146.9,
+            238.2,
+            135.6,
+            100.8,
+            113.1
+          ],
+          [
+            218.4,
+            229.9,
+            354.0,
+            400.5,
+            300.2,
+            327.7,
+            null
+          ],
+          [
+            254.8,
+            264.7,
+            404.3,
+            467.6,
+            349.6,
+            null,
+            null
+          ],
+          [
+            264.8,
+            266.1,
+            429.3,
+            464.6,
+            null,
+            null,
+            null
+          ],
+          [
+            268.8,
+            279.1,
+            437.6,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            269.5,
+            277.5,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            270.8,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ]
+        ]
+      },
+      "_adobe_lob": {
+        "gross_premium_mix": [
+          {
+            "line_of_business": "Direct insurance: Accident and health",
+            "amount_gbp_m": 15.5,
+            "percentage_of_total": 3.0
+          },
+          {
+            "line_of_business": "Marine",
+            "amount_gbp_m": 22.7,
+            "percentage_of_total": 4.4
+          },
+          {
+            "line_of_business": "Aviation",
+            "amount_gbp_m": 0.1,
+            "percentage_of_total": 0.0
+          },
+          {
+            "line_of_business": "Energy - Marine",
+            "amount_gbp_m": 13.8,
+            "percentage_of_total": 2.7
+          },
+          {
+            "line_of_business": "Energy - Non Marine",
+            "amount_gbp_m": 16.8,
+            "percentage_of_total": 3.2
+          },
+          {
+            "line_of_business": "Fire and other damage to property",
+            "amount_gbp_m": 122.9,
+            "percentage_of_total": 23.7
+          },
+          {
+            "line_of_business": "Third party liability",
+            "amount_gbp_m": 158.7,
+            "percentage_of_total": 30.6
+          },
+          {
+            "line_of_business": "Pecuniary loss",
+            "amount_gbp_m": 17.1,
+            "percentage_of_total": 3.3
+          }
+        ],
+        "gross_premiums_written_gbp_m": 518.4,
+        "claims_incurred_by_lob": [
+          {
+            "line_of_business": "Direct insurance: Accident and health",
+            "amount_gbp_m": -18.3
+          },
+          {
+            "line_of_business": "Marine",
+            "amount_gbp_m": -14.8
+          },
+          {
+            "line_of_business": "Aviation",
+            "amount_gbp_m": -1.2
+          },
+          {
+            "line_of_business": "Energy - Marine",
+            "amount_gbp_m": -9.9
+          },
+          {
+            "line_of_business": "Energy - Non Marine",
+            "amount_gbp_m": -8.4
+          },
+          {
+            "line_of_business": "Fire and other damage to property",
+            "amount_gbp_m": -85.0
+          },
+          {
+            "line_of_business": "Third party liability",
+            "amount_gbp_m": -99.7
+          },
+          {
+            "line_of_business": "Pecuniary loss",
+            "amount_gbp_m": -93.3
+          }
+        ],
+        "currency": "GBP",
+        "method": "azure"
       }
     }
   },
-  "total_cost_usd": 0.046208,
-  "total_tokens": 120095,
+  "total_cost_usd": 0.055076,
+  "total_tokens": 135532,
   "validation": {
     "passed": true,
-    "total_discrepancies": 48,
-    "within_tolerance": 48,
+    "total_discrepancies": 25,
+    "within_tolerance": 25,
     "hard_failures": 0,
     "hard_failure_details": []
   }
