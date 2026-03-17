@@ -36,7 +36,7 @@ load_dotenv()
 logger = logging.getLogger(__name__)
 
 # Bump this when extraction logic changes to invalidate cached table grids
-_CACHE_VERSION = 3
+_CACHE_VERSION = 5  # v5: transposed triangle support (Development Year 1,2,3... format)
 
 
 # ── Data structures ───────────────────────────────────────────────────────
@@ -122,6 +122,7 @@ def extract_tables(
     report_year: int,
     backend: TableBackend = TableBackend.AZURE,
     cache_dir: Optional[Path] = None,
+    azure_paid: bool = False,
 ) -> ExtractionResult:
     """Extract triangle, LOB, and provisions tables from a syndicate report PDF.
 
@@ -144,7 +145,7 @@ def extract_tables(
     elif backend == TableBackend.ADOBE:
         return _extract_adobe(pdf_path, report_year, cache_dir)
     elif backend == TableBackend.AZURE:
-        return _extract_azure(pdf_path, report_year, cache_dir)
+        return _extract_azure(pdf_path, report_year, cache_dir, azure_paid=azure_paid)
     else:
         raise ValueError(f"Unknown backend: {backend}")
 
@@ -159,6 +160,9 @@ _PAGE_KEYWORDS = {
         "cumulative claims incurred", "cumulative gross claims",
         "outstanding claims provision",
         "year later", "years later", "months later",
+        "development year", "year of account",
+        "ultimate contract outstanding claims",
+        "gross of reinsurance", "net of reinsurance",
     ],
     "provisions": [
         "provision for claims", "claims outstanding",
@@ -191,7 +195,10 @@ def _is_scanned_pdf(pdf_path: Path, sample_pages: int = 5) -> bool:
 
 def _classify_page(text: str) -> set[str]:
     """Return set of matching categories for a page's text."""
-    text_lower = text.lower()
+    # Normalise non-breaking spaces (U+00A0) that PyMuPDF often emits,
+    # and collapse newlines to spaces so multi-word keywords match even
+    # when PyMuPDF splits them across lines (e.g. "years\nlater")
+    text_lower = text.replace("\u00a0", " ").replace("\n", " ").lower()
     categories = set()
     for category, keywords in _PAGE_KEYWORDS.items():
         hits = sum(1 for kw in keywords if kw.lower() in text_lower)
@@ -200,10 +207,13 @@ def _classify_page(text: str) -> set[str]:
     return categories
 
 
-def _find_relevant_pages(pdf_path: Path) -> tuple[dict, dict, str]:
+def _find_relevant_pages(pdf_path: Path) -> tuple[dict, dict, str, set]:
     """Find relevant pages using PyMuPDF (native) or Tesseract (scanned).
 
-    Returns (page_matches, page_texts, method).
+    Returns (page_matches, page_texts, method, rotated_pages).
+    rotated_pages is a set of page numbers whose content is physically rotated
+    90° clockwise on the page (common in scanned syndicate reports with
+    landscape tables).  These pages need rotation before sending to APIs.
     """
     scanned = _is_scanned_pdf(pdf_path)
 
@@ -211,7 +221,8 @@ def _find_relevant_pages(pdf_path: Path) -> tuple[dict, dict, str]:
         logger.info(f"Scanned PDF detected, using Tesseract OCR")
         return _find_pages_ocr(pdf_path)
     else:
-        return _find_pages_native(pdf_path)
+        matches, texts, method = _find_pages_native(pdf_path)
+        return matches, texts, method, set()
 
 
 def _find_pages_native(pdf_path: Path) -> tuple[dict, dict, str]:
@@ -229,37 +240,126 @@ def _find_pages_native(pdf_path: Path) -> tuple[dict, dict, str]:
     return page_matches, page_texts, "pymupdf"
 
 
-def _find_pages_ocr(pdf_path: Path) -> tuple[dict, dict, str]:
-    """Scan pages with Tesseract OCR for scanned PDFs."""
+def _ocr_text_quality(text: str) -> float:
+    """Score OCR text quality from 0.0 (garbage) to 1.0 (clean).
+
+    Rotated scanned pages produce gibberish when OCR'd in the wrong
+    orientation — lots of short "words", high non-alpha ratio, etc.
+    """
+    words = text.split()
+    if len(words) < 3:
+        return 0.0
+    # Fraction of words that are ≥3 characters (real words)
+    long_words = sum(1 for w in words if len(w) >= 3)
+    long_frac = long_words / len(words)
+    # Fraction of characters that are alphanumeric or common punctuation
+    clean_chars = sum(1 for c in text if c.isalnum() or c in ' .,;:()-£$%\n\t')
+    clean_frac = clean_chars / max(1, len(text))
+    return (long_frac + clean_frac) / 2
+
+
+def _find_pages_ocr(pdf_path: Path) -> tuple[dict, dict, str, set]:
+    """Scan pages with Tesseract OCR for scanned PDFs.
+
+    Uses PyMuPDF to render page images (with rotation normalised to 0)
+    then Tesseract to extract text.  This avoids Poppler's incorrect
+    handling of /Rotate flags on some scanned syndicate reports that
+    causes landscape pages to render upside-down.
+
+    When normal-orientation OCR produces garbage text, the image is
+    re-tried at 90° and 270° rotations to handle pages where the
+    content is physically rotated (e.g. landscape claims triangles
+    in scanned syndicate reports).
+
+    Returns (page_matches, page_texts, "tesseract", rotated_pages).
+    rotated_pages is a set of page numbers that needed rotation.
+    """
     try:
-        from pdf2image import convert_from_path
         import pytesseract as _pytesseract
+        from PIL import Image
+        from io import BytesIO
         # Set Tesseract path if not in PATH
         tesseract_path = Path("C:/Program Files/Tesseract-OCR/tesseract.exe")
         if tesseract_path.exists():
             _pytesseract.pytesseract.tesseract_cmd = str(tesseract_path)
     except ImportError:
-        logger.warning("pdf2image/pytesseract not installed, cannot OCR scanned PDF")
-        return {}, {}, "none"
+        logger.warning("pytesseract/Pillow not installed, cannot OCR scanned PDF")
+        return {}, {}, "none", set()
 
     page_matches = {}
     page_texts = {}
+    rotated_pages = set()  # pages that needed rotation for correct OCR
 
-    images = convert_from_path(str(pdf_path), dpi=200)
-    for page_num, image in enumerate(images):
+    doc = fitz.open(pdf_path)
+    n_pages = len(doc)
+    # First pass: OCR all pages in normal orientation
+    for page_num in range(n_pages):
+        page = doc[page_num]
+        # Remove incorrect /Rotate flags before rendering.  Some scanned PDFs
+        # have landscape pages with rotation=270 that renders content upside-down.
+        if page.rotation != 0:
+            page.set_rotation(0)
+        pix = page.get_pixmap(dpi=200)
+        image = Image.open(BytesIO(pix.tobytes("png")))
         text = _pytesseract.image_to_string(image)
         page_texts[page_num] = text
         categories = _classify_page(text)
         if categories:
             page_matches[page_num] = categories
         if (page_num + 1) % 10 == 0:
-            logger.info(f"  OCR'd {page_num + 1}/{len(images)} pages")
+            logger.info(f"  OCR'd {page_num + 1}/{n_pages} pages")
 
-    return page_matches, page_texts, "tesseract"
+    # Second pass: re-scan unclassified non-blank pages at 90° CW rotation.
+    # Some scanned syndicate reports have landscape claims development
+    # tables physically rotated on the page.  Normal OCR produces garbage
+    # for these; rotating the image 90° yields correct readable text.
+    #
+    # Only retries pages that weren't already classified in the first pass,
+    # so the extra cost is bounded by the number of "mystery" pages.
+    unclassified = [p for p in range(n_pages)
+                    if p not in page_matches and len(page_texts[p].strip()) >= 20]
+    if unclassified:
+        logger.info(f"  Rotation scan: retrying {len(unclassified)} unclassified pages")
+        for page_num in unclassified:
+            page = doc[page_num]
+            if page.rotation != 0:
+                page.set_rotation(0)
+            pix = page.get_pixmap(dpi=200)
+            image = Image.open(BytesIO(pix.tobytes("png")))
+            rotated_img = image.rotate(-90, expand=True)  # 90° CW
+            rot_text = _pytesseract.image_to_string(rotated_img)
+            rot_categories = _classify_page(rot_text)
+            if rot_categories:
+                # Rotation found relevant content — use rotated text
+                page_texts[page_num] = rot_text
+                page_matches[page_num] = rot_categories
+                rotated_pages.add(page_num)
+                cats_str = ", ".join(sorted(rot_categories))
+                logger.info(f"  Page {page_num + 1}: content physically rotated 90°, "
+                            f"found [{cats_str}] after rotation")
+        if rotated_pages:
+            logger.info(f"  Rotation scan complete: found {len(rotated_pages)} rotated pages")
+
+    doc.close()
+
+    return page_matches, page_texts, "tesseract", rotated_pages
 
 
-def _extract_pages_to_pdf(pdf_path: Path, page_numbers: list[int], output_path: Path):
-    """Create a new PDF containing only the specified pages."""
+def _extract_pages_to_pdf(
+    pdf_path: Path,
+    page_numbers: list[int],
+    output_path: Path,
+    rotated_pages: set[int] | None = None,
+):
+    """Create a new PDF containing only the specified pages.
+
+    Parameters
+    ----------
+    rotated_pages : set of page numbers whose content is physically rotated
+        90° clockwise on the scanned page.  For these pages the rendered
+        image is re-drawn rotated so that API backends (Azure DI, etc.)
+        receive correctly oriented content.
+    """
     import tempfile
     # Write to a temp file first, then rename — avoids fitz.save failure
     # on Windows when the target path is locked by another process.
@@ -267,24 +367,66 @@ def _extract_pages_to_pdf(pdf_path: Path, page_numbers: list[int], output_path: 
         output_path.unlink(missing_ok=True)
     except OSError:
         pass
+    if rotated_pages is None:
+        rotated_pages = set()
+
     src = fitz.open(pdf_path)
     dst = fitz.open()
+
     for page_num in sorted(page_numbers):
-        dst.insert_pdf(src, from_page=page_num, to_page=page_num)
+        if page_num in rotated_pages:
+            # Page content is physically rotated 90° CW on the scan.
+            # Re-render at high DPI, rotate the image, and insert as a
+            # new image-based page so Azure DI sees correctly oriented content.
+            src_page = src[page_num]
+            if src_page.rotation != 0:
+                src_page.set_rotation(0)
+            pix = src_page.get_pixmap(dpi=200)
+            from PIL import Image
+            from io import BytesIO
+            img = Image.open(BytesIO(pix.tobytes("png")))
+            img_rotated = img.rotate(-90, expand=True)  # 90° CW
+            buf = BytesIO()
+            img_rotated.save(buf, format="PNG")
+            buf.seek(0)
+            # Create a new page matching the rotated dimensions
+            w_pt = img_rotated.width * 72 / 200  # convert pixels back to points
+            h_pt = img_rotated.height * 72 / 200
+            new_page = dst.new_page(width=w_pt, height=h_pt)
+            new_page.insert_image(
+                fitz.Rect(0, 0, w_pt, h_pt),
+                stream=buf.read(),
+            )
+            logger.info(f"  Rotated page {page_num + 1} for API submission")
+        else:
+            dst.insert_pdf(src, from_page=page_num, to_page=page_num)
+
+    # Normalise rotated pages: some scanned syndicate reports have landscape
+    # pages with incorrect /Rotate flags (e.g. rotation=270 on content that
+    # is already correctly oriented).  Removing the flag lets Azure DI read
+    # the raw page content, which is the correct orientation for these PDFs.
+    for page in dst:
+        if page.rotation != 0:
+            page.set_rotation(0)
     # Save to temp file in the same directory, then rename (atomic on same FS)
     fd, tmp_path = tempfile.mkstemp(suffix=".pdf", dir=str(output_path.parent))
     os.close(fd)
+    dst.save(tmp_path)
+    dst.close()
+    src.close()
     try:
-        dst.save(tmp_path)
-        dst.close()
-        src.close()
-        # Replace any existing file with the new one
         Path(tmp_path).replace(output_path)
-    except Exception:
-        dst.close()
-        src.close()
-        Path(tmp_path).unlink(missing_ok=True)
-        raise
+    except OSError:
+        # On Windows, replace can fail if the target is locked.
+        # Fall back to remove-then-rename.
+        try:
+            output_path.unlink(missing_ok=True)
+            Path(tmp_path).rename(output_path)
+        except OSError:
+            # Last resort: just use the temp file directly
+            import shutil
+            shutil.copy2(tmp_path, str(output_path))
+            Path(tmp_path).unlink(missing_ok=True)
 
 
 def _call_nutrient_api(pdf_path: Path, api_key: str) -> dict:
@@ -333,11 +475,49 @@ def _cells_to_grid(cells: list) -> list[list[str]]:
 
 
 def _clean_cell(text: str):
-    """Clean a cell value: strip whitespace, parse numbers, handle parenthesized negatives."""
+    """Clean a cell value: strip whitespace, parse numbers, handle parenthesized negatives.
+
+    Standalone dashes (-, –, —) are treated as 0.0 per UK accounting convention
+    where a dash in a financial statement means nil/zero.
+    """
     if not text or not text.strip():
         return None
-    s = text.strip().replace(",", "").replace(" ", "")
+    # Strip Azure Document Intelligence annotations (e.g., ":unselected:", ":selected:")
+    s = re.sub(r':(?:un)?selected:', '', text).strip()
+    if not s:
+        return None
+    s = s.replace(",", "").replace(" ", "")
+    # Standalone dash = nil/zero in accounting context
+    if s in ("-", "\u2013", "\u2014", "nil", "Nil"):
+        return 0.0
     # Accounting-style negatives: (123.4) -> -123.4
+    m = re.match(r'^\(([0-9.]+)\)$', s)
+    if m:
+        try:
+            return -float(m.group(1))
+        except ValueError:
+            pass
+    try:
+        return float(s)
+    except ValueError:
+        return text.strip()
+
+
+def _clean_cell_triangle(text: str):
+    """Clean a triangle cell value — same as _clean_cell but treats dashes as None.
+
+    In a claims development triangle, a dash means "no data yet" (the UW year
+    hasn't reached that development period), not "zero claims".
+    """
+    if not text or not text.strip():
+        return None
+    s = re.sub(r':(?:un)?selected:', '', text).strip()
+    if not s:
+        return None
+    s = s.replace(",", "").replace(" ", "")
+    # Standalone dash = no data in triangle context
+    if s in ("-", "\u2013", "\u2014", "nil", "Nil"):
+        return None
     m = re.match(r'^\(([0-9.]+)\)$', s)
     if m:
         try:
@@ -374,6 +554,147 @@ def _extract_numbers(num_strings: list[str]) -> list[float]:
         except ValueError:
             continue
     return values
+
+
+def _parse_transposed_triangle_from_text(text: str, report_year: int):
+    """Parse a transposed triangle from concatenated page text.
+
+    Handles the format where "Development Year 1 2 3 ... Total" is a header
+    and UW years are row labels, but everything is concatenated without spaces
+    (common in certain PyMuPDF extractions).
+
+    Pattern: "...Year of Account201657,73559,926117,918..."
+    """
+    text_lower = text.lower()
+
+    # Must contain "development year" and "year of account" markers
+    dev_year_pos = text_lower.find("development year")
+    yoa_pos = text_lower.find("year of account")
+    if dev_year_pos == -1 or yoa_pos == -1:
+        return None, "no transposed triangle markers found"
+
+    # Find the section starting from "Year of Account"
+    # Extract UW year rows: each starts with a 4-digit year followed by numbers
+    # Pattern: 2016<numbers separated by commas>2017<numbers>...
+    after_yoa = text[yoa_pos + len("Year of Account"):]
+
+    # Truncate at the first stop marker to avoid picking up a second triangle
+    # (e.g., gross triangle followed by net triangle on same page)
+    section_stop_patterns = [
+        "current estimate", "cumulative payment",
+        "cumulative gross payment", "cumulative net payment",
+        "gross claims reserve", "net claims reserve",
+        "gross unearned", "net unearned",
+        "estimate of cumulative net",
+    ]
+    section_end = len(after_yoa)
+    for sp in section_stop_patterns:
+        sp_pos = after_yoa.lower().find(sp)
+        if sp_pos != -1 and sp_pos < section_end:
+            section_end = sp_pos
+    after_yoa = after_yoa[:section_end]
+
+    # Find all UW year + values sequences
+    # UW years appear as 4-digit numbers that are plausible years (2010-2030)
+    # followed by comma-formatted numbers
+    uw_years = []
+    year_values = {}  # {year: [values]}
+
+    # Split on year boundaries: find all years in the text
+    year_positions = list(re.finditer(r'((?:19|20)\d{2})', after_yoa))
+    valid_year_positions = []
+    for mp in year_positions:
+        yr = int(mp.group(1))
+        if 1990 <= yr <= 2030 and yr <= report_year:
+            # Skip duplicate years (same year already found)
+            if yr not in [v[2] for v in valid_year_positions]:
+                valid_year_positions.append((mp.start(), mp.end(), yr))
+
+    if len(valid_year_positions) < 2:
+        return None, "not enough UW years found"
+
+    for i, (start, end, year) in enumerate(valid_year_positions):
+        # Find the end of this row's data
+        if i + 1 < len(valid_year_positions):
+            row_text = after_yoa[end:valid_year_positions[i + 1][0]]
+        else:
+            # Last year — take remaining text (already truncated at stop marker)
+            row_text = after_yoa[end:]
+
+        # Extract numbers from this row — use comma-formatted number regex
+        # to correctly split concatenated values like "57,73559,926117,918"
+        nums = re.findall(r'\(\d{1,3}(?:,\d{3})*\)|\d{1,3}(?:,\d{3})*', row_text)
+        values = _extract_numbers(nums)
+        if values:
+            uw_years.append(year)
+            year_values[year] = values
+
+    if len(uw_years) < 2:
+        return None, "not enough UW year rows found"
+
+    uw_years = sorted(uw_years)
+
+    # Validate year range
+    if max(uw_years) > report_year:
+        return None, f"max UW year {max(uw_years)} > report year {report_year}"
+    if max(uw_years) < report_year - 5:
+        return None, f"max UW year {max(uw_years)} too old for report year {report_year}"
+
+    if len(uw_years) < 3:
+        return "new_syndicate", f"{len(uw_years)} UW year(s)"
+
+    # Strip Total column: each UW year Y should have at most
+    # (report_year - Y + 1) development values. If there's an extra value
+    # (the Total column), remove it.
+    for y in uw_years:
+        expected_devs = report_year - y + 1
+        if len(year_values[y]) > expected_devs:
+            year_values[y] = year_values[y][:expected_devs]
+
+    # Build transposed triangle: dev_rows[d][y] = year_values[y][d]
+    max_dev = max(len(year_values[y]) for y in uw_years)
+    dev_rows = []
+    for d in range(max_dev):
+        row = []
+        for y in uw_years:
+            vals = year_values[y]
+            if d < len(vals):
+                row.append(vals[d])
+            else:
+                row.append(None)
+        dev_rows.append(row)
+
+    if len(dev_rows) < 2:
+        return None, f"only {len(dev_rows)} development rows"
+
+    # Detect currency and units
+    currency = "USD"
+    if "gbp" in text_lower or "£" in text_lower:
+        currency = "GBP"
+    elif "eur" in text_lower or "€" in text_lower:
+        currency = "EUR"
+
+    units = "millions"
+    if "£'000" in text_lower or "£000" in text_lower or "'000" in text_lower:
+        units = "thousands"
+
+    # Detect type — check context before "Development Year" for gross/net
+    # Default to gross since gross triangles typically appear first
+    context_start = max(0, dev_year_pos - 300)
+    context = text_lower[context_start:yoa_pos + 50]
+    if "net" in context and "gross" not in context:
+        tri_type = "net"
+    else:
+        tri_type = "gross"
+
+    triangle = TriangleData(
+        type=tri_type, currency=currency, units=units,
+        underwriting_years=uw_years, development_rows=dev_rows,
+    )
+    details = (f"{tri_type} {len(uw_years)} UW years "
+               f"({min(uw_years)}-{max(uw_years)}), "
+               f"{len(dev_rows)} dev rows (transposed text), {units}, {currency}")
+    return triangle, details
 
 
 def _parse_triangle_from_text(text: str, report_year: int):
@@ -434,11 +755,19 @@ def _parse_triangle_from_text(text: str, report_year: int):
                     header_end_idx = j - 1
                     break
 
+    # Strategy C: Transposed triangle in concatenated text
+    # Pattern: "Development Year 123456Total...Year of Account201657,73559,926..."
+    # where UW years are row labels and dev periods 1,2,3... are columns
+    if not uw_years:
+        result = _parse_transposed_triangle_from_text(text, report_year)
+        if result[0] is not None:
+            return result
+
     if not uw_years or len(uw_years) < 3:
         return None, "no UW year header found in page text"
 
     # Check max year is within range
-    if max(uw_years) > report_year or max(uw_years) < report_year - 2:
+    if max(uw_years) > report_year or max(uw_years) < report_year - 5:
         return None, f"max UW year {max(uw_years)} outside range for report year {report_year}"
 
     n_cols = len(uw_years)
@@ -452,16 +781,19 @@ def _parse_triangle_from_text(text: str, report_year: int):
         r"\d+\s+months?\s+later",
         r"^(one|two|three|four|five|six|seven|eight|nine|ten)\b",
         r"^\d+\s+year",
+        r"^year\s+\d+",                         # "Year 1", "Year 2", ... (Year of Account format)
     ]
     # Labels that signal the END of development rows (summary/total section)
     stop_labels = [
         "current estimate of cum",     # "Current estimate of cumulative claims incurred"
         "cumulative .* payment",        # "Cumulative gross claims payments to date"
+        "cumulative claims paid",       # "Cumulative claims paid" (Year of Account format)
         "less gross claims paid",
         "less net claims paid",
         "less claims paid",
         "gross outstanding claims",
         "net outstanding claims",
+        "outstanding claims reserve",   # "Outstanding claims reserve" (Year of Account format)
         "outstanding .* provision",     # but NOT "outstanding claims provision" in title
     ]
 
@@ -487,9 +819,15 @@ def _parse_triangle_from_text(text: str, report_year: int):
         # Skip non-numeric text lines (continuation of multi-line labels)
         if re.match(r'^[a-z]', line_lower) and not re.search(r'\d{2,}', line):
             continue
-        # Extract numbers from this line
+        # Extract numbers from this line, treating standalone dashes as zero
+        # (accounting convention: dash = nil/zero)
         nums = re.findall(r'[\-]?[\d,]+\.?\d*|\([\d,]+\.?\d*\)', line)
         new_vals = _extract_numbers(nums)
+        # If the line is just a dash (or dashes), treat each as zero
+        if not new_vals:
+            dash_count = len(re.findall(r'(?<!\d)[-\u2013\u2014](?!\d)', line.strip()))
+            if dash_count > 0 and not re.search(r'\d', line):
+                new_vals = [0.0] * dash_count
         all_values.extend(new_vals)
 
     # Group values into rows. Development period d (0 = end of UW year) has
@@ -571,23 +909,29 @@ def _parse_nutrient_triangle(grid: list[list[str]], report_year: int):
             if m:
                 year = int(m.group())
                 if 1990 <= year <= 2030 and "prior" not in val.lower() and "&" not in val:
+                    # Skip bare year labels in column 0 — these are row labels
+                    # (e.g. UW year row "2011" in a transposed triangle, or
+                    # report year "2021" as table title), not column headers
+                    if col_idx == 0 and val.strip() == str(year):
+                        continue
                     if year not in uw_years:
                         uw_years.append(year)
                         uw_col_indices.append(col_idx)
 
     if len(uw_years) < 1:
-        return None, "no underwriting years found"
+        # Try transposed format (Development Year 1,2,3... with UW years as rows)
+        return _parse_transposed_triangle(grid, report_year)
 
     # Sort by year
     pairs = sorted(zip(uw_years, uw_col_indices))
     uw_years = [p[0] for p in pairs]
     uw_col_indices = [p[1] for p in pairs]
 
-    # Max UW year must be recent (within 2 years of report year) but need not
+    # Max UW year must be recent (within 5 years of report year) but need not
     # equal it — run-off syndicates stop writing new business before the report date.
     if max(uw_years) > report_year:
         return None, f"max UW year {max(uw_years)} > report year {report_year}"
-    if max(uw_years) < report_year - 2:
+    if max(uw_years) < report_year - 5:
         return None, f"max UW year {max(uw_years)} too old for report year {report_year}"
 
     if len(uw_years) < 3:
@@ -601,31 +945,89 @@ def _parse_nutrient_triangle(grid: list[list[str]], report_year: int):
         r"after\s+\w+\s+years?",               # "After one year", "After two years"
         r"\d+\s+months?\s+later",               # "12 months later", "24 months later"
         r"estimate.*end\s+of\s+underwriting",   # "Estimate of cumulative...end of underwriting year"
+        r"^year\s+\d+",                         # "Year 1", "Year 2", ... (Year of Account format)
     ]
     skip_labels = [
         "current estimate", "cumulative payment", "cumulative claim",
         "outstanding", "provision", "gross outstanding", "net outstanding",
     ]
+    # Section headers that mark end of the incurred-claims triangle.
+    # If we've already collected dev rows and hit one of these, stop.
+    section_break_patterns = [
+        "paid claims", "claims paid", "gross paid", "net paid",
+        "less gross", "less net",  # "Less gross claims paid", "Less net claims paid"
+        "cumulative claims paid", "cumulative payments",
+        "cumulative gross payments", "cumulative net payments",
+        "claims reserve", "gross claims reserve", "net claims reserve",
+        "gross reserve", "net reserve",
+        "current estimate",  # summary row signals end of dev rows
+        "estimate of cumulative net",  # start of net section in combined gross+net tables
+    ]
 
     dev_rows = []
-    for row in grid:
+    collecting = False  # True once we've started finding dev rows
+    # Track rows consumed as continuation of a split label (skip them in main loop)
+    consumed_as_continuation = set()
+    for row_i, row in enumerate(grid):
+        if row_i in consumed_as_continuation:
+            continue
         label = row[0].lower().strip() if row else ""
         if not label:
             continue
+        # Check for section break (paid claims section, reserve summary, etc.)
+        if collecting and any(s in label for s in section_break_patterns):
+            break
         if any(s in label for s in skip_labels):
+            continue
+        # Check for "& prior" aggregate rows — skip them (not a dev period)
+        if "prior" in label and ("&" in label or "and" in label):
             continue
         is_dev_row = any(re.search(p, label) for p in dev_period_patterns)
         if not is_dev_row:
             continue
+        collecting = True
 
         values = []
         for col_idx in uw_col_indices:
             if col_idx < len(row):
-                val = _clean_cell(row[col_idx])
+                val = _clean_cell_triangle(row[col_idx])
                 values.append(val if isinstance(val, (int, float)) else None)
             else:
                 values.append(None)
+
+        # Handle split-label rows: Azure/OCR sometimes splits a multi-line
+        # cell label across two grid rows (e.g. "at end of underwriting" on
+        # one row, "year" with the actual values on the next).  When the
+        # matched dev-period row has all-empty values, peek at the next row
+        # and use its values if it looks like a continuation.
+        if all(v is None for v in values) and row_i + 1 < len(grid):
+            next_row = grid[row_i + 1]
+            next_label = next_row[0].lower().strip() if next_row else ""
+            # Next row is a continuation if it:
+            #  - doesn't match any dev pattern on its own
+            #  - isn't a section break or skip label
+            #  - has at least one non-empty value in the UW year columns
+            next_is_dev = any(re.search(p, next_label) for p in dev_period_patterns)
+            next_is_break = any(s in next_label for s in section_break_patterns)
+            next_is_skip = any(s in next_label for s in skip_labels)
+            if not next_is_dev and not next_is_break and not next_is_skip:
+                next_values = []
+                for col_idx in uw_col_indices:
+                    if col_idx < len(next_row):
+                        val = _clean_cell_triangle(next_row[col_idx])
+                        next_values.append(val if isinstance(val, (int, float)) else None)
+                    else:
+                        next_values.append(None)
+                if any(v is not None for v in next_values):
+                    values = next_values
+                    consumed_as_continuation.add(row_i + 1)
+
         dev_rows.append(values)
+
+    # Strip trailing all-null rows (development periods with no data yet,
+    # e.g. "After five years" when the triangle only covers 4 UW years)
+    while dev_rows and all(v is None for v in dev_rows[-1]):
+        dev_rows.pop()
 
     if len(dev_rows) < 2:
         return None, f"only {len(dev_rows)} development rows"
@@ -652,7 +1054,168 @@ def _parse_nutrient_triangle(grid: list[list[str]], report_year: int):
         type=tri_type, currency=currency, units=units,
         underwriting_years=uw_years, development_rows=dev_rows,
     )
-    details = f"Nutrient triangle: {len(uw_years)} UW years, {len(dev_rows)} dev rows"
+    details = f"{len(uw_years)} UW years, {len(dev_rows)} dev rows"
+    return tri, details
+
+
+def _parse_transposed_triangle(grid: list[list[str]], report_year: int):
+    """Parse a transposed triangle where dev periods are columns and UW years are rows.
+
+    Format A: headers are "Development Year  1  2  3  4  5  6  Total"
+    and rows are "2016  57,083  59,022  95,617  95,099  45,248  <blank>  45,248"
+
+    Format B (headerless): Azure sometimes splits header from data, so the grid
+    has no descriptive header — just a currency row ("$000") followed by UW year
+    rows with numeric values forming the triangle.
+
+    Returns (TriangleData, details_str) or (None, reason).
+    """
+    if len(grid) < 4 or len(grid[0]) < 3:
+        return None, "too small for transposed triangle"
+
+    # Detect transposed format: first header cell contains "Development Year"
+    # and subsequent cells are integers 1,2,3... or "Total"
+    header = grid[0]
+    header0_lower = header[0].lower().strip()
+    has_dev_year_header = "development year" in header0_lower
+
+    dev_col_indices = []
+    if has_dev_year_header:
+        # Verify columns are dev period numbers (1, 2, 3, ...)
+        for col_idx in range(1, len(header)):
+            val = header[col_idx].strip()
+            if val.isdigit() and 1 <= int(val) <= 20:
+                dev_col_indices.append(col_idx)
+            elif val.lower() == "total":
+                break  # stop before Total column
+
+        if len(dev_col_indices) < 2:
+            return None, "not enough development period columns"
+    else:
+        # Headerless format: check if rows have UW years as labels.
+        # First count how many rows have a 4-digit year in column 0.
+        year_row_count = 0
+        for row in grid:
+            if row and re.match(r'^(19|20)\d{2}$', row[0].strip()):
+                year_row_count += 1
+        if year_row_count < 3:
+            return None, "not a transposed triangle (no 'Development Year' header and < 3 year rows)"
+        # Use all columns except col 0 (year label) as dev period columns,
+        # but exclude the last column if it looks like "Cumulative Payments"
+        # (detected by checking if last col values are always <= the max of
+        # other columns for each row — skip that heuristic, just include all).
+        # We'll strip the last column later if it's a payments column.
+        n_cols = len(grid[0])
+        dev_col_indices = list(range(1, n_cols))
+
+    # Find UW year rows — look for rows where col 0 is a 4-digit year
+    uw_years = []
+    uw_row_indices = []
+    skip_labels = [
+        "current estimate", "cumulative payment", "cumulative claim",
+        "gross claims reserve", "net claims reserve", "gross unearned",
+        "net unearned", "year of account",
+    ]
+    for row_idx in range(1, len(grid)):
+        label = grid[row_idx][0].strip()
+        label_lower = label.lower()
+        # Skip currency/header rows and summary rows
+        if not label or any(s in label_lower for s in skip_labels):
+            continue
+        m = re.match(r'^(19|20)\d{2}$', label)
+        if m:
+            year = int(label)
+            if 1990 <= year <= 2030:
+                uw_years.append(year)
+                uw_row_indices.append(row_idx)
+
+    if len(uw_years) < 1:
+        return None, "no underwriting years found in row labels"
+
+    # Validate year range
+    if max(uw_years) > report_year:
+        return None, f"max UW year {max(uw_years)} > report year {report_year}"
+    if max(uw_years) < report_year - 5:
+        return None, f"max UW year {max(uw_years)} too old for report year {report_year}"
+
+    if len(uw_years) < 3:
+        return "new_syndicate", f"{len(uw_years)} UW year(s) ({min(uw_years)}-{max(uw_years)})"
+
+    # Extract values: each UW year row has values for dev periods 1..N
+    # Transpose into standard format: dev_rows[d] = [val_for_year0, val_for_year1, ...]
+    n_dev = len(dev_col_indices)
+    n_years = len(uw_years)
+
+    # Build a matrix: raw_data[year_idx][dev_idx]
+    raw_data = []
+    for row_idx in uw_row_indices:
+        row = grid[row_idx]
+        vals = []
+        for col_idx in dev_col_indices:
+            if col_idx < len(row):
+                val = _clean_cell_triangle(row[col_idx])
+                vals.append(val if isinstance(val, (int, float)) else None)
+            else:
+                vals.append(None)
+        raw_data.append(vals)
+
+    # In headerless mode, the last column may be "Cumulative Payments" — a
+    # column where every UW year has a value (no Nones).  A proper triangle
+    # column has decreasing non-null counts per UW year, so the last dev
+    # column should have only 1 non-null value (the oldest year).  If the
+    # last column is fully populated, strip it.
+    if not has_dev_year_header and raw_data:
+        last_col_vals = [row[-1] for row in raw_data if row]
+        # Last column fully populated = likely cumulative payments, not dev period
+        if all(v is not None for v in last_col_vals) and len(last_col_vals) >= 3:
+            # Also check the second-to-last column has at least one None
+            second_last = [row[-2] for row in raw_data if len(row) >= 2]
+            if any(v is None for v in second_last):
+                for row in raw_data:
+                    row.pop()
+
+    # Transpose: dev_rows[d][y] = raw_data[y][d]
+    max_dev = max(len(vals) for vals in raw_data)
+    dev_rows = []
+    for d in range(max_dev):
+        row = []
+        for y_idx in range(n_years):
+            if d < len(raw_data[y_idx]):
+                row.append(raw_data[y_idx][d])
+            else:
+                row.append(None)
+        dev_rows.append(row)
+
+    # Trim trailing all-None rows
+    while dev_rows and all(v is None for v in dev_rows[-1]):
+        dev_rows.pop()
+
+    if len(dev_rows) < 2:
+        return None, f"only {len(dev_rows)} development rows"
+
+    # Detect currency from grid text
+    flat = _grid_text_lower(grid)
+    currency = "USD"
+    if "gbp" in flat or chr(163) in flat or "£" in flat:
+        currency = "GBP"
+    elif "eur" in flat or chr(8364) in flat:
+        currency = "EUR"
+
+    # Detect units
+    units = "millions"
+    if re.search(r"[£$]'?000", flat) or "'000" in flat:
+        units = "thousands"
+
+    # Detect gross vs net
+    tri_type = "gross"
+    if "net" in flat and "gross" not in flat:
+        tri_type = "net"
+
+    tri = TriangleData(
+        type=tri_type, currency=currency, units=units,
+        underwriting_years=uw_years, development_rows=dev_rows,
+    )
+    details = f"{len(uw_years)} UW years, {len(dev_rows)} dev rows (transposed)"
     return tri, details
 
 
@@ -870,7 +1433,7 @@ def _extract_nutrient(pdf_path: Path, report_year: int, cache_dir: Path) -> Extr
 
     # Step 1: Find relevant pages
     print(f"  [Nutrient] Scanning {pdf_path.name}...")
-    page_matches, page_texts, scan_method = _find_relevant_pages(pdf_path)
+    page_matches, page_texts, scan_method, rotated_pages = _find_relevant_pages(pdf_path)
 
     doc = fitz.open(pdf_path)
     total_pages = len(doc)
@@ -891,7 +1454,7 @@ def _extract_nutrient(pdf_path: Path, report_year: int, cache_dir: Path) -> Extr
     # Step 2: Extract relevant pages into slim PDF
     relevant_pages = sorted(page_matches.keys())
     slim_pdf = cache_dir / f"{pdf_path.stem}_slim.pdf"
-    _extract_pages_to_pdf(pdf_path, relevant_pages, slim_pdf)
+    _extract_pages_to_pdf(pdf_path, relevant_pages, slim_pdf, rotated_pages)
     slim_size = slim_pdf.stat().st_size / 1024
     print(f"  [Nutrient] Slim PDF: {len(relevant_pages)} pages, {slim_size:.0f} KB")
 
@@ -1038,7 +1601,7 @@ def _extract_adobe(pdf_path: Path, report_year: int, cache_dir: Path) -> Extract
 
     # Step 1: Find relevant pages (same approach as Nutrient/Azure)
     print(f"  [Adobe] Scanning {pdf_path.name}...")
-    page_matches, page_texts, scan_method = _find_relevant_pages(pdf_path)
+    page_matches, page_texts, scan_method, rotated_pages = _find_relevant_pages(pdf_path)
 
     if not page_matches:
         print(f"  [Adobe] No relevant pages found")
@@ -1054,7 +1617,7 @@ def _extract_adobe(pdf_path: Path, report_year: int, cache_dir: Path) -> Extract
     # Check if Adobe already processed this (cached output exists)
     report_out = cache_dir / f"{pdf_path.stem}_slim"
     if not (report_out / "structuredData.json").exists():
-        _extract_pages_to_pdf(pdf_path, relevant_pages, slim_pdf)
+        _extract_pages_to_pdf(pdf_path, relevant_pages, slim_pdf, rotated_pages)
         slim_size = slim_pdf.stat().st_size / 1024
         orig_size = pdf_path.stat().st_size / 1024
         print(f"  [Adobe] Slim PDF: {len(relevant_pages)} pages, {slim_size:.0f} KB "
@@ -1131,10 +1694,19 @@ def _call_azure_api(pdf_path: Path, endpoint: str, api_key: str):
     """
     from azure.core.credentials import AzureKeyCredential
     from azure.ai.documentintelligence import DocumentIntelligenceClient
+    from azure.core.pipeline.policies import RetryPolicy
 
+    # Configure with short retry backoff so Ctrl+C isn't blocked for minutes
+    # by the SDK's default retry sleep.
+    retry_policy = RetryPolicy(
+        retry_total=3,
+        retry_backoff_factor=1,
+        retry_backoff_max=10,
+    )
     client = DocumentIntelligenceClient(
         endpoint=endpoint,
         credential=AzureKeyCredential(api_key),
+        retry_policy=retry_policy,
     )
 
     with open(pdf_path, "rb") as f:
@@ -1143,6 +1715,13 @@ def _call_azure_api(pdf_path: Path, endpoint: str, api_key: str):
             body=f,
             content_type="application/pdf",
         )
+    # Poll manually so Ctrl+C can interrupt during the wait.
+    # Timeout after 120 seconds to avoid indefinite hangs.
+    deadline = time.time() + 120
+    while not poller.done():
+        if time.time() > deadline:
+            raise TimeoutError("Azure Document Intelligence API timed out after 120s")
+        time.sleep(1)
     return poller.result()
 
 
@@ -1169,7 +1748,12 @@ def _classify_table_content(grid: list[list[str]]) -> set[str]:
     has_dev_periods = any(p in flat for p in dev_patterns)
     has_triangle_title = any(kw in flat for kw in triangle_title_kw)
 
-    if len(uw_years) >= 3 and (has_dev_periods or has_triangle_title):
+    # Detect transposed format: "Development Year 1 2 3 ..." with "Year of Account"
+    has_transposed = ("development year" in flat and "year of account" in flat)
+
+    if len(uw_years) >= 3 and (has_dev_periods or has_triangle_title or has_transposed):
+        cats.add("claims_triangle")
+    elif has_transposed and len(uw_years) >= 1:
         cats.add("claims_triangle")
     elif has_triangle_title and len(uw_years) >= 1:
         # Title is strong evidence even with fewer detected years
@@ -1194,12 +1778,13 @@ def _classify_table_content(grid: list[list[str]]) -> set[str]:
     return cats
 
 
-def _extract_azure(pdf_path: Path, report_year: int, cache_dir: Path) -> ExtractionResult:
+def _extract_azure(pdf_path: Path, report_year: int, cache_dir: Path,
+                    azure_paid: bool = False) -> ExtractionResult:
     """Extract tables using Azure AI Document Intelligence.
 
     Uses the same targeted-page approach: PyMuPDF/Tesseract identifies
     relevant pages, then sends them in batches to Azure (F0 tier = 2 pages
-    per request; S0 tier handles full documents).
+    per request; paid S0 tier sends all relevant pages in one request).
     """
     endpoint = os.getenv("DOCUMENTINTELLIGENCE_ENDPOINT")
     api_key = os.getenv("DOCUMENTINTELLIGENCE_API_KEY")
@@ -1212,7 +1797,7 @@ def _extract_azure(pdf_path: Path, report_year: int, cache_dir: Path) -> Extract
 
     # Step 1: Find relevant pages
     print(f"  [Azure] Scanning {pdf_path.name}...")
-    page_matches, page_texts, scan_method = _find_relevant_pages(pdf_path)
+    page_matches, page_texts, scan_method, rotated_pages = _find_relevant_pages(pdf_path)
 
     doc = fitz.open(pdf_path)
     total_pages = len(doc)
@@ -1243,12 +1828,13 @@ def _extract_azure(pdf_path: Path, report_year: int, cache_dir: Path) -> Extract
         page_priority[page_num] = best_priority
 
     sorted_pages = sorted(relevant_pages, key=lambda p: page_priority[p])
-    batch_size = 2  # Azure F0 tier limit
+    batch_size = len(sorted_pages) if azure_paid else 2  # paid S0: all at once; F0: 2 pages
     batches = [sorted_pages[i:i+batch_size] for i in range(0, len(sorted_pages), batch_size)]
 
     # Check for cached Azure results — cache key includes relevant pages
-    # so cache invalidates if page classification changes
+    # and batch mode so cache invalidates if either changes
     pages_hash = "_".join(str(p) for p in sorted(relevant_pages))
+    batch_mode = "paid" if azure_paid else "free"
     cache_file = cache_dir / f"{pdf_path.stem}_azure.json"
     all_grids = []  # (grid, orig_page, categories)
 
@@ -1256,9 +1842,10 @@ def _extract_azure(pdf_path: Path, report_year: int, cache_dir: Path) -> Extract
     if cache_file.exists():
         with open(cache_file) as f:
             cached = json.load(f)
-        # Validate cache: must match code version and page set
+        # Validate cache: must match code version, page set, and batch mode
         cached_ver = cached.get("_cache_version") if isinstance(cached, dict) else None
         cached_pages = cached.get("_pages_hash") if isinstance(cached, dict) else None
+        cached_batch = cached.get("_batch_mode") if isinstance(cached, dict) else None
         if not isinstance(cached, dict) or cached_ver != _CACHE_VERSION:
             cache_file.unlink()
             reason = "legacy format" if not isinstance(cached, dict) else "code changed"
@@ -1266,6 +1853,9 @@ def _extract_azure(pdf_path: Path, report_year: int, cache_dir: Path) -> Extract
         elif cached_pages != pages_hash:
             cache_file.unlink()
             print(f"  [Azure] Cache invalidated (page set changed) — re-extracting")
+        elif cached_batch is not None and cached_batch != batch_mode:
+            cache_file.unlink()
+            print(f"  [Azure] Cache invalidated (batch mode changed: {cached_batch} → {batch_mode}) — re-extracting")
         else:
             cache_valid = True
             print(f"  [Azure] Using cached result")
@@ -1291,7 +1881,7 @@ def _extract_azure(pdf_path: Path, report_year: int, cache_dir: Path) -> Extract
             cat_str = ", ".join(sorted(batch_cats))
 
             slim_pdf = cache_dir / f"{pdf_path.stem}_slim_b{batch_idx}.pdf"
-            _extract_pages_to_pdf(pdf_path, batch_pages, slim_pdf)
+            _extract_pages_to_pdf(pdf_path, batch_pages, slim_pdf, rotated_pages)
             pages_str = ", ".join(str(p+1) for p in batch_pages)
             print(f"  [Azure] Batch {batch_idx+1}/{len(batches)}: pages {pages_str} [{cat_str}]")
 
@@ -1331,7 +1921,6 @@ def _extract_azure(pdf_path: Path, report_year: int, cache_dir: Path) -> Extract
             try:
                 slim_pdf.unlink(missing_ok=True)
             except PermissionError:
-                import time
                 time.sleep(0.5)
                 try:
                     slim_pdf.unlink(missing_ok=True)
@@ -1342,6 +1931,7 @@ def _extract_azure(pdf_path: Path, report_year: int, cache_dir: Path) -> Extract
         cache_data = {
             "_cache_version": _CACHE_VERSION,
             "_pages_hash": pages_hash,
+            "_batch_mode": batch_mode,
             "tables": [
                 {"grid": grid, "orig_page": orig_page, "categories": sorted(cats)}
                 for grid, orig_page, cats in all_grids

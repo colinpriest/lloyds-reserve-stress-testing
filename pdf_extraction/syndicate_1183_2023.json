@@ -1,5 +1,5 @@
 {
-  "extraction_timestamp": "2026-03-16T09:53:52.694428+00:00",
+  "extraction_timestamp": "2026-03-17T05:58:52.461176+00:00",
   "spec": {
     "prompt_version": "2.6",
     "field_definitions_version": "1.0",
@@ -13,9 +13,9 @@
       "opening_reserves_gbp_m": 2066.5,
       "opening_reserves_page": 8,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": 0.0,
-      "prior_year_development_pct": 0.0,
-      "direction": "flat",
+      "prior_year_development_gbp_m": -337.0,
+      "prior_year_development_pct": -16.31,
+      "direction": "release",
       "prior_year_movement_page": 45,
       "prior_year_movement_confidence": 0.8,
       "exact_reserve_text": "The net claims ratio also continued to benefit from prior year releases of $8.0m, or 0.8% of net earned premium (2022: $57.8m, or 6.4% of net earned premium). Refer to note 7 for further details.",
@@ -117,6 +117,11 @@
           "percentage_of_total": 0.6
         },
         {
+          "line_of_business": "Motor",
+          "amount_gbp_m": 0.0,
+          "percentage_of_total": 0.0
+        },
+        {
           "line_of_business": "Marine, aviation & transport",
           "amount_gbp_m": 93.4,
           "percentage_of_total": 6.6
@@ -160,7 +165,7 @@
       "gross_premium_page": 5,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "The prior year development amount is calculated from the gross claims development triangle as the 'Movement in prior year's provision for claims outstanding' note only provides net figures. Individual line of business movements are not available on a gross basis. [CODE OVERRIDE: Model said PYD=-36.6, but code computed 0.0 from triangle (OVERRIDE from gemini-2.5-flash triangle). Using code value.]",
+      "data_quality_notes": "The prior year development amount is calculated from the gross claims development triangle as the 'Movement in prior year's provision for claims outstanding' note only provides net figures. Individual line of business movements are not available on a gross basis. [RAG OVERRIDE: Model said PYD=-36.6, RAG triangle computed -337.0. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
@@ -325,12 +330,66 @@
         "total_tokens": 32188,
         "cost_usd": 0.011515
       },
+      "_rag_triangle": {
+        "type": "gross",
+        "currency": "USD",
+        "units": "millions",
+        "underwriting_years": [
+          "2019",
+          "2020",
+          "2021",
+          "2022",
+          "2023"
+        ],
+        "development_rows": [
+          [
+            1414.7,
+            1285.8,
+            1271.6,
+            1059.1,
+            985.7
+          ],
+          [
+            974.3,
+            918.4,
+            975.0,
+            830.8,
+            null
+          ],
+          [
+            791.7,
+            946.2,
+            907.5,
+            null,
+            null
+          ],
+          [
+            902.8,
+            809.7,
+            null,
+            null,
+            null
+          ],
+          [
+            769.8,
+            null,
+            null,
+            null,
+            null
+          ]
+        ]
+      },
       "_adobe_lob": {
         "gross_premium_mix": [
           {
             "line_of_business": "Accident and health",
             "amount_gbp_m": 8.7,
             "percentage_of_total": 0.6
+          },
+          {
+            "line_of_business": "Motor",
+            "amount_gbp_m": 0.0,
+            "percentage_of_total": 0.0
           },
           {
             "line_of_business": "Marine, aviation & transport",
@@ -380,6 +439,10 @@
             "amount_gbp_m": -3.3
           },
           {
+            "line_of_business": "Motor",
+            "amount_gbp_m": 0.0
+          },
+          {
             "line_of_business": "Marine, aviation & transport",
             "amount_gbp_m": -40.8
           },
@@ -422,9 +485,9 @@
       "opening_reserves_gbp_m": 2066.5,
       "opening_reserves_page": 44,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": 0.0,
-      "prior_year_development_pct": 0.0,
-      "direction": "flat",
+      "prior_year_development_gbp_m": -337.0,
+      "prior_year_development_pct": -16.31,
+      "direction": "release",
       "prior_year_movement_page": 45,
       "prior_year_movement_confidence": 0.8,
       "exact_reserve_text": "There has been a reassessment of the net provision for claims outstanding held at the previous year end. The release in 2023 amounted to $8.0m (2022: $57.8m), attributable to the following classes of business:",
@@ -584,6 +647,11 @@
           "percentage_of_total": 0.6
         },
         {
+          "line_of_business": "Motor",
+          "amount_gbp_m": 0.0,
+          "percentage_of_total": 0.0
+        },
+        {
           "line_of_business": "Marine, aviation & transport",
           "amount_gbp_m": 93.4,
           "percentage_of_total": 6.6
@@ -627,7 +695,7 @@
       "gross_premium_page": 6,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "The 'Movement in prior year's provision' note (note 7) reports net (post-reinsurance) prior year releases of $8.0m; a gross prior year movement is not provided explicitly in that note. As required, the gross prior year movement was derived from the gross claims development triangle - which shows effectively no movement (gross prior year development ~0). Some cells in the printed triangle were not fully legible in the source extraction and have been set to null where unclear. Mapping of some internal class names (e.g., Political Risk, Political Violence) to the standard Lloyd's LOB list was approximate where no exact match exists.",
+      "data_quality_notes": "The 'Movement in prior year's provision' note (note 7) reports net (post-reinsurance) prior year releases of $8.0m; a gross prior year movement is not provided explicitly in that note. As required, the gross prior year movement was derived from the gross claims development triangle - which shows effectively no movement (gross prior year development ~0). Some cells in the printed triangle were not fully legible in the source extraction and have been set to null where unclear. Mapping of some internal class names (e.g., Political Risk, Political Violence) to the standard Lloyd's LOB list was approximate where no exact match exists. [RAG OVERRIDE: Model said PYD=0.0, RAG triangle computed -337.0. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
@@ -780,12 +848,66 @@
         "total_tokens": 49901,
         "cost_usd": 0.036837
       },
+      "_rag_triangle": {
+        "type": "gross",
+        "currency": "USD",
+        "units": "millions",
+        "underwriting_years": [
+          "2019",
+          "2020",
+          "2021",
+          "2022",
+          "2023"
+        ],
+        "development_rows": [
+          [
+            1414.7,
+            1285.8,
+            1271.6,
+            1059.1,
+            985.7
+          ],
+          [
+            974.3,
+            918.4,
+            975.0,
+            830.8,
+            null
+          ],
+          [
+            791.7,
+            946.2,
+            907.5,
+            null,
+            null
+          ],
+          [
+            902.8,
+            809.7,
+            null,
+            null,
+            null
+          ],
+          [
+            769.8,
+            null,
+            null,
+            null,
+            null
+          ]
+        ]
+      },
       "_adobe_lob": {
         "gross_premium_mix": [
           {
             "line_of_business": "Accident and health",
             "amount_gbp_m": 8.7,
             "percentage_of_total": 0.6
+          },
+          {
+            "line_of_business": "Motor",
+            "amount_gbp_m": 0.0,
+            "percentage_of_total": 0.0
           },
           {
             "line_of_business": "Marine, aviation & transport",
@@ -833,6 +955,10 @@
           {
             "line_of_business": "Accident and health",
             "amount_gbp_m": -3.3
+          },
+          {
+            "line_of_business": "Motor",
+            "amount_gbp_m": 0.0
           },
           {
             "line_of_business": "Marine, aviation & transport",

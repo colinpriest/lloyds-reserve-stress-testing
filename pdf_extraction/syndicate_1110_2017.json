@@ -1,5 +1,5 @@
 {
-  "extraction_timestamp": "2026-03-16T06:26:11.553373+00:00",
+  "extraction_timestamp": "2026-03-17T05:40:03.987204+00:00",
   "spec": {
     "prompt_version": "2.6",
     "field_definitions_version": "1.0",
@@ -74,12 +74,17 @@
           "line_of_business": "Casualty",
           "amount_gbp_m": 21.1,
           "percentage_of_total": 29.4
+        },
+        {
+          "line_of_business": "Other",
+          "amount_gbp_m": 0.0,
+          "percentage_of_total": 0.0
         }
       ],
       "gross_premium_page": 30,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The claims development triangle on page 25 does not explicitly show prior year development for the current reporting period in a way that can be directly summed for all prior years. The narrative on page 37 provides a net run-off figure and a gross direct business run-off figure, which is used for prior_year_development_gbp_m. The gross premium mix includes negative premiums for some lines of business, which is unusual but taken directly from the source. [CODE OVERRIDE: Model said PYD=-22.5, but code computed -1.845 from triangle (OVERRIDE from gemini-2.5-flash triangle). Using code value.]",
+      "data_quality_notes": "The claims development triangle on page 25 does not explicitly show prior year development for the current reporting period in a way that can be directly summed for all prior years. The narrative on page 37 provides a net run-off figure and a gross direct business run-off figure, which is used for prior_year_development_gbp_m. The gross premium mix includes negative premiums for some lines of business, which is unusual but taken directly from the source. [RAG OVERRIDE: Model said PYD=-22.5, RAG triangle computed -1.845. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -130,6 +135,43 @@
         "total_tokens": 23950,
         "cost_usd": 0.007656
       },
+      "_rag_triangle": {
+        "type": "gross",
+        "currency": "GBP",
+        "units": "thousands",
+        "underwriting_years": [
+          2014,
+          2015,
+          2016,
+          2017
+        ],
+        "development_rows": [
+          [
+            39707.0,
+            50277.0,
+            56508.0,
+            16403.0
+          ],
+          [
+            122383.0,
+            142274.0,
+            118827.0,
+            null
+          ],
+          [
+            137886.0,
+            151699.0,
+            null,
+            null
+          ],
+          [
+            126616.0,
+            null,
+            null,
+            null
+          ]
+        ]
+      },
       "_adobe_lob": {
         "gross_premium_mix": [
           {
@@ -171,6 +213,11 @@
             "line_of_business": "Casualty",
             "amount_gbp_m": 21.1,
             "percentage_of_total": 29.4
+          },
+          {
+            "line_of_business": "Other",
+            "amount_gbp_m": 0.0,
+            "percentage_of_total": 0.0
           }
         ],
         "gross_premiums_written_gbp_m": 71.8,
@@ -206,6 +253,10 @@
           {
             "line_of_business": "Casualty",
             "amount_gbp_m": -40.6
+          },
+          {
+            "line_of_business": "Other",
+            "amount_gbp_m": 0.0
           }
         ],
         "currency": "GBP",
@@ -293,12 +344,17 @@
           "line_of_business": "Casualty",
           "amount_gbp_m": 21.1,
           "percentage_of_total": 29.4
+        },
+        {
+          "line_of_business": "Other",
+          "amount_gbp_m": 0.0,
+          "percentage_of_total": 0.0
         }
       ],
       "gross_premium_page": 29,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior year development figure derived from explicit narrative ('surplus run-off amount of GBP 18.1m' and its components). Gross prior-year movement computed as release of GBP 22.5m on direct business offset by GBP 4.4m adverse on reinsurance accepted business (net release GBP 18.1m). Claims development triangle in the report is present but formatted in the PDF such that only the 'As at' row could be unambiguously parsed; triangle formatting ambiguity limits triangulation verification. [CODE OVERRIDE: Model said PYD=-18.1, but code computed -1.845 from triangle (OVERRIDE from gemini-2.5-flash triangle). Using code value.]",
+      "data_quality_notes": "Prior year development figure derived from explicit narrative ('surplus run-off amount of GBP 18.1m' and its components). Gross prior-year movement computed as release of GBP 22.5m on direct business offset by GBP 4.4m adverse on reinsurance accepted business (net release GBP 18.1m). Claims development triangle in the report is present but formatted in the PDF such that only the 'As at' row could be unambiguously parsed; triangle formatting ambiguity limits triangulation verification. [RAG OVERRIDE: Model said PYD=-18.1, RAG triangle computed -1.845. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -355,6 +411,43 @@
         "total_tokens": 34979,
         "cost_usd": 0.024395
       },
+      "_rag_triangle": {
+        "type": "gross",
+        "currency": "GBP",
+        "units": "thousands",
+        "underwriting_years": [
+          2014,
+          2015,
+          2016,
+          2017
+        ],
+        "development_rows": [
+          [
+            39707.0,
+            50277.0,
+            56508.0,
+            16403.0
+          ],
+          [
+            122383.0,
+            142274.0,
+            118827.0,
+            null
+          ],
+          [
+            137886.0,
+            151699.0,
+            null,
+            null
+          ],
+          [
+            126616.0,
+            null,
+            null,
+            null
+          ]
+        ]
+      },
       "_adobe_lob": {
         "gross_premium_mix": [
           {
@@ -396,6 +489,11 @@
             "line_of_business": "Casualty",
             "amount_gbp_m": 21.1,
             "percentage_of_total": 29.4
+          },
+          {
+            "line_of_business": "Other",
+            "amount_gbp_m": 0.0,
+            "percentage_of_total": 0.0
           }
         ],
         "gross_premiums_written_gbp_m": 71.8,
@@ -431,6 +529,10 @@
           {
             "line_of_business": "Casualty",
             "amount_gbp_m": -40.6
+          },
+          {
+            "line_of_business": "Other",
+            "amount_gbp_m": 0.0
           }
         ],
         "currency": "GBP",

@@ -16,6 +16,7 @@ Usage:
     python test_gemini.py --table-backend azure     # use Azure Document Intelligence (default)
     python test_gemini.py --table-backend nutrient  # use Nutrient.io
     python test_gemini.py --table-backend adobe     # use Adobe PDF Extract
+    python test_gemini.py --azure-paid              # paid S0 tier: all pages in one request
 
 LLM outputs are cached in pdf_extraction/llm_cache/ using a SHA-256 hash of
 (model_name, prompt_version, prompt_text, syndicate_num, report_year[, page_num]).
@@ -32,6 +33,7 @@ import hashlib
 import signal
 import tempfile
 import zipfile
+import requests
 from datetime import datetime, timezone
 from pathlib import Path
 from dotenv import load_dotenv
@@ -114,6 +116,7 @@ load_dotenv()
 # Table extraction backend (can be overridden with --table-backend)
 # Priority: azure (default) > nutrient > adobe
 TABLE_BACKEND = TableBackend.AZURE
+AZURE_PAID = False  # --azure-paid: send all relevant pages in one request (S0 tier)
 
 
 # ---------------------------------------------------------------------------
@@ -249,6 +252,156 @@ TOLERANCE_RULES_VERSION = "1.0"
 # LLM output caching
 # ---------------------------------------------------------------------------
 LLM_CACHE_DIR = Path("pdf_extraction/llm_cache")
+
+# ---------------------------------------------------------------------------
+# Syndicate inception year tracking
+# ---------------------------------------------------------------------------
+INCEPTION_YEARS_FILE = Path("pdf_extraction/syndicate_inception_years.json")
+
+
+def _load_inception_years() -> dict:
+    """Load syndicate inception years from JSON file."""
+    if INCEPTION_YEARS_FILE.exists():
+        with open(INCEPTION_YEARS_FILE) as f:
+            data = json.load(f)
+        # Strip _meta key, return {int_syndicate: int_year}
+        return {int(k): int(v) for k, v in data.items() if k != "_meta"}
+    return {}
+
+
+def _save_inception_years(inception: dict) -> None:
+    """Save syndicate inception years to JSON file, preserving _meta."""
+    existing = {}
+    if INCEPTION_YEARS_FILE.exists():
+        with open(INCEPTION_YEARS_FILE) as f:
+            existing = json.load(f)
+    meta = existing.get("_meta", {
+        "description": "First underwriting year for each Lloyd's syndicate. "
+                       "Used to skip reports from the first two years of operation "
+                       "where prior year development cannot be meaningfully computed.",
+        "source": "Auto-populated from claims development triangles in extraction JSONs. "
+                  "Unknown syndicates are looked up via Perplexity API.",
+        "last_updated": datetime.now().strftime("%Y-%m-%d"),
+    })
+    meta["last_updated"] = datetime.now().strftime("%Y-%m-%d")
+    output = {"_meta": meta}
+    for s in sorted(inception.keys()):
+        output[str(s)] = inception[s]
+    INCEPTION_YEARS_FILE.parent.mkdir(parents=True, exist_ok=True)
+    with open(INCEPTION_YEARS_FILE, "w") as f:
+        json.dump(output, f, indent=2)
+
+
+def _lookup_inception_year_perplexity(syndicate_num: int) -> int | None:
+    """Query Perplexity API for the first underwriting year of a syndicate.
+
+    Returns the year as int, or None if lookup fails.
+    """
+    api_key = os.getenv("PERPLEXITY_API_KEY")
+    if not api_key:
+        print(f"  WARNING: PERPLEXITY_API_KEY not set - cannot look up inception year for syndicate {syndicate_num}")
+        return None
+
+    query = (
+        f"What year did Lloyd's of London syndicate {syndicate_num} first begin "
+        f"underwriting insurance? I need the first year they wrote any business, "
+        f"anywhere in the world. Return ONLY the four-digit year number, nothing else."
+    )
+
+    headers = {
+        "Authorization": f"Bearer {api_key}",
+        "Content-Type": "application/json",
+    }
+    payload = {
+        "model": "sonar",
+        "messages": [
+            {"role": "system", "content": "You are a research assistant. Answer with ONLY a four-digit year. No other text."},
+            {"role": "user", "content": query},
+        ],
+        "temperature": 0.1,
+    }
+
+    try:
+        response = requests.post(
+            "https://api.perplexity.ai/chat/completions",
+            headers=headers,
+            json=payload,
+            timeout=30,
+        )
+        response.raise_for_status()
+        result = response.json()
+        answer = result["choices"][0]["message"]["content"].strip()
+        # Extract 4-digit year from response
+        year_match = re.search(r"\b(19\d{2}|20\d{2})\b", answer)
+        if year_match:
+            year = int(year_match.group(1))
+            print(f"  Perplexity: Syndicate {syndicate_num} first underwrote in {year}")
+            return year
+        else:
+            print(f"  WARNING: Could not parse year from Perplexity response: {answer!r}")
+            return None
+    except Exception as e:
+        print(f"  WARNING: Perplexity lookup failed for syndicate {syndicate_num}: {e}")
+        return None
+
+
+def _earliest_report_year(syndicate_num: int) -> int | None:
+    """Find the earliest report year we have on disk for a syndicate."""
+    pdf_dir = Path("syndicate_reports/pdfs")
+    if not pdf_dir.exists():
+        return None
+    earliest = None
+    for p in pdf_dir.glob(f"syndicate_{syndicate_num}_*.pdf"):
+        try:
+            year = int(p.stem.split("_")[2])
+            if earliest is None or year < earliest:
+                earliest = year
+        except (IndexError, ValueError):
+            continue
+    return earliest
+
+
+def get_inception_year(syndicate_num: int, inception_cache: dict) -> int | None:
+    """Get the first underwriting year for a syndicate.
+
+    Checks local cache first, then queries Perplexity if missing.
+    Stores result back in cache and saves to disk.
+
+    Sanity check: if Perplexity returns a year later than our earliest
+    report for this syndicate, the answer is clearly wrong — a syndicate
+    can't have reports before it started underwriting. In that case,
+    fall back to earliest_report_year - 2 (conservative estimate).
+    """
+    if syndicate_num in inception_cache:
+        return inception_cache[syndicate_num]
+
+    # Not in cache - query Perplexity
+    year = _lookup_inception_year_perplexity(syndicate_num)
+    if year is not None:
+        earliest_report = _earliest_report_year(syndicate_num)
+        if earliest_report is not None and year > earliest_report:
+            fallback = earliest_report - 2
+            print(f"  WARNING: Perplexity returned inception={year} for syndicate "
+                  f"{syndicate_num}, but we have a report from {earliest_report}. "
+                  f"Using conservative fallback: {fallback}")
+            year = fallback
+        inception_cache[syndicate_num] = year
+        _save_inception_years(inception_cache)
+    return year
+
+
+def is_early_year_syndicate(syndicate_num: int, report_year: int,
+                            inception_cache: dict) -> tuple[bool, int | None]:
+    """Check if a report is from the first two underwriting years of a syndicate.
+
+    Returns (should_skip, inception_year).
+    A report should be skipped when report_year < inception_year + 2,
+    because fewer than 3 development years are available for PYD computation.
+    """
+    inception_year = get_inception_year(syndicate_num, inception_cache)
+    if inception_year is None:
+        return False, None  # Can't determine - don't skip
+    return report_year < inception_year + 2, inception_year
 
 
 def _llm_cache_key(model: str, prompt_text: str, syndicate_num: int,
@@ -1796,7 +1949,8 @@ def extract_pyd_from_relevant_pages(pdf_path, report_year):
 
     # Step 1: Table extraction (deterministic, best quality)
     backend_name = TABLE_BACKEND.value.capitalize()
-    extraction = extract_tables(pdf_path, report_year, backend=TABLE_BACKEND)
+    extraction = extract_tables(pdf_path, report_year, backend=TABLE_BACKEND,
+                                azure_paid=AZURE_PAID)
 
     if extraction.triangle:
         tri_data = extraction.triangle.to_dict()
@@ -1929,10 +2083,18 @@ def _validate_triangle_structure(uw_years, rows, report_year):
 
     # Expected pattern: column 0 (oldest) should have most non-nulls,
     # each subsequent column should have one fewer.
+    # For run-off syndicates (max UW year < report year), extra development
+    # rows shift all columns up by extra_dev_years.
+    try:
+        max_uw = max(int(y) for y in uw_years)
+    except (ValueError, TypeError):
+        max_uw = report_year
+    extra_dev_years = max(0, report_year - max_uw)
+
     matches = 0
     checks = 0
     for col_idx in range(n_cols):
-        expected_filled = min(n_rows, n_cols - col_idx)
+        expected_filled = min(n_rows, n_cols - col_idx + extra_dev_years)
         actual_filled = sum(1 for r in range(n_rows) if rows[r][col_idx] is not None)
         checks += 1
         # Allow ±1 tolerance (for summary rows or slight variations)
@@ -1975,34 +2137,67 @@ def compute_pyd_from_triangle(triangle_data, report_year):
         max_uw = max(int(y) for y in uw_years)
     except (ValueError, TypeError):
         return None, "cannot parse UW years"
-    if max_uw > report_year or max_uw < report_year - 2:
+    if max_uw > report_year or max_uw < report_year - 5:
         return None, (f"triangle max UW year ({max_uw}) outside range for report year ({report_year}) "
                      f"— likely misaligned extraction")
 
     n_cols = len(uw_years)
+
+    # Strip trailing all-null rows (development periods with no data yet,
+    # e.g. "After five years" when triangle only covers 4 UW years)
+    while rows and all(v is None for v in rows[-1]):
+        rows.pop()
+
     n_rows = len(rows)
 
-    # Validate: number of rows should roughly equal number of columns.
-    # For a standard NxN triangle, n_rows ≈ n_cols.
-    # For run-off syndicates (max UW year < report year), extra development
-    # rows exist because claims continue developing after new writing stops.
-    extra_dev_years = report_year - max_uw  # 0 for active, 1+ for run-off
-    expected_max_rows = n_cols + extra_dev_years + 1
+    # Validate: number of rows should be consistent with the development span.
+    # The oldest UW year column can have up to (report_year - min_uw_year + 1)
+    # development rows.  For triangles with year gaps (e.g. [2013..2018, 2022])
+    # the row count depends on the span, not the column count.
+    try:
+        min_uw = min(int(y) for y in uw_years)
+    except (ValueError, TypeError):
+        min_uw = max_uw
+    expected_max_rows = report_year - min_uw + 2  # +2 for tolerance
     if n_rows > expected_max_rows:
-        return None, (f"triangle has {n_rows} rows but only {n_cols} columns "
-                     f"— likely includes summary rows or is misaligned")
+        return None, (f"triangle has {n_rows} rows but span is only "
+                     f"{min_uw}-{report_year} — likely includes summary rows or is misaligned")
 
-    # Validate: oldest column should have the most filled rows.
-    # In a proper NxN triangle, column 0 should have ~N non-null values.
+    # Validate: oldest column should have at least some filled rows.
+    # In a proper NxN triangle, column 0 should have ~N non-null values,
+    # but run-off syndicates may have dashes ("-" = zero claims) in the
+    # oldest column after the first development period.  Require at least
+    # 1 filled value (a completely empty oldest column signals misalignment).
     if n_rows >= 2 and n_cols >= 2:
         col0_filled = sum(1 for r in range(n_rows) if rows[r][0] is not None)
-        expected_col0 = min(n_rows, n_cols)
-        if col0_filled < expected_col0:
-            return None, (f"oldest column has {col0_filled} filled rows, "
-                         f"expected {expected_col0} — likely shifted/misaligned")
+        if col0_filled < 1:
+            return None, (f"oldest column has 0 filled rows "
+                         f"— likely shifted/misaligned")
 
     if n_rows < 2:
         return None, "triangle has fewer than 2 development rows"
+
+    # Validate: detect year-like values contaminating data rows.
+    # When a segmental analysis table is misidentified as a triangle, the
+    # development_rows contain calendar year numbers (e.g. 2001, 2013, 2014)
+    # alongside actual claims amounts.  Real claims triangles never have
+    # values in the 1980-2030 range mixed with small amounts.
+    year_like_count = 0
+    total_vals = 0
+    for r in range(n_rows):
+        for c in range(n_cols):
+            val = rows[r][c] if isinstance(rows[r], list) and c < len(rows[r]) else None
+            if val is not None:
+                try:
+                    fv = float(val)
+                    total_vals += 1
+                    if 1980 <= fv <= 2030 and fv == int(fv):
+                        year_like_count += 1
+                except (ValueError, TypeError):
+                    pass
+    if total_vals > 0 and year_like_count / total_vals > 0.15:
+        return None, (f"triangle has {year_like_count}/{total_vals} values that look like "
+                     f"calendar years (1980-2030) — likely a misidentified segmental table")
 
     # Validate row lengths — pad short rows with None
     for i in range(n_rows):
@@ -2123,7 +2318,9 @@ def compute_pyd_from_triangle(triangle_data, report_year):
     #   Full integers: 1,000,000 - 500,000,000  (individual pounds)
     #   Thousands:     1,000 - 500,000           (£000)
     #   Millions:      1 - 500                   (£m)
-    if units == "millions":
+    if units not in ("thousands", "full", "percentage"):
+        # Auto-detect units from value magnitudes when header detection was ambiguous
+        # or returned an unknown unit string (e.g. "units").
         sample_vals = [rows[r][c] for r in range(min(2, n_rows)) for c in range(n_cols)
                        if rows[r][c] is not None and isinstance(rows[r][c], (int, float))]
         if sample_vals:
@@ -2134,6 +2331,8 @@ def compute_pyd_from_triangle(triangle_data, report_year):
             elif max_val > 10_000:
                 units = "thousands"
                 details.append(f"  (auto-detected: values up to {max_val:,.0f} — treating as thousands)")
+            else:
+                units = "millions"
 
     if units == "full":
         total_pyd = round(total_pyd / 1_000_000, 3)
@@ -2153,12 +2352,20 @@ def _apply_triangle_pyd(result, computed_pyd, model_name, details, reason):
     """Apply a code-computed PYD value to a result dict, updating direction and notes."""
     result = dict(result)
     old_pyd = result.get("prior_year_development_gbp_m")
+    # Sanity check BEFORE applying: releases can't exceed 100% of opening
+    # reserves (reserves can't go negative).  Strengthenings CAN exceed 100%
+    # in extreme scenarios, so only reject negative values below -100%.
+    if result.get("opening_reserves_gbp_m"):
+        pyd_pct = round(computed_pyd / result["opening_reserves_gbp_m"] * 100, 2)
+        if pyd_pct < -100:
+            msg = (f"  [{model_name}] Triangle PYD ratio {pyd_pct:.1f}% < -100% — "
+                   f"likely unit mismatch or misaligned triangle. Discarding.")
+            return result, msg
     result["prior_year_development_gbp_m"] = computed_pyd
-    result["prior_year_development_pct"] = (
-        round(computed_pyd / result["opening_reserves_gbp_m"] * 100, 2)
-        if result.get("opening_reserves_gbp_m")
-        else None
-    )
+    pyd_pct = None
+    if result.get("opening_reserves_gbp_m"):
+        pyd_pct = round(computed_pyd / result["opening_reserves_gbp_m"] * 100, 2)
+    result["prior_year_development_pct"] = pyd_pct
     if computed_pyd < 0:
         result["direction"] = "release"
     elif computed_pyd > 0:
@@ -2236,14 +2443,16 @@ def verify_triangles(result_gemini, result_openai, gemini_name, openai_name, rep
             pass
 
     def _passes_sanity(pyd_val, struct_score):
-        """PYD should not exceed 50% of opening reserves, and structure should be OK."""
+        """Releases must not exceed 100% of opening reserves; structure must be OK."""
         if pyd_val is None:
             return False
         if struct_score < 0.5:
             return False
         if opening and opening > 0:
-            pyd_pct = abs(pyd_val) / opening * 100
-            if pyd_pct > 50:
+            # Releases can't exceed 100% (reserves can't go negative).
+            # Strengthenings CAN exceed 100% in extreme scenarios.
+            pyd_pct = pyd_val / opening * 100
+            if pyd_pct < -100:
                 return False
         return True
 
@@ -2784,13 +2993,43 @@ def write_run_manifest(run_stats):
     print(f"  Run manifest updated: {manifest_path} ({len(manifest['runs'])} runs total)")
 
 
-def process_one_report(report_path):
+def process_one_report(report_path, inception_cache=None):
     """Process a single report with both models.
 
     Returns (output_data, passed, discrepancies, hard_failures) or
     None if the report should be skipped (e.g. first-year syndicate).
     """
+    if inception_cache is None:
+        inception_cache = _load_inception_years()
+
     syndicate_num, report_year = parse_report_filename(report_path)
+
+    # Early check: skip reports from the first two underwriting years
+    # of a syndicate (fewer than 3 development years available for PYD).
+    # This runs BEFORE any API calls to save cost.
+    should_skip, inception_year = is_early_year_syndicate(
+        syndicate_num, report_year, inception_cache
+    )
+    if should_skip:
+        early_year_output = {
+            "extraction_timestamp": datetime.now(timezone.utc).isoformat(),
+            "spec": {
+                "prompt_version": PROMPT_VERSION,
+                "field_definitions_version": FIELD_DEFINITIONS_VERSION,
+                "tolerance_rules_version": TOLERANCE_RULES_VERSION,
+            },
+            "source_file": str(report_path),
+            "first_year_syndicate": True,
+            "reason": (
+                f"Syndicate {syndicate_num} began underwriting in {inception_year}; "
+                f"report year {report_year} is within the first two underwriting years "
+                f"- insufficient development history for prior year development analysis"
+            ),
+            "syndicate": syndicate_num,
+            "year": report_year,
+            "inception_year": inception_year,
+        }
+        return "first_year", early_year_output
 
     # Convert HTML to PDF if needed
     actual_path = report_path
@@ -2805,6 +3044,12 @@ def process_one_report(report_path):
     # before spending money on LLM calls
     rag_result = extract_pyd_from_relevant_pages(actual_path, report_year)
     if rag_result.get("first_year_syndicate"):
+        # Triangle has <=2 UW years — update inception cache if this is new info
+        if syndicate_num not in inception_cache:
+            # Conservative estimate: first UW year = report_year - 1
+            inception_cache[syndicate_num] = report_year - 1
+            _save_inception_years(inception_cache)
+            print(f"  Inception year for syndicate {syndicate_num} estimated as {report_year - 1} (from triangle)")
         # Build minimal audit-trail JSON for first-year syndicates
         first_year_output = {
             "extraction_timestamp": datetime.now(timezone.utc).isoformat(),
@@ -2864,47 +3109,82 @@ def process_one_report(report_path):
         # RAG found a valid triangle PYD — use it as ground truth
         rag_pyd = rag_result["pyd"]
         rag_details = rag_result["pyd_details"]
-        print(f"  [RAG] Triangle PYD: {rag_pyd:+.3f}m")
 
-        # Apply to both models
-        for result, model_name in [
-            (result_gemini, GEMINI_MODEL),
-            (result_openai, OPENAI_MODEL),
-        ]:
-            model_pyd = result.get("prior_year_development_gbp_m")
-            if model_pyd is None:
-                result["prior_year_development_gbp_m"] = rag_pyd
-                if result.get("opening_reserves_gbp_m"):
-                    result["prior_year_development_pct"] = round(
-                        rag_pyd / result["opening_reserves_gbp_m"] * 100, 2
-                    )
-                result["direction"] = "release" if rag_pyd < 0 else "strengthening" if rag_pyd > 0 else "flat"
-                print(f"  [{model_name}] PYD filled from RAG triangle: {rag_pyd:+.3f}m")
-            else:
-                try:
-                    if abs(float(model_pyd) - rag_pyd) >= 0.5:
-                        old_pyd = model_pyd
+        # Sanity check: RAG PYD should be reasonable relative to opening reserves.
+        # If |PYD%| > 100%, the triangle is likely garbled (e.g. segmental analysis
+        # table misidentified as a claims triangle with year values in data rows).
+        rag_sane = True
+        avg_opening = None
+        for r in [result_gemini, result_openai]:
+            op = r.get("opening_reserves_gbp_m")
+            if op and op > 0:
+                avg_opening = op
+                break
+        if avg_opening and avg_opening > 0:
+            rag_pyd_pct = rag_pyd / avg_opening * 100
+            # Releases can't exceed 100% (reserves can't go negative).
+            # Strengthenings CAN exceed 100% in extreme scenarios.
+            if rag_pyd_pct < -100:
+                rag_sane = False
+                print(f"  [RAG] Triangle PYD {rag_pyd:+.3f}m ({rag_pyd_pct:.1f}% of opening) "
+                      f"< -100% — likely misidentified table. Discarding RAG PYD.")
+
+        if rag_sane:
+            print(f"  [RAG] Triangle PYD: {rag_pyd:+.3f}m")
+
+            # Apply to both models
+            for result, model_name in [
+                (result_gemini, GEMINI_MODEL),
+                (result_openai, OPENAI_MODEL),
+            ]:
+                model_pyd = result.get("prior_year_development_gbp_m")
+                if model_pyd is None:
+                    result["prior_year_development_gbp_m"] = rag_pyd
+                    if result.get("opening_reserves_gbp_m"):
+                        result["prior_year_development_pct"] = round(
+                            rag_pyd / result["opening_reserves_gbp_m"] * 100, 2
+                        )
+                    result["direction"] = "release" if rag_pyd < 0 else "strengthening" if rag_pyd > 0 else "flat"
+                    print(f"  [{model_name}] PYD filled from RAG triangle: {rag_pyd:+.3f}m")
+                else:
+                    try:
+                        old_pyd = float(model_pyd)
+                        diff = abs(old_pyd - rag_pyd)
+                        # Always use RAG triangle value — it's computed
+                        # deterministically from the claims development table
+                        # and is authoritative over LLM-extracted values
+                        # (which may come from wrong sources like net movements
+                        # or P&L gross change in provision).
                         result["prior_year_development_gbp_m"] = rag_pyd
                         if result.get("opening_reserves_gbp_m"):
                             result["prior_year_development_pct"] = round(
                                 rag_pyd / result["opening_reserves_gbp_m"] * 100, 2
                             )
                         result["direction"] = "release" if rag_pyd < 0 else "strengthening" if rag_pyd > 0 else "flat"
-                        old_notes = result.get("data_quality_notes", "") or ""
-                        result["data_quality_notes"] = (
-                            f"{old_notes} [RAG OVERRIDE: Model said PYD={old_pyd}, "
-                            f"RAG triangle computed {rag_pyd}. Using RAG value.]"
-                        )
-                        print(f"  [{model_name}] PYD overridden by RAG triangle: {old_pyd} → {rag_pyd:+.3f}m")
-                    else:
-                        print(f"  [{model_name}] PYD confirmed by RAG triangle: {model_pyd}")
-                except (ValueError, TypeError):
-                    pass
+                        if diff >= 0.5:
+                            old_notes = result.get("data_quality_notes", "") or ""
+                            result["data_quality_notes"] = (
+                                f"{old_notes} [RAG OVERRIDE: Model said PYD={old_pyd}, "
+                                f"RAG triangle computed {rag_pyd}. Using RAG value.]"
+                            )
+                            print(f"  [{model_name}] PYD overridden by RAG triangle: {old_pyd} → {rag_pyd:+.3f}m")
+                        else:
+                            print(f"  [{model_name}] PYD confirmed by RAG triangle: {model_pyd} → {rag_pyd:+.3f}m")
+                    except (ValueError, TypeError):
+                        pass
 
-        # Store RAG triangle in both results for reference
+        # Store RAG triangle in both results for reference (even if PYD was rejected)
         if rag_result["triangle"]:
             result_gemini["_rag_triangle"] = rag_result["triangle"]
             result_openai["_rag_triangle"] = rag_result["triangle"]
+
+        if not rag_sane:
+            # RAG PYD was insane — fall back to LLM-extracted triangles
+            result_gemini, result_openai, tri_messages = verify_triangles(
+                result_gemini, result_openai, GEMINI_MODEL, OPENAI_MODEL, report_year
+            )
+            for msg in tri_messages:
+                print(msg)
     else:
         # No triangle from RAG — fall back to LLM-extracted triangles
         result_gemini, result_openai, tri_messages = verify_triangles(
@@ -3025,6 +3305,11 @@ if __name__ == "__main__":
             break
     print(f"Table extraction backend: {TABLE_BACKEND.value}")
 
+    # --azure-paid flag: send all relevant pages in one API request (paid S0 tier)
+    if "--azure-paid" in sys.argv:
+        AZURE_PAID = True
+        print("Azure mode: paid (S0 tier) — all relevant pages in one request")
+
     # --single flag: process only the named report (e.g. --single syndicate_1856_2024)
     single_arg = None
     for idx, arg in enumerate(sys.argv):
@@ -3077,6 +3362,14 @@ if __name__ == "__main__":
     # Enable Ctrl+C to interrupt blocking API calls on Windows
     signal.signal(signal.SIGINT, signal.default_int_handler)
 
+    # Pre-load logs so Ctrl+C handler can always save them
+    dis_log = load_disagreement_log()
+    rej_log = load_rejection_log()
+
+    # Load syndicate inception years cache (shared across all reports)
+    inception_cache = _load_inception_years()
+    print(f"Loaded inception years for {len(inception_cache)} syndicates")
+
     for i, report_path in enumerate(to_process, 1):
         syndicate_num, report_year = parse_report_filename(report_path)
         print(f"\n{'=' * 70}")
@@ -3084,7 +3377,7 @@ if __name__ == "__main__":
         print(f"{'=' * 70}")
 
         try:
-            result = process_one_report(report_path)
+            result = process_one_report(report_path, inception_cache)
             if isinstance(result, tuple) and len(result) == 2 and result[0] == "first_year":
                 # First-year syndicate — write audit-trail JSON and skip further processing
                 first_year_data = result[1]

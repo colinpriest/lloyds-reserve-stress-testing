@@ -1,5 +1,5 @@
 {
-  "extraction_timestamp": "2026-03-16T09:19:24.861071+00:00",
+  "extraction_timestamp": "2026-03-17T05:49:59.923085+00:00",
   "spec": {
     "prompt_version": "2.6",
     "field_definitions_version": "1.0",
@@ -13,9 +13,9 @@
       "opening_reserves_gbp_m": 822.7,
       "opening_reserves_page": 17,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": -85.8,
-      "prior_year_development_pct": null,
-      "direction": "release",
+      "prior_year_development_gbp_m": 49.5,
+      "prior_year_development_pct": 6.02,
+      "direction": "strengthening",
       "prior_year_movement_page": 23,
       "prior_year_movement_confidence": 1.0,
       "exact_reserve_text": "There was a release from the prior year net provision for claims of GBP 85.8m (2013: GBP 93.5m) arising from a number of classes.",
@@ -137,6 +137,56 @@
         "output_tokens": 1174,
         "total_tokens": 12783,
         "cost_usd": 0.005816
+      },
+      "data_quality_notes": " [RAG OVERRIDE: Model said PYD=-85.8, RAG triangle computed 49.5. Using RAG value.]",
+      "_rag_triangle": {
+        "type": "gross",
+        "currency": "GBP",
+        "units": "millions",
+        "underwriting_years": [
+          "2010",
+          "2011",
+          "2012",
+          "2013",
+          "2014"
+        ],
+        "development_rows": [
+          [
+            48.9,
+            42.6,
+            51.5,
+            63.4,
+            55.1
+          ],
+          [
+            40.8,
+            38.0,
+            39.5,
+            35.6,
+            null
+          ],
+          [
+            35.0,
+            89.7,
+            80.6,
+            null,
+            null
+          ],
+          [
+            91.0,
+            99.0,
+            null,
+            null,
+            null
+          ],
+          [
+            90.1,
+            null,
+            null,
+            null,
+            null
+          ]
+        ]
       },
       "gross_premium_mix": [
         {
@@ -340,9 +390,9 @@
       "opening_reserves_gbp_m": 822.7,
       "opening_reserves_page": 14,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": null,
-      "prior_year_development_pct": null,
-      "direction": "release",
+      "prior_year_development_gbp_m": 49.5,
+      "prior_year_development_pct": 6.02,
+      "direction": "strengthening",
       "prior_year_movement_page": 23,
       "prior_year_movement_confidence": 0.0,
       "exact_reserve_text": "There has been a reassessment of the net provision for claims outstanding held at the previous year end. The release in 2014 amounted to GBP 85.8m (2013: GBP 93.5m), attributable to the following classes of business:",
@@ -545,6 +595,55 @@
         "total_tokens": 39243,
         "cost_usd": 0.020185
       },
+      "_rag_triangle": {
+        "type": "gross",
+        "currency": "GBP",
+        "units": "millions",
+        "underwriting_years": [
+          "2010",
+          "2011",
+          "2012",
+          "2013",
+          "2014"
+        ],
+        "development_rows": [
+          [
+            48.9,
+            42.6,
+            51.5,
+            63.4,
+            55.1
+          ],
+          [
+            40.8,
+            38.0,
+            39.5,
+            35.6,
+            null
+          ],
+          [
+            35.0,
+            89.7,
+            80.6,
+            null,
+            null
+          ],
+          [
+            91.0,
+            99.0,
+            null,
+            null,
+            null
+          ],
+          [
+            90.1,
+            null,
+            null,
+            null,
+            null
+          ]
+        ]
+      },
       "_adobe_lob": {
         "gross_premium_mix": [
           {
@@ -677,21 +776,15 @@
   "total_tokens": 52026,
   "validation": {
     "passed": false,
-    "total_discrepancies": 28,
+    "total_discrepancies": 27,
     "within_tolerance": 26,
-    "hard_failures": 2,
+    "hard_failures": 1,
     "hard_failure_details": [
       {
         "field": "currency",
         "type": "value_mismatch",
         "gemini-2.5-flash": "<MISSING>",
         "gpt-5-mini": "GBP"
-      },
-      {
-        "field": "prior_year_development_gbp_m",
-        "type": "value_mismatch",
-        "gemini-2.5-flash": -85.8,
-        "gpt-5-mini": null
       }
     ]
   }
