@@ -1,43 +1,282 @@
 {
-  "extraction_timestamp": "2026-03-17T13:19:27.563177+00:00",
+  "extraction_timestamp": "2026-03-18T11:10:33.516211+00:00",
   "spec": {
-    "prompt_version": "2.6",
+    "prompt_version": "2.10",
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
   "source_file": "syndicate_reports\\pdfs\\syndicate_1945_2014.pdf",
-  "no_triangle_data": true,
-  "excluded": true,
-  "exclusion_reason": "No claims development triangle or reserve movement text found in report - recommend non-inclusion in analysis",
-  "syndicate": 1945,
-  "year": 2014,
-  "gross_premium_mix": [
-    {
-      "line_of_business": "Accident and Health",
-      "amount_gbp_m": 11.6,
-      "percentage_of_total": 17.4
+  "models": {
+    "gemini-2.5-flash": {
+      "syndicate": 1945,
+      "year": 2014,
+      "opening_reserves_gbp_m": 25.444,
+      "opening_reserves_page": 6,
+      "opening_reserves_confidence": 1.0,
+      "prior_year_development_gbp_m": -4.7,
+      "prior_year_development_pct": -18.47,
+      "direction": "release",
+      "prior_year_movement_page": 10,
+      "prior_year_movement_confidence": 1.0,
+      "exact_reserve_text": "As a result of favourable experience during 2014, there has been a release of GBP 4.7m of prior year reserves.",
+      "primary_causes": [
+        "Favorable claims development"
+      ],
+      "specific_events": [],
+      "specific_years_affected": [],
+      "prior_year_events": [],
+      "named_events": [],
+      "standardized_narrative": "The syndicate experienced a favorable prior year development in 2014, resulting in a release of GBP 4.7 million of gross prior year reserves due to favorable claims experience.",
+      "raw_causal_phrases": [
+        "favourable experience"
+      ],
+      "lob_movements": [],
+      "gross_premiums_written_gbp_m": 66.6,
+      "gross_premium_mix": [
+        {
+          "line_of_business": "Accident and Health",
+          "amount_gbp_m": 11.6,
+          "percentage_of_total": 17.4
+        },
+        {
+          "line_of_business": "Marine",
+          "amount_gbp_m": 1.3,
+          "percentage_of_total": 2.0
+        },
+        {
+          "line_of_business": "Fire and other damage to property",
+          "amount_gbp_m": 9.9,
+          "percentage_of_total": 14.9
+        },
+        {
+          "line_of_business": "Pecuniary loss",
+          "amount_gbp_m": 5.5,
+          "percentage_of_total": 8.3
+        },
+        {
+          "line_of_business": "Reinsurance",
+          "amount_gbp_m": 38.3,
+          "percentage_of_total": 57.5
+        }
+      ],
+      "gross_premium_page": 9,
+      "gross_premium_confidence": 1.0,
+      "currency": "GBP",
+      "data_quality_notes": "",
+      "_claims_triangle": {
+        "type": "none",
+        "currency": null,
+        "units": null,
+        "page": null,
+        "underwriting_years": [],
+        "development_rows": []
+      },
+      "source_type": "syndicate",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_1945_2014_llm.pdf",
+      "content_hash": "59e38a652303d67f96aa0541ed1f7bae95e6133386208b014de3db7b818a66a5",
+      "standardized_at": "2026-03-18T11:09:53.106124+00:00",
+      "standardization_model": "gemini-2.5-flash",
+      "_extraction_meta": {
+        "model": "gemini-2.5-flash",
+        "input_tokens": 8573,
+        "output_tokens": 722,
+        "total_tokens": 11591,
+        "cost_usd": 0.004377
+      },
+      "_adobe_lob": {
+        "gross_premium_mix": [
+          {
+            "line_of_business": "Accident and Health",
+            "amount_gbp_m": 11.6,
+            "percentage_of_total": 17.4
+          },
+          {
+            "line_of_business": "Marine",
+            "amount_gbp_m": 1.3,
+            "percentage_of_total": 2.0
+          },
+          {
+            "line_of_business": "Fire and other damage to property",
+            "amount_gbp_m": 9.9,
+            "percentage_of_total": 14.9
+          },
+          {
+            "line_of_business": "Pecuniary loss",
+            "amount_gbp_m": 5.5,
+            "percentage_of_total": 8.3
+          },
+          {
+            "line_of_business": "Reinsurance",
+            "amount_gbp_m": 38.3,
+            "percentage_of_total": 57.5
+          }
+        ],
+        "gross_premiums_written_gbp_m": 66.6,
+        "claims_incurred_by_lob": [
+          {
+            "line_of_business": "Accident and Health",
+            "amount_gbp_m": -10.4
+          },
+          {
+            "line_of_business": "Marine",
+            "amount_gbp_m": -1.2
+          },
+          {
+            "line_of_business": "Fire and other damage to property",
+            "amount_gbp_m": -4.4
+          },
+          {
+            "line_of_business": "Pecuniary loss",
+            "amount_gbp_m": -1.9
+          },
+          {
+            "line_of_business": "Reinsurance",
+            "amount_gbp_m": -12.5
+          }
+        ],
+        "currency": "GBP",
+        "method": "azure"
+      }
     },
-    {
-      "line_of_business": "Marine",
-      "amount_gbp_m": 1.3,
-      "percentage_of_total": 2.0
-    },
-    {
-      "line_of_business": "Fire and other damage to property",
-      "amount_gbp_m": 9.9,
-      "percentage_of_total": 14.9
-    },
-    {
-      "line_of_business": "Pecuniary loss",
-      "amount_gbp_m": 5.5,
-      "percentage_of_total": 8.3
-    },
-    {
-      "line_of_business": "Reinsurance",
-      "amount_gbp_m": 38.3,
-      "percentage_of_total": 57.5
+    "gpt-5-mini": {
+      "syndicate": 1945,
+      "year": 2014,
+      "opening_reserves_gbp_m": 25.444,
+      "opening_reserves_page": 15,
+      "opening_reserves_confidence": 1.0,
+      "prior_year_development_gbp_m": -4.7,
+      "prior_year_development_pct": -18.47,
+      "direction": "release",
+      "prior_year_movement_page": 21,
+      "prior_year_movement_confidence": 1.0,
+      "exact_reserve_text": "As a result of favourable experience during 2014, there has been a release of GBP 4.7m of prior year reserves.",
+      "primary_causes": [
+        "Favorable claims development"
+      ],
+      "specific_events": [],
+      "specific_years_affected": [],
+      "prior_year_events": [],
+      "named_events": [],
+      "standardized_narrative": "Opening gross claims outstanding at 1 January 2014 were GBP 25.444m. During 2014 the syndicate recorded a release of prior year claims reserves of GBP 4.7m due to favourable claims experience. No specific named catastrophe events or line-of-business specific reserve movements are disclosed.",
+      "raw_causal_phrases": [
+        "As a result of favourable experience during 2014, there has been a release of GBP 4.7m of prior year reserves."
+      ],
+      "lob_movements": [],
+      "gross_premiums_written_gbp_m": 66.6,
+      "gross_premium_mix": [
+        {
+          "line_of_business": "Accident and Health",
+          "amount_gbp_m": 11.6,
+          "percentage_of_total": 17.4
+        },
+        {
+          "line_of_business": "Marine",
+          "amount_gbp_m": 1.3,
+          "percentage_of_total": 2.0
+        },
+        {
+          "line_of_business": "Fire and other damage to property",
+          "amount_gbp_m": 9.9,
+          "percentage_of_total": 14.9
+        },
+        {
+          "line_of_business": "Pecuniary loss",
+          "amount_gbp_m": 5.5,
+          "percentage_of_total": 8.3
+        },
+        {
+          "line_of_business": "Reinsurance",
+          "amount_gbp_m": 38.3,
+          "percentage_of_total": 57.5
+        }
+      ],
+      "gross_premium_page": 20,
+      "gross_premium_confidence": 1.0,
+      "currency": "GBP",
+      "data_quality_notes": "Prior year movement (GBP 4.7m release) is stated in the Claims Outstanding note as a narrative sentence; no tabulated 'movement in prior year provision' with gross column was provided. No claims development triangle or LOB-specific PYD amounts are present. All monetary values in the report are presented in GBP '000.",
+      "_claims_triangle": {
+        "type": "none",
+        "currency": "GBP",
+        "units": "thousands",
+        "page": null,
+        "underwriting_years": [],
+        "development_rows": []
+      },
+      "source_type": "syndicate",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_1945_2014_llm.pdf",
+      "content_hash": "59e38a652303d67f96aa0541ed1f7bae95e6133386208b014de3db7b818a66a5",
+      "standardized_at": "2026-03-18T11:10:33.514211+00:00",
+      "standardization_model": "gpt-5-mini",
+      "_extraction_meta": {
+        "model": "gpt-5-mini",
+        "input_tokens": 16541,
+        "output_tokens": 2532,
+        "total_tokens": 19073,
+        "cost_usd": 0.009199
+      },
+      "_adobe_lob": {
+        "gross_premium_mix": [
+          {
+            "line_of_business": "Accident and Health",
+            "amount_gbp_m": 11.6,
+            "percentage_of_total": 17.4
+          },
+          {
+            "line_of_business": "Marine",
+            "amount_gbp_m": 1.3,
+            "percentage_of_total": 2.0
+          },
+          {
+            "line_of_business": "Fire and other damage to property",
+            "amount_gbp_m": 9.9,
+            "percentage_of_total": 14.9
+          },
+          {
+            "line_of_business": "Pecuniary loss",
+            "amount_gbp_m": 5.5,
+            "percentage_of_total": 8.3
+          },
+          {
+            "line_of_business": "Reinsurance",
+            "amount_gbp_m": 38.3,
+            "percentage_of_total": 57.5
+          }
+        ],
+        "gross_premiums_written_gbp_m": 66.6,
+        "claims_incurred_by_lob": [
+          {
+            "line_of_business": "Accident and Health",
+            "amount_gbp_m": -10.4
+          },
+          {
+            "line_of_business": "Marine",
+            "amount_gbp_m": -1.2
+          },
+          {
+            "line_of_business": "Fire and other damage to property",
+            "amount_gbp_m": -4.4
+          },
+          {
+            "line_of_business": "Pecuniary loss",
+            "amount_gbp_m": -1.9
+          },
+          {
+            "line_of_business": "Reinsurance",
+            "amount_gbp_m": -12.5
+          }
+        ],
+        "currency": "GBP",
+        "method": "azure"
+      }
     }
-  ],
-  "gross_premiums_written_gbp_m": 66.6,
-  "currency": "GBP"
+  },
+  "total_cost_usd": 0.013576,
+  "total_tokens": 30664,
+  "validation": {
+    "passed": true,
+    "total_discrepancies": 7,
+    "within_tolerance": 7,
+    "hard_failures": 0,
+    "hard_failure_details": []
+  }
 }

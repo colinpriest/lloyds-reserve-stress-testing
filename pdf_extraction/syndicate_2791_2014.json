@@ -1,57 +1,362 @@
 {
-  "extraction_timestamp": "2026-03-18T05:45:36.992631+00:00",
+  "extraction_timestamp": "2026-03-18T09:06:04.938892+00:00",
   "spec": {
     "prompt_version": "2.10",
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
   "source_file": "syndicate_reports\\pdfs\\syndicate_2791_2014.pdf",
-  "first_year_syndicate": true,
-  "reason": "Syndicate too new - insufficient underwriting years for prior year development analysis",
-  "syndicate": 2791,
-  "year": 2014,
-  "gross_premium_mix": [
-    {
-      "line_of_business": "Property reinsurance",
-      "amount_gbp_m": 190.4,
-      "percentage_of_total": 60.8
+  "models": {
+    "gemini-2.5-flash": {
+      "syndicate": 2791,
+      "year": 2014,
+      "opening_reserves_gbp_m": 360.523,
+      "opening_reserves_page": 18,
+      "opening_reserves_confidence": 1.0,
+      "prior_year_development_gbp_m": -46.836,
+      "prior_year_development_pct": -12.99,
+      "direction": "release",
+      "prior_year_movement_page": 13,
+      "prior_year_movement_confidence": 0.8,
+      "exact_reserve_text": "A positive run-off of GBP 10.0m on the 2012 and prior years' reserves (2011 and prior: GBP 17.2m) was experienced in the year. This change to the previous closed year reserves was 4.2% of the relevant provisions brought forward. The change in the year was principally due to the favourable run-off of the long-tail casualty classes.",
+      "primary_causes": [
+        "Favorable claims development",
+        "Other"
+      ],
+      "specific_events": [],
+      "specific_years_affected": [
+        2011,
+        2012
+      ],
+      "prior_year_events": [],
+      "named_events": [],
+      "standardized_narrative": "Syndicate 2791 experienced a mixed prior year development in 2014, with a gross release of GBP 12.153 million. This was driven by a release of GBP 44.434 million for the 2011 and prior years of account, partially offset by a strengthening of GBP 56.587 million for the 2012 pure year of account. The overall positive run-off was principally attributed to favourable development in long-tail casualty classes.",
+      "raw_causal_phrases": [
+        "favourable run-off of the long-tail casualty classes"
+      ],
+      "lob_movements": [
+        {
+          "line_of_business": "Casualty",
+          "direction": "release",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.5
+        }
+      ],
+      "gross_premiums_written_gbp_m": 313.4,
+      "gross_premium_mix": [
+        {
+          "line_of_business": "Property reinsurance",
+          "amount_gbp_m": 190.4,
+          "percentage_of_total": 60.8
+        },
+        {
+          "line_of_business": "Direct and facultative property",
+          "amount_gbp_m": 46.2,
+          "percentage_of_total": 14.7
+        },
+        {
+          "line_of_business": "Marine and offshore energy",
+          "amount_gbp_m": 30.2,
+          "percentage_of_total": 9.6
+        },
+        {
+          "line_of_business": "Motor",
+          "amount_gbp_m": 18.5,
+          "percentage_of_total": 5.9
+        },
+        {
+          "line_of_business": "Third party liability",
+          "amount_gbp_m": 9.7,
+          "percentage_of_total": 3.1
+        },
+        {
+          "line_of_business": "Accident and health",
+          "amount_gbp_m": 9.1,
+          "percentage_of_total": 2.9
+        },
+        {
+          "line_of_business": "Specialist lines",
+          "amount_gbp_m": 5.3,
+          "percentage_of_total": 1.7
+        },
+        {
+          "line_of_business": "Terrorism and political risks",
+          "amount_gbp_m": 4.1,
+          "percentage_of_total": 1.3
+        }
+      ],
+      "gross_premium_page": 14,
+      "gross_premium_confidence": 1.0,
+      "currency": "GBP",
+      "data_quality_notes": "The prior year development figure of -12.153m is derived from the gross 'Movement in Underwriting Reserves' table (Note 5). The narrative text on page 13 explicitly states a net positive run-off of GBP 10.0m, which is not used for the gross figure. [RAG OVERRIDE: Model said PYD=-12.153, RAG triangle computed -46.836. Using RAG value.]",
+      "_claims_triangle": {
+        "type": "none",
+        "currency": null,
+        "units": null,
+        "page": null,
+        "underwriting_years": [],
+        "development_rows": []
+      },
+      "source_type": "syndicate",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_2791_2014_llm.pdf",
+      "content_hash": "15622ead5ef4855b6b0ad9a297c1cc38cce33d6140d4a51bc472a9be1d9f331b",
+      "standardized_at": "2026-03-18T09:05:14.124086+00:00",
+      "standardization_model": "gemini-2.5-flash",
+      "_extraction_meta": {
+        "model": "gemini-2.5-flash",
+        "input_tokens": 12185,
+        "output_tokens": 1167,
+        "total_tokens": 17433,
+        "cost_usd": 0.006573
+      },
+      "_adobe_lob": {
+        "gross_premium_mix": [
+          {
+            "line_of_business": "Property reinsurance",
+            "amount_gbp_m": 190.4,
+            "percentage_of_total": 60.8
+          },
+          {
+            "line_of_business": "Direct and facultative property",
+            "amount_gbp_m": 46.2,
+            "percentage_of_total": 14.7
+          },
+          {
+            "line_of_business": "Marine and offshore energy",
+            "amount_gbp_m": 30.2,
+            "percentage_of_total": 9.6
+          },
+          {
+            "line_of_business": "Motor",
+            "amount_gbp_m": 18.5,
+            "percentage_of_total": 5.9
+          },
+          {
+            "line_of_business": "Third party liability",
+            "amount_gbp_m": 9.7,
+            "percentage_of_total": 3.1
+          },
+          {
+            "line_of_business": "Accident and health",
+            "amount_gbp_m": 9.1,
+            "percentage_of_total": 2.9
+          },
+          {
+            "line_of_business": "Specialist lines",
+            "amount_gbp_m": 5.3,
+            "percentage_of_total": 1.7
+          },
+          {
+            "line_of_business": "Terrorism and political risks",
+            "amount_gbp_m": 4.1,
+            "percentage_of_total": 1.3
+          }
+        ],
+        "gross_premiums_written_gbp_m": 313.4,
+        "claims_incurred_by_lob": null,
+        "currency": "USD",
+        "method": "azure"
+      },
+      "_adobe_provisions": {
+        "opening_gross_claims_outstanding": 228.455
+      }
     },
-    {
-      "line_of_business": "Direct and facultative property",
-      "amount_gbp_m": 46.2,
-      "percentage_of_total": 14.7
-    },
-    {
-      "line_of_business": "Marine and offshore energy",
-      "amount_gbp_m": 30.2,
-      "percentage_of_total": 9.6
-    },
-    {
-      "line_of_business": "Motor",
-      "amount_gbp_m": 18.5,
-      "percentage_of_total": 5.9
-    },
-    {
-      "line_of_business": "Third party liability",
-      "amount_gbp_m": 9.7,
-      "percentage_of_total": 3.1
-    },
-    {
-      "line_of_business": "Accident and health",
-      "amount_gbp_m": 9.1,
-      "percentage_of_total": 2.9
-    },
-    {
-      "line_of_business": "Specialist lines",
-      "amount_gbp_m": 5.3,
-      "percentage_of_total": 1.7
-    },
-    {
-      "line_of_business": "Terrorism and political risks",
-      "amount_gbp_m": 4.1,
-      "percentage_of_total": 1.3
+    "gpt-5-mini": {
+      "syndicate": 2791,
+      "year": 2014,
+      "opening_reserves_gbp_m": 360.523,
+      "opening_reserves_page": 41,
+      "opening_reserves_confidence": 1.0,
+      "prior_year_development_gbp_m": -46.836,
+      "prior_year_development_pct": -12.99,
+      "direction": "release",
+      "prior_year_movement_page": 48,
+      "prior_year_movement_confidence": 0.5,
+      "exact_reserve_text": "The movement in the net provision for claims includes a release of GBP 22.8m in respect of claims outstanding at the previous year end (2013: GBP 20.4m).",
+      "primary_causes": [
+        "Favorable claims development"
+      ],
+      "specific_events": [],
+      "specific_years_affected": [],
+      "prior_year_events": [],
+      "named_events": [],
+      "standardized_narrative": "At 1 January 2014 the gross claims outstanding (opening reserves) were GBP 360.523m. During 2014 there was a net release of GBP 22.8m (a favourable development of approximately 6.3% of opening gross claims), described as a release in respect of claims outstanding at the previous year end. The movement is principally attributed to favourable run-off in long-tail casualty classes. The report does not disclose a gross prior-year movement figure; the stated GBP 22.8m is a net (after-reinsurance) release and has been used as the best available quantified prior year movement.",
+      "raw_causal_phrases": [
+        "The movement in the net provision for claims includes a release of GBP 22.8m in respect of claims outstanding at the previous year end (2013: GBP 20.4m).",
+        "A positive run-off of GBP 10.0m on the 2012 and prior years' reserves (2011 and prior: GBP 17.2m) was experienced in the year. This change to the previous closed year reserves was 4.2% of the relevant provisions brought forward. The change in the year was principally due to the favourable run-off of the long-tail casualty classes."
+      ],
+      "lob_movements": [
+        {
+          "line_of_business": "Casualty",
+          "direction": "release",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.8
+        },
+        {
+          "line_of_business": "Property",
+          "direction": "flat",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.2
+        },
+        {
+          "line_of_business": "Marine",
+          "direction": "flat",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.2
+        },
+        {
+          "line_of_business": "Motor",
+          "direction": "flat",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.2
+        },
+        {
+          "line_of_business": "Accident & Health",
+          "direction": "flat",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.2
+        },
+        {
+          "line_of_business": "Treaty",
+          "direction": "flat",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.2
+        }
+      ],
+      "gross_premiums_written_gbp_m": 313.4,
+      "gross_premium_mix": [
+        {
+          "line_of_business": "Property reinsurance",
+          "amount_gbp_m": 190.4,
+          "percentage_of_total": 60.8
+        },
+        {
+          "line_of_business": "Direct and facultative property",
+          "amount_gbp_m": 46.2,
+          "percentage_of_total": 14.7
+        },
+        {
+          "line_of_business": "Marine and offshore energy",
+          "amount_gbp_m": 30.2,
+          "percentage_of_total": 9.6
+        },
+        {
+          "line_of_business": "Motor",
+          "amount_gbp_m": 18.5,
+          "percentage_of_total": 5.9
+        },
+        {
+          "line_of_business": "Third party liability",
+          "amount_gbp_m": 9.7,
+          "percentage_of_total": 3.1
+        },
+        {
+          "line_of_business": "Accident and health",
+          "amount_gbp_m": 9.1,
+          "percentage_of_total": 2.9
+        },
+        {
+          "line_of_business": "Specialist lines",
+          "amount_gbp_m": 5.3,
+          "percentage_of_total": 1.7
+        },
+        {
+          "line_of_business": "Terrorism and political risks",
+          "amount_gbp_m": 4.1,
+          "percentage_of_total": 1.3
+        }
+      ],
+      "gross_premium_page": 29,
+      "gross_premium_confidence": 1.0,
+      "currency": "GBP",
+      "data_quality_notes": "Opening gross claims outstanding taken from Balance Sheet (Claims outstanding, prior-year comparative column). The only explicitly quantified prior-year movement in the report is stated as a net (after reinsurance) release of GBP 22.8m; no gross (insurance liabilities) prior-year movement figure is provided, so the net figure has been used (flagged). No gross claims development triangle was found in the provided pages; RITC activity and reinsurance items in notes may distort development figures. Per-line reserve movements are not quantified in the report, other than commentary attributing improvement principally to favourable run-off in long-tail casualty classes. [RAG OVERRIDE: Model said PYD=-22.8, RAG triangle computed -46.836. Using RAG value.]",
+      "_claims_triangle": {
+        "type": "none",
+        "currency": "GBP",
+        "units": null,
+        "page": null,
+        "underwriting_years": [],
+        "development_rows": []
+      },
+      "source_type": "syndicate",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_2791_2014_llm.pdf",
+      "content_hash": "15622ead5ef4855b6b0ad9a297c1cc38cce33d6140d4a51bc472a9be1d9f331b",
+      "standardized_at": "2026-03-18T09:06:04.937609+00:00",
+      "standardization_model": "gpt-5-mini",
+      "_extraction_meta": {
+        "model": "gpt-5-mini",
+        "input_tokens": 21852,
+        "output_tokens": 5430,
+        "total_tokens": 27282,
+        "cost_usd": 0.016323
+      },
+      "_adobe_lob": {
+        "gross_premium_mix": [
+          {
+            "line_of_business": "Property reinsurance",
+            "amount_gbp_m": 190.4,
+            "percentage_of_total": 60.8
+          },
+          {
+            "line_of_business": "Direct and facultative property",
+            "amount_gbp_m": 46.2,
+            "percentage_of_total": 14.7
+          },
+          {
+            "line_of_business": "Marine and offshore energy",
+            "amount_gbp_m": 30.2,
+            "percentage_of_total": 9.6
+          },
+          {
+            "line_of_business": "Motor",
+            "amount_gbp_m": 18.5,
+            "percentage_of_total": 5.9
+          },
+          {
+            "line_of_business": "Third party liability",
+            "amount_gbp_m": 9.7,
+            "percentage_of_total": 3.1
+          },
+          {
+            "line_of_business": "Accident and health",
+            "amount_gbp_m": 9.1,
+            "percentage_of_total": 2.9
+          },
+          {
+            "line_of_business": "Specialist lines",
+            "amount_gbp_m": 5.3,
+            "percentage_of_total": 1.7
+          },
+          {
+            "line_of_business": "Terrorism and political risks",
+            "amount_gbp_m": 4.1,
+            "percentage_of_total": 1.3
+          }
+        ],
+        "gross_premiums_written_gbp_m": 313.4,
+        "claims_incurred_by_lob": null,
+        "currency": "USD",
+        "method": "azure"
+      },
+      "_adobe_provisions": {
+        "opening_gross_claims_outstanding": 228.455
+      }
     }
-  ],
-  "gross_premiums_written_gbp_m": 313.4,
-  "currency": "USD"
+  },
+  "total_cost_usd": 0.022896,
+  "total_tokens": 44715,
+  "validation": {
+    "passed": true,
+    "total_discrepancies": 14,
+    "within_tolerance": 14,
+    "hard_failures": 0,
+    "hard_failure_details": []
+  }
 }

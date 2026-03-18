@@ -1,38 +1,281 @@
 {
-  "extraction_timestamp": "2026-03-18T01:58:59.465301+00:00",
+  "extraction_timestamp": "2026-03-18T10:09:35.685548+00:00",
   "spec": {
-    "prompt_version": "2.8",
+    "prompt_version": "2.10",
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
   "source_file": "syndicate_reports\\pdfs\\syndicate_2243_2014.pdf",
-  "no_triangle_data": true,
-  "excluded": true,
-  "exclusion_reason": "No claims development triangle or reserve movement text found in report - recommend non-inclusion in analysis",
-  "syndicate": 2243,
-  "year": 2014,
-  "gross_premium_mix": [
-    {
-      "line_of_business": "Transport",
-      "amount_gbp_m": 4.0,
-      "percentage_of_total": 0.1
+  "models": {
+    "gemini-2.5-flash": {
+      "syndicate": 2243,
+      "year": 2014,
+      "opening_reserves_gbp_m": 86.725,
+      "opening_reserves_page": 6,
+      "opening_reserves_confidence": 1.0,
+      "prior_year_development_gbp_m": -3.3,
+      "prior_year_development_pct": -3.81,
+      "direction": "release",
+      "prior_year_movement_page": 10,
+      "prior_year_movement_confidence": 0.8,
+      "exact_reserve_text": "The run-off improvement for Syndicate 2243 relating to prior year's business was GBP 3.3m. This was mainly attributable to the Construction class which improved by GBP 2.6m following better than expected claims experience in 2014.",
+      "primary_causes": [
+        "Favorable claims development"
+      ],
+      "specific_events": [],
+      "specific_years_affected": [],
+      "prior_year_events": [],
+      "named_events": [],
+      "standardized_narrative": "Syndicate 2243 reported a net prior year reserve release of GBP 3.3 million for the year ended 31 December 2014, representing a 3.81% release against opening gross reserves. This run-off improvement was primarily driven by favourable claims development in the Construction class, contributing GBP 2.6 million, and other Casualty classes, where ultimate loss ratios reduced due to better than expected claims experience.",
+      "raw_causal_phrases": [
+        "run-off improvement for Syndicate 2243 relating to prior year's business",
+        "mainly attributable to the Construction class which improved by GBP 2.6m following better than expected claims experience in 2014",
+        "strong performances in both the Construction and Casualty classes, where ultimate loss ratios have reduced following favourable claims experience over the year"
+      ],
+      "lob_movements": [
+        {
+          "line_of_business": "Property",
+          "direction": "release",
+          "amount_gbp_m": -2.6,
+          "percentage": null,
+          "confidence": 1.0
+        },
+        {
+          "line_of_business": "Casualty",
+          "direction": "release",
+          "amount_gbp_m": -0.7,
+          "percentage": null,
+          "confidence": 0.8
+        }
+      ],
+      "gross_premiums_written_gbp_m": 3863.0,
+      "gross_premium_mix": [
+        {
+          "line_of_business": "Transport",
+          "amount_gbp_m": 4.0,
+          "percentage_of_total": 0.1
+        },
+        {
+          "line_of_business": "Fire and other damage to property",
+          "amount_gbp_m": 743.0,
+          "percentage_of_total": 19.2
+        },
+        {
+          "line_of_business": "Third Party Liability",
+          "amount_gbp_m": 180.0,
+          "percentage_of_total": 4.7
+        },
+        {
+          "line_of_business": "Reinsurance",
+          "amount_gbp_m": 2936.0,
+          "percentage_of_total": 76.0
+        }
+      ],
+      "gross_premium_page": 9,
+      "gross_premium_confidence": 1.0,
+      "currency": "GBP",
+      "data_quality_notes": "The prior year development figure of -GBP 3.3m is stated as 'run-off improvement' and is assumed to be net of reinsurance as not explicitly stated as gross. The breakdown of the remaining GBP 0.7m release for Casualty is inferred.",
+      "_claims_triangle": {
+        "type": "none",
+        "currency": null,
+        "units": null,
+        "page": null,
+        "underwriting_years": [],
+        "development_rows": []
+      },
+      "source_type": "syndicate",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_2243_2014_llm.pdf",
+      "content_hash": "a1898dbbec39a3dbd30e20f5788f1beca5f5525064eb50039bcb000d55e4f88d",
+      "standardized_at": "2026-03-18T10:08:42.560972+00:00",
+      "standardization_model": "gemini-2.5-flash",
+      "_extraction_meta": {
+        "model": "gemini-2.5-flash",
+        "input_tokens": 8573,
+        "output_tokens": 990,
+        "total_tokens": 15474,
+        "cost_usd": 0.005047
+      },
+      "_adobe_lob": {
+        "gross_premium_mix": [
+          {
+            "line_of_business": "Transport",
+            "amount_gbp_m": 4.0,
+            "percentage_of_total": 0.1
+          },
+          {
+            "line_of_business": "Fire and other damage to property",
+            "amount_gbp_m": 743.0,
+            "percentage_of_total": 19.2
+          },
+          {
+            "line_of_business": "Third Party Liability",
+            "amount_gbp_m": 180.0,
+            "percentage_of_total": 4.7
+          },
+          {
+            "line_of_business": "Reinsurance",
+            "amount_gbp_m": 2936.0,
+            "percentage_of_total": 76.0
+          }
+        ],
+        "gross_premiums_written_gbp_m": 3863.0,
+        "claims_incurred_by_lob": [
+          {
+            "line_of_business": "Transport",
+            "amount_gbp_m": -30.0
+          },
+          {
+            "line_of_business": "Fire and other damage to property",
+            "amount_gbp_m": -886.0
+          },
+          {
+            "line_of_business": "Third Party Liability",
+            "amount_gbp_m": -74.0
+          },
+          {
+            "line_of_business": "Reinsurance",
+            "amount_gbp_m": -2439.0
+          }
+        ],
+        "currency": "GBP",
+        "method": "azure"
+      }
     },
-    {
-      "line_of_business": "Fire and other damage to property",
-      "amount_gbp_m": 743.0,
-      "percentage_of_total": 19.2
-    },
-    {
-      "line_of_business": "Third Party Liability",
-      "amount_gbp_m": 180.0,
-      "percentage_of_total": 4.7
-    },
-    {
-      "line_of_business": "Reinsurance",
-      "amount_gbp_m": 2936.0,
-      "percentage_of_total": 76.0
+    "gpt-5-mini": {
+      "syndicate": 2243,
+      "year": 2014,
+      "opening_reserves_gbp_m": 86.725,
+      "opening_reserves_page": 15,
+      "opening_reserves_confidence": 1.0,
+      "prior_year_development_gbp_m": -3.3,
+      "prior_year_development_pct": -3.8,
+      "direction": "release",
+      "prior_year_movement_page": 21,
+      "prior_year_movement_confidence": 0.8,
+      "exact_reserve_text": "The run-off improvement for Syndicate 2243 relating to prior year's business was GBP 3.3m. This was mainly attributable to the Construction class which improved by GBP 2.6m following better than expected claims experience in 2014.",
+      "primary_causes": [
+        "Favorable claims development"
+      ],
+      "specific_events": [],
+      "specific_years_affected": [],
+      "prior_year_events": [],
+      "named_events": [],
+      "standardized_narrative": "The syndicate recorded a run-off improvement on prior years of GBP 3.3m (a release), mainly driven by a GBP 2.6m improvement in the Construction class due to better-than-expected claims experience in 2014.",
+      "raw_causal_phrases": [
+        "The run-off improvement for Syndicate 2243 relating to prior year's business was GBP 3.3m.",
+        "This was mainly attributable to the Construction class which improved by GBP 2.6m following better than expected claims experience in 2014.",
+        "ultimate loss ratios have reduced following favourable claims experience over the year"
+      ],
+      "lob_movements": [
+        {
+          "line_of_business": "Property",
+          "direction": "release",
+          "amount_gbp_m": -2.6,
+          "percentage": null,
+          "confidence": 0.8
+        }
+      ],
+      "gross_premiums_written_gbp_m": 3863.0,
+      "gross_premium_mix": [
+        {
+          "line_of_business": "Transport",
+          "amount_gbp_m": 4.0,
+          "percentage_of_total": 0.1
+        },
+        {
+          "line_of_business": "Fire and other damage to property",
+          "amount_gbp_m": 743.0,
+          "percentage_of_total": 19.2
+        },
+        {
+          "line_of_business": "Third Party Liability",
+          "amount_gbp_m": 180.0,
+          "percentage_of_total": 4.7
+        },
+        {
+          "line_of_business": "Reinsurance",
+          "amount_gbp_m": 2936.0,
+          "percentage_of_total": 76.0
+        }
+      ],
+      "gross_premium_page": 20,
+      "gross_premium_confidence": 1.0,
+      "currency": "GBP",
+      "data_quality_notes": "Prior year development (GBP 3.3m improvement) is taken from the narrative in the Technical Provisions note; the report does not explicitly label this amount as gross or net of reinsurance. The GBP 2.6m Construction improvement is explicit. Gross claims opening balance is from the Balance Sheet (Claims outstanding). No claims development triangle was provided in the extracted pages. Small negative gross written premium for 'Marine, aviation and Transport' (GBP 4k) is shown in the statutory segmental table and has been transcribed as-is.",
+      "_claims_triangle": {
+        "type": "none",
+        "currency": "GBP",
+        "units": null,
+        "page": null,
+        "underwriting_years": [],
+        "development_rows": []
+      },
+      "source_type": "syndicate",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_2243_2014_llm.pdf",
+      "content_hash": "a1898dbbec39a3dbd30e20f5788f1beca5f5525064eb50039bcb000d55e4f88d",
+      "standardized_at": "2026-03-18T10:09:35.684549+00:00",
+      "standardization_model": "gpt-5-mini",
+      "_extraction_meta": {
+        "model": "gpt-5-mini",
+        "input_tokens": 10995,
+        "output_tokens": 3921,
+        "total_tokens": 14916,
+        "cost_usd": 0.010591
+      },
+      "_adobe_lob": {
+        "gross_premium_mix": [
+          {
+            "line_of_business": "Transport",
+            "amount_gbp_m": 4.0,
+            "percentage_of_total": 0.1
+          },
+          {
+            "line_of_business": "Fire and other damage to property",
+            "amount_gbp_m": 743.0,
+            "percentage_of_total": 19.2
+          },
+          {
+            "line_of_business": "Third Party Liability",
+            "amount_gbp_m": 180.0,
+            "percentage_of_total": 4.7
+          },
+          {
+            "line_of_business": "Reinsurance",
+            "amount_gbp_m": 2936.0,
+            "percentage_of_total": 76.0
+          }
+        ],
+        "gross_premiums_written_gbp_m": 3863.0,
+        "claims_incurred_by_lob": [
+          {
+            "line_of_business": "Transport",
+            "amount_gbp_m": -30.0
+          },
+          {
+            "line_of_business": "Fire and other damage to property",
+            "amount_gbp_m": -886.0
+          },
+          {
+            "line_of_business": "Third Party Liability",
+            "amount_gbp_m": -74.0
+          },
+          {
+            "line_of_business": "Reinsurance",
+            "amount_gbp_m": -2439.0
+          }
+        ],
+        "currency": "GBP",
+        "method": "azure"
+      }
     }
-  ],
-  "gross_premiums_written_gbp_m": 3863.0,
-  "currency": "GBP"
+  },
+  "total_cost_usd": 0.015638,
+  "total_tokens": 30390,
+  "validation": {
+    "passed": true,
+    "total_discrepancies": 14,
+    "within_tolerance": 14,
+    "hard_failures": 0,
+    "hard_failure_details": []
+  }
 }

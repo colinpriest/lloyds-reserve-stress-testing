@@ -19,11 +19,12 @@ PDF input
   |
   v
 +-----------------------------------------------+
-| Step 0: Inception year check                   |
+| Step 0: Inception year check (soft)            |
 |   is_early_year_syndicate()                    |
 |     Lookup syndicate_inception_years.json       |
 |     If missing: query Perplexity API            |
-|     Skip if report_year < inception_year + 2    |
+|     Flag if report_year < inception_year + 2    |
+|     (does NOT skip -- validated by triangle)    |
 |   Cost: $0 (or ~$0.001 per Perplexity call)    |
 +-----------------------------------------------+
   |
@@ -105,6 +106,17 @@ PDF input
   |
   v
 +-----------------------------------------------+
+| Step 4c: Narrative PYD parsers                 |
+|   If still no PYD:                             |
+|     _extract_pyd_from_provisions_text()        |
+|     _parse_pyd_from_pl_narrative()             |
+|     _parse_pyd_from_yoa_narrative()            |
+|     _parse_pyd_from_general_narrative()        |
+|   Cascade: first match wins                    |
++-----------------------------------------------+
+  |
+  v
++-----------------------------------------------+
 | Step 5: Dual-LLM cross-validation             |
 |   Gemini + GPT extract independently           |
 |   verify_triangles() resolves disagreements    |
@@ -119,8 +131,7 @@ PDF input
   v
 +-----------------------------------------------+
 | Step 6: Report classification                  |
-|   early_year: report_year < inception + 2       |
-|   first_year_syndicate: no usable UW years for PYD|
+|   first_year_syndicate: triangle has <3 UW years |
 |   no_triangle_data: no triangle + no text      |
 |   Normal: full extraction with PYD             |
 +-----------------------------------------------+
@@ -372,19 +383,90 @@ page 4 of the original PDF.
 identify pages containing reserve narrative text.  A page needs
 to match **2 or more** patterns to qualify.  Key patterns:
 
-- `r"prior\s+year\s+(reserve|claim|development|movement|provision)"`
+- `r"prior\s+year[\u2019\u2018']?s?\s+(reserve|claim|development|movement|provision|business)"`
+  -- matches both "prior year reserve" and possessive forms like
+  "prior year's business" used by run-off syndicates.  The
+  apostrophe character class `[\u2019\u2018']` handles both ASCII
+  `'` and Unicode curly quotes (`\u2019` right single quotation
+  mark, `\u2018` left single quotation mark) that PyMuPDF
+  sometimes emits from older PDFs.  Added after syndicate
+  2121/2014 page 31 ("prior year\u2019s provision") failed to match
+  the original ASCII-only `'?` pattern.
 - `r"reserve\s+(release|strengthen|deteriorat|surplus|deficit)"`
+- `r"run.?off\s+(surplus|deficit|deviation|result|improvement|deterioration|release|strengthening)"`
+  -- the run-off directional terms were expanded after syndicate
+  2243/2014 was missed; its text used "run-off improvement" which
+  the original list (surplus|deficit|deviation|result) did not cover
 - `r"prior\s+year.*release"` / `r"prior\s+year.*strengthen"`
 - `r"released?\s+prior\s+year\s+reserve"` -- added for
   Beazley's phrasing ("released prior year reserves of $75.1m")
   where "released" precedes "prior year"
-- `r"release\s+of\s+prior\s+year"` -- catches "release of
-  prior year reserves"
+- `r"release\s+of\s+.{0,30}prior\s+year"` -- catches "release of
+  prior year reserves" and also "release of £4.7m of prior year
+  reserves" where an amount appears between "release of" and
+  "prior year".  Widened from the original `release\s+of\s+
+  prior\s+year` after syndicate 1945/2014 was incorrectly
+  excluded -- its text "a release of £4.7m of prior year
+  reserves" matched only 1 pattern (below the threshold of 2)
+  because the amount "£4.7m of" broke the adjacency requirement
+- `r"relating\s+to\s+prior\s+(year|underwriting)"` -- catches
+  run-off syndicate language like "relating to prior year's
+  business"
+- `r"prior\s+years?\s+of\s+account.*?(surplus|improve|deteriorat|profit|loss)"`
+  -- catches Lloyd's-specific language where reserve development
+  is described in terms of "years of account" rather than "prior
+  year reserves".  Added after syndicate 2121/2014 page 7 --
+  "Reserves in respect of the 2011 and prior years of account
+  continue to improve and develop satisfactorily, generating a
+  surplus of £2.2 million." -- matched only 1 pattern without this.
+- `r"(improvement|deterioration)\s+(for|in|of|on|relating)"` --
+  catches directional reserve language without the word "reserve"
+  or "run-off", e.g. "improvement for Syndicate 2243".  The `of`
+  alternative was added after syndicate 2121/2014 page 31 --
+  "An overall improvement of £1,922,000 on prior year's
+  provisions" -- failed to match because the original pattern
+  lacked `of` in its alternatives
+- `r"(better|worse)\s+than\s+expected\s+(claims|loss|experience)"`
+  -- catches expectation-based causal phrases like "better than
+  expected claims experience"
 
 The last two patterns were added after syndicate 2623/2020
 failed to find its reserve narrative page (page 4), which
 matched only 1 pattern (`prior year reserve`) because
 "released" appeared before "prior year" in the sentence.
+
+The run-off and expectation patterns were added after syndicate
+2243/2014 was incorrectly excluded.  Its reserve text -- "The
+run-off improvement for Syndicate 2243 relating to prior year's
+business was £3.3m.  This was mainly attributable to the
+Construction class which improved by £2.6m following better than
+expected claims experience in 2014." -- matched **zero** of the
+original 13 patterns because it used none of the standard UK
+insurance phrasing ("favourable development", "reserve release",
+etc.).  With the expanded pattern set this text matches 4
+patterns.
+
+Three further pattern fixes were made after syndicate 2121/2014
+was incorrectly excluded as `no_triangle_data`.  Its page 7
+describes a £2.2m surplus on prior years of account and page 31
+has a provisions note reporting £1,922,000 improvement -- but
+both pages scored only 1 (below the threshold of 2) because:
+
+1. **Unicode apostrophe** -- page 31's "prior year\u2019s
+   provision" used a Unicode right single quotation mark
+   (`\u2019`), which the ASCII `'?` in the original pattern did
+   not match.  Fix: widen to `[\u2019\u2018']?`.
+2. **Missing `of` alternative** -- "improvement of £1,922,000"
+   did not match `(improvement|deterioration)\s+(for|in|on|
+   relating)` because `of` was absent.  Fix: add `of` to the
+   alternatives.
+3. **"Prior years of account" language** -- page 7's "prior years
+   of account continue to improve" is standard Lloyd's phrasing
+   but matched no existing pattern.  Fix: add a new pattern
+   `prior\s+years?\s+of\s+account.*?(surplus|improve|deteriorat|
+   profit|loss)`.
+
+With these fixes page 7 scores 2 and page 31 scores 3.
 
 ### 5.4  Atomic file writes (Windows)
 
@@ -1691,13 +1773,19 @@ Two independent checks run in sequence; the first to match wins.
 **Functions**: `is_early_year_syndicate()`, `get_inception_year()`,
 `_lookup_inception_year_perplexity()` (`test_gemini.py`)
 
-Before any PDF reading or API calls, the pipeline checks whether
-the report falls within the syndicate's first two underwriting
-years.  A syndicate needs at least 3 development periods before
-prior year development can be meaningfully separated from current
-year activity.
+Before PDF reading, the pipeline checks whether the report falls
+within the syndicate's first two underwriting years.  A syndicate
+needs at least 3 development periods before prior year development
+can be meaningfully separated from current year activity.
 
-**Decision rule**: skip when `report_year < inception_year + 2`.
+**Decision rule**: flag (but do not skip) when
+`report_year < inception_year + 2`.  The flag is stored in
+`inception_skip` and validated against the actual triangle in
+the RAG extraction step.  If the triangle contradicts the cache
+(i.e. it has UW years older than the cached inception year), the
+cache is corrected and extraction proceeds normally.  This
+prevents incorrect Perplexity lookups from permanently blocking
+reports that have valid triangles.
 
 **Inception year lookup** (in priority order):
 
@@ -1756,10 +1844,20 @@ the report proceeds to normal extraction.
 
 ### 11.2  First-year syndicate (triangle-based detection)
 
-If the inception year check did not skip the report, the RAG-lite
-extraction runs and may detect a triangle with fewer than 3
+The RAG-lite extraction always runs (regardless of the inception
+year flag) and may detect a triangle with fewer than 3
 underwriting years.  This is a second line of defence for
 syndicates not yet in the inception cache.
+
+**Cache correction**: if the inception cache flagged the report
+for skipping but the RAG extraction finds a triangle with usable
+UW years, the cache is corrected to `min(underwriting_years)` and
+extraction proceeds normally.  The correction is logged:
+
+```
+[Inception] Cache said inception=2018 (would skip),
+but triangle shows UW years back to 2011 -- correcting cache
+```
 
 The check uses **usable years**, not raw UW year count:
 
@@ -1819,6 +1917,49 @@ the provisions note including RITC), but the RAG triangle
 computed −28.0m (organic development only).  The RAG triangle
 value was used, and the RITC distortion was noted in
 `data_quality_notes`.
+
+### 11.3.1  Narrative PYD parsers (Step 4c)
+
+After the provisions PYD fallback, the pipeline runs four
+text-based parsers in cascade order on reserve movement pages.
+Each parser targets a different phrasing convention used across
+Lloyd's syndicate reports.  The first parser to return a value
+wins.
+
+| Parser | Method tag | Required keywords | Pattern |
+|--------|-----------|-------------------|---------|
+| `_extract_pyd_from_provisions_text()` | `provisions_text` | provisions-style table text | Tabular "prior year" claims rows |
+| `_parse_pyd_from_pl_narrative()` | `pl_narrative` | "includes" + "prior" | "includes £34,490k of releases in respect of prior accident years" |
+| `_parse_pyd_from_yoa_narrative()` | `yoa_narrative` | "prior year" + "movement" | "Prior year movements of £5.8m" |
+| `_parse_pyd_from_general_narrative()` | `general_narrative` | "prior year" | "release of £4.7m of prior year reserves" |
+
+The **general narrative parser** is a catch-all added after
+syndicate 1945/2014 was incorrectly excluded as
+`no_triangle_data`.  The report's reserve text -- "As a result
+of favourable experience during 2014, there has been a release
+of £4.7m of prior year reserves" -- did not match either the
+P&L narrative parser (no "includes" keyword) or the YOA
+narrative parser (no "movement" keyword).
+
+The general parser matches two pattern families:
+
+- **Pattern A**: `{release/strengthening} of £AMOUNT ... prior year`
+  - "a release of £4.7m of prior year reserves"
+  - "strengthening of £12.3m in prior year claims reserves"
+- **Pattern B**: `£AMOUNT ... {release/strengthening} ... prior year`
+  - "£4.7m release on prior year reserves"
+
+Sign convention: "release" → negative (favourable),
+"strengthening"/"adverse development" → positive (adverse).
+
+Unit detection follows the same logic as the P&L and YOA
+parsers: explicit `k`/`m` suffix, or context-based detection
+from `'000`/`thousands` keywords on the page.
+
+**Example**: syndicate 1945/2014 -- PYD = −4.700m (release),
+extracted from "release of £4.7m of prior year reserves" via
+`method: "general_narrative"`.  Both LLMs independently
+confirmed the same value.
 
 ### 11.4  No-triangle-data exclusion
 
@@ -1996,10 +2137,12 @@ updated slim PDF containing the Balance Sheet page.
 }
 ```
 
-### 14.2  First-year syndicate (inception year skip)
+### 14.2  First-year syndicate
 
-When the inception year check identifies the report as being in
-the first two underwriting years:
+When the triangle-based detection confirms the report is from a
+syndicate with fewer than 3 usable underwriting years (the
+inception year cache alone no longer triggers a skip -- see
+section 11.1):
 
 ```json
 {
@@ -2082,7 +2225,7 @@ statuses based on its structure:
 
 | Status | Condition | Badge colour | Description |
 |--------|-----------|--------------|-------------|
-| **Skipped** | No `models` key (has `first_year_syndicate`, `no_triangle_data`, or `reason`) | Yellow | Report was never sent to LLMs -- auto-detected as first-year syndicate, no-triangle-data, or inception year skip.  No API cost incurred. |
+| **Skipped** | No `models` key (has `first_year_syndicate`, `no_triangle_data`, or `reason`) | Yellow | Report was never sent to LLMs -- auto-detected as first-year syndicate or no-triangle-data via triangle inspection.  No API cost incurred (except table extraction). |
 | **Excluded** | Has `models` key AND `excluded: true` | Purple | Extraction ran but the report was excluded during adjudication or manual review.  API cost was incurred. |
 | **Extracted** | Has `models` key, no `excluded` flag | Green/Red | Normal extraction result.  Shown as "Reliable" (green) if both PYD and premium mix are present, or "Incomplete" (red) otherwise. |
 
@@ -2754,3 +2897,33 @@ on page 49 shows gross prior year claims development of
 report has `adobe_provisions.gross_prior_year_claims`, that
 value is used as the PYD with `method: "provisions"`.  See
 section 11.3 for details and RITC caveats.
+
+### Incorrect inception year causes reports to be skipped
+
+**Symptom**: report flagged as `first_year_syndicate` with
+`"reason": "Syndicate N began underwriting in YYYY"`, but the
+PDF contains a full claims development triangle with UW years
+going back much further.  Example: syndicate 1980/2018 was
+skipped with `inception_year: 2018` despite the triangle
+showing UW years 2011--2017.
+
+**Cause**: the inception year check (Step 0) ran before any PDF
+reading and trusted the `syndicate_inception_years.json` cache
+blindly.  If Perplexity returned the wrong year (or the cache
+was populated from a different report's partial data), the
+pipeline returned `first_year_syndicate` without ever opening
+the PDF or inspecting the triangle.
+
+**Fix**: the inception year check is now a **soft flag** rather
+than a hard skip.  The pipeline always proceeds to RAG-lite
+extraction (Step 1--4).  After the triangle is extracted, the
+pipeline compares the triangle's earliest UW year against the
+cached inception year.  If the triangle contradicts the cache:
+
+1. The cache is corrected to `min(underwriting_years)`
+2. `inception_skip` is cleared
+3. Extraction proceeds normally
+
+This ensures the triangle (ground truth) always takes precedence
+over the inception cache (heuristic).  See section 11.1 for
+the updated decision rule.

@@ -860,6 +860,157 @@ def _parse_net_pyd_from_text(reserve_text, direction=None):
     return None
 
 
+def _extract_accounting_numbers(line):
+    """Extract numbers from a line with accounting notation.
+
+    Handles:  (217,691) → -217691.0,  44,434 → 44434.0.
+    Skips dashes (–, -) and year-like 4-digit integers (> 1900) that
+    appear WITHOUT comma separators (e.g. "2011" is a year, but "2,402"
+    is a monetary value in thousands).
+    """
+    numbers = []
+    for match in re.finditer(r'\(([\d,]+(?:\.\d+)?)\)|([\d,]+(?:\.\d+)?)', line):
+        neg_val, pos_val = match.groups()
+        if neg_val:
+            numbers.append(-float(neg_val.replace(',', '')))
+        elif pos_val:
+            raw = pos_val.replace(',', '')
+            val = float(raw)
+            # Skip year-like numbers: exactly 4 digits, > 1900, and no comma
+            # in the original (so "2011" is a year but "2,402" is monetary)
+            if '.' not in raw and len(raw) == 4 and val > 1900 and ',' not in pos_val:
+                continue
+            numbers.append(val)
+    return numbers
+
+
+def _extract_pyd_from_reserves_movement(pages, report_year):
+    """Extract opening reserves and PYD from a 'Movement in Underwriting
+    Reserves' note.
+
+    Some syndicates (particularly those with RITC) present reserve movements
+    in this table rather than a claims development triangle.  Common for
+    syndicates that assumed prior year reserves via RITC.
+
+    Expected format::
+
+        Movement in Underwriting Reserves
+                            Reserves  Exchange  RITC
+                            £'000     £'000     £'000
+        2011 and prior
+        Opening balance     (217,691) (10,764)  (228,455)
+        Change in year       44,434    2,402     46,836
+
+    Returns dict with 'pyd', 'opening_reserves', 'details' or None.
+    """
+    if not pages:
+        return None
+
+    for _page_num, text in pages:
+        text_lower = text.lower()
+        if not re.search(r'movement\s+in\s+(underwriting\s+)?reserves', text_lower):
+            continue
+        if 'opening balance' not in text_lower:
+            continue
+        if 'change in year' not in text_lower:
+            continue
+
+        # Detect units (£'000 → divisor = 1000)
+        units_divisor = 1.0
+        if re.search(r"[£$\u00a3]\s*['\u2018\u2019]?\s*000", text):
+            units_divisor = 1000.0
+        elif "'000" in text or "\u2019000" in text:
+            units_divisor = 1000.0
+
+        lines = text.split('\n')
+        in_prior_section = False
+        opening_balance = None
+        change_in_year = None
+
+        # State for collecting numbers after a label line.
+        # PyMuPDF often splits tables into separate lines:
+        #   "Opening balance"
+        #   "(217,691)"
+        #   "(10,764)"
+        #   "(228,455)"
+        collecting_for = None  # "opening" or "change"
+        collected_nums = []
+
+        def _flush_collected():
+            nonlocal opening_balance, change_in_year, collecting_for, collected_nums
+            if collecting_for == "opening" and collected_nums:
+                opening_balance = collected_nums[-1]
+            elif collecting_for == "change" and collected_nums:
+                change_in_year = collected_nums[-1]
+            collecting_for = None
+            collected_nums = []
+
+        for line in lines:
+            stripped = line.strip()
+            line_lower = stripped.lower()
+
+            if re.search(r'\d{4}\s+and\s+prior', line_lower):
+                _flush_collected()
+                in_prior_section = True
+                continue
+
+            # Next year header (e.g. "2012 pure") ends the section
+            if in_prior_section and re.match(r'\d{4}\s', line_lower):
+                _flush_collected()
+                break
+
+            if not in_prior_section:
+                continue
+
+            # Check if this line is a label
+            if 'opening balance' in line_lower:
+                _flush_collected()
+                # Numbers may be on the same line or subsequent lines
+                nums = _extract_accounting_numbers(stripped)
+                if nums:
+                    opening_balance = nums[-1]
+                else:
+                    collecting_for = "opening"
+                    collected_nums = []
+                continue
+
+            if 'change in year' in line_lower:
+                _flush_collected()
+                nums = _extract_accounting_numbers(stripped)
+                if nums:
+                    change_in_year = nums[-1]
+                else:
+                    collecting_for = "change"
+                    collected_nums = []
+                continue
+
+            # If we're collecting numbers for a label, grab them
+            if collecting_for and stripped:
+                nums = _extract_accounting_numbers(stripped)
+                if nums:
+                    collected_nums.extend(nums)
+                elif not re.match(r'^[\s\-\u2013\u2014\u2015]*$', stripped):
+                    # Non-numeric, non-dash line → stop collecting
+                    _flush_collected()
+
+        _flush_collected()
+
+        if opening_balance is not None and change_in_year is not None:
+            opening_m = round(abs(opening_balance) / units_divisor, 3)
+            # Positive change = liability decreased = release → PYD negative
+            pyd_m = round(-change_in_year / units_divisor, 3)
+            change_m = round(change_in_year / units_divisor, 3)
+            return {
+                "pyd": pyd_m,
+                "opening_reserves": opening_m,
+                "details": (f"from reserves movement note "
+                            f"(opening={opening_m:.1f}m, "
+                            f"change={change_m:+.1f}m)"),
+            }
+
+    return None
+
+
 def _extract_pyd_from_loss_ratio_triangle(page_text, report_year):
     """Extract PYD from a loss ratio development triangle page.
 
@@ -970,6 +1121,9 @@ def _extract_pyd_from_loss_ratio_triangle(page_text, report_year):
         "total ultimate", "gross claims liab", "less paid",
         "less unearned", "less non", "net claims liab",
         "net claims development",  # stop before net section on same page
+        "underwriting year - net",  # stop before net loss ratio section
+        "underwriting year -net",   # variant without space
+        "underwriting year- net",   # variant
     ]
 
     all_ratios = []
@@ -982,9 +1136,14 @@ def _extract_pyd_from_loss_ratio_triangle(page_text, report_year):
         if line_lower.strip() == "%":
             after_header = True
             continue
+        # In columnar PyMuPDF output each ratio is on its own line
+        # (e.g. "127%").  The first line with "%" is the first real
+        # ratio value, NOT a header to skip.  Only skip if the line
+        # looks like a pure header (e.g. "%" alone, already handled
+        # above).  Set after_header but DO NOT skip the line.
         if not after_header and "%" in line_lower:
             after_header = True
-            continue
+            # fall through to extract the value from this line
         if not after_header:
             continue
         # Stop at summary rows
@@ -1103,6 +1262,16 @@ def _extract_pyd_from_loss_ratio_triangle(page_text, report_year):
                       f"{len(dev_rows)} dev rows) but no 'Total ultimate losses' "
                       f"row — cannot convert to absolute PYD")
 
+    # Validate: reject if "ultimates" are actually year values (1990-2030).
+    # This happens when "total" + "ultimately" co-occur in surrounding text
+    # and year headers are mistakenly collected as ultimate amounts.
+    year_like = sum(1 for v in raw_ultimates[:n_cols_total]
+                    if 1990 <= v <= 2030 and v == int(v))
+    if year_like >= n_cols_total * 0.5:
+        return None, (f"loss ratio triangle found but 'ultimates' row contains "
+                      f"{year_like}/{n_cols_total} year-like values "
+                      f"({raw_ultimates[:n_cols_total]}) — false detection")
+
     # Keep only n_cols_total values (drop trailing "Total" column)
     raw_ultimates = raw_ultimates[:n_cols_total]
     # Filter out ae aggregate columns to align with uw_years
@@ -1154,6 +1323,306 @@ def _extract_pyd_from_loss_ratio_triangle(page_text, report_year):
     total_pyd = round(total_pyd, 3)
     details.append(f"  Total PYD = {total_pyd:+.3f}m ({used_years} UW years)")
     return total_pyd, "\n".join(details)
+
+
+def _extract_pyd_from_provisions_text(page_text):
+    """Extract gross prior year development from a provisions movement note.
+
+    Looks for "claims incurred in prior underwriting year" (or similar)
+    followed by the gross value in $'000 or £'000.  Returns (pyd_m, details)
+    or (None, reason).
+    """
+    lines = page_text.split("\n")
+    for i, line in enumerate(lines):
+        ll = line.lower().strip()
+        if ("prior" in ll
+                and ("underwriting" in ll or "year" in ll)
+                and "incurred" in ll
+                and "includes" not in ll):
+            # Found the prior year claims incurred label in a provisions
+            # table row.  Skip narrative text (which contains "includes")
+            # — those are handled by _parse_pyd_from_pl_narrative().
+            # The gross value is typically on the same line or the next line.
+            # Collect the first numeric value after the label.
+            candidates = []
+            # Check same line first
+            nums = re.findall(r'\(?([\d,]+\.?\d*)\)?', line)
+            for n in nums:
+                try:
+                    val = float(n.replace(",", ""))
+                    if val > 0:
+                        candidates.append(val)
+                except ValueError:
+                    pass
+            # Check next 3 lines
+            for j in range(i + 1, min(i + 4, len(lines))):
+                nline = lines[j].strip()
+                if not nline:
+                    continue
+                # Stop at next label
+                if re.match(r'^[A-Z]', nline) and not re.search(r'^\(?\d', nline):
+                    break
+                nums = re.findall(r'\(?([\d,]+\.?\d*)\)?', nline)
+                for n in nums:
+                    try:
+                        val = float(n.replace(",", ""))
+                        if val > 0:
+                            candidates.append(val)
+                    except ValueError:
+                        pass
+                if candidates:
+                    break
+
+            if candidates:
+                raw_val = candidates[0]  # First value is gross column
+                # Check sign: if line has parentheses around number, it's negative
+                sign_line = line + " " + (lines[i + 1].strip() if i + 1 < len(lines) else "")
+                # Detect units from surrounding text
+                is_thousands = False
+                for ctx_line in lines[max(0, i - 10):i + 5]:
+                    ctx_lower = ctx_line.lower()
+                    # Match '000, \u2019000, \u2018000, "000 and similar
+                    if any(kw in ctx_lower for kw in [
+                        "'000", "\u2019000", "\u2018000", "\u0027000",
+                        "000s", "thousands",
+                    ]):
+                        is_thousands = True
+                        break
+                    # Also detect "$'000" / "£'000" with various quote styles
+                    if re.search(r"[£$€]\s*['\u2018\u2019\u0027]?\s*000", ctx_lower):
+                        is_thousands = True
+                        break
+
+                pyd_m = raw_val / 1000 if is_thousands else raw_val
+                pyd_m = round(pyd_m, 3)
+                return pyd_m, (f"Provisions note: 'Claims incurred in prior "
+                               f"underwriting year' = {raw_val:,.0f}"
+                               f"{' ($000)' if is_thousands else ''} = {pyd_m:+.3f}m")
+
+    return None, "no 'claims incurred in prior underwriting year' found"
+
+
+def _parse_pyd_from_pl_narrative(page_text):
+    """Extract net PYD from P&L technical account narrative text.
+
+    Matches patterns like:
+      "includes £34,490k (2013: £51,518k) of releases in respect of prior accident years"
+      "includes a net release of £5.3m relating to prior years"
+
+    Returns (pyd_m, details_str) or (None, reason_str).
+    """
+    # Join lines to handle line-wrapping; work within single sentences
+    text = " ".join(page_text.split())
+    tl = text.lower()
+
+    if "prior" not in tl or "includes" not in tl:
+        return None, "no P&L narrative pattern"
+
+    # Pattern A: "includes £AMOUNT[k/m] ... of {releases/strengthening} ... prior ... year"
+    m = re.search(
+        r'includes\b[^.]*?'
+        r'[£$€]\s*([\d,]+(?:\.\d+)?)\s*([km])?\b'
+        r'[^.]*?'
+        r'\bof\s+(releases?|strengthening|strengthenings|adverse\s+development)\b'
+        r'[^.]*?'
+        r'\bprior\s+(?:accident\s+|underwriting\s+)?years?\b',
+        tl,
+    )
+    if m:
+        raw_str = m.group(1).replace(",", "")
+        unit = m.group(2)
+        direction_word = m.group(3)
+    else:
+        # Pattern B: "includes ... release/strengthening of £AMOUNT ... prior year"
+        m = re.search(
+            r'includes\b[^.]*?'
+            r'\b(releases?|strengthening|strengthenings|adverse\s+development)\b'
+            r'[^.]*?'
+            r'[£$€]\s*([\d,]+(?:\.\d+)?)\s*([km])?\b'
+            r'[^.]*?'
+            r'\bprior\s+(?:accident\s+|underwriting\s+)?years?\b',
+            tl,
+        )
+        if not m:
+            return None, "no P&L narrative PYD pattern matched"
+        direction_word = m.group(1)
+        raw_str = m.group(2).replace(",", "")
+        unit = m.group(3)
+
+    raw_val = float(raw_str)
+    if raw_val <= 0 or 1900 <= raw_val <= 2099:
+        return None, f"P&L narrative: extracted value {raw_val} looks like a year"
+
+    # Determine units: explicit k/m suffix, or context-based detection
+    is_thousands = (unit == "k")
+    if not is_thousands and unit != "m":
+        if any(kw in tl for kw in [
+            "'000", "\u2019000", "\u2018000", "\u0027000", "thousands",
+        ]):
+            is_thousands = True
+        if re.search(r"[£$€]\s*['\u2018\u2019\u0027]?\s*000", tl):
+            is_thousands = True
+
+    pyd_m = raw_val / 1000 if is_thousands else raw_val
+    pyd_m = round(pyd_m, 3)
+
+    # Sign: release = negative (favourable), strengthening = positive (adverse)
+    if "release" in direction_word:
+        pyd_m = -abs(pyd_m)
+
+    return pyd_m, (f"P&L narrative: '{direction_word}' of "
+                   f"{raw_val:,.0f}{' (£000)' if is_thousands else ''}"
+                   f" = {pyd_m:+.3f}m")
+
+
+def _parse_pyd_from_yoa_narrative(page_text):
+    """Extract PYD from Year of Account (YOA) style narrative text.
+
+    Matches patterns like:
+      "Prior year movements of £5.8m in 2014, comprising £5.4m adverse
+       movements in claims reserving and £0.4m movement in premiums"
+
+    Some Lloyd's syndicates (especially smaller or YOA-accounting ones)
+    state PYD in this format rather than in a provisions table or
+    "includes" P&L sentence.
+
+    Returns (pyd_m, details_str) or (None, reason_str).
+    """
+    # Join lines to handle line-wrapping
+    text = " ".join(page_text.split())
+    tl = text.lower()
+
+    if "prior year" not in tl or "movement" not in tl:
+        return None, "no YOA narrative pattern"
+
+    # Pattern: "Prior year movements of £X.Xm"
+    # May also appear as "Prior year movements of £X,XXXk" or "£X,XXX"
+    m = re.search(
+        r'prior\s+year\s+movements?\s+of\s+'
+        r'[£$€]\s*([\d,]+(?:\.\d+)?)\s*([km])?\b',
+        tl,
+    )
+    if not m:
+        return None, "no YOA narrative PYD pattern matched"
+
+    raw_str = m.group(1).replace(",", "")
+    unit = m.group(2)
+    raw_val = float(raw_str)
+
+    if raw_val <= 0 or 1900 <= raw_val <= 2099:
+        return None, f"YOA narrative: extracted value {raw_val} looks like a year"
+
+    # Determine units
+    is_thousands = (unit == "k")
+    if not is_thousands and unit != "m":
+        if any(kw in tl for kw in [
+            "'000", "\u2019000", "\u2018000", "\u0027000", "thousands",
+        ]):
+            is_thousands = True
+        if re.search(r"[£$€]\s*['\u2018\u2019\u0027]?\s*000", tl):
+            is_thousands = True
+
+    pyd_m = raw_val / 1000 if is_thousands else raw_val
+    pyd_m = round(pyd_m, 3)
+
+    # Determine direction from context:
+    # Look for "adverse" or "strengthening" near the amount → positive (adverse)
+    # Look for "release" or "favourable" near the amount → negative (favourable)
+    # Default to adverse (positive) if direction is unclear — "movements" without
+    # qualifier typically means adverse in Lloyd's YOA reports.
+    context = tl[max(0, m.start() - 50):m.end() + 200]
+    if any(kw in context for kw in ["release", "favourable", "favorable", "surplus"]):
+        pyd_m = -abs(pyd_m)
+    elif any(kw in context for kw in ["adverse", "strengthen", "deficit"]):
+        pyd_m = abs(pyd_m)
+    else:
+        # Ambiguous — check the broader sentence for direction cues
+        pyd_m = abs(pyd_m)  # default to adverse
+
+    direction = "adverse" if pyd_m > 0 else "favourable"
+    return pyd_m, (f"YOA narrative: 'prior year movements of' "
+                   f"{raw_val:,.1f}{unit or ''}"
+                   f"{' (£000)' if is_thousands else ''}"
+                   f" [{direction}] = {pyd_m:+.3f}m")
+
+
+def _parse_pyd_from_general_narrative(page_text):
+    """Extract PYD from general reserve narrative text.
+
+    Matches patterns like:
+      "a release of £4.7m of prior year reserves"
+      "strengthening of £12.3m in prior year claims reserves"
+      "there has been a release of £4.7m of prior year reserves"
+
+    This is a catch-all parser for reports that don't use the "includes"
+    P&L format or "prior year movements of" YOA format.
+
+    Returns (pyd_m, details_str) or (None, reason_str).
+    """
+    text = " ".join(page_text.split())
+    tl = text.lower()
+
+    if "prior year" not in tl:
+        return None, "no general narrative pattern"
+
+    # Pattern A: "release/strengthening of £AMOUNT ... prior year [reserves]"
+    m = re.search(
+        r'\b(releases?|strengthening|strengthenings|adverse\s+development)\b'
+        r'\s+of\s+'
+        r'[£$€]\s*([\d,]+(?:\.\d+)?)\s*([km])?\b'
+        r'.{0,40}'
+        r'\bprior\s+year',
+        tl,
+    )
+    if not m:
+        # Pattern B: "£AMOUNT ... release/strengthening ... prior year"
+        m = re.search(
+            r'[£$€]\s*([\d,]+(?:\.\d+)?)\s*([km])?\b'
+            r'.{0,40}'
+            r'\b(releases?|strengthening|strengthenings|adverse\s+development)\b'
+            r'.{0,40}'
+            r'\bprior\s+year',
+            tl,
+        )
+        if m:
+            # Reorder groups: amount is group 1,2; direction is group 3
+            raw_str = m.group(1).replace(",", "")
+            unit = m.group(2)
+            direction_word = m.group(3)
+        else:
+            return None, "no general narrative PYD pattern matched"
+    else:
+        direction_word = m.group(1)
+        raw_str = m.group(2).replace(",", "")
+        unit = m.group(3)
+
+    raw_val = float(raw_str)
+    if raw_val <= 0 or 1900 <= raw_val <= 2099:
+        return None, f"general narrative: extracted value {raw_val} looks like a year"
+
+    # Determine units
+    is_thousands = (unit == "k")
+    if not is_thousands and unit != "m":
+        if any(kw in tl for kw in [
+            "'000", "\u2019000", "\u2018000", "\u0027000", "thousands",
+        ]):
+            is_thousands = True
+        if re.search(r"[£$€]\s*['\u2018\u2019\u0027]?\s*000", tl):
+            is_thousands = True
+
+    pyd_m = raw_val / 1000 if is_thousands else raw_val
+    pyd_m = round(pyd_m, 3)
+
+    # Sign: release = negative (favourable), strengthening = positive (adverse)
+    if "release" in direction_word:
+        pyd_m = -abs(pyd_m)
+    else:
+        pyd_m = abs(pyd_m)
+
+    return pyd_m, (f"general narrative: '{direction_word}' of "
+                   f"{raw_val:,.1f}{unit or ''}"
+                   f"{' (£000)' if is_thousands else ''}"
+                   f" = {pyd_m:+.3f}m")
 
 
 def parse_json_response(text):
@@ -2144,17 +2613,28 @@ TRIANGLE_PATTERNS = [
 
 # Patterns that indicate prior year reserve movement text
 RESERVE_MOVEMENT_PATTERNS = [
-    r"prior\s+year\s+(reserve|claim|development|movement|provision)",
+    r"prior\s+year[\u2019\u2018']?s?\s+(reserve|claim|development|movement|provision|business)",
     r"movement\s+in\s+prior\s+year",
     r"prior\s+underwriting\s+year",
+    r"prior\s+years?\s+of\s+account",              # Lloyd's YOA: "2012 & prior years of account"
     r"reserve\s+(release|strengthen|deteriorat|surplus|deficit)",
-    r"run.?off\s+(surplus|deficit|deviation|result)",
-    r"favourable.*development",
+    r"run.?off\s+(surplus|deficit|deviation|result|improvement|deterioration|release|strengthening)",
+    r"(favourable|favorable|profitable).*development",
     r"adverse.*development",
     r"prior\s+year.*release",
     r"prior\s+year.*strengthen",
     r"released?\s+prior\s+year\s+reserve",   # "released prior year reserves"
-    r"release\s+of\s+prior\s+year",          # "release of prior year reserves"
+    r"release\s+of\s+.{0,30}prior\s+year",    # "release of [£4.7m of] prior year reserves"
+    r"claims\s+incurred\s+in\s+prior",       # provisions movement note
+    r"movement\s+in\s+(claims|provision)",    # provisions movement heading
+    r"relating\s+to\s+prior\s+(year|underwriting)",  # "relating to prior year's business"
+    r"(improvement|deterioration)\s+(for|in|of|on|relating)",  # run-off improvement/deterioration
+    r"(better|worse)\s+than\s+expected\s+(claims|loss|experience)",  # expectation-based language
+    r"\d{4}.{0,20}year.{0,5}of.{0,5}account.{0,80}(profit|loss|surplus|deficit|develop)",  # "2012 year of account closed with a profit"
+    r"(closed|closing)\s+year.{0,50}(profit|loss|surplus|deficit|result|of\s+account)",     # "closed year result"
+    r"prior\s+accident\s+year",                                                             # "prior accident years" (common in older reports)
+    r"in\s+respect\s+of\s+prior\s+(?:accident\s+|underwriting\s+)?year",                    # "in respect of prior [accident/underwriting] years"
+    r"releases?\s+in\s+respect\s+of",                                                       # "releases in respect of ..." (prior year context)
 ]
 
 
@@ -2511,12 +2991,30 @@ def extract_pyd_from_relevant_pages(pdf_path, report_year):
             print(f"  [{backend_name}] Provisions movement: {', '.join(parts)}")
         result["adobe_provisions"] = prov_data  # key kept for backwards compatibility
 
-    # If confirmed first-year syndicate, no need for further extraction
+    # If confirmed first-year syndicate, check for reserves movement fallback
+    # before giving up.  Some syndicates (e.g. those with RITC) show a
+    # "Movement in Underwriting Reserves" note with opening balance and
+    # change-in-year even when the claims triangle has too few UW years.
+    # If the reserves movement note isn't found, fall through to the normal
+    # text extraction flow — the report may state PYD in narrative text
+    # (e.g. "Prior year movements of £5.8m") even when the triangle is small.
+    pages = None
+    text_method = None
     if result["first_year_syndicate"]:
-        return result
+        pages, text_method = extract_text_from_pdf(pdf_path)
+        override = _extract_pyd_from_reserves_movement(pages, report_year) if pages else None
+        if override:
+            result["first_year_syndicate"] = False
+            result["pyd"] = override["pyd"]
+            result["pyd_details"] = override["details"]
+            result["method"] = "reserves_movement"
+            result["opening_reserves_from_movement"] = override["opening_reserves"]
+            print(f"  [RAG] Reserves movement note overrides first-year: "
+                  f"PYD={override['pyd']:+.3f}m, opening={override['opening_reserves']:.1f}m")
 
     # Step 2: Extract text for page search (needed for reserve text and LLM fallback)
-    pages, text_method = extract_text_from_pdf(pdf_path)
+    if pages is None:
+        pages, text_method = extract_text_from_pdf(pdf_path)
 
     if pages:
         total_chars = sum(len(t) for _, t in pages)
@@ -2583,6 +3081,13 @@ def extract_pyd_from_relevant_pages(pdf_path, report_year):
                 result["pyd"] = lr_pyd
                 result["pyd_details"] = lr_details
                 result["method"] = "loss_ratio_triangle"
+            elif lr_details and "loss ratio triangle found" in lr_details:
+                # A valid loss ratio grid structure was detected but PYD
+                # could not be computed (no "Total ultimate losses" row).
+                # Still mark that the report has a triangle so that we
+                # don't exclude it — LLMs may extract PYD from narrative.
+                result["has_loss_ratio_triangle"] = True
+                print(f"  [RAG] Loss ratio triangle found but no absolute PYD: {lr_details}")
 
         # Step 4: Collect reserve movement text
         if res_pages:
@@ -2591,6 +3096,13 @@ def extract_pyd_from_relevant_pages(pdf_path, report_year):
             )
             if result["pyd"] is None:
                 print(f"  [RAG] No triangle, but found {len(res_pages)} reserve text page(s)")
+            # If this was flagged as first-year but we found reserve movement
+            # text, the syndicate likely has prior year movements (e.g. from
+            # RITC) even though the claims triangle is small.  Clear the flag
+            # so the narrative PYD parsers can attempt extraction.
+            if result["first_year_syndicate"] and result["pyd"] is None:
+                result["first_year_syndicate"] = False
+                print(f"  [RAG] Reserve text found — clearing first-year flag, will try narrative parsers")
 
     # Step 5: If still no PYD but we have provisions data with gross PYD,
     # use it as a fallback.  The provisions movement note (e.g. "Claims
@@ -2602,17 +3114,74 @@ def extract_pyd_from_relevant_pages(pdf_path, report_year):
         prov_gross = prov.get("gross_prior_year_claims")
         if prov_gross is not None:
             result["pyd"] = prov_gross
-            result["pyd_details"] = "from provisions movement note"
+            result["pyd_details"] = "from provisions movement note (table extraction)"
             result["method"] = "provisions"
             print(f"  [RAG] Using provisions PYD as fallback: {prov_gross:+.3f}m")
+
+    # Step 5b: If still no PYD, try text-based provisions extraction
+    # from reserve movement pages.  This catches provisions notes that
+    # Azure's table detection missed (e.g. columnar text layouts).
+    if result["pyd"] is None and not result["first_year_syndicate"] and result["reserve_text"]:
+        for page_num, page_text in (res_pages if pages else []):
+            prov_pyd, prov_details = _extract_pyd_from_provisions_text(page_text)
+            if prov_pyd is not None:
+                result["pyd"] = prov_pyd
+                result["pyd_details"] = prov_details
+                result["method"] = "provisions_text"
+                print(f"  [RAG] Provisions text PYD: {prov_pyd:+.3f}m ({prov_details})")
+                break
+
+    # Step 5c: If still no PYD, try P&L technical account narrative
+    # extraction.  Some reports state PYD in prose rather than in a
+    # provisions movement table, e.g. "includes £34,490k of releases
+    # in respect of prior accident years".
+    if result["pyd"] is None and not result["first_year_syndicate"] and result["reserve_text"]:
+        for page_num, page_text in (res_pages if pages else []):
+            pl_pyd, pl_details = _parse_pyd_from_pl_narrative(page_text)
+            if pl_pyd is not None:
+                result["pyd"] = pl_pyd
+                result["pyd_details"] = pl_details
+                result["method"] = "pl_narrative"
+                print(f"  [RAG] P&L narrative PYD: {pl_pyd:+.3f}m ({pl_details})")
+                break
+
+    # Step 5d: If still no PYD, try YOA-style narrative extraction.
+    # Some Lloyd's syndicates state PYD as "Prior year movements of £X.Xm"
+    # in their year of account review, rather than in provisions notes or
+    # "includes" P&L sentences.
+    if result["pyd"] is None and not result["first_year_syndicate"] and result["reserve_text"]:
+        for page_num, page_text in (res_pages if pages else []):
+            yoa_pyd, yoa_details = _parse_pyd_from_yoa_narrative(page_text)
+            if yoa_pyd is not None:
+                result["pyd"] = yoa_pyd
+                result["pyd_details"] = yoa_details
+                result["method"] = "yoa_narrative"
+                print(f"  [RAG] YOA narrative PYD: {yoa_pyd:+.3f}m ({yoa_details})")
+                break
+
+    # Step 5e: If still no PYD, try general narrative extraction.
+    # Catches patterns like "a release of £4.7m of prior year reserves"
+    # that don't use the "includes" P&L format or "movements of" YOA format.
+    if result["pyd"] is None and not result["first_year_syndicate"] and result["reserve_text"]:
+        for page_num, page_text in (res_pages if pages else []):
+            gen_pyd, gen_details = _parse_pyd_from_general_narrative(page_text)
+            if gen_pyd is not None:
+                result["pyd"] = gen_pyd
+                result["pyd_details"] = gen_details
+                result["method"] = "general_narrative"
+                print(f"  [RAG] General narrative PYD: {gen_pyd:+.3f}m ({gen_details})")
+                break
 
     # If after all attempts we have no PYD, no triangle, no reserve text,
     # and it's not a first-year syndicate, flag as "no triangle data" —
     # this report has no usable reserve development information and should
     # be excluded from downstream analysis.
+    # Exception: if a loss ratio triangle was found, the report has useful
+    # data that LLMs can use to extract PYD from narrative text.
     if (result["pyd"] is None
             and not result["first_year_syndicate"]
-            and not result["reserve_text"]):
+            and not result["reserve_text"]
+            and not result.get("has_loss_ratio_triangle")):
         result["no_triangle_data"] = True
 
     return result
@@ -3676,32 +4245,12 @@ def process_one_report(report_path, inception_cache=None):
 
     syndicate_num, report_year = parse_report_filename(report_path)
 
-    # Early check: skip reports from the first two underwriting years
-    # of a syndicate (fewer than 3 development years available for PYD).
-    # This runs BEFORE any API calls to save cost.
-    should_skip, inception_year = is_early_year_syndicate(
+    # Check inception cache — but don't skip yet.  The cache may be wrong
+    # (e.g. Perplexity returned the wrong year).  We'll validate against
+    # the actual triangle below and correct the cache if needed.
+    inception_skip, inception_year = is_early_year_syndicate(
         syndicate_num, report_year, inception_cache
     )
-    if should_skip:
-        early_year_output = {
-            "extraction_timestamp": datetime.now(timezone.utc).isoformat(),
-            "spec": {
-                "prompt_version": PROMPT_VERSION,
-                "field_definitions_version": FIELD_DEFINITIONS_VERSION,
-                "tolerance_rules_version": TOLERANCE_RULES_VERSION,
-            },
-            "source_file": str(report_path),
-            "first_year_syndicate": True,
-            "reason": (
-                f"Syndicate {syndicate_num} began underwriting in {inception_year}; "
-                f"report year {report_year} is within the first two underwriting years "
-                f"- insufficient development history for prior year development analysis"
-            ),
-            "syndicate": syndicate_num,
-            "year": report_year,
-            "inception_year": inception_year,
-        }
-        return "first_year", early_year_output
 
     # Convert HTML to PDF if needed
     actual_path = report_path
@@ -3715,6 +4264,22 @@ def process_one_report(report_path, inception_cache=None):
     # Early check: run RAG-lite first to detect first-year syndicates
     # before spending money on LLM calls
     rag_result = extract_pyd_from_relevant_pages(actual_path, report_year)
+
+    # Correct inception cache if the triangle contradicts it.
+    # The triangle is ground truth — if the RAG found a valid triangle
+    # with usable UW years, the inception cache was wrong.
+    if inception_skip and not rag_result.get("first_year_syndicate"):
+        tri = rag_result.get("triangle")
+        uw_years = tri.get("underwriting_years", []) if tri else []
+        if uw_years:
+            tri_inception = min(int(y) for y in uw_years)
+            old_inception = inception_cache.get(syndicate_num)
+            print(f"  [Inception] Cache said inception={old_inception} (would skip), "
+                  f"but triangle shows UW years back to {tri_inception} — correcting cache")
+            inception_cache[syndicate_num] = tri_inception
+            _save_inception_years(inception_cache)
+            inception_skip = False
+
     if rag_result.get("first_year_syndicate"):
         # Triangle has <=2 UW years — update inception cache if this is new info
         if syndicate_num not in inception_cache:
@@ -3801,7 +4366,15 @@ def process_one_report(report_path, inception_cache=None):
     # Loss ratio triangle PYD is often at managed/group level rather than
     # syndicate level (e.g. Beazley 2623).  It should only fill in blanks,
     # never override an LLM-extracted syndicate-level figure.
-    rag_is_fallback_only = (rag_method == "loss_ratio_triangle")
+    # Net triangles also must not override: they capture net-of-reinsurance
+    # development which differs from the gross PYD that LLMs extract from
+    # the reserve commentary text (e.g. syndicate 2526/2014 has a net
+    # triangle giving -85m but gross PYD stated in text is +31.7m).
+    rag_tri_type = (rag_result.get("triangle") or {}).get("type", "none")
+    rag_is_fallback_only = (
+        rag_method == "loss_ratio_triangle"
+        or rag_tri_type == "net"
+    )
 
     if rag_result["pyd"] is not None:
         # RAG found a valid triangle PYD — use it as ground truth
@@ -3821,11 +4394,16 @@ def process_one_report(report_path, inception_cache=None):
         if avg_opening and avg_opening > 0:
             rag_pyd_pct = rag_pyd / avg_opening * 100
             # Releases can't exceed 100% (reserves can't go negative).
-            # Strengthenings CAN exceed 100% in extreme scenarios.
             if rag_pyd_pct < -100:
                 rag_sane = False
                 print(f"  [RAG] Triangle PYD {rag_pyd:+.3f}m ({rag_pyd_pct:.1f}% of opening) "
                       f"< -100% — likely misidentified table. Discarding RAG PYD.")
+            # Strengthenings > 200% are implausible — likely a garbled
+            # triangle or bogus "ultimates" values.
+            elif rag_pyd_pct > 200:
+                rag_sane = False
+                print(f"  [RAG] Triangle PYD {rag_pyd:+.3f}m ({rag_pyd_pct:.1f}% of opening) "
+                      f"> +200% — likely misidentified table. Discarding RAG PYD.")
         elif abs(rag_pyd) > 0.1:
             # Non-zero PYD but zero opening reserves -- can't have reserve
             # development when there are no reserves.  Likely a net triangle
@@ -3844,35 +4422,42 @@ def process_one_report(report_path, inception_cache=None):
             ]:
                 model_pyd = result.get("prior_year_development_gbp_m")
                 if model_pyd is None:
-                    result["prior_year_development_gbp_m"] = rag_pyd
-                    _op = result.get("opening_reserves_gbp_m")
-                    if rag_pyd == 0:
-                        result["prior_year_development_pct"] = 0.0
-                    elif _op and _op > 0:
-                        result["prior_year_development_pct"] = round(
-                            rag_pyd / _op * 100, 2
-                        )
-                    result["direction"] = "release" if rag_pyd < 0 else "strengthening" if rag_pyd > 0 else "flat"
-                    level = " (managed level)" if rag_is_fallback_only else ""
-                    print(f"  [{model_name}] PYD filled from RAG triangle{level}: {rag_pyd:+.3f}m")
-                    if rag_is_fallback_only:
-                        old_notes = result.get("data_quality_notes", "") or ""
-                        result["data_quality_notes"] = (
-                            f"{old_notes} [MANAGED LEVEL: PYD from loss ratio triangle "
-                            f"is at managed/group level, not syndicate share. "
-                            f"May differ from syndicate-level figure.]"
-                        ).strip()
+                    if rag_tri_type == "net":
+                        # Net triangle PYD is fundamentally different from
+                        # gross PYD — don't fill in blanks with it.
+                        print(f"  [{model_name}] PYD is None; skipping net triangle fill-in")
+                    else:
+                        result["prior_year_development_gbp_m"] = rag_pyd
+                        _op = result.get("opening_reserves_gbp_m")
+                        if rag_pyd == 0:
+                            result["prior_year_development_pct"] = 0.0
+                        elif _op and _op > 0:
+                            result["prior_year_development_pct"] = round(
+                                rag_pyd / _op * 100, 2
+                            )
+                        result["direction"] = "release" if rag_pyd < 0 else "strengthening" if rag_pyd > 0 else "flat"
+                        level = " (managed level)" if rag_method == "loss_ratio_triangle" else ""
+                        print(f"  [{model_name}] PYD filled from RAG triangle{level}: {rag_pyd:+.3f}m")
+                        if rag_is_fallback_only:
+                            old_notes = result.get("data_quality_notes", "") or ""
+                            result["data_quality_notes"] = (
+                                f"{old_notes} [MANAGED LEVEL: PYD from loss ratio triangle "
+                                f"is at managed/group level, not syndicate share. "
+                                f"May differ from syndicate-level figure.]"
+                            ).strip()
                 else:
                     try:
                         old_pyd = float(model_pyd)
                         diff = abs(old_pyd - rag_pyd)
 
                         if rag_is_fallback_only:
-                            # Loss ratio triangle is at managed/group level —
-                            # keep the LLM value which comes from syndicate-level
-                            # narrative text.
-                            print(f"  [{model_name}] Keeping LLM PYD={old_pyd} "
-                                  f"(loss ratio triangle gives {rag_pyd:+.3f}m at managed level)")
+                            # Net triangle or loss ratio triangle — keep the
+                            # LLM value which comes from gross narrative text.
+                            if rag_tri_type == "net":
+                                reason = f"net triangle gives {rag_pyd:+.3f}m"
+                            else:
+                                reason = f"loss ratio triangle gives {rag_pyd:+.3f}m at managed level"
+                            print(f"  [{model_name}] Keeping LLM PYD={old_pyd} ({reason})")
                         else:
                             # Standard claims triangle — deterministic PYD is
                             # authoritative over LLM-extracted values (which may
@@ -3949,6 +4534,19 @@ def process_one_report(report_path, inception_cache=None):
             (result_openai, OPENAI_MODEL),
         ]:
             result["_adobe_provisions"] = adobe_prov
+
+    # If opening reserves came from a reserves movement note (RITC syndicates),
+    # inject it into the provisions dict so the auto-resolution mechanism
+    # can use it for opening_reserves_gbp_m discrepancy resolution.
+    movement_opening = rag_result.get("opening_reserves_from_movement")
+    if movement_opening is not None:
+        prov_dict = adobe_prov or {}
+        if prov_dict.get("opening_gross_claims_outstanding") is None:
+            prov_dict["opening_gross_claims_outstanding"] = movement_opening
+            for result in [result_gemini, result_openai]:
+                result["_adobe_provisions"] = prov_dict
+            print(f"  [RAG] Reserves movement opening ({movement_opening:.1f}m) "
+                  f"available for opening reserves resolution")
 
     # Net-of-reinsurance PYD fallback: if both LLMs returned null PYD but both
     # found narrative text with a quantified net reserve movement, use the net

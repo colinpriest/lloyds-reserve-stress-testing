@@ -220,9 +220,11 @@ def _is_scanned_pdf(pdf_path: Path, sample_pages: int = 5) -> bool:
 def _classify_page(text: str) -> set[str]:
     """Return set of matching categories for a page's text."""
     # Normalise non-breaking spaces (U+00A0) that PyMuPDF often emits,
-    # and collapse newlines to spaces so multi-word keywords match even
-    # when PyMuPDF splits them across lines (e.g. "years\nlater")
-    text_lower = text.replace("\u00a0", " ").replace("\n", " ").lower()
+    # collapse newlines to spaces so multi-word keywords match even
+    # when PyMuPDF splits them across lines (e.g. "years\nlater"),
+    # and collapse runs of whitespace to single spaces so column-layout
+    # PDFs match (e.g. "Accident and  health" → "accident and health")
+    text_lower = re.sub(r'\s+', ' ', text.replace("\u00a0", " ")).lower()
     categories = set()
     for category, keywords in _PAGE_KEYWORDS.items():
         hits = sum(1 for kw in keywords if kw.lower() in text_lower)
@@ -1478,6 +1480,163 @@ def _parse_nutrient_lob(grid: list[list[str]], report_year: int,
     )
 
 
+# ── Text-based LOB fallback ───────────────────────────────────────────────
+
+# Canonical LOB patterns for text-based extraction (order matters — longer
+# patterns first to avoid partial matches)
+_TEXT_LOB_PATTERNS = [
+    ("Accident and health", re.compile(r'accident\s+and\s+health', re.I)),
+    ("Fire and other damage to property", re.compile(r'fire\s+and\s+other\s+damage\s+to\s+property', re.I)),
+    ("Marine aviation and transport", re.compile(r'marine[\s,]+aviation', re.I)),
+    ("Third party liability", re.compile(r'third\s+party\s+liability', re.I)),
+    ("Pecuniary loss", re.compile(r'pecuniary\s+loss', re.I)),
+    ("Motor", re.compile(r'\bmotor\b(?:\s+vehicle)?', re.I)),
+    ("Credit and suretyship", re.compile(r'credit\s+and\s+suretyship', re.I)),
+    ("Reinsurance", re.compile(r'\breinsurance\s+accept(?:ed|ances)', re.I)),
+    ("Property", re.compile(r'\bproperty\b(?:\s+(?:direct|insurance|catastrophe))?', re.I)),
+    ("Casualty", re.compile(r'\bcasualty\b', re.I)),
+    ("Energy", re.compile(r'\benergy\b', re.I)),
+    ("Miscellaneous", re.compile(r'\bmiscellaneous\b', re.I)),
+]
+
+# Numbers that follow a LOB label — may be parenthesised negatives
+_NUM_RE = re.compile(r'[(\-]?\d[\d,]*(?:\.\d+)?[)]?')
+
+
+def _parse_lob_from_text(text: str, report_year: int) -> Optional[LOBData]:
+    """Parse LOB breakdown from raw page text when API table extraction fails.
+
+    Targets the standard Lloyd's "Particulars of business written" /
+    "Type of business" note, which lists LOB names followed by columns of
+    numbers (GWP, GEP, claims incurred, expenses, RI balance, total).
+
+    The first number after each LOB name is treated as GWP (Gross Premiums
+    Written) and the third (if present) as claims incurred.
+
+    Returns LOBData or None.
+    """
+    # Collapse whitespace for reliable multi-word matching
+    norm = re.sub(r'\s+', ' ', text.replace('\u00a0', ' '))
+    norm_lower = norm.lower()
+
+    # Must have LOB signals
+    lob_hits = sum(1 for _, pat in _TEXT_LOB_PATTERNS if pat.search(norm_lower))
+    if lob_hits < 2:
+        return None
+
+    # Find the report-year section — look for the year in a header context
+    # The table typically has "2015" on a line near "premiums written"
+    # We want the section for report_year, not the comparative year
+    year_str = str(report_year)
+    sections = []
+    # Split on year boundaries to isolate the report-year table from the
+    # comparative table (e.g. 2015 section vs 2014 section)
+    parts = re.split(r'(?=\b' + year_str + r'\b)', norm)
+    for part in parts:
+        if year_str in part[:40]:  # year near start of section
+            sections.append(part)
+
+    # If no year-specific section found, use the full text but only if
+    # the report year appears somewhere
+    if not sections:
+        if year_str not in norm:
+            return None
+        sections = [norm]
+
+    # Use the first (report-year) section
+    section = sections[0]
+
+    # Also try to cut off at the comparative year or "Geographical analysis"
+    for stop_signal in [str(report_year - 1), "geographical analysis", "Geographical analysis"]:
+        idx = section.find(stop_signal, 40)  # skip first 40 chars (header)
+        if idx > 0:
+            section = section[:idx]
+            break
+
+    # Detect currency
+    currency = "GBP"
+    if "$" in section or "usd" in section.lower():
+        currency = "USD"
+    elif "€" in section.lower() or "eur" in section.lower():
+        currency = "EUR"
+
+    # Extract LOB entries — track matched spans to avoid overlapping matches
+    # (e.g. "Property" matching within "Fire and other damage to property")
+    lob_entries = []
+    claims_entries = []
+    matched_spans = []  # (start, end) of already-matched LOB names
+
+    for lob_name, pattern in _TEXT_LOB_PATTERNS:
+        m = pattern.search(section)
+        if not m:
+            continue
+        # Skip if this match overlaps with an already-matched (longer) pattern
+        if any(m.start() < prev_end and m.end() > prev_start
+               for prev_start, prev_end in matched_spans):
+            continue
+        matched_spans.append((m.start(), m.end()))
+        # Get text after the LOB name match to find numbers
+        after = section[m.end():]
+        # Collect numbers — stop at the next LOB name or section header
+        numbers = []
+        pos = 0
+        for nm in _NUM_RE.finditer(after):
+            # Stop if we've gone past ~200 chars (into next LOB row)
+            if nm.start() > 200:
+                break
+            # Stop if we hit another LOB name
+            snippet_to_num = after[pos:nm.start()].lower()
+            if any(p.search(snippet_to_num) for _, p in _TEXT_LOB_PATTERNS):
+                break
+            raw = nm.group().replace(',', '').replace('(', '-').replace(')', '')
+            try:
+                numbers.append(float(raw))
+            except ValueError:
+                continue
+            pos = nm.end()
+
+        if not numbers:
+            continue
+
+        gwp = abs(numbers[0])
+        claims = numbers[2] if len(numbers) >= 3 else None
+
+        if gwp > 0:
+            lob_entries.append({"line_of_business": lob_name, "amount_raw": gwp})
+        if claims is not None:
+            claims_entries.append({"line_of_business": lob_name, "amount_raw": claims})
+
+    if not lob_entries:
+        return None
+
+    # Auto-detect units from magnitude
+    total_gwp = sum(e["amount_raw"] for e in lob_entries)
+    units_divisor = 1.0
+    if total_gwp > 10_000_000:
+        units_divisor = 1_000_000.0
+    elif total_gwp > 10_000:
+        units_divisor = 1_000.0
+
+    total_gwp_m = round(total_gwp / units_divisor, 1) if units_divisor != 1.0 else round(total_gwp, 1)
+
+    for e in lob_entries:
+        raw = e.pop("amount_raw")
+        e["amount_gbp_m"] = round(raw / units_divisor, 1) if units_divisor != 1.0 else round(raw, 1)
+        e["percentage_of_total"] = round(e["amount_gbp_m"] / total_gwp_m * 100, 1) if total_gwp_m > 0 else 0
+
+    for e in claims_entries:
+        raw = e.pop("amount_raw")
+        e["amount_gbp_m"] = round(raw / units_divisor, 1) if units_divisor != 1.0 else round(raw, 1)
+
+    return LOBData(
+        gross_premium_mix=lob_entries,
+        gross_premiums_written_gbp_m=total_gwp_m,
+        claims_incurred_by_lob=claims_entries if claims_entries else None,
+        currency=currency,
+        method="text_fallback",
+    )
+
+
 # ── Nutrient: parse provisions ────────────────────────────────────────────
 
 def _parse_nutrient_provisions(grid: list[list[str]], report_year: int):
@@ -1743,6 +1902,22 @@ def _extract_nutrient(pdf_path: Path, report_year: int, cache_dir: Path) -> Extr
                     best_triangle = tri_result
                     best_triangle_details = f"{details} (from page text)"
                     print(f"  [Nutrient] Text fallback triangle: {details}")
+
+    # Text-based LOB fallback
+    if best_lob is None:
+        for page_num in sorted(page_matches):
+            if "premium_mix" not in page_matches[page_num]:
+                continue
+            text = page_texts.get(page_num, "")
+            if not text:
+                continue
+            lob = _parse_lob_from_text(text, report_year)
+            if lob and len(lob.gross_premium_mix) > best_lob_count:
+                lob.method = "nutrient_text_fallback"
+                best_lob = lob
+                best_lob_count = len(lob.gross_premium_mix)
+                print(f"  [Nutrient] Text fallback LOB: {len(lob.gross_premium_mix)} classes, "
+                      f"GWP={lob.gross_premiums_written_gbp_m}m")
 
     result.triangle = best_triangle
     result.triangle_details = best_triangle_details or result.triangle_details
@@ -2226,6 +2401,23 @@ def _extract_azure(pdf_path: Path, report_year: int, cache_dir: Path,
                     best_triangle = tri_result
                     best_triangle_details = f"{details} (from page text)"
                     print(f"  [Azure] Text fallback triangle: {details}")
+
+    # Step 5: Text-based LOB fallback — if Azure didn't find a LOB table,
+    # try parsing from the raw page text on premium_mix pages
+    if best_lob is None:
+        for page_num in sorted(page_matches):
+            if "premium_mix" not in page_matches[page_num]:
+                continue
+            text = page_texts.get(page_num, "")
+            if not text:
+                continue
+            lob = _parse_lob_from_text(text, report_year)
+            if lob and len(lob.gross_premium_mix) > best_lob_count:
+                lob.method = "azure_text_fallback"
+                best_lob = lob
+                best_lob_count = len(lob.gross_premium_mix)
+                print(f"  [Azure] Text fallback LOB: {len(lob.gross_premium_mix)} classes, "
+                      f"GWP={lob.gross_premiums_written_gbp_m}m")
 
     result.triangle = best_triangle
     result.triangle_details = best_triangle_details or result.triangle_details

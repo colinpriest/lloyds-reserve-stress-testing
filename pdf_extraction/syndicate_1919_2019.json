@@ -1,48 +1,733 @@
 {
-  "extraction_timestamp": "2026-03-17T13:19:15.913765+00:00",
+  "extraction_timestamp": "2026-03-18T11:35:37.487004+00:00",
   "spec": {
-    "prompt_version": "2.6",
+    "prompt_version": "2.10",
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
   "source_file": "syndicate_reports\\pdfs\\syndicate_1919_2019.pdf",
-  "no_triangle_data": true,
-  "excluded": true,
-  "exclusion_reason": "No claims development triangle or reserve movement text found in report - recommend non-inclusion in analysis",
-  "syndicate": 1919,
-  "year": 2019,
-  "gross_premium_mix": [
-    {
-      "line_of_business": "Marine, aviation and transport",
-      "amount_gbp_m": 61.7,
-      "percentage_of_total": 15.7
+  "models": {
+    "gemini-2.5-flash": {
+      "syndicate": 1919,
+      "year": 2019,
+      "opening_reserves_gbp_m": 706.98,
+      "opening_reserves_page": 5,
+      "opening_reserves_confidence": 1.0,
+      "prior_year_development_gbp_m": 92.577,
+      "prior_year_development_pct": 13.09,
+      "direction": "strengthening",
+      "prior_year_movement_page": 16,
+      "prior_year_movement_confidence": 1.0,
+      "exact_reserve_text": "During 2019, gross ultimate claims in respect of prior underwriting years (2017 and prior) increased by $64.2m ($29.5m net of RI).",
+      "primary_causes": [
+        "Adverse claims development",
+        "Large loss development"
+      ],
+      "specific_events": [],
+      "specific_years_affected": [
+        2015,
+        2016,
+        2017
+      ],
+      "prior_year_events": [
+        {
+          "event_name": "Casualty division losses",
+          "event_year": 2016,
+          "impact_description": "adverse development on 2016 and prior underwriting years of account",
+          "lobs_affected": [
+            "Casualty"
+          ],
+          "amount_gbp_m": 58.3,
+          "confidence": 1.0
+        },
+        {
+          "event_name": "Multi-year construction policies large losses",
+          "event_year": null,
+          "impact_description": "newly occurring large losses, mostly from multi-year construction policies in the Tech division",
+          "lobs_affected": [
+            "Property"
+          ],
+          "amount_gbp_m": null,
+          "confidence": 0.8
+        }
+      ],
+      "named_events": [
+        {
+          "event_name": "Aviation terror event",
+          "event_year": null,
+          "event_type": "man_made",
+          "net_loss_gbp_m": 25.0,
+          "loss_description": "hypothetical scenario for the 2020 Syndicate Business Forecast",
+          "lobs_affected": [
+            "Aviation"
+          ],
+          "page": 12,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Third party liability event",
+          "event_year": null,
+          "event_type": "liability",
+          "net_loss_gbp_m": 18.7,
+          "loss_description": "hypothetical scenario for the 2020 Syndicate Business Forecast",
+          "lobs_affected": [
+            "Casualty"
+          ],
+          "page": 12,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Director and Officers liability event",
+          "event_year": null,
+          "event_type": "liability",
+          "net_loss_gbp_m": 17.0,
+          "loss_description": "hypothetical scenario for the 2020 Syndicate Business Forecast",
+          "lobs_affected": [
+            "Professional Lines"
+          ],
+          "page": 12,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Aviation Collision",
+          "event_year": null,
+          "event_type": "man_made",
+          "net_loss_gbp_m": 6.134,
+          "loss_description": "hypothetical scenario for the 2020 Syndicate Business Forecast",
+          "lobs_affected": [
+            "Aviation"
+          ],
+          "page": 12,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Chile Earthquake",
+          "event_year": null,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": 5.0,
+          "loss_description": "hypothetical scenario for the 2020 Syndicate Business Forecast",
+          "lobs_affected": [
+            "Property"
+          ],
+          "page": 12,
+          "confidence": 0.8
+        }
+      ],
+      "standardized_narrative": "During 2019, Syndicate 1919 experienced a gross prior year reserve strengthening of $64.2 million, representing 9.08% of its opening gross claims outstanding. This adverse development was primarily driven by $58.3 million in large loss claims development within the Casualty division, affecting underwriting years 2016 and prior. The remaining strengthening was due to newly occurring large losses from multi-year construction policies in the Technical Risks division (mapped to Property). Conversely, claim experience for the Aviation and Marine divisions on 2017 and prior underwriting years was within expectations, indicating no significant movement.",
+      "raw_causal_phrases": [
+        "adverse large loss claims development on older underwriting years 2015 and prior",
+        "gross ultimate claims in respect of prior underwriting years (2017 and prior) increased by $64.2m",
+        "$58.3m ($26.9m net of RI) relates to Casualty division losses on 2016 and prior underwriting years of account",
+        "newly occurring large losses, mostly from multi-year construction policies in the Tech division"
+      ],
+      "lob_movements": [
+        {
+          "line_of_business": "Casualty",
+          "direction": "strengthening",
+          "amount_gbp_m": 58.3,
+          "percentage": null,
+          "confidence": 1.0
+        },
+        {
+          "line_of_business": "Property",
+          "direction": "strengthening",
+          "amount_gbp_m": 5.9,
+          "percentage": null,
+          "confidence": 0.8
+        }
+      ],
+      "gross_premiums_written_gbp_m": 392.3,
+      "gross_premium_mix": [
+        {
+          "line_of_business": "Marine, aviation and transport",
+          "amount_gbp_m": 61.7,
+          "percentage_of_total": 15.7
+        },
+        {
+          "line_of_business": "Fire and other damage to property",
+          "amount_gbp_m": 118.1,
+          "percentage_of_total": 30.1
+        },
+        {
+          "line_of_business": "Third party liability",
+          "amount_gbp_m": 91.3,
+          "percentage_of_total": 23.3
+        },
+        {
+          "line_of_business": "Accident and health",
+          "amount_gbp_m": 3.3,
+          "percentage_of_total": 0.8
+        },
+        {
+          "line_of_business": "Miscellaneous",
+          "amount_gbp_m": 11.7,
+          "percentage_of_total": 3.0
+        },
+        {
+          "line_of_business": "Reinsurance",
+          "amount_gbp_m": 106.2,
+          "percentage_of_total": 27.1
+        }
+      ],
+      "gross_premium_page": 9,
+      "gross_premium_confidence": 1.0,
+      "currency": "USD",
+      "data_quality_notes": "The amount for 'Multi-year construction policies large losses' is inferred as the remainder of the total strengthening not explicitly attributed to Casualty, as the report states 'The remainder is driven by newly occurring large losses, mostly from multi-year construction policies in the Tech division.' [CODE OVERRIDE: Model said PYD=64.2, but code computed 92.577 from triangle (OVERRIDE from agreed triangles). Using code value.]",
+      "_claims_triangle": {
+        "type": "gross",
+        "currency": "USD",
+        "units": "thousands",
+        "page": 15,
+        "underwriting_years": [
+          2011,
+          2012,
+          2013,
+          2014,
+          2015,
+          2016,
+          2017,
+          2018,
+          2019
+        ],
+        "development_rows": [
+          [
+            175455,
+            107746,
+            115601,
+            109112,
+            104605,
+            118842,
+            95902,
+            157541,
+            94227
+          ],
+          [
+            299778,
+            229040,
+            233304,
+            207538,
+            246532,
+            261655,
+            227989,
+            332647,
+            null
+          ],
+          [
+            286303,
+            260369,
+            221623,
+            208189,
+            253386,
+            279813,
+            251790,
+            null,
+            null
+          ],
+          [
+            279863,
+            252823,
+            213506,
+            201476,
+            257061,
+            289886,
+            null,
+            null,
+            null
+          ],
+          [
+            282974,
+            249050,
+            210274,
+            220353,
+            275905,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            279696,
+            244348,
+            206838,
+            234068,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            278055,
+            247940,
+            223644,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            276008,
+            249066,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            284220,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ]
+        ]
+      },
+      "source_type": "syndicate",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_1919_2019_llm.pdf",
+      "content_hash": "f63c6508bd3512308c83cb7246f0ecb6a284779c3eb8433f276e41e11224c70c",
+      "standardized_at": "2026-03-18T11:33:56.280926+00:00",
+      "standardization_model": "gemini-2.5-flash",
+      "_extraction_meta": {
+        "model": "gemini-2.5-flash",
+        "input_tokens": 10895,
+        "output_tokens": 2641,
+        "total_tokens": 22901,
+        "cost_usd": 0.009871
+      },
+      "_adobe_lob": {
+        "gross_premium_mix": [
+          {
+            "line_of_business": "Marine, aviation and transport",
+            "amount_gbp_m": 61.7,
+            "percentage_of_total": 15.7
+          },
+          {
+            "line_of_business": "Fire and other damage to property",
+            "amount_gbp_m": 118.1,
+            "percentage_of_total": 30.1
+          },
+          {
+            "line_of_business": "Third party liability",
+            "amount_gbp_m": 91.3,
+            "percentage_of_total": 23.3
+          },
+          {
+            "line_of_business": "Accident and health",
+            "amount_gbp_m": 3.3,
+            "percentage_of_total": 0.8
+          },
+          {
+            "line_of_business": "Miscellaneous",
+            "amount_gbp_m": 11.7,
+            "percentage_of_total": 3.0
+          },
+          {
+            "line_of_business": "Reinsurance",
+            "amount_gbp_m": 106.2,
+            "percentage_of_total": 27.1
+          }
+        ],
+        "gross_premiums_written_gbp_m": 392.3,
+        "claims_incurred_by_lob": [
+          {
+            "line_of_business": "Marine, aviation and transport",
+            "amount_gbp_m": -54.0
+          },
+          {
+            "line_of_business": "Fire and other damage to property",
+            "amount_gbp_m": -74.8
+          },
+          {
+            "line_of_business": "Third party liability",
+            "amount_gbp_m": -91.5
+          },
+          {
+            "line_of_business": "Accident and health",
+            "amount_gbp_m": -9.2
+          },
+          {
+            "line_of_business": "Miscellaneous",
+            "amount_gbp_m": 0.0
+          },
+          {
+            "line_of_business": "Reinsurance",
+            "amount_gbp_m": -123.6
+          }
+        ],
+        "currency": "USD",
+        "method": "azure"
+      }
     },
-    {
-      "line_of_business": "Fire and other damage to property",
-      "amount_gbp_m": 118.1,
-      "percentage_of_total": 30.1
-    },
-    {
-      "line_of_business": "Third party liability",
-      "amount_gbp_m": 91.3,
-      "percentage_of_total": 23.3
-    },
-    {
-      "line_of_business": "Accident and health",
-      "amount_gbp_m": 3.3,
-      "percentage_of_total": 0.8
-    },
-    {
-      "line_of_business": "Miscellaneous",
-      "amount_gbp_m": 11.7,
-      "percentage_of_total": 3.0
-    },
-    {
-      "line_of_business": "Reinsurance",
-      "amount_gbp_m": 106.2,
-      "percentage_of_total": 27.1
+    "gpt-5-mini": {
+      "syndicate": 1919,
+      "year": 2019,
+      "opening_reserves_gbp_m": 706.98,
+      "opening_reserves_page": 18,
+      "opening_reserves_confidence": 1.0,
+      "prior_year_development_gbp_m": 92.577,
+      "prior_year_development_pct": 13.09,
+      "direction": "strengthening",
+      "prior_year_movement_page": 41,
+      "prior_year_movement_confidence": 1.0,
+      "exact_reserve_text": "During 2019, gross ultimate claims in respect of prior underwriting years (2017 and prior) increased by $64.2m ($29.5m net of RI). Of this, $58.3m ($26.9m net of RI) relates to Casualty division losses on 2016 and prior underwriting years of account. The remainder is driven by newly occurring large losses, mostly from multi-year construction policies in the Tech division. At the same time claim experience during 2019 on the Aviation and Marine divisions on 2017 and prior underwriting years has been within expectations.",
+      "primary_causes": [
+        "Man-made catastrophe / large losses",
+        "Large loss development",
+        "Adverse claims development"
+      ],
+      "specific_events": [],
+      "specific_years_affected": [
+        2017,
+        2016
+      ],
+      "prior_year_events": [
+        {
+          "event_name": "Casualty division losses (2016 and prior)",
+          "event_year": 2016,
+          "impact_description": "Adverse development relating to Casualty division losses on 2016 and prior underwriting years of account",
+          "lobs_affected": [
+            "Casualty"
+          ],
+          "amount_gbp_m": 58.3,
+          "confidence": 1.0
+        },
+        {
+          "event_name": "Multi-year construction policies (Tech division) - newly occurring large losses",
+          "event_year": null,
+          "impact_description": "Remainder of prior year deterioration driven by newly occurring large losses, mostly from multi-year construction policies in the Tech division",
+          "lobs_affected": [
+            "Property"
+          ],
+          "amount_gbp_m": null,
+          "confidence": 0.5
+        }
+      ],
+      "named_events": [
+        {
+          "event_name": "Aviation terror event (RDS scenario)",
+          "event_year": null,
+          "event_type": "man_made",
+          "net_loss_gbp_m": 25.0,
+          "loss_description": "Estimated net claims shown in RDS scenarios",
+          "lobs_affected": [
+            "Aviation"
+          ],
+          "page": 37,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Third party liability event (RDS scenario)",
+          "event_year": null,
+          "event_type": "liability",
+          "net_loss_gbp_m": 18.7,
+          "loss_description": "Estimated net claims shown in RDS scenarios",
+          "lobs_affected": [
+            "Casualty"
+          ],
+          "page": 37,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Director and Officers liability event (RDS scenario)",
+          "event_year": null,
+          "event_type": "man_made",
+          "net_loss_gbp_m": 17.0,
+          "loss_description": "Estimated net claims shown in RDS scenarios",
+          "lobs_affected": [
+            "Professional Lines"
+          ],
+          "page": 37,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Aviation Collision (RDS scenario)",
+          "event_year": null,
+          "event_type": "man_made",
+          "net_loss_gbp_m": 6.134,
+          "loss_description": "Estimated net claims shown in RDS scenarios",
+          "lobs_affected": [
+            "Aviation"
+          ],
+          "page": 37,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Chile Earthquake (RDS scenario)",
+          "event_year": null,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": 5.0,
+          "loss_description": "Estimated net claims shown in RDS scenarios",
+          "lobs_affected": [
+            "Property"
+          ],
+          "page": 37,
+          "confidence": 0.8
+        }
+      ],
+      "standardized_narrative": "At 31 December 2019 the syndicate's gross claims outstanding at the prior year (opening) was 706.98 (USD millions). During 2019 gross prior-year development was adverse totalling $64.2m (strengthening), driven largely by $58.3m of deterioration in the Casualty division (2016 and prior) and additional large losses primarily from multi-year construction policies in the technical/engineering area. Aviation and Marine prior-year experience was broadly within expectations. The net impact after reinsurance was smaller ($29.5m net).",
+      "raw_causal_phrases": [
+        "During 2019, gross ultimate claims in respect of prior underwriting years (2017 and prior) increased by $64.2m ($29.5m net of RI).",
+        "Of this, $58.3m ($26.9m net of RI) relates to Casualty division losses on 2016 and prior underwriting years of account.",
+        "The remainder is driven by newly occurring large losses, mostly from multi-year construction policies in the Tech division.",
+        "At the same time claim experience during 2019 on the Aviation and Marine divisions on 2017 and prior underwriting years has been within expectations."
+      ],
+      "lob_movements": [
+        {
+          "line_of_business": "Casualty",
+          "direction": "strengthening",
+          "amount_gbp_m": 58.3,
+          "percentage": null,
+          "confidence": 1.0
+        }
+      ],
+      "gross_premiums_written_gbp_m": 392.3,
+      "gross_premium_mix": [
+        {
+          "line_of_business": "Marine, aviation and transport",
+          "amount_gbp_m": 61.7,
+          "percentage_of_total": 15.7
+        },
+        {
+          "line_of_business": "Fire and other damage to property",
+          "amount_gbp_m": 118.1,
+          "percentage_of_total": 30.1
+        },
+        {
+          "line_of_business": "Third party liability",
+          "amount_gbp_m": 91.3,
+          "percentage_of_total": 23.3
+        },
+        {
+          "line_of_business": "Accident and health",
+          "amount_gbp_m": 3.3,
+          "percentage_of_total": 0.8
+        },
+        {
+          "line_of_business": "Miscellaneous",
+          "amount_gbp_m": 11.7,
+          "percentage_of_total": 3.0
+        },
+        {
+          "line_of_business": "Reinsurance",
+          "amount_gbp_m": 106.2,
+          "percentage_of_total": 27.1
+        }
+      ],
+      "gross_premium_page": 27,
+      "gross_premium_confidence": 1.0,
+      "currency": "USD",
+      "data_quality_notes": "All financial statement figures are presented in the report's native currency (USD). Opening gross claims outstanding taken from the Statement of Financial Position (liabilities) 2018 comparative column. Prior year development gross figure ($64.2m) taken verbatim from the narrative (explicit gross amount). Casualty-specific amount $58.3m is explicit. 'Tech division' deterioration described but not quantified separately so mapped to Property for LOB-level prior year events with lower confidence. Claims development triangle is provided (gross) and was used for cross-checks; RITC not apparent. Some mapping of the report's 'Tech' division to standard Lloyd's LOBs is approximate. [CODE OVERRIDE: Model said PYD=64.2, but code computed 92.577 from triangle (OVERRIDE from agreed triangles). Using code value.]",
+      "_claims_triangle": {
+        "type": "gross",
+        "currency": "USD",
+        "units": "thousands",
+        "page": 40,
+        "underwriting_years": [
+          2011,
+          2012,
+          2013,
+          2014,
+          2015,
+          2016,
+          2017,
+          2018,
+          2019
+        ],
+        "development_rows": [
+          [
+            175455,
+            107746,
+            115601,
+            109112,
+            104605,
+            118842,
+            95902,
+            157541,
+            94227
+          ],
+          [
+            299778,
+            229040,
+            233304,
+            207538,
+            246532,
+            261655,
+            227989,
+            332647,
+            null
+          ],
+          [
+            286303,
+            260369,
+            221623,
+            208189,
+            253386,
+            279813,
+            251790,
+            null,
+            null
+          ],
+          [
+            279863,
+            252823,
+            213506,
+            201476,
+            257061,
+            289886,
+            null,
+            null,
+            null
+          ],
+          [
+            282974,
+            249050,
+            210274,
+            220353,
+            275905,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            279696,
+            244348,
+            206838,
+            234068,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            278055,
+            247940,
+            223644,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            276008,
+            249066,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            284220,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ]
+        ]
+      },
+      "source_type": "syndicate",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_1919_2019_llm.pdf",
+      "content_hash": "f63c6508bd3512308c83cb7246f0ecb6a284779c3eb8433f276e41e11224c70c",
+      "standardized_at": "2026-03-18T11:35:37.484012+00:00",
+      "standardization_model": "gpt-5-mini",
+      "_extraction_meta": {
+        "model": "gpt-5-mini",
+        "input_tokens": 23346,
+        "output_tokens": 6532,
+        "total_tokens": 29878,
+        "cost_usd": 0.018901
+      },
+      "_adobe_lob": {
+        "gross_premium_mix": [
+          {
+            "line_of_business": "Marine, aviation and transport",
+            "amount_gbp_m": 61.7,
+            "percentage_of_total": 15.7
+          },
+          {
+            "line_of_business": "Fire and other damage to property",
+            "amount_gbp_m": 118.1,
+            "percentage_of_total": 30.1
+          },
+          {
+            "line_of_business": "Third party liability",
+            "amount_gbp_m": 91.3,
+            "percentage_of_total": 23.3
+          },
+          {
+            "line_of_business": "Accident and health",
+            "amount_gbp_m": 3.3,
+            "percentage_of_total": 0.8
+          },
+          {
+            "line_of_business": "Miscellaneous",
+            "amount_gbp_m": 11.7,
+            "percentage_of_total": 3.0
+          },
+          {
+            "line_of_business": "Reinsurance",
+            "amount_gbp_m": 106.2,
+            "percentage_of_total": 27.1
+          }
+        ],
+        "gross_premiums_written_gbp_m": 392.3,
+        "claims_incurred_by_lob": [
+          {
+            "line_of_business": "Marine, aviation and transport",
+            "amount_gbp_m": -54.0
+          },
+          {
+            "line_of_business": "Fire and other damage to property",
+            "amount_gbp_m": -74.8
+          },
+          {
+            "line_of_business": "Third party liability",
+            "amount_gbp_m": -91.5
+          },
+          {
+            "line_of_business": "Accident and health",
+            "amount_gbp_m": -9.2
+          },
+          {
+            "line_of_business": "Miscellaneous",
+            "amount_gbp_m": 0.0
+          },
+          {
+            "line_of_business": "Reinsurance",
+            "amount_gbp_m": -123.6
+          }
+        ],
+        "currency": "USD",
+        "method": "azure"
+      }
     }
-  ],
-  "gross_premiums_written_gbp_m": 392.3,
-  "currency": "USD"
+  },
+  "total_cost_usd": 0.028772,
+  "total_tokens": 52779,
+  "validation": {
+    "passed": true,
+    "total_discrepancies": 19,
+    "within_tolerance": 19,
+    "hard_failures": 0,
+    "hard_failure_details": []
+  }
 }
