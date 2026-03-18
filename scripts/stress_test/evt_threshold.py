@@ -50,8 +50,15 @@ class GPDFit:
     ks_pvalue: float
     
     # Confidence intervals (bootstrap)
-    shape_ci: Tuple[float, float]
-    scale_ci: Tuple[float, float]
+    shape_ci: Optional[Tuple[float, float]] = None
+    scale_ci: Optional[Tuple[float, float]] = None
+
+    def __post_init__(self):
+        """Convert lists to tuples (e.g. when loaded from JSON)."""
+        if isinstance(self.shape_ci, list):
+            self.shape_ci = tuple(self.shape_ci)
+        if isinstance(self.scale_ci, list):
+            self.scale_ci = tuple(self.scale_ci)
 
 
 def gpd_cdf(x: np.ndarray, shape: float, scale: float) -> np.ndarray:
@@ -118,7 +125,7 @@ def fit_gpd(exceedances: np.ndarray,
     
     # PWM estimators
     b0 = np.mean(exceedances_sorted)
-    b1 = np.sum(np.arange(1, n+1) * exceedances_sorted) / (n * (n - 1))
+    b1 = np.sum(np.arange(0, n) * exceedances_sorted) / (n * (n - 1))
     
     # Initial shape and scale from PWM
     shape_init = 2 - b0 / (b0 - 2 * b1)
@@ -493,8 +500,9 @@ def return_period_to_severity(gpd_fit: GPDFit,
     p_gpd = 1 - p_exceed / p_above_threshold
     
     if p_gpd < 0 or p_gpd > 1:
-        logger.warning(f"Invalid GPD probability {p_gpd} for return period {return_period}")
-        p_gpd = np.clip(p_gpd, 0.001, 0.999)
+        logger.warning(f"Invalid GPD probability {p_gpd} for return period {return_period} "
+                       f"— return period is below the threshold region, returning threshold severity")
+        return gpd_fit.threshold
     
     # GPD quantile
     excess = gpd_quantile(p_gpd, gpd_fit.shape, gpd_fit.scale)
@@ -504,16 +512,24 @@ def return_period_to_severity(gpd_fit: GPDFit,
 
 def severity_to_return_period(gpd_fit: GPDFit,
                                severity: float,
+                               historical_severities: np.ndarray = None,
                                n_observations_per_year: float = 1.0) -> float:
     """
     Convert severity to return period.
+
+    Args:
+        gpd_fit: Fitted GPD parameters
+        severity: Severity value to convert
+        historical_severities: Array of historical severity values for empirical CDF
+        n_observations_per_year: Number of observations per year
     """
     if severity <= gpd_fit.threshold:
-        # Below threshold, use empirical
-        p_exceed = gpd_fit.n_total * (1 - np.searchsorted(
-            np.sort(np.random.uniform(0, severity, gpd_fit.n_total)), severity
-        ) / gpd_fit.n_total)
-        return 1.0 / max(p_exceed, 0.001)
+        if historical_severities is None:
+            raise ValueError("historical_severities required for below-threshold severity-to-return-period conversion")
+        # Below threshold: use empirical exceedance probability
+        n_exceed = np.sum(historical_severities >= severity)
+        p_exceed = n_exceed / len(historical_severities)
+        return 1.0 / max(p_exceed * n_observations_per_year, 0.0001)
     
     excess = severity - gpd_fit.threshold
     p_gpd = gpd_cdf(excess, gpd_fit.shape, gpd_fit.scale)

@@ -405,12 +405,10 @@ def prepare_historical_data(
             reserves = m.get('prior_reserves_gbp_m')
 
         if reserves is None or reserves <= 0:
-            # Cannot compute meaningful complexity without reserves
+            # Cannot compute meaningful complexity without reserves — skip this movement
             skipped_no_reserves_complexity += 1
-            # Use amount-based estimate for complexity only (not severity)
-            amt = abs(m.get('amount_gbp_m', 0) or 0)
-            reserves = max(amt * 10, 50.0)  # Conservative estimate, min 50m
-            logger.debug(f"No reserves for {syn}/{year}, estimated complexity from amount")
+            logger.debug(f"No reserves for {syn}/{year}, skipping — cannot compute complexity")
+            continue
 
         # Compute complexity score: R × (1 - HHI)
         complexity = reserves * (1 - profile['hhi'])

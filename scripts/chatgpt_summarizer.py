@@ -146,13 +146,37 @@ class ChatGPTSummarizer:
         if response_format:
             payload["response_format"] = response_format
         
-        try:
-            response = self.session.post(self.api_url, json=payload, timeout=60)
-            response.raise_for_status()
-            return response.json()['choices'][0]['message']['content']
-        except Exception as e:
-            logger.error(f"OpenAI API error: {e}")
-            raise
+        max_retries = 3
+        for attempt in range(1, max_retries + 1):
+            try:
+                response = self.session.post(self.api_url, json=payload, timeout=60)
+                response.raise_for_status()
+                data = response.json()
+                try:
+                    return data['choices'][0]['message']['content']
+                except (KeyError, IndexError) as e:
+                    raise ValueError(f"Unexpected OpenAI response structure: {e}. Keys: {list(data.keys())}")
+            except (requests.exceptions.Timeout, requests.exceptions.ConnectionError) as e:
+                if attempt < max_retries:
+                    wait = 2 ** attempt
+                    logger.warning(f"OpenAI API transient error (attempt {attempt}/{max_retries}), retrying in {wait}s: {e}")
+                    import time
+                    time.sleep(wait)
+                else:
+                    logger.error(f"OpenAI API error after {max_retries} attempts: {e}")
+                    raise
+            except requests.exceptions.HTTPError as e:
+                if e.response is not None and e.response.status_code == 429 and attempt < max_retries:
+                    wait = 2 ** attempt * 5
+                    logger.warning(f"Rate limited (attempt {attempt}/{max_retries}), retrying in {wait}s")
+                    import time
+                    time.sleep(wait)
+                else:
+                    logger.error(f"OpenAI API HTTP error: {e}")
+                    raise
+            except Exception as e:
+                logger.error(f"OpenAI API error: {e}")
+                raise
     
     def standardize_lob_commentary(self, 
                                    raw_texts: List[str],

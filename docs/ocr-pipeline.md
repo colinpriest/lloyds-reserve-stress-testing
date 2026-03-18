@@ -35,7 +35,7 @@ PDF input
 |     |-> OCR (Tesseract) with rotation handling |
 |   _classify_page() tags each page:             |
 |     claims_triangle | premium_mix |            |
-|     pl_account | provisions                    |
+|     pl_account | provisions | balance_sheet    |
 |   Returns: (matches, texts, method,            |
 |             rotated_pages)                     |
 +-----------------------------------------------+
@@ -64,6 +64,10 @@ PDF input
 |     Text-based parser for columnar layouts     |
 |   Fallback: _parse_transposed_triangle_from_text() |
 |     Text parser for concatenated transposed    |
+|   _parse_nutrient_provisions()                 |
+|     Prior year claims movement                 |
+|   _parse_opening_claims_outstanding()          |
+|     Opening gross claims outstanding           |
 +-----------------------------------------------+
   |
   v
@@ -83,13 +87,17 @@ PDF input
 |   Gemini + GPT extract independently           |
 |   verify_triangles() resolves disagreements    |
 |   RAG triangle PYD overrides LLM values        |
+|   RAG provisions opening resolves reserves     |
+|   Net-of-reinsurance PYD fallback if null      |
+|   Zero-opening override (PYD=0 if opening=0)  |
+|   Direction forced from resolved PYD sign      |
 +-----------------------------------------------+
   |
   v
 +-----------------------------------------------+
 | Step 6: Report classification                  |
 |   early_year: report_year < inception + 2       |
-|   first_year_syndicate: < 3 UW years in triangle|
+|   first_year_syndicate: no usable UW years for PYD|
 |   no_triangle_data: no triangle + no text      |
 |   Normal: full extraction with PYD             |
 +-----------------------------------------------+
@@ -144,10 +152,39 @@ keywords appear in the page text (case-insensitive).
 
 | Category          | Keywords (subset)                                                    |
 |-------------------|----------------------------------------------------------------------|
-| `claims_triangle` | "claims development", "development table", "cumulative gross claims", "year later", "years later", "development year", "year of account", "ultimate contract outstanding claims", "gross of reinsurance", "net of reinsurance" |
+| `claims_triangle` | "claims development", "development table", "cumulative gross claims", "year later", "years later", "development year", "year of account", "underlying pure year", "incurred at end of underwriting", "ultimate contract outstanding claims", "gross of reinsurance", "net of reinsurance" |
 | `provisions`      | "provision for claims", "prior year", "movement in prior", "gross provision" |
 | `pl_account`      | "technical account", "profit and loss", "claims incurred"            |
-| `premium_mix`     | "accident and health", "marine aviation", "third party liability", "reinsurance" |
+| `premium_mix`     | "segmental analysis", "analysis of underwriting result", "class of business", "by class of business", "accident and health", "marine aviation", "third party liability", "reinsurance" |
+| `balance_sheet`   | "statement of financial position", "balance sheet", "total assets", "total liabilities", "technical provisions", "claims outstanding", "gross technical provisions" |
+
+The `balance_sheet` category was added in v2.8 to ensure the
+Statement of Financial Position page is included in the slim PDF.
+Without it, LLMs could not find the opening gross claims
+outstanding figure (e.g. syndicate 2003/2019 had Gemini reading
+1,227m and GPT reading 5,466m instead of the correct 5,921m,
+because the Balance Sheet page only matched 1 keyword in
+`provisions` and needed 2+ to qualify).
+
+The `premium_mix` category was extended to include
+`"segmental analysis"`, `"analysis of underwriting result"`,
+`"class of business"`, and `"by class of business"`.
+Without these, monoline syndicates (e.g. syndicate 2357/Nephila,
+pure reinsurance) failed page classification: their segmental
+analysis page contained only one regulatory LOB name
+("reinsurance"), giving just 1 keyword hit -- below the ≥2
+threshold.  Adding the section heading as a keyword ensures
+the page is tagged, sent to Azure for table extraction, and
+included in the slim PDF for LLMs.
+
+The `"class of business"` keywords also capture **divisional
+tables** in the Managing Agent's Report (e.g. "Gross written
+premium income by class of business...") which often provide a
+more granular breakdown than the regulatory segmental analysis
+note.  For example, syndicate 2357/2015's regulatory note has a
+single "Reinsurance" LOB, but the Managing Agent's Report breaks
+this into "Property Catastrophe Reinsurance", "Reinsurance",
+and "Weather".
 
 The full keyword lists are in `_PAGE_KEYWORDS`
 (`table_extraction.py`).
@@ -392,8 +429,12 @@ backends (Azure, Nutrient, Adobe).
    `report_year` (accommodates run-off syndicates and syndicates
    with year gaps whose last UW year may significantly precede the
    report year, e.g. syndicate 1884/2021 with max UW year 2018).
-6. If fewer than 3 UW years, return `"new_syndicate"` (first-year
-   syndicate detection).
+6. If fewer than 3 UW years, check whether any year is old enough
+   for PYD computation (`uw_year <= report_year - 2`).  If no
+   usable years exist, return `"new_syndicate"`.  If usable years
+   exist (e.g. syndicate 2468/2022 with UW year 2020), the triangle
+   is parsed normally — single-column triangles are valid when the
+   year has enough development history.
 7. If **no** UW years are found in headers, fall through to the
    transposed triangle parser (section 7.6).
 
@@ -706,6 +747,150 @@ After stripping Cumulative Payments column and transposing:
 This function is invoked as a fallback from `_parse_nutrient_triangle()`
 when no UW years are found in the column headers (step 7.1.6).
 
+### 7.6.3  Format C: "Underlying Pure Year" header
+
+**Cause**: some syndicates (e.g. syndicate 1919) use non-standard
+labels for their transposed triangle.  Instead of "Development Year"
+with numeric column headers (1, 2, 3, ...), they use:
+
+- **Row label**: "Underlying Pure Year" (instead of "Year of Account")
+- **First dev column**: "Incurred at end of underwriting year"
+  (instead of dev period 1)
+- **Subsequent columns**: "1 year later", "2 years later", etc.
+  (instead of bare integers)
+- **Last column**: "Cumulative Payments" (stripped before parsing)
+
+**Detection**: the first header cell contains "Underlying Pure Year"
+or "underlying".  Subsequent cells are matched against the patterns
+`"incurred"`, `"end of underwriting"`, `"year later"`, and
+`"years later"`.  Columns matching `"cumulative"` or `"total"` are
+excluded.
+
+**Parsing steps**:
+
+1. Identify development period columns by matching column headers
+   against the patterns above.
+2. Parse UW year rows and extract numeric values (same as Format A).
+3. Transpose, trim, and infer currency/units/type as usual.
+
+**Example** (syndicate 1919/2018):
+
+```
+Input grid (Format C):
+  Underlying Pure Year | Incurred at end... | 1 year later | 2 years later | ... | Cumulative Payments
+  2011                 | 175,847            | 299,981      | 286,324       | ... | 257,282
+  2012                 | 107,509            | 228,009      | 259,497       | ... | 230,096
+  ...
+  2018                 | 157,771            | -            | -             | ... | 12,645
+
+Output (standard format, after stripping Cumulative Payments):
+  UW years: [2011, 2012, ..., 2018]
+  Row 0: [175847, 107509, ..., 157771]  (incurred at end of UW year)
+  Row 1: [299981, 228009, ..., None]    (1 year later)
+  ...
+```
+
+### 7.7  LOB grid parsing (monoline threshold)
+
+**Function**: `_parse_nutrient_lob(grid, report_year, page_text)`
+(`table_extraction.py`)
+
+Tables tagged as `premium_mix` are parsed for LOB (line of
+business) breakdowns.  The parser validates a table as a
+segmental analysis by counting how many `_LOB_KEYWORDS` appear
+in the grid text.
+
+**Normal syndicates** (3+ LOBs): require `lob_hits >= 3` to
+avoid false positives from non-LOB tables that happen to
+contain words like "reinsurance" or "property".
+
+**Monoline syndicates** (1-2 LOBs): when the **page text**
+(not just the grid) contains an explicit LOB table signal --
+`"segmental analysis"`, `"class of business"`, or
+`"analysis of underwriting result"` -- the threshold drops to
+`lob_hits >= 1`.  This is necessary because the signal phrase
+often appears as a section heading above the table, outside the
+grid that Azure/Nutrient returns.
+
+The `page_text` parameter is the full OCR/PyMuPDF text of the
+page containing the grid, passed through from the page scan.
+
+**Example**: syndicate 2357/2015 (Nephila, pure reinsurance).
+The regulatory segmental analysis on page 25 has a single row:
+"Reinsurance: $73,098k".  The grid text contains "reinsurance"
+(1 LOB keyword), insufficient for the normal threshold of 3.
+But the page text contains "segmental analysis", so the
+threshold drops to 1 and the single-LOB breakdown is accepted.
+
+### 7.8  Provisions grid parsing
+
+**Functions**: `_parse_nutrient_provisions(grid, report_year)`,
+`_parse_opening_claims_outstanding(grid, report_year)`
+(`table_extraction.py`)
+
+Tables tagged as `provisions` or `balance_sheet` are parsed for
+two pieces of data:
+
+#### 7.8.1  Prior year claims movement
+
+`_parse_nutrient_provisions()` searches for a row whose label
+contains `"prior"` and one of `"claim"`, `"underwriting"`, or
+`"year"`.  It extracts gross, reinsurance share, and net amounts
+from the corresponding columns.  Column positions are detected
+from header keywords (`"gross"`, `"reinsur"`/`"share"`/`"ceded"`,
+`"net"`), with a positional fallback to columns 1/2/3 if headers
+are not found.
+
+Values exceeding 10,000 in absolute terms are assumed to be in
+thousands and divided by 1,000 to convert to millions.
+
+#### 7.8.2  Opening gross claims outstanding
+
+`_parse_opening_claims_outstanding()` extracts the gross claims
+outstanding at the start of the reporting year from provisions
+movement tables or balance sheet notes.
+
+**Detection**: the function requires both `"claims outstanding"`
+and one of `"balance"`, `"1 january"`, or `"brought forward"` to
+appear in the grid text.
+
+**Section-aware parsing**:
+
+1. Scan rows for a `"claims outstanding"` section header.
+2. Within that section, find the `"balance at 1 january"`,
+   `"brought forward"`, or `"at 1 january"` row.
+3. Extract the value from the gross column.
+4. Stop parsing if a different section (`"unearned premium"`,
+   `"deferred acquisition"`, `"total"`) is encountered.
+
+**Unit detection**: the function checks headers (rows 0--3) for
+`"'000"`, `"000s"`, or `"thousand"`.  If found, the extracted
+value is divided by 1,000 to convert to millions.
+
+**Column detection**: looks for a header cell containing `"gross"`
+(excluding `"net"`).  Falls back to column 1.
+
+**Example**: syndicate 2357/2016 has a Technical Provisions note
+(page 24) with:
+
+```
+Claims outstanding
+  Balance at 1 January    17    -    17    -    -    -
+  Change in claims ...    25,791    (3,018)    22,773    ...
+```
+
+The table is in `$'000`, so `17` → `$0.017m`.  Both LLMs
+extracted wrong values for opening reserves (Gemini: 7.806m
+from total technical provisions, GPT: 23.463m from member's
+balances).  The RAG-extracted `0.017m` is the correct gross
+claims outstanding at 1 January 2016.
+
+**Integration**: the extracted value is stored as
+`ProvisionsData.opening_gross_claims_outstanding` and included
+in the `_adobe_provisions` metadata on both LLM result dicts.
+It is used downstream for auto-resolution of
+`opening_reserves_gbp_m` hard failures (section 10.6).
+
 ---
 
 ## 8  Text-based triangle fallback
@@ -790,17 +975,29 @@ without spaces.
 
 **Parsing steps**:
 
-1. **Marker detection**: require both `"development year"` and
-   `"year of account"` in the text (case-insensitive).
-2. **Extract after "Year of Account"**: take the text following
-   the `"Year of Account"` marker.
+1. **Marker detection**: the text is whitespace-normalised
+   (all `\s+` collapsed to single spaces) before searching for
+   markers, because PyMuPDF often splits multi-word labels across
+   lines (e.g. `"Underlying\nPure\nYear"`).  The function requires
+   both a **development period marker** and a **UW year label
+   marker**:
+   - Standard: `"development year"` + `"year of account"`
+   - Alternative (e.g. syndicate 1919): `"incurred at end of
+     underwriting"` + `"underlying pure year"`
+   Positions found in the normalised text are mapped back to the
+   original text using a regex search for the phrase with flexible
+   whitespace between words.
+2. **Extract after UW year label**: take the text following the
+   matched UW year label (`"Year of Account"` or
+   `"Underlying Pure Year"`).
 3. **Truncate at stop markers**: cut the text at the first
    occurrence of "current estimate", "cumulative payment",
    "cumulative gross payment", "cumulative net payment",
    "gross claims reserve", "net claims reserve",
-   "gross unearned", "net unearned", or
-   "estimate of cumulative net".  This prevents collecting
-   values from the paid-claims or net triangle sections.
+   "gross unearned", "net unearned",
+   "estimate of cumulative net", or **"net of reinsurance"**
+   (the last prevents collecting values from a net triangle on the
+   same page).
 4. **Find UW years**: match `(19|20)\d{2}` in the after-YoA text.
    Deduplicate (a year appearing twice means both gross and net
    sections were captured -- only keep the first occurrence).
@@ -938,6 +1135,47 @@ The -100% check is applied in three places:
 3. `_passes_sanity()` inside `verify_triangles()` -- gates
    whether a single-model triangle can be trusted.
 
+### 9.4.1  Zero opening reserves edge case
+
+Some syndicates (e.g. syndicate 2357/Nephila in early years)
+have zero gross claims outstanding at the start of the year
+and a claims development triangle that is entirely
+dashes/zeros for prior underwriting years.  In this case:
+
+- **PYD = 0** (no prior year reserves → no development)
+- **PYD% = 0%** (not undefined -- zero development of zero
+  reserves is definitionally zero percent)
+- **Non-zero RAG PYD is rejected**: when opening reserves = 0
+  and the RAG triangle computes a non-trivial PYD
+  (|PYD| > 0.1m), it is discarded.  This catches cases where
+  the deterministic extraction picked up a **net** triangle
+  (which may have large movements) instead of the gross
+  triangle (which has no prior year claims).
+
+All PYD% calculations use a three-way branch:
+
+```python
+if pyd == 0:
+    pyd_pct = 0.0        # definitionally zero
+elif opening > 0:
+    pyd_pct = pyd / opening * 100
+else:
+    pyd_pct = None        # can't compute (shouldn't reach here)
+```
+
+This applies in `_apply_triangle_pyd()`, the RAG override
+path, the net fallback path, and `_passes_sanity()`.
+
+**Post-LLM zero-opening override**: after all PYD resolution
+(RAG override, triangle verification, net fallback), if
+**both** models agree that opening reserves = 0, the pipeline
+forces PYD = 0.0, PYD% = 0.0, and direction = "flat" on both
+models.  This catches cases where an LLM misinterprets
+current-year claims activity as prior year development
+(e.g. GPT extracting $17k from the provisions movement note
+as PYD for syndicate 2357/2015, when there were zero prior
+year reserves to develop).
+
 ### 9.5  Year-value contamination detection
 
 **Function**: `compute_pyd_from_triangle()`, year-like value
@@ -1058,6 +1296,147 @@ When the difference is < 0.5m, the RAG value still replaces
 the LLM value but is logged as "confirmed" rather than
 "overridden" (no note added to `data_quality_notes`).
 
+### 10.4  Net-of-reinsurance PYD fallback
+
+**Function**: `_parse_net_pyd_from_text()` (`test_gemini.py`)
+
+Some reports (especially smaller or older syndicates) only
+disclose prior year reserve movements **net of reinsurance**
+in their narrative text, with no gross movement note, no
+gross claims development triangle, and no loss ratio table.
+Previously these reports would have `prior_year_development_gbp_m:
+null` despite both LLMs finding and quoting the net figure
+in `exact_reserve_text`.
+
+The pipeline now applies a last-resort fallback **after** all
+other PYD sources have been tried (RAG triangle, LLM-extracted
+triangles, provisions note):
+
+1. Check whether both LLMs returned `prior_year_development_gbp_m:
+   null`.
+2. Check whether `exact_reserve_text` contains a quantified
+   reserve movement (e.g. "reserve release of GBP 1.3m net of
+   reinsurance").
+3. Parse the amount and sign from the narrative text using
+   `_parse_net_pyd_from_text()`.
+4. If successful, fill in the PYD value and compute the
+   percentage against opening reserves.
+
+**Source priority chain** (highest to lowest):
+
+| Priority | Source | Gross/Net |
+|----------|--------|-----------|
+| 1 | RAG deterministic triangle PYD | Gross |
+| 2 | LLM-extracted "Movement in prior year's provision" note | Gross |
+| 3 | LLM-extracted narrative text (gross amount) | Gross |
+| 4 | LLM-extracted year-of-account result breakdown | Net* |
+| 5 | LLM-extracted loss ratio development table | Gross |
+| 6 | Narrative text net-of-reinsurance figure (parsed post-hoc) | Net |
+
+\* Year-of-account results are inherently net of reinsurance.
+
+When the net fallback is used, a `[NET FALLBACK]` note is
+appended to `data_quality_notes`:
+
+```
+[NET FALLBACK: No gross PYD available. Using net-of-reinsurance
+figure (-1.300m) from narrative text.]
+```
+
+**Supported text patterns** (case-insensitive):
+
+- "reserve release of GBP 1.3m"
+- "release of £1.3m"
+- "strengthening of GBP 2.9m"
+- "GBP 1.3m net release"
+- "£2.9m strengthening"
+
+Sign is determined from context words near the match
+("release"/"surplus" → negative, "strengthening"/"deterioration"
+→ positive).  If context is ambiguous, the `direction` field
+from the LLM extraction is used as tiebreaker.
+
+**Example**: syndicate 1910/2014 reports "a reserve release of
+GBP 1.3m (2013: strengthening GBP 2.9m) net of reinsurance was
+made from prior year reserves."  No gross triangle or movement
+note exists.  The fallback parser extracts -1.3 (release) and
+computes -1.86% of the £69.876m opening reserves.
+
+### 10.5  Direction forcing from PYD
+
+After all PYD resolution (RAG override, triangle verification,
+net fallback, zero-opening override), the pipeline forces the
+`direction` field on **both** models to match the resolved PYD
+sign:
+
+| PYD value | Forced direction |
+|-----------|------------------|
+| `0`       | `"flat"`         |
+| `< 0`     | `"release"`      |
+| `> 0`     | `"strengthening"`|
+
+This runs **before** the comparison/tolerance check
+(`compare_results`), so any LLM-reported direction that
+contradicts the PYD is overridden before it can cause a hard
+failure.
+
+**Rationale**: the triangle-computed PYD is the authoritative
+source of truth for the magnitude and sign of reserve
+development.  The LLM `direction` field is a textual
+interpretation that can be wrong (e.g. GPT reporting
+"strengthening" when PYD = 0 for a zero-claims syndicate).
+Forcing direction from PYD eliminates these spurious
+disagreements.
+
+Previously, direction disagreements (e.g. `null` vs `"flat"`)
+were handled by `resolve_computed_fields()` after the
+comparison.  That auto-resolution remains as a safety net for
+cases where PYD is null on both models, but the upstream
+direction-forcing step handles the common case.
+
+### 10.6  Opening reserves auto-resolution from RAG provisions
+
+**Function**: `resolve_computed_fields()` (`test_gemini.py`)
+
+When the two LLMs disagree on `opening_reserves_gbp_m` beyond
+the 0.5% tolerance (a hard failure), the pipeline checks whether
+the RAG provisions table extracted an
+`opening_gross_claims_outstanding` value (section 7.8.2).
+
+If available, the RAG value **overrides both models**:
+
+1. Both models' `opening_reserves_gbp_m` are set to the RAG
+   value.
+2. `prior_year_development_pct` is recomputed using the
+   corrected opening reserves.
+3. The hard failure is reclassified as auto-resolved.
+
+**Rationale**: LLMs frequently confuse opening reserves with
+other balance sheet figures:
+
+| Wrong source | What it actually is |
+|--------------|---------------------|
+| Member's balances | Equity, not claims reserves |
+| Total technical provisions | Includes unearned premiums |
+| Net claims outstanding | After reinsurance deduction |
+| Reinsurers' share | Only the ceded portion |
+
+The RAG provisions table value comes from the "Balance at
+1 January" row within the "Claims outstanding" section of the
+Technical Provisions movement note -- the definitive source for
+gross opening claims reserves.
+
+**Example**: syndicate 2357/2016.  Gemini extracted 7.806m
+(total technical provisions = unearned premiums 7,789 + claims
+outstanding 17, in $'000).  GPT extracted 23.463m (member's
+balances).  The correct value is $0.017m (claims outstanding
+at 1 January = 17 in $'000).
+
+```
+Auto-resolved opening_reserves_gbp_m using RAG provisions table: 0.017m
+  gemini-2.5-flash: 7.806, gpt-5-mini: 23.463, RAG: 0.017
+```
+
 ---
 
 ## 11  Report classification
@@ -1085,10 +1464,28 @@ year activity.
    from claims development triangles (earliest UW year across all
    reports for a syndicate).
 2. **Perplexity API** -- if a syndicate is not in the cache, the
-   pipeline queries Perplexity (`sonar` model) with:
-   *"What year did Lloyd's of London syndicate N first begin
-   underwriting insurance?"*
-   The response is parsed for a 4-digit year and saved to the cache.
+   pipeline queries Perplexity (`sonar` model) with a structured
+   JSON request.  The prompt asks for a JSON object:
+   ```json
+   {
+     "syndicate_number": 2001,
+     "first_underwriting_year": 1997,
+     "confidence": "high",
+     "source": "Lloyd's syndicate directory"
+   }
+   ```
+   The prompt explicitly warns that syndicate numbers are not
+   necessarily the same as inception years.  Validation checks:
+   - **Confidence filter**: answers with `"confidence": "low"` are
+     rejected.  Medium and high confidence answers are accepted.
+   - **Range check**: year must be between 1688 and 2030.
+   - **Sanity check vs reports on disk**: if the returned year is
+     later than the earliest report we have for the syndicate, the
+     answer is clearly wrong (a syndicate can't have reports before
+     it started).  In that case, the pipeline falls back to
+     `earliest_report_year - 2` as a conservative estimate.
+   - **JSON parse fallback**: if Perplexity returns free text
+     instead of JSON, a regex extracts the first 4-digit year.
    Cost: ~$0.001 per query; each syndicate is queried at most once.
 3. **Triangle detection** -- if the RAG-lite extraction later finds
    a triangle with <= 2 UW years, the pipeline updates the cache
@@ -1122,7 +1519,22 @@ extraction runs and may detect a triangle with fewer than 3
 underwriting years.  This is a second line of defence for
 syndicates not yet in the inception cache.
 
-- Triangle with < 3 UW years -> `first_year_syndicate = True`
+The check uses **usable years**, not raw UW year count:
+
+- A UW year is "usable" for PYD if `uw_year <= report_year - 2`
+  (i.e. there is a previous diagonal to compare against)
+- If the triangle has < 3 UW years **and** no usable years exist
+  → `first_year_syndicate = True`
+- If the triangle has < 3 UW years **but** usable years exist
+  → the triangle is parsed normally and PYD is computed
+
+**Example**: syndicate 2468/2022 has a single-column triangle
+(UW year 2020).  Since 2020 ≤ 2022 − 2 = 2020, the year is
+usable.  The pipeline extracts the triangle (29,267 → 28,431 →
+28,278 in £'000) and computes PYD = −0.153m (a release).
+
+When `first_year_syndicate` is triggered:
+
 - The inception cache is updated with the estimated inception year
 - LLM extraction is **skipped** (saves API cost)
 - LOB breakdown is still extracted if available
@@ -1241,6 +1653,18 @@ LLM cache keys are computed from `(model, prompt_version,
 prompt_text, syndicate, year)`.  Changing the prompt text or
 bumping `PROMPT_VERSION` auto-invalidates affected entries.
 
+**Azure cache and page set changes**: Azure caches also store
+a `_pages_hash` derived from the set of relevant page numbers.
+When page classification changes (e.g. adding the
+`balance_sheet` category), the page set changes for affected
+reports, automatically invalidating their Azure cache without
+needing a `_CACHE_VERSION` bump.
+
+**v2.8 cache invalidation**: `PROMPT_VERSION` was bumped from
+2.7 to 2.8 when the `balance_sheet` page category was added.
+This forces LLM re-extraction so Gemini and GPT receive the
+updated slim PDF containing the Balance Sheet page.
+
 ---
 
 ## 14  Output format
@@ -1296,7 +1720,7 @@ the first two underwriting years:
 }
 ```
 
-When detected by the triangle check (fewer than 3 UW years):
+When detected by the triangle check (no usable UW years for PYD):
 
 ```json
 {
@@ -1324,9 +1748,91 @@ include a `reclassified_from` field indicating the previous status
 }
 ```
 
+### 14.4  Excluded after extraction
+
+Reports that were fully extracted (have a `models` key with LLM
+outputs) but subsequently excluded during adjudication or manual
+review.  These retain the full extraction data alongside the
+exclusion flags:
+
+```json
+{
+  "extraction_timestamp": "2026-03-17T07:51:30+00:00",
+  "source_file": "syndicate_reports/pdfs/syndicate_1897_2014.pdf",
+  "models": {
+    "gemini-2.5-flash": { "...full extraction..." },
+    "gpt-5-mini": { "...full extraction..." }
+  },
+  "validation": { "passed": false, "hard_failures": 2, "..." : "..." },
+  "excluded": true,
+  "exclusion_reason": "The 1897 report for 2014 does not disclose prior year claim movements",
+  "exclusion_date": "2026-03-17"
+}
+```
+
+The key distinction from 14.3 is that these reports **have**
+`models` -- the extraction ran but the result was rejected.
+Common causes include unresolvable LLM disagreements where the
+underlying report does not contain sufficient reserve data.
+
 ---
 
-## 15  Troubleshooting
+## 15  Progress report dashboard
+
+The file `pdf_extraction/progress_report.html` provides a
+browser-based monitoring dashboard that reads JSON output files
+and source PDFs via the File System Access API.
+
+### 15.1  Report status categories
+
+Each completed JSON file is classified into one of three
+statuses based on its structure:
+
+| Status | Condition | Badge colour | Description |
+|--------|-----------|--------------|-------------|
+| **Skipped** | No `models` key (has `first_year_syndicate`, `no_triangle_data`, or `reason`) | Yellow | Report was never sent to LLMs -- auto-detected as first-year syndicate, no-triangle-data, or inception year skip.  No API cost incurred. |
+| **Excluded** | Has `models` key AND `excluded: true` | Purple | Extraction ran but the report was excluded during adjudication or manual review.  API cost was incurred. |
+| **Extracted** | Has `models` key, no `excluded` flag | Green/Red | Normal extraction result.  Shown as "Reliable" (green) if both PYD and premium mix are present, or "Incomplete" (red) otherwise. |
+
+**Console INCOMPLETE warning**: After writing each JSON file,
+`test_gemini.py` checks whether the extraction has both PYD %
+and a non-empty premium mix.  If either is missing, a
+`>> INCOMPLETE: missing <fields>` line is printed to the
+console so the operator sees the same status that the dashboard
+will show, without needing to open `progress_report.html`.
+
+**Note**: reports with both `no_triangle_data: true` and
+`excluded: true` but **no** `models` key are classified as
+Skipped, not Excluded.  The `excluded` flag on these files is a
+legacy artefact from the no-triangle-data detection path --
+the report was never sent to LLMs.
+
+### 15.2  Dashboard cards
+
+| Card | Metric | Denominator |
+|------|--------|-------------|
+| Completed | Count of all JSON files | Total PDFs in source folder |
+| Progress | % complete | Total PDFs |
+| Elapsed Time | Wall time from first to latest extraction timestamp | -- |
+| Est. Remaining | `(avg_time_per_report) * remaining_count` | -- |
+| Reliable Data | % of extracted (non-skipped, non-excluded) reports with both PYD and premium data | Extracted count |
+| Total Cost | Sum of `total_cost_usd` across all reports | -- |
+| Skipped | % of completed reports that are skipped | Completed count |
+| Excluded | % of completed reports that are excluded after extraction | Completed count |
+
+### 15.3  Syndicate/year resolution for excluded reports
+
+Excluded reports with `models` typically lack top-level
+`syndicate` and `year` fields (these are inside the model
+objects).  The dashboard resolves these in priority order:
+
+1. Top-level `data.syndicate` / `data.year`
+2. First model object's `.syndicate` / `.year`
+3. Filename regex: `syndicate_(\d+)_(\d{4}).json`
+
+---
+
+## 16  Troubleshooting
 
 ### Triangle has too many development rows
 
@@ -1439,6 +1945,54 @@ through to no-data.
 column headers.  The text-based parser has Strategy C
 (`_parse_transposed_triangle_from_text()`) for cases where the
 API detects no table at all.
+
+### "Underlying Pure Year" triangle not detected
+
+**Symptom**: triangle extraction returns `no_triangle_data` for
+a syndicate that uses non-standard labels like "Underlying Pure
+Year" and "Incurred at end of underwriting year" (e.g. syndicate
+1919).
+
+**Cause**: three independent issues compounded:
+
+1. **Page keywords**: `_PAGE_KEYWORDS['claims_triangle']` did not
+   include "underlying pure year" or "incurred at end of
+   underwriting", so the page was not tagged for triangle
+   extraction (though other keywords like "year later" and "gross
+   of reinsurance" could still match if present).
+
+2. **Text-based parser markers**: `_parse_transposed_triangle_from_text()`
+   only checked for `"development year"` + `"year of account"`.
+   PyMuPDF splits "Underlying Pure Year" across lines as
+   `"Underlying\nPure\nYear"`, so even a simple string search
+   fails.  The function now normalises whitespace before marker
+   detection and supports the alternative marker pair.
+
+3. **Grid-based parser headers**: `_parse_transposed_triangle()`
+   only checked for `"Development Year"` in the first header cell.
+   The "Underlying Pure Year" header was not recognised.
+
+4. **Units detection**: `$000` was not matched by the unit
+   detection regex in the text-based parsers (only `£000`/`£'000`/
+   `'000` were checked).  This caused USD-denominated triangles in
+   thousands to be treated as millions.
+
+**Fix** (cache version 6):
+
+- Added `"underlying pure year"` and `"incurred at end of
+  underwriting"` to `_PAGE_KEYWORDS['claims_triangle']`.
+- `_parse_transposed_triangle_from_text()` now normalises
+  whitespace (`\s+` → ` `) before searching for markers, and
+  supports `"underlying pure year"` as an alternative to
+  `"year of account"` and `"incurred at end of underwriting"`
+  as an alternative to `"development year"`.  Added
+  `"net of reinsurance"` as a section stop marker.
+- `_parse_transposed_triangle()` recognises "Underlying Pure Year"
+  as a header (Format C, section 7.6.3) and parses
+  "X year(s) later" / "Incurred at end..." as dev period columns.
+- Units detection in text-based parsers now uses regex
+  `[£$]'?000` instead of hard-coded `£000`/`£'000` strings,
+  correctly matching `$000`.
 
 ### "Year of Account" triangle not detected
 
@@ -1668,3 +2222,151 @@ are treated as development periods.  A fully-populated last
 column is detected and stripped as "Cumulative Payments" (the
 second-to-last column must have at least one null to confirm
 the triangle staircase shape).
+
+### PYD is null despite narrative text quoting a figure
+
+**Symptom**: both LLMs return `prior_year_development_gbp_m:
+null`, but `exact_reserve_text` contains a clear amount like
+"reserve release of GBP 1.3m net of reinsurance".
+
+**Cause**: the report only discloses the prior year movement
+**net of reinsurance** (no gross movement note, no gross
+triangle, no loss ratio table).  The LLM prompt historically
+instructed models to return null when only a net figure was
+available.
+
+**Fix**: two changes:
+1. The LLM prompt now includes **Source 6** (last resort):
+   use the net-of-reinsurance figure when no gross source
+   exists, flagged in `data_quality_notes`.
+2. Post-processing in `process_single_report()` runs
+   `_parse_net_pyd_from_text()` after all other PYD sources.
+   If both models still have null PYD but valid
+   `exact_reserve_text`, the parser extracts the net amount
+   and fills it in with a `[NET FALLBACK]` annotation.
+
+**Example**: syndicate 1910/2014 -- "a reserve release of
+GBP 1.3m net of reinsurance" -> `prior_year_development_gbp_m:
+-1.3`, `prior_year_development_pct: -1.86`.
+
+### Perplexity returns syndicate number as inception year
+
+**Symptom**: log shows `"WARNING: Perplexity returned syndicate
+number N as inception year -- ignoring"` for syndicates whose
+number coincidentally equals their actual inception year (e.g.
+syndicate 2001 genuinely started underwriting in 2001).
+
+**Cause**: the old free-text parser had a heuristic that rejected
+any Perplexity response where the parsed year equalled the
+syndicate number, on the assumption that Perplexity was echoing
+the number.  This rejected 17 syndicates in the 1980--2021 range
+whose numbers happen to match their true inception year.
+
+**Fix**: `_lookup_inception_year_perplexity()` was rewritten to
+request **structured JSON output** from Perplexity instead of
+free text.  The prompt asks for:
+```json
+{
+  "syndicate_number": 2001,
+  "first_underwriting_year": 1997,
+  "confidence": "high",
+  "source": "Lloyd's syndicate directory"
+}
+```
+The syndicate-number-echo heuristic was removed.  Instead,
+quality control is handled by:
+- **Confidence filtering**: `"low"` confidence answers are
+  rejected; `"medium"` and `"high"` are accepted.
+- **Range validation**: year must be 1688--2030.
+- **Sanity check vs reports on disk**: year must not be later
+  than the earliest report we have for the syndicate.
+- **JSON parse fallback**: if Perplexity returns free text,
+  a regex extracts the first 4-digit year.
+
+### Unicode characters cause charmap codec error on Windows
+
+**Symptom**: `'charmap' codec can't encode character '\u2192'`
+crashes the pipeline on Windows when printing RAG override
+messages.
+
+**Cause**: print statements contained Unicode characters
+(U+2192 RIGHTWARDS ARROW, U+2014 EM DASH) that the Windows
+console code page (cp1252) cannot encode.
+
+**Fix**: replaced Unicode arrows and em-dashes with ASCII
+equivalents (`->` and `--`) in all print/log statements in
+`test_gemini.py` and `table_extraction.py`.
+
+### LLMs extract wrong opening reserves
+
+**Symptom**: Gemini and GPT return different (wrong) values for
+`opening_reserves_gbp_m`.  For example, syndicate 2003/2019 had
+Gemini reading 1,227m and GPT reading 5,466m instead of the
+correct 5,921m ($5,921,697 thousands from the Technical
+Provisions note).
+
+**Cause**: the Balance Sheet / Statement of Financial Position
+page was not included in the slim PDF sent to the LLMs.  The
+page contained "Claims outstanding" (1 keyword hit in
+`provisions`) but needed 2+ hits to be classified.  Without
+this page, the LLMs could not find the gross technical
+provisions opening balance and fell back to other figures
+(e.g. reinsurers' share of claims outstanding, or net
+provisions).
+
+**Fix** (v2.8): added a `balance_sheet` category to
+`_PAGE_KEYWORDS` in `table_extraction.py` with keywords:
+"statement of financial position", "balance sheet",
+"total assets", "total liabilities", "technical provisions",
+"claims outstanding", "gross technical provisions".
+Bumped `PROMPT_VERSION` from 2.7 to 2.8 to invalidate LLM
+caches.
+
+**Additional fix**: even with the balance sheet page included,
+LLMs can still confuse opening reserves with other figures
+(member's balances, total technical provisions including
+unearned premiums).  The pipeline now extracts the opening
+gross claims outstanding deterministically from the Technical
+Provisions movement note (section 7.8.2) and uses it to
+auto-resolve `opening_reserves_gbp_m` hard failures
+(section 10.6).
+
+### Auto-accepted fields shown as "Unresolved" in report decision
+
+**Symptom**: after the adjudication loop resolves all hard
+failures (including auto-computed `prior_year_development_pct`),
+`present_report_decision()` displays auto-accepted fields as
+"Unresolved" and prompts for a manual include/exclude decision.
+
+**Cause**: `present_report_decision()` in `adjudicate.py` only
+counted `("approve", "override", "override_value")` as resolved
+decision types.  Fields resolved via `"auto_accept"` (immaterial
+differences, auto-computed percentages) were classified as
+unresolved.
+
+**Fix**: added `"auto_accept"` to the resolved decision types
+in `present_report_decision()`.
+
+### Gemini returns malformed JSON with unquoted property names
+
+**Symptom**: `parse_json_response()` fails with "Expecting
+property name enclosed in double quotes" and the pipeline
+retries up to 3 times before crashing.
+
+**Cause**: Gemini occasionally outputs JavaScript-style JSON
+with unquoted property names (e.g. `{ syndicate_number: 2357 }`
+instead of `{ "syndicate_number": 2357 }`).  The existing JSON
+repair logic handled trailing commas and `//` comments but not
+unquoted keys.
+
+**Fix**: `parse_json_response()` now applies two additional
+repair strategies:
+
+1. **Multi-line comment removal**: strips `/* ... */` blocks.
+2. **Unquoted property name quoting**: converts
+   `{ key: "value" }` to `{ "key": "value" }` using the regex
+   `(?<=[\{,])\s*([a-zA-Z_][a-zA-Z0-9_]*)\s*:`.  This matches
+   identifiers after `{` or `,` that are not already quoted,
+   and wraps them in double quotes.  Already-quoted keys are
+   unaffected because the lookbehind requires `{` or `,`
+   immediately before the identifier.

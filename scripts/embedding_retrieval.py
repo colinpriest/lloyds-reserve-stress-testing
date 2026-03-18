@@ -172,8 +172,10 @@ class VectorStore:
             return
         
         # Normalize embeddings for cosine similarity
-        normalized = self.embeddings / np.linalg.norm(self.embeddings, axis=1, keepdims=True)
-        
+        norms = np.linalg.norm(self.embeddings, axis=1, keepdims=True)
+        norms = np.maximum(norms, 1e-10)  # Avoid division by zero for zero-norm vectors
+        normalized = self.embeddings / norms
+
         # Create index
         self.index = self.faiss.IndexFlatIP(self.dimensions)  # Inner product (cosine after normalization)
         self.index.add(normalized)
@@ -187,7 +189,11 @@ class VectorStore:
             return []
         
         query = np.array([query_embedding], dtype=np.float32)
-        query = query / np.linalg.norm(query)  # Normalize
+        query_norm = np.linalg.norm(query)
+        if query_norm < 1e-10:
+            logger.warning("Query embedding has near-zero norm — returning empty results")
+            return []
+        query = query / query_norm  # Normalize
         
         if self.use_faiss and self.index is not None:
             # FAISS search
@@ -195,7 +201,9 @@ class VectorStore:
             results = [(self.metadata[idx], float(score)) for idx, score in zip(indices[0], scores[0]) if idx >= 0]
         else:
             # Numpy fallback - cosine similarity
-            normalized = self.embeddings / np.linalg.norm(self.embeddings, axis=1, keepdims=True)
+            norms = np.linalg.norm(self.embeddings, axis=1, keepdims=True)
+            norms = np.maximum(norms, 1e-10)
+            normalized = self.embeddings / norms
             similarities = np.dot(normalized, query.T).flatten()
             top_indices = np.argsort(similarities)[::-1][:k]
             results = [(self.metadata[idx], float(similarities[idx])) for idx in top_indices]

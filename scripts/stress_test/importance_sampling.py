@@ -129,7 +129,11 @@ def importance_sample(scenarios: List[SyntheticScenario],
     Sample scenarios according to importance weights.
     """
     # Normalise weights to probabilities
-    probs = weights / weights.sum()
+    weight_sum = weights.sum()
+    if weight_sum == 0:
+        raise ValueError("All importance weights are zero — cannot sample. "
+                         "Check that scenarios fall within the defined severity bins.")
+    probs = weights / weight_sum
     
     # Sample indices
     indices = np.random.choice(
@@ -150,7 +154,10 @@ def importance_sample_with_jittering(scenarios: List[SyntheticScenario],
     Sample with replacement and add small jitter to severity ratios
     to avoid exact duplicates in underrepresented bins.
     """
-    probs = weights / weights.sum()
+    weight_sum = weights.sum()
+    if weight_sum == 0:
+        raise ValueError("All importance weights are zero — cannot sample.")
+    probs = weights / weight_sum
     
     indices = np.random.choice(
         len(scenarios),
@@ -235,7 +242,12 @@ def resample_to_gpd(scenarios: List[SyntheticScenario],
         (resampled_scenarios, result_statistics)
     """
     logger.info(f"Resampling {len(scenarios)} scenarios to target size {target_size}")
-    
+
+    if not scenarios:
+        raise ValueError("Cannot resample: no scenarios provided")
+    if len(historical_severities) == 0:
+        raise ValueError("Cannot resample: no historical severities provided")
+
     # Default 5% bins
     if severity_bins is None:
         max_sev = max(max(s.severity_ratio for s in scenarios), max(historical_severities))

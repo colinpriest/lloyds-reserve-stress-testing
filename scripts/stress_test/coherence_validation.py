@@ -133,9 +133,10 @@ class RegressionValidator:
         )
         self.model.fit(X.toarray(), severities)
         
-        # Compute residual std for Z-score calculation
-        predictions = self.model.predict(X.toarray())
-        residuals = severities - predictions
+        # Compute residual std using cross-validated predictions to avoid train/predict leak
+        from sklearn.model_selection import cross_val_predict
+        cv_predictions = cross_val_predict(self.model, X.toarray(), severities, cv=5)
+        residuals = severities - cv_predictions
         self.residual_std = np.std(residuals)
         
         logger.info(f"Validator trained. Residual std: {self.residual_std:.4f}")

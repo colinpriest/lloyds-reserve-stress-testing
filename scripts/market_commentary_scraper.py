@@ -480,8 +480,11 @@ class MarketCommentaryScraper:
                             continue
                         
                         # Try to extract year from URL or content
-                        year_match = re.search(r'20(1[4-9]|2[0-4])', article_url + article_text[:500])
-                        article_year = int("20" + year_match.group(1)) if year_match else 2024
+                        year_match = re.search(r'20(1[4-9]|2[0-9])', article_url + article_text[:500])
+                        if not year_match:
+                            logger.warning(f"Cannot determine year for article: {article_url[:100]} — skipping")
+                            continue
+                        article_year = int("20" + year_match.group(1))
                         
                         # Extract reserve commentary
                         commentary = self._extract_reserve_commentary(article_text)
@@ -565,8 +568,11 @@ class MarketCommentaryScraper:
                                     text = content.get_text()
                                     commentary = self._extract_reserve_commentary(text)
                                     
-                                    year_match = re.search(r'20(1[4-9]|2[0-4])', article_url + text[:500])
-                                    article_year = int("20" + year_match.group(1)) if year_match else 2024
+                                    year_match = re.search(r'20(1[4-9]|2[0-9])', article_url + text[:500])
+                                    if not year_match:
+                                        logger.warning(f"Cannot determine year for Alpha article: {article_url[:100]} — skipping")
+                                        continue
+                                    article_year = int("20" + year_match.group(1))
                                     
                                     source = CommentarySource(
                                         source_type="analyst",
@@ -576,7 +582,7 @@ class MarketCommentaryScraper:
                                         period="article",
                                         content=text[:10000],
                                         extracted_at=datetime.now().isoformat(),
-                                        content_hash=hashlib.md5(text.encode()).hexdigest(),
+                                        content_hash=hashlib.sha256(text.encode()).hexdigest(),
                                         lines_of_business=commentary["lob_mentions"],
                                         reserve_movements=commentary["prior_year_movements"],
                                         causal_statements=commentary["causal_statements"]
@@ -869,7 +875,11 @@ class PerplexitySummarizer:
             
             try:
                 response = self._call_perplexity(prompt)
-                content = response['choices'][0]['message']['content']
+                try:
+                    content = response['choices'][0]['message']['content']
+                except (KeyError, IndexError) as e:
+                    logger.error(f"Unexpected Perplexity response structure for {lob}: {e}")
+                    continue
                 citations = response.get('citations', [])
                 
                 # Parse the response to extract structured data

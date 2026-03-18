@@ -176,6 +176,9 @@ def present_adjudication(report_stem, field, gemini_val, gpt_val, adj_result, co
         return ("exclude", reason)
     elif choice == "s":
         return ("stop", None)
+    else:
+        logger.warning(f"Unrecognised adjudication choice: {choice!r}")
+        return ("stop", None)
 
 
 def present_report_decision(report_stem, syndicate_num, report_year, report_results):
@@ -186,8 +189,9 @@ def present_report_decision(report_stem, syndicate_num, report_year, report_resu
         ("exclude", reason)           -- reject from dataset
         ("stop", None)                -- halt the script
     """
-    resolved = [r for r in report_results if r.get("decision_type") in ("approve", "override", "override_value")]
-    unresolved = [r for r in report_results if r.get("decision_type") not in ("approve", "override", "override_value")]
+    resolved_types = ("approve", "override", "override_value", "auto_accept")
+    resolved = [r for r in report_results if r.get("decision_type") in resolved_types]
+    unresolved = [r for r in report_results if r.get("decision_type") not in resolved_types]
 
     print()
     print(f"    {'~' * 60}")
@@ -459,10 +463,19 @@ def build_verification_prompt(field, gemini_value, gpt_value, syndicate_num, rep
             f"Two LLMs disagree on the opening gross claims outstanding:\n"
             f"  - Model A says: {gemini_value}\n"
             f"  - Model B says: {gpt_value}\n\n"
-            f"Find the GROSS CLAIMS OUTSTANDING at the start of the year (i.e. prior year-end). "
-            f"This is ONLY claims reserves -- do NOT include unearned premium provisions. "
-            f"Look in the Technical Reserves note or Balance Sheet for 'Claims outstanding - gross amount' "
-            f"or 'Gross claims outstanding'.\n\n"
+            f"Find the GROSS CLAIMS OUTSTANDING at the start of the year (i.e. prior year-end balance).\n\n"
+            f"This is ONLY claims reserves — do NOT include 'Provision for unearned premiums'.\n\n"
+            f"Use these sources in STRICT priority order — use the FIRST available:\n"
+            f"  1. BALANCE SHEET / Statement of Financial Position — find 'Claims outstanding' "
+            f"(or 'Gross claims outstanding' or 'Claims outstanding - gross amount') in the LIABILITIES "
+            f"section under 'Technical provisions'. Use the PRIOR YEAR comparative column "
+            f"(e.g. in a {report_year} report, use the {report_year - 1} column). "
+            f"WARNING: Do NOT use the 'Reinsurers' share of claims outstanding' from the ASSETS side — "
+            f"that is the reinsurance recoverable, a completely different figure.\n"
+            f"  2. Technical Reserves / Claims Provisions note — 'At 1 January' or "
+            f"'At beginning of year' in the GROSS / Insurance liabilities column. "
+            f"NOTE: This may differ from the Balance Sheet by small amounts due to accounting "
+            f"adjustments — the Balance Sheet figure is authoritative.\n\n"
             f"{CURRENCY_NOTE}\n\n"
             f"Reply with ONLY valid JSON:\n"
             f'{{"field": "opening_reserves_gbp_m", "correct_value": <number or null>, '
@@ -676,7 +689,10 @@ def call_adjudicator(pdf_path, prompt, page_hints=None,
 
     import anthropic
 
-    client = anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
+    api_key = os.getenv("ANTHROPIC_API_KEY")
+    if not api_key:
+        raise ValueError("ANTHROPIC_API_KEY environment variable is not set — required for adjudication")
+    client = anthropic.Anthropic(api_key=api_key)
 
     pdf_bytes = _shrink_pdf(pdf_path, page_hints=page_hints)
     pdf_b64 = base64.b64encode(pdf_bytes).decode("utf-8")
@@ -1300,7 +1316,11 @@ def analyse_patterns():
         raw = response.content[0].text.strip()
         if raw.startswith("```"):
             raw = raw.split("\n", 1)[1].rsplit("```", 1)[0].strip()
-        fix = json.loads(raw)
+        try:
+            fix = json.loads(raw)
+        except json.JSONDecodeError as e:
+            logger.warning(f"Failed to parse Claude prompt-fix JSON: {e}\nRaw: {raw[:200]}")
+            continue
 
         # Present to human for approval
         decision_type, decision_data = present_prompt_proposal(proposal, fix)

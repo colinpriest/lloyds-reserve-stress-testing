@@ -635,8 +635,8 @@ def merge_corpus(
         "training_pairs_generated": len(training_pairs),
         "unique_syndicates": len(set(m.syndicate for m in unified_movements if m.syndicate)),
         "year_range": {
-            "min": min(m.year for m in unified_movements),
-            "max": max(m.year for m in unified_movements),
+            "min": min((m.year for m in unified_movements), default=None),
+            "max": max((m.year for m in unified_movements), default=None),
         },
         "size_metrics_enhanced": size_metrics_enhanced,
         "causes_frequency": {},

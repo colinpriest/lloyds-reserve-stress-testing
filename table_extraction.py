@@ -28,7 +28,11 @@ from enum import Enum
 from pathlib import Path
 from typing import Optional
 
-import fitz  # PyMuPDF
+try:
+    import fitz  # PyMuPDF
+except ImportError:
+    fitz = None
+    logging.getLogger(__name__).warning("PyMuPDF (fitz) not installed — text-based triangle fallback unavailable")
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -36,7 +40,9 @@ load_dotenv()
 logger = logging.getLogger(__name__)
 
 # Bump this when extraction logic changes to invalidate cached table grids
-_CACHE_VERSION = 5  # v5: transposed triangle support (Development Year 1,2,3... format)
+_CACHE_VERSION = 6  # v6: fix uw-year regex in _classify_table_content (non-capturing group);
+                    #     add "underlying pure year" as triangle title keyword;
+                    #     add "underlying pure year" + dev-period labels as transposed-triangle signal
 
 
 # ── Data structures ───────────────────────────────────────────────────────
@@ -91,6 +97,7 @@ class ProvisionsData:
     gross_prior_year_claims: Optional[float] = None
     ri_share_prior_year: Optional[float] = None
     net_prior_year_claims: Optional[float] = None
+    opening_gross_claims_outstanding: Optional[float] = None
 
     def to_dict(self) -> dict:
         d = {}
@@ -100,6 +107,8 @@ class ProvisionsData:
             d["ri_share_prior_year"] = self.ri_share_prior_year
         if self.net_prior_year_claims is not None:
             d["net_prior_year_claims"] = self.net_prior_year_claims
+        if self.opening_gross_claims_outstanding is not None:
+            d["opening_gross_claims_outstanding"] = self.opening_gross_claims_outstanding
         return d
 
 
@@ -113,6 +122,8 @@ class ExtractionResult:
     first_year_syndicate: bool = False
     method: str = "none"
     elapsed_s: float = 0.0
+    relevant_pages: list[int] = field(default_factory=list)
+    rotated_pages: set[int] = field(default_factory=set)
 
 
 # ── Public API ────────────────────────────────────────────────────────────
@@ -161,6 +172,7 @@ _PAGE_KEYWORDS = {
         "outstanding claims provision",
         "year later", "years later", "months later",
         "development year", "year of account",
+        "underlying pure year", "incurred at end of underwriting",
         "ultimate contract outstanding claims",
         "gross of reinsurance", "net of reinsurance",
     ],
@@ -173,9 +185,17 @@ _PAGE_KEYWORDS = {
         "gross premiums written", "earned premiums", "claims incurred",
     ],
     "premium_mix": [
+        "segmental analysis", "analysis of underwriting result",
+        "class of business", "by class of business",
         "accident and health", "marine aviation",
         "fire and other damage", "third party liability",
         "reinsurance", "miscellaneous",
+    ],
+    "balance_sheet": [
+        "statement of financial position", "balance sheet",
+        "total assets", "total liabilities",
+        "technical provisions", "claims outstanding",
+        "gross technical provisions",
     ],
 }
 
@@ -566,17 +586,47 @@ def _parse_transposed_triangle_from_text(text: str, report_year: int):
     Pattern: "...Year of Account201657,73559,926117,918..."
     """
     text_lower = text.lower()
+    # Normalize whitespace for marker detection (PyMuPDF often inserts \n mid-phrase)
+    text_norm = re.sub(r'\s+', ' ', text_lower)
 
-    # Must contain "development year" and "year of account" markers
-    dev_year_pos = text_lower.find("development year")
-    yoa_pos = text_lower.find("year of account")
+    # Must contain development period marker AND UW year row marker
+    # Standard format: "Development Year" + "Year of Account"
+    # Alt format (e.g. syndicate 1919): "Incurred at end of underwriting year" + "Underlying Pure Year"
+    dev_year_pos = text_norm.find("development year")
+    yoa_pos = text_norm.find("year of account")
+
+    # Try alternative markers if standard ones not found
+    if dev_year_pos == -1:
+        # "Incurred at end of underwriting year" acts as the first dev period column
+        dev_year_pos = text_norm.find("incurred at end of underwriting")
+    if yoa_pos == -1:
+        yoa_pos = text_norm.find("underlying pure year")
+
     if dev_year_pos == -1 or yoa_pos == -1:
         return None, "no transposed triangle markers found"
 
-    # Find the section starting from "Year of Account"
-    # Extract UW year rows: each starts with a 4-digit year followed by numbers
-    # Pattern: 2016<numbers separated by commas>2017<numbers>...
-    after_yoa = text[yoa_pos + len("Year of Account"):]
+    # Map position in normalized text back to original text.
+    # Build a mapping from normalized-text positions to original-text positions.
+    # Since we collapsed whitespace, find the marker phrase in the original text
+    # by searching for the words with flexible whitespace between them.
+    def _find_in_original(phrase, start_hint=0):
+        """Find a phrase in original text allowing flexible whitespace."""
+        words = phrase.split()
+        pattern = r'\s+'.join(re.escape(w) for w in words)
+        m = re.search(pattern, text_lower[start_hint:])
+        if m:
+            return start_hint + m.start(), start_hint + m.end()
+        return None, None
+
+    if "year of account" in text_norm[yoa_pos:yoa_pos + 25]:
+        yoa_start, yoa_end = _find_in_original("year of account")
+    else:
+        yoa_start, yoa_end = _find_in_original("underlying pure year")
+
+    if yoa_start is None:
+        return None, "could not locate UW year label in original text"
+
+    after_yoa = text[yoa_end:]
 
     # Truncate at the first stop marker to avoid picking up a second triangle
     # (e.g., gross triangle followed by net triangle on same page)
@@ -586,6 +636,7 @@ def _parse_transposed_triangle_from_text(text: str, report_year: int):
         "gross claims reserve", "net claims reserve",
         "gross unearned", "net unearned",
         "estimate of cumulative net",
+        "net of reinsurance",  # stop before net triangle on same page
     ]
     section_end = len(after_yoa)
     for sp in section_stop_patterns:
@@ -675,13 +726,13 @@ def _parse_transposed_triangle_from_text(text: str, report_year: int):
         currency = "EUR"
 
     units = "millions"
-    if "£'000" in text_lower or "£000" in text_lower or "'000" in text_lower:
+    if re.search(r"[£$]'?000", text_lower) or "'000" in text_lower:
         units = "thousands"
 
-    # Detect type — check context before "Development Year" for gross/net
+    # Detect type — check context before the triangle header for gross/net
     # Default to gross since gross triangles typically appear first
-    context_start = max(0, dev_year_pos - 300)
-    context = text_lower[context_start:yoa_pos + 50]
+    context_start = max(0, yoa_start - 300)
+    context = text_lower[context_start:yoa_start + 50]
     if "net" in context and "gross" not in context:
         tri_type = "net"
     else:
@@ -695,6 +746,20 @@ def _parse_transposed_triangle_from_text(text: str, report_year: int):
                f"({min(uw_years)}-{max(uw_years)}), "
                f"{len(dev_rows)} dev rows (transposed text), {units}, {currency}")
     return triangle, details
+
+
+def _year_has_prior_context(line: str, year_str: str) -> bool:
+    """Check if a year in a line is qualified with 'prior' (e.g. '2011 and prior').
+
+    Checks both before and after the year position in the line.
+    """
+    pos = line.find(year_str)
+    if pos < 0:
+        return False
+    # Check 15 chars before and 20 chars after the year for "prior"
+    before = line[max(0, pos - 15):pos].lower()
+    after = line[pos + len(year_str):pos + len(year_str) + 20].lower()
+    return "prior" in before or "prior" in after
 
 
 def _parse_triangle_from_text(text: str, report_year: int):
@@ -718,7 +783,7 @@ def _parse_triangle_from_text(text: str, report_year: int):
         years_on_line = re.findall(r'\b((?:19|20)\d{2})\b', line)
         years_on_line = [int(y) for y in years_on_line
                          if 1990 <= int(y) <= 2030
-                         and "prior" not in line[max(0, line.find(str(y))-10):line.find(str(y))].lower()]
+                         and not _year_has_prior_context(line, str(y))]
         seen = set()
         unique_years = []
         for y in years_on_line:
@@ -779,6 +844,7 @@ def _parse_triangle_from_text(text: str, report_year: int):
         r"year\s+later", r"years?\s+later",
         r"after\s+\w+\s+years?",
         r"\d+\s+months?\s+later",
+        r"^\d+\s+months?\b",                    # "12 months", "24 months" (without "later")
         r"^(one|two|three|four|five|six|seven|eight|nine|ten)\b",
         r"^\d+\s+year",
         r"^year\s+\d+",                         # "Year 1", "Year 2", ... (Year of Account format)
@@ -795,6 +861,8 @@ def _parse_triangle_from_text(text: str, report_year: int):
         "net outstanding claims",
         "outstanding claims reserve",   # "Outstanding claims reserve" (Year of Account format)
         "outstanding .* provision",     # but NOT "outstanding claims provision" in title
+        "estimated total",             # "Estimated total losses" summary row
+        "paid claims",                 # "Paid claims" section break
     ]
 
     # Step 3: Collect all numeric values after the year headers.
@@ -870,7 +938,7 @@ def _parse_triangle_from_text(text: str, report_year: int):
         currency = "EUR"
 
     units = "millions"
-    if "£'000" in text_lower or "£000" in text_lower or "'000" in text_lower:
+    if re.search(r"[£$]'?000", text_lower) or "'000" in text_lower:
         units = "thousands"
 
     # Detect type (gross vs net)
@@ -880,7 +948,7 @@ def _parse_triangle_from_text(text: str, report_year: int):
         type=tri_type,
         currency=currency,
         units=units,
-        underwriting_years=[str(y) for y in uw_years],
+        underwriting_years=[int(y) for y in uw_years],
         development_rows=dev_rows,
     )
 
@@ -935,7 +1003,14 @@ def _parse_nutrient_triangle(grid: list[list[str]], report_year: int):
         return None, f"max UW year {max(uw_years)} too old for report year {report_year}"
 
     if len(uw_years) < 3:
-        return "new_syndicate", f"{len(uw_years)} UW year(s) ({min(uw_years)}-{max(uw_years)})"
+        # Check if any UW year is old enough to have usable PYD
+        # (i.e., at least 2 years before the report year so there's a
+        # previous diagonal to compare against).  Single-column triangles
+        # with enough development rows ARE valid for PYD computation.
+        usable = [y for y in uw_years if y <= report_year - 2]
+        if not usable:
+            return "new_syndicate", f"{len(uw_years)} UW year(s) ({min(uw_years)}-{max(uw_years)})"
+        # Fall through to parse the triangle normally
 
     # Parse development rows — only keep rows that look like development periods
     dev_period_patterns = [
@@ -944,11 +1019,13 @@ def _parse_nutrient_triangle(grid: list[list[str]], report_year: int):
         r"^\d+\s+year", r"^(one|two|three|four|five|six|seven|eight|nine|ten)\b",
         r"after\s+\w+\s+years?",               # "After one year", "After two years"
         r"\d+\s+months?\s+later",               # "12 months later", "24 months later"
+        r"^\d+\s+months?\b",                    # "12 months", "24 months" (without "later")
         r"estimate.*end\s+of\s+underwriting",   # "Estimate of cumulative...end of underwriting year"
         r"^year\s+\d+",                         # "Year 1", "Year 2", ... (Year of Account format)
     ]
     skip_labels = [
         "current estimate", "cumulative payment", "cumulative claim",
+        "estimated total",
         "outstanding", "provision", "gross outstanding", "net outstanding",
     ]
     # Section headers that mark end of the incurred-claims triangle.
@@ -961,6 +1038,7 @@ def _parse_nutrient_triangle(grid: list[list[str]], report_year: int):
         "claims reserve", "gross claims reserve", "net claims reserve",
         "gross reserve", "net reserve",
         "current estimate",  # summary row signals end of dev rows
+        "estimated total",   # "Estimated total losses" summary row
         "estimate of cumulative net",  # start of net section in combined gross+net tables
     ]
 
@@ -1074,10 +1152,12 @@ def _parse_transposed_triangle(grid: list[list[str]], report_year: int):
         return None, "too small for transposed triangle"
 
     # Detect transposed format: first header cell contains "Development Year"
-    # and subsequent cells are integers 1,2,3... or "Total"
+    # or "Underlying Pure Year" (alt format with "X year(s) later" columns)
+    # and subsequent cells are integers 1,2,3... or "Total" or "X year(s) later"
     header = grid[0]
     header0_lower = header[0].lower().strip()
     has_dev_year_header = "development year" in header0_lower
+    has_pure_year_header = "underlying pure year" in header0_lower or "underlying" in header0_lower
 
     dev_col_indices = []
     if has_dev_year_header:
@@ -1091,6 +1171,19 @@ def _parse_transposed_triangle(grid: list[list[str]], report_year: int):
 
         if len(dev_col_indices) < 2:
             return None, "not enough development period columns"
+    elif has_pure_year_header:
+        # Alt format: columns are "Incurred at end of underwriting year",
+        # "1 year later", "2 years later", ..., "Cumulative Payments"
+        for col_idx in range(1, len(header)):
+            val = header[col_idx].strip().lower()
+            if ("incurred" in val or "end of underwriting" in val
+                    or "year later" in val or "years later" in val):
+                dev_col_indices.append(col_idx)
+            elif "cumulative" in val or "total" in val:
+                break  # stop before Cumulative Payments / Total column
+
+        if len(dev_col_indices) < 2:
+            return None, "not enough development period columns (pure year format)"
     else:
         # Headerless format: check if rows have UW years as labels.
         # First count how many rows have a 4-digit year in column 0.
@@ -1114,7 +1207,8 @@ def _parse_transposed_triangle(grid: list[list[str]], report_year: int):
     skip_labels = [
         "current estimate", "cumulative payment", "cumulative claim",
         "gross claims reserve", "net claims reserve", "gross unearned",
-        "net unearned", "year of account",
+        "net unearned", "year of account", "underlying pure year",
+        "underlying", "incurred at end",
     ]
     for row_idx in range(1, len(grid)):
         label = grid[row_idx][0].strip()
@@ -1227,6 +1321,7 @@ _LOB_KEYWORDS = [
     "fire and other damage", "third party liability", "miscellaneous",
     "reinsurance", "energy", "casualty", "aviation", "property",
     "pecuniary", "credit", "suretyship", "specialty", "transport",
+    "property catastrophe", "weather", "cyber", "liability",
 ]
 
 _SECTION_HEADERS = {
@@ -1236,16 +1331,28 @@ _SECTION_HEADERS = {
 _TOTAL_LABELS = {"total", "sub-total", "subtotal", "grand total", "direct insurance"}
 
 
-def _parse_nutrient_lob(grid: list[list[str]], report_year: int):
+def _parse_nutrient_lob(grid: list[list[str]], report_year: int,
+                        page_text: str = ""):
     """Parse a Nutrient table grid as a segmental analysis / LOB breakdown.
 
     Returns LOBData or None.
+    ``page_text`` is the full text of the page containing this table,
+    used to detect explicit LOB table signals (e.g. "segmental analysis",
+    "class of business") that may appear above the table, not in the grid.
     """
     flat = _grid_text_lower(grid)
+    combined = flat + " " + page_text.lower()
 
-    # Must contain multiple LOB keywords
+    # Must contain multiple LOB keywords — but lower the bar for tables
+    # that are explicitly identified as segmental analysis or class-of-
+    # business tables (monoline syndicates may have only 1-2 LOBs)
     lob_hits = sum(1 for kw in _LOB_KEYWORDS if kw in flat)
-    if lob_hits < 3:
+    is_explicit_lob_table = any(
+        sig in combined for sig in ("segmental analysis", "class of business",
+                                    "analysis of underwriting result")
+    )
+    min_lob_hits = 1 if is_explicit_lob_table else 3
+    if lob_hits < min_lob_hits:
         return None
 
     # Check this is for the report year (not a comparative)
@@ -1419,6 +1526,77 @@ def _parse_nutrient_provisions(grid: list[list[str]], report_year: int):
     return None
 
 
+def _parse_opening_claims_outstanding(grid: list[list[str]], report_year: int) -> Optional[float]:
+    """Extract opening gross claims outstanding from a provisions movement table.
+
+    Looks for the "Balance at 1 January" row within a "Claims outstanding" section
+    and returns the gross column value in millions.
+
+    Returns the opening gross claims outstanding in millions, or None.
+    """
+    flat = _grid_text_lower(grid)
+    if "claims outstanding" not in flat:
+        return None
+    if "balance" not in flat and "1 january" not in flat and "brought forward" not in flat:
+        return None
+
+    # Detect units from header rows (£'000, $'000, thousands, etc.)
+    in_thousands = False
+    for row in grid[:4]:
+        row_text = " ".join(row).lower()
+        if "'000" in row_text or "000s" in row_text or "thousand" in row_text:
+            in_thousands = True
+            break
+
+    # Detect column layout from header rows — look for "Gross" column
+    # Also detect the current year column (report_year values are in the
+    # first set of columns, prior year in the second set for side-by-side tables)
+    gross_col = None
+    for row in grid[:3]:
+        for i, val in enumerate(row):
+            h = val.lower()
+            if "gross" in h and "net" not in h:
+                gross_col = i
+                break
+        if gross_col is not None:
+            break
+
+    # Positional fallback: first numeric column after label
+    if gross_col is None:
+        gross_col = 1
+
+    # Find the claims outstanding section, then the "Balance at 1 January" row
+    in_claims_section = False
+    for row in grid:
+        label = row[0].lower().strip() if row else ""
+
+        # Detect section headers
+        if "claims outstanding" in label and not any(
+            kw in label for kw in ("unearned", "provision for unearned")
+        ):
+            in_claims_section = True
+            continue
+
+        # Exit claims outstanding section when we hit another section
+        if in_claims_section and any(
+            kw in label for kw in ("unearned premium", "deferred acquisition", "total")
+        ):
+            break
+
+        # Look for opening balance row within claims outstanding section
+        if in_claims_section and any(
+            kw in label for kw in ("balance at 1 january", "brought forward", "at 1 january")
+        ):
+            if gross_col < len(row):
+                val = _clean_cell(row[gross_col])
+                if isinstance(val, (int, float)):
+                    if in_thousands:
+                        val = round(val / 1_000, 3)
+                    return val
+
+    return None
+
+
 # ── Nutrient: main extraction ─────────────────────────────────────────────
 
 def _extract_nutrient(pdf_path: Path, report_year: int, cache_dir: Path) -> ExtractionResult:
@@ -1438,6 +1616,9 @@ def _extract_nutrient(pdf_path: Path, report_year: int, cache_dir: Path) -> Extr
     doc = fitz.open(pdf_path)
     total_pages = len(doc)
     doc.close()
+
+    result.relevant_pages = sorted(page_matches.keys())
+    result.rotated_pages = rotated_pages
 
     print(f"  [Nutrient] {total_pages} pages scanned via {scan_method}, "
           f"{len(page_matches)} relevant pages found")
@@ -1488,6 +1669,7 @@ def _extract_nutrient(pdf_path: Path, report_year: int, cache_dir: Path) -> Extr
     best_lob = None
     best_lob_count = 0
     best_provisions = None
+    opening_claims = None
 
     for slim_idx, page in enumerate(pages):
         orig_page = page_index_to_orig.get(slim_idx, -1)
@@ -1518,7 +1700,8 @@ def _extract_nutrient(pdf_path: Path, report_year: int, cache_dir: Path) -> Extr
 
             # Try LOB (on premium_mix-tagged pages)
             if "premium_mix" in cats:
-                lob = _parse_nutrient_lob(grid, report_year)
+                lob = _parse_nutrient_lob(grid, report_year,
+                                          page_text=page_texts.get(page_num, ""))
                 if lob and len(lob.gross_premium_mix) > best_lob_count:
                     best_lob = lob
                     best_lob_count = len(lob.gross_premium_mix)
@@ -1528,6 +1711,14 @@ def _extract_nutrient(pdf_path: Path, report_year: int, cache_dir: Path) -> Extr
                 prov = _parse_nutrient_provisions(grid, report_year)
                 if prov:
                     best_provisions = prov
+
+            # Extract opening claims outstanding
+            if opening_claims is None and any(
+                t in cats for t in ("provisions", "balance_sheet")
+            ):
+                oc = _parse_opening_claims_outstanding(grid, report_year)
+                if oc is not None:
+                    opening_claims = oc
 
     # Text-based triangle fallback
     if best_triangle is None:
@@ -1551,6 +1742,11 @@ def _extract_nutrient(pdf_path: Path, report_year: int, cache_dir: Path) -> Extr
     result.triangle_details = best_triangle_details or result.triangle_details
     result.lob = best_lob
     result.provisions = best_provisions
+    # Attach opening claims outstanding to provisions data
+    if opening_claims is not None:
+        if result.provisions is None:
+            result.provisions = ProvisionsData()
+        result.provisions.opening_gross_claims_outstanding = opening_claims
     # Valid triangle trumps new_syndicate flag from a partial/different table
     if best_triangle is not None:
         result.first_year_syndicate = False
@@ -1603,12 +1799,14 @@ def _extract_adobe(pdf_path: Path, report_year: int, cache_dir: Path) -> Extract
     print(f"  [Adobe] Scanning {pdf_path.name}...")
     page_matches, page_texts, scan_method, rotated_pages = _find_relevant_pages(pdf_path)
 
+    relevant_pages = sorted(page_matches.keys())
+    result.relevant_pages = relevant_pages
+    result.rotated_pages = rotated_pages
+
     if not page_matches:
         print(f"  [Adobe] No relevant pages found")
         result.elapsed_s = time.time() - t0
         return result
-
-    relevant_pages = sorted(page_matches.keys())
     print(f"  [Adobe] {len(relevant_pages)} relevant pages found via {scan_method}")
 
     # Step 2: Create slim PDF with only relevant pages
@@ -1732,11 +1930,17 @@ def _classify_table_content(grid: list[list[str]]) -> set[str]:
 
     # ── Claims triangle detection ───────────────────────────────────────
     # Detect from: (a) year count + dev periods, (b) title keywords, (c) row labels
-    uw_years = re.findall(r'\b(19|20)\d{2}\b', flat)
+    # Use a non-capturing group so findall returns full 4-digit years, not just
+    # the prefix ('19' or '20').  A capturing group like (19|20) causes findall
+    # to return only the captured fragment, so len(uw_years) is always 0 for
+    # data-only tables whose years appear as e.g. "2011", "2012", ...
+    uw_years = re.findall(r'\b(?:19|20)\d{2}\b', flat)
     dev_patterns = [
         "at end", "year later", "years later", "one year", "two year",
         "after one", "after two", "after three", "after four", "after five",
         "months later", "month later",
+        "12 months", "24 months", "36 months", "48 months",
+        "60 months", "72 months", "84 months",
     ]
     # Title/header keywords that strongly indicate a triangle
     triangle_title_kw = [
@@ -1744,12 +1948,19 @@ def _classify_table_content(grid: list[list[str]]) -> set[str]:
         "cumulative gross claims", "cumulative net claims",
         "development table", "development triangle",
         "outstanding claims provision",
+        # "Underlying Pure Year" is used by some syndicates (e.g. 1919) as the
+        # row-label header in a transposed triangle instead of "Year of Account"
+        "underlying pure year",
     ]
     has_dev_periods = any(p in flat for p in dev_patterns)
     has_triangle_title = any(kw in flat for kw in triangle_title_kw)
 
     # Detect transposed format: "Development Year 1 2 3 ..." with "Year of Account"
-    has_transposed = ("development year" in flat and "year of account" in flat)
+    # Also handle "Underlying Pure Year" as an equivalent row-label header
+    has_transposed = (
+        ("development year" in flat and "year of account" in flat)
+        or ("underlying pure year" in flat and ("year later" in flat or "years later" in flat))
+    )
 
     if len(uw_years) >= 3 and (has_dev_periods or has_triangle_title or has_transposed):
         cats.add("claims_triangle")
@@ -1757,6 +1968,11 @@ def _classify_table_content(grid: list[list[str]]) -> set[str]:
         cats.add("claims_triangle")
     elif has_triangle_title and len(uw_years) >= 1:
         # Title is strong evidence even with fewer detected years
+        cats.add("claims_triangle")
+    elif has_dev_periods and has_triangle_title:
+        # Header-only split table: dev period labels present but UW years in a
+        # separate sibling table (Azure sometimes splits a single triangle into
+        # a header grid and a data grid).  Tag it so the data grid gets tried.
         cats.add("claims_triangle")
 
     # Negative: sensitivity/assumption tables are NOT triangles
@@ -1803,6 +2019,9 @@ def _extract_azure(pdf_path: Path, report_year: int, cache_dir: Path,
     total_pages = len(doc)
     doc.close()
 
+    result.relevant_pages = sorted(page_matches.keys())
+    result.rotated_pages = rotated_pages
+
     print(f"  [Azure] {total_pages} pages scanned via {scan_method}, "
           f"{len(page_matches)} relevant pages found")
 
@@ -1816,7 +2035,7 @@ def _extract_azure(pdf_path: Path, report_year: int, cache_dir: Path,
         print(f"    Page {page_num + 1}: [{cats}]")
 
     # Step 2: Sort pages by priority and send in batches of 2
-    priority_order = ["claims_triangle", "premium_mix", "provisions", "pl_account"]
+    priority_order = ["claims_triangle", "premium_mix", "provisions", "pl_account", "balance_sheet"]
     page_priority = {}
     relevant_pages = sorted(page_matches.keys())
     for page_num in relevant_pages:
@@ -1852,10 +2071,10 @@ def _extract_azure(pdf_path: Path, report_year: int, cache_dir: Path,
             print(f"  [Azure] Cache invalidated ({reason}) — re-extracting")
         elif cached_pages != pages_hash:
             cache_file.unlink()
-            print(f"  [Azure] Cache invalidated (page set changed) — re-extracting")
+            print(f"  [Azure] Cache invalidated (page set changed) -- re-extracting")
         elif cached_batch is not None and cached_batch != batch_mode:
             cache_file.unlink()
-            print(f"  [Azure] Cache invalidated (batch mode changed: {cached_batch} → {batch_mode}) — re-extracting")
+            print(f"  [Azure] Cache invalidated (batch mode changed: {cached_batch} -> {batch_mode}) -- re-extracting")
         else:
             cache_valid = True
             print(f"  [Azure] Using cached result")
@@ -1946,6 +2165,7 @@ def _extract_azure(pdf_path: Path, report_year: int, cache_dir: Path,
     best_lob = None
     best_lob_count = 0
     best_provisions = None
+    opening_claims = None
 
     for grid, orig_page, cats in all_grids:
         if "claims_triangle" in cats and best_triangle is None:
@@ -1962,7 +2182,8 @@ def _extract_azure(pdf_path: Path, report_year: int, cache_dir: Path,
                     best_triangle_details = details
 
         if "premium_mix" in cats:
-            lob = _parse_nutrient_lob(grid, report_year)
+            pt = page_texts.get(orig_page, "")
+            lob = _parse_nutrient_lob(grid, report_year, page_text=pt)
             if lob and len(lob.gross_premium_mix) > best_lob_count:
                 best_lob = lob
                 best_lob.method = "azure"
@@ -1972,6 +2193,14 @@ def _extract_azure(pdf_path: Path, report_year: int, cache_dir: Path,
             prov = _parse_nutrient_provisions(grid, report_year)
             if prov:
                 best_provisions = prov
+
+        # Extract opening claims outstanding from provisions/balance_sheet tables
+        if opening_claims is None and any(
+            t in cats for t in ("provisions", "balance_sheet")
+        ):
+            oc = _parse_opening_claims_outstanding(grid, report_year)
+            if oc is not None:
+                opening_claims = oc
 
     # Step 4: Text-based triangle fallback — if Azure didn't find a triangle
     # table, try parsing from the raw page text on claims_triangle pages
@@ -1996,6 +2225,11 @@ def _extract_azure(pdf_path: Path, report_year: int, cache_dir: Path,
     result.triangle_details = best_triangle_details or result.triangle_details
     result.lob = best_lob
     result.provisions = best_provisions
+    # Attach opening claims outstanding to provisions data
+    if opening_claims is not None:
+        if result.provisions is None:
+            result.provisions = ProvisionsData()
+        result.provisions.opening_gross_claims_outstanding = opening_claims
     # Valid triangle trumps new_syndicate flag from a partial/different table
     if best_triangle is not None:
         result.first_year_syndicate = False

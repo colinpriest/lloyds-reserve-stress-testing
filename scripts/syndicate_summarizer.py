@@ -340,7 +340,10 @@ class SyndicateSummarizer:
             if 'usage' in result:
                 self.total_tokens += result['usage'].get('total_tokens', 0)
             
-            return result['choices'][0]['message']['content']
+            try:
+                return result['choices'][0]['message']['content']
+            except (KeyError, IndexError) as e:
+                raise ValueError(f"Unexpected OpenAI response structure: {e}. Keys: {list(result.keys())}")
             
         except requests.exceptions.Timeout:
             logger.error("OpenAI API timeout")
@@ -897,7 +900,7 @@ Extract all prior year reserve movements. {"For EACH keyword listed above, eithe
             if json_match:
                 try:
                     data = json.loads(json_match.group())
-                except:
+                except json.JSONDecodeError:
                     data = {"movements": [], "confidence": "low", "data_quality_notes": "Parse error"}
             else:
                 data = {"movements": [], "confidence": "low", "data_quality_notes": "Parse error"}

@@ -20,6 +20,7 @@ from typing import List, Dict, Tuple, Optional
 from dataclasses import dataclass
 from scipy import stats
 from scipy.spatial import ConvexHull, Delaunay
+from scipy.spatial import QhullError
 from collections import defaultdict
 
 from config import ValidationConfig, DEFAULT_VALIDATION_CONFIG, SyntheticScenario
@@ -91,22 +92,24 @@ def point_in_alpha_shape(point: np.ndarray,
             hull = ConvexHull(points)
             delaunay = Delaunay(points[hull.vertices])
             return delaunay.find_simplex(point) >= 0
-        except:
+        except (QhullError, ValueError) as e:
+            logger.debug(f"ConvexHull fallback failed: {e}")
             return True
-    
+
     # Simple approach: check if point is within convex hull of boundary vertices
     boundary_points = set()
     for e1, e2 in boundary_edges:
         boundary_points.add(tuple(e1))
         boundary_points.add(tuple(e2))
-    
+
     boundary_array = np.array(list(boundary_points))
-    
+
     try:
         hull = ConvexHull(boundary_array)
         delaunay = Delaunay(boundary_array[hull.vertices])
         return delaunay.find_simplex(point) >= 0
-    except:
+    except (QhullError, ValueError) as e:
+        logger.debug(f"Boundary check failed: {e}")
         return True
 
 
@@ -203,11 +206,12 @@ def mmd_permutation_test(X: np.ndarray,
         (observed_mmd, p_value)
     """
     # Subsample if datasets are large (for speed)
+    rng = np.random.RandomState(42)
     max_samples = 500
     if len(X) > max_samples:
-        X = X[np.random.choice(len(X), max_samples, replace=False)]
+        X = X[rng.choice(len(X), max_samples, replace=False)]
     if len(Y) > max_samples:
-        Y = Y[np.random.choice(len(Y), max_samples, replace=False)]
+        Y = Y[rng.choice(len(Y), max_samples, replace=False)]
     
     logger.info(f"    MMD test: {len(X)} historical, {len(Y)} synthetic samples")
     
@@ -221,7 +225,7 @@ def mmd_permutation_test(X: np.ndarray,
     log_interval = max(n_permutations // 10, 1)
     
     for i in range(n_permutations):
-        perm = np.random.permutation(len(combined))
+        perm = rng.permutation(len(combined))
         X_perm = combined[perm[:m]]
         Y_perm = combined[perm[m:]]
         permuted_mmds.append(compute_mmd(X_perm, Y_perm, sigma))
@@ -253,8 +257,10 @@ def compute_grid_coverage(historical_coords: np.ndarray,
     mins = historical_coords.min(axis=0)
     maxs = historical_coords.max(axis=0)
     
-    # Create grid
-    cell_size = (maxs - mins) / grid_size
+    # Create grid, guarding against zero range in any dimension
+    ranges = maxs - mins
+    ranges[ranges == 0] = 1.0  # Avoid division by zero for constant dimensions
+    cell_size = ranges / grid_size
     
     def point_to_cell(point):
         cell = tuple(int((point[d] - mins[d]) / cell_size[d]) for d in range(n_dims))

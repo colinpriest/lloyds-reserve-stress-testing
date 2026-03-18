@@ -28,6 +28,7 @@ import os
 import re
 import sys
 import json
+import time
 import base64
 import hashlib
 import signal
@@ -109,7 +110,7 @@ from adjudicate import (
     save_rejection_log,
     ADJUDICATOR_MODEL,
 )
-from table_extraction import extract_tables, TableBackend
+from table_extraction import extract_tables, TableBackend, _extract_pages_to_pdf
 
 load_dotenv()
 
@@ -161,6 +162,32 @@ _DOUBLE_ENCODED = {
     "\u00c3\u00bc": "u",       # double-encoded u-umlaut
     "\u00c3\u00b6": "o",       # double-encoded o-umlaut
 }
+
+
+def _gemini_call_with_retry(fn, *, max_retries=5, base_delay=30):
+    """Call a Gemini API function with exponential backoff on transient errors.
+
+    Retries on: 503 UNAVAILABLE, 429 RESOURCE_EXHAUSTED, and 400 "Upload has
+    already been terminated" (transient Gemini Files API error).
+
+    fn: zero-argument callable that makes the API request and returns a response.
+    Returns the response on success, raises on non-retryable errors.
+    """
+    for attempt in range(1, max_retries + 1):
+        try:
+            return fn()
+        except Exception as e:
+            err_str = str(e)
+            retryable = (
+                any(code in err_str for code in ("503", "429", "UNAVAILABLE", "RESOURCE_EXHAUSTED"))
+                or "Upload has already been terminated" in err_str
+            )
+            if not retryable or attempt == max_retries:
+                raise
+            delay = base_delay * (2 ** (attempt - 1))
+            print(f"  [retry] Attempt {attempt}/{max_retries} failed ({err_str[:80]}). "
+                  f"Retrying in {delay}s...")
+            time.sleep(delay)
 
 
 def _sanitize_ascii(s):
@@ -244,7 +271,7 @@ GEMINI_MODEL = "gemini-2.5-flash"
 OPENAI_MODEL = "gpt-5-mini"
 
 # Frozen spec versions -- bump these when spec files change
-PROMPT_VERSION = "2.6"
+PROMPT_VERSION = "2.10"  # 2.10: add monoline LOB extraction, direction forced from triangle PYD
 FIELD_DEFINITIONS_VERSION = "1.0"
 TOLERANCE_RULES_VERSION = "1.0"
 
@@ -260,13 +287,61 @@ INCEPTION_YEARS_FILE = Path("pdf_extraction/syndicate_inception_years.json")
 
 
 def _load_inception_years() -> dict:
-    """Load syndicate inception years from JSON file."""
+    """Load syndicate inception years from JSON file, then backfill from
+    already-extracted output JSONs that contain triangle data.
+
+    This ensures that syndicates processed in previous runs (whose triangles
+    contain ``underwriting_years``) are reflected in the cache even if
+    Perplexity was never called or returned nothing for them.
+    """
+    cache: dict[int, int] = {}
     if INCEPTION_YEARS_FILE.exists():
         with open(INCEPTION_YEARS_FILE) as f:
             data = json.load(f)
-        # Strip _meta key, return {int_syndicate: int_year}
-        return {int(k): int(v) for k, v in data.items() if k != "_meta"}
-    return {}
+        cache = {int(k): int(v) for k, v in data.items() if k != "_meta"}
+
+    # Backfill from extraction JSONs that have triangle data or inception_year
+    output_dir = Path("pdf_extraction")
+    dirty = False
+    for jf in output_dir.glob("syndicate_*.json"):
+        try:
+            stem_parts = jf.stem.split("_")  # syndicate_NNNN_YYYY
+            syn_num = int(stem_parts[1])
+        except (IndexError, ValueError):
+            continue
+        # Only backfill if syndicate not already in cache
+        if syn_num in cache:
+            continue
+        try:
+            with open(jf) as f:
+                doc = json.load(f)
+        except (json.JSONDecodeError, OSError):
+            continue
+        # Check 1: explicit inception_year field (from first-year stubs / Perplexity)
+        if "inception_year" in doc:
+            try:
+                cache[syn_num] = int(doc["inception_year"])
+                dirty = True
+                continue
+            except (ValueError, TypeError):
+                pass
+        # Check 2: _rag_triangle.underwriting_years in model outputs
+        for model_key in doc.get("models", {}).values():
+            tri = model_key.get("_rag_triangle") if isinstance(model_key, dict) else None
+            if tri and tri.get("underwriting_years"):
+                uw_years = [int(y) for y in tri["underwriting_years"]]
+                inception = min(uw_years)
+                # Only update if earlier than what we already have
+                if syn_num not in cache or inception < cache[syn_num]:
+                    cache[syn_num] = inception
+                    dirty = True
+                break
+
+    if dirty:
+        _save_inception_years(cache)
+        print(f"  Backfilled inception years from existing extractions -> {len(cache)} syndicates total")
+
+    return cache
 
 
 def _save_inception_years(inception: dict) -> None:
@@ -292,10 +367,12 @@ def _save_inception_years(inception: dict) -> None:
         json.dump(output, f, indent=2)
 
 
+
 def _lookup_inception_year_perplexity(syndicate_num: int) -> int | None:
     """Query Perplexity API for the first underwriting year of a syndicate.
 
     Returns the year as int, or None if lookup fails.
+    Uses structured JSON output to avoid ambiguous free-text parsing.
     """
     api_key = os.getenv("PERPLEXITY_API_KEY")
     if not api_key:
@@ -304,8 +381,10 @@ def _lookup_inception_year_perplexity(syndicate_num: int) -> int | None:
 
     query = (
         f"What year did Lloyd's of London syndicate {syndicate_num} first begin "
-        f"underwriting insurance? I need the first year they wrote any business, "
-        f"anywhere in the world. Return ONLY the four-digit year number, nothing else."
+        f"underwriting insurance? I need the first year they wrote any business. "
+        f"Note: the syndicate NUMBER ({syndicate_num}) is NOT necessarily the same "
+        f"as the year it started — many syndicates have numbers that look like years "
+        f"but started in a completely different year."
     )
 
     headers = {
@@ -315,10 +394,43 @@ def _lookup_inception_year_perplexity(syndicate_num: int) -> int | None:
     payload = {
         "model": "sonar",
         "messages": [
-            {"role": "system", "content": "You are a research assistant. Answer with ONLY a four-digit year. No other text."},
+            {
+                "role": "system",
+                "content": (
+                    "You are a research assistant specialising in Lloyd's of London."
+                ),
+            },
             {"role": "user", "content": query},
         ],
         "temperature": 0.1,
+        "response_format": {
+            "type": "json_schema",
+            "json_schema": {
+                "schema": {
+                    "type": "object",
+                    "properties": {
+                        "syndicate_number": {
+                            "type": "integer",
+                            "description": "The syndicate number queried",
+                        },
+                        "first_underwriting_year": {
+                            "type": "integer",
+                            "description": "The first year this syndicate wrote any insurance business",
+                        },
+                        "confidence": {
+                            "type": "string",
+                            "enum": ["high", "medium", "low"],
+                            "description": "Confidence in the answer",
+                        },
+                        "source": {
+                            "type": "string",
+                            "description": "Where this information was found",
+                        },
+                    },
+                    "required": ["syndicate_number", "first_underwriting_year", "confidence", "source"],
+                },
+            },
+        },
     }
 
     try:
@@ -331,15 +443,30 @@ def _lookup_inception_year_perplexity(syndicate_num: int) -> int | None:
         response.raise_for_status()
         result = response.json()
         answer = result["choices"][0]["message"]["content"].strip()
-        # Extract 4-digit year from response
-        year_match = re.search(r"\b(19\d{2}|20\d{2})\b", answer)
-        if year_match:
-            year = int(year_match.group(1))
-            print(f"  Perplexity: Syndicate {syndicate_num} first underwrote in {year}")
-            return year
-        else:
-            print(f"  WARNING: Could not parse year from Perplexity response: {answer!r}")
+
+        # Strip markdown code fences if present
+        if answer.startswith("```"):
+            answer = re.sub(r"^```(?:json)?\s*", "", answer)
+            answer = re.sub(r"\s*```$", "", answer)
+
+        parsed = json.loads(answer)
+        year = parsed["first_underwriting_year"]
+        confidence = parsed.get("confidence", "unknown")
+        source = parsed.get("source", "")
+
+        if not isinstance(year, int) or year < 1688 or year > 2030:
+            print(f"  WARNING: Perplexity returned invalid year {year!r} for syndicate {syndicate_num}. "
+                  f"Full response: {parsed}")
             return None
+
+        # Reject low-confidence answers
+        if confidence == "low":
+            print(f"  WARNING: Perplexity low-confidence answer for syndicate {syndicate_num}: {year} ({source})")
+            return None
+
+        print(f"  Perplexity: Syndicate {syndicate_num} first underwrote in {year} "
+              f"(confidence={confidence}, source={source!r})")
+        return year
     except Exception as e:
         print(f"  WARNING: Perplexity lookup failed for syndicate {syndicate_num}: {e}")
         return None
@@ -507,7 +634,7 @@ Return this JSON structure:
 {{
   "syndicate": {syndicate_num},
   "year": {report_year},
-  "opening_reserves_gbp_m": <opening GROSS CLAIMS OUTSTANDING (also called "gross claims reserves") at start of year, in millions as a number. This is ONLY the claims reserve — do NOT include provisions for unearned premiums. Look in the Technical Reserves note or Balance Sheet for "Gross claims outstanding" or "Claims outstanding - gross amount". null if not found>,
+  "opening_reserves_gbp_m": <opening GROSS CLAIMS OUTSTANDING at start of year, in millions. PRIMARY SOURCE: the Balance Sheet / Statement of Financial Position — find "Claims outstanding" (or "Gross claims outstanding") in the LIABILITIES section under "Technical provisions". Use the PRIOR YEAR comparative column (e.g. in a 2019 report, use the 2018 column). This is ONLY claims reserves — do NOT include "Provision for unearned premiums". Do NOT use the reinsurers' share from the ASSETS side. SECONDARY SOURCE: Technical Reserves note "At 1 January" — but prefer Balance Sheet if both are available. null if not found>,
   "opening_reserves_page": <page number where found>,
   "opening_reserves_confidence": <0.0 to 1.0>,
   "prior_year_development_gbp_m": <GROSS amount in millions as a SIGNED number: NEGATIVE for releases, POSITIVE for strengthenings/deteriorations. MUST be the GROSS figure (insurance liabilities), NOT net of reinsurance. If the note shows Insurance liabilities / Reinsurer's share / Net columns, use the INSURANCE LIABILITIES column. Use the figure from the "Movement in prior year's provision for claims outstanding" note. CRITICAL: Do NOT use the "Claims incurred in prior underwriting years" row from the Profit and Loss Account Technical Account — this is GROSS CLAIMS INCURRED (premiums earned minus claims paid minus reserve changes), NOT the reserve movement. It is a completely different accounting concept. Do NOT use narrative text that says "net releases of £X" or "net improvement of £X" — the word "net" means after reinsurance. Do NOT use the "Movement in provision" line from the Technical Reserves reconciliation table, which includes current year movements. null if not found>,
@@ -589,7 +716,7 @@ Rules:
 - Map line of business names to the standard Lloyd's LOBs where possible. If a syndicate has a "Treaty" division (reinsurance accepted), map it to "Treaty" — do NOT split it into Reinsurance - Property/Casualty/Specialty unless the report explicitly breaks it down by those sub-categories.
 - Map causes to the standard causal categories where possible
 - For exact_reserve_text: copy verbatim, do not paraphrase
-- IMPORTANT — opening_reserves_gbp_m: Use ONLY gross claims outstanding (claims reserves). Do NOT include unearned premium provisions. These are different items in the balance sheet / technical reserves note.
+- IMPORTANT — opening_reserves_gbp_m: Use ONLY gross claims outstanding (claims reserves). Do NOT include unearned premium provisions. PRIMARY source is the Balance Sheet / Statement of Financial Position: find "Claims outstanding" under "Technical provisions" in the LIABILITIES section, and use the PRIOR YEAR comparative column. Do NOT use the "Reinsurers' share of claims outstanding" from the ASSETS side — that is the reinsurance recoverable, not the gross claims reserve. If the Balance Sheet is not available, fall back to the Technical Reserves note "At 1 January" figure.
 - IMPORTANT — prior_year_development_gbp_m — WRONG SOURCES TO REJECT FIRST:
   ✗ "Claims incurred in prior underwriting years" or "Claims incurred in relation to prior underwriting years" from the Profit & Loss Account / Technical Account. Despite containing the words "prior underwriting years", this is CLAIMS INCURRED (a P&L accounting line), NOT the prior year reserve movement. Example to REJECT: "Claims incurred in relation to prior underwriting years 789.7 (617.6) 172.1" — these are gross/reinsurance/net CLAIMS INCURRED, not reserve movements. IGNORE THIS COMPLETELY.
   ✗ "Movement in provision" from Technical Reserves reconciliation — includes BOTH current + prior year combined.
@@ -603,9 +730,10 @@ Rules:
   Source 3: Year-of-account result breakdown summing non-current-year components.
   Source 4: GROSS claims development triangle — compare bottom row to previous diagonal for UW years older than 2 most recent.
   Source 5: Loss ratio development table × premiums (fallback if no absolute triangle).
-  IMPORTANT FALLBACK: If the movement note only shows NET figures, fall back to the GROSS claims development triangle (source 4). Return null if no reliable aggregate prior year development figure is available.
+  Source 6 (LAST RESORT): If NO gross figure is available from ANY of the above sources (no gross movement note, no gross triangle, no loss ratio table), but the narrative text or movement note explicitly states a NET (after reinsurance) prior year development figure, use the NET figure. Flag this clearly in data_quality_notes as "NET of reinsurance — no gross figure available". This is better than returning null when the report clearly quantifies the prior year movement, even if only net.
+  IMPORTANT FALLBACK: If the movement note only shows NET figures AND a gross triangle exists, fall back to the GROSS claims development triangle (source 4). Only use Source 6 (net figure) if no gross source is available at all. Return null only if no figure (gross or net) is available.
 - IMPORTANT — sign convention for "surplus/(deficit)" language: When a report says "A surplus/(deficit) run-off deviation of (X) million", the PARENTHESES around the number indicate a DEFICIT. A deficit means prior reserves were INSUFFICIENT, which is ADVERSE development = STRENGTHENING (POSITIVE sign). Example: "surplus/(deficit) of (3.0) million" means a 3.0m deficit = prior_year_development_gbp_m: +3.0, direction: "strengthening". Conversely, an unparenthesized number means a surplus = release = NEGATIVE sign.
-- IMPORTANT — gross_premium_mix: Use the REGULATORY segmental analysis from the Notes to the Accounts. Copy the line of business names EXACTLY as printed (e.g. "Marine, aviation and transport", "Fire and other damage to property", "Third party liability", "Miscellaneous", "Reinsurance"). Do NOT rename them to standard Lloyd's LOB names. Do NOT split combined categories into separate entries. Do NOT use the underwriter's internal divisional breakdown.
+- IMPORTANT — gross_premium_mix: Use the REGULATORY segmental analysis from the Notes to the Accounts. Copy the line of business names EXACTLY as printed (e.g. "Marine, aviation and transport", "Fire and other damage to property", "Third party liability", "Miscellaneous", "Reinsurance"). Do NOT rename them to standard Lloyd's LOB names. Do NOT split combined categories into separate entries. Do NOT use the underwriter's internal divisional breakdown. Even if the report has only ONE line of business (e.g. a monoline reinsurer writing 100% "Reinsurance"), still include it as a single entry in gross_premium_mix — do NOT return an empty array just because there is only one class. Also look for "Gross written premium income by class of business" tables in the Managing Agent's Report — these often provide a more granular divisional breakdown than the regulatory segmental analysis note.
 - IMPORTANT — gross_premium_mix with "Direct insurance" and "Reinsurance acceptances" sub-tables: Some segmental analysis notes split gross premiums into "Direct insurance" and "Reinsurance acceptances" sub-tables, each with their own LOB categories (e.g. both may have "Fire and other damage to property"). In this case, list the individual Direct insurance categories with their amounts, then add a SINGLE consolidated "Reinsurance acceptances" line with the total of all reinsurance accepted premiums. Do NOT list the individual reinsurance sub-categories separately (they would create duplicate LOB names). The total should still equal gross_premiums_written_gbp_m.
 - IMPORTANT — gross_premium_mix: prefer DIVISIONAL TOTALS over regulatory sub-categories. When the report contains BOTH a regulatory segmental analysis (with fine-grained statutory classes like "Marine, aviation and transport", "Fire and other damage to property") AND a divisional/business class summary (e.g. "Marine", "Property", "Specialty", "Political Lines", "Treaty"), use the DIVISIONAL summary. The divisional breakdown aggregates across direct and reinsurance business to give the TOTAL premium per business class, which is what we need. The regulatory segmental analysis often shows only the direct insurance component for each statutory class, understating the true LOB total. Each entry in gross_premium_mix should represent the TOTAL premium for that business class (direct + reinsurance combined). The amounts must still sum to gross_premiums_written_gbp_m.
 - IMPORTANT — year-of-account result breakdown: Many Lloyd's reports break down the overall result by year of account, e.g. "The result is a profit of £7,833,000, of which a loss of £5,556,000 is attributable to the {report_year} year of account, a profit of £14,806,000 is attributable to the {report_year - 1} year of account and a loss of £1,417,000 is attributable to the {report_year - 2} and prior years of account." In this example, the {report_year - 1} YOA profit (£14.806m) and the {report_year - 2} & prior YOA loss (-£1.417m) are BOTH prior year development. The NET prior year development = sum of all non-current-year components = £14.806m + (-£1.417m) = £13.389m. Since this is a net profit on prior years, direction = "release", prior_year_development_gbp_m = -13.389 (negative = release). This breakdown is a PRIMARY source for prior year development — look for it in the Managing Agent's Report or Underwriter's Report. Also look for "The [YYYY] & prior years of account is closing with a collectable loss/profit of £X" which indicates the closure result for older years.
@@ -687,6 +815,51 @@ def add_metadata(data, model, report_path, content_hash):
     return data
 
 
+def _parse_net_pyd_from_text(reserve_text, direction=None):
+    """Parse a net-of-reinsurance PYD amount from narrative reserve text.
+
+    Returns signed float in millions (negative=release, positive=strengthening),
+    or None if no clear amount can be parsed.
+    """
+    if not reserve_text:
+        return None
+    text = reserve_text.lower()
+    # Match patterns like "release of GBP 1.3m", "release of £1.3m",
+    # "strengthening of GBP 2.9m", etc.
+    patterns = [
+        r'(?:reserve\s+)?(?:release|surplus)\s+of\s+(?:gbp|£|usd|\$|eur|€)\s*([\d,.]+)\s*(?:m|million)',
+        r'(?:strengthening|deterioration|deficit)\s+of\s+(?:gbp|£|usd|\$|eur|€)\s*([\d,.]+)\s*(?:m|million)',
+        r'(?:gbp|£|usd|\$|eur|€)\s*([\d,.]+)\s*(?:m|million)\s+(?:net\s+)?(?:release|surplus)',
+        r'(?:gbp|£|usd|\$|eur|€)\s*([\d,.]+)\s*(?:m|million)\s+(?:net\s+)?(?:strengthening|deterioration)',
+        # Also match "release of GBP 1.3m" without explicit unit suffix
+        r'(?:reserve\s+)?(?:release|surplus)\s+of\s+(?:gbp|£|usd|\$|eur|€)\s*([\d,.]+)',
+        r'(?:strengthening|deterioration|deficit)\s+of\s+(?:gbp|£|usd|\$|eur|€)\s*([\d,.]+)',
+    ]
+    for pattern in patterns:
+        match = re.search(pattern, text)
+        if match:
+            amount_str = match.group(1).replace(",", "")
+            try:
+                amount = float(amount_str)
+            except ValueError:
+                continue
+            # Determine sign from context around the match
+            context = text[max(0, match.start() - 50):match.end() + 50]
+            is_release = any(w in context for w in ["release", "surplus", "favourable", "favorable"])
+            is_strength = any(w in context for w in ["strengthening", "deterioration", "deficit", "adverse"])
+            if is_release:
+                return -amount
+            elif is_strength:
+                return amount
+            elif direction == "release":
+                return -amount
+            elif direction == "strengthening":
+                return amount
+            # Can't determine sign — skip
+            continue
+    return None
+
+
 def parse_json_response(text):
     """Parse JSON from LLM response, stripping markdown fences if present."""
     raw = text.strip()
@@ -712,9 +885,13 @@ def parse_json_response(text):
         # Fix common LLM JSON errors:
         # 1. Trailing commas before } or ]
         fixed = re.sub(r',\s*([}\]])', r'\1', candidate)
-        # 2. Single-line // comments
+        # 2. Single-line // comments (outside strings)
         fixed = re.sub(r'//[^\n]*', '', fixed)
-        # 3. Single quotes → double quotes (but not inside strings)
+        # 3. Multi-line /* */ comments
+        fixed = re.sub(r'/\*.*?\*/', '', fixed, flags=re.DOTALL)
+        # 4. Unquoted property names: { key: "value" } → { "key": "value" }
+        fixed = re.sub(r'(?<=[\{,])\s*([a-zA-Z_][a-zA-Z0-9_]*)\s*:', r' "\1":', fixed)
+        # 5. Single quotes → double quotes (but not inside strings)
         # Only do this if no double-quoted strings exist at all
         if '"' not in fixed.replace('\\"', ''):
             fixed = fixed.replace("'", '"')
@@ -738,29 +915,33 @@ def extract_with_gemini(report_path, file_bytes, content_hash, syndicate_num, re
 
     print(f"  [{model}] Uploading {report_path.name}...")
     client = genai.Client(api_key=os.getenv("GOOGLE_API_KEY"))
-    uploaded_file = client.files.upload(file=report_path)
+    t0 = time.time()
+    uploaded_file = _gemini_call_with_retry(
+        lambda: client.files.upload(file=report_path))
+    print(f"  [{model}] Upload done ({time.time() - t0:.1f}s). Extracting...")
 
-    print(f"  [{model}] Extracting...")
     gemini_config = GenerateContentConfig(
         temperature=0.0,
         response_mime_type="application/json",
     )
-    response = client.models.generate_content(
+    t1 = time.time()
+    response = _gemini_call_with_retry(lambda: client.models.generate_content(
         model=model,
         contents=[uploaded_file, build_prompt(syndicate_num, report_year)],
         config=gemini_config,
-    )
+    ))
+    print(f"  [{model}] Response received ({time.time() - t1:.1f}s)")
 
     # Retry up to twice on malformed JSON
     try:
         data = sanitize_ascii(parse_json_response(response.text))
     except json.JSONDecodeError as e:
         print(f"  [{model}] Malformed JSON ({e}), retrying (attempt 2)...")
-        response = client.models.generate_content(
+        response = _gemini_call_with_retry(lambda: client.models.generate_content(
             model=model,
             contents=[uploaded_file, build_prompt(syndicate_num, report_year)],
             config=gemini_config,
-        )
+        ))
         try:
             data = sanitize_ascii(parse_json_response(response.text))
         except json.JSONDecodeError as e2:
@@ -771,11 +952,11 @@ def extract_with_gemini(report_path, file_bytes, content_hash, syndicate_num, re
                 "no trailing commas, and no text outside the JSON braces. "
                 "Here is what you output:\n\n" + response.text[:3000]
             )
-            response = client.models.generate_content(
+            response = _gemini_call_with_retry(lambda: client.models.generate_content(
                 model=model,
                 contents=[uploaded_file, fix_prompt],
                 config=gemini_config,
-            )
+            ))
             data = sanitize_ascii(parse_json_response(response.text))
     data = add_metadata(data, model, report_path, content_hash)
 
@@ -1689,8 +1870,8 @@ def extract_text_from_pdf(pdf_path):
             total_chars = sum(len(t) for _, t in pages)
             if len(pages) > 0 and total_chars / len(pages) > 100:
                 return pages, "pymupdf"
-        except Exception:
-            pass
+        except Exception as e:
+            logger.debug(f"PyMuPDF extraction failed for {pdf_path.name}: {e}")
 
     # Try pdfplumber
     try:
@@ -1703,8 +1884,8 @@ def extract_text_from_pdf(pdf_path):
             total_chars = sum(len(t) for _, t in pages)
             if len(pages) > 0 and total_chars / len(pages) > 100:
                 return pages, "pdfplumber"
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug(f"pdfplumber extraction failed for {pdf_path.name}: {e}")
 
     # OCR with Tesseract — cache results to avoid re-running
     if HAS_PDF2IMAGE and HAS_TESSERACT:
@@ -1718,8 +1899,8 @@ def extract_text_from_pdf(pdf_path):
                     cached = json.load(f)
                 pages = [(p["page"], p["text"]) for p in cached]
                 return pages, "ocr_cache"
-            except Exception:
-                pass
+            except Exception as e:
+                logger.debug(f"OCR cache read failed for {pdf_path.name}: {e}")
 
         try:
             images = convert_from_path(str(pdf_path), dpi=200)
@@ -1840,15 +2021,16 @@ def extract_triangle_from_page(pdf_path, page_num, report_year, model="gemini-2.
             response_mime_type="application/json",
         )
         # Send image as inline data
-        response = client.models.generate_content(
+        image_bytes = base64.b64decode(img_b64)
+        response = _gemini_call_with_retry(lambda: client.models.generate_content(
             model=model,
             contents=[
                 {"inline_data": {"mime_type": "image/png",
-                                 "data": base64.b64decode(img_b64)}},
+                                 "data": image_bytes}},
                 prompt,
             ],
             config=config,
-        )
+        ))
         try:
             data = parse_json_response(response.text)
             usage = response.usage_metadata
@@ -1858,7 +2040,8 @@ def extract_triangle_from_page(pdf_path, page_num, report_year, model="gemini-2.
                             syndicate_num=_syn, report_year=report_year,
                             page_num=page_num)
             return data, cost
-        except (json.JSONDecodeError, Exception) as e:
+        except Exception as e:
+            logger.warning(f"Failed to parse Gemini vision response: {e}")
             return None, 0
     else:
         # OpenAI
@@ -1883,7 +2066,8 @@ def extract_triangle_from_page(pdf_path, page_num, report_year, model="gemini-2.
                             syndicate_num=_syn, report_year=report_year,
                             page_num=page_num)
             return data, cost
-        except (json.JSONDecodeError, Exception) as e:
+        except Exception as e:
+            logger.warning(f"Failed to parse GPT vision response: {e}")
             return None, 0
 
 
@@ -1913,7 +2097,8 @@ def extract_triangle_with_retry(pdf_path, page_num, report_year, max_retries=3):
             return tri_data, pyd, details, total_cost
 
         # New/young syndicate — triangle is structurally correct but too small for PYD
-        if details and "fewer than 2 development rows" in details:
+        if details and ("fewer than 2 development rows" in details
+                        or "no usable UW years" in details):
             return tri_data, None, "new_syndicate", total_cost
 
         last_details = details
@@ -1945,18 +2130,22 @@ def extract_pyd_from_relevant_pages(pdf_path, report_year):
         "adobe_lob": None, "adobe_provisions": None,
         "first_year_syndicate": False,
         "no_triangle_data": False,
+        "relevant_pages": [],
+        "rotated_pages": set(),
     }
 
     # Step 1: Table extraction (deterministic, best quality)
     backend_name = TABLE_BACKEND.value.capitalize()
     extraction = extract_tables(pdf_path, report_year, backend=TABLE_BACKEND,
                                 azure_paid=AZURE_PAID)
+    result["relevant_pages"] = extraction.relevant_pages
+    result["rotated_pages"] = extraction.rotated_pages
 
     if extraction.triangle:
         tri_data = extraction.triangle.to_dict()
         uw_years = tri_data.get("underwriting_years", [])
         usable_years = [y for y in uw_years if int(y) <= report_year - 2]
-        if len(uw_years) <= 2 or len(usable_years) == 0:
+        if len(usable_years) == 0:
             oldest = min(uw_years) if uw_years else "?"
             print(f"  [{backend_name}] NEW SYNDICATE: triangle spans {oldest}-{report_year} "
                   f"({len(uw_years)} UW years, {len(usable_years)} usable) "
@@ -1970,6 +2159,16 @@ def extract_pyd_from_relevant_pages(pdf_path, report_year):
                 result["pyd"] = pyd
                 result["pyd_details"] = pyd_details
                 result["method"] = extraction.method
+            elif pyd_details and "no usable UW years" in pyd_details:
+                # Triangle is structurally valid but all data-bearing columns
+                # are too recent for PYD (e.g. syndicate started 2015 but
+                # has nominal UW year columns going back to 2013 with dashes).
+                oldest = min(uw_years) if uw_years else "?"
+                print(f"  [{backend_name}] NEW SYNDICATE: triangle found "
+                      f"({extraction.triangle_details}) but no UW years "
+                      f"old enough for PYD -- treating as first-year syndicate")
+                result["first_year_syndicate"] = True
+                result["triangle"] = tri_data
     elif extraction.first_year_syndicate:
         # Table extraction found a table with < 3 UW years but couldn't find a
         # full triangle.  Don't trust this — the parser may have found a partial
@@ -1993,11 +2192,14 @@ def extract_pyd_from_relevant_pages(pdf_path, report_year):
         prov_data = extraction.provisions.to_dict()
         gross = prov_data.get("gross_prior_year_claims")
         net = prov_data.get("net_prior_year_claims")
+        opening = prov_data.get("opening_gross_claims_outstanding")
         parts = []
         if gross is not None:
             parts.append(f"gross={gross:+.1f}m")
         if net is not None:
             parts.append(f"net={net:+.1f}m")
+        if opening is not None:
+            parts.append(f"opening claims={opening:.3f}m")
         if parts:
             print(f"  [{backend_name}] Provisions movement: {', '.join(parts)}")
         result["adobe_provisions"] = prov_data  # key kept for backwards compatibility
@@ -2016,6 +2218,11 @@ def extract_pyd_from_relevant_pages(pdf_path, report_year):
         relevant = find_relevant_pages(pages, report_year)
         tri_pages = relevant["triangle_pages"]
         res_pages = relevant["reserve_pages"]
+
+        # Merge text-based page numbers into the relevant_pages set
+        text_page_nums = set(pn for pn, _ in tri_pages + res_pages)
+        existing = set(result["relevant_pages"])
+        result["relevant_pages"] = sorted(existing | text_page_nums)
 
         # Step 3: If Adobe didn't find a triangle, try LLM vision on triangle pages
         if result["pyd"] is None and not result["first_year_syndicate"] and tri_pages and HAS_PDF2IMAGE:
@@ -2163,15 +2370,22 @@ def compute_pyd_from_triangle(triangle_data, report_year):
         return None, (f"triangle has {n_rows} rows but span is only "
                      f"{min_uw}-{report_year} — likely includes summary rows or is misaligned")
 
-    # Validate: oldest column should have at least some filled rows.
-    # In a proper NxN triangle, column 0 should have ~N non-null values,
-    # but run-off syndicates may have dashes ("-" = zero claims) in the
-    # oldest column after the first development period.  Require at least
-    # 1 filled value (a completely empty oldest column signals misalignment).
+    # Validate: at least one column should have filled rows.
+    # In a proper NxN triangle, column 0 (oldest) should have ~N non-null
+    # values, but syndicates that started recently may have legitimately
+    # empty oldest columns (dashes = no claims activity in early years).
+    # Only reject if ALL columns are empty (truly broken extraction).
     if n_rows >= 2 and n_cols >= 2:
-        col0_filled = sum(1 for r in range(n_rows) if rows[r][0] is not None)
-        if col0_filled < 1:
-            return None, (f"oldest column has 0 filled rows "
+        any_col_filled = False
+        first_filled_col = None
+        for c in range(n_cols):
+            col_filled = sum(1 for r in range(n_rows) if rows[r][c] is not None)
+            if col_filled > 0:
+                any_col_filled = True
+                if first_filled_col is None:
+                    first_filled_col = c
+        if not any_col_filled:
+            return None, (f"all columns have 0 filled rows "
                          f"— likely shifted/misaligned")
 
     if n_rows < 2:
@@ -2276,7 +2490,15 @@ def compute_pyd_from_triangle(triangle_data, report_year):
                     continue
 
         if current_val is None or current_row_idx is None:
-            details.append(f"  {uw_year}: skipped (no current estimate)")
+            # All-None column for an old enough UW year means zero claims
+            # activity (dashes in the triangle = no claims, not missing data).
+            # PYD contribution is 0 — count the year as used.
+            expected_dev_periods = report_year - uw_year + 1
+            if expected_dev_periods >= 2:
+                details.append(f"  {uw_year}: all-zero column (no claims activity), PYD=0")
+                used_years += 1
+            else:
+                details.append(f"  {uw_year}: skipped (no current estimate)")
             continue
 
         # Previous diagonal = one row above in same column
@@ -2355,16 +2577,25 @@ def _apply_triangle_pyd(result, computed_pyd, model_name, details, reason):
     # Sanity check BEFORE applying: releases can't exceed 100% of opening
     # reserves (reserves can't go negative).  Strengthenings CAN exceed 100%
     # in extreme scenarios, so only reject negative values below -100%.
-    if result.get("opening_reserves_gbp_m"):
-        pyd_pct = round(computed_pyd / result["opening_reserves_gbp_m"] * 100, 2)
+    opening = result.get("opening_reserves_gbp_m")
+    if computed_pyd != 0 and opening and opening > 0:
+        pyd_pct = round(computed_pyd / opening * 100, 2)
         if pyd_pct < -100:
             msg = (f"  [{model_name}] Triangle PYD ratio {pyd_pct:.1f}% < -100% — "
                    f"likely unit mismatch or misaligned triangle. Discarding.")
             return result, msg
+    elif computed_pyd != 0 and (not opening or opening == 0):
+        # Non-zero PYD from zero opening reserves is nonsensical
+        msg = (f"  [{model_name}] Triangle PYD {computed_pyd:+.3f}m but opening reserves = 0 — "
+               f"likely misidentified table. Discarding.")
+        return result, msg
     result["prior_year_development_gbp_m"] = computed_pyd
-    pyd_pct = None
-    if result.get("opening_reserves_gbp_m"):
-        pyd_pct = round(computed_pyd / result["opening_reserves_gbp_m"] * 100, 2)
+    if computed_pyd == 0:
+        pyd_pct = 0.0
+    elif opening and opening > 0:
+        pyd_pct = round(computed_pyd / opening * 100, 2)
+    else:
+        pyd_pct = None
     result["prior_year_development_pct"] = pyd_pct
     if computed_pyd < 0:
         result["direction"] = "release"
@@ -2448,12 +2679,17 @@ def verify_triangles(result_gemini, result_openai, gemini_name, openai_name, rep
             return False
         if struct_score < 0.5:
             return False
+        if pyd_val == 0:
+            return True  # Zero PYD is always sane
         if opening and opening > 0:
             # Releases can't exceed 100% (reserves can't go negative).
             # Strengthenings CAN exceed 100% in extreme scenarios.
             pyd_pct = pyd_val / opening * 100
             if pyd_pct < -100:
                 return False
+        elif not opening or opening == 0:
+            # Non-zero PYD from zero opening reserves is nonsensical
+            return False
         return True
 
     sane_g = _passes_sanity(pyd_g, struct_g)
@@ -2707,6 +2943,74 @@ def resolve_computed_fields(hard_failures, result_a, result_b, model_a, model_b)
                 resolved.append(d)
                 continue
 
+        if d["field"] == "direction":
+            dir_a = d.get(model_a)
+            dir_b = d.get(model_b)
+            pyd_a = result_a.get("prior_year_development_gbp_m")
+            pyd_b = result_b.get("prior_year_development_gbp_m")
+            # Auto-resolve when one model returned null (couldn't extract)
+            # and the other has a valid direction consistent with its PYD
+            if dir_a is None and dir_b is not None:
+                # Accept model_b's direction if its PYD is consistent
+                if (pyd_b == 0 and dir_b == "flat") or \
+                   (pyd_b is not None and pyd_b < 0 and dir_b == "release") or \
+                   (pyd_b is not None and pyd_b > 0 and dir_b == "strengthening") or \
+                   pyd_a is None:  # model_a has no PYD info at all
+                    print(f"  Auto-resolved direction: {model_a}=null, "
+                          f"accepting {model_b}={dir_b}")
+                    result_a["direction"] = dir_b
+                    d["auto_resolved"] = True
+                    d["closer_model"] = model_b
+                    resolved.append(d)
+                    continue
+            elif dir_b is None and dir_a is not None:
+                if (pyd_a == 0 and dir_a == "flat") or \
+                   (pyd_a is not None and pyd_a < 0 and dir_a == "release") or \
+                   (pyd_a is not None and pyd_a > 0 and dir_a == "strengthening") or \
+                   pyd_b is None:
+                    print(f"  Auto-resolved direction: {model_b}=null, "
+                          f"accepting {model_a}={dir_a}")
+                    result_b["direction"] = dir_a
+                    d["auto_resolved"] = True
+                    d["closer_model"] = model_a
+                    resolved.append(d)
+                    continue
+
+        if d["field"] == "opening_reserves_gbp_m":
+            # Auto-resolve using RAG opening claims outstanding from provisions table
+            prov_a = result_a.get("_adobe_provisions") or {}
+            rag_opening = prov_a.get("opening_gross_claims_outstanding")
+            if rag_opening is not None:
+                val_a = d.get(model_a)
+                val_b = d.get(model_b)
+                # Use RAG value and accept whichever LLM is closer
+                try:
+                    err_a = abs(float(val_a) - rag_opening) if val_a is not None else 999
+                    err_b = abs(float(val_b) - rag_opening) if val_b is not None else 999
+                except (TypeError, ValueError):
+                    err_a = err_b = 999
+                closer = model_a if err_a <= err_b else model_b
+                print(f"  Auto-resolved opening_reserves_gbp_m using RAG provisions table: "
+                      f"{rag_opening:.3f}m")
+                print(f"    {model_a}: {val_a}, {model_b}: {val_b}, RAG: {rag_opening:.3f}")
+                # Override both models with RAG value
+                result_a["opening_reserves_gbp_m"] = rag_opening
+                result_b["opening_reserves_gbp_m"] = rag_opening
+                # Recompute PYD percentage with corrected opening reserves
+                for r in [result_a, result_b]:
+                    pyd = r.get("prior_year_development_gbp_m")
+                    if pyd is not None and rag_opening > 0:
+                        r["prior_year_development_pct"] = round(
+                            float(pyd) / rag_opening * 100, 2
+                        )
+                    elif rag_opening == 0 or pyd == 0:
+                        r["prior_year_development_pct"] = 0.0
+                d["auto_resolved"] = True
+                d["rag_value"] = rag_opening
+                d["closer_model"] = closer
+                resolved.append(d)
+                continue
+
         remaining.append(d)
 
     return remaining, resolved
@@ -2766,7 +3070,6 @@ def _get_field_context(field, gem_data, gpt_data):
         lines.append(f"  Gemini: {g_str}")
         lines.append(f"  GPT:    {o_str}")
     return lines
-    print(f"    ---")
 
 
 def print_discrepancies(discrepancies, model_a, model_b):
@@ -3095,12 +3398,32 @@ def process_one_report(report_path, inception_cache=None):
             no_data_output["currency"] = adobe_lob.get("currency", "GBP")
         return "no_triangle_data", no_data_output
 
-    # Extract with both models (use converted PDF path but keep original as source)
+    # Build slim PDF with only relevant pages for LLM extraction
+    relevant_pages = rag_result.get("relevant_pages", [])
+    rotated_pages = rag_result.get("rotated_pages", set())
+    if relevant_pages:
+        slim_dir = OUTPUT_DIR / "llm_slim"
+        slim_dir.mkdir(parents=True, exist_ok=True)
+        llm_pdf = slim_dir / f"{actual_path.stem}_llm.pdf"
+        _extract_pages_to_pdf(actual_path, relevant_pages, llm_pdf, rotated_pages)
+        slim_size = llm_pdf.stat().st_size / 1024
+        print(f"  [LLM] Slim PDF: {len(relevant_pages)} pages, {slim_size:.0f} KB "
+              f"(full report: {len(file_bytes) / 1024:.0f} KB)")
+        with open(llm_pdf, "rb") as f:
+            llm_bytes = f.read()
+        llm_hash = hashlib.sha256(llm_bytes).hexdigest()
+    else:
+        # Fallback: send full PDF if no relevant pages identified
+        llm_pdf = actual_path
+        llm_bytes = file_bytes
+        llm_hash = content_hash
+
+    # Extract with both models (slim PDF with relevant pages only)
     result_gemini = extract_with_gemini(
-        actual_path, file_bytes, content_hash, syndicate_num, report_year
+        llm_pdf, llm_bytes, llm_hash, syndicate_num, report_year
     )
     result_openai = extract_with_openai(
-        actual_path, file_bytes, content_hash, syndicate_num, report_year
+        llm_pdf, llm_bytes, llm_hash, syndicate_num, report_year
     )
 
     # RAG-lite was already run above (before LLM calls) for early first-year detection.
@@ -3128,6 +3451,13 @@ def process_one_report(report_path, inception_cache=None):
                 rag_sane = False
                 print(f"  [RAG] Triangle PYD {rag_pyd:+.3f}m ({rag_pyd_pct:.1f}% of opening) "
                       f"< -100% — likely misidentified table. Discarding RAG PYD.")
+        elif abs(rag_pyd) > 0.1:
+            # Non-zero PYD but zero opening reserves -- can't have reserve
+            # development when there are no reserves.  Likely a net triangle
+            # or misidentified table.
+            rag_sane = False
+            print(f"  [RAG] Triangle PYD {rag_pyd:+.3f}m but opening reserves = 0 "
+                  f"— likely misidentified table or net triangle. Discarding RAG PYD.")
 
         if rag_sane:
             print(f"  [RAG] Triangle PYD: {rag_pyd:+.3f}m")
@@ -3140,9 +3470,12 @@ def process_one_report(report_path, inception_cache=None):
                 model_pyd = result.get("prior_year_development_gbp_m")
                 if model_pyd is None:
                     result["prior_year_development_gbp_m"] = rag_pyd
-                    if result.get("opening_reserves_gbp_m"):
+                    _op = result.get("opening_reserves_gbp_m")
+                    if rag_pyd == 0:
+                        result["prior_year_development_pct"] = 0.0
+                    elif _op and _op > 0:
                         result["prior_year_development_pct"] = round(
-                            rag_pyd / result["opening_reserves_gbp_m"] * 100, 2
+                            rag_pyd / _op * 100, 2
                         )
                     result["direction"] = "release" if rag_pyd < 0 else "strengthening" if rag_pyd > 0 else "flat"
                     print(f"  [{model_name}] PYD filled from RAG triangle: {rag_pyd:+.3f}m")
@@ -3156,9 +3489,12 @@ def process_one_report(report_path, inception_cache=None):
                         # (which may come from wrong sources like net movements
                         # or P&L gross change in provision).
                         result["prior_year_development_gbp_m"] = rag_pyd
-                        if result.get("opening_reserves_gbp_m"):
+                        _op = result.get("opening_reserves_gbp_m")
+                        if rag_pyd == 0:
+                            result["prior_year_development_pct"] = 0.0
+                        elif _op and _op > 0:
                             result["prior_year_development_pct"] = round(
-                                rag_pyd / result["opening_reserves_gbp_m"] * 100, 2
+                                rag_pyd / _op * 100, 2
                             )
                         result["direction"] = "release" if rag_pyd < 0 else "strengthening" if rag_pyd > 0 else "flat"
                         if diff >= 0.5:
@@ -3167,9 +3503,9 @@ def process_one_report(report_path, inception_cache=None):
                                 f"{old_notes} [RAG OVERRIDE: Model said PYD={old_pyd}, "
                                 f"RAG triangle computed {rag_pyd}. Using RAG value.]"
                             )
-                            print(f"  [{model_name}] PYD overridden by RAG triangle: {old_pyd} → {rag_pyd:+.3f}m")
+                            print(f"  [{model_name}] PYD overridden by RAG triangle: {old_pyd} -> {rag_pyd:+.3f}m")
                         else:
-                            print(f"  [{model_name}] PYD confirmed by RAG triangle: {model_pyd} → {rag_pyd:+.3f}m")
+                            print(f"  [{model_name}] PYD confirmed by RAG triangle: {model_pyd} -> {rag_pyd:+.3f}m")
                     except (ValueError, TypeError):
                         pass
 
@@ -3177,6 +3513,15 @@ def process_one_report(report_path, inception_cache=None):
         if rag_result["triangle"]:
             result_gemini["_rag_triangle"] = rag_result["triangle"]
             result_openai["_rag_triangle"] = rag_result["triangle"]
+
+            # Learn inception year from triangle's earliest UW year
+            tri_uw_years = rag_result["triangle"].get("underwriting_years", [])
+            if tri_uw_years:
+                tri_inception = min(int(y) for y in tri_uw_years)
+                cached = inception_cache.get(syndicate_num)
+                if cached is None or tri_inception < cached:
+                    inception_cache[syndicate_num] = tri_inception
+                    _save_inception_years(inception_cache)
 
         if not rag_sane:
             # RAG PYD was insane — fall back to LLM-extracted triangles
@@ -3214,6 +3559,62 @@ def process_one_report(report_path, inception_cache=None):
             (result_openai, OPENAI_MODEL),
         ]:
             result["_adobe_provisions"] = adobe_prov
+
+    # Net-of-reinsurance PYD fallback: if both LLMs returned null PYD but both
+    # found narrative text with a quantified net reserve movement, use the net
+    # figure as a last resort.  This is better than leaving PYD as null when
+    # the report clearly states a net amount.
+    for result, model_name in [
+        (result_gemini, GEMINI_MODEL),
+        (result_openai, OPENAI_MODEL),
+    ]:
+        if result.get("prior_year_development_gbp_m") is not None:
+            continue  # already has a value
+        reserve_text = result.get("exact_reserve_text") or ""
+        if not reserve_text:
+            continue
+        # Try to parse a net figure from the reserve text
+        net_pyd = _parse_net_pyd_from_text(reserve_text, result.get("direction"))
+        if net_pyd is not None:
+            result["prior_year_development_gbp_m"] = net_pyd
+            if net_pyd == 0:
+                result["prior_year_development_pct"] = 0.0
+            elif result.get("opening_reserves_gbp_m") and result["opening_reserves_gbp_m"] > 0:
+                result["prior_year_development_pct"] = round(
+                    net_pyd / result["opening_reserves_gbp_m"] * 100, 2
+                )
+            result["direction"] = "release" if net_pyd < 0 else "strengthening" if net_pyd > 0 else "flat"
+            old_notes = result.get("data_quality_notes", "") or ""
+            result["data_quality_notes"] = (
+                f"{old_notes} [NET FALLBACK: No gross PYD available. "
+                f"Using net-of-reinsurance figure ({net_pyd:+.3f}m) from narrative text.]"
+            )
+            print(f"  [{model_name}] PYD filled from narrative net figure: {net_pyd:+.3f}m (net of reinsurance)")
+
+    # Zero-opening override: if opening reserves = 0, PYD must be 0 and
+    # direction must be flat — there are no prior year reserves to develop
+    opening_g = result_gemini.get("opening_reserves_gbp_m")
+    opening_o = result_openai.get("opening_reserves_gbp_m")
+    if opening_g == 0 and opening_o == 0:
+        for model_name, result in [(GEMINI_MODEL, result_gemini), (OPENAI_MODEL, result_openai)]:
+            pyd_val = result.get("prior_year_development_gbp_m")
+            if pyd_val is not None and pyd_val != 0:
+                print(f"  [{model_name}] Opening reserves = 0 -- PYD forced: "
+                      f"{pyd_val:+.3f}m -> 0.0 (no prior reserves to develop)")
+            result["prior_year_development_gbp_m"] = 0.0
+            result["prior_year_development_pct"] = 0.0
+            result["direction"] = "flat"
+
+    # Force direction from resolved PYD — triangle PYD dominates direction
+    for model_name, result in [(GEMINI_MODEL, result_gemini), (OPENAI_MODEL, result_openai)]:
+        pyd_val = result.get("prior_year_development_gbp_m")
+        if pyd_val is not None:
+            expected_dir = "flat" if pyd_val == 0 else ("release" if pyd_val < 0 else "strengthening")
+            current_dir = result.get("direction")
+            if current_dir != expected_dir:
+                result["direction"] = expected_dir
+                if current_dir is not None:
+                    print(f"  [{model_name}] Direction forced: {current_dir} -> {expected_dir} (PYD={pyd_val:+.3f}m)")
 
     # Compare
     discrepancies = compare_results(result_gemini, result_openai, GEMINI_MODEL, OPENAI_MODEL)
@@ -3279,6 +3680,14 @@ def process_one_report(report_path, inception_cache=None):
 # ---------------------------------------------------------------------------
 
 if __name__ == "__main__":
+    # Guard against non-existent flags that would silently run against ALL reports
+    for bad_flag in ("--syndicates", "--years"):
+        if bad_flag in sys.argv:
+            print(f"ERROR: {bad_flag} is not a valid flag for test_gemini.py.")
+            print(f"  Use --single syndicate_NNNN_YYYY to process a single report.")
+            print(f"  Example: python test_gemini.py --single syndicate_2357_2016 --batch")
+            sys.exit(1)
+
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     AUDIT_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -3442,21 +3851,45 @@ if __name__ == "__main__":
         print(f"  Written: {output_file}")
 
         # Console summary: PYD amount + % of reserves
+        # Resolve across all models (first non-null), matching dashboard logic
         _any_model = output_data.get("models", {})
-        _first_model_data = next(iter(_any_model.values()), {}) if _any_model else {}
-        _pyd_gbp = _first_model_data.get("prior_year_development_gbp_m")
-        _pyd_pct = _first_model_data.get("prior_year_development_pct")
-        _opening = _first_model_data.get("opening_reserves_gbp_m")
+        _pyd_gbp = None
+        _pyd_pct = None
+        _opening = None
+        _currency = "GBP"
+        for _m in _any_model.values():
+            if _pyd_gbp is None and _m.get("prior_year_development_gbp_m") is not None:
+                _pyd_gbp = _m["prior_year_development_gbp_m"]
+            if _pyd_pct is None and _m.get("prior_year_development_pct") is not None:
+                _pyd_pct = _m["prior_year_development_pct"]
+            if _opening is None and _m.get("opening_reserves_gbp_m") is not None:
+                _opening = _m["opening_reserves_gbp_m"]
+            if _m.get("currency"):
+                _currency = _m["currency"]
         if _pyd_gbp is not None and _pyd_pct is not None:
             _dir = "release" if _pyd_gbp < 0 else "strengthening" if _pyd_gbp > 0 else "flat"
-            _currency = _first_model_data.get("currency", "GBP")
-            print(f"  >> RESULT: PYD = {_pyd_gbp:+.1f}m {_currency} ({_pyd_pct:+.1f}% of "
-                  f"{_opening:.0f}m reserves) [{_dir}]")
+            if _opening is not None:
+                print(f"  >> RESULT: PYD = {_pyd_gbp:+.1f}m {_currency} ({_pyd_pct:+.1f}% of "
+                      f"{_opening:.0f}m reserves) [{_dir}]")
+            else:
+                print(f"  >> RESULT: PYD = {_pyd_gbp:+.1f}m {_currency} ({_pyd_pct:+.1f}%) [{_dir}]")
         elif _pyd_gbp is not None:
             _dir = "release" if _pyd_gbp < 0 else "strengthening" if _pyd_gbp > 0 else "flat"
             print(f"  >> RESULT: PYD = {_pyd_gbp:+.1f}m [{_dir}]")
         else:
             print(f"  >> RESULT: No prior year development extracted")
+
+        # Check completeness: warn about missing fields that affect dashboard reliability
+        _missing = []
+        _has_premium_mix = any(
+            m.get("gross_premium_mix") for m in _any_model.values()
+        )
+        if not _has_premium_mix:
+            _missing.append("premium mix (no LOB breakdown found)")
+        if _pyd_pct is None:
+            _missing.append("PYD %")
+        if _missing:
+            print(f"  >> INCOMPLETE: missing {'; '.join(_missing)}")
 
         if not passed:
             run_failed += 1

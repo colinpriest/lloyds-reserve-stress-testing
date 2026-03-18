@@ -131,10 +131,10 @@ class OrthogonalProjectionNetwork:
         self.output_dim = self.config.latent_dim
         
         # Initialize weights
-        np.random.seed(42)
-        self.W1 = np.random.randn(self.input_dim, self.hidden_dim) * 0.1
+        rng = np.random.RandomState(42)
+        self.W1 = rng.randn(self.input_dim, self.hidden_dim) * 0.1
         self.b1 = np.zeros(self.hidden_dim)
-        self.W2 = np.random.randn(self.hidden_dim, self.output_dim) * 0.1
+        self.W2 = rng.randn(self.hidden_dim, self.output_dim) * 0.1
         self.b2 = np.zeros(self.output_dim)
         
         # Normalisation parameters (set during fit)
@@ -166,33 +166,58 @@ class OrthogonalProjectionNetwork:
         identity = np.eye(self.output_dim)
         return np.sum((gram - identity) ** 2)
     
-    def _contrastive_loss(self, 
-                          embeddings: np.ndarray, 
-                          labels: np.ndarray) -> float:
+    def _contrastive_loss(self,
+                          embeddings: np.ndarray,
+                          labels: np.ndarray) -> Tuple[float, np.ndarray]:
         """
-        Supervised contrastive loss.
-        Positive pairs: same severity bin
-        Negative pairs: different severity bins
+        Supervised contrastive loss (vectorized).
+        Positive pairs: same severity bin — minimize distance.
+        Negative pairs: different severity bins — hinge loss on distance.
+
+        Returns:
+            (loss_value, gradient w.r.t. embeddings)
         """
+        from scipy.spatial.distance import pdist, squareform
+
         n = len(embeddings)
-        total_loss = 0.0
-        count = 0
-        
+        # Pairwise squared distances (n, n)
+        dists_sq = squareform(pdist(embeddings, 'sqeuclidean'))
+        dists = np.sqrt(np.maximum(dists_sq, 1e-12))
+
+        # Masks for positive and negative pairs (upper triangle only)
+        same_label = labels[:, None] == labels[None, :]
+        upper = np.triu(np.ones((n, n), dtype=bool), k=1)
+        pos_mask = same_label & upper
+        neg_mask = (~same_label) & upper
+
+        # Loss: positive pairs = squared distance, negative pairs = hinge
+        margin = self.config.contrastive_margin
+        hinge_vals = np.maximum(0, margin - dists)
+
+        loss = np.sum(dists_sq[pos_mask]) + np.sum(hinge_vals[neg_mask] ** 2)
+        count = np.sum(upper)
+        loss = loss / max(count, 1)
+
+        # Gradient w.r.t. embeddings
+        grad = np.zeros_like(embeddings)
+        # Positive pair gradient: d/d(e_i) of ||e_i - e_j||^2 = 2(e_i - e_j)
         for i in range(n):
-            for j in range(i + 1, n):
-                dist = np.sum((embeddings[i] - embeddings[j]) ** 2)
-                
-                if labels[i] == labels[j]:
-                    # Positive pair: minimize distance
-                    total_loss += dist
-                else:
-                    # Negative pair: maximize distance (hinge loss)
-                    margin = self.config.contrastive_margin
-                    total_loss += max(0, margin - np.sqrt(dist)) ** 2
-                
-                count += 1
-        
-        return total_loss / max(count, 1)
+            pos_j = np.where(pos_mask[i])[0]
+            if len(pos_j) > 0:
+                grad[i] += 2 * np.sum(embeddings[i] - embeddings[pos_j], axis=0)
+
+            # Negative pair gradient: d/d(e_i) of max(0, m - ||e_i-e_j||)^2
+            neg_j = np.where(neg_mask[i])[0]
+            if len(neg_j) > 0:
+                diff = embeddings[i] - embeddings[neg_j]
+                d = dists[i, neg_j]
+                active = hinge_vals[i, neg_j] > 0
+                if np.any(active):
+                    coeff = -2 * hinge_vals[i, neg_j][active] / d[active]
+                    grad[i] += np.sum(coeff[:, None] * diff[active], axis=0)
+
+        grad /= max(count, 1)
+        return loss, grad
     
     def fit(self, 
             movements: List[HistoricalMovement],
@@ -233,27 +258,42 @@ class OrthogonalProjectionNetwork:
         
         for epoch in range(self.config.epochs):
             # Forward pass
-            hidden, output = self.forward(X)
-            
+            pre_relu = X @ self.W1 + self.b1
+            hidden = self._relu(pre_relu)
+            output = hidden @ self.W2 + self.b2
+
             # Compute losses
-            contrastive = self._contrastive_loss(output, severity_bins)
+            contrastive, d_output = self._contrastive_loss(output, severity_bins)
             orthogonality = self._orthogonality_loss()
             total_loss = contrastive + lam * orthogonality
-            
-            # Backward pass (simplified gradient computation)
-            # Gradient of orthogonality loss w.r.t. W2
+
+            # Backward pass: contrastive gradient through network
+            # d_output is (n, output_dim) gradient w.r.t. output embeddings
+            d_b2 = np.sum(d_output, axis=0)
+            d_W2_contrastive = hidden.T @ d_output
+
+            # Backprop through ReLU
+            d_hidden = d_output @ self.W2.T
+            d_pre_relu = d_hidden * self._relu_grad(pre_relu)
+            d_W1 = X.T @ d_pre_relu
+            d_b1 = np.sum(d_pre_relu, axis=0)
+
+            # Orthogonality gradient w.r.t. W2
             gram = self.W2.T @ self.W2
             identity = np.eye(self.output_dim)
             ortho_grad = 4 * self.W2 @ (gram - identity)
-            
-            # Update W2 with orthogonality gradient
-            self.W2 -= lr * lam * ortho_grad
-            
+
+            # Update all parameters
+            self.W1 -= lr * d_W1
+            self.b1 -= lr * d_b1
+            self.W2 -= lr * (d_W2_contrastive + lam * ortho_grad)
+            self.b2 -= lr * d_b2
+
             # Re-orthogonalize W2 periodically using SVD
             if epoch % 10 == 0:
                 U, _, Vt = np.linalg.svd(self.W2, full_matrices=False)
                 self.W2 = U @ Vt
-            
+
             if epoch % 20 == 0:
                 logger.info(f"Epoch {epoch}: loss={total_loss:.4f} "
                            f"(contrastive={contrastive:.4f}, ortho={orthogonality:.4f})")

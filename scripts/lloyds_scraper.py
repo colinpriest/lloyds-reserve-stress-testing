@@ -37,7 +37,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 # Import syndicate numbers
-sys.path.insert(0, str(Path(__file__).parent / 'data'))
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent / 'data'))
 from syndicate_numbers import ALL_SYNDICATES, ONLINE_YEARS, LIFE_SYNDICATES
 
 
@@ -414,11 +414,18 @@ class LloydsScraper:
             response = self.session.get(report.pdf_url, timeout=60, stream=True)
             response.raise_for_status()
             
-            # Save file
-            with open(local_path, 'wb') as f:
-                for chunk in response.iter_content(chunk_size=8192):
-                    f.write(chunk)
-            
+            # Save to temp file first, then rename on success (atomic download)
+            import tempfile
+            tmp_fd, tmp_path = tempfile.mkstemp(dir=str(self.pdf_dir), suffix='.tmp')
+            try:
+                with os.fdopen(tmp_fd, 'wb') as f:
+                    for chunk in response.iter_content(chunk_size=8192):
+                        f.write(chunk)
+                Path(tmp_path).replace(local_path)
+            except Exception:
+                Path(tmp_path).unlink(missing_ok=True)
+                raise
+
             report.local_path = str(local_path)
             report.download_status = 'success'
             report.file_size = local_path.stat().st_size

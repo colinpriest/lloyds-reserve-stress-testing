@@ -36,11 +36,8 @@ import time
 import sys
 import warnings
 
-# Suppress non-critical numerical warnings from sklearn
-warnings.filterwarnings('ignore', category=RuntimeWarning, 
-                        message='invalid value encountered in divide')
-warnings.filterwarnings('ignore', category=RuntimeWarning,
-                        message='divide by zero encountered')
+# Note: RuntimeWarnings for divide-by-zero and invalid values are NOT suppressed.
+# Fix the root cause in the code that produces them instead.
 
 # Add stress_test directory to path for imports
 _script_dir = Path(__file__).resolve().parent
@@ -263,7 +260,10 @@ class ScenarioLibraryBuilder:
         logger.info(f"Threshold: {self.gpd_fit.threshold:.4f}")
         logger.info(f"Shape (xi): {self.gpd_fit.shape:.4f}")
         logger.info(f"Scale (sigma): {self.gpd_fit.scale:.4f}")
-        logger.info(f"A-D p-value: {self.gpd_fit.ad_pvalue:.4f}")
+        if self.gpd_fit.ad_pvalue is not None:
+            logger.info(f"A-D p-value: {self.gpd_fit.ad_pvalue:.4f}")
+        else:
+            logger.warning("A-D p-value: not computed")
         
         # Return period examples
         for rp in [10, 50, 100, 200]:
@@ -331,7 +331,7 @@ class ScenarioLibraryBuilder:
                     s.narrative,
                     s.severity_ratio,
                     s.complexity_score,
-                    [0.0] * 13  # LOB vector placeholder
+                    s.lob_breakdown_vector() if hasattr(s, 'lob_breakdown_vector') else [1.0 if lob in s.lob_breakdown else 0.0 for lob in ['Property', 'Casualty', 'Marine', 'Energy', 'Motor', 'Aviation', 'Reinsurance - Property', 'Reinsurance - Casualty', 'Reinsurance - Specialty', 'Professional Lines', 'Accident & Health', 'Cyber', 'Aggregate']]
                 )
                 s.latent_coords = coords.tolist()
                 synthetic_coords.append(coords.tolist())
