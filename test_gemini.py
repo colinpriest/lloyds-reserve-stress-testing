@@ -16,7 +16,7 @@ Usage:
     python test_gemini.py --table-backend azure     # use Azure Document Intelligence (default)
     python test_gemini.py --table-backend nutrient  # use Nutrient.io
     python test_gemini.py --table-backend adobe     # use Adobe PDF Extract
-    python test_gemini.py --azure-paid              # paid S0 tier: all pages in one request
+    python test_gemini.py --azure-free              # free F0 tier: one page per request
 
 LLM outputs are cached in pdf_extraction/llm_cache/ using a SHA-256 hash of
 (model_name, prompt_version, prompt_text, syndicate_num, report_year[, page_num]).
@@ -117,7 +117,7 @@ load_dotenv()
 # Table extraction backend (can be overridden with --table-backend)
 # Priority: azure (default) > nutrient > adobe
 TABLE_BACKEND = TableBackend.AZURE
-AZURE_PAID = False  # --azure-paid: send all relevant pages in one request (S0 tier)
+AZURE_PAID = True  # default: paid S0 tier (all pages in one request); --azure-free to disable
 
 
 # ---------------------------------------------------------------------------
@@ -860,6 +860,302 @@ def _parse_net_pyd_from_text(reserve_text, direction=None):
     return None
 
 
+def _extract_pyd_from_loss_ratio_triangle(page_text, report_year):
+    """Extract PYD from a loss ratio development triangle page.
+
+    Some syndicates (e.g. Beazley 2623) present claims development as
+    cumulative loss ratios (%) rather than absolute claims amounts.  When
+    the page also contains a "Total ultimate losses ($m)" or similar row
+    with absolute values per UW year, we can compute PYD as:
+
+        pyd_j = total_ultimate_j * (current_ratio_j - prev_ratio_j)
+                / current_ratio_j
+
+    Returns (pyd_float, details_str) or (None, reason_str).
+    """
+    lines = page_text.split("\n")
+    lines_stripped = [l.strip() for l in lines]
+
+    # ── Step 1: Detect that this is a loss ratio triangle ──
+    text_lower = page_text.lower()
+    if "claims development" not in text_lower:
+        return None, "no claims development header"
+    # Must have percentage indicators
+    pct_count = text_lower.count("%")
+    if pct_count < 3:
+        return None, "too few % symbols for loss ratio triangle"
+
+    # ── Step 2: Find UW years ──
+    # Track "ae" (and earlier) aggregate columns that have no ratio data
+    # but DO have a value in the ultimates row.
+    all_years = []       # all column years (including ae aggregate)
+    ae_columns = set()   # indices of aggregate columns (no ratio data)
+    header_end_idx = 0
+
+    # Strategy A: years on one line (e.g. "2010ae  2011  2012  2013")
+    for i, line in enumerate(lines_stripped):
+        year_matches = re.findall(r'\b((?:19|20)\d{2})(ae?)?\b', line)
+        if len(year_matches) >= 3:
+            seen = set()
+            for y_str, suffix in year_matches:
+                y = int(y_str)
+                if 1990 <= y <= 2030 and y not in seen:
+                    seen.add(y)
+                    if suffix:  # "ae" or "a" suffix
+                        ae_columns.add(len(all_years))
+                    all_years.append(y)
+            if len(all_years) >= 3:
+                header_end_idx = i
+                break
+            all_years.clear()
+            ae_columns.clear()
+
+    # Strategy B: years on consecutive lines (columnar PyMuPDF output)
+    if not all_years:
+        for i, line in enumerate(lines_stripped):
+            m = re.match(r'^((?:19|20)\d{2})(ae?)?$', line)
+            if m:
+                has_ae = bool(m.group(2))
+                # Check if next non-blank line is "e" (continuation of "ae" suffix)
+                if not has_ae and (i + 1 < len(lines_stripped)
+                                   and lines_stripped[i + 1].lower() in ("e", "ae")):
+                    has_ae = True
+                year_run = [(int(m.group(1)), has_ae)]
+                j = i + 1
+                while j < len(lines_stripped):
+                    m2 = re.match(r'^((?:19|20)\d{2})(ae?)?$', lines_stripped[j])
+                    if m2:
+                        year_run.append((int(m2.group(1)), bool(m2.group(2))))
+                        j += 1
+                    elif lines_stripped[j].lower() in ("total", "total\xa0"):
+                        j += 1
+                        break
+                    elif lines_stripped[j].lower() in ("e", "ae"):
+                        # Mark previous year as aggregate
+                        if year_run:
+                            yr, _ = year_run[-1]
+                            year_run[-1] = (yr, True)
+                        j += 1
+                        continue
+                    else:
+                        break
+                if len(year_run) >= 3:
+                    for idx, (yr, is_ae) in enumerate(year_run):
+                        all_years.append(yr)
+                        if is_ae:
+                            ae_columns.add(idx)
+                    header_end_idx = j - 1
+                    break
+
+    if len(all_years) < 3:
+        return None, "fewer than 3 UW years found"
+
+    all_years_sorted = sorted(all_years)
+    # Ratio-bearing columns = all columns EXCEPT aggregate "ae" columns
+    uw_years = [y for i, y in enumerate(all_years_sorted)
+                if i not in ae_columns]
+    n_cols_total = len(all_years_sorted)  # includes ae columns (for ultimates)
+    n_cols = len(uw_years)                # ratio-bearing columns only
+
+    if max(uw_years) > report_year or max(uw_years) < report_year - 5:
+        return None, f"max UW year {max(uw_years)} outside range for report year {report_year}"
+
+    # ── Step 3: Parse the loss ratio grid ──
+    # Skip % header lines, dev period labels; collect numeric values
+    dev_labels = [
+        r"^\d+\s+months?\b", r"^(one|two|three|four|five|six|seven|eight|nine|ten)\b",
+        r"year\s+later", r"years?\s+later", r"at\s+end",
+    ]
+    stop_labels = [
+        "total ultimate", "gross claims liab", "less paid",
+        "less unearned", "less non", "net claims liab",
+        "net claims development",  # stop before net section on same page
+    ]
+
+    all_ratios = []
+    after_header = False
+    for line in lines_stripped[header_end_idx + 1:]:
+        line_lower = line.lower()
+        if not line_lower:
+            continue
+        # Skip standalone % symbols
+        if line_lower.strip() == "%":
+            after_header = True
+            continue
+        if not after_header and "%" in line_lower:
+            after_header = True
+            continue
+        if not after_header:
+            continue
+        # Stop at summary rows
+        if any(sl in line_lower for sl in stop_labels):
+            break
+        # Skip dev period labels
+        if any(re.search(p, line_lower) for p in dev_labels):
+            continue
+        # Skip pure text lines
+        if re.match(r'^[a-z]', line_lower) and not re.search(r'\d', line):
+            continue
+        # Extract numbers
+        nums = re.findall(r'[\-]?[\d,]+\.?\d*', line)
+        for n in nums:
+            try:
+                val = float(n.replace(",", ""))
+                # Loss ratios should be between 0 and 200%
+                if 0 < val <= 200:
+                    all_ratios.append(val)
+            except ValueError:
+                continue
+
+    # Group ratios into development rows
+    max_dev = report_year - min(uw_years) + 1
+    dev_rows = []
+    idx = 0
+    for d in range(max_dev):
+        expected = sum(1 for y in uw_years if report_year - y >= d)
+        if expected < 1:
+            break
+        if idx + expected > len(all_ratios):
+            break
+        row = list(all_ratios[idx:idx + expected])
+        row += [None] * (n_cols - len(row))
+        dev_rows.append(row[:n_cols])
+        idx += expected
+
+    if len(dev_rows) < 2:
+        return None, f"only {len(dev_rows)} development rows parsed from loss ratio grid"
+
+    # ── Step 4: Find "Total ultimate losses" row ──
+    # Only search within the GROSS section — stop before "Net Claims Development".
+    # Collect n_cols_total values (including ae aggregate column),
+    # then filter out ae columns to align with uw_years.
+    gross_end_idx = len(lines_stripped)
+    for i, line in enumerate(lines_stripped):
+        if "net claims development" in line.lower():
+            gross_end_idx = i
+            break
+
+    # The label "Total ultimate losses ($m)" may span 1-4 lines in PyMuPDF
+    # output, e.g.:
+    #   "Total ultimate losses ($m)  8,061.0  756.9 ..."   (all on one line)
+    #   "Total"  /  "ultimate"  /  "losses"  /  "($m)"     (four lines)
+    # We accumulate label tokens until we've seen "total" + "ultimate", then
+    # start collecting numeric values.
+    raw_ultimates = None
+    label_state = 0          # 0=nothing, 1=seen "total", 2=seen "ultimate"
+    collecting_ult = False
+    raw_ult_vals = []
+    for line in lines_stripped[:gross_end_idx]:
+        line_lower = line.lower().strip()
+
+        # Once we're collecting values, stop at next section
+        if collecting_ult:
+            if any(sl in line_lower for sl in
+                   ["less paid", "less unearned", "gross claims liab",
+                    "less non", "net claims"]):
+                break
+            if not line_lower:
+                continue
+            nums = re.findall(r'[\-]?[\d,]+\.?\d*|\([\d,]+\.?\d*\)', line)
+            for n in nums:
+                n_clean = n.replace(",", "").replace("(", "-").replace(")", "")
+                try:
+                    val = float(n_clean)
+                    if abs(val) > 1:  # absolute amounts, not ratios
+                        raw_ult_vals.append(val)
+                except ValueError:
+                    continue
+            if len(raw_ult_vals) >= n_cols_total:
+                break
+            continue
+
+        # Label accumulation: look for "total" then "ultimate"
+        if label_state == 0 and "total" in line_lower:
+            if "total ultimate" in line_lower:
+                label_state = 2  # both words on same line
+            else:
+                label_state = 1
+        elif label_state == 1 and "ultimate" in line_lower:
+            label_state = 2
+
+        # Once we've seen "total ultimate", check if this line also has values
+        if label_state == 2:
+            # Extract any numbers that might be on the same line as the label
+            nums = re.findall(r'[\-]?[\d,]+\.?\d*|\([\d,]+\.?\d*\)', line)
+            vals = []
+            for n in nums:
+                n_clean = n.replace(",", "").replace("(", "-").replace(")", "")
+                try:
+                    val = float(n_clean)
+                    if abs(val) > 1:  # absolute amounts, not ratios
+                        vals.append(val)
+                except ValueError:
+                    continue
+            if vals:
+                raw_ult_vals.extend(vals)
+            collecting_ult = True
+
+    if len(raw_ult_vals) >= n_cols_total:
+        raw_ultimates = raw_ult_vals
+
+    if raw_ultimates is None or len(raw_ultimates) < n_cols_total:
+        return None, (f"loss ratio triangle found ({n_cols} UW years, "
+                      f"{len(dev_rows)} dev rows) but no 'Total ultimate losses' "
+                      f"row — cannot convert to absolute PYD")
+
+    # Keep only n_cols_total values (drop trailing "Total" column)
+    raw_ultimates = raw_ultimates[:n_cols_total]
+    # Filter out ae aggregate columns to align with uw_years
+    ultimates = [v for i, v in enumerate(raw_ultimates) if i not in ae_columns]
+
+    # ── Step 5: Compute PYD ──
+    details = [f"Loss ratio triangle: {n_cols} UW years "
+               f"({min(uw_years)}-{max(uw_years)}), {len(dev_rows)} dev rows"]
+    total_pyd = 0.0
+    used_years = 0
+
+    for col_idx, uw_year in enumerate(uw_years):
+        # Exclude two most recent UW years
+        if uw_year >= report_year - 1:
+            continue
+
+        # Find current (last non-null) and previous diagonal
+        current_ratio = None
+        current_row = None
+        for row_idx in range(len(dev_rows) - 1, -1, -1):
+            if dev_rows[row_idx][col_idx] is not None:
+                current_ratio = dev_rows[row_idx][col_idx]
+                current_row = row_idx
+                break
+
+        if current_ratio is None or current_row is None or current_row == 0:
+            continue
+
+        prev_ratio = dev_rows[current_row - 1][col_idx]
+        if prev_ratio is None:
+            continue
+
+        ult = ultimates[col_idx]
+        if ult <= 0 or current_ratio <= 0:
+            continue
+
+        # PYD = total_ultimate * (current_ratio - prev_ratio) / current_ratio
+        pyd_j = ult * (current_ratio - prev_ratio) / current_ratio
+        total_pyd += pyd_j
+        used_years += 1
+
+        details.append(f"  {uw_year}: ratio {prev_ratio:.1f}% -> {current_ratio:.1f}% "
+                       f"(chg {current_ratio - prev_ratio:+.1f}pp), "
+                       f"ult={ult:.1f}m, pyd={pyd_j:+.3f}m")
+
+    if used_years == 0:
+        return None, "no usable UW years in loss ratio triangle"
+
+    total_pyd = round(total_pyd, 3)
+    details.append(f"  Total PYD = {total_pyd:+.3f}m ({used_years} UW years)")
+    return total_pyd, "\n".join(details)
+
+
 def parse_json_response(text):
     """Parse JSON from LLM response, stripping markdown fences if present."""
     raw = text.strip()
@@ -907,7 +1203,9 @@ def parse_json_response(text):
 def extract_with_gemini(report_path, file_bytes, content_hash, syndicate_num, report_year, model=GEMINI_MODEL):
     """Extract using Google Gemini."""
     prompt_text = build_prompt(syndicate_num, report_year)
-    cache_key = _llm_cache_key(model, prompt_text, syndicate_num, report_year)
+    # Include content_hash in cache key so that changes to the slim PDF
+    # (e.g. different page set after off-by-one fix) invalidate the cache.
+    cache_key = _llm_cache_key(model, prompt_text + "|" + content_hash, syndicate_num, report_year)
     cached, hit = _llm_cache_load(cache_key)
     if hit:
         print(f"  [{model}] Cache hit — skipping API call")
@@ -985,7 +1283,9 @@ def extract_with_gemini(report_path, file_bytes, content_hash, syndicate_num, re
 def extract_with_openai(report_path, file_bytes, content_hash, syndicate_num, report_year, model=OPENAI_MODEL):
     """Extract using OpenAI GPT with file upload."""
     prompt_text = build_prompt(syndicate_num, report_year)
-    cache_key = _llm_cache_key(model, prompt_text, syndicate_num, report_year)
+    # Include content_hash in cache key so that changes to the slim PDF
+    # (e.g. different page set after off-by-one fix) invalidate the cache.
+    cache_key = _llm_cache_key(model, prompt_text + "|" + content_hash, syndicate_num, report_year)
     cached, hit = _llm_cache_load(cache_key)
     if hit:
         print(f"  [{model}] Cache hit — skipping API call")
@@ -1835,6 +2135,11 @@ TRIANGLE_PATTERNS = [
     r"one\s+year\s+later",
     r"two\s+years?\s+later",
     r"three\s+years?\s+later",
+    # Loss ratio triangle format (e.g. Beazley 2623)
+    r"\b12\s+months\b",
+    r"\b24\s+months\b",
+    r"total\s+ultimate\s+loss",
+    r"gross\s+claims\s+liabilities",
 ]
 
 # Patterns that indicate prior year reserve movement text
@@ -1848,6 +2153,8 @@ RESERVE_MOVEMENT_PATTERNS = [
     r"adverse.*development",
     r"prior\s+year.*release",
     r"prior\s+year.*strengthen",
+    r"released?\s+prior\s+year\s+reserve",   # "released prior year reserves"
+    r"release\s+of\s+prior\s+year",          # "release of prior year reserves"
 ]
 
 
@@ -2219,8 +2526,11 @@ def extract_pyd_from_relevant_pages(pdf_path, report_year):
         tri_pages = relevant["triangle_pages"]
         res_pages = relevant["reserve_pages"]
 
-        # Merge text-based page numbers into the relevant_pages set
-        text_page_nums = set(pn for pn, _ in tri_pages + res_pages)
+        # Merge text-based page numbers into the relevant_pages set.
+        # find_relevant_pages returns 1-indexed page numbers (from
+        # extract_text_from_pdf), but table_extraction uses 0-indexed
+        # page numbers throughout.  Convert to 0-indexed before merging.
+        text_page_nums = set(pn - 1 for pn, _ in tri_pages + res_pages)
         existing = set(result["relevant_pages"])
         result["relevant_pages"] = sorted(existing | text_page_nums)
 
@@ -2251,6 +2561,29 @@ def extract_pyd_from_relevant_pages(pdf_path, report_year):
                     result["method"] = "ocr_vision"
                     break
 
+        # Step 3b: If still no PYD, try loss ratio triangle on triangle pages.
+        # The loss ratio grid and the "Total ultimate losses" row may span
+        # consecutive pages, so concatenate all triangle page texts.
+        # Exclude pages that are purely "Net Claims Development" (no gross).
+        if result["pyd"] is None and not result["first_year_syndicate"] and tri_pages:
+            gross_tri_pages = []
+            for pn, txt in tri_pages:
+                txt_lower = txt.lower()
+                # Skip pages that have net claims development but no gross
+                if ("net claims development" in txt_lower
+                        and "gross claims development" not in txt_lower):
+                    continue
+                gross_tri_pages.append((pn, txt))
+            combined_tri_text = "\n".join(text for _, text in gross_tri_pages)
+            lr_pyd, lr_details = _extract_pyd_from_loss_ratio_triangle(
+                combined_tri_text, report_year
+            )
+            if lr_pyd is not None:
+                print(f"  [RAG] Loss ratio triangle PYD: {lr_pyd:+.3f}m")
+                result["pyd"] = lr_pyd
+                result["pyd_details"] = lr_details
+                result["method"] = "loss_ratio_triangle"
+
         # Step 4: Collect reserve movement text
         if res_pages:
             result["reserve_text"] = "\n---\n".join(
@@ -2258,6 +2591,20 @@ def extract_pyd_from_relevant_pages(pdf_path, report_year):
             )
             if result["pyd"] is None:
                 print(f"  [RAG] No triangle, but found {len(res_pages)} reserve text page(s)")
+
+    # Step 5: If still no PYD but we have provisions data with gross PYD,
+    # use it as a fallback.  The provisions movement note (e.g. "Claims
+    # incurred in relation to prior underwriting years") is a reliable
+    # source of prior year development when no claims development triangle
+    # is available in the report.
+    if result["pyd"] is None and not result["first_year_syndicate"]:
+        prov = result.get("adobe_provisions") or {}
+        prov_gross = prov.get("gross_prior_year_claims")
+        if prov_gross is not None:
+            result["pyd"] = prov_gross
+            result["pyd_details"] = "from provisions movement note"
+            result["method"] = "provisions"
+            print(f"  [RAG] Using provisions PYD as fallback: {prov_gross:+.3f}m")
 
     # If after all attempts we have no PYD, no triangle, no reserve text,
     # and it's not a first-year syndicate, flag as "no triangle data" —
@@ -2412,6 +2759,28 @@ def compute_pyd_from_triangle(triangle_data, report_year):
     if total_vals > 0 and year_like_count / total_vals > 0.15:
         return None, (f"triangle has {year_like_count}/{total_vals} values that look like "
                      f"calendar years (1980-2030) — likely a misidentified segmental table")
+
+    # Validate: detect loss ratio triangles misidentified as claims triangles.
+    # Loss ratios are percentages (0-200%), while claims amounts are typically
+    # in the hundreds/thousands/millions.  If all non-null values are < 200,
+    # this is almost certainly a loss ratio triangle, not a claims triangle.
+    if total_vals > 3:
+        pct_like_count = sum(
+            1 for r in range(n_rows) for c in range(min(n_cols, len(rows[r])))
+            if rows[r][c] is not None
+            and isinstance(rows[r][c], (int, float))
+            and 0 < float(rows[r][c]) <= 200
+        )
+        if pct_like_count == total_vals:
+            max_val = max(
+                float(rows[r][c])
+                for r in range(n_rows) for c in range(min(n_cols, len(rows[r])))
+                if rows[r][c] is not None and isinstance(rows[r][c], (int, float))
+            )
+            if max_val <= 200:
+                return None, (f"triangle has all {total_vals} values in 0-200 range "
+                             f"(max={max_val:.1f}) — likely a loss ratio triangle, "
+                             f"not a claims development triangle")
 
     # Validate row lengths — pad short rows with None
     for i in range(n_rows):
@@ -3428,6 +3797,12 @@ def process_one_report(report_path, inception_cache=None):
 
     # RAG-lite was already run above (before LLM calls) for early first-year detection.
     # Use the cached result — no need to re-run.
+    rag_method = rag_result.get("method", "")
+    # Loss ratio triangle PYD is often at managed/group level rather than
+    # syndicate level (e.g. Beazley 2623).  It should only fill in blanks,
+    # never override an LLM-extracted syndicate-level figure.
+    rag_is_fallback_only = (rag_method == "loss_ratio_triangle")
+
     if rag_result["pyd"] is not None:
         # RAG found a valid triangle PYD — use it as ground truth
         rag_pyd = rag_result["pyd"]
@@ -3478,34 +3853,49 @@ def process_one_report(report_path, inception_cache=None):
                             rag_pyd / _op * 100, 2
                         )
                     result["direction"] = "release" if rag_pyd < 0 else "strengthening" if rag_pyd > 0 else "flat"
-                    print(f"  [{model_name}] PYD filled from RAG triangle: {rag_pyd:+.3f}m")
+                    level = " (managed level)" if rag_is_fallback_only else ""
+                    print(f"  [{model_name}] PYD filled from RAG triangle{level}: {rag_pyd:+.3f}m")
+                    if rag_is_fallback_only:
+                        old_notes = result.get("data_quality_notes", "") or ""
+                        result["data_quality_notes"] = (
+                            f"{old_notes} [MANAGED LEVEL: PYD from loss ratio triangle "
+                            f"is at managed/group level, not syndicate share. "
+                            f"May differ from syndicate-level figure.]"
+                        ).strip()
                 else:
                     try:
                         old_pyd = float(model_pyd)
                         diff = abs(old_pyd - rag_pyd)
-                        # Always use RAG triangle value — it's computed
-                        # deterministically from the claims development table
-                        # and is authoritative over LLM-extracted values
-                        # (which may come from wrong sources like net movements
-                        # or P&L gross change in provision).
-                        result["prior_year_development_gbp_m"] = rag_pyd
-                        _op = result.get("opening_reserves_gbp_m")
-                        if rag_pyd == 0:
-                            result["prior_year_development_pct"] = 0.0
-                        elif _op and _op > 0:
-                            result["prior_year_development_pct"] = round(
-                                rag_pyd / _op * 100, 2
-                            )
-                        result["direction"] = "release" if rag_pyd < 0 else "strengthening" if rag_pyd > 0 else "flat"
-                        if diff >= 0.5:
-                            old_notes = result.get("data_quality_notes", "") or ""
-                            result["data_quality_notes"] = (
-                                f"{old_notes} [RAG OVERRIDE: Model said PYD={old_pyd}, "
-                                f"RAG triangle computed {rag_pyd}. Using RAG value.]"
-                            )
-                            print(f"  [{model_name}] PYD overridden by RAG triangle: {old_pyd} -> {rag_pyd:+.3f}m")
+
+                        if rag_is_fallback_only:
+                            # Loss ratio triangle is at managed/group level —
+                            # keep the LLM value which comes from syndicate-level
+                            # narrative text.
+                            print(f"  [{model_name}] Keeping LLM PYD={old_pyd} "
+                                  f"(loss ratio triangle gives {rag_pyd:+.3f}m at managed level)")
                         else:
-                            print(f"  [{model_name}] PYD confirmed by RAG triangle: {model_pyd} -> {rag_pyd:+.3f}m")
+                            # Standard claims triangle — deterministic PYD is
+                            # authoritative over LLM-extracted values (which may
+                            # come from wrong sources like net movements or P&L
+                            # gross change in provision).
+                            result["prior_year_development_gbp_m"] = rag_pyd
+                            _op = result.get("opening_reserves_gbp_m")
+                            if rag_pyd == 0:
+                                result["prior_year_development_pct"] = 0.0
+                            elif _op and _op > 0:
+                                result["prior_year_development_pct"] = round(
+                                    rag_pyd / _op * 100, 2
+                                )
+                            result["direction"] = "release" if rag_pyd < 0 else "strengthening" if rag_pyd > 0 else "flat"
+                            if diff >= 0.5:
+                                old_notes = result.get("data_quality_notes", "") or ""
+                                result["data_quality_notes"] = (
+                                    f"{old_notes} [RAG OVERRIDE: Model said PYD={old_pyd}, "
+                                    f"RAG triangle computed {rag_pyd}. Using RAG value.]"
+                                )
+                                print(f"  [{model_name}] PYD overridden by RAG triangle: {old_pyd} -> {rag_pyd:+.3f}m")
+                            else:
+                                print(f"  [{model_name}] PYD confirmed by RAG triangle: {model_pyd} -> {rag_pyd:+.3f}m")
                     except (ValueError, TypeError):
                         pass
 
@@ -3714,10 +4104,10 @@ if __name__ == "__main__":
             break
     print(f"Table extraction backend: {TABLE_BACKEND.value}")
 
-    # --azure-paid flag: send all relevant pages in one API request (paid S0 tier)
-    if "--azure-paid" in sys.argv:
-        AZURE_PAID = True
-        print("Azure mode: paid (S0 tier) — all relevant pages in one request")
+    # --azure-free flag: use free F0 tier (one page per request instead of batched)
+    if "--azure-free" in sys.argv:
+        AZURE_PAID = False
+        print("Azure mode: free (F0 tier) — one page per request")
 
     # --single flag: process only the named report (e.g. --single syndicate_1856_2024)
     single_arg = None

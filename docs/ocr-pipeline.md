@@ -74,6 +74,7 @@ PDF input
 +-----------------------------------------------+
 | Step 4: PYD computation (Python, not LLM)      |
 |   compute_pyd_from_triangle()                  |
+|     Loss ratio triangle detection (reject)     |
 |     Year-value contamination detection          |
 |     Summary-row stripping                      |
 |     Diagonal extraction                        |
@@ -83,10 +84,32 @@ PDF input
   |
   v
 +-----------------------------------------------+
+| Step 4a: Loss ratio triangle PYD               |
+|   _extract_pyd_from_loss_ratio_triangle()      |
+|     Parse cumulative loss ratio grid            |
+|     Find "Total ultimate losses" row            |
+|     Compute PYD per UW year from ratio changes  |
+|     Gross/net section separation                |
+|     "ae" aggregate column handling              |
+|   Result is managed-level (fallback only)       |
++-----------------------------------------------+
+  |
+  v
++-----------------------------------------------+
+| Step 4b: Provisions PYD fallback               |
+|   If no triangle PYD found:                    |
+|     Use provisions movement note               |
+|     (gross prior year claims development)      |
+|   Runs before no_triangle_data check           |
++-----------------------------------------------+
+  |
+  v
++-----------------------------------------------+
 | Step 5: Dual-LLM cross-validation             |
 |   Gemini + GPT extract independently           |
 |   verify_triangles() resolves disagreements    |
 |   RAG triangle PYD overrides LLM values        |
+|     (except loss ratio: fallback only)         |
 |   RAG provisions opening resolves reserves     |
 |   Net-of-reinsurance PYD fallback if null      |
 |   Zero-opening override (PYD=0 if opening=0)  |
@@ -152,7 +175,7 @@ keywords appear in the page text (case-insensitive).
 
 | Category          | Keywords (subset)                                                    |
 |-------------------|----------------------------------------------------------------------|
-| `claims_triangle` | "claims development", "development table", "cumulative gross claims", "year later", "years later", "development year", "year of account", "underlying pure year", "incurred at end of underwriting", "ultimate contract outstanding claims", "gross of reinsurance", "net of reinsurance" |
+| `claims_triangle` | "claims development", "development table", "cumulative gross claims", "year later", "years later", "development year", "year of account", "underlying pure year", "incurred at end of underwriting", "ultimate contract outstanding claims", "gross of reinsurance", "net of reinsurance", "12 months", "24 months", "gross claims liabilities", "total ultimate losses" |
 | `provisions`      | "provision for claims", "prior year", "movement in prior", "gross provision" |
 | `pl_account`      | "technical account", "profit and loss", "claims incurred"            |
 | `premium_mix`     | "segmental analysis", "analysis of underwriting result", "class of business", "by class of business", "accident and health", "marine aviation", "third party liability", "reinsurance" |
@@ -318,7 +341,52 @@ Two kinds of rotation are handled:
      the API backend (Azure DI) can read the correctly oriented
      content.
 
-### 5.2  Atomic file writes (Windows)
+### 5.2  Page index reconciliation (off-by-one fix)
+
+`table_extraction.py` uses **0-indexed** page numbers throughout
+(matching PyMuPDF's `doc[page_num]`).  `test_gemini.py`'s
+`extract_text_from_pdf()` returns **1-indexed** page numbers
+(`pages.append((i + 1, text))`).
+
+When merging text-based page numbers (from `find_relevant_pages`)
+into the API-based page set (from `table_extraction`), the
+1-indexed numbers must be converted to 0-indexed:
+
+```python
+text_page_nums = set(pn - 1 for pn, _ in tri_pages + res_pages)
+existing = set(result["relevant_pages"])
+result["relevant_pages"] = sorted(existing | text_page_nums)
+```
+
+Without this conversion, reserve narrative pages (e.g. page 4
+containing "released prior year reserves of $180.2m") were
+included as page 4 instead of page 3 in the slim PDF, causing
+the wrong page to be sent to LLMs.  This was discovered on
+syndicate 2623/2016 where both Gemini and GPT said "no prior
+year development figure found" despite the narrative being on
+page 4 of the original PDF.
+
+### 5.3  Reserve page detection patterns
+
+`find_relevant_pages()` uses `RESERVE_MOVEMENT_PATTERNS` to
+identify pages containing reserve narrative text.  A page needs
+to match **2 or more** patterns to qualify.  Key patterns:
+
+- `r"prior\s+year\s+(reserve|claim|development|movement|provision)"`
+- `r"reserve\s+(release|strengthen|deteriorat|surplus|deficit)"`
+- `r"prior\s+year.*release"` / `r"prior\s+year.*strengthen"`
+- `r"released?\s+prior\s+year\s+reserve"` -- added for
+  Beazley's phrasing ("released prior year reserves of $75.1m")
+  where "released" precedes "prior year"
+- `r"release\s+of\s+prior\s+year"` -- catches "release of
+  prior year reserves"
+
+The last two patterns were added after syndicate 2623/2020
+failed to find its reserve narrative page (page 4), which
+matched only 1 pattern (`prior year reserve`) because
+"released" appeared before "prior year" in the sentence.
+
+### 5.4  Atomic file writes (Windows)
 
 PyMuPDF's `fitz.save()` can fail on Windows when the target file
 is locked by another process.  The pipeline works around this with
@@ -1226,6 +1294,158 @@ based on the expected staircase fill pattern:
 
 Triangles with structure score < 0.5 are rejected.
 
+### 9.7  Loss ratio triangle detection
+
+**Function**: `compute_pyd_from_triangle()`, loss-ratio value
+check.
+
+Some syndicates (notably Beazley syndicate 2623) present claims
+development as **cumulative loss ratios** (percentages) rather
+than absolute cumulative claims amounts.  When Azure or another
+backend extracts such a table, every value in the grid is between
+0 and 200 -- far too small to be claims amounts but consistent
+with loss ratio percentages.
+
+The pipeline counts non-null values in the 0--200 range.  If
+**all** values fall in this range and the maximum value is <= 200,
+the triangle is rejected:
+
+```
+triangle has all 21 values in 0-200 range (max=66.5)
+— likely a loss ratio triangle, not a claims development triangle
+```
+
+The check requires at least 4 non-null values to avoid
+false-positives on very sparse triangles.
+
+Loss ratio triangles are handled separately by
+`_extract_pyd_from_loss_ratio_triangle()` (section 9.8).
+
+### 9.8  Loss ratio triangle PYD extraction
+
+**Function**: `_extract_pyd_from_loss_ratio_triangle(page_text,
+report_year)` (`test_gemini.py`)
+
+When the standard claims triangle parser rejects a table as a
+loss ratio triangle, this function attempts to extract PYD
+from the loss ratio development grid combined with a "Total
+ultimate losses" row.
+
+#### 9.8.1  Applicability
+
+This parser activates as Step 3b in the pipeline, after LLM
+vision fails and before reserve text collection.  It only runs
+when:
+
+1. No PYD has been obtained from earlier steps (Azure triangle,
+   LLM vision).
+2. Triangle pages have been found by `find_relevant_pages()`.
+3. The report is not classified as `first_year_syndicate`.
+
+**Important**: the loss ratio triangle is typically at
+**managed/group level** (e.g. "Beazley managed level"), not
+syndicate level.  The computed PYD may differ significantly
+from the syndicate-share figure in the narrative text.
+Accordingly, the loss ratio PYD is marked as **fallback only**:
+it fills in LLM blanks but never overrides an LLM-extracted
+syndicate-level value (see section 10.3).
+
+#### 9.8.2  Gross/net section separation
+
+Many reports (e.g. 2623/2016) place both gross and net claims
+development on the **same page**.  The parser must only use the
+gross section.  Two safeguards ensure this:
+
+1. **Ratio collection stop label**: `"net claims development"`
+   is in the stop-labels list, so ratio parsing halts before
+   the net section.
+2. **Ultimates search bounded**: the "Total ultimate losses"
+   search scans only lines before the first occurrence of
+   "Net Claims Development".
+3. **Page filtering**: when concatenating multi-page triangle
+   text, pages that contain "Net Claims Development" but not
+   "Gross Claims Development" are excluded.
+
+#### 9.8.3  UW year detection
+
+Two strategies handle different PyMuPDF output formats:
+
+- **Strategy A**: years on a single header line (e.g.
+  `"2010ae  2011  2012  2013"`).
+- **Strategy B**: years on consecutive lines (columnar PyMuPDF
+  output, e.g. `"2011ae"` / `"2012"` / `"2013"` / ...).
+
+Both strategies detect the `"ae"` suffix (meaning "and earlier")
+which marks aggregate columns.  The regex
+`r'^((?:19|20)\d{2})(ae?)?$'` matches both `"2011a"` and
+`"2011ae"`.  Aggregate columns are tracked in an `ae_columns`
+set and excluded from ratio grouping but included in the
+ultimates column count.
+
+#### 9.8.4  Ratio grid parsing
+
+After the year header, the parser collects numeric values from
+the loss ratio grid:
+
+1. Skip `%` header lines and development period labels ("12
+   months", "24 months", etc.).
+2. Stop at summary rows ("total ultimate", "gross claims liab",
+   "net claims development").
+3. Filter values to the 0--200 range (valid loss ratios).
+4. Group values into development rows based on the expected
+   count per period: for period `d`, expect
+   `count(UW years where report_year - year >= d)` values.
+
+#### 9.8.5  "Total ultimate losses" detection
+
+The label may span 1--4 lines in columnar PyMuPDF output:
+
+```
+"Total ultimate losses ($m)  8,061.0  756.9 ..."   (one line)
+"Total"  /  "ultimate"  /  "losses"  /  "($m)"     (four lines)
+```
+
+A state machine accumulates label tokens: state 0 (nothing) →
+state 1 (seen "total") → state 2 (seen "ultimate") → start
+collecting values.  Values on the same line as the label are
+included.  Collection stops at "less paid", "less unearned",
+"gross claims liab", or "net claims".
+
+The collected values include `n_cols_total` entries (including
+the `ae` aggregate column).  Aggregate columns are filtered out
+to align with the ratio-bearing UW years.
+
+When no "Total ultimate losses" row is found (e.g. 2623/2016,
+2623/2017 which only have "Gross claims liabilities"), the
+parser returns `None` and PYD falls through to LLM narrative
+extraction.
+
+#### 9.8.6  PYD computation
+
+For each UW year (excluding the two most recent):
+
+```
+pyd_j = total_ultimate_j * (current_ratio - prev_ratio)
+        / current_ratio
+```
+
+Where `current_ratio` is the last non-null value in the column
+and `prev_ratio` is the value one row above.  Total PYD is the
+sum across all usable UW years.
+
+**Example** (2623/2021):
+
+```
+Loss ratio triangle: 10 UW years (2012-2021), 10 dev rows
+  2012: ratio 45.8% -> 45.6% (chg -0.2pp), ult=698.2m, pyd=-3.062m
+  2019: ratio 74.8% -> 69.5% (chg -5.3pp), ult=1686.4m, pyd=-128.603m
+  Total PYD = -106.358m (8 UW years)
+```
+
+Note: the narrative for 2021 says "$150.8m release" at syndicate
+level, while the loss ratio triangle gives -106.4m at managed
+level.  The LLM narrative value is preferred (see section 10.3).
+
 ---
 
 ## 10  Dual-LLM cross-validation
@@ -1268,6 +1488,27 @@ triangle is computed deterministically from the claims
 development table and is authoritative over any LLM-extracted
 figure.
 
+**Exception -- loss ratio triangles**: when the RAG PYD comes
+from a loss ratio triangle (`method = "loss_ratio_triangle"`),
+it is treated as **fallback only**.  Loss ratio triangles are
+typically at managed/group level (e.g. "Beazley managed level")
+rather than syndicate level.  The managed-level PYD can differ
+from the syndicate-share figure in both magnitude and
+direction.
+
+- If an LLM extracts a PYD value from narrative text (e.g.
+  "the syndicate released prior year reserves of $150.8m"),
+  that syndicate-level value is **kept** -- the loss ratio
+  PYD does not override it.
+- If both LLMs return null PYD, the loss ratio PYD is used
+  as a fallback, with a `data_quality_notes` annotation:
+
+  ```
+  [MANAGED LEVEL: PYD from loss ratio triangle is at
+  managed/group level, not syndicate share. May differ
+  from syndicate-level figure.]
+  ```
+
 **Sanity gate**: before applying, the RAG PYD is checked
 against opening reserves.  If `pyd / opening_reserves < -100%`
 (i.e. a release exceeding the entire opening balance), the
@@ -1276,13 +1517,14 @@ RAG PYD is discarded and the pipeline falls back to
 cases where a non-triangle table (e.g. segmental analysis)
 was misidentified as a claims triangle by the API backend.
 
-This unconditional override is necessary because LLMs sometimes
-extract PYD from the wrong source (e.g. P&L "gross change in
-provision" which includes current-year claims movements, or
-"net provision for claims outstanding" which is after
-reinsurance).  These wrong-source values can be numerically
-close to the correct triangle PYD by coincidence, so a
-tolerance-based check would let them through.
+This unconditional override (for non-loss-ratio triangles)
+is necessary because LLMs sometimes extract PYD from the
+wrong source (e.g. P&L "gross change in provision" which
+includes current-year claims movements, or "net provision
+for claims outstanding" which is after reinsurance).  These
+wrong-source values can be numerically close to the correct
+triangle PYD by coincidence, so a tolerance-based check would
+let them through.
 
 When the LLM value differs from the RAG value by >= 0.5m,
 the override is recorded in `data_quality_notes`:
@@ -1540,10 +1782,49 @@ When `first_year_syndicate` is triggered:
 - LOB breakdown is still extracted if available
 - Output JSON: `{"first_year_syndicate": true, ...}`
 
-### 11.3  No-triangle-data exclusion
+### 11.3  Provisions PYD fallback
 
-Reports where no claims triangle and no reserve movement text
-can be found **and** the report is not in the first two UW years:
+Before checking for `no_triangle_data`, the pipeline attempts to
+use the **provisions movement note** as a PYD source.  If no
+triangle PYD was computed (Step 4) and the report is not a
+first-year syndicate, the pipeline checks for a gross prior year
+claims development figure extracted from the provisions note
+(`_parse_nutrient_provisions()`, section 7.8).
+
+If `adobe_provisions.gross_prior_year_claims` is available, it is
+used as the PYD value with `method: "provisions"` and
+`pyd_details: "from provisions movement note"`.  This prevents
+reports from being excluded when a valid provisions note exists
+but no claims development triangle was found.
+
+**Example**: syndicate 2791/2024 has no claims development
+triangle in the report (Azure detected only P&L/premium tables),
+but the provisions movement note on page 49 discloses gross
+prior year claims development of −27.986m.  Without this
+fallback, the report would be flagged as `no_triangle_data` and
+excluded.
+
+**RITC caveat**: for syndicates that accept Reinsurance to Close
+(RITC) from other syndicates, the provisions note PYD may differ
+significantly from a triangle-derived PYD.  The provisions note
+includes RITC-acquired reserves in the prior year movement,
+while the triangle only tracks organic development.  When both
+sources are available, the triangle PYD takes precedence (per
+RAG authority rules in section 10).  The difference is logged
+but not treated as an error.
+
+**Example**: syndicate 2791/2024 accepted RITC from syndicate
+6103.  Both LLMs independently extracted PYD ≈ −67.6m (matching
+the provisions note including RITC), but the RAG triangle
+computed −28.0m (organic development only).  The RAG triangle
+value was used, and the RITC distortion was noted in
+`data_quality_notes`.
+
+### 11.4  No-triangle-data exclusion
+
+Reports where no claims triangle, no provisions PYD, and no
+reserve movement text can be found **and** the report is not in
+the first two UW years:
 
 - `no_triangle_data = True`, `excluded = True`
 - LLM extraction is **skipped**
@@ -1650,8 +1931,19 @@ than a development column.
 | `pdf_extraction/ocr_page_cache/`               | Tesseract OCR text per page    | Delete file to re-OCR                   |
 
 LLM cache keys are computed from `(model, prompt_version,
-prompt_text, syndicate, year)`.  Changing the prompt text or
-bumping `PROMPT_VERSION` auto-invalidates affected entries.
+prompt_text + content_hash, syndicate, year)`.  Changing the
+prompt text, bumping `PROMPT_VERSION`, or changing the slim
+PDF page set (which changes `content_hash`) auto-invalidates
+affected entries.
+
+**v2.10 content_hash fix**: prior to v2.10, the LLM cache
+key did not include the slim PDF content hash.  This meant
+that changes to the page set (e.g. the off-by-one fix that
+added reserve narrative pages to the slim PDF) did not
+invalidate the LLM cache -- stale responses from the old
+slim PDF were served.  The fix appends the SHA-256 content
+hash of the slim PDF to `prompt_text` before hashing,
+ensuring any change to the slim PDF invalidates the cache.
 
 **Azure cache and page set changes**: Azure caches also store
 a `_pages_hash` derived from the set of relevant page numbers.
@@ -2249,6 +2541,42 @@ available.
 GBP 1.3m net of reinsurance" -> `prior_year_development_gbp_m:
 -1.3`, `prior_year_development_pct: -1.86`.
 
+### Loss ratio triangle PYD disagrees with narrative
+
+**Symptom**: the loss ratio triangle computes a PYD at managed
+level (e.g. +65.9m strengthening) but the narrative says the
+syndicate released reserves (e.g. -$75.1m release).
+
+**Cause**: Beazley syndicate 2623 (and similar group-managed
+syndicates) present claims development at the **Beazley managed
+level**, not the syndicate 2623 share.  The syndicate's share
+of claims varies by underwriting year and line of business, so
+managed-level PYD can differ from syndicate-level PYD in both
+magnitude and direction.
+
+**Resolution**: the pipeline marks loss ratio triangle PYD as
+**fallback only** (`rag_is_fallback_only = True`).  When both
+LLMs extract a syndicate-level PYD from the narrative text,
+their value is kept and the managed-level figure is logged but
+not applied.  The loss ratio PYD only fills in LLM blanks.
+
+**Affected syndicates**: 2623/2016 through 2623/2022.
+
+### Azure extracts loss ratios as claims triangle
+
+**Symptom**: Azure finds a triangle on the claims development
+page but PYD makes no sense (e.g. -11.2m when the narrative
+says -180.2m).
+
+**Cause**: Azure extracted the cumulative loss ratio grid
+(percentages like 66.5, 64.6, 63.4) as if they were absolute
+claims amounts in millions.
+
+**Fix**: `compute_pyd_from_triangle()` now checks if all
+non-null values are in the 0--200 range.  If so, the triangle
+is rejected as a loss ratio table.  The loss ratio parser
+(`_extract_pyd_from_loss_ratio_triangle`) handles it separately.
+
 ### Perplexity returns syndicate number as inception year
 
 **Symptom**: log shows `"WARNING: Perplexity returned syndicate
@@ -2370,3 +2698,59 @@ repair strategies:
    and wraps them in double quotes.  Already-quoted keys are
    unaffected because the lookbehind requires `{` or `,`
    immediately before the identifier.
+
+### Combined gross+net triangle: "Total Ultimate" section boundary
+
+**Symptom**: triangle has double the expected development rows
+(e.g. 20 rows for a 10-column triangle).  PYD computation
+produces wrong values because net incurred-claims rows are
+mixed into the gross triangle.
+
+**Cause**: the Azure-detected table spans both the gross and
+net incurred-claims sections, separated by a "Total Ultimate
+losses" summary row and a "Less cumulative paid claims" header.
+Neither label matched existing `section_break_patterns`, so the
+parser collected all rows from both sections.
+
+**Example**: syndicate 2791/2020 page 59 has a single Azure
+table grid containing:
+```
+[Gross incurred claims - 10 development rows]
+Total Ultimate losses    610,982  ...
+Less cumulative paid claims
+[Paid claims - 10 rows]
+Net incurred claims
+[Net incurred claims - 10 rows]
+```
+
+The parser collected 20+ development rows instead of 10.
+
+**Fix**: added `"total ultimate"` and `"less cumulative"` to
+`section_break_patterns` in `_parse_nutrient_triangle()`.  These
+match "Total Ultimate losses" (summary row separating gross from
+paid section) and "Less cumulative paid claims" (header starting
+the paid-claims section).
+
+### Report excluded despite having provisions PYD
+
+**Symptom**: report flagged as `no_triangle_data` and excluded,
+even though the provisions movement note contains a valid gross
+prior year claims development figure.
+
+**Cause**: the pipeline checked for `no_triangle_data` (no
+triangle + no reserve text) before consulting the provisions
+note.  Reports with a provisions PYD but no triangle were
+incorrectly excluded.
+
+**Example**: syndicate 2791/2024 has no claims development
+triangle (Azure detected only P&L/premium tables on the
+misclassified `claims_triangle` pages), but provisions data
+on page 49 shows gross prior year claims development of
+−27.986m.
+
+**Fix**: added a provisions PYD fallback step (Step 4b) in
+`process_one_report()` that runs **before** the
+`no_triangle_data` check.  If no triangle PYD exists and the
+report has `adobe_provisions.gross_prior_year_claims`, that
+value is used as the PYD with `method: "provisions"`.  See
+section 11.3 for details and RITC caveats.

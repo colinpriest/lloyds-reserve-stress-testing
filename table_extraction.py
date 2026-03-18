@@ -175,6 +175,10 @@ _PAGE_KEYWORDS = {
         "underlying pure year", "incurred at end of underwriting",
         "ultimate contract outstanding claims",
         "gross of reinsurance", "net of reinsurance",
+        # Beazley-style loss ratio triangles use "12 months", "24 months" etc.
+        # as development period labels instead of "X years later"
+        "12 months", "24 months",
+        "gross claims liabilities", "total ultimate losses",
     ],
     "provisions": [
         "provision for claims", "claims outstanding",
@@ -1040,6 +1044,8 @@ def _parse_nutrient_triangle(grid: list[list[str]], report_year: int):
         "current estimate",  # summary row signals end of dev rows
         "estimated total",   # "Estimated total losses" summary row
         "estimate of cumulative net",  # start of net section in combined gross+net tables
+        "total ultimate",    # "Total Ultimate losses" summary row before paid/net section
+        "less cumulative",   # "Less cumulative paid claims" — starts paid section
     ]
 
     dev_rows = []
