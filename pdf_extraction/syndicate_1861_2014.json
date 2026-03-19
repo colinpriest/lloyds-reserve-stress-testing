@@ -1,53 +1,415 @@
 {
-  "extraction_timestamp": "2026-03-17T07:18:22.984583+00:00",
+  "extraction_timestamp": "2026-03-18T21:55:47.006358+00:00",
   "spec": {
-    "prompt_version": "2.6",
+    "prompt_version": "2.10",
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
   "source_file": "syndicate_reports\\pdfs\\syndicate_1861_2014.pdf",
-  "no_triangle_data": true,
-  "excluded": true,
-  "exclusion_reason": "No claims development triangle or reserve movement text found in report - recommend non-inclusion in analysis",
-  "syndicate": 1861,
-  "year": 2014,
-  "gross_premium_mix": [
-    {
-      "line_of_business": "Accident and health",
-      "amount_gbp_m": 16.7,
-      "percentage_of_total": 8.4
+  "models": {
+    "gemini-2.5-flash": {
+      "syndicate": 1861,
+      "year": 2014,
+      "opening_reserves_gbp_m": 183.321,
+      "opening_reserves_page": 8,
+      "opening_reserves_confidence": 1.0,
+      "prior_year_development_gbp_m": -6.4,
+      "prior_year_development_pct": -3.49,
+      "direction": "release",
+      "prior_year_movement_page": 13,
+      "prior_year_movement_confidence": 0.8,
+      "exact_reserve_text": "Included within net claims incurred of GBP 83.1m (2013: GBP 59.1m) is an improvement of GBP 6.4m to claims reserves established at the prior year end.",
+      "primary_causes": [
+        "Favorable claims development",
+        "Natural catastrophe events",
+        "Large loss development"
+      ],
+      "specific_events": [],
+      "specific_years_affected": [
+        2012,
+        2013
+      ],
+      "prior_year_events": [
+        {
+          "event_name": "legacy issues",
+          "event_year": null,
+          "impact_description": "resolution of certain legacy issues has had an appreciable favourable impact on incurred claims, leading to reserve releases.",
+          "lobs_affected": [],
+          "amount_gbp_m": null,
+          "confidence": 0.5
+        }
+      ],
+      "named_events": [],
+      "standardized_narrative": "The syndicate experienced a net release of GBP 6.4 million in prior year claims reserves, primarily driven by favourable claims development. This included attritional losses not developing as anticipated, improvements on previously held catastrophe loss reserves, and a generally benign catastrophe year. These positive developments were observed across multiple classes, notably Marine (Hull & Liability), Starr Tech Onshore, and Property. The resolution of certain legacy issues also contributed to favourable incurred claims.",
+      "raw_causal_phrases": [
+        "material reserve improvements on the 2012 & Prior years of account",
+        "benign catastrophe year",
+        "lower than expected attritional and large loss activity",
+        "resolution of certain legacy issues has had an appreciable favourable impact on incurred claims",
+        "attritional losses not developing as originally anticipated",
+        "improvements on previously held catastrophe loss reserves"
+      ],
+      "lob_movements": [
+        {
+          "line_of_business": "Marine",
+          "direction": "release",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.5
+        },
+        {
+          "line_of_business": "Professional Lines",
+          "direction": "release",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.5
+        },
+        {
+          "line_of_business": "Property",
+          "direction": "release",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.5
+        }
+      ],
+      "gross_premiums_written_gbp_m": 197.8,
+      "gross_premium_mix": [
+        {
+          "line_of_business": "Accident and health",
+          "amount_gbp_m": 16.7,
+          "percentage_of_total": 8.4
+        },
+        {
+          "line_of_business": "Marine, aviation and transport",
+          "amount_gbp_m": 29.1,
+          "percentage_of_total": 14.7
+        },
+        {
+          "line_of_business": "to property",
+          "amount_gbp_m": 41.6,
+          "percentage_of_total": 21.0
+        },
+        {
+          "line_of_business": "Third-party liability",
+          "amount_gbp_m": 33.1,
+          "percentage_of_total": 16.7
+        },
+        {
+          "line_of_business": "Credit and Suretyship",
+          "amount_gbp_m": 13.7,
+          "percentage_of_total": 6.9
+        },
+        {
+          "line_of_business": "Miscellaneous",
+          "amount_gbp_m": 0.3,
+          "percentage_of_total": 0.2
+        },
+        {
+          "line_of_business": "Reinsurance",
+          "amount_gbp_m": 63.3,
+          "percentage_of_total": 32.0
+        }
+      ],
+      "gross_premium_page": 12,
+      "gross_premium_confidence": 1.0,
+      "currency": "GBP",
+      "data_quality_notes": "Prior year development amount is reported as net of reinsurance, as a gross figure was not explicitly available.",
+      "_claims_triangle": {
+        "type": "none",
+        "currency": null,
+        "units": null,
+        "page": null,
+        "underwriting_years": [],
+        "development_rows": []
+      },
+      "source_type": "syndicate",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_1861_2014_llm.pdf",
+      "content_hash": "2a3cdf4f0769a73567dfec898a9a40f01ed53358cce96c71b5f112ca2fc5eb75",
+      "standardized_at": "2026-03-18T21:54:35.721486+00:00",
+      "standardization_model": "gemini-2.5-flash",
+      "_extraction_meta": {
+        "model": "gemini-2.5-flash",
+        "input_tokens": 9347,
+        "output_tokens": 1277,
+        "total_tokens": 14147,
+        "cost_usd": 0.005997
+      },
+      "_adobe_lob": {
+        "gross_premium_mix": [
+          {
+            "line_of_business": "Accident and health",
+            "amount_gbp_m": 16.7,
+            "percentage_of_total": 8.4
+          },
+          {
+            "line_of_business": "Marine, aviation and transport",
+            "amount_gbp_m": 29.1,
+            "percentage_of_total": 14.7
+          },
+          {
+            "line_of_business": "to property",
+            "amount_gbp_m": 41.6,
+            "percentage_of_total": 21.0
+          },
+          {
+            "line_of_business": "Third-party liability",
+            "amount_gbp_m": 33.1,
+            "percentage_of_total": 16.7
+          },
+          {
+            "line_of_business": "Credit and Suretyship",
+            "amount_gbp_m": 13.7,
+            "percentage_of_total": 6.9
+          },
+          {
+            "line_of_business": "Miscellaneous",
+            "amount_gbp_m": 0.3,
+            "percentage_of_total": 0.2
+          },
+          {
+            "line_of_business": "Reinsurance",
+            "amount_gbp_m": 63.3,
+            "percentage_of_total": 32.0
+          }
+        ],
+        "gross_premiums_written_gbp_m": 197.8,
+        "claims_incurred_by_lob": [
+          {
+            "line_of_business": "Accident and health",
+            "amount_gbp_m": -7.0
+          },
+          {
+            "line_of_business": "to property",
+            "amount_gbp_m": -16.5
+          },
+          {
+            "line_of_business": "Third-party liability",
+            "amount_gbp_m": -12.4
+          },
+          {
+            "line_of_business": "Credit and Suretyship",
+            "amount_gbp_m": -3.8
+          },
+          {
+            "line_of_business": "Miscellaneous",
+            "amount_gbp_m": -0.5
+          },
+          {
+            "line_of_business": "Reinsurance",
+            "amount_gbp_m": -42.1
+          }
+        ],
+        "currency": "GBP",
+        "method": "azure"
+      }
     },
-    {
-      "line_of_business": "Marine, aviation and transport",
-      "amount_gbp_m": 29.1,
-      "percentage_of_total": 14.7
-    },
-    {
-      "line_of_business": "to property",
-      "amount_gbp_m": 41.6,
-      "percentage_of_total": 21.0
-    },
-    {
-      "line_of_business": "Third-party liability",
-      "amount_gbp_m": 33.1,
-      "percentage_of_total": 16.7
-    },
-    {
-      "line_of_business": "Credit and Suretyship",
-      "amount_gbp_m": 13.7,
-      "percentage_of_total": 6.9
-    },
-    {
-      "line_of_business": "Miscellaneous",
-      "amount_gbp_m": 0.3,
-      "percentage_of_total": 0.2
-    },
-    {
-      "line_of_business": "Reinsurance",
-      "amount_gbp_m": 63.3,
-      "percentage_of_total": 32.0
+    "gpt-5-mini": {
+      "syndicate": 1861,
+      "year": 2014,
+      "opening_reserves_gbp_m": 183.321,
+      "opening_reserves_page": 18,
+      "opening_reserves_confidence": 1.0,
+      "prior_year_development_gbp_m": -6.4,
+      "prior_year_development_pct": -3.49,
+      "direction": "release",
+      "prior_year_movement_page": 26,
+      "prior_year_movement_confidence": 0.5,
+      "exact_reserve_text": "Included within net claims incurred of GBP 83.1m (2013: GBP 59.1m) is an improvement of GBP 6.4m to claims reserves established at the prior year end. This favourable loss development is spread across multiple classes of business and years of account and is caused by both attritional losses not developing as originally anticipated and improvements on previously held catastrophe loss reserves. The most significant favourable development occurred on the 2012 year of account and related to the Property (Direct & Facultative) class.",
+      "primary_causes": [
+        "Favorable claims development",
+        "Natural catastrophe events",
+        "Other"
+      ],
+      "specific_events": [],
+      "specific_years_affected": [
+        2012
+      ],
+      "prior_year_events": [
+        {
+          "event_name": "2012 & Prior years reserve improvements",
+          "event_year": 2012,
+          "impact_description": "Favourable development on prior years' reserves, most significant on the 2012 year of account relating to Property (Direct & Facultative); spread across Marine (Hull & Liability), Starr Tech Onshore and Property classes.",
+          "lobs_affected": [
+            "Marine",
+            "Property",
+            "Professional Lines"
+          ],
+          "amount_gbp_m": null,
+          "confidence": 0.5
+        }
+      ],
+      "named_events": [],
+      "standardized_narrative": "The syndicate reports a favourable prior-year development, with an improvement of GBP 6.4m (net) in claims reserves relative to the prior year. This improvement is attributed to benign catastrophe experience, lower-than-expected attritional and large loss activity, resolution of legacy issues and specific favourable development on the 2012 year of account, particularly within Property and Marine-related lines. No gross prior-year movement is explicitly stated in the technical notes, so the reported GBP 6.4m figure is net of reinsurance.",
+      "raw_causal_phrases": [
+        "improvement of GBP 6.4m to claims reserves established at the prior year end.",
+        "This favourable loss development is spread across multiple classes of business and years of account",
+        "benign catastrophe year",
+        "lower than expected attritional and large loss activity",
+        "resolution of certain legacy issues",
+        "material reserve improvements on the 2012 & Prior years of account during the period, most notably across the Marine (Hull & Liability), Starr Tech Onshore and Property classes."
+      ],
+      "lob_movements": [
+        {
+          "line_of_business": "Marine",
+          "direction": "release",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.5
+        },
+        {
+          "line_of_business": "Property",
+          "direction": "release",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.5
+        },
+        {
+          "line_of_business": "Professional Lines",
+          "direction": "release",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.5
+        }
+      ],
+      "gross_premiums_written_gbp_m": 197.8,
+      "gross_premium_mix": [
+        {
+          "line_of_business": "Accident and health",
+          "amount_gbp_m": 16.7,
+          "percentage_of_total": 8.4
+        },
+        {
+          "line_of_business": "Marine, aviation and transport",
+          "amount_gbp_m": 29.1,
+          "percentage_of_total": 14.7
+        },
+        {
+          "line_of_business": "to property",
+          "amount_gbp_m": 41.6,
+          "percentage_of_total": 21.0
+        },
+        {
+          "line_of_business": "Third-party liability",
+          "amount_gbp_m": 33.1,
+          "percentage_of_total": 16.7
+        },
+        {
+          "line_of_business": "Credit and Suretyship",
+          "amount_gbp_m": 13.7,
+          "percentage_of_total": 6.9
+        },
+        {
+          "line_of_business": "Miscellaneous",
+          "amount_gbp_m": 0.3,
+          "percentage_of_total": 0.2
+        },
+        {
+          "line_of_business": "Reinsurance",
+          "amount_gbp_m": 63.3,
+          "percentage_of_total": 32.0
+        }
+      ],
+      "gross_premium_page": 25,
+      "gross_premium_confidence": 1.0,
+      "currency": "GBP",
+      "data_quality_notes": "No explicit GROSS prior year reserve movement (gross claims outstanding movement attributable to prior years) was presented in the notes. The report states a GBP 6.4m improvement but explicitly as a net figure within 'net claims incurred'. Per instructions, the gross prior-year development is not available and the net figure has been used as a fallback. Starr Tech Onshore was mapped to 'Professional Lines' for LOB mapping by inference.",
+      "_claims_triangle": {
+        "type": "none",
+        "currency": "GBP",
+        "units": "thousands",
+        "page": null,
+        "underwriting_years": [],
+        "development_rows": []
+      },
+      "source_type": "syndicate",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_1861_2014_llm.pdf",
+      "content_hash": "2a3cdf4f0769a73567dfec898a9a40f01ed53358cce96c71b5f112ca2fc5eb75",
+      "standardized_at": "2026-03-18T21:55:47.004856+00:00",
+      "standardization_model": "gpt-5-mini",
+      "_extraction_meta": {
+        "model": "gpt-5-mini",
+        "input_tokens": 13990,
+        "output_tokens": 3847,
+        "total_tokens": 17837,
+        "cost_usd": 0.011192
+      },
+      "_adobe_lob": {
+        "gross_premium_mix": [
+          {
+            "line_of_business": "Accident and health",
+            "amount_gbp_m": 16.7,
+            "percentage_of_total": 8.4
+          },
+          {
+            "line_of_business": "Marine, aviation and transport",
+            "amount_gbp_m": 29.1,
+            "percentage_of_total": 14.7
+          },
+          {
+            "line_of_business": "to property",
+            "amount_gbp_m": 41.6,
+            "percentage_of_total": 21.0
+          },
+          {
+            "line_of_business": "Third-party liability",
+            "amount_gbp_m": 33.1,
+            "percentage_of_total": 16.7
+          },
+          {
+            "line_of_business": "Credit and Suretyship",
+            "amount_gbp_m": 13.7,
+            "percentage_of_total": 6.9
+          },
+          {
+            "line_of_business": "Miscellaneous",
+            "amount_gbp_m": 0.3,
+            "percentage_of_total": 0.2
+          },
+          {
+            "line_of_business": "Reinsurance",
+            "amount_gbp_m": 63.3,
+            "percentage_of_total": 32.0
+          }
+        ],
+        "gross_premiums_written_gbp_m": 197.8,
+        "claims_incurred_by_lob": [
+          {
+            "line_of_business": "Accident and health",
+            "amount_gbp_m": -7.0
+          },
+          {
+            "line_of_business": "to property",
+            "amount_gbp_m": -16.5
+          },
+          {
+            "line_of_business": "Third-party liability",
+            "amount_gbp_m": -12.4
+          },
+          {
+            "line_of_business": "Credit and Suretyship",
+            "amount_gbp_m": -3.8
+          },
+          {
+            "line_of_business": "Miscellaneous",
+            "amount_gbp_m": -0.5
+          },
+          {
+            "line_of_business": "Reinsurance",
+            "amount_gbp_m": -42.1
+          }
+        ],
+        "currency": "GBP",
+        "method": "azure"
+      }
     }
-  ],
-  "gross_premiums_written_gbp_m": 197.8,
-  "currency": "GBP"
+  },
+  "total_cost_usd": 0.017189,
+  "total_tokens": 31984,
+  "validation": {
+    "passed": true,
+    "total_discrepancies": 19,
+    "within_tolerance": 19,
+    "hard_failures": 0,
+    "hard_failure_details": []
+  }
 }

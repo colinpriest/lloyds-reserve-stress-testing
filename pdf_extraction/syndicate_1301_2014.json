@@ -1,43 +1,285 @@
 {
-  "extraction_timestamp": "2026-03-17T06:24:09.526598+00:00",
+  "extraction_timestamp": "2026-03-18T22:13:18.562905+00:00",
   "spec": {
-    "prompt_version": "2.6",
+    "prompt_version": "2.10",
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
   "source_file": "syndicate_reports\\pdfs\\syndicate_1301_2014.pdf",
-  "no_triangle_data": true,
-  "excluded": true,
-  "exclusion_reason": "No claims development triangle or reserve movement text found in report - recommend non-inclusion in analysis",
-  "syndicate": 1301,
-  "year": 2014,
-  "gross_premium_mix": [
-    {
-      "line_of_business": "Accident & Health",
-      "amount_gbp_m": 7.0,
-      "percentage_of_total": 5.0
+  "models": {
+    "gemini-2.5-flash": {
+      "syndicate": 1301,
+      "year": 2014,
+      "opening_reserves_gbp_m": 79.107,
+      "opening_reserves_page": 6,
+      "opening_reserves_confidence": 1.0,
+      "prior_year_development_gbp_m": -6.2,
+      "prior_year_development_pct": -7.84,
+      "direction": "release",
+      "prior_year_movement_page": 10,
+      "prior_year_movement_confidence": 1.0,
+      "exact_reserve_text": "The movement in net provision for claims includes a release of GBP 6.2m in respect of claims outstanding at the previous year end (2013 GBP 3.5m).",
+      "primary_causes": [
+        "Favorable claims development"
+      ],
+      "specific_events": [],
+      "specific_years_affected": [
+        2013
+      ],
+      "prior_year_events": [],
+      "named_events": [],
+      "standardized_narrative": "The syndicate reported a net release of GBP 6.2m in prior year claims provisions, indicating favorable claims development for reserves outstanding at the previous year end (2013 and prior).",
+      "raw_causal_phrases": [
+        "release of GBP 6.2m in respect of claims outstanding at the previous year end"
+      ],
+      "lob_movements": [],
+      "gross_premiums_written_gbp_m": 141.1,
+      "gross_premium_mix": [
+        {
+          "line_of_business": "Accident & Health",
+          "amount_gbp_m": 7.0,
+          "percentage_of_total": 5.0
+        },
+        {
+          "line_of_business": "Marine, Aviation & Transport",
+          "amount_gbp_m": 51.3,
+          "percentage_of_total": 36.4
+        },
+        {
+          "line_of_business": "property",
+          "amount_gbp_m": 41.5,
+          "percentage_of_total": 29.4
+        },
+        {
+          "line_of_business": "Miscellaneous",
+          "amount_gbp_m": 2.3,
+          "percentage_of_total": 1.6
+        },
+        {
+          "line_of_business": "Reinsurance",
+          "amount_gbp_m": 39.0,
+          "percentage_of_total": 27.6
+        }
+      ],
+      "gross_premium_page": 9,
+      "gross_premium_confidence": 1.0,
+      "currency": "GBP",
+      "data_quality_notes": "The prior year development figure is explicitly stated as 'net' of reinsurance.",
+      "_claims_triangle": {
+        "type": "none",
+        "currency": null,
+        "units": null,
+        "page": null,
+        "underwriting_years": [],
+        "development_rows": []
+      },
+      "source_type": "syndicate",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_1301_2014_llm.pdf",
+      "content_hash": "d1c00e61ffc71dfd5dbcf8d8733c2956c4d73b360711500572e4f1ec94aac2f7",
+      "standardized_at": "2026-03-18T22:12:08.313282+00:00",
+      "standardization_model": "gemini-2.5-flash",
+      "_extraction_meta": {
+        "model": "gemini-2.5-flash",
+        "input_tokens": 8831,
+        "output_tokens": 774,
+        "total_tokens": 11860,
+        "cost_usd": 0.004584
+      },
+      "_adobe_lob": {
+        "gross_premium_mix": [
+          {
+            "line_of_business": "Accident & Health",
+            "amount_gbp_m": 7.0,
+            "percentage_of_total": 5.0
+          },
+          {
+            "line_of_business": "Marine, Aviation & Transport",
+            "amount_gbp_m": 51.3,
+            "percentage_of_total": 36.4
+          },
+          {
+            "line_of_business": "property",
+            "amount_gbp_m": 41.5,
+            "percentage_of_total": 29.4
+          },
+          {
+            "line_of_business": "Miscellaneous",
+            "amount_gbp_m": 2.3,
+            "percentage_of_total": 1.6
+          },
+          {
+            "line_of_business": "Reinsurance",
+            "amount_gbp_m": 39.0,
+            "percentage_of_total": 27.6
+          }
+        ],
+        "gross_premiums_written_gbp_m": 141.1,
+        "claims_incurred_by_lob": [
+          {
+            "line_of_business": "Accident & Health",
+            "amount_gbp_m": -2.0
+          },
+          {
+            "line_of_business": "Marine, Aviation & Transport",
+            "amount_gbp_m": -32.4
+          },
+          {
+            "line_of_business": "property",
+            "amount_gbp_m": -23.1
+          },
+          {
+            "line_of_business": "Miscellaneous",
+            "amount_gbp_m": -0.9
+          },
+          {
+            "line_of_business": "Reinsurance",
+            "amount_gbp_m": -16.1
+          }
+        ],
+        "currency": "GBP",
+        "method": "azure"
+      }
     },
-    {
-      "line_of_business": "Marine, Aviation & Transport",
-      "amount_gbp_m": 51.3,
-      "percentage_of_total": 36.4
-    },
-    {
-      "line_of_business": "property",
-      "amount_gbp_m": 41.5,
-      "percentage_of_total": 29.4
-    },
-    {
-      "line_of_business": "Miscellaneous",
-      "amount_gbp_m": 2.3,
-      "percentage_of_total": 1.6
-    },
-    {
-      "line_of_business": "Reinsurance",
-      "amount_gbp_m": 39.0,
-      "percentage_of_total": 27.6
+    "gpt-5-mini": {
+      "syndicate": 1301,
+      "year": 2014,
+      "opening_reserves_gbp_m": 79.107,
+      "opening_reserves_page": 15,
+      "opening_reserves_confidence": 1.0,
+      "prior_year_development_gbp_m": -6.2,
+      "prior_year_development_pct": -7.84,
+      "direction": "release",
+      "prior_year_movement_page": 26,
+      "prior_year_movement_confidence": 0.5,
+      "exact_reserve_text": "The movement in net provision for claims includes a release of GBP 6.2m in respect of claims outstanding at the previous year end (2013 GBP 3.5m).",
+      "primary_causes": [
+        "Favorable claims development"
+      ],
+      "specific_events": [],
+      "specific_years_affected": [],
+      "prior_year_events": [],
+      "named_events": [],
+      "standardized_narrative": "Syndicate 1301 opened 2014 with gross claims outstanding of GBP 79.107m (balance sheet comparative). The report discloses a net release on prior year claims of GBP 6.2m (stated as a release in the movement note), equivalent to a ~7.8% reduction of opening gross claims. No gross prior-year movement amount was disclosed in the technical movement note, so the reported net release has been used as the quantified PYD. The movement is described as favourable claims development; no specific prior-year catastrophe or large loss events are named as driving this movement.",
+      "raw_causal_phrases": [
+        "The movement in net provision for claims includes a release of GBP 6.2m in respect of claims outstanding at the previous year end (2013 GBP 3.5m).",
+        "release of GBP 6.2m"
+      ],
+      "lob_movements": [],
+      "gross_premiums_written_gbp_m": 141.1,
+      "gross_premium_mix": [
+        {
+          "line_of_business": "Accident & Health",
+          "amount_gbp_m": 7.0,
+          "percentage_of_total": 5.0
+        },
+        {
+          "line_of_business": "Marine, Aviation & Transport",
+          "amount_gbp_m": 51.3,
+          "percentage_of_total": 36.4
+        },
+        {
+          "line_of_business": "property",
+          "amount_gbp_m": 41.5,
+          "percentage_of_total": 29.4
+        },
+        {
+          "line_of_business": "Miscellaneous",
+          "amount_gbp_m": 2.3,
+          "percentage_of_total": 1.6
+        },
+        {
+          "line_of_business": "Reinsurance",
+          "amount_gbp_m": 39.0,
+          "percentage_of_total": 27.6
+        }
+      ],
+      "gross_premium_page": 12,
+      "gross_premium_confidence": 1.0,
+      "currency": "GBP",
+      "data_quality_notes": "Opening gross claims outstanding taken from Balance Sheet (Claims outstanding, comparative 2013 column = GBP 79,107k GBP 79.107m). The report does not provide a gross 'movement in prior year's provision for claims outstanding' figure; only a net statement is given: 'release of GBP 6.2m'. Per instructions, the net figure has been used as a fallback and flagged here. No gross claims development triangle or gross PYD number was found in the available notes.",
+      "_claims_triangle": {
+        "type": "none",
+        "currency": "GBP",
+        "units": "millions",
+        "page": null,
+        "underwriting_years": [],
+        "development_rows": []
+      },
+      "source_type": "syndicate",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_1301_2014_llm.pdf",
+      "content_hash": "d1c00e61ffc71dfd5dbcf8d8733c2956c4d73b360711500572e4f1ec94aac2f7",
+      "standardized_at": "2026-03-18T22:13:18.559905+00:00",
+      "standardization_model": "gpt-5-mini",
+      "_extraction_meta": {
+        "model": "gpt-5-mini",
+        "input_tokens": 15882,
+        "output_tokens": 4170,
+        "total_tokens": 20052,
+        "cost_usd": 0.012311
+      },
+      "_adobe_lob": {
+        "gross_premium_mix": [
+          {
+            "line_of_business": "Accident & Health",
+            "amount_gbp_m": 7.0,
+            "percentage_of_total": 5.0
+          },
+          {
+            "line_of_business": "Marine, Aviation & Transport",
+            "amount_gbp_m": 51.3,
+            "percentage_of_total": 36.4
+          },
+          {
+            "line_of_business": "property",
+            "amount_gbp_m": 41.5,
+            "percentage_of_total": 29.4
+          },
+          {
+            "line_of_business": "Miscellaneous",
+            "amount_gbp_m": 2.3,
+            "percentage_of_total": 1.6
+          },
+          {
+            "line_of_business": "Reinsurance",
+            "amount_gbp_m": 39.0,
+            "percentage_of_total": 27.6
+          }
+        ],
+        "gross_premiums_written_gbp_m": 141.1,
+        "claims_incurred_by_lob": [
+          {
+            "line_of_business": "Accident & Health",
+            "amount_gbp_m": -2.0
+          },
+          {
+            "line_of_business": "Marine, Aviation & Transport",
+            "amount_gbp_m": -32.4
+          },
+          {
+            "line_of_business": "property",
+            "amount_gbp_m": -23.1
+          },
+          {
+            "line_of_business": "Miscellaneous",
+            "amount_gbp_m": -0.9
+          },
+          {
+            "line_of_business": "Reinsurance",
+            "amount_gbp_m": -16.1
+          }
+        ],
+        "currency": "GBP",
+        "method": "azure"
+      }
     }
-  ],
-  "gross_premiums_written_gbp_m": 141.1,
-  "currency": "GBP"
+  },
+  "total_cost_usd": 0.016895,
+  "total_tokens": 31912,
+  "validation": {
+    "passed": true,
+    "total_discrepancies": 10,
+    "within_tolerance": 10,
+    "hard_failures": 0,
+    "hard_failure_details": []
+  }
 }

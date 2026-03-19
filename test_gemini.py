@@ -31,6 +31,7 @@ import json
 import time
 import base64
 import hashlib
+import logging
 import signal
 import tempfile
 import zipfile
@@ -113,6 +114,8 @@ from adjudicate import (
 from table_extraction import extract_tables, TableBackend, _extract_pages_to_pdf
 
 load_dotenv()
+
+logger = logging.getLogger(__name__)
 
 # Table extraction backend (can be overridden with --table-backend)
 # Priority: azure (default) > nutrient > adobe
@@ -293,12 +296,20 @@ def _load_inception_years() -> dict:
     This ensures that syndicates processed in previous runs (whose triangles
     contain ``underwriting_years``) are reflected in the cache even if
     Perplexity was never called or returned nothing for them.
+
+    Entries listed in ``_manual_overrides`` in the JSON file are protected
+    from any automatic updates (Perplexity, triangle backfill, etc.).
     """
     cache: dict[int, int] = {}
+    manual: set[int] = set()
     if INCEPTION_YEARS_FILE.exists():
         with open(INCEPTION_YEARS_FILE) as f:
             data = json.load(f)
-        cache = {int(k): int(v) for k, v in data.items() if k != "_meta"}
+        cache = {int(k): int(v) for k, v in data.items()
+                 if k not in ("_meta", "_manual_overrides")}
+        # Load manual overrides list
+        for s in data.get("_manual_overrides", []):
+            manual.add(int(s))
 
     # Backfill from extraction JSONs that have triangle data or inception_year
     output_dir = Path("pdf_extraction")
@@ -308,6 +319,9 @@ def _load_inception_years() -> dict:
             stem_parts = jf.stem.split("_")  # syndicate_NNNN_YYYY
             syn_num = int(stem_parts[1])
         except (IndexError, ValueError):
+            continue
+        # Never overwrite manually-corrected entries
+        if syn_num in manual:
             continue
         # Only backfill if syndicate not already in cache
         if syn_num in cache:
@@ -331,7 +345,6 @@ def _load_inception_years() -> dict:
             if tri and tri.get("underwriting_years"):
                 uw_years = [int(y) for y in tri["underwriting_years"]]
                 inception = min(uw_years)
-                # Only update if earlier than what we already have
                 if syn_num not in cache or inception < cache[syn_num]:
                     cache[syn_num] = inception
                     dirty = True
@@ -345,7 +358,7 @@ def _load_inception_years() -> dict:
 
 
 def _save_inception_years(inception: dict) -> None:
-    """Save syndicate inception years to JSON file, preserving _meta."""
+    """Save syndicate inception years to JSON file, preserving _meta and _manual_overrides."""
     existing = {}
     if INCEPTION_YEARS_FILE.exists():
         with open(INCEPTION_YEARS_FILE) as f:
@@ -359,13 +372,24 @@ def _save_inception_years(inception: dict) -> None:
         "last_updated": datetime.now().strftime("%Y-%m-%d"),
     })
     meta["last_updated"] = datetime.now().strftime("%Y-%m-%d")
-    output = {"_meta": meta}
+    manual_overrides = existing.get("_manual_overrides", [])
+    output = {"_meta": meta, "_manual_overrides": manual_overrides}
     for s in sorted(inception.keys()):
         output[str(s)] = inception[s]
     INCEPTION_YEARS_FILE.parent.mkdir(parents=True, exist_ok=True)
     with open(INCEPTION_YEARS_FILE, "w") as f:
         json.dump(output, f, indent=2)
 
+
+
+def _load_manual_overrides() -> set[int]:
+    """Load the set of syndicate numbers whose inception years are manually
+    verified and must never be overwritten by automated processes."""
+    if INCEPTION_YEARS_FILE.exists():
+        with open(INCEPTION_YEARS_FILE) as f:
+            data = json.load(f)
+        return {int(s) for s in data.get("_manual_overrides", [])}
+    return set()
 
 
 def _lookup_inception_year_perplexity(syndicate_num: int) -> int | None:
@@ -1118,8 +1142,8 @@ def _extract_pyd_from_loss_ratio_triangle(page_text, report_year):
         r"year\s+later", r"years?\s+later", r"at\s+end",
     ]
     stop_labels = [
-        "total ultimate", "gross claims liab", "less paid",
-        "less unearned", "less non", "net claims liab",
+        "total ultimate", "gross claims liab",
+        "less paid", "less unearned", "less non", "net claims liab",
         "net claims development",  # stop before net section on same page
         "underwriting year - net",  # stop before net loss ratio section
         "underwriting year -net",   # variant without space
@@ -1149,6 +1173,11 @@ def _extract_pyd_from_loss_ratio_triangle(page_text, report_year):
         # Stop at summary rows
         if any(sl in line_lower for sl in stop_labels):
             break
+        # Stop at "Gross claims" when it's NOT the header "Gross Claims Development"
+        if (line_lower.strip() == "gross claims"
+                or (line_lower.strip().startswith("gross claims")
+                    and "development" not in line_lower)):
+            break
         # Skip dev period labels
         if any(re.search(p, line_lower) for p in dev_labels):
             continue
@@ -1166,18 +1195,23 @@ def _extract_pyd_from_loss_ratio_triangle(page_text, report_year):
             except ValueError:
                 continue
 
-    # Group ratios into development rows
-    max_dev = report_year - min(uw_years) + 1
+    # Group ratios into development rows.
+    # Use all_years_sorted (includes ae columns) for grouping, then strip ae
+    # columns so dev_rows aligns with uw_years.
+    max_dev = report_year - min(all_years_sorted) + 1
     dev_rows = []
     idx = 0
     for d in range(max_dev):
-        expected = sum(1 for y in uw_years if report_year - y >= d)
+        expected = sum(1 for y in all_years_sorted if report_year - y >= d)
         if expected < 1:
             break
         if idx + expected > len(all_ratios):
             break
-        row = list(all_ratios[idx:idx + expected])
-        row += [None] * (n_cols - len(row))
+        full_row = list(all_ratios[idx:idx + expected])
+        full_row += [None] * (n_cols_total - len(full_row))
+        # Strip ae columns to align with uw_years
+        row = [v for i, v in enumerate(full_row[:n_cols_total])
+               if i not in ae_columns]
         dev_rows.append(row[:n_cols])
         idx += expected
 
@@ -1257,10 +1291,121 @@ def _extract_pyd_from_loss_ratio_triangle(page_text, report_year):
     if len(raw_ult_vals) >= n_cols_total:
         raw_ultimates = raw_ult_vals
 
+    # ── Step 4b: Fallback — "Gross claims liabilities" rows ──
+    # Some reports (e.g. Beazley syndicates) show total claims liabilities
+    # by UW year instead of "Total ultimate losses".  Structure:
+    #   "Gross claims liabilities (Beazley managed level)"  → group totals
+    #   "Less non XXXX share"                               → deduction
+    #   "Gross claims liabilities (XXXX share)"             → syndicate share
+    # Prefer the syndicate share row; fall back to managed level.
+    gcl_is_share = False
+    if raw_ultimates is None or len(raw_ultimates) < n_cols_total:
+        gcl_managed = []
+        gcl_share = []
+        gcl_state = "scan"  # scan, label, collect
+        gcl_label = ""
+        gcl_vals = []
+        gcl_is_deduction = False
+
+        for line in lines_stripped[:gross_end_idx]:
+            ll = line.lower().strip()
+
+            if gcl_state == "collect":
+                # Stop at next section label
+                if any(kw in ll for kw in
+                       ["less non", "less paid", "net claims",
+                        "gross claims", "net claim"]):
+                    # Save collected values
+                    if not gcl_is_deduction and len(gcl_vals) >= n_cols_total:
+                        if "share" in gcl_label and "less" not in gcl_label:
+                            gcl_share = gcl_vals[:n_cols_total]
+                        else:
+                            gcl_managed = gcl_vals[:n_cols_total]
+                    # Start new label
+                    gcl_state = "label"
+                    gcl_label = ll
+                    gcl_vals = []
+                    gcl_is_deduction = "less" in ll
+                    continue
+                if not ll:
+                    continue
+                nums = re.findall(r'[\-]?[\d,]+\.?\d*|\([\d,]+\.?\d*\)', line)
+                for n in nums:
+                    n_clean = n.replace(",", "").replace("(", "-").replace(")", "")
+                    try:
+                        val = float(n_clean)
+                        if abs(val) > 1:
+                            gcl_vals.append(val)
+                    except ValueError:
+                        continue
+                if len(gcl_vals) >= n_cols_total:
+                    if not gcl_is_deduction:
+                        if "share" in gcl_label and "less" not in gcl_label:
+                            gcl_share = gcl_vals[:n_cols_total]
+                        else:
+                            gcl_managed = gcl_vals[:n_cols_total]
+                    gcl_state = "scan"
+                    gcl_vals = []
+                continue
+
+            if gcl_state == "label":
+                # Still accumulating multi-line label text.
+                # A line is numeric only if it starts with a digit (after
+                # stripping parens/minus) AND does not contain alphabetic text
+                # (e.g., "(3623 share)" is a label, not a number).
+                is_numeric_line = (re.search(r'^\d', ll.lstrip("(-"))
+                                   and not re.search(r'[a-z]', ll))
+                if is_numeric_line:
+                    # Numeric line — switch to collecting
+                    gcl_state = "collect"
+                    # fall through to collect from this line
+                    nums = re.findall(r'[\-]?[\d,]+\.?\d*|\([\d,]+\.?\d*\)', line)
+                    for n in nums:
+                        n_clean = n.replace(",", "").replace("(", "-").replace(")", "")
+                        try:
+                            val = float(n_clean)
+                            if abs(val) > 1:
+                                gcl_vals.append(val)
+                        except ValueError:
+                            continue
+                    continue
+                gcl_label += " " + ll
+                continue
+
+            # gcl_state == "scan"
+            if (("gross claims" in ll or ("claims" in ll and "liabilit" in ll))
+                    and "development" not in ll):
+                gcl_state = "label"
+                gcl_label = ll
+                gcl_vals = []
+                gcl_is_deduction = False
+            elif "less non" in ll:
+                gcl_state = "label"
+                gcl_label = ll
+                gcl_vals = []
+                gcl_is_deduction = True
+
+        # Flush final section
+        if gcl_state == "collect" and not gcl_is_deduction and len(gcl_vals) >= n_cols_total:
+            if "share" in gcl_label and "less" not in gcl_label:
+                gcl_share = gcl_vals[:n_cols_total]
+            else:
+                gcl_managed = gcl_vals[:n_cols_total]
+
+        # Prefer syndicate share over managed level
+        if len(gcl_share) >= n_cols_total:
+            raw_ultimates = gcl_share
+            raw_ult_vals = gcl_share
+            gcl_is_share = True
+        elif len(gcl_managed) >= n_cols_total:
+            raw_ultimates = gcl_managed
+            raw_ult_vals = gcl_managed
+
     if raw_ultimates is None or len(raw_ultimates) < n_cols_total:
         return None, (f"loss ratio triangle found ({n_cols} UW years, "
                       f"{len(dev_rows)} dev rows) but no 'Total ultimate losses' "
-                      f"row — cannot convert to absolute PYD")
+                      f"or 'Gross claims liabilities' row — cannot convert to "
+                      f"absolute PYD")
 
     # Validate: reject if "ultimates" are actually year values (1990-2030).
     # This happens when "total" + "ultimately" co-occur in surrounding text
@@ -1278,8 +1423,12 @@ def _extract_pyd_from_loss_ratio_triangle(page_text, report_year):
     ultimates = [v for i, v in enumerate(raw_ultimates) if i not in ae_columns]
 
     # ── Step 5: Compute PYD ──
+    ult_source = ("gross claims liabilities (syndicate share)" if gcl_is_share
+                  else "gross claims liabilities (managed level)" if gcl_managed
+                  else "total ultimate losses")
     details = [f"Loss ratio triangle: {n_cols} UW years "
-               f"({min(uw_years)}-{max(uw_years)}), {len(dev_rows)} dev rows"]
+               f"({min(uw_years)}-{max(uw_years)}), {len(dev_rows)} dev rows, "
+               f"ultimates from {ult_source}"]
     total_pyd = 0.0
     used_years = 0
 
@@ -3823,6 +3972,19 @@ def check_tolerance(discrepancies, model_a, model_b):
             ))
             or _is_numeric_near(d.get(model_a), d.get(model_b), rel_tol=0.005)
         )
+        # For gross_premium_mix percentages, when total GPW is negative the
+        # sign convention is ambiguous (e.g. 88% vs -87.43%).  Tolerate if
+        # the absolute values are close.
+        if (not is_tolerated
+                and "percentage_of_total" in field
+                and "gross_premium_mix" in field):
+            try:
+                va = abs(float(d.get(model_a)))
+                vb = abs(float(d.get(model_b)))
+                if _is_numeric_near(va, vb, rel_tol=0.05):
+                    is_tolerated = True
+            except (TypeError, ValueError):
+                pass
         if is_tolerated:
             tolerated.append(d)
         else:
@@ -4268,21 +4430,28 @@ def process_one_report(report_path, inception_cache=None):
     # Correct inception cache if the triangle contradicts it.
     # The triangle is ground truth — if the RAG found a valid triangle
     # with usable UW years, the inception cache was wrong.
+    # BUT: never overwrite manually-verified inception years.
+    manual_overrides = _load_manual_overrides()
     if inception_skip and not rag_result.get("first_year_syndicate"):
         tri = rag_result.get("triangle")
         uw_years = tri.get("underwriting_years", []) if tri else []
         if uw_years:
             tri_inception = min(int(y) for y in uw_years)
             old_inception = inception_cache.get(syndicate_num)
-            print(f"  [Inception] Cache said inception={old_inception} (would skip), "
-                  f"but triangle shows UW years back to {tri_inception} — correcting cache")
-            inception_cache[syndicate_num] = tri_inception
-            _save_inception_years(inception_cache)
-            inception_skip = False
+            if syndicate_num in manual_overrides:
+                print(f"  [Inception] Triangle shows UW years back to {tri_inception}, "
+                      f"but syndicate {syndicate_num} has manual override ({old_inception}) — keeping manual value, not skipping")
+                inception_skip = False
+            else:
+                print(f"  [Inception] Cache said inception={old_inception} (would skip), "
+                      f"but triangle shows UW years back to {tri_inception} — correcting cache")
+                inception_cache[syndicate_num] = tri_inception
+                _save_inception_years(inception_cache)
+                inception_skip = False
 
     if rag_result.get("first_year_syndicate"):
         # Triangle has <=2 UW years — update inception cache if this is new info
-        if syndicate_num not in inception_cache:
+        if syndicate_num not in inception_cache and syndicate_num not in manual_overrides:
             # Conservative estimate: first UW year = report_year - 1
             inception_cache[syndicate_num] = report_year - 1
             _save_inception_years(inception_cache)
@@ -4366,14 +4535,12 @@ def process_one_report(report_path, inception_cache=None):
     # Loss ratio triangle PYD is often at managed/group level rather than
     # syndicate level (e.g. Beazley 2623).  It should only fill in blanks,
     # never override an LLM-extracted syndicate-level figure.
-    # Net triangles also must not override: they capture net-of-reinsurance
-    # development which differs from the gross PYD that LLMs extract from
-    # the reserve commentary text (e.g. syndicate 2526/2014 has a net
-    # triangle giving -85m but gross PYD stated in text is +31.7m).
+    # Net triangles are treated as authoritative — the deterministic PYD
+    # computation is more reliable than LLM extraction, even for net
+    # triangles (e.g. syndicate 386/2018 where LLMs wildly disagree).
     rag_tri_type = (rag_result.get("triangle") or {}).get("type", "none")
     rag_is_fallback_only = (
         rag_method == "loss_ratio_triangle"
-        or rag_tri_type == "net"
     )
 
     if rag_result["pyd"] is not None:
@@ -4422,29 +4589,30 @@ def process_one_report(report_path, inception_cache=None):
             ]:
                 model_pyd = result.get("prior_year_development_gbp_m")
                 if model_pyd is None:
-                    if rag_tri_type == "net":
-                        # Net triangle PYD is fundamentally different from
-                        # gross PYD — don't fill in blanks with it.
-                        print(f"  [{model_name}] PYD is None; skipping net triangle fill-in")
-                    else:
-                        result["prior_year_development_gbp_m"] = rag_pyd
-                        _op = result.get("opening_reserves_gbp_m")
-                        if rag_pyd == 0:
-                            result["prior_year_development_pct"] = 0.0
-                        elif _op and _op > 0:
-                            result["prior_year_development_pct"] = round(
-                                rag_pyd / _op * 100, 2
-                            )
-                        result["direction"] = "release" if rag_pyd < 0 else "strengthening" if rag_pyd > 0 else "flat"
-                        level = " (managed level)" if rag_method == "loss_ratio_triangle" else ""
-                        print(f"  [{model_name}] PYD filled from RAG triangle{level}: {rag_pyd:+.3f}m")
-                        if rag_is_fallback_only:
-                            old_notes = result.get("data_quality_notes", "") or ""
-                            result["data_quality_notes"] = (
-                                f"{old_notes} [MANAGED LEVEL: PYD from loss ratio triangle "
-                                f"is at managed/group level, not syndicate share. "
-                                f"May differ from syndicate-level figure.]"
-                            ).strip()
+                    result["prior_year_development_gbp_m"] = rag_pyd
+                    _op = result.get("opening_reserves_gbp_m")
+                    if rag_pyd == 0:
+                        result["prior_year_development_pct"] = 0.0
+                    elif _op and _op > 0:
+                        result["prior_year_development_pct"] = round(
+                            rag_pyd / _op * 100, 2
+                        )
+                    result["direction"] = "release" if rag_pyd < 0 else "strengthening" if rag_pyd > 0 else "flat"
+                    level = " (managed level)" if rag_method == "loss_ratio_triangle" else ""
+                    net_note = " (net triangle)" if rag_tri_type == "net" else ""
+                    print(f"  [{model_name}] PYD filled from RAG triangle{level}{net_note}: {rag_pyd:+.3f}m")
+                    if rag_is_fallback_only:
+                        old_notes = result.get("data_quality_notes", "") or ""
+                        result["data_quality_notes"] = (
+                            f"{old_notes} [LOSS RATIO TRIANGLE: PYD from loss ratio "
+                            f"triangle is gross. May differ from net figure in narrative.]"
+                        ).strip()
+                    elif rag_tri_type == "net":
+                        old_notes = result.get("data_quality_notes", "") or ""
+                        result["data_quality_notes"] = (
+                            f"{old_notes} [NET TRIANGLE: PYD from net-of-reinsurance "
+                            f"claims development triangle.]"
+                        ).strip()
                 else:
                     try:
                         old_pyd = float(model_pyd)
@@ -4452,12 +4620,42 @@ def process_one_report(report_path, inception_cache=None):
 
                         if rag_is_fallback_only:
                             # Net triangle or loss ratio triangle — keep the
-                            # LLM value which comes from gross narrative text.
+                            # LLM value which comes from gross narrative text,
+                            # UNLESS the LLM direction contradicts the RAG
+                            # (indicates LLM computed PYD from triangle
+                            # incorrectly and got the wrong sign).
+                            rag_dir = "release" if rag_pyd < 0 else "strengthening" if rag_pyd > 0 else "flat"
+                            llm_dir = "release" if old_pyd < 0 else "strengthening" if old_pyd > 0 else "flat"
                             if rag_tri_type == "net":
                                 reason = f"net triangle gives {rag_pyd:+.3f}m"
                             else:
-                                reason = f"loss ratio triangle gives {rag_pyd:+.3f}m at managed level"
-                            print(f"  [{model_name}] Keeping LLM PYD={old_pyd} ({reason})")
+                                reason = f"loss ratio triangle gives {rag_pyd:+.3f}m (gross)"
+                            if llm_dir != rag_dir and rag_dir != "flat":
+                                # LLM direction contradicts deterministic RAG —
+                                # LLM likely computed its own triangle PYD and
+                                # got the sign wrong.  Override with RAG value.
+                                result["prior_year_development_gbp_m"] = rag_pyd
+                                _op = result.get("opening_reserves_gbp_m")
+                                if rag_pyd == 0:
+                                    result["prior_year_development_pct"] = 0.0
+                                elif _op and _op > 0:
+                                    result["prior_year_development_pct"] = round(
+                                        rag_pyd / _op * 100, 2
+                                    )
+                                result["direction"] = rag_dir
+                                old_notes = result.get("data_quality_notes", "") or ""
+                                result["data_quality_notes"] = (
+                                    f"{old_notes} [RAG DIRECTION OVERRIDE: LLM said "
+                                    f"PYD={old_pyd} ({llm_dir}), RAG triangle "
+                                    f"computed {rag_pyd:+.3f}m ({rag_dir}). LLM "
+                                    f"direction contradicts deterministic RAG — "
+                                    f"overriding with RAG value.]"
+                                ).strip()
+                                print(f"  [{model_name}] RAG DIRECTION OVERRIDE: "
+                                      f"LLM PYD={old_pyd} ({llm_dir}) contradicts "
+                                      f"RAG {rag_pyd:+.3f}m ({rag_dir})")
+                            else:
+                                print(f"  [{model_name}] Keeping LLM PYD={old_pyd} ({reason})")
                         else:
                             # Standard claims triangle — deterministic PYD is
                             # authoritative over LLM-extracted values (which may
@@ -4490,8 +4688,9 @@ def process_one_report(report_path, inception_cache=None):
             result_openai["_rag_triangle"] = rag_result["triangle"]
 
             # Learn inception year from triangle's earliest UW year
+            # Never overwrite manually-verified inception years
             tri_uw_years = rag_result["triangle"].get("underwriting_years", [])
-            if tri_uw_years:
+            if tri_uw_years and syndicate_num not in manual_overrides:
                 tri_inception = min(int(y) for y in tri_uw_years)
                 cached = inception_cache.get(syndicate_num)
                 if cached is None or tri_inception < cached:
@@ -4547,6 +4746,47 @@ def process_one_report(report_path, inception_cache=None):
                 result["_adobe_provisions"] = prov_dict
             print(f"  [RAG] Reserves movement opening ({movement_opening:.1f}m) "
                   f"available for opening reserves resolution")
+
+    # Proactive RAG opening reserves override: if the balance sheet / provisions
+    # extraction found gross claims outstanding, use it authoritatively for both
+    # models — similar to how RAG triangle PYD overrides LLM-extracted PYD.
+    rag_opening = (adobe_prov or {}).get("opening_gross_claims_outstanding")
+    if rag_opening is not None and rag_opening > 0:
+        for result, model_name in [
+            (result_gemini, GEMINI_MODEL),
+            (result_openai, OPENAI_MODEL),
+        ]:
+            llm_opening = result.get("opening_reserves_gbp_m")
+            result["opening_reserves_gbp_m"] = rag_opening
+            # Recompute PYD percentage with corrected opening reserves
+            pyd = result.get("prior_year_development_gbp_m")
+            if pyd is not None and rag_opening > 0:
+                result["prior_year_development_pct"] = round(
+                    float(pyd) / rag_opening * 100, 2
+                )
+            elif pyd == 0 or rag_opening == 0:
+                result["prior_year_development_pct"] = 0.0
+            if llm_opening is not None:
+                try:
+                    diff = abs(float(llm_opening) - rag_opening)
+                    if diff >= 0.5:
+                        old_notes = result.get("data_quality_notes", "") or ""
+                        result["data_quality_notes"] = (
+                            f"{old_notes} [RAG OVERRIDE: Model said opening_reserves="
+                            f"{llm_opening}, balance sheet gives {rag_opening:.3f}m. "
+                            f"Using RAG value.]"
+                        ).strip()
+                        print(f"  [{model_name}] Opening reserves overridden by RAG balance sheet: "
+                              f"{llm_opening} -> {rag_opening:.3f}m")
+                    else:
+                        print(f"  [{model_name}] Opening reserves confirmed by RAG balance sheet: "
+                              f"{llm_opening} -> {rag_opening:.3f}m")
+                except (TypeError, ValueError):
+                    print(f"  [{model_name}] Opening reserves set from RAG balance sheet: "
+                          f"{rag_opening:.3f}m")
+            else:
+                print(f"  [{model_name}] Opening reserves filled from RAG balance sheet: "
+                      f"{rag_opening:.3f}m")
 
     # Net-of-reinsurance PYD fallback: if both LLMs returned null PYD but both
     # found narrative text with a quantified net reserve movement, use the net

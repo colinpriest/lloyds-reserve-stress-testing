@@ -1,7 +1,7 @@
 {
-  "extraction_timestamp": "2026-03-17T06:16:17.758289+00:00",
+  "extraction_timestamp": "2026-03-18T21:49:56.028420+00:00",
   "spec": {
-    "prompt_version": "2.6",
+    "prompt_version": "2.10",
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -11,13 +11,13 @@
       "syndicate": 1225,
       "year": 2016,
       "opening_reserves_gbp_m": 441.4,
-      "opening_reserves_page": 11,
+      "opening_reserves_page": 3,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": 12.1,
       "prior_year_development_pct": 2.74,
       "direction": "strengthening",
-      "prior_year_movement_page": 22,
-      "prior_year_movement_confidence": 0.8,
+      "prior_year_movement_page": 8,
+      "prior_year_movement_confidence": 1.0,
       "exact_reserve_text": "Favourable movement in technical provisions",
       "primary_causes": [
         "Favorable claims development"
@@ -26,7 +26,7 @@
       "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "The syndicate reported a favourable movement of GBP 27.8 million in its prior years' technical provisions. This indicates a release of reserves, suggesting that previous estimates for claims from prior underwriting years proved to be more than adequate. No specific causal factors or affected lines of business were detailed for this favourable development.",
+      "standardized_narrative": "The syndicate experienced a GBP 27.8 million release of prior year reserves in 2016, representing a 6.3% favourable movement compared to the opening gross claims outstanding. No specific causes or events were detailed for this movement.",
       "raw_causal_phrases": [
         "Favourable movement in technical provisions"
       ],
@@ -54,71 +54,29 @@
           "percentage_of_total": 1.6
         }
       ],
-      "gross_premium_page": 21,
+      "gross_premium_page": 7,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The prior year development figure of GBP 27.8m is explicitly stated as \"Favourable movement in technical provisions\" but its gross/net nature is not explicitly clarified in the text, though \"technical provisions\" typically refers to gross. The sign (negative for release) is inferred from \"favourable movement\". The claims development triangle on page 27 shows a gross strengthening of +21.3m for prior years (excluding the two most recent), which contradicts the narrative of a favourable movement. Given the explicit statement on page 22, that figure is used, but the contradiction is noted. [RAG OVERRIDE: Model said PYD=-27.8, RAG triangle computed 12.1. Using RAG value.]",
+      "data_quality_notes": "The claims development table on page 10 is not in a standard triangle format for extracting development period rows of absolute amounts. [RAG OVERRIDE: Model said PYD=-27.8, RAG triangle computed 12.1. Using RAG value.]",
       "_claims_triangle": {
-        "type": "loss_ratio",
-        "currency": "GBP",
-        "units": "percentage",
-        "page": 27,
-        "underwriting_years": [
-          2012,
-          2013,
-          2014,
-          2015,
-          2016
-        ],
-        "development_rows": [
-          [
-            59,
-            57,
-            58,
-            61,
-            64
-          ],
-          [
-            52,
-            62,
-            53,
-            56,
-            null
-          ],
-          [
-            48,
-            58,
-            55,
-            null,
-            null
-          ],
-          [
-            46,
-            58,
-            null,
-            null,
-            null
-          ],
-          [
-            45,
-            null,
-            null,
-            null,
-            null
-          ]
-        ]
+        "type": "none",
+        "currency": null,
+        "units": null,
+        "page": null,
+        "underwriting_years": [],
+        "development_rows": []
       },
       "source_type": "syndicate",
-      "source_file": "syndicate_reports\\pdfs\\syndicate_1225_2016.pdf",
-      "content_hash": "20ef3409517540e53b5209a418edb187368cefb8d0772b81e6c4b92ea53faf99",
-      "standardized_at": "2026-03-16T12:44:34.170882+00:00",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_1225_2016_llm.pdf",
+      "content_hash": "16b795cfe14a0f96816a7a1974b8ad8b2d1acaa1d4883cd2a797b393551308a9",
+      "standardized_at": "2026-03-18T21:49:08.744612+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 13624,
-        "output_tokens": 1027,
-        "total_tokens": 20822,
-        "cost_usd": 0.006655
+        "input_tokens": 8831,
+        "output_tokens": 732,
+        "total_tokens": 12924,
+        "cost_usd": 0.004479
       },
       "_rag_triangle": {
         "type": "gross",
@@ -232,27 +190,22 @@
     "gpt-5-mini": {
       "syndicate": 1225,
       "year": 2016,
-      "opening_reserves_gbp_m": 441.4,
-      "opening_reserves_page": 24,
-      "opening_reserves_confidence": 1.0,
+      "opening_reserves_gbp_m": null,
+      "opening_reserves_page": null,
+      "opening_reserves_confidence": 0.0,
       "prior_year_development_gbp_m": 12.1,
-      "prior_year_development_pct": 2.74,
+      "prior_year_development_pct": null,
       "direction": "strengthening",
-      "prior_year_movement_page": 20,
-      "prior_year_movement_confidence": 0.5,
-      "exact_reserve_text": "The provision for claims at the beginning of the year as compared with net payments and provisions at the end of the year in respect of prior years' claims provision are as follows:\n\nFavourable movement in technical provisions 27.8 37.8",
-      "primary_causes": [
-        "Favorable claims development"
-      ],
+      "prior_year_movement_page": null,
+      "prior_year_movement_confidence": 0.0,
+      "exact_reserve_text": "",
+      "primary_causes": [],
       "specific_events": [],
       "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "The syndicate recorded a favourable movement in prior years' technical provisions of GBP 27.8m in 2016 (a release of reserves, approximately 6.3% of opening gross claims outstanding of GBP 441.4m). The report attributes this to favourable movement in technical provisions (favourable claims development). No specific named prior-year loss events are identified in the movement note.",
-      "raw_causal_phrases": [
-        "The provision for claims at the beginning of the year as compared with net payments and provisions at the end of the year in respect of prior years' claims provision are as follows:",
-        "Favourable movement in technical provisions 27.8 37.8"
-      ],
+      "standardized_narrative": "Insufficient legible data in the provided images to extract a definitive gross opening claims outstanding balance or a gross prior-year reserve movement for Syndicate 1225 at 31 December 2016. The report images include balance sheet, notes and a claims development table, but text and numeric cells required for authoritative extraction are not reliably readable from the supplied scans.",
+      "raw_causal_phrases": [],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 292.8,
       "gross_premium_mix": [
@@ -277,36 +230,85 @@
           "percentage_of_total": 1.6
         }
       ],
-      "gross_premium_page": 19,
+      "gross_premium_page": null,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The 'Favourable movement in technical provisions GBP 27.8m' figure is presented in the Prior years' claims provision note but the note excerpt in the scanned pages appears as a single aggregated figure without an explicit 'Insurance liabilities (gross)' column heading. It is therefore recorded here as the prior year movement with medium confidence (0.5). A gross claims development triangle is present in the report (page 25) but the scanned images do not clearly show all development-period rows needed to compute a gross PYD from the triangle; hence the PYD was taken from the prior years' claims provision note. Opening gross claims outstanding (441.4) is explicit in the provision reconciliation (page 24) and recorded with high confidence. [RAG OVERRIDE: Model said PYD=-27.8, RAG triangle computed 12.1. Using RAG value.]",
+      "data_quality_notes": "Document images are partially rotated, low resolution and many numeric table cells and sentences are not clearly legible. The primary required items (Gross 'Claims outstanding' prior-year comparative on the Balance Sheet; the 'Movement in prior year's provision for claims outstanding' gross column or an explicit gross PYD narrative) could not be confidently read. A claims development triangle appears present (page ~25) but numbers are not reliably extractable from the images. Recommend supplying higher-resolution, upright PDF pages or the source text/notes (Balance Sheet liabilities: 'Claims outstanding' - prior year column; Technical reserves movement note labelled 'Movement in prior year's provision for claims outstanding' showing Insurance liabilities (gross) column) to populate numeric fields and confidence levels.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "millions",
         "page": 25,
         "underwriting_years": [
+          2011,
           2012,
           2013,
           2014,
           2015,
           2016
         ],
-        "development_rows": [],
-        "notes": "A gross claims development table / analysis appears on page 25 (shows gross ultimate losses and gross claims liabilities by underwriting year). However the scanned images do not clearly present the full set of development-period rows (e.g. 'At end of underwriting year', 'One year later', etc.) in a reliably extractable format. Development rows left empty for data quality reasons."
+        "development_rows": [
+          [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ]
+        ]
       },
       "source_type": "syndicate",
-      "source_file": "syndicate_reports\\pdfs\\syndicate_1225_2016.pdf",
-      "content_hash": "20ef3409517540e53b5209a418edb187368cefb8d0772b81e6c4b92ea53faf99",
-      "standardized_at": "2026-03-16T12:46:43.175131+00:00",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_1225_2016_llm.pdf",
+      "content_hash": "16b795cfe14a0f96816a7a1974b8ad8b2d1acaa1d4883cd2a797b393551308a9",
+      "standardized_at": "2026-03-18T21:49:56.026420+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 34177,
-        "output_tokens": 5512,
-        "total_tokens": 39689,
-        "cost_usd": 0.019568
+        "input_tokens": 15882,
+        "output_tokens": 2673,
+        "total_tokens": 18555,
+        "cost_usd": 0.009317
       },
       "_rag_triangle": {
         "type": "gross",
@@ -418,13 +420,26 @@
       }
     }
   },
-  "total_cost_usd": 0.026223,
-  "total_tokens": 60511,
+  "total_cost_usd": 0.013796,
+  "total_tokens": 31479,
   "validation": {
-    "passed": true,
-    "total_discrepancies": 10,
+    "passed": false,
+    "total_discrepancies": 12,
     "within_tolerance": 10,
-    "hard_failures": 0,
-    "hard_failure_details": []
+    "hard_failures": 2,
+    "hard_failure_details": [
+      {
+        "field": "opening_reserves_gbp_m",
+        "type": "value_mismatch",
+        "gemini-2.5-flash": 441.4,
+        "gpt-5-mini": null
+      },
+      {
+        "field": "prior_year_development_pct",
+        "type": "value_mismatch",
+        "gemini-2.5-flash": 2.74,
+        "gpt-5-mini": null
+      }
+    ]
   }
 }

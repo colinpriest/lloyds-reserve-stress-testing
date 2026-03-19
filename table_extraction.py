@@ -1691,6 +1691,123 @@ def _parse_nutrient_provisions(grid: list[list[str]], report_year: int):
     return None
 
 
+def _parse_balance_sheet_claims_outstanding(grid: list[list[str]], report_year: int) -> Optional[float]:
+    """Extract gross claims outstanding from the balance sheet LIABILITIES section.
+
+    Looks for "Claims outstanding" under "Technical provisions" in the liabilities
+    section and returns the PRIOR YEAR comparative column value in millions.
+
+    This is the primary deterministic source for opening_reserves_gbp_m, since the
+    prior year balance sheet figure equals the opening position for the current year.
+
+    Returns the opening gross claims outstanding in millions, or None.
+    """
+    flat = _grid_text_lower(grid)
+
+    # Must be a balance sheet with technical provisions
+    if "technical provision" not in flat:
+        return None
+
+    # Must have "claims outstanding" as a ROW label (not just a column header
+    # in a provisions movement table)
+    has_claims_row = False
+    for row in grid:
+        if row and "claims outstanding" in row[0].lower():
+            has_claims_row = True
+            break
+    if not has_claims_row:
+        return None
+
+    # Skip assets-side tables (reinsurers' share)
+    if "reinsurer" in flat:
+        return None
+
+    # Detect units from header rows
+    # Common patterns: £'000, $'000, £000, $000, '000, 000s, thousands, £m, $m
+    in_thousands = False
+    in_millions = False
+    for row in grid[:4]:
+        row_text = " ".join(row).lower()
+        if any(kw in row_text for kw in ("'000", "\u2019000", "000s", "thousand",
+                                          "£000", "$000", "\u00a3000")):
+            in_thousands = True
+            break
+        if any(kw in row_text for kw in ("£m", "$m", "million")):
+            in_millions = True
+            break
+
+    # Identify the prior year column and notes column from header
+    prior_year_col = None
+    notes_col = None
+    for row in grid[:4]:
+        for i, val in enumerate(row):
+            v = str(val).lower().strip()
+            if v in ("notes", "note"):
+                notes_col = i
+            if str(report_year - 1) in v and prior_year_col is None:
+                prior_year_col = i
+        if prior_year_col is not None:
+            break
+
+    def _extract_prior_year_value(row: list[str]) -> Optional[float]:
+        """Extract the prior year numeric value from a row."""
+        if prior_year_col is not None and prior_year_col < len(row):
+            val = _clean_cell(row[prior_year_col])
+            if isinstance(val, (int, float)):
+                return val
+        # Fallback: collect all numeric values, skip notes column, take last
+        numerics = []
+        for i, cell in enumerate(row):
+            if i == 0:
+                continue  # label column
+            if i == notes_col:
+                continue
+            val = _clean_cell(cell)
+            if isinstance(val, (int, float)):
+                numerics.append(val)
+        # Prior year is the last numeric column in the row
+        if len(numerics) >= 2:
+            return numerics[-1]
+        return None
+
+    def _to_millions(val: float) -> float:
+        """Convert raw value to millions based on detected units."""
+        if in_thousands:
+            return round(val / 1_000, 3)
+        if in_millions:
+            return round(val, 3)
+        # No unit detected — infer from magnitude.  Claims outstanding values
+        # >50,000 are almost certainly in thousands (no syndicate has >£50bn
+        # reserves).  Values 50–50,000 are ambiguous but likely already in
+        # millions for most syndicates.
+        if abs(val) > 50_000:
+            return round(val / 1_000, 3)
+        return round(val, 3)
+
+    # Walk through rows looking for "Claims outstanding" in the liabilities section
+    for j, row in enumerate(grid):
+        label = row[0].lower().strip() if row else ""
+        if "claims outstanding" not in label:
+            continue
+
+        # Pattern A (181/186 syndicates): values directly on the row
+        val = _extract_prior_year_value(row)
+        if val is not None and val > 0:
+            return _to_millions(val)
+
+        # Pattern B (e.g. syndicate 4242): "Claims outstanding" is a sub-header,
+        # next row has "Gross amount" with the values
+        if j + 1 < len(grid):
+            next_row = grid[j + 1]
+            next_label = next_row[0].lower().strip() if next_row else ""
+            if "gross" in next_label:
+                val = _extract_prior_year_value(next_row)
+                if val is not None and val > 0:
+                    return _to_millions(val)
+
+    return None
+
+
 def _parse_opening_claims_outstanding(grid: list[list[str]], report_year: int) -> Optional[float]:
     """Extract opening gross claims outstanding from a provisions movement table.
 
@@ -1882,6 +1999,12 @@ def _extract_nutrient(pdf_path: Path, report_year: int, cache_dir: Path) -> Extr
                 t in cats for t in ("provisions", "balance_sheet")
             ):
                 oc = _parse_opening_claims_outstanding(grid, report_year)
+                if oc is not None:
+                    opening_claims = oc
+
+            # Extract opening claims from balance sheet liabilities section
+            if opening_claims is None and "balance_sheet" in cats:
+                oc = _parse_balance_sheet_claims_outstanding(grid, report_year)
                 if oc is not None:
                     opening_claims = oc
 
@@ -2134,6 +2257,12 @@ def _classify_table_content(grid: list[list[str]]) -> set[str]:
         "underlying pure year",
     ]
     has_dev_periods = any(p in flat for p in dev_patterns)
+    # Edge case: syndicate 3902 uses bare "1 year", "2 years", "3 years" as
+    # dev-period labels (no "later" suffix) with "Gross claims" / "Net claims"
+    # as the table heading instead of a standard triangle title.
+    if not has_dev_periods and ("gross claims" in flat or "net claims" in flat):
+        if re.search(r'\b[1-9]\s+years?\b', flat):
+            has_dev_periods = True
     has_triangle_title = any(kw in flat for kw in triangle_title_kw)
 
     # Detect transposed format: "Development Year 1 2 3 ..." with "Year of Account"
@@ -2263,6 +2392,13 @@ def _extract_azure(pdf_path: Path, report_year: int, cache_dir: Path,
                 grid = entry["grid"]
                 orig_page = entry["orig_page"]
                 cats = set(entry["categories"])
+                # Re-apply content classification to pick up new rules
+                # (e.g. bare "N year(s)" dev-period labels for syndicate 3902)
+                content_cats = _classify_table_content(grid)
+                cats = cats | content_cats
+                if "_not_triangle" in content_cats:
+                    cats.discard("claims_triangle")
+                    cats.discard("_not_triangle")
                 all_grids.append((grid, orig_page, cats))
 
     if not cache_valid:
@@ -2380,6 +2516,12 @@ def _extract_azure(pdf_path: Path, report_year: int, cache_dir: Path,
             t in cats for t in ("provisions", "balance_sheet")
         ):
             oc = _parse_opening_claims_outstanding(grid, report_year)
+            if oc is not None:
+                opening_claims = oc
+
+        # Extract opening claims from balance sheet liabilities section
+        if opening_claims is None and "balance_sheet" in cats:
+            oc = _parse_balance_sheet_claims_outstanding(grid, report_year)
             if oc is not None:
                 opening_claims = oc
 

@@ -68,7 +68,10 @@ PDF input
 |   _parse_nutrient_provisions()                 |
 |     Prior year claims movement                 |
 |   _parse_opening_claims_outstanding()          |
-|     Opening gross claims outstanding           |
+|     Opening gross claims from provisions note  |
+|   _parse_balance_sheet_claims_outstanding()    |
+|     Opening gross claims from balance sheet    |
+|     liabilities (fallback if provisions empty) |
 +-----------------------------------------------+
   |
   v
@@ -122,7 +125,8 @@ PDF input
 |   verify_triangles() resolves disagreements    |
 |   RAG triangle PYD overrides LLM values        |
 |     (except loss ratio: fallback only)         |
-|   RAG provisions opening resolves reserves     |
+|   RAG balance sheet opening overrides reserves |
+|     (proactive: both models, always)           |
 |   Net-of-reinsurance PYD fallback if null      |
 |   Zero-opening override (PYD=0 if opening=0)  |
 |   Direction forced from resolved PYD sign      |
@@ -972,14 +976,15 @@ The regulatory segmental analysis on page 25 has a single row:
 But the page text contains "segmental analysis", so the
 threshold drops to 1 and the single-LOB breakdown is accepted.
 
-### 7.8  Provisions grid parsing
+### 7.8  Provisions and balance sheet grid parsing
 
 **Functions**: `_parse_nutrient_provisions(grid, report_year)`,
-`_parse_opening_claims_outstanding(grid, report_year)`
+`_parse_opening_claims_outstanding(grid, report_year)`,
+`_parse_balance_sheet_claims_outstanding(grid, report_year)`
 (`table_extraction.py`)
 
 Tables tagged as `provisions` or `balance_sheet` are parsed for
-two pieces of data:
+three pieces of data:
 
 #### 7.8.1  Prior year claims movement
 
@@ -994,7 +999,7 @@ are not found.
 Values exceeding 10,000 in absolute terms are assumed to be in
 thousands and divided by 1,000 to convert to millions.
 
-#### 7.8.2  Opening gross claims outstanding
+#### 7.8.2  Opening gross claims outstanding (provisions note)
 
 `_parse_opening_claims_outstanding()` extracts the gross claims
 outstanding at the start of the reporting year from provisions
@@ -1035,11 +1040,84 @@ from total technical provisions, GPT: 23.463m from member's
 balances).  The RAG-extracted `0.017m` is the correct gross
 claims outstanding at 1 January 2016.
 
+#### 7.8.3  Opening gross claims outstanding (balance sheet)
+
+`_parse_balance_sheet_claims_outstanding()` is a fallback that
+extracts gross claims outstanding from the **Statement of
+Financial Position** (balance sheet) when the provisions note
+parser (7.8.2) returns nothing.
+
+**Detection**: the function requires:
+
+- `"technical provision"` in the grid text (identifies the
+  liabilities section)
+- `"claims outstanding"` as a **row label** (column 0) -- this
+  distinguishes it from provisions movement tables where "Claims
+  outstanding" appears as a column header
+- Absence of `"reinsurer"` in the grid text -- this rejects the
+  ASSETS-side table (reinsurers' share of claims outstanding)
+
+**Two table patterns** are handled, covering 186/186 observed
+balance sheet tables across all syndicates:
+
+| Pattern | Prevalence | Layout |
+|---------|------------|--------|
+| **A: values on row** | 181/186 syndicates | `Claims outstanding  15  327,771  314,395` |
+| **B: sub-header + gross** | 2/186 syndicates (4242) | `Claims outstanding` (header) then `Gross amount  14  30,740  12,121` |
+| **C: header only** | 3/186 syndicates | `Claims outstanding` as column header in provisions tables (skipped) |
+
+**Prior year column detection**:
+
+1. Scan header rows (0--3) for a cell containing
+   `str(report_year - 1)`.  If found, use that column index.
+2. If no year match, identify the `"Notes"` column and collect
+   all numeric values excluding the label (column 0) and notes
+   column.  The last numeric value is taken as the prior year
+   comparative.
+
+**Unit detection**: checks header rows for:
+
+- Thousands: `'000`, `\u2019000`, `000s`, `thousand`, `£000`,
+  `$000` → divide by 1,000
+- Millions: `£m`, `$m`, `million` → no conversion
+- Neither detected: values > 50,000 are assumed thousands (no
+  syndicate has >£50bn reserves); values ≤ 50,000 assumed
+  already in millions
+
+**Example**: syndicate 4242/2016 has a Statement of Financial
+Position with separate ASSETS and LIABILITIES tables.  The
+LIABILITIES table (Azure Table 3) contains:
+
+```
+MEMBERS' BALANCE AND LIABILITIES
+  Technical provisions
+    Claims outstanding
+      Gross amount    14    30,740    12,121
+```
+
+The table is in `$'000`.  The prior year column (2015) value is
+12,121 → `$12.121m`.  Both LLMs originally returned wrong
+values: Gemini 12.121 (correct), GPT 78.049 (total technical
+provisions including unearned premiums 65,928 + claims 12,121).
+The ASSETS-side table showing `Claims outstanding: 911` is the
+reinsurers' share and is correctly rejected by the
+`"reinsurer"` filter.
+
 **Integration**: the extracted value is stored as
 `ProvisionsData.opening_gross_claims_outstanding` and included
 in the `_adobe_provisions` metadata on both LLM result dicts.
-It is used downstream for auto-resolution of
-`opening_reserves_gbp_m` hard failures (section 10.6).
+
+**Priority chain**: the pipeline tries opening claims extraction
+in this order:
+
+1. `_parse_opening_claims_outstanding()` on provisions/balance
+   sheet tagged tables (provisions movement note)
+2. `_parse_balance_sheet_claims_outstanding()` on balance sheet
+   tagged tables (Statement of Financial Position liabilities)
+3. Reserves movement note opening (RITC syndicates)
+
+The first non-null result is used.  Downstream, the RAG value
+is applied proactively to both LLMs (section 10.6).
 
 ---
 
@@ -1718,47 +1796,94 @@ comparison.  That auto-resolution remains as a safety net for
 cases where PYD is null on both models, but the upstream
 direction-forcing step handles the common case.
 
-### 10.6  Opening reserves auto-resolution from RAG provisions
+### 10.6  Opening reserves from RAG provisions / balance sheet
 
-**Function**: `resolve_computed_fields()` (`test_gemini.py`)
+The pipeline applies RAG-extracted opening reserves at **two
+stages**: proactively before cross-validation, and as a fallback
+during disagreement resolution.
 
-When the two LLMs disagree on `opening_reserves_gbp_m` beyond
-the 0.5% tolerance (a hard failure), the pipeline checks whether
-the RAG provisions table extracted an
-`opening_gross_claims_outstanding` value (section 7.8.2).
+#### 10.6.1  Proactive RAG override (both models)
 
-If available, the RAG value **overrides both models**:
+After LLM extraction completes, the pipeline checks whether
+`_adobe_provisions` contains an `opening_gross_claims_outstanding`
+value (from sections 7.8.2 or 7.8.3).
+
+If available, the RAG value **overrides both models regardless
+of whether they agree**:
 
 1. Both models' `opening_reserves_gbp_m` are set to the RAG
    value.
 2. `prior_year_development_pct` is recomputed using the
    corrected opening reserves.
-3. The hard failure is reclassified as auto-resolved.
+3. If the override differs from the LLM value by >= 0.5m, a
+   `[RAG OVERRIDE]` note is appended to `data_quality_notes`.
 
-**Rationale**: LLMs frequently confuse opening reserves with
-other balance sheet figures:
+This is analogous to the RAG triangle PYD override (section 9)
+-- the deterministic extraction is authoritative over LLMs.
+
+**Log messages**:
+
+```
+  [gemini-2.5-flash] Opening reserves confirmed by RAG balance sheet: 12.121 -> 12.121m
+  [gpt-5-mini] Opening reserves overridden by RAG balance sheet: 78.049 -> 12.121m
+```
+
+#### 10.6.2  Disagreement fallback resolution
+
+**Function**: `resolve_computed_fields()` (`test_gemini.py`)
+
+If the proactive override did not fire (no RAG value was
+available at that stage) and the two LLMs disagree on
+`opening_reserves_gbp_m` beyond the 5% tolerance (a hard
+failure), the pipeline re-checks `opening_gross_claims_outstanding`
+from the provisions dict.
+
+If available, the RAG value overrides both models and the hard
+failure is reclassified as auto-resolved.  This path handles
+cases where the RAG value was injected late (e.g. from a
+reserves movement note for RITC syndicates).
+
+#### 10.6.3  Rationale and common LLM errors
+
+LLMs frequently confuse opening reserves with other balance
+sheet figures:
 
 | Wrong source | What it actually is |
 |--------------|---------------------|
 | Member's balances | Equity, not claims reserves |
 | Total technical provisions | Includes unearned premiums |
 | Net claims outstanding | After reinsurance deduction |
-| Reinsurers' share | Only the ceded portion |
+| Reinsurers' share (assets) | Only the ceded portion |
 
-The RAG provisions table value comes from the "Balance at
-1 January" row within the "Claims outstanding" section of the
-Technical Provisions movement note -- the definitive source for
-gross opening claims reserves.
+The RAG value comes from one of two deterministic sources:
 
-**Example**: syndicate 2357/2016.  Gemini extracted 7.806m
-(total technical provisions = unearned premiums 7,789 + claims
-outstanding 17, in $'000).  GPT extracted 23.463m (member's
-balances).  The correct value is $0.017m (claims outstanding
-at 1 January = 17 in $'000).
+1. **Provisions movement note** (section 7.8.2): the "Balance at
+   1 January" row within the "Claims outstanding" section.
+2. **Balance sheet liabilities** (section 7.8.3): the prior year
+   column of "Claims outstanding -- Gross amount" under
+   "Technical provisions" in the Statement of Financial Position.
+
+Both are definitive sources for gross opening claims reserves.
+
+**Example 1** (provisions note): syndicate 2357/2016.  Gemini
+extracted 7.806m (total technical provisions = unearned premiums
+7,789 + claims outstanding 17, in $'000).  GPT extracted 23.463m
+(member's balances).  RAG provisions note gives $0.017m.
 
 ```
 Auto-resolved opening_reserves_gbp_m using RAG provisions table: 0.017m
   gemini-2.5-flash: 7.806, gpt-5-mini: 23.463, RAG: 0.017
+```
+
+**Example 2** (balance sheet): syndicate 4242/2016.  Gemini
+extracted 12.121m (correct).  GPT extracted 78.049m (total
+technical provisions including unearned premiums).  RAG balance
+sheet gives $12.121m from the LIABILITIES-side "Claims
+outstanding -- Gross amount" prior year column.
+
+```
+  [gemini-2.5-flash] Opening reserves confirmed by RAG balance sheet: 12.121 -> 12.121m
+  [gpt-5-mini] Opening reserves overridden by RAG balance sheet: 78.049 -> 12.121m
 ```
 
 ---
@@ -1786,6 +1911,13 @@ the RAG extraction step.  If the triangle contradicts the cache
 cache is corrected and extraction proceeds normally.  This
 prevents incorrect Perplexity lookups from permanently blocking
 reports that have valid triangles.
+
+**Manual overrides**: syndicates listed in the `_manual_overrides`
+array in the cache file are protected from all automatic updates.
+Neither Perplexity lookups, triangle backfill, nor cache correction
+will overwrite their inception year.  Use this for syndicates where
+the automatically-determined inception year is known to be wrong
+and has been manually corrected.  See "Cache file format" below.
 
 **Inception year lookup** (in priority order):
 
@@ -1820,7 +1952,8 @@ reports that have valid triangles.
 3. **Triangle detection** -- if the RAG-lite extraction later finds
    a triangle with <= 2 UW years, the pipeline updates the cache
    with `inception_year = report_year - 1` as a conservative
-   estimate (for syndicates not already in the cache).
+   estimate (for syndicates not already in the cache and not in
+   `_manual_overrides`).
 
 **When the inception year is unknown** and Perplexity is
 unavailable (no API key, network error), the check is skipped and
@@ -1835,12 +1968,27 @@ the report proceeds to normal extraction.
     "source": "Auto-populated from triangles + Perplexity lookups",
     "last_updated": "2026-03-17"
   },
+  "_manual_overrides": [1110, 2001],
   "1084": 2011,
+  "1110": 2012,
   "1322": 2022,
   "1609": 2021,
-  "1991": 2013
+  "1991": 2013,
+  "2001": 1993
 }
 ```
+
+The `_manual_overrides` array lists syndicate numbers whose inception
+years have been manually verified and must not be changed by any
+automated process.  To protect a syndicate:
+
+1. Correct its inception year value in the JSON file
+2. Add its syndicate number to the `_manual_overrides` array
+
+All automated update paths (`_load_inception_years()` backfill,
+`get_inception_year()` Perplexity lookup, triangle correction in
+`process_single_report()`, and triangle learning) check this list
+before writing.
 
 ### 11.2  First-year syndicate (triangle-based detection)
 
@@ -1852,11 +2000,20 @@ syndicates not yet in the inception cache.
 **Cache correction**: if the inception cache flagged the report
 for skipping but the RAG extraction finds a triangle with usable
 UW years, the cache is corrected to `min(underwriting_years)` and
-extraction proceeds normally.  The correction is logged:
+extraction proceeds normally.  Syndicates in `_manual_overrides`
+are never corrected -- extraction still proceeds (the skip flag
+is cleared) but the cached inception year is preserved.
 
+Correction log (normal syndicate):
 ```
 [Inception] Cache said inception=2018 (would skip),
 but triangle shows UW years back to 2011 -- correcting cache
+```
+
+Correction log (manual override syndicate):
+```
+[Inception] Triangle shows UW years back to 2011,
+but syndicate 1110 has manual override (2012) -- keeping manual value, not skipping
 ```
 
 The check uses **usable years**, not raw UW year count:
@@ -2064,7 +2221,7 @@ than a development column.
 
 | Cache location                                 | Content                        | Invalidation                            |
 |------------------------------------------------|--------------------------------|-----------------------------------------|
-| `pdf_extraction/syndicate_inception_years.json`| First UW year per syndicate    | Edit file directly; auto-updated by Perplexity lookups |
+| `pdf_extraction/syndicate_inception_years.json`| First UW year per syndicate    | Edit file directly; auto-updated by Perplexity lookups. Add syndicate to `_manual_overrides` to prevent auto-updates |
 | `pdf_extraction/azure_output/`                 | Azure API table grids          | `_CACHE_VERSION`, page set, batch mode  |
 | `pdf_extraction/nutrient_output/`              | Nutrient API responses         | `_CACHE_VERSION` bump                   |
 | `pdf_extraction/adobe_output/`                 | Adobe PDF Extract results      | `_CACHE_VERSION` bump                   |
@@ -2927,3 +3084,9 @@ cached inception year.  If the triangle contradicts the cache:
 This ensures the triangle (ground truth) always takes precedence
 over the inception cache (heuristic).  See section 11.1 for
 the updated decision rule.
+
+**If automatic correction keeps reverting a manually-set value**:
+add the syndicate number to the `_manual_overrides` array in
+`syndicate_inception_years.json`.  This protects the entry from
+all automated updates (Perplexity, triangle backfill, cache
+correction).  See section 11.1 "Manual overrides".
