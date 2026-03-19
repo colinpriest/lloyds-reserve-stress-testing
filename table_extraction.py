@@ -442,6 +442,47 @@ def _extract_pages_to_pdf(
     dst.save(tmp_path)
     dst.close()
     src.close()
+
+    # If the slim PDF is too large (e.g. scanned pages with huge embedded
+    # images), re-render every page as a compressed JPEG image at 150 DPI.
+    # This keeps the file under the Gemini API size limit (~20 MB).
+    MAX_SLIM_PDF_BYTES = 20 * 1024 * 1024  # 20 MB
+    if os.path.getsize(tmp_path) > MAX_SLIM_PDF_BYTES:
+        logger.info(
+            f"  Slim PDF too large ({os.path.getsize(tmp_path) / 1024 / 1024:.1f} MB), "
+            f"compressing pages as JPEG..."
+        )
+        from PIL import Image
+        from io import BytesIO
+        big = fitz.open(tmp_path)
+        compressed = fitz.open()
+        for page in big:
+            pix = page.get_pixmap(dpi=150)
+            img = Image.open(BytesIO(pix.tobytes("png")))
+            buf = BytesIO()
+            img.save(buf, format="JPEG", quality=75)
+            buf.seek(0)
+            w_pt = pix.width * 72 / 150
+            h_pt = pix.height * 72 / 150
+            new_page = compressed.new_page(width=w_pt, height=h_pt)
+            new_page.insert_image(
+                fitz.Rect(0, 0, w_pt, h_pt),
+                stream=buf.read(),
+            )
+        # Save to a second temp file — cannot overwrite tmp_path while
+        # big still holds it open (Windows file locking).
+        fd2, tmp2 = tempfile.mkstemp(suffix=".pdf", dir=str(output_path.parent))
+        os.close(fd2)
+        compressed.save(tmp2)
+        compressed.close()
+        big.close()
+        # Replace the original oversized temp with the compressed one
+        Path(tmp_path).unlink(missing_ok=True)
+        Path(tmp2).rename(tmp_path)
+        logger.info(
+            f"  Compressed slim PDF: {os.path.getsize(tmp_path) / 1024 / 1024:.1f} MB"
+        )
+
     try:
         Path(tmp_path).replace(output_path)
     except OSError:
@@ -966,6 +1007,35 @@ def _parse_triangle_from_text(text: str, report_year: int):
     return triangle, details
 
 
+def _extract_row_values(row, uw_col_indices, ghost_cols):
+    """Extract values from a grid row, checking ghost columns when primary is empty.
+
+    Args:
+        row: grid row (list of cell strings)
+        uw_col_indices: list of column indices for each UW year
+        ghost_cols: dict {uw_year_index: ghost_col_index} for columns with
+                    data split across primary and adjacent columns
+    Returns:
+        list of numeric values (or None) for each UW year
+    """
+    values = []
+    for yi, col_idx in enumerate(uw_col_indices):
+        val = None
+        if col_idx < len(row):
+            v = _clean_cell_triangle(row[col_idx])
+            if isinstance(v, (int, float)):
+                val = v
+        # If primary column is empty and this UW year has a ghost column, try it
+        if val is None and yi in ghost_cols:
+            g_col = ghost_cols[yi]
+            if g_col < len(row):
+                v = _clean_cell_triangle(row[g_col])
+                if isinstance(v, (int, float)):
+                    val = v
+        values.append(val)
+    return values
+
+
 # ── Nutrient: parse triangle ─────────────────────────────────────────────
 
 def _parse_nutrient_triangle(grid: list[list[str]], report_year: int):
@@ -979,17 +1049,39 @@ def _parse_nutrient_triangle(grid: list[list[str]], report_year: int):
     # Find underwriting year columns from header rows (check first 3 rows)
     uw_years = []
     uw_col_indices = []
+    # Track cells that contain multiple years (e.g. "2022 2023" merged into
+    # one Azure grid cell).  These need special handling during data extraction:
+    # the cell's value applies to the FIRST year, and the next grid column
+    # contains the SECOND year's value.
+    _multi_year_cols = {}  # {col_idx: [year1, year2, ...]}
     for row_idx in range(min(3, len(grid))):
         for col_idx, val in enumerate(grid[row_idx]):
-            m = re.search(r'\b(19|20)\d{2}\b', val)
-            if m:
-                year = int(m.group())
-                if 1990 <= year <= 2030 and "prior" not in val.lower() and "&" not in val:
+            matches = re.findall(r'\b((?:19|20)\d{2})\b', val)
+            if not matches:
+                continue
+            if "prior" in val.lower() or "&" in val:
+                continue
+            years_in_cell = []
+            for m in matches:
+                year = int(m)
+                if 1990 <= year <= 2030:
                     # Skip bare year labels in column 0 — these are row labels
                     # (e.g. UW year row "2011" in a transposed triangle, or
                     # report year "2021" as table title), not column headers
                     if col_idx == 0 and val.strip() == str(year):
                         continue
+                    years_in_cell.append(year)
+            if len(years_in_cell) > 1:
+                # Multiple years merged into one cell — assign to consecutive
+                # columns starting at col_idx.  The actual data for the 2nd+
+                # year will be in the next grid column(s).
+                _multi_year_cols[col_idx] = years_in_cell
+                for offset, year in enumerate(years_in_cell):
+                    if year not in uw_years:
+                        uw_years.append(year)
+                        uw_col_indices.append(col_idx + offset)
+            else:
+                for year in years_in_cell:
                     if year not in uw_years:
                         uw_years.append(year)
                         uw_col_indices.append(col_idx)
@@ -1002,6 +1094,39 @@ def _parse_nutrient_triangle(grid: list[list[str]], report_year: int):
     pairs = sorted(zip(uw_years, uw_col_indices))
     uw_years = [p[0] for p in pairs]
     uw_col_indices = [p[1] for p in pairs]
+
+    # ── Ghost-column detection ───────────────────────────────────────
+    # Azure sometimes inserts an extra empty column between two UW year
+    # headers (e.g. "2015 $000", "", "2016 $000").  When that happens,
+    # data for the first year may appear at EITHER the mapped col OR
+    # col+1 (the ghost column), varying row by row.  We record which
+    # UW years have a ghost column so that the data extraction loop can
+    # check both columns per row and use whichever has data.
+    _uw_col_set = set(uw_col_indices)
+    _ghost_cols = {}  # {uw_year_index: ghost_col_index}
+    for yi, col_idx in enumerate(uw_col_indices):
+        ghost_col = col_idx + 1
+        if ghost_col in _uw_col_set:
+            continue  # adjacent column already belongs to another UW year
+        # Check if any data rows have values at ghost_col
+        has_ghost_data = False
+        for row in grid:
+            if len(row) <= ghost_col:
+                continue
+            v_ghost = _clean_cell_triangle(row[ghost_col]) if ghost_col < len(row) else None
+            if isinstance(v_ghost, (int, float)):
+                has_ghost_data = True
+                break
+        if has_ghost_data:
+            # Verify the ghost column header is empty (confirming it's a phantom)
+            ghost_header_empty = all(
+                grid[r][ghost_col].strip() == "" if r < len(grid) and ghost_col < len(grid[r]) else True
+                for r in range(min(3, len(grid)))
+            )
+            if ghost_header_empty:
+                _ghost_cols[yi] = ghost_col
+                logger.info(f"Ghost column detected: UW year {uw_years[yi]} has data at "
+                           f"both col {col_idx} and col {ghost_col}")
 
     # Max UW year must be recent (within 5 years of report year) but need not
     # equal it — run-off syndicates stop writing new business before the report date.
@@ -1050,6 +1175,9 @@ def _parse_nutrient_triangle(grid: list[list[str]], report_year: int):
         "estimate of cumulative net",  # start of net section in combined gross+net tables
         "total ultimate",    # "Total Ultimate losses" summary row before paid/net section
         "less cumulative",   # "Less cumulative paid claims" — starts paid section
+        "cumulative",        # bare "Cumulative" (Azure splits "Cumulative payments" across rows)
+        "payment",           # bare "payments" row (continuation of split "Cumulative payments")
+        "balance to pay",    # "Estimated balance to pay" section below triangle
     ]
 
     dev_rows = []
@@ -1075,40 +1203,37 @@ def _parse_nutrient_triangle(grid: list[list[str]], report_year: int):
             continue
         collecting = True
 
-        values = []
-        for col_idx in uw_col_indices:
-            if col_idx < len(row):
-                val = _clean_cell_triangle(row[col_idx])
-                values.append(val if isinstance(val, (int, float)) else None)
-            else:
-                values.append(None)
+        values = _extract_row_values(row, uw_col_indices, _ghost_cols)
 
         # Handle split-label rows: Azure/OCR sometimes splits a multi-line
-        # cell label across two grid rows (e.g. "at end of underwriting" on
-        # one row, "year" with the actual values on the next).  When the
-        # matched dev-period row has all-empty values, peek at the next row
-        # and use its values if it looks like a continuation.
-        if all(v is None for v in values) and row_i + 1 < len(grid):
-            next_row = grid[row_i + 1]
-            next_label = next_row[0].lower().strip() if next_row else ""
-            # Next row is a continuation if it:
-            #  - doesn't match any dev pattern on its own
-            #  - isn't a section break or skip label
-            #  - has at least one non-empty value in the UW year columns
-            next_is_dev = any(re.search(p, next_label) for p in dev_period_patterns)
-            next_is_break = any(s in next_label for s in section_break_patterns)
-            next_is_skip = any(s in next_label for s in skip_labels)
-            if not next_is_dev and not next_is_break and not next_is_skip:
-                next_values = []
-                for col_idx in uw_col_indices:
-                    if col_idx < len(next_row):
-                        val = _clean_cell_triangle(next_row[col_idx])
-                        next_values.append(val if isinstance(val, (int, float)) else None)
-                    else:
-                        next_values.append(None)
+        # cell label across two or three grid rows (e.g. "At end of" /
+        # "underwriting" / "year one" with values on the last row).  When
+        # the matched dev-period row has all-empty values, scan up to 3
+        # subsequent rows for continuation data.
+        if all(v is None for v in values):
+            for lookahead in range(1, 4):  # check next 1-3 rows
+                if row_i + lookahead >= len(grid):
+                    break
+                next_row = grid[row_i + lookahead]
+                next_label = next_row[0].lower().strip() if next_row else ""
+                # Stop scanning if we hit a section break or skip label
+                next_is_break = any(s in next_label for s in section_break_patterns)
+                next_is_skip = any(s in next_label for s in skip_labels)
+                if next_is_break or next_is_skip:
+                    break
+                next_values = _extract_row_values(next_row, uw_col_indices, _ghost_cols)
                 if any(v is not None for v in next_values):
                     values = next_values
-                    consumed_as_continuation.add(row_i + 1)
+                    # Mark all intermediate rows as consumed
+                    for skip_i in range(1, lookahead + 1):
+                        consumed_as_continuation.add(row_i + skip_i)
+                    break
+                # If this row matches a dev pattern on its own but has no
+                # data, it's a genuine new dev period — stop scanning.
+                # (Rows with data were already handled above.)
+                next_is_dev = any(re.search(p, next_label) for p in dev_period_patterns)
+                if next_is_dev:
+                    break
 
         dev_rows.append(values)
 
@@ -1163,11 +1288,13 @@ def _parse_transposed_triangle(grid: list[list[str]], report_year: int):
 
     # Detect transposed format: first header cell contains "Development Year"
     # or "Underlying Pure Year" (alt format with "X year(s) later" columns)
+    # or "Year of account" (Lloyd's YOA format with "One year later" columns)
     # and subsequent cells are integers 1,2,3... or "Total" or "X year(s) later"
     header = grid[0]
     header0_lower = header[0].lower().strip()
     has_dev_year_header = "development year" in header0_lower
     has_pure_year_header = "underlying pure year" in header0_lower or "underlying" in header0_lower
+    has_yoa_header = "year of account" in header0_lower
 
     dev_col_indices = []
     if has_dev_year_header:
@@ -1181,19 +1308,24 @@ def _parse_transposed_triangle(grid: list[list[str]], report_year: int):
 
         if len(dev_col_indices) < 2:
             return None, "not enough development period columns"
-    elif has_pure_year_header:
+    elif has_pure_year_header or has_yoa_header:
         # Alt format: columns are "Incurred at end of underwriting year",
         # "1 year later", "2 years later", ..., "Cumulative Payments"
+        # OR Lloyd's YOA format: "At the end of calendar year",
+        # "One year later", ..., "Cumulative payments", "Estimated balance to pay"
         for col_idx in range(1, len(header)):
             val = header[col_idx].strip().lower()
             if ("incurred" in val or "end of underwriting" in val
-                    or "year later" in val or "years later" in val):
+                    or "end of calendar" in val or "at the end" in val
+                    or "year later" in val or "years later" in val
+                    or "months later" in val):
                 dev_col_indices.append(col_idx)
-            elif "cumulative" in val or "total" in val:
-                break  # stop before Cumulative Payments / Total column
+            elif ("cumulative" in val or "total" in val
+                      or "estimated" in val or "balance" in val):
+                break  # stop before Cumulative Payments / Estimated balance columns
 
         if len(dev_col_indices) < 2:
-            return None, "not enough development period columns (pure year format)"
+            return None, "not enough development period columns (pure year/YOA format)"
     else:
         # Headerless format: check if rows have UW years as labels.
         # First count how many rows have a 4-digit year in column 0.
@@ -1652,6 +1784,7 @@ def _parse_nutrient_provisions(grid: list[list[str]], report_year: int):
 
     # Detect column layout from header
     gross_col = ri_col = net_col = None
+    claims_outstanding_col = None
     if grid:
         for i, val in enumerate(grid[0]):
             h = val.lower()
@@ -1661,10 +1794,24 @@ def _parse_nutrient_provisions(grid: list[list[str]], report_year: int):
                 ri_col = i
             elif "net" in h:
                 net_col = i
+            # Track "Claims outstanding" column separately — some tables
+            # have "Provision for unearned premiums | Claims outstanding | Total"
+            # layout where gross/RI/net are section headers (rows) rather than
+            # column headers.  In this layout, "Claims outstanding" is where
+            # the actual gross claims PYD lives.
+            if "claims outstanding" in h or ("claims" in h and "outstanding" in h):
+                claims_outstanding_col = i
 
     # Positional fallback
     if gross_col is None and len(grid[0]) >= 4:
-        gross_col, ri_col, net_col = 1, 2, 3
+        # If header has "Claims outstanding" as a column, use it for gross
+        # instead of the default positional col 1 (which may be unearned premiums).
+        if claims_outstanding_col is not None:
+            gross_col = claims_outstanding_col
+            # "Total" column (usually last) serves as net_col
+            net_col = len(grid[0]) - 1 if len(grid[0]) > claims_outstanding_col + 1 else None
+        else:
+            gross_col, ri_col, net_col = 1, 2, 3
 
     # Find "prior year" row
     for row in grid:
@@ -1824,11 +1971,12 @@ def _parse_opening_claims_outstanding(grid: list[list[str]], report_year: int) -
     if "balance" not in flat and "1 january" not in flat and "brought forward" not in flat:
         return None
 
-    # Detect units from header rows (£'000, $'000, thousands, etc.)
+    # Detect units from header rows (£'000, $'000, $000, £000, thousands, etc.)
     in_thousands = False
     for row in grid[:4]:
         row_text = " ".join(row).lower()
-        if "'000" in row_text or "000s" in row_text or "thousand" in row_text:
+        if any(kw in row_text for kw in ("'000", "\u2019000", "000s", "thousand",
+                                          "£000", "$000", "\u00a3000")):
             in_thousands = True
             break
 
@@ -1849,6 +1997,7 @@ def _parse_opening_claims_outstanding(grid: list[list[str]], report_year: int) -
     if gross_col is None:
         gross_col = 1
 
+    # --- Pattern A: "Claims outstanding" is a ROW label (section header) ---
     # Find the claims outstanding section, then the "Balance at 1 January" row
     in_claims_section = False
     for row in grid:
@@ -1876,7 +2025,53 @@ def _parse_opening_claims_outstanding(grid: list[list[str]], report_year: int) -
                 if isinstance(val, (int, float)):
                     if in_thousands:
                         val = round(val / 1_000, 3)
+                    elif abs(val) > 50_000:
+                        # Magnitude fallback: no syndicate has >£50bn
+                        # reserves, so values > 50,000 are in thousands
+                        val = round(val / 1_000, 3)
                     return val
+
+    # --- Pattern B: "Claims outstanding" is a COLUMN header ---
+    # Some syndicates (e.g. 780) present provisions movement as a columnar
+    # table where headers are:
+    #   ['31 December YYYY', 'Provision for unearned premiums', 'Claims outstanding', 'Total']
+    # and rows are:
+    #   ['Gross', '', '', '']
+    #   ['At 1 January YYYY', '109.3', '348.5', '457.8']
+    claims_col = None
+    for row in grid[:3]:
+        for i, val in enumerate(row):
+            if "claims outstanding" in val.lower() and "unearned" not in val.lower():
+                claims_col = i
+                break
+        if claims_col is not None:
+            break
+
+    if claims_col is not None:
+        # Find "At 1 January" or "Brought forward" in the Gross section
+        in_gross = False
+        for row in grid:
+            label = row[0].lower().strip() if row else ""
+            if "gross" == label or label.startswith("gross"):
+                in_gross = True
+                continue
+            # Stop at reinsurers' share or net section
+            if in_gross and any(
+                kw in label for kw in ("reinsurer", "net", "at 31 december")
+            ):
+                break
+            if in_gross and any(
+                kw in label for kw in ("at 1 january", "balance at 1 january",
+                                       "brought forward")
+            ):
+                if claims_col < len(row):
+                    val = _clean_cell(row[claims_col])
+                    if isinstance(val, (int, float)):
+                        if in_thousands:
+                            val = round(val / 1_000, 3)
+                        elif abs(val) > 50_000:
+                            val = round(val / 1_000, 3)
+                        return val
 
     return None
 
@@ -2004,8 +2199,12 @@ def _extract_nutrient(pdf_path: Path, report_year: int, cache_dir: Path) -> Extr
                 if oc is not None:
                     opening_claims = oc
 
-            # Extract opening claims from balance sheet liabilities section
-            if opening_claims is None and "balance_sheet" in cats:
+            # Extract opening claims from balance sheet liabilities section.
+            # Also try pl_account tables: scanned PDFs sometimes misclassify
+            # the balance sheet page as pl_account.
+            if opening_claims is None and any(
+                t in cats for t in ("balance_sheet", "pl_account")
+            ):
                 oc = _parse_balance_sheet_claims_outstanding(grid, report_year)
                 if oc is not None:
                     opening_claims = oc
@@ -2481,24 +2680,40 @@ def _extract_azure(pdf_path: Path, report_year: int, cache_dir: Path,
     # Step 3: Parse tables
     best_triangle = None
     best_triangle_details = None
+    best_triangle_score = -1
     best_lob = None
     best_lob_count = 0
     best_provisions = None
     opening_claims = None
 
+    def _triangle_completeness(tri: TriangleData) -> int:
+        """Count non-null values in the triangle — higher is better."""
+        count = 0
+        for row in tri.development_rows:
+            for v in row:
+                if v is not None:
+                    count += 1
+        return count
+
     for grid, orig_page, cats in all_grids:
-        if "claims_triangle" in cats and best_triangle is None:
+        if "claims_triangle" in cats:
             tri_result, details = _parse_nutrient_triangle(grid, report_year)
             if tri_result == "new_syndicate":
                 result.first_year_syndicate = True
                 result.triangle_details = details
             elif isinstance(tri_result, TriangleData):
                 n_years = len(tri_result.underwriting_years)
-                if (best_triangle is None
-                        or (tri_result.type == "gross" and best_triangle.type != "gross")
-                        or n_years > len(best_triangle.underwriting_years)):
+                completeness = _triangle_completeness(tri_result)
+                # Score: prefer gross, then more UW years, then more complete
+                score = (
+                    (1000 if tri_result.type == "gross" else 0)
+                    + n_years * 10
+                    + completeness
+                )
+                if score > best_triangle_score:
                     best_triangle = tri_result
                     best_triangle_details = details
+                    best_triangle_score = score
 
         if "premium_mix" in cats:
             pt = page_texts.get(orig_page, "")
@@ -2521,8 +2736,12 @@ def _extract_azure(pdf_path: Path, report_year: int, cache_dir: Path,
             if oc is not None:
                 opening_claims = oc
 
-        # Extract opening claims from balance sheet liabilities section
-        if opening_claims is None and "balance_sheet" in cats:
+        # Extract opening claims from balance sheet liabilities section.
+        # Also try pl_account tables: scanned PDFs sometimes misclassify
+        # the balance sheet page as pl_account.
+        if opening_claims is None and any(
+            t in cats for t in ("balance_sheet", "pl_account")
+        ):
             oc = _parse_balance_sheet_claims_outstanding(grid, report_year)
             if oc is not None:
                 opening_claims = oc

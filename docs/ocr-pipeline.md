@@ -60,13 +60,16 @@ PDF input
 |     section-break detection (paid claims),     |
 |     currency/unit/type inference               |
 |   Fallback: _parse_transposed_triangle()       |
-|     Grid parser for "Dev Year 1,2,3..." format |
+|     Grid parser for "Dev Year 1,2,3...",       |
+|     "Underlying Pure Year", and                |
+|     "Year of account" formats                  |
 |   Fallback: _parse_triangle_from_text()        |
 |     Text-based parser for columnar layouts     |
 |   Fallback: _parse_transposed_triangle_from_text() |
 |     Text parser for concatenated transposed    |
 |   _parse_nutrient_provisions()                 |
 |     Prior year claims movement                 |
+|     ("Claims outstanding" column detection)    |
 |   _parse_opening_claims_outstanding()          |
 |     Opening gross claims from provisions note  |
 |   _parse_balance_sheet_claims_outstanding()    |
@@ -100,7 +103,16 @@ PDF input
   |
   v
 +-----------------------------------------------+
-| Step 4b: Provisions PYD fallback               |
+| Step 4b: Triangle vs provisions cross-check    |
+|   If triangle PYD and provisions PYD disagree  |
+|   in sign: prefer provisions (measures actual  |
+|   balance-sheet reserve movement, not diagonal  |
+|   development which can include emergence)     |
++-----------------------------------------------+
+  |
+  v
++-----------------------------------------------+
+| Step 4c: Provisions PYD fallback               |
 |   If no triangle PYD found:                    |
 |     Use provisions movement note               |
 |     (gross prior year claims development)      |
@@ -109,7 +121,7 @@ PDF input
   |
   v
 +-----------------------------------------------+
-| Step 4c: Narrative PYD parsers                 |
+| Step 4d: Narrative PYD parsers                 |
 |   If still no PYD:                             |
 |     _extract_pyd_from_provisions_text()        |
 |     _parse_pyd_from_pl_narrative()             |
@@ -122,6 +134,8 @@ PDF input
 +-----------------------------------------------+
 | Step 5: Dual-LLM cross-validation             |
 |   Gemini + GPT extract independently           |
+|   _normalize_currency_fields() on each result  |
+|     (remap _usd_m/_eur_m → _gbp_m)            |
 |   verify_triangles() resolves disagreements    |
 |   RAG triangle PYD overrides LLM values        |
 |     (except loss ratio: fallback only)         |
@@ -500,6 +514,38 @@ a temp-file-then-rename pattern:
    filesystem).
 3. Fall back to delete-then-rename if `replace()` fails.
 4. Last resort: `shutil.copy2()` + delete temp.
+
+### 5.5  Oversized slim PDF compression
+
+Scanned PDFs (e.g. syndicate 5000/2014) contain full-page raster
+images as their page content.  When `_extract_pages_to_pdf()` copies
+10 such pages into the slim PDF, the result can be 100+ MB -- far
+larger than the original PDF (2.4 MB) because PyMuPDF's
+`insert_pdf()` preserves the raw embedded images without
+recompression.
+
+The Gemini Files API accepts the upload but `generate_content()`
+rejects the request with `400 INVALID_ARGUMENT` when the content
+exceeds its processing limit.
+
+**Fix**: after writing the slim PDF, check its size against a 20 MB
+threshold (`MAX_SLIM_PDF_BYTES`).  If exceeded, re-render every page
+as a compressed JPEG image:
+
+1. Open the oversized slim PDF with PyMuPDF.
+2. For each page, render at 150 DPI via `page.get_pixmap(dpi=150)`.
+3. Convert to PIL `Image` and save as JPEG at 75% quality.
+4. Create a new page in a fresh PDF and insert the JPEG image.
+5. Overwrite the temp file with the compressed version.
+
+This reduces the slim PDF from ~100 MB to ~2--5 MB while preserving
+sufficient image quality for LLM text extraction.  The compression
+is safe because these are already image-based pages -- no searchable
+text layer is lost.
+
+Discovered on syndicate 5000/2014 (29 scanned pages, 10 relevant)
+where the 102 MB slim PDF caused a Gemini `400 INVALID_ARGUMENT`
+error.
 
 ---
 
@@ -961,6 +1007,62 @@ Output (standard format, after stripping Cumulative Payments):
   ...
 ```
 
+### 7.6.4  Format D: "Year of account" header (Lloyd's YOA)
+
+**Cause**: many Lloyd's syndicates (e.g. syndicate 780) present
+their claims development triangle in a "Year of account" format
+where the first header cell is "Year of account" and subsequent
+column headers are development period labels:
+
+- "At the end of calendar year" (first development period)
+- "One year later", "Two years later", ... (subsequent periods)
+- "Cumulative payments" (summary column -- not a dev period)
+- "Estimated balance to pay" (summary column -- not a dev period)
+
+These tables are frequently presented in **landscape/rotated**
+orientation in the PDF.  Azure Document Intelligence successfully
+extracts the table grid from rotated pages, but the parser must
+correctly identify which columns are development periods and which
+are summary columns.
+
+**Detection**: the first header cell contains "year of account"
+(case-insensitive).  Subsequent cells are matched against the
+patterns `"end of calendar"`, `"at the end"`, `"year later"`,
+`"years later"`, and `"months later"`.  Columns matching
+`"cumulative"`, `"total"`, `"estimated"`, or `"balance"` are
+excluded.
+
+**Why this matters**: without this detection, the parser falls
+through to headerless mode (Format B), which includes all columns
+as development periods.  The "Cumulative payments" and "Estimated
+balance to pay" columns then become extra development rows after
+transposing, causing the triangle to have too many rows (e.g. 8
+rows for a 6-year span) and fail `compute_pyd_from_triangle()`'s
+row count validation.
+
+**Example** (syndicate 780/2016):
+
+```
+Input grid (Format D):
+  Year of account | At the end of calendar year | One year later | ... | Five years later | Cumulative payments | Estimated balance to pay
+  2010 & prior    | -       | -       | ... | -       | -         | 203.2
+  2011            | 134.2   | 224.3   | ... | 236.9   | (208.9)   | 28.0
+  2012            | 44.8    | 94.9    | ... | -       | (93.9)    | 15.1
+  ...
+  2016            | 29.2    | -       | ... | -       | (18.4)    | 10.8
+
+Output (after excluding Cumulative payments / Estimated balance, transposing):
+  UW years: [2011, 2012, 2013, 2014, 2015, 2016]
+  Row 0: [134.2, 44.8, 37.9, 29.5, 21.0, 29.2]  (at end of cal year)
+  Row 1: [224.3, 94.9, 78.1, 84.2, 113.2, None]  (one year later)
+  ...
+  Row 5: [236.9, None, None, None, None, None]    (five years later)
+```
+
+**Note**: the "2010 & prior" row is skipped because it does not
+match the `r'^(19|20)\d{2}$'` year pattern.  The "Total gross
+claims outstanding" row is also excluded.
+
 ### 7.7  LOB grid parsing (monoline threshold)
 
 **Function**: `_parse_nutrient_lob(grid, report_year, page_text)`
@@ -1013,6 +1115,25 @@ from header keywords (`"gross"`, `"reinsur"`/`"share"`/`"ceded"`,
 `"net"`), with a positional fallback to columns 1/2/3 if headers
 are not found.
 
+**"Claims outstanding" column detection**: some provisions tables
+(e.g. syndicate 780) use a non-standard column layout:
+
+```
+31 December 2016 | Provision for unearned premiums | Claims outstanding | Total
+```
+
+In this layout, Gross/Reinsurers' share/Net are section headers
+(rows), not column headers.  The actual gross claims PYD is in
+the "Claims outstanding" column, not column 1 ("Provision for
+unearned premiums", which is typically "-" or 0 for prior year
+claims).  The parser detects "claims outstanding" in any column
+header and uses that column as `gross_col` instead of the default
+positional fallback.
+
+Without this detection, the positional fallback assigns
+`gross_col=1` (unearned premiums) which returns 0.0 for the
+prior year row, masking the actual gross claims PYD.
+
 Values exceeding 10,000 in absolute terms are assumed to be in
 thousands and divided by 1,000 to convert to millions.
 
@@ -1026,24 +1147,61 @@ movement tables or balance sheet notes.
 and one of `"balance"`, `"1 january"`, or `"brought forward"` to
 appear in the grid text.
 
-**Section-aware parsing**:
+**Two layout patterns** are handled:
 
-1. Scan rows for a `"claims outstanding"` section header.
+**Pattern A — "Claims outstanding" as a row label** (section header):
+
+1. Scan rows for a `"claims outstanding"` section header in
+   column 0.
 2. Within that section, find the `"balance at 1 january"`,
    `"brought forward"`, or `"at 1 january"` row.
 3. Extract the value from the gross column.
 4. Stop parsing if a different section (`"unearned premium"`,
    `"deferred acquisition"`, `"total"`) is encountered.
 
+**Pattern B — "Claims outstanding" as a column header**:
+
+Some syndicates (e.g. 780) present the provisions movement as a
+columnar table where "Claims outstanding" is a column header,
+not a row label:
+
+```
+31 December 2016 | Provision for unearned premiums | Claims outstanding | Total
+                 | $                               | $                  | $
+Gross            |                                 |                    |
+At 1 January 2016| 109.3                           | 348.5              | 457.8
+```
+
+Pattern A fails here because no row has "claims outstanding" in
+column 0.  Pattern B handles this by:
+
+1. Scanning header rows (0--2) for a cell containing "claims
+   outstanding" to identify the column index.
+2. Walking rows within the "Gross" section (stopping at
+   "Reinsurer", "Net", or "At 31 December").
+3. Finding the "At 1 January" / "Brought forward" row and
+   extracting the value from the identified column.
+
+**Example**: syndicate 780/2016 has a provisions movement table
+(Azure Table 11, page 31) with "Claims outstanding" as column 2.
+The "At 1 January 2016" row has value 348.5 in that column.
+Both LLMs extracted wrong values: Gemini 348.5 (correct from
+balance sheet), GPT 345.2 (net closing total from page 26) /
+313.8 (closing gross claims outstanding, not opening).  The
+RAG-extracted `348.5m` is the correct opening gross claims
+outstanding.
+
 **Unit detection**: the function checks headers (rows 0--3) for
 `"'000"`, `"000s"`, or `"thousand"`.  If found, the extracted
-value is divided by 1,000 to convert to millions.
+value is divided by 1,000 to convert to millions.  Values
+exceeding 50,000 in absolute terms are assumed thousands.
 
-**Column detection**: looks for a header cell containing `"gross"`
-(excluding `"net"`).  Falls back to column 1.
+**Column detection** (Pattern A only): looks for a header cell
+containing `"gross"` (excluding `"net"`).  Falls back to
+column 1.
 
-**Example**: syndicate 2357/2016 has a Technical Provisions note
-(page 24) with:
+**Example (Pattern A)**: syndicate 2357/2016 has a Technical
+Provisions note (page 24) with:
 
 ```
 Claims outstanding
@@ -1130,11 +1288,23 @@ in this order:
 1. `_parse_opening_claims_outstanding()` on provisions/balance
    sheet tagged tables (provisions movement note)
 2. `_parse_balance_sheet_claims_outstanding()` on balance sheet
-   tagged tables (Statement of Financial Position liabilities)
+   **and pl_account** tagged tables (Statement of Financial
+   Position liabilities)
 3. Reserves movement note opening (RITC syndicates)
 
 The first non-null result is used.  Downstream, the RAG value
 is applied proactively to both LLMs (section 10.6).
+
+**Why pl_account tables are included in step 2**: scanned PDFs
+sometimes cause the page classifier to assign `pl_account`
+instead of `balance_sheet` to the balance sheet page.  For
+example, syndicate 780/2016 has its liabilities balance sheet
+on page 12 (0-indexed 11), but the OCR-based page scanner
+classified it as `[pl_account, premium_mix]`.  The balance
+sheet parser's own structural checks (`"technical provision"`
+in text, `"claims outstanding"` as row label, absence of
+`"reinsurer"`) are sufficient to reject non-balance-sheet
+tables, so the broader category match is safe.
 
 ---
 
@@ -1508,7 +1678,23 @@ loss ratio triangle, this function attempts to extract PYD
 from the loss ratio development grid combined with a "Total
 ultimate losses" row.
 
-#### 9.8.1  Applicability
+#### 9.8.1  Header detection and page acceptance
+
+The parser accepts a page if it contains **any** of these
+header signals:
+
+- `"claims development"` (standard header)
+- `"gross ratios"` (Beazley 623 format)
+- Both `"12 months"` and `"24 months"` (development period
+  labels implying a triangle is present)
+
+**Net-only page rejection**: if the page contains `"net ratios"`
+but neither `"gross ratios"` nor `"gross claims development"`,
+it is rejected as a net-only loss ratio page.  This prevents
+the parser from reading a net triangle when the gross section
+is on a different page.
+
+#### 9.8.2  Applicability
 
 This parser activates as Step 3b in the pipeline, after LLM
 vision fails and before reserve text collection.  It only runs
@@ -1527,23 +1713,32 @@ Accordingly, the loss ratio PYD is marked as **fallback only**:
 it fills in LLM blanks but never overrides an LLM-extracted
 syndicate-level value (see section 10.3).
 
-#### 9.8.2  Gross/net section separation
+**Known syndicates using loss ratio triangles**: Beazley
+syndicates 623 and 2623.  Syndicate 623 uses "Gross ratios" /
+"Net ratios" headers; syndicate 2623 uses "Gross Claims
+Development" / "Net Claims Development" headers.
+
+#### 9.8.3  Gross/net section separation
 
 Many reports (e.g. 2623/2016) place both gross and net claims
 development on the **same page**.  The parser must only use the
-gross section.  Two safeguards ensure this:
+gross section.  Four safeguards ensure this:
 
-1. **Ratio collection stop label**: `"net claims development"`
-   is in the stop-labels list, so ratio parsing halts before
-   the net section.
-2. **Ultimates search bounded**: the "Total ultimate losses"
+1. **Header-level rejection**: pages with `"net ratios"` but no
+   `"gross ratios"` or `"gross claims development"` are rejected
+   outright (see section 9.8.1).
+2. **Ratio collection stop labels**: `"net claims development"`,
+   `"net ratios"`, `"underwriting year - net"` (and spacing
+   variants) are in the stop-labels list, so ratio parsing halts
+   before the net section.
+3. **Ultimates search bounded**: the "Total ultimate losses"
    search scans only lines before the first occurrence of
    "Net Claims Development".
-3. **Page filtering**: when concatenating multi-page triangle
-   text, pages that contain "Net Claims Development" but not
-   "Gross Claims Development" are excluded.
+4. **Page filtering (Step 3b)**: when concatenating multi-page
+   triangle text, pages that contain `"net ratios"` but neither
+   `"gross ratios"` nor `"gross claims development"` are excluded.
 
-#### 9.8.3  UW year detection
+#### 9.8.4  UW year detection
 
 Two strategies handle different PyMuPDF output formats:
 
@@ -1554,12 +1749,18 @@ Two strategies handle different PyMuPDF output formats:
 
 Both strategies detect the `"ae"` suffix (meaning "and earlier")
 which marks aggregate columns.  The regex
-`r'^((?:19|20)\d{2})(ae?)?$'` matches both `"2011a"` and
-`"2011ae"`.  Aggregate columns are tracked in an `ae_columns`
-set and excluded from ratio grouping but included in the
-ultimates column count.
+`r'\b((?:19|20)\d{2})\s*(ae?)?\b'` (Strategy A) and
+`r'^((?:19|20)\d{2})\s*(ae?)?$'` (Strategy B) match both
+`"2011ae"` and `"2012 ae"` (with or without a space before the
+suffix).  Aggregate columns are tracked in an `ae_columns` set
+and excluded from ratio grouping but included in the ultimates
+column count.
 
-#### 9.8.4  Ratio grid parsing
+**Note**: the space-tolerant regex was added to handle
+syndicate 623 (Beazley), which renders "2012 ae" with a space
+in PyMuPDF columnar output.
+
+#### 9.8.5  Ratio grid parsing
 
 After the year header, the parser collects numeric values from
 the loss ratio grid:
@@ -1567,13 +1768,22 @@ the loss ratio grid:
 1. Skip `%` header lines and development period labels ("12
    months", "24 months", etc.).
 2. Stop at summary rows ("total ultimate", "gross claims liab",
-   "net claims development").
+   "net claims development", "net ratios",
+   "underwriting year - net").
 3. Filter values to the 0--200 range (valid loss ratios).
 4. Group values into development rows based on the expected
    count per period: for period `d`, expect
    `count(UW years where report_year - year >= d)` values.
 
-#### 9.8.5  "Total ultimate losses" detection
+**Important**: the expected count per development row uses only
+the `uw_years` list (excluding ae columns), not all columns.
+Aggregate "ae" columns have no ratio data in the grid — they
+only contribute a value in the "Total ultimate losses" row.
+Using `all_years_sorted` (which includes ae columns) would
+over-count expected values per row and consume ratios from
+subsequent development periods.
+
+#### 9.8.6  "Total ultimate losses" detection
 
 The label may span 1--4 lines in columnar PyMuPDF output:
 
@@ -1597,7 +1807,7 @@ When no "Total ultimate losses" row is found (e.g. 2623/2016,
 parser returns `None` and PYD falls through to LLM narrative
 extraction.
 
-#### 9.8.6  PYD computation
+#### 9.8.7  PYD computation
 
 For each UW year (excluding the two most recent):
 
@@ -1622,6 +1832,22 @@ Loss ratio triangle: 10 UW years (2012-2021), 10 dev rows
 Note: the narrative for 2021 says "$150.8m release" at syndicate
 level, while the loss ratio triangle gives -106.4m at managed
 level.  The LLM narrative value is preferred (see section 10.3).
+
+**Example** (623/2022 — "Gross ratios" header with ae column):
+
+```
+Loss ratio triangle: 10 UW years (2012ae, 2013-2022), 11 dev rows
+  Header format: "Gross ratios" (not "claims development")
+  ae column "2012 ae" has ultimate=1880.4m but NO ratio data
+  2013: ratio 63.3% -> 62.2% (chg -1.1pp), ult=512.0m, pyd=-9.058m
+  2020: ratio 66.6% -> 65.5% (chg -1.1pp), ult=1680.8m, pyd=-28.239m
+  Total PYD = +27.771m (8 UW years, gross strengthening)
+```
+
+Note: the narrative reports net PYD of -$9.3m (release) while
+the gross loss ratio triangle gives +$27.8m (strengthening).
+Reinsurance absorbed the gross strengthening and produced a
+net release.  The pipeline correctly uses the gross figure.
 
 ---
 
@@ -1903,6 +2129,69 @@ outstanding -- Gross amount" prior year column.
   [gpt-5-mini] Opening reserves overridden by RAG balance sheet: 78.049 -> 12.121m
 ```
 
+### 10.7  Currency field normalization
+
+**Function**: `_normalize_currency_fields()` (`test_gemini.py`)
+
+The LLM prompt uses `_gbp_m` as the canonical field suffix for
+**all** monetary fields regardless of the report's actual
+currency.  A separate `currency` field records the true
+denomination (GBP, USD, or EUR).  This convention keeps
+downstream comparison and auto-resolution logic simple -- all
+monetary fields have a single, predictable name.
+
+However, some LLMs (notably Gemini) rename the fields to match
+the report's currency.  For a USD-denominated syndicate, Gemini
+may return `opening_reserves_usd_m` instead of
+`opening_reserves_gbp_m`, `prior_year_development_usd_m`
+instead of `prior_year_development_gbp_m`, etc.  When the other
+LLM (GPT) follows the schema correctly, the field-by-field
+comparison sees `<MISSING>` vs a value for each currency
+variant, producing spurious hard failures even though both
+models extracted the same number.
+
+**Normalization** runs immediately after LLM extraction and
+before any RAG override, triangle verification, or
+cross-validation:
+
+1. Scan all top-level keys for `_usd_m` or `_eur_m` suffixes.
+2. For each match, rename to the corresponding `_gbp_m` key
+   (e.g. `opening_reserves_usd_m` → `opening_reserves_gbp_m`).
+   If the `_gbp_m` key already has a value, the variant is
+   simply removed (the canonical value takes precedence).
+3. Repeat for nested list-of-dicts fields: `lob_movements`,
+   `named_events`, `prior_year_events`, `gross_premium_mix`
+   (e.g. `amount_usd_m` → `amount_gbp_m`,
+   `net_loss_eur_m` → `net_loss_gbp_m`).
+
+**Log message** (only when renaming occurs):
+
+```
+  [gemini-2.5-flash] Normalized currency field names → _gbp_m
+```
+
+**Example**: syndicate 623/2015 (USD-denominated Beazley
+syndicate).  Before the fix, Gemini returned:
+
+| Field (Gemini) | Field (GPT) | Result |
+|----------------|-------------|--------|
+| `opening_reserves_usd_m: 705.7` | `opening_reserves_gbp_m: 705.7` | Hard failure (MISSING vs value on each variant) |
+| `prior_year_development_usd_m: -40.3` | `prior_year_development_gbp_m: -40.3` | Hard failure |
+| `gross_premiums_written_usd_m: 379.8` | `gross_premiums_written_gbp_m: 329.3` | Hard failure |
+
+After normalization, Gemini's fields are remapped to `_gbp_m`:
+
+| Field | Gemini | GPT | Result |
+|-------|--------|-----|--------|
+| `opening_reserves_gbp_m` | 705.7 | 705.7 | Match |
+| `prior_year_development_gbp_m` | -40.3 | -40.3 | Match |
+| `gross_premiums_written_gbp_m` | 379.8 | 329.3 | Real discrepancy (USD amount vs Adobe LOB GBP amount) |
+
+The first two spurious hard failures are eliminated.  The
+third is a genuine discrepancy (Gemini extracted the USD GWP
+from the report narrative while GPT/Adobe extracted the GBP
+equivalent from the segmental analysis).
+
 ---
 
 ## 11  Report classification
@@ -2081,9 +2370,11 @@ excluded.
 significantly from a triangle-derived PYD.  The provisions note
 includes RITC-acquired reserves in the prior year movement,
 while the triangle only tracks organic development.  When both
-sources are available, the triangle PYD takes precedence (per
-RAG authority rules in section 10).  The difference is logged
-but not treated as an error.
+sources are available and agree in sign, the triangle PYD takes
+precedence (per RAG authority rules in section 10).  When they
+disagree in sign, provisions takes precedence (per the cross-
+validation in section 11.3.1).  The difference is logged but not
+treated as an error.
 
 **Example**: syndicate 2791/2024 accepted RITC from syndicate
 6103.  Both LLMs independently extracted PYD ≈ −67.6m (matching
@@ -2092,7 +2383,70 @@ computed −28.0m (organic development only).  The RAG triangle
 value was used, and the RITC distortion was noted in
 `data_quality_notes`.
 
-### 11.3.1  Narrative PYD parsers (Step 4c)
+### 11.3.1  Triangle vs provisions cross-validation (Step 4b)
+
+After both triangle PYD and provisions PYD are extracted, the
+pipeline cross-validates them.  The triangle diagonal PYD and the
+provisions gross PYD can measure different things:
+
+- **Triangle diagonal PYD** (`compute_pyd_from_triangle()`):
+  computes the change in cumulative claims estimates between the
+  current and previous diagonals.  Excludes the two most recent
+  UW years.  For Lloyd's "Year of account" triangles, the
+  diagonal differences for semi-mature years (2--3 years old) can
+  include significant normal premium-earning development, not just
+  reserve re-estimation.
+
+- **Provisions gross PYD** (`_parse_nutrient_provisions()`):
+  extracts the "prior year" movement from the provisions note on
+  the balance sheet.  This directly measures the change in gross
+  claims outstanding attributable to prior years as disclosed in
+  the accounts.
+
+**Cross-validation rule**: when both are available and they
+**disagree in sign** (one is a release, the other a
+strengthening), the provisions figure is preferred.  A sign
+disagreement is a strong signal that the triangle diagonal is
+contaminated by normal emergence in immature years, or that the
+triangle is missing prior-year aggregate rows that contribute to
+the provisions figure.
+
+The override is logged:
+
+```
+[Azure] Triangle PYD (+24.900m) disagrees in sign with provisions (-15.6m) -- using provisions
+```
+
+When they agree in sign (both positive or both negative), the
+triangle PYD is kept regardless of magnitude difference.  The
+triangle is still considered the primary source because it is
+computed deterministically from the raw data.
+
+**Trigger conditions**: the cross-check only runs when:
+
+1. `result["pyd"]` is not None (triangle PYD was computed)
+2. `result["method"]` is a table-extraction method (`"azure"`,
+   `"nutrient"`, or `"adobe"`)
+3. Provisions `gross_prior_year_claims` is available and non-zero
+
+**Example** (syndicate 780/2016):
+
+The triangle diagonal PYD is +24.9m (cumulative claims estimates
+rose for 2011--2014 UW years), but the provisions note reports
+gross prior year claims movement of −15.6m (a release).  The
+sign disagreement triggers the override, and −15.6m is used.
+Both LLMs independently extracted −15.6m and −17.1m, confirming
+the provisions figure.
+
+**Example** (syndicate 33/2024):
+
+The triangle diagonal PYD is −53.2m (release) and provisions is
+−183.8m (also a release).  Same sign, so no override -- the
+triangle PYD is kept.  The magnitude difference is expected
+because provisions includes development from the two most recent
+UW years that the triangle excludes.
+
+### 11.3.2  Narrative PYD parsers (Step 4d)
 
 After the provisions PYD fallback, the pipeline runs four
 text-based parsers in cascade order on reserve movement pages.
@@ -3065,7 +3419,7 @@ misclassified `claims_triangle` pages), but provisions data
 on page 49 shows gross prior year claims development of
 −27.986m.
 
-**Fix**: added a provisions PYD fallback step (Step 4b) in
+**Fix**: added a provisions PYD fallback step (Step 4c) in
 `process_one_report()` that runs **before** the
 `no_triangle_data` check.  If no triangle PYD exists and the
 report has `adobe_provisions.gross_prior_year_claims`, that
@@ -3147,3 +3501,92 @@ images and successfully extracts the 12-class LOB table.  The
 Azure cache auto-invalidates because the relevant page set
 changes (page 27 is now included), producing a different
 `_pages_hash`.
+
+### Rotated "Year of account" triangle produces PYD = 0
+
+**Symptom**: a Lloyd's syndicate (e.g. 780/2016) with a
+landscape-oriented claims development triangle shows PYD = 0.0m
+[flat], despite the report clearly containing prior year reserve
+releases.  The log shows:
+
+```
+[Azure] Extracted: triangle=6 UW years
+[RAG] No triangle, but found 3 reserve text page(s)
+[RAG] Using provisions PYD as fallback: +0.000m
+```
+
+**Root cause** (three interacting bugs):
+
+1. **Triangle parser did not recognise "Year of account" header**.
+   The table uses "Year of account" as its first header cell, but
+   `_parse_transposed_triangle()` only recognised "Development
+   Year" and "Underlying Pure Year".  It fell through to
+   headerless mode (Format B), which included the "Cumulative
+   payments" and "Estimated balance to pay" columns as development
+   periods.  After transposing, the triangle had 8 development
+   rows for a 6-year span, causing `compute_pyd_from_triangle()`
+   to reject it ("triangle has 8 rows but span is only
+   2011--2016 -- likely includes summary rows or is misaligned").
+
+2. **Provisions parser picked wrong column for gross PYD**.
+   The provisions table had headers `"Provision for unearned
+   premiums | Claims outstanding | Total"` instead of the expected
+   `"Gross | Reinsurers' share | Net"`.  The positional fallback
+   assigned `gross_col=1` ("Provision for unearned premiums"),
+   which showed "-" (→ 0.0) for the prior year row.  The actual
+   gross claims PYD was in column 2 ("Claims outstanding") at
+   −15.6m.
+
+3. **RAG override propagated the zero**.  With provisions
+   `gross_prior_year_claims = 0.0`, both LLMs' correct values
+   (−15.6m and −17.1m) were overridden to 0.0.
+
+**Fixes** (three changes):
+
+1. Added "Year of account" header detection in
+   `_parse_transposed_triangle()` (Format D, section 7.6.4).
+   Development period columns are now identified from header
+   labels ("end of calendar", "year later", etc.) and summary
+   columns ("cumulative", "estimated", "balance") are excluded.
+
+2. Added "Claims outstanding" column detection in
+   `_parse_nutrient_provisions()` (section 7.8.1).  When a column
+   header contains "claims outstanding", it is used as `gross_col`
+   instead of the default positional fallback.
+
+3. Added triangle vs provisions cross-validation (Step 4b,
+   section 11.3.1).  When both triangle PYD and provisions gross
+   PYD are available and disagree in sign, provisions is preferred
+   because it directly measures balance-sheet reserve movement.
+
+**Result**: PYD for syndicate 780/2016 changed from 0.0m to
+−15.6m (−4.5% of $348m reserves, release), confirmed by both
+LLMs.
+
+### Gemini 400 INVALID_ARGUMENT on scanned syndicate PDF
+
+**Symptom**: `extract_with_gemini()` fails with `400
+INVALID_ARGUMENT` after a successful file upload.  The log shows
+the slim PDF is orders of magnitude larger than the original:
+
+```
+[LLM] Slim PDF: 10 pages, 102107 KB (full report: 2449 KB)
+[gemini-2.5-flash] Upload done (21.4s). Extracting...
+ERROR: 400 INVALID_ARGUMENT
+```
+
+**Root cause**: the source PDF is fully scanned (all 29 pages are
+raster images).  `_extract_pages_to_pdf()` copies pages via
+`insert_pdf()`, which preserves the raw embedded images without
+recompression.  10 pages of high-resolution scans produce a 100+ MB
+slim PDF -- well beyond Gemini's content processing limit.
+
+**Fix**: added an automatic compression step in
+`_extract_pages_to_pdf()` (section 5.5).  After writing the slim
+PDF, if it exceeds `MAX_SLIM_PDF_BYTES` (20 MB), every page is
+re-rendered at 150 DPI and saved as a JPEG at 75% quality.  This
+reduces the file to ~2--5 MB while preserving sufficient image
+quality for LLM text extraction.
+
+Discovered on syndicate 5000/2014 (29 scanned pages, 10 relevant,
+102 MB slim PDF → Gemini 400 error).

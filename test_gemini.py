@@ -29,6 +29,7 @@ import re
 import sys
 import json
 import time
+import traceback
 import base64
 import hashlib
 import logging
@@ -1053,8 +1054,19 @@ def _extract_pyd_from_loss_ratio_triangle(page_text, report_year):
 
     # ── Step 1: Detect that this is a loss ratio triangle ──
     text_lower = page_text.lower()
-    if "claims development" not in text_lower:
-        return None, "no claims development header"
+    # Accept several header variants: "claims development", "gross ratios",
+    # or development period labels with % symbols.
+    # Do NOT accept "net ratios" alone — we need gross data for PYD.
+    has_header = ("claims development" in text_lower
+                  or "gross ratios" in text_lower
+                  or ("12 months" in text_lower and "24 months" in text_lower))
+    if not has_header:
+        return None, "no claims development / loss ratio header"
+    # Reject pages with net ratios but no gross ratios
+    if ("net ratios" in text_lower
+            and "gross ratios" not in text_lower
+            and "gross claims development" not in text_lower):
+        return None, "net-only loss ratio page (no gross data)"
     # Must have percentage indicators
     pct_count = text_lower.count("%")
     if pct_count < 3:
@@ -1069,7 +1081,7 @@ def _extract_pyd_from_loss_ratio_triangle(page_text, report_year):
 
     # Strategy A: years on one line (e.g. "2010ae  2011  2012  2013")
     for i, line in enumerate(lines_stripped):
-        year_matches = re.findall(r'\b((?:19|20)\d{2})(ae?)?\b', line)
+        year_matches = re.findall(r'\b((?:19|20)\d{2})\s*(ae?)?\b', line)
         if len(year_matches) >= 3:
             seen = set()
             for y_str, suffix in year_matches:
@@ -1088,7 +1100,7 @@ def _extract_pyd_from_loss_ratio_triangle(page_text, report_year):
     # Strategy B: years on consecutive lines (columnar PyMuPDF output)
     if not all_years:
         for i, line in enumerate(lines_stripped):
-            m = re.match(r'^((?:19|20)\d{2})(ae?)?$', line)
+            m = re.match(r'^((?:19|20)\d{2})\s*(ae?)?$', line)
             if m:
                 has_ae = bool(m.group(2))
                 # Check if next non-blank line is "e" (continuation of "ae" suffix)
@@ -1098,7 +1110,7 @@ def _extract_pyd_from_loss_ratio_triangle(page_text, report_year):
                 year_run = [(int(m.group(1)), has_ae)]
                 j = i + 1
                 while j < len(lines_stripped):
-                    m2 = re.match(r'^((?:19|20)\d{2})(ae?)?$', lines_stripped[j])
+                    m2 = re.match(r'^((?:19|20)\d{2})\s*(ae?)?$', lines_stripped[j])
                     if m2:
                         year_run.append((int(m2.group(1)), bool(m2.group(2))))
                         j += 1
@@ -1145,6 +1157,7 @@ def _extract_pyd_from_loss_ratio_triangle(page_text, report_year):
         "total ultimate", "gross claims liab",
         "less paid", "less unearned", "less non", "net claims liab",
         "net claims development",  # stop before net section on same page
+        "net ratios",              # stop before net loss ratio section (e.g. Beazley 623)
         "underwriting year - net",  # stop before net loss ratio section
         "underwriting year -net",   # variant without space
         "underwriting year- net",   # variant
@@ -1196,22 +1209,20 @@ def _extract_pyd_from_loss_ratio_triangle(page_text, report_year):
                 continue
 
     # Group ratios into development rows.
-    # Use all_years_sorted (includes ae columns) for grouping, then strip ae
-    # columns so dev_rows aligns with uw_years.
-    max_dev = report_year - min(all_years_sorted) + 1
+    # Use uw_years (excludes ae columns) for grouping since ae columns
+    # never have ratio data in the grid — they are aggregates that only
+    # appear in the "Total ultimate losses" row.
+    max_dev = report_year - min(uw_years) + 1
     dev_rows = []
     idx = 0
     for d in range(max_dev):
-        expected = sum(1 for y in all_years_sorted if report_year - y >= d)
+        expected = sum(1 for y in uw_years if report_year - y >= d)
         if expected < 1:
             break
         if idx + expected > len(all_ratios):
             break
-        full_row = list(all_ratios[idx:idx + expected])
-        full_row += [None] * (n_cols_total - len(full_row))
-        # Strip ae columns to align with uw_years
-        row = [v for i, v in enumerate(full_row[:n_cols_total])
-               if i not in ae_columns]
+        row = list(all_ratios[idx:idx + expected])
+        row += [None] * (n_cols - len(row))
         dev_rows.append(row[:n_cols])
         idx += expected
 
@@ -1299,9 +1310,9 @@ def _extract_pyd_from_loss_ratio_triangle(page_text, report_year):
     #   "Gross claims liabilities (XXXX share)"             → syndicate share
     # Prefer the syndicate share row; fall back to managed level.
     gcl_is_share = False
+    gcl_managed = []
+    gcl_share = []
     if raw_ultimates is None or len(raw_ultimates) < n_cols_total:
-        gcl_managed = []
-        gcl_share = []
         gcl_state = "scan"  # scan, label, collect
         gcl_label = ""
         gcl_vals = []
@@ -3140,6 +3151,26 @@ def extract_pyd_from_relevant_pages(pdf_path, report_year):
             print(f"  [{backend_name}] Provisions movement: {', '.join(parts)}")
         result["adobe_provisions"] = prov_data  # key kept for backwards compatibility
 
+    # Cross-validate triangle PYD vs provisions PYD.
+    # Triangle diagonal differences measure total development (including normal
+    # emergence for immature UW years), while the provisions note measures the
+    # actual balance-sheet reserve movement.  When both are available and they
+    # disagree in sign, the provisions figure is more reliable for "prior year
+    # development" as used in actuarial reserve analysis.
+    if result["pyd"] is not None and result["method"] in ("azure", "nutrient", "adobe"):
+        prov = result.get("adobe_provisions") or {}
+        prov_gross = prov.get("gross_prior_year_claims")
+        if prov_gross is not None and prov_gross != 0.0:
+            tri_pyd = result["pyd"]
+            # Disagree in sign — provisions is authoritative for reserve movement
+            if (tri_pyd > 0 and prov_gross < 0) or (tri_pyd < 0 and prov_gross > 0):
+                print(f"  [{backend_name}] Triangle PYD ({tri_pyd:+.3f}m) disagrees in sign "
+                      f"with provisions ({prov_gross:+.1f}m) — using provisions")
+                result["pyd"] = prov_gross
+                result["pyd_details"] = (f"provisions overrides triangle (sign disagreement: "
+                                         f"triangle={tri_pyd:+.3f}m, provisions={prov_gross:+.1f}m)")
+                result["method"] = "provisions"
+
     # If confirmed first-year syndicate, check for reserves movement fallback
     # before giving up.  Some syndicates (e.g. those with RITC) show a
     # "Movement in Underwriting Reserves" note with opening balance and
@@ -3218,6 +3249,11 @@ def extract_pyd_from_relevant_pages(pdf_path, report_year):
                 txt_lower = txt.lower()
                 # Skip pages that have net claims development but no gross
                 if ("net claims development" in txt_lower
+                        and "gross claims development" not in txt_lower):
+                    continue
+                # Skip pages that have net ratios but no gross ratios
+                if ("net ratios" in txt_lower
+                        and "gross ratios" not in txt_lower
                         and "gross claims development" not in txt_lower):
                     continue
                 gross_tri_pages.append((pn, txt))
@@ -3435,6 +3471,16 @@ def compute_pyd_from_triangle(triangle_data, report_year):
         return None, (f"triangle has {n_rows} rows but span is only "
                      f"{min_uw}-{report_year} — likely includes summary rows or is misaligned")
 
+    # Normalise row lengths early — pad short rows with None so that all
+    # subsequent column-indexed access (validation checks, PYD computation)
+    # is safe.  LLM-extracted triangles sometimes return rows shorter than
+    # n_cols, which would cause IndexError without this padding.
+    for i in range(n_rows):
+        if not isinstance(rows[i], list):
+            rows[i] = []
+        while len(rows[i]) < n_cols:
+            rows[i].append(None)
+
     # Validate: at least one column should have filled rows.
     # In a proper NxN triangle, column 0 (oldest) should have ~N non-null
     # values, but syndicates that started recently may have legitimately
@@ -3465,7 +3511,7 @@ def compute_pyd_from_triangle(triangle_data, report_year):
     total_vals = 0
     for r in range(n_rows):
         for c in range(n_cols):
-            val = rows[r][c] if isinstance(rows[r], list) and c < len(rows[r]) else None
+            val = rows[r][c]
             if val is not None:
                 try:
                     fv = float(val)
@@ -3484,7 +3530,7 @@ def compute_pyd_from_triangle(triangle_data, report_year):
     # this is almost certainly a loss ratio triangle, not a claims triangle.
     if total_vals > 3:
         pct_like_count = sum(
-            1 for r in range(n_rows) for c in range(min(n_cols, len(rows[r])))
+            1 for r in range(n_rows) for c in range(n_cols)
             if rows[r][c] is not None
             and isinstance(rows[r][c], (int, float))
             and 0 < float(rows[r][c]) <= 200
@@ -3492,20 +3538,13 @@ def compute_pyd_from_triangle(triangle_data, report_year):
         if pct_like_count == total_vals:
             max_val = max(
                 float(rows[r][c])
-                for r in range(n_rows) for c in range(min(n_cols, len(rows[r])))
+                for r in range(n_rows) for c in range(n_cols)
                 if rows[r][c] is not None and isinstance(rows[r][c], (int, float))
             )
             if max_val <= 200:
                 return None, (f"triangle has all {total_vals} values in 0-200 range "
                              f"(max={max_val:.1f}) — likely a loss ratio triangle, "
                              f"not a claims development triangle")
-
-    # Validate row lengths — pad short rows with None
-    for i in range(n_rows):
-        if not isinstance(rows[i], list):
-            rows[i] = []
-        while len(rows[i]) < n_cols:
-            rows[i].append(None)
 
     # Detect and strip "Current estimate" summary row if LLM included it.
     # The summary row has a non-null value in every column, repeating
@@ -3910,6 +3949,69 @@ def verify_triangles(result_gemini, result_openai, gemini_name, openai_name, rep
                 pass
 
     return result_gemini, result_openai, messages
+
+
+# ---------------------------------------------------------------------------
+# Currency field normalization
+# ---------------------------------------------------------------------------
+
+# The LLM prompt uses _gbp_m as the canonical field suffix for ALL currencies,
+# with a separate "currency" field to indicate the actual currency.  Some LLMs
+# (notably Gemini) rename the fields to _usd_m or _eur_m for non-GBP syndicates.
+# This function remaps those back to the canonical _gbp_m names so that
+# downstream comparison / auto-resolution logic works correctly.
+
+_CURRENCY_SUFFIXES = ("_usd_m", "_eur_m")
+_CANONICAL_SUFFIX = "_gbp_m"
+
+
+def _normalize_currency_fields(result):
+    """Rename _usd_m / _eur_m fields to _gbp_m in an LLM extraction result.
+
+    Operates in-place on the top-level dict AND on dicts inside list fields
+    (lob_movements, named_events, prior_year_events, gross_premium_mix).
+
+    Returns True if any renaming was performed.
+    """
+    renamed = False
+
+    # --- Top-level fields ---
+    for key in list(result.keys()):
+        for suffix in _CURRENCY_SUFFIXES:
+            if key.endswith(suffix):
+                canonical = key[: -len(suffix)] + _CANONICAL_SUFFIX
+                # Only rename if the canonical slot is absent or None
+                if result.get(canonical) is None:
+                    result[canonical] = result.pop(key)
+                    renamed = True
+                else:
+                    # Canonical already has a value — just remove the variant
+                    del result[key]
+                    renamed = True
+                break  # done with this key
+
+    # --- Nested list-of-dicts fields ---
+    for list_field in ("lob_movements", "named_events", "prior_year_events",
+                       "gross_premium_mix"):
+        items = result.get(list_field)
+        if not isinstance(items, list):
+            continue
+        for item in items:
+            if not isinstance(item, dict):
+                continue
+            for key in list(item.keys()):
+                for suffix in _CURRENCY_SUFFIXES:
+                    if key.endswith(suffix):
+                        canonical = key[: -len(suffix)] + _CANONICAL_SUFFIX
+                        if item.get(canonical) is None:
+                            item[canonical] = item.pop(key)
+                            renamed = True
+                        else:
+                            del item[key]
+                            renamed = True
+                        break
+
+    return renamed
 
 
 # ---------------------------------------------------------------------------
@@ -4529,6 +4631,12 @@ def process_one_report(report_path, inception_cache=None):
         llm_pdf, llm_bytes, llm_hash, syndicate_num, report_year
     )
 
+    # Normalize currency field names: some LLMs rename _gbp_m → _usd_m/_eur_m
+    # for non-GBP syndicates.  Remap to canonical _gbp_m before comparison.
+    for _r, _name in [(result_gemini, GEMINI_MODEL), (result_openai, OPENAI_MODEL)]:
+        if _normalize_currency_fields(_r):
+            print(f"  [{_name}] Normalized currency field names → _gbp_m")
+
     # RAG-lite was already run above (before LLM calls) for early first-year detection.
     # Use the cached result — no need to re-run.
     rag_method = rag_result.get("method", "")
@@ -4977,8 +5085,18 @@ if __name__ == "__main__":
         already_done = set()
         print(f"Single report mode: {single_arg}")
     else:
-        # Skip already-processed reports
-        already_done = {f.stem for f in OUTPUT_DIR.glob("syndicate_*.json")}
+        # Skip already-processed reports (verify JSON is valid — truncated files from interrupted runs are re-processed)
+        already_done = set()
+        for f in OUTPUT_DIR.glob("syndicate_*.json"):
+            if f.stem == "syndicate_inception_years":
+                continue
+            try:
+                with open(f) as fh:
+                    json.load(fh)
+                already_done.add(f.stem)
+            except (json.JSONDecodeError, OSError):
+                print(f"  Removing corrupt output: {f.name}")
+                f.unlink()
         to_process = [r for r in reports if r.stem not in already_done]
         print(f"Already processed: {len(already_done)}, remaining: {len(to_process)}")
 
@@ -5061,6 +5179,7 @@ if __name__ == "__main__":
             sys.exit(130)
         except Exception as e:
             print(f"  ERROR: {e}")
+            traceback.print_exc()
             print(f"  Skipping {report_path.name} and continuing...")
             run_errored += 1
             continue
