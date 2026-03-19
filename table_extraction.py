@@ -190,10 +190,12 @@ _PAGE_KEYWORDS = {
     ],
     "premium_mix": [
         "segmental analysis", "analysis of underwriting result",
+        "analysis of the underwriting result",
         "class of business", "by class of business",
         "accident and health", "marine aviation",
         "fire and other damage", "third party liability",
         "reinsurance", "miscellaneous",
+        "gross premiums written", "commissions on direct insurance",
     ],
     "balance_sheet": [
         "statement of financial position", "balance sheet",

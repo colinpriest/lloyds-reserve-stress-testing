@@ -193,7 +193,7 @@ keywords appear in the page text (case-insensitive).
 | `claims_triangle` | "claims development", "development table", "cumulative gross claims", "year later", "years later", "development year", "year of account", "underlying pure year", "incurred at end of underwriting", "ultimate contract outstanding claims", "gross of reinsurance", "net of reinsurance", "12 months", "24 months", "gross claims liabilities", "total ultimate losses" |
 | `provisions`      | "provision for claims", "prior year", "movement in prior", "gross provision" |
 | `pl_account`      | "technical account", "profit and loss", "claims incurred"            |
-| `premium_mix`     | "segmental analysis", "analysis of underwriting result", "class of business", "by class of business", "accident and health", "marine aviation", "third party liability", "reinsurance" |
+| `premium_mix`     | "segmental analysis", "analysis of underwriting result", "analysis of the underwriting result", "class of business", "by class of business", "accident and health", "marine aviation", "third party liability", "reinsurance", "gross premiums written", "commissions on direct insurance" |
 | `balance_sheet`   | "statement of financial position", "balance sheet", "total assets", "total liabilities", "technical provisions", "claims outstanding", "gross technical provisions" |
 
 The `balance_sheet` category was added in v2.8 to ensure the
@@ -223,6 +223,23 @@ note.  For example, syndicate 2357/2015's regulatory note has a
 single "Reinsurance" LOB, but the Managing Agent's Report breaks
 this into "Property Catastrophe Reinsurance", "Reinsurance",
 and "Weather".
+
+Three additional keywords were added to handle **image-based
+segmental analysis tables** (e.g. syndicate 5151/2018).  When
+the segmental analysis table is embedded as an image rather than
+native PDF text, PyMuPDF extracts only the surrounding prose --
+the section heading and a brief footer -- not the table data
+itself.  The original keyword `"analysis of underwriting result"`
+failed to match because the actual PDF text reads "An analysis
+of **the** underwriting result".  Adding the variant
+`"analysis of the underwriting result"` fixes the mismatch.
+The keywords `"gross premiums written"` and `"commissions on
+direct insurance"` provide additional hits from the prose that
+commonly surrounds segmental analysis tables (e.g. "Commissions
+on direct insurance gross premiums during 2018 were...").
+Together these ensure the page reaches the >=2 keyword threshold
+and is sent to Azure, whose prebuilt-layout model performs OCR
+on embedded images and can extract the table structure.
 
 The full keyword lists are in `_PAGE_KEYWORDS`
 (`table_extraction.py`).
@@ -3090,3 +3107,43 @@ add the syndicate number to the `_manual_overrides` array in
 `syndicate_inception_years.json`.  This protects the entry from
 all automated updates (Perplexity, triangle backfill, cache
 correction).  See section 11.1 "Manual overrides".
+
+### Image-based segmental analysis table not extracted
+
+**Symptom**: `gross_premium_mix` is empty (`[]`) for both LLMs
+despite the PDF containing a full segmental analysis table.
+Example: syndicate 5151/2018 -- the segmental analysis on page 28
+has 12 LOB classes but neither model extracted them.
+
+**Cause**: the segmental analysis table is embedded as an image
+(PNG) rather than native PDF text.  PyMuPDF extracts only the
+surrounding prose ("5. Segmental analysis / An analysis of the
+underwriting result before investment return is set out below:")
+but not the table data.  The page failed `_classify_page()`
+because:
+
+1. Only 1 keyword matched: `"segmental analysis"` (needs >=2)
+2. `"analysis of underwriting result"` did not match because
+   the actual text reads "analysis of **the** underwriting
+   result" (extra article)
+
+Since the page was never tagged as `premium_mix`, it was not
+sent to Azure Document Intelligence and was not included in the
+slim PDF.
+
+**Fix**: added three new keywords to `_PAGE_KEYWORDS["premium_mix"]`:
+
+- `"analysis of the underwriting result"` -- matches the variant
+  phrasing with the article "the"
+- `"gross premiums written"` -- appears on income statement pages
+  that overlap with LOB data
+- `"commissions on direct insurance"` -- appears in the prose
+  footer of segmental analysis pages (e.g. "Commissions on
+  direct insurance gross premiums during 2018 were...")
+
+With these keywords, page 28 now gets 3 hits and is sent to
+Azure.  Azure's prebuilt-layout model performs OCR on embedded
+images and successfully extracts the 12-class LOB table.  The
+Azure cache auto-invalidates because the relevant page set
+changes (page 27 is now included), producing a different
+`_pages_hash`.
