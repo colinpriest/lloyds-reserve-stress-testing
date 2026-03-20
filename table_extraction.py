@@ -1475,6 +1475,19 @@ _SECTION_HEADERS = {
 }
 _TOTAL_LABELS = {"total", "sub-total", "subtotal", "grand total", "direct insurance"}
 
+# Row labels that should be skipped — not real LOBs.
+# RITC (reinsurance to close) rows inflate the total and are not a line of business.
+_SKIP_ROW_LABELS = {
+    "movements in respect of ritc received",
+    "movements in respect of ritc receivable",
+    "reinsurance to close premium received",
+    "reinsurance to close premium receivable",
+    "reinsurance to close premium payable",
+    "reinsurance to close",
+    "ritc received",
+    "ritc payable",
+}
+
 
 def _parse_nutrient_lob(grid: list[list[str]], report_year: int,
                         page_text: str = ""):
@@ -1498,6 +1511,24 @@ def _parse_nutrient_lob(grid: list[list[str]], report_year: int,
     )
     min_lob_hits = 1 if is_explicit_lob_table else 3
     if lob_hits < min_lob_hits:
+        return None
+
+    # Reject tables that are not segmental analysis:
+    # (a) Provisions movement tables with date/movement row labels
+    # (b) Reinsurance-to-close (RITC) tables
+    # (c) Members' balances / balance sheet tables
+    _NON_LOB_TABLE_SIGNALS = [
+        "at 1 january", "at 31 december", "at 1 jan", "at 31 dec",
+        "exchange adjustment", "movement in provision",
+        "movement in prior", "at start of", "at end of",
+        "reinsurance to close", "members' balances",
+        "payments of profit", "total comprehensive income",
+        "deferred acquisition costs",
+    ]
+    non_lob_hits = sum(
+        1 for sig in _NON_LOB_TABLE_SIGNALS if sig in flat
+    )
+    if non_lob_hits >= 2:
         return None
 
     # Check this is for the report year (not a comparative)
@@ -1543,14 +1574,35 @@ def _parse_nutrient_lob(grid: list[list[str]], report_year: int,
     claims_entries = []
     total_gwp = 0.0
 
+    # Track year sections — segmental analysis tables often have both
+    # report year (2022) and prior year (2021) rows.  Only collect data
+    # from the report year section.
+    in_report_year_section = True  # default if no year row seen
+    seen_any_year_row = False
+
     for row in grid[1:]:
         if not row or not row[0].strip():
             continue
         label = row[0].strip()
         label_lower = label.lower().rstrip(":")
 
+        # Detect year section dividers (bare year in first column, rest empty)
+        if re.match(r'^(19|20)\d{2}$', label):
+            rest_empty = all(not c.strip() for c in row[1:])
+            if rest_empty:
+                seen_any_year_row = True
+                in_report_year_section = (int(label) == report_year)
+                continue
+
+        if seen_any_year_row and not in_report_year_section:
+            continue
+
         # Skip section headers
         if label_lower in _SECTION_HEADERS:
+            continue
+
+        # Skip RITC and other non-LOB rows
+        if label_lower in _SKIP_ROW_LABELS:
             continue
 
         # Handle totals
@@ -1587,9 +1639,12 @@ def _parse_nutrient_lob(grid: list[list[str]], report_year: int,
     if not lob_entries:
         return None
 
-    # Auto-detect units from magnitude
-    if total_gwp == 0:
-        total_gwp = sum(e["amount_raw"] for e in lob_entries)
+    # Recalculate total from LOB entries — the "Total" row in the table may
+    # include RITC or other skipped rows, making it larger than the sum of
+    # the LOB entries we actually kept.
+    lob_sum = sum(e["amount_raw"] for e in lob_entries)
+    if total_gwp == 0 or total_gwp > lob_sum * 1.1:
+        total_gwp = lob_sum
 
     units_divisor = 1.0
     if total_gwp > 10_000_000:
@@ -2718,13 +2773,31 @@ def _extract_azure(pdf_path: Path, report_year: int, cache_dir: Path,
                     best_triangle_details = details
                     best_triangle_score = score
 
-        if "premium_mix" in cats:
+        if "premium_mix" in cats and "provisions" not in cats:
             pt = page_texts.get(orig_page, "")
             lob = _parse_nutrient_lob(grid, report_year, page_text=pt)
-            if lob and len(lob.gross_premium_mix) > best_lob_count:
-                best_lob = lob
-                best_lob.method = "azure"
-                best_lob_count = len(lob.gross_premium_mix)
+            if lob:
+                # Score: strongly prefer tables with explicit segmental analysis
+                # signals (header with "premiums written") over incidental matches.
+                header_text = " ".join(grid[0]).lower() if grid else ""
+                has_gwp_header = "premium" in header_text and ("written" in header_text or "earned" in header_text)
+                # Prefer tables with year-section dividers (statutory accounts
+                # format with "2022" / "2021" rows) — these are the canonical
+                # segmental analysis tables and correctly scope to report year.
+                has_year_sections = any(
+                    re.match(r'^(19|20)\d{2}$', row[0].strip())
+                    and all(not c.strip() for c in row[1:])
+                    for row in grid[1:] if row and row[0].strip()
+                )
+                lob_score = (
+                    len(lob.gross_premium_mix)
+                    + (100 if has_gwp_header else 0)
+                    + (200 if has_year_sections else 0)
+                )
+                if lob_score > best_lob_count:
+                    best_lob = lob
+                    best_lob.method = "azure"
+                    best_lob_count = lob_score
 
         if "provisions" in cats and best_provisions is None:
             prov = _parse_nutrient_provisions(grid, report_year)
