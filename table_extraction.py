@@ -829,7 +829,7 @@ def _parse_triangle_from_text(text: str, report_year: int):
 
     # Strategy A: years on one line (e.g., "2014  2015  2016  2017")
     for i, line in enumerate(lines):
-        years_on_line = re.findall(r'\b((?:19|20)\d{2})\b', line)
+        years_on_line = re.findall(r'\b((?:19|20)\d{2})(?:\d(?!\d)|\b)', line)
         years_on_line = [int(y) for y in years_on_line
                          if 1990 <= int(y) <= 2030
                          and not _year_has_prior_context(line, str(y))]
@@ -1056,7 +1056,10 @@ def _parse_nutrient_triangle(grid: list[list[str]], report_year: int):
     _multi_year_cols = {}  # {col_idx: [year1, year2, ...]}
     for row_idx in range(min(3, len(grid))):
         for col_idx, val in enumerate(grid[row_idx]):
-            matches = re.findall(r'\b((?:19|20)\d{2})\b', val)
+            # Match 4-digit years, allowing optional trailing footnote
+            # markers (e.g. "20171" where "1" is a superscript reference).
+            # Strip the footnote by capturing only the year digits.
+            matches = re.findall(r'\b((?:19|20)\d{2})(?:\d(?!\d)|\b)', val)
             if not matches:
                 continue
             if "prior" in val.lower() or "&" in val:

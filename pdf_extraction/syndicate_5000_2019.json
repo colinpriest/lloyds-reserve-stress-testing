@@ -1,5 +1,5 @@
 {
-  "extraction_timestamp": "2026-03-19T04:41:07.620334+00:00",
+  "extraction_timestamp": "2026-03-20T07:20:56.306775+00:00",
   "spec": {
     "prompt_version": "2.10",
     "field_definitions_version": "1.0",
@@ -10,25 +10,23 @@
     "gemini-2.5-flash": {
       "syndicate": 5000,
       "year": 2019,
-      "opening_reserves_gbp_m": 469335.0,
+      "opening_reserves_gbp_m": 469.335,
       "opening_reserves_page": 5,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": 68.19,
-      "prior_year_development_pct": 0.01,
+      "prior_year_development_pct": 14.53,
       "direction": "strengthening",
-      "prior_year_movement_page": 13,
-      "prior_year_movement_confidence": 0.8,
-      "exact_reserve_text": "The (deficit)/surplus following the reassessment of claims outstanding, net of expected reinsurance recoveries, held at the end of the previous year are set out below:",
+      "prior_year_movement_page": 14,
+      "prior_year_movement_confidence": 1.0,
+      "exact_reserve_text": "Change in claims outstanding",
       "primary_causes": [
         "Adverse claims development"
       ],
       "specific_events": [],
-      "specific_years_affected": [
-        2011
-      ],
+      "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "The syndicate experienced a gross prior year reserve strengthening of GBP 3.44 million, representing 0.73% of opening gross reserves. This strengthening was primarily driven by adverse claims development, specifically identified for the 2011 underwriting year based on the gross claims development triangle. The report also notes a net adverse prior year reserve development of GBP 62.9 million, which is significantly higher than the gross figure derived from the triangle, suggesting a large reinsurance recovery component or a different basis of calculation for the net figure. The claims development triangle showed minimal movement for most underwriting years, with only the 2011 year showing a change.",
+      "standardized_narrative": "The syndicate experienced a strengthening of gross prior year reserves by GBP 60.1 million in 2019. This adverse development was attributed to a higher level of adverse prior year reserve development, as noted in the review of the business.",
       "raw_causal_phrases": [
         "adverse prior year reserve development"
       ],
@@ -74,7 +72,7 @@
       "gross_premium_page": 12,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "There is a significant discrepancy between the gross prior year development of +3.44m derived from the claims development triangle and the net prior year reserve development of +62.9m explicitly stated in the narrative and a dedicated note. The gross figure from the triangle was used as per instructions, but the net figure suggests a large reinsurance recovery component or a different basis of calculation for the net figure. The claims development triangle showed minimal movement for most underwriting years, with only the 2011 year showing a change. [RAG OVERRIDE: Model said PYD=3.44, RAG triangle computed 68.19. Using RAG value.] [RAG OVERRIDE: Model said opening_reserves=469.335, balance sheet gives 469335.000m. Using RAG value.]",
+      "data_quality_notes": "The 'exact_reserve_text' is a line item from a table, as no descriptive sentence for the gross prior year movement was found. The narrative on page 2 mentions a net prior year development figure of GBP 62.9m, which differs from the gross figure used. Gross LOB movements for prior year development were not available. [RAG OVERRIDE: Model said PYD=60.097, RAG triangle computed 68.19. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -88,7 +86,8 @@
           2015,
           2016,
           2017,
-          2018
+          2018,
+          2019
         ],
         "development_rows": [
           [
@@ -99,7 +98,8 @@
             80.74,
             74.49,
             134.17,
-            91.76
+            91.76,
+            88.2
           ],
           [
             251.11,
@@ -109,7 +109,8 @@
             177.18,
             207.73,
             248.78,
-            274.6
+            274.6,
+            null
           ],
           [
             239.73,
@@ -119,6 +120,7 @@
             194.9,
             232.05,
             299.38,
+            null,
             null
           ],
           [
@@ -128,6 +130,7 @@
             173.69,
             198.9,
             244.0,
+            null,
             null,
             null
           ],
@@ -139,6 +142,7 @@
             201.43,
             null,
             null,
+            null,
             null
           ],
           [
@@ -146,6 +150,7 @@
             159.05,
             181.05,
             178.44,
+            null,
             null,
             null,
             null,
@@ -159,11 +164,13 @@
             null,
             null,
             null,
+            null,
             null
           ],
           [
             229.07,
             165.25,
+            null,
             null,
             null,
             null,
@@ -179,21 +186,22 @@
             null,
             null,
             null,
+            null,
             null
           ]
         ]
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_5000_2019_llm.pdf",
-      "content_hash": "4e5761c7ca22d711edc0cbc784fd4afeaddee046bd6d68646a4c6667e38da8dd",
-      "standardized_at": "2026-03-19T04:40:13.006687+00:00",
+      "content_hash": "1d63e8ff83a3142acaf09d750d072e9f3e7bb5cd81e6b2281885c64f71c7654a",
+      "standardized_at": "2026-03-20T07:19:33.631681+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
         "input_tokens": 9605,
-        "output_tokens": 1664,
-        "total_tokens": 19429,
-        "cost_usd": 0.007041
+        "output_tokens": 1549,
+        "total_tokens": 14928,
+        "cost_usd": 0.006754
       },
       "_rag_triangle": {
         "type": "gross",
@@ -385,28 +393,35 @@
         "method": "azure"
       },
       "_adobe_provisions": {
-        "opening_gross_claims_outstanding": 469335.0
+        "opening_gross_claims_outstanding": 469.335
       }
     },
     "gpt-5-mini": {
       "syndicate": 5000,
       "year": 2019,
-      "opening_reserves_gbp_m": 469335.0,
-      "opening_reserves_page": 25,
+      "opening_reserves_gbp_m": 469.335,
+      "opening_reserves_page": 11,
       "opening_reserves_confidence": 0.8,
       "prior_year_development_gbp_m": 68.19,
-      "prior_year_development_pct": 0.01,
+      "prior_year_development_pct": 14.53,
       "direction": "strengthening",
-      "prior_year_movement_page": null,
-      "prior_year_movement_confidence": 0.0,
-      "exact_reserve_text": "",
-      "primary_causes": [],
+      "prior_year_movement_page": 25,
+      "prior_year_movement_confidence": 0.5,
+      "exact_reserve_text": "The (deficit)/surplus following the reassessment of claims outstanding, net of expected reinsurance recoveries, held at the end of the previous year are set out below:",
+      "primary_causes": [
+        "Man-made catastrophe / large losses",
+        "Large loss development",
+        "Other"
+      ],
       "specific_events": [],
       "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "Opening gross claims outstanding (closing 2018 balance) was identified in the technical provisions/claims outstanding table. The report images provided did not clearly show an explicit GROSS prior-year reserve movement figure nor a clearly legible narrative sentence quantifying gross prior year development, so prior year development has not been extracted.",
-      "raw_causal_phrases": [],
+      "standardized_narrative": "Opening gross claims outstanding at 1 January 2019 (the prior-year closing gross claims outstanding) was approximately GBP 98.268m. The report contains a Technical Reserves note describing a (deficit)/surplus reassessment of prior year claims, and the Managing Agent commentary describes increased large loss activity and foreign exchange driven movements affecting the combined ratio. The report does not provide a clearly labelled GROSS prior-year movement figure that can be unambiguously extracted from the published notes; therefore a gross prior-year movement amount is not reported here.",
+      "raw_causal_phrases": [
+        "largely driven by foreign currency exchange rate movements",
+        "a higher level of large losses"
+      ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 369.8,
       "gross_premium_mix": [
@@ -449,26 +464,26 @@
       "gross_premium_page": 10,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Document provided as images with low resolution for many notes. Opening gross claims outstanding taken from the 'Claims outstanding' / Technical Provisions table (closing 2018 balance = 360,483 in GBP 000 360.483m). Gross written premium taken from the technical account 'Gross premiums written' row (358,987 in GBP 000 358.987m). A clear GROSS prior-year movement (movement in prior year's provision for claims outstanding) was not readable in the supplied images; narrative statements in the report that mention 'net releases' or underwriting year results were present but the gross (insurance liabilities) prior-year movement figure required by the instructions could not be confidently located. A claims development triangle appears present in the report (page 29) but the numeric cells were not legible enough to compute prior year development reliably. Where figures were extracted they are in the report's native currency and units (amounts in the report are presented in GBP 000). Prior-year development is therefore returned as null rather than risk returning an incorrect gross figure. If higher-resolution pages (particularly the Technical Provisions note showing the 'movement in prior year's provision for claims outstanding' or the claims development triangle) are provided, a precise gross prior-year development amount and per-LOB movements can be calculated. [RAG OVERRIDE: Model said opening_reserves=360.483, balance sheet gives 469335.000m. Using RAG value.]",
+      "data_quality_notes": "Opening gross claims outstanding taken from the Balance Sheet (Claims outstanding, 31 Dec 2018 comparative column). The report does not contain an unambiguous, labelled GROSS prior-year movement (movement in prior year's provision) value that could be confidently read from the scanned pages; narrative and tables that discuss prior year movement are presented net of reinsurance or in combined/movement tables that include current year changes. A Technical Reserves note heading and the introductory sentence referencing the (deficit)/surplus of prior year claims was located (page 25) but the gross numeric movement could not be reliably extracted from the available images. No reliable, machine-readable claims development triangle values were extracted. Where figures were read from scanned tables they may be approximate; users should verify against the original PDF. [RAG OVERRIDE: Model said opening_reserves=98.268, balance sheet gives 469.335m. Using RAG value.]",
       "_claims_triangle": {
-        "type": "gross",
+        "type": "none",
         "currency": "GBP",
-        "units": "thousands",
-        "page": 29,
+        "units": "millions",
+        "page": null,
         "underwriting_years": [],
         "development_rows": []
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_5000_2019_llm.pdf",
-      "content_hash": "4e5761c7ca22d711edc0cbc784fd4afeaddee046bd6d68646a4c6667e38da8dd",
-      "standardized_at": "2026-03-19T04:41:07.615335+00:00",
+      "content_hash": "1d63e8ff83a3142acaf09d750d072e9f3e7bb5cd81e6b2281885c64f71c7654a",
+      "standardized_at": "2026-03-20T07:20:56.305267+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
         "input_tokens": 18681,
-        "output_tokens": 3021,
-        "total_tokens": 21702,
-        "cost_usd": 0.010712
+        "output_tokens": 3349,
+        "total_tokens": 22030,
+        "cost_usd": 0.011368
       },
       "_rag_triangle": {
         "type": "gross",
@@ -660,16 +675,16 @@
         "method": "azure"
       },
       "_adobe_provisions": {
-        "opening_gross_claims_outstanding": 469335.0
+        "opening_gross_claims_outstanding": 469.335
       }
     }
   },
-  "total_cost_usd": 0.017753,
-  "total_tokens": 41131,
+  "total_cost_usd": 0.018122,
+  "total_tokens": 36958,
   "validation": {
     "passed": true,
-    "total_discrepancies": 11,
-    "within_tolerance": 11,
+    "total_discrepancies": 15,
+    "within_tolerance": 15,
     "hard_failures": 0,
     "hard_failure_details": []
   }

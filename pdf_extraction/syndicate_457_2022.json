@@ -1,5 +1,5 @@
 {
-  "extraction_timestamp": "2026-03-19T03:50:03.931596+00:00",
+  "extraction_timestamp": "2026-03-20T05:22:56.172628+00:00",
   "spec": {
     "prompt_version": "2.10",
     "field_definitions_version": "1.0",
@@ -10,11 +10,11 @@
     "gemini-2.5-flash": {
       "syndicate": 457,
       "year": 2022,
-      "opening_reserves_gbp_m": 925386.0,
+      "opening_reserves_gbp_m": 925.386,
       "opening_reserves_page": 8,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": 68.771,
-      "prior_year_development_pct": 0.01,
+      "prior_year_development_pct": 7.43,
       "direction": "strengthening",
       "prior_year_movement_page": 19,
       "prior_year_movement_confidence": 1.0,
@@ -134,7 +134,7 @@
       "gross_premium_page": 17,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The prior year development figure is taken from the explicit 'Total prior year releases' table on page 19, which provides a breakdown of gross releases by line of business. This figure closely aligns with the net figure stated in the narrative on page 19. [RAG OVERRIDE: Model said PYD=-68.297, RAG triangle computed 68.771. Using RAG value.] [RAG OVERRIDE: Model said opening_reserves=925.386, balance sheet gives 925386.000m. Using RAG value.]",
+      "data_quality_notes": "The prior year development figure is taken from the explicit 'Total prior year releases' table on page 19, which provides a breakdown of gross releases by line of business. This figure closely aligns with the net figure stated in the narrative on page 19. [RAG OVERRIDE: Model said PYD=-68.297, RAG triangle computed 68.771. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -277,8 +277,8 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_457_2022_llm.pdf",
-      "content_hash": "1bcb7c2a7fe9a9a8a4017d6edfedd8548060905721269418aa3296a5ba5723b4",
-      "standardized_at": "2026-03-19T03:47:57.463618+00:00",
+      "content_hash": "b3c9c5d7a03421daef66ac487fd0a02c983a15445d56d5c5b9f4c99abde7f5b1",
+      "standardized_at": "2026-03-20T05:21:12.364050+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
@@ -490,17 +490,17 @@
         "method": "azure"
       },
       "_adobe_provisions": {
-        "opening_gross_claims_outstanding": 925386.0
+        "opening_gross_claims_outstanding": 925.386
       }
     },
     "gpt-5-mini": {
       "syndicate": 457,
       "year": 2022,
-      "opening_reserves_gbp_m": 925386.0,
+      "opening_reserves_gbp_m": 925.386,
       "opening_reserves_page": 20,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": 68.771,
-      "prior_year_development_pct": 0.01,
+      "prior_year_development_pct": 7.43,
       "direction": "strengthening",
       "prior_year_movement_page": 45,
       "prior_year_movement_confidence": 0.8,
@@ -508,26 +508,36 @@
       "primary_causes": [
         "Favorable claims development"
       ],
-      "specific_events": [],
+      "specific_events": [
+        "South African riots"
+      ],
       "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [
         {
+          "event_name": "9/11",
+          "event_year": 2001,
+          "impact_description": "Referenced as a historical comparator for a challenging reinsurance renewal (2002 following 9/11).",
+          "lobs_affected": [],
+          "amount_gbp_m": null,
+          "confidence": 0.8
+        },
+        {
           "event_name": "South African riots",
           "event_year": null,
-          "event_type": "man_made",
-          "net_loss_gbp_m": null,
-          "loss_description": "funding requirements maintained to cover the liabilities in respect of the South African riots",
+          "impact_description": "Funding requirements maintained to cover the liabilities in respect of the South African riots.",
           "lobs_affected": [],
+          "net_loss_gbp_m": null,
+          "loss_description": "funding maintained to cover liabilities (amount not quantified)",
           "page": 34,
-          "confidence": 0.6
+          "confidence": 0.8
         }
       ],
-      "standardized_narrative": "The Syndicate recorded net releases from prior accident years (net GBP 68.3m) in 2022. Analysis of the gross claims development triangle indicates an aggregate gross favorable development of approximately GBP 119.1m across underwriting years up to 2020, driven primarily by releases in Marine, Property and Energy lines, with the largest net releases recorded in Marine. The net release after reinsurance was GBP 68.3m and was reflected in the 2022 technical result.",
+      "standardized_narrative": "Opening gross claims reserves at 1 January 2022 were GBP 925.4m. During 2022 there was a gross favourable development across prior accident years of approximately GBP 105.8m (a release, c.11.4% of opening reserves), resulting in a net release after reinsurance of GBP 68.3m. The releases were broad-based across lines (notably Marine, Energy and Property), partially offset by an adverse movement in reinsurance acceptances.",
       "raw_causal_phrases": [
         "includes GBP 68.3m (2021: GBP 68.4m) of releases from reserves in respect of prior accident years.",
-        "prior year releases",
-        "funding requirements maintained to cover the liabilities in respect of the South African riots"
+        "Total prior year releases 68,297",
+        "funding requirements maintained to cover the liabilities in respect of the South African riots."
       ],
       "lob_movements": [
         {
@@ -606,10 +616,10 @@
           "percentage_of_total": 13.3
         }
       ],
-      "gross_premium_page": 30,
+      "gross_premium_page": 17,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Gross prior year development was calculated from the gross claims development triangle (pages 45). The report explicitly states a NET prior year release of GBP 68.3m; a gross movement is not tabulated directly, so the triangle calculation (gross release GBP 119.092m) was used as the primary gross figure. No explicit gross 'movement in prior year provision' line was found. Page references for some tables were inferred from parsed page headers. [RAG OVERRIDE: Model said PYD=-119.092, RAG triangle computed 68.771. Using RAG value.] [RAG OVERRIDE: Model said opening_reserves=925.386, balance sheet gives 925386.000m. Using RAG value.]",
+      "data_quality_notes": "Prior year development (gross) computed from the gross claims development triangle (note 17). The per-line prior year breakdown in the notes is presented net of reinsurance; gross per-LOB movements were not provided. Where only net per-LOB figures are available they have been reported as-is and flagged in lob_movements. [RAG OVERRIDE: Model said PYD=-105.766, RAG triangle computed 68.771. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -752,15 +762,15 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_457_2022_llm.pdf",
-      "content_hash": "1bcb7c2a7fe9a9a8a4017d6edfedd8548060905721269418aa3296a5ba5723b4",
-      "standardized_at": "2026-03-19T03:50:03.928093+00:00",
+      "content_hash": "b3c9c5d7a03421daef66ac487fd0a02c983a15445d56d5c5b9f4c99abde7f5b1",
+      "standardized_at": "2026-03-20T05:22:56.169961+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
         "input_tokens": 18627,
-        "output_tokens": 10401,
-        "total_tokens": 29028,
-        "cost_usd": 0.025459
+        "output_tokens": 9889,
+        "total_tokens": 28516,
+        "cost_usd": 0.024435
       },
       "_rag_triangle": {
         "type": "gross",
@@ -965,12 +975,12 @@
         "method": "azure"
       },
       "_adobe_provisions": {
-        "opening_gross_claims_outstanding": 925386.0
+        "opening_gross_claims_outstanding": 925.386
       }
     }
   },
-  "total_cost_usd": 0.034849,
-  "total_tokens": 47613,
+  "total_cost_usd": 0.033825,
+  "total_tokens": 47101,
   "validation": {
     "passed": true,
     "total_discrepancies": 14,

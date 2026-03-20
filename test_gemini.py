@@ -3547,18 +3547,20 @@ def compute_pyd_from_triangle(triangle_data, report_year):
                              f"not a claims development triangle")
 
     # Detect and strip "Current estimate" summary row if LLM included it.
-    # The summary row has a non-null value in every column, repeating
-    # the last non-null value from each column's development rows.
+    # The summary row repeats the last non-null value from each column's
+    # development rows.  It may have nulls in recent columns (where the
+    # triangle itself has nulls), so we check non-null entries only.
     # We work on a COPY to avoid mutating the original triangle data.
     rows = [list(r) for r in rows]  # deep copy
     if n_rows >= 3:
         last_row = rows[-1]
-        all_filled = all(last_row[col] is not None for col in range(n_cols))
-        if all_filled:
-            # Check if last row values match the last non-null in each column
+        filled_cols = [col for col in range(n_cols) if last_row[col] is not None]
+        if len(filled_cols) >= 2:
+            # Check if non-null values in last row match the last non-null
+            # in each corresponding column above
             matches = 0
             mismatched_cols = []
-            for col in range(n_cols):
+            for col in filled_cols:
                 for r in range(n_rows - 2, -1, -1):
                     if rows[r][col] is not None:
                         try:
@@ -3569,13 +3571,13 @@ def compute_pyd_from_triangle(triangle_data, report_year):
                         except (ValueError, TypeError):
                             pass
                         break
-            if matches >= n_cols * 0.7:
+            if matches >= len(filled_cols) * 0.7:
                 if 0 in mismatched_cols:
                     # Col 0 has a DIFFERENT value from rows above — this last row
                     # contains real development data for the oldest UW year merged
                     # with the summary row. NULL out only the columns that matched
                     # (those are summary duplicates), keep the mismatched ones.
-                    for col in range(n_cols):
+                    for col in filled_cols:
                         if col not in mismatched_cols:
                             rows[-1][col] = None
                 else:
@@ -4095,7 +4097,8 @@ def check_tolerance(discrepancies, model_a, model_b):
     return len(hard_failures) == 0, tolerated, hard_failures
 
 
-def resolve_computed_fields(hard_failures, result_a, result_b, model_a, model_b):
+def resolve_computed_fields(hard_failures, result_a, result_b, model_a, model_b,
+                            syndicate_num=None, report_year=None):
     """Auto-resolve derived fields when the inputs they depend on agree.
 
     prior_year_development_pct = prior_year_development_gbp_m / opening_reserves_gbp_m * 100
@@ -4108,7 +4111,33 @@ def resolve_computed_fields(hard_failures, result_a, result_b, model_a, model_b)
     remaining = []
     resolved = []
 
+    # Known-truth fields: syndicate number and report year come from the
+    # filename, so when one LLM returns None we can auto-resolve.
+    known_truth = {}
+    if syndicate_num is not None:
+        known_truth["syndicate"] = syndicate_num
+        known_truth["syndicate_number"] = syndicate_num
+    if report_year is not None:
+        known_truth["report_year"] = report_year
+
     for d in hard_failures:
+        # Auto-resolve fields with known ground truth (from filename)
+        if d["field"] in known_truth:
+            truth = known_truth[d["field"]]
+            val_a = d.get(model_a)
+            val_b = d.get(model_b)
+            # Accept if one model got it right or returned None
+            if val_a == truth or val_b == truth or val_a is None or val_b is None:
+                # Fill in the correct value on whichever model was wrong/null
+                result_a[d["field"]] = truth
+                result_b[d["field"]] = truth
+                closer = model_a if val_a == truth else model_b
+                print(f"  Auto-resolved {d['field']}: {model_a}={val_a}, "
+                      f"{model_b}={val_b}, truth={truth}")
+                d["auto_resolved"] = True
+                d["closer_model"] = closer
+                resolved.append(d)
+                continue
         if d["field"] == "prior_year_development_pct":
             pyd_a = result_a.get("prior_year_development_gbp_m")
             pyd_b = result_b.get("prior_year_development_gbp_m")
@@ -4959,7 +4988,8 @@ def process_one_report(report_path, inception_cache=None):
     # Auto-resolve computed fields: prior_year_development_pct can be derived
     # from opening_reserves_gbp_m and prior_year_development_gbp_m when those agree.
     hard_failures, auto_resolved = resolve_computed_fields(
-        hard_failures, result_gemini, result_openai, GEMINI_MODEL, OPENAI_MODEL
+        hard_failures, result_gemini, result_openai, GEMINI_MODEL, OPENAI_MODEL,
+        syndicate_num=syndicate_num, report_year=report_year
     )
     tolerated.extend(auto_resolved)
     passed = len(hard_failures) == 0

@@ -1,5 +1,5 @@
 {
-  "extraction_timestamp": "2026-03-19T02:50:41.864655+00:00",
+  "extraction_timestamp": "2026-03-20T07:30:48.392393+00:00",
   "spec": {
     "prompt_version": "2.10",
     "field_definitions_version": "1.0",
@@ -13,9 +13,9 @@
       "opening_reserves_gbp_m": 1949.555,
       "opening_reserves_page": 5,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": 0.0,
-      "prior_year_development_pct": 0.0,
-      "direction": "flat",
+      "prior_year_development_gbp_m": 12.465,
+      "prior_year_development_pct": 0.64,
+      "direction": "strengthening",
       "prior_year_movement_page": 20,
       "prior_year_movement_confidence": 1.0,
       "exact_reserve_text": "An (adverse)/ favourable run-off deviation was experienced during the year in respect of the following classes of business:",
@@ -174,7 +174,7 @@
       "gross_premium_page": 18,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior year development amount is NET of reinsurance as no gross figure was explicitly available in the report. The 'Net claims outstanding' note on page 20 provides a net figure, and the gross claims development triangle on page 15 did not clearly indicate a gross prior year development movement. [RAG OVERRIDE: Model said PYD=-49.463, RAG triangle computed 0.0. Using RAG value.]",
+      "data_quality_notes": "Prior year development amount is NET of reinsurance as no gross figure was explicitly available in the report. The 'Net claims outstanding' note on page 20 provides a net figure, and the gross claims development triangle on page 15 did not clearly indicate a gross prior year development movement. [RAG OVERRIDE: Model said PYD=-49.463, RAG triangle computed 12.465. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -284,8 +284,8 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_4444_2019_llm.pdf",
-      "content_hash": "0c15d9790544a23ae868327fdd03ec201193ef10b0f0f09124c0c856be12a8a3",
-      "standardized_at": "2026-03-19T02:45:20.187909+00:00",
+      "content_hash": "caced486525f5254482e211fe7ce7acb8cd3d4d9d5285d4170653040daf5c9de",
+      "standardized_at": "2026-03-20T07:27:13.671085+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
@@ -528,19 +528,26 @@
       "opening_reserves_gbp_m": 1949.555,
       "opening_reserves_page": 14,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": 0.0,
-      "prior_year_development_pct": 0.0,
-      "direction": "flat",
-      "prior_year_movement_page": 36,
-      "prior_year_movement_confidence": 0.5,
-      "exact_reserve_text": "An (adverse)/ favourable run-off deviation was experienced during the year in respect of the following classes of business:",
+      "prior_year_development_gbp_m": 12.465,
+      "prior_year_development_pct": 0.64,
+      "direction": "strengthening",
+      "prior_year_movement_page": 24,
+      "prior_year_movement_confidence": 0.8,
+      "exact_reserve_text": "An (adverse)/ favourable run-off deviation was experienced during the year in respect of the following classes of business:\nThe positive impact of the relatively benign catastrophe experience was, however, offset in part by some strengthening of reserves in non-catastrophe classes of business following adverse claims experience.",
       "primary_causes": [
         "Natural catastrophe events",
         "Adverse claims development",
-        "Favorable claims development"
+        "Reserve methodology change",
+        "IBNR recalibration"
       ],
-      "specific_events": [],
-      "specific_years_affected": [],
+      "specific_events": [
+        "Storm Dorian",
+        "Typhoon Faxai",
+        "Typhoon Hagibis"
+      ],
+      "specific_years_affected": [
+        2017
+      ],
       "prior_year_events": [],
       "named_events": [
         {
@@ -549,7 +556,9 @@
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": 5.4,
           "loss_description": "catastrophe costs included in 2019 results",
-          "lobs_affected": [],
+          "lobs_affected": [
+            "Property"
+          ],
           "page": 4,
           "confidence": 1.0
         },
@@ -559,7 +568,9 @@
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": 5.3,
           "loss_description": "catastrophe costs included in 2019 results",
-          "lobs_affected": [],
+          "lobs_affected": [
+            "Property"
+          ],
           "page": 4,
           "confidence": 1.0
         },
@@ -569,67 +580,76 @@
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": 6.2,
           "loss_description": "catastrophe costs included in 2019 results",
-          "lobs_affected": [],
+          "lobs_affected": [
+            "Property"
+          ],
           "page": 4,
           "confidence": 1.0
         }
       ],
-      "standardized_narrative": "The syndicate experienced a small net favourable prioryear runoff during 2019 (net runoff deviation of GBP 49.463m release). Management state that catastrophe experience in 2019 was relatively benign (helping the result) but that this was partly offset by some strengthening of reserves in noncatastrophe classes following adverse claims experience. No gross prioryear movement figure was clearly provided in the movement note, so the reported net runoff deviation has been used.",
+      "standardized_narrative": "At 31 December 2019 Syndicate 4444's gross claims outstanding opened at GBP 1,949.6m. Analysis of the claims development triangle shows a net favourable prior-year development of approximately GBP 116.4m (gross), driven by generally benign catastrophe experience in 2019 (which included costs for Storm Dorian, Typhoon Faxai and Typhoon Hagibis) but partially offset by strengthening in non-catastrophe classes following adverse claims experience and a change in exposure/earnings patterns for certain consumer product and warranty lines which lengthened earning patterns and impacted reserves.",
       "raw_causal_phrases": [
-        "Catastrophe experience in the current period was more favourable than in 2018, contributing to the significant improvement in the net claims ratio.",
-        "Nonetheless, the 2019 results do include catastrophe costs for Storm Dorian (GBP 5.4m); Typhoon Faxai (GBP 5.3m) and Typhoon Hagibis (GBP 6.2m).",
-        "The positive impact of the relatively benign catastrophe experience was, however, offset in part by some strengthening of reserves in non-catastrophe classes of business following adverse claims experience.",
+        "catastrophe experience in the current period was more favourable than in 2018",
+        "offset in part by some strengthening of reserves in non-catastrophe classes of business following adverse claims experience.",
+        "A review of exposure lengths for consumer product and structural defect warranty and mortgage indemnity products, conducted in 2019, has resulted in a lengthening of earnings patterns for these classes. The impact in 2019 was to reduce profit by GBP 30m for the year, with an increase in total assets and total liabilities of GBP 65m, and GBP 95m, respectively.",
         "An (adverse)/ favourable run-off deviation was experienced during the year in respect of the following classes of business:"
       ],
       "lob_movements": [
         {
           "line_of_business": "Accident & Health",
-          "direction": "strengthening",
-          "amount_gbp_m": 0.524,
+          "direction": "release",
+          "amount_gbp_m": -0.524,
           "percentage": null,
-          "confidence": 0.8
+          "confidence": 0.5
         },
         {
           "line_of_business": "Motor",
-          "direction": "release",
-          "amount_gbp_m": -0.082,
+          "direction": "strengthening",
+          "amount_gbp_m": 0.082,
           "percentage": null,
-          "confidence": 0.8
+          "confidence": 0.5
         },
         {
           "line_of_business": "Energy",
-          "direction": "strengthening",
-          "amount_gbp_m": 1.244,
+          "direction": "release",
+          "amount_gbp_m": -1.244,
           "percentage": null,
-          "confidence": 0.8
+          "confidence": 0.5
         },
         {
           "line_of_business": "Marine",
-          "direction": "strengthening",
-          "amount_gbp_m": 13.969,
+          "direction": "release",
+          "amount_gbp_m": -13.969,
           "percentage": null,
-          "confidence": 0.8
+          "confidence": 0.5
         },
         {
           "line_of_business": "Property",
-          "direction": "release",
-          "amount_gbp_m": -2.856,
+          "direction": "strengthening",
+          "amount_gbp_m": 2.856,
           "percentage": null,
-          "confidence": 0.8
+          "confidence": 0.5
         },
         {
           "line_of_business": "Casualty",
-          "direction": "release",
-          "amount_gbp_m": -38.637,
+          "direction": "strengthening",
+          "amount_gbp_m": 38.637,
           "percentage": null,
-          "confidence": 0.8
+          "confidence": 0.5
         },
         {
           "line_of_business": "Professional Lines",
-          "direction": "strengthening",
-          "amount_gbp_m": 7.22,
+          "direction": "release",
+          "amount_gbp_m": -7.22,
           "percentage": null,
-          "confidence": 0.8
+          "confidence": 0.5
+        },
+        {
+          "line_of_business": "Treaty",
+          "direction": "strengthening",
+          "amount_gbp_m": 18.618,
+          "percentage": null,
+          "confidence": 0.5
         }
       ],
       "gross_premiums_written_gbp_m": 1363.8,
@@ -688,7 +708,7 @@
       "gross_premium_page": 34,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "No explicit GROSS prioryear movement (movement in prior year's provision for claims outstanding) was clearly stated in the notes. A net runoff deviation table was available and has been used as a fallback (net of reinsurance). A gross claims development triangle is present but formatting in the source made extracting a clear single gross prioryear movement difficult; users should treat the prioryear movement reported here as NET (release of GBP 49.463m) and refer to the original notes/triangle for a detailed gross analysis. [RAG OVERRIDE: Model said PYD=-49.463, RAG triangle computed 0.0. Using RAG value.]",
+      "data_quality_notes": "Opening gross claims outstanding taken from Balance Sheet (Claims outstanding prior year column). Prior-year development (gross) was calculated from the gross claims development triangle (Page 24) as the sum of movements on underwriting years up to and including 2017 (excluding 2018 and 2019) - this is a calculation-based extraction (confidence 0.8). The note-level run-off table (Note 10) provides class-level run-off deviations but appears to be presented net of reinsurance; those class movements were used to populate lob_movements (confidence 0.5) and therefore should be treated as net/inferred. A review of the report found a change in accounting estimate (exposure lengthening) that materially affected reserves/profit and has been noted above. [RAG OVERRIDE: Model said PYD=-116.37, RAG triangle computed 12.465. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -795,7 +815,7 @@
             null
           ],
           [
-            null,
+            570455,
             null,
             null,
             null,
@@ -806,29 +826,29 @@
             null
           ],
           [
-            570455,
-            555381,
-            469735,
-            545203,
-            699963,
-            774422,
-            996903,
-            686825,
-            236766
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
           ]
         ]
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_4444_2019_llm.pdf",
-      "content_hash": "0c15d9790544a23ae868327fdd03ec201193ef10b0f0f09124c0c856be12a8a3",
-      "standardized_at": "2026-03-19T02:50:41.858651+00:00",
+      "content_hash": "caced486525f5254482e211fe7ce7acb8cd3d4d9d5285d4170653040daf5c9de",
+      "standardized_at": "2026-03-20T07:30:48.376223+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
         "input_tokens": 27536,
-        "output_tokens": 14859,
-        "total_tokens": 42395,
-        "cost_usd": 0.036602
+        "output_tokens": 12153,
+        "total_tokens": 39689,
+        "cost_usd": 0.03119
       },
       "_rag_triangle": {
         "type": "gross",
@@ -1059,12 +1079,12 @@
       }
     }
   },
-  "total_cost_usd": 0.046385,
-  "total_tokens": 67878,
+  "total_cost_usd": 0.040973,
+  "total_tokens": 65172,
   "validation": {
     "passed": true,
-    "total_discrepancies": 30,
-    "within_tolerance": 30,
+    "total_discrepancies": 49,
+    "within_tolerance": 49,
     "hard_failures": 0,
     "hard_failure_details": []
   }

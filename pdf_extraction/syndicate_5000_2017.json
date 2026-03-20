@@ -1,5 +1,5 @@
 {
-  "extraction_timestamp": "2026-03-19T04:33:12.789665+00:00",
+  "extraction_timestamp": "2026-03-20T07:20:50.160032+00:00",
   "spec": {
     "prompt_version": "2.10",
     "field_definitions_version": "1.0",
@@ -32,25 +32,25 @@
           "event_year": 2017,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": 72.0,
-          "loss_description": "cost GBP 72.0m (aggregate, including reinstatements)",
+          "loss_description": "The principal driver of the loss was the third quarter Hurricanes, Harvey, Irma and Maria, and the fourth quarter Californian Wildfires, which in aggregate, including reinstatements, cost GBP 72.0m.",
           "lobs_affected": [],
           "page": 2,
-          "confidence": 0.8
+          "confidence": 0.9
         },
         {
           "event_name": "Californian Wildfires",
           "event_year": 2017,
           "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": 72.0,
-          "loss_description": "cost GBP 72.0m (aggregate, including reinstatements)",
+          "net_loss_gbp_m": null,
+          "loss_description": "The principal driver of the loss was the third quarter Hurricanes, Harvey, Irma and Maria, and the fourth quarter Californian Wildfires, which in aggregate, including reinstatements, cost GBP 72.0m.",
           "lobs_affected": [],
           "page": 2,
           "confidence": 0.8
         }
       ],
-      "standardized_narrative": "The syndicate reported a prior year reserve strengthening of GBP 28.4 million in 2017, primarily driven by adverse development on some large prior year third party liability losses. This strengthening represents 8.11% of the opening gross claims outstanding. The overall loss for the year was significantly impacted by 2017 hurricanes (Harvey, Irma, Maria) and Californian wildfires.",
+      "standardized_narrative": "For the 2017 financial year, Syndicate 5000 reported a prior year reserve strengthening of GBP 28.4 million. This adverse development was primarily driven by large prior year third party liability losses. The overall result for the year was a loss of GBP 82.0 million, significantly impacted by current year natural catastrophe events including the third quarter Hurricanes (Harvey, Irma, Maria) and fourth quarter Californian Wildfires, which collectively cost GBP 72.0 million.",
       "raw_causal_phrases": [
-        "a prior year reserve charge of GBP 28.4m",
+        "prior year reserve charge of GBP 28.4m",
         "driven by some large prior year third party liability losses"
       ],
       "lob_movements": [],
@@ -92,10 +92,10 @@
           "percentage_of_total": 17.8
         }
       ],
-      "gross_premium_page": 15,
+      "gross_premium_page": 2,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The claims development triangle on page 17 shows zero prior year development, which contradicts the explicit narrative statement of a GBP 28.4m prior year reserve charge on page 2. The narrative statement is used as the primary source for prior year development due to its explicit nature. LOB movements are not provided on a gross basis. [RAG OVERRIDE: Model said PYD=28.4, RAG triangle computed -183.0. Using RAG value.]",
+      "data_quality_notes": "The prior year development figure of GBP 28.4m is explicitly stated as a gross charge in the Strategic Report. The claims development triangle on page 17 calculates a prior year development of +GBP 24m, which differs from the stated figure. The stated figure is used as it is a direct statement of the total prior year movement. The LOB breakdown for prior year development is only available on a net basis, so it is not included to maintain consistency with the gross total. [RAG OVERRIDE: Model said PYD=28.4, RAG triangle computed -183.0. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -178,15 +178,15 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_5000_2017_llm.pdf",
-      "content_hash": "487919896c4c95f87fe9b3ee304c1422a9d10909931879f3f3430e7f3a632517",
-      "standardized_at": "2026-03-19T04:32:18.552092+00:00",
+      "content_hash": "c63d13fccf2213704b7d08ea3dea028f29e3501a60cf666f55fa60aca67d5779",
+      "standardized_at": "2026-03-20T07:19:31.930437+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
         "input_tokens": 10637,
-        "output_tokens": 1619,
-        "total_tokens": 16232,
-        "cost_usd": 0.007239
+        "output_tokens": 1627,
+        "total_tokens": 18017,
+        "cost_usd": 0.007259
       },
       "_rag_triangle": {
         "type": "gross",
@@ -347,7 +347,7 @@
       "syndicate": 5000,
       "year": 2017,
       "opening_reserves_gbp_m": 350.17,
-      "opening_reserves_page": 12,
+      "opening_reserves_page": null,
       "opening_reserves_confidence": 0.0,
       "prior_year_development_gbp_m": -183.0,
       "prior_year_development_pct": -52.26,
@@ -355,13 +355,62 @@
       "prior_year_movement_page": null,
       "prior_year_movement_confidence": 0.0,
       "exact_reserve_text": "",
-      "primary_causes": [],
-      "specific_events": [],
+      "primary_causes": [
+        "Natural catastrophe events",
+        "Large loss development",
+        "Adverse claims development"
+      ],
+      "specific_events": [
+        "Hurricane Harvey",
+        "Hurricane Irma",
+        "Hurricane Maria"
+      ],
       "specific_years_affected": [],
       "prior_year_events": [],
-      "named_events": [],
-      "standardized_narrative": "Insufficient extractable data from the provided images to determine a reliable gross opening claims outstanding figure or a quantified gross prior-year reserve movement. The report images include a technical provisions / claims development section and the profit & loss technical account, but the key movement tables and balance sheet numeric values required by the specification could not be unambiguously read from the supplied scans.",
-      "raw_causal_phrases": [],
+      "named_events": [
+        {
+          "event_name": "Hurricane Harvey",
+          "event_year": 2017,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "One of the third quarter hurricanes cited as a principal driver of the year's loss",
+          "lobs_affected": [
+            "Property"
+          ],
+          "page": 2,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Hurricane Irma",
+          "event_year": 2017,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "One of the third quarter hurricanes cited as a principal driver of the year's loss",
+          "lobs_affected": [
+            "Property"
+          ],
+          "page": 2,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Hurricane Maria",
+          "event_year": 2017,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "One of the third quarter hurricanes cited as a principal driver of the year's loss",
+          "lobs_affected": [
+            "Property"
+          ],
+          "page": 2,
+          "confidence": 0.8
+        }
+      ],
+      "standardized_narrative": "The 2017 annual report records a significant underwriting loss driven by third-quarter US hurricanes (Harvey, Irma and Maria). The document discusses large catastrophe losses and an elevated combined ratio; the report does not provide a clearly labelled GROSS prior-year reserve movement amount in accessible pages, so no gross prior-year release/strengthening figure could be extracted with confidence. Primary drivers mentioned are natural catastrophe events and related large loss development.",
+      "raw_causal_phrases": [
+        "the third quarter hurricanes of Harvey, Irma and Maria",
+        "the results for the year were a loss of GBP 82.0m (2016 profit of GBP 22.2m)",
+        "combined ratio was 130.1% (2016: 98.2%)"
+      ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 361.8,
       "gross_premium_mix": [
@@ -404,89 +453,26 @@
       "gross_premium_page": 10,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Many numeric lines in the Balance Sheet and Technical Provisions notes are not legible in the supplied images. I could read the total gross premiums written for 2017 (~361,752) from the Technical Account (page ~10) but could not confidently extract the Balance Sheet 'Claims outstanding' prior-year (1 Jan) gross figure or the 'Movement in prior year's provision for claims outstanding' gross column. A claims development triangle is present in the notes but numeric cells are not reliably readable. As a result opening_reserves_gbp_m and prior_year_development_gbp_m are returned as null. If higher fidelity scans or the original PDF are provided I can extract precise figures and populate the triangle and movement fields. NET figures may be present in narrative but per instructions NET-only values were not used.",
+      "data_quality_notes": "Many required reserve-specific figures (gross opening claims outstanding, gross prior-year movement, technical reserves reconciliation) could not be confidently read from the provided scanned pages. The balance sheet and technical provisions pages exist in the file but the numeric cells are not reliably legible in the images supplied; therefore opening_reserves and prior_year_development are returned as null. Gross written premium was readable on the statement of profit and loss (page 10). No clearly labelled GROSS 'movement in prior year's provision for claims outstanding' numeric total was found in the accessible/legible text; P&L \"Claims incurred in relation to prior underwriting years\" lines were ignored per instructions. If higher-resolution scans of the Balance Sheet (Technical provisions: 'Claims outstanding' line) or the Technical Provisions movement table are provided, the missing gross reserve figures and prior year development can likely be extracted.",
       "_claims_triangle": {
-        "type": "gross",
+        "type": "none",
         "currency": "GBP",
-        "units": "thousands",
-        "page": 34,
-        "underwriting_years": [
-          2011,
-          2012,
-          2013,
-          2014,
-          2015,
-          2016,
-          2017
-        ],
-        "development_rows": [
-          [
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-          ],
-          [
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-          ],
-          [
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-          ],
-          [
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-          ],
-          [
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-          ],
-          [
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-          ]
-        ]
+        "units": "millions",
+        "page": null,
+        "underwriting_years": [],
+        "development_rows": []
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_5000_2017_llm.pdf",
-      "content_hash": "487919896c4c95f87fe9b3ee304c1422a9d10909931879f3f3430e7f3a632517",
-      "standardized_at": "2026-03-19T04:33:12.779658+00:00",
+      "content_hash": "c63d13fccf2213704b7d08ea3dea028f29e3501a60cf666f55fa60aca67d5779",
+      "standardized_at": "2026-03-20T07:20:50.147201+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
         "input_tokens": 22413,
-        "output_tokens": 3106,
-        "total_tokens": 25519,
-        "cost_usd": 0.011815
+        "output_tokens": 3114,
+        "total_tokens": 25527,
+        "cost_usd": 0.011831
       },
       "_rag_triangle": {
         "type": "gross",
@@ -644,12 +630,12 @@
       }
     }
   },
-  "total_cost_usd": 0.019054,
-  "total_tokens": 41751,
+  "total_cost_usd": 0.01909,
+  "total_tokens": 43544,
   "validation": {
     "passed": true,
-    "total_discrepancies": 13,
-    "within_tolerance": 13,
+    "total_discrepancies": 18,
+    "within_tolerance": 18,
     "hard_failures": 0,
     "hard_failure_details": []
   }

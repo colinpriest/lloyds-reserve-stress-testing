@@ -1,5 +1,5 @@
 {
-  "extraction_timestamp": "2026-03-19T02:32:06.622610+00:00",
+  "extraction_timestamp": "2026-03-20T07:00:03.773049+00:00",
   "spec": {
     "prompt_version": "2.10",
     "field_definitions_version": "1.0",
@@ -13,9 +13,9 @@
       "opening_reserves_gbp_m": 898.97,
       "opening_reserves_page": 5,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": 0.0,
-      "prior_year_development_pct": 0.0,
-      "direction": "flat",
+      "prior_year_development_gbp_m": -13.896,
+      "prior_year_development_pct": -1.55,
+      "direction": "release",
       "prior_year_movement_page": 13,
       "prior_year_movement_confidence": 0.8,
       "exact_reserve_text": "The development of insurance liabilities provides a measure of the syndicate's ability to estimate the ultimate value of claims.",
@@ -101,7 +101,7 @@
       "gross_premium_page": 16,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior year development was calculated from the gross claims development triangle on page 13 as no explicit gross prior year movement figure was found in narrative or specific notes. The 'Net claims outstanding' run-off deviation on page 18 was identified as a net figure and therefore not used for the gross prior year development or LOB movements. [RAG OVERRIDE: Model said PYD=-13.895, RAG triangle computed 0.0. Using RAG value.]",
+      "data_quality_notes": "Prior year development was calculated from the gross claims development triangle on page 13 as no explicit gross prior year movement figure was found in narrative or specific notes. The 'Net claims outstanding' run-off deviation on page 18 was identified as a net figure and therefore not used for the gross prior year development or LOB movements.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -154,8 +154,8 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_4444_2015_llm.pdf",
-      "content_hash": "216803daff663e85c63e5ddcfa4d0c0f43a5bc72c1fc6107e669356039d79ba6",
-      "standardized_at": "2026-03-19T02:30:31.182363+00:00",
+      "content_hash": "d385e4d9de8e65c2ee82a8c3216890f628db1f5d5171686a76e2f83037b273d3",
+      "standardized_at": "2026-03-20T06:57:48.258227+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
@@ -326,28 +326,26 @@
       "opening_reserves_gbp_m": 898.97,
       "opening_reserves_page": 14,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": 0.0,
-      "prior_year_development_pct": 0.0,
-      "direction": "flat",
-      "prior_year_movement_page": 34,
-      "prior_year_movement_confidence": 0.5,
+      "prior_year_development_gbp_m": -13.896,
+      "prior_year_development_pct": -1.55,
+      "direction": "release",
+      "prior_year_movement_page": 23,
+      "prior_year_movement_confidence": 0.8,
       "exact_reserve_text": "A favourable/(adverse) run-off deviation was experienced during the year in respect of the following classes of business:",
       "primary_causes": [
-        "Favorable claims development",
-        "Reinsurance recoveries"
+        "Favorable claims development"
       ],
       "specific_events": [],
-      "specific_years_affected": [],
+      "specific_years_affected": [
+        2011,
+        2012,
+        2013
+      ],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "Opening gross claims outstanding at 1 January 2015 was GBP 898.97m. During 2015 the syndicate recorded a net favourable run-off (release) reported as GBP 31.883m (net), driven by favourable claims development across a number of classes and by reinsurance-inwards recoveries. No explicit gross prior-year movement was provided in the movement note, so the quantified figure above is the reported net run-off deviation.",
+      "standardized_narrative": "The syndicate recorded a modest gross favourable prior year reserve movement of approximately GBP 15.8m (release), calculated from the gross claims development table, driven by favourable development across earlier underwriting years (notably 2011-2013). Net run-off movements by class (note 9) show mixed outcomes across lines, with reinsurance inwards and Marine & Energy and Aviation showing favourable run-off, while some motor and property liabilities showed adverse development. The gross prior year release represents approximately a 1.8% reduction of opening gross claims outstanding.",
       "raw_causal_phrases": [
-        "A favourable/(adverse) run-off deviation was experienced during the year in respect of the following classes of business:",
-        "Reinsurance inwards",
-        "changes in the legal environment",
-        "the effects of inflation",
-        "the impact of large losses",
-        "movements in industry benchmarks"
+        "A favourable/(adverse) run-off deviation was experienced during the year in respect of the following classes of business:"
       ],
       "lob_movements": [
         {
@@ -355,70 +353,63 @@
           "direction": "release",
           "amount_gbp_m": -0.588,
           "percentage": null,
-          "confidence": 1.0
+          "confidence": 0.9
         },
         {
           "line_of_business": "Motor",
           "direction": "strengthening",
-          "amount_gbp_m": 2.81,
+          "amount_gbp_m": 1.19,
           "percentage": null,
-          "confidence": 1.0
-        },
-        {
-          "line_of_business": "Motor",
-          "direction": "release",
-          "amount_gbp_m": -1.62,
-          "percentage": null,
-          "confidence": 1.0
+          "confidence": 0.8
         },
         {
           "line_of_business": "Marine",
           "direction": "release",
           "amount_gbp_m": -8.813,
           "percentage": null,
-          "confidence": 0.8
+          "confidence": 0.7
         },
         {
           "line_of_business": "Aviation",
           "direction": "release",
           "amount_gbp_m": -4.192,
           "percentage": null,
-          "confidence": 1.0
+          "confidence": 0.9
         },
         {
           "line_of_business": "Property",
           "direction": "strengthening",
           "amount_gbp_m": 5.114,
           "percentage": null,
-          "confidence": 1.0
+          "confidence": 0.9
         },
         {
           "line_of_business": "Casualty",
           "direction": "release",
           "amount_gbp_m": -0.806,
           "percentage": null,
-          "confidence": 1.0
+          "confidence": 0.9
         },
         {
           "line_of_business": "Professional Lines",
           "direction": "strengthening",
           "amount_gbp_m": 2.03,
           "percentage": null,
-          "confidence": 1.0
+          "confidence": 0.9
         },
         {
           "line_of_business": "Aggregate",
           "direction": "strengthening",
           "amount_gbp_m": 2.871,
           "percentage": null,
-          "confidence": 0.8
+          "confidence": 0.6
         },
         {
           "line_of_business": "Treaty",
           "direction": "release",
           "amount_gbp_m": -28.689,
           "percentage": null,
-          "confidence": 1.0
+          "confidence": 0.9
         }
       ],
       "gross_premiums_written_gbp_m": 827.2,
@@ -477,7 +468,7 @@
       "gross_premium_page": 32,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior-year development: no explicit GROSS 'movement in prior year's provision for claims outstanding' figure was found. The report provides a net 'favourable/(adverse) run-off deviation' table (total GBP 31,883k) which has been used as a fallback (NET of reinsurance). A gross movement could potentially be derived from the gross claims development table, but extraction is ambiguous due to the presence of an aggregated '2010 & prior' column and formatting; therefore the reported prior_year_development_gbp_m is NET and flagged accordingly. [RAG OVERRIDE: Model said PYD=-31.883, RAG triangle computed 0.0. Using RAG value.]",
+      "data_quality_notes": "Gross prior year development was not presented explicitly as a single gross movement figure. The gross PYD was calculated from the gross claims development table (claims triangle) on page 23 by comparing current estimates to the previous diagonal for underwriting years 2011-2013 (excluded the aggregated '2010 & prior' column). Note 9 provides a net (after reinsurance) run-off table by class which was used for class-level movements (lob_movements) - those are NET figures, not gross. Where mappings from statutory class names to standard Lloyd's LOBs were ambiguous (e.g. 'Marine & Energy'), a best-fit mapping was used. All monetary amounts converted to millions; triangle values are reported in the source as thousands. Confidence levels reflect whether figures are explicit (1.0), calculated from tables (0.8) or inferred/mapped (0.6-0.9). [RAG OVERRIDE: Model said PYD=-15.791, RAG triangle computed -13.896. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -490,19 +481,56 @@
           2014,
           2015
         ],
-        "development_rows": []
+        "development_rows": [
+          [
+            216533,
+            193801,
+            178441,
+            217535,
+            217535
+          ],
+          [
+            345414,
+            354741,
+            360033,
+            360033,
+            null
+          ],
+          [
+            361698,
+            356540,
+            356540,
+            null,
+            null
+          ],
+          [
+            351920,
+            351920,
+            null,
+            null,
+            null
+          ],
+          [
+            344242,
+            null,
+            null,
+            null,
+            null
+          ]
+        ],
+        "confidence": 0.8
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_4444_2015_llm.pdf",
-      "content_hash": "216803daff663e85c63e5ddcfa4d0c0f43a5bc72c1fc6107e669356039d79ba6",
-      "standardized_at": "2026-03-19T02:32:06.618613+00:00",
+      "content_hash": "d385e4d9de8e65c2ee82a8c3216890f628db1f5d5171686a76e2f83037b273d3",
+      "standardized_at": "2026-03-20T07:00:03.759402+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
         "input_tokens": 25515,
-        "output_tokens": 9382,
-        "total_tokens": 34897,
-        "cost_usd": 0.025143
+        "output_tokens": 12215,
+        "total_tokens": 37730,
+        "cost_usd": 0.030809
       },
       "_rag_triangle": {
         "type": "gross",
@@ -661,12 +689,12 @@
       }
     }
   },
-  "total_cost_usd": 0.032006,
-  "total_tokens": 54770,
+  "total_cost_usd": 0.037672,
+  "total_tokens": 57603,
   "validation": {
     "passed": true,
-    "total_discrepancies": 29,
-    "within_tolerance": 29,
+    "total_discrepancies": 27,
+    "within_tolerance": 27,
     "hard_failures": 0,
     "hard_failure_details": []
   }
