@@ -1,0 +1,407 @@
+{
+  "extraction_timestamp": "2026-07-05T19:57:23.979196+00:00",
+  "spec": {
+    "prompt_version": "2.10",
+    "field_definitions_version": "1.0",
+    "tolerance_rules_version": "1.0"
+  },
+  "source_file": "syndicate_reports\\pdfs\\syndicate_6107_2019.pdf",
+  "models": {
+    "gemini-2.5-flash": {
+      "syndicate": 6107,
+      "year": 2019,
+      "opening_reserves_gbp_m": 97.6813,
+      "opening_reserves_page": 6,
+      "opening_reserves_confidence": 1.0,
+      "prior_year_development_gbp_m": null,
+      "prior_year_development_pct": null,
+      "direction": "mixed",
+      "prior_year_movement_page": 3,
+      "prior_year_movement_confidence": 0.5,
+      "exact_reserve_text": "The 2017 underwriting year has closed with a declared loss of $17.1m, which represents a loss on capacity of 27.9%. The syndicate has incurred material losses as a result of the natural catastrophe events of 2017 and 2018. The impact of the property reinsurance loss on the 2017 year of account closing return on capacity, has been partially offset by the profitability of the cyber business.",
+      "primary_causes": [
+        "Natural catastrophe events",
+        "Adverse claims development",
+        "Favorable claims development"
+      ],
+      "specific_events": [],
+      "specific_years_affected": [
+        2017,
+        2018
+      ],
+      "prior_year_events": [],
+      "named_events": [
+        {
+          "event_name": "Typhoons Hagibis",
+          "event_year": 2019,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "impacted by the natural catastrophe events",
+          "lobs_affected": [],
+          "page": 3,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Typhoons Faxai",
+          "event_year": 2019,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "impacted by the natural catastrophe events",
+          "lobs_affected": [],
+          "page": 3,
+          "confidence": 0.8
+        }
+      ],
+      "standardized_narrative": "The report indicates that the 2017 underwriting year closed with a loss, primarily due to property reinsurance losses from 2017 and 2018 natural catastrophe events, partially offset by profitable cyber business. The 2018 underwriting year is also forecasting a loss. While specific prior year development for the entire portfolio is not quantified, the narrative suggests mixed development with adverse impacts from past natural catastrophes on property reinsurance and favorable development from cyber business.",
+      "raw_causal_phrases": [
+        "material losses as a result of the natural catastrophe events of 2017 and 2018",
+        "impact of the property reinsurance loss",
+        "profitability of the cyber business"
+      ],
+      "lob_movements": [
+        {
+          "line_of_business": "Reinsurance - Property",
+          "direction": "strengthening",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.5
+        },
+        {
+          "line_of_business": "Cyber",
+          "direction": "release",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.5
+        }
+      ],
+      "gross_premiums_written_gbp_m": 73.5014,
+      "gross_premium_mix": [],
+      "gross_premium_page": 5,
+      "gross_premium_confidence": 1.0,
+      "currency": "USD",
+      "data_quality_notes": "The prior year development figure is not explicitly stated as a single gross amount for the entire portfolio. It is inferred from the narrative about specific year of account results (2017 YOA loss due to property reinsurance, offset by cyber profitability). The gross premium mix is described narratively as 'property reinsurance' and 'cyber business' but no specific amounts or percentages are provided in a table. The opening_reserves_gbp_m field is populated with USD millions as per instructions to use native currency, despite the field name.",
+      "source_type": "syndicate",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_6107_2019_llm.pdf",
+      "content_hash": "4535ac23b09ff6162957772ef18b426907ce0f6f279ea2e5ba9ab6086db01bef",
+      "standardized_at": "2026-07-05T19:55:35.415900+00:00",
+      "standardization_model": "gemini-2.5-flash",
+      "_extraction_meta": {
+        "model": "gemini-2.5-flash",
+        "input_tokens": 12959,
+        "output_tokens": 1019,
+        "total_tokens": 21827,
+        "cost_usd": 0.006435
+      }
+    },
+    "gpt-5-mini": {
+      "syndicate": 6107,
+      "year": 2019,
+      "opening_reserves_gbp_m": 97.6813,
+      "opening_reserves_page": 15,
+      "opening_reserves_confidence": 1.0,
+      "prior_year_development_gbp_m": 16.909161,
+      "prior_year_development_pct": 17.3108,
+      "direction": "strengthening",
+      "prior_year_movement_page": 28,
+      "prior_year_movement_confidence": 0.8,
+      "exact_reserve_text": "The 2017 underwriting year has closed with a declared loss of $17.1m, which represents a loss on capacity of 27.9%. The syndicate has incurred material losses as a result of the natural catastrophe events of 2017 and 2018.",
+      "primary_causes": [
+        "Natural catastrophe events",
+        "Man-made catastrophe / large losses",
+        "Adverse claims development"
+      ],
+      "specific_events": [
+        "Typhoon Hagibis",
+        "Typhoon Faxai"
+      ],
+      "specific_years_affected": [
+        2017,
+        2018
+      ],
+      "prior_year_events": [
+        {
+          "event_name": "2017 underwriting year closure",
+          "event_year": 2017,
+          "impact_description": "2017 underwriting year closed with a declared loss of $17.1m (loss on capacity 27.9%), reflecting material catastrophe-related losses.",
+          "lobs_affected": [
+            "Reinsurance - Property",
+            "Property"
+          ],
+          "amount_gbp_m": 17.1,
+          "confidence": 1.0
+        },
+        {
+          "event_name": "Natural catastrophe events 2017",
+          "event_year": 2017,
+          "impact_description": "Material natural catastrophe losses in 2017 that adversely impacted reserves and the 2017 year of account.",
+          "lobs_affected": [
+            "Reinsurance - Property",
+            "Property"
+          ],
+          "amount_gbp_m": null,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Natural catastrophe events 2018",
+          "event_year": 2018,
+          "impact_description": "Material natural catastrophe losses in 2018 that contributed to adverse reserve development and affected the 2018 underwriting year.",
+          "lobs_affected": [
+            "Reinsurance - Property",
+            "Property"
+          ],
+          "amount_gbp_m": null,
+          "confidence": 0.8
+        }
+      ],
+      "named_events": [
+        {
+          "event_name": "Typhoon Hagibis",
+          "event_year": 2019,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "The 2019 underwriting year has been impacted by Typhoon Hagibis in Japan.",
+          "lobs_affected": [
+            "Reinsurance - Property",
+            "Property"
+          ],
+          "page": 3,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Typhoon Faxai",
+          "event_year": 2019,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "The 2019 underwriting year has been impacted by Typhoon Faxai in Japan.",
+          "lobs_affected": [
+            "Reinsurance - Property",
+            "Property"
+          ],
+          "page": 3,
+          "confidence": 0.8
+        }
+      ],
+      "standardized_narrative": "At 31 December 2019 the syndicate's opening gross claims outstanding (prior year comparative) was 97.6813 (thousand units = reported in USD). Analysis of the gross claims development triangle indicates a net adverse prior-year development of approximately 16.91 (million, USD) across underwriting years up to 2017, i.e. an overall strengthening of reserves. The primary drivers cited in the report are material natural catastrophe losses (notably events in 2017 and 2018) on the property/reinsurance portfolio, partially offset by cyber profitability. Specific 2019 events (Typhoon Hagibis and Typhoon Faxai) impacted the 2019 year but the prior-year deterioration is principally attributable to earlier catastrophe activity and consequent adverse claims development.",
+      "raw_causal_phrases": [
+        "The syndicate has incurred material losses as a result of the natural catastrophe events of 2017 and 2018.",
+        "The 2017 underwriting year has closed with a declared loss of $17.1m",
+        "The 2019 underwriting year has been impacted by the natural catastrophe events of Typhoons Hagibis and Faxai in Japan."
+      ],
+      "lob_movements": [
+        {
+          "line_of_business": "Reinsurance - Property",
+          "direction": "strengthening",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.7
+        },
+        {
+          "line_of_business": "Cyber",
+          "direction": "release",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.5
+        },
+        {
+          "line_of_business": "Property",
+          "direction": "strengthening",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.6
+        }
+      ],
+      "gross_premiums_written_gbp_m": 73.5014,
+      "gross_premium_mix": [
+        {
+          "line_of_business": "Property reinsurance and cyber reinsurance",
+          "amount_gbp_m": 73.5014,
+          "percentage_of_total": 100.0
+        }
+      ],
+      "gross_premium_page": 14,
+      "gross_premium_confidence": 1.0,
+      "currency": "USD",
+      "data_quality_notes": "Prior year development amount was not explicitly stated as a gross PYD figure in the notes. The reported gross prior-year movement was calculated from the gross claims development table (gross ultimate losses and development percentages) as the sum of changes for underwriting years 2010-2017 (triangle method). Figures are in the report's native currency (USD). There is no explicit single-line 'movement in prior year's provision' gross figure; net or reinsurer-share figures exist in other notes. LOB-level reserve movements are not explicitly quantified in the report and have been inferred with low-to-moderate confidence.",
+      "_claims_triangle": {
+        "type": "gross",
+        "currency": "USD",
+        "units": "percentage",
+        "page": 28,
+        "underwriting_years": [
+          2010,
+          2011,
+          2012,
+          2013,
+          2014,
+          2015,
+          2016,
+          2017,
+          2018,
+          2019
+        ],
+        "development_rows": [
+          [
+            58.0,
+            53.0,
+            60.9,
+            58.5,
+            61.0,
+            65.0,
+            66.3,
+            116.7,
+            90.6,
+            91.6
+          ],
+          [
+            144.3,
+            72.9,
+            36.8,
+            44.9,
+            32.5,
+            29.5,
+            37.0,
+            119.0,
+            111.7,
+            null
+          ],
+          [
+            126.2,
+            67.3,
+            31.6,
+            42.6,
+            30.7,
+            20.9,
+            38.4,
+            121.2,
+            null,
+            null
+          ],
+          [
+            122.6,
+            62.5,
+            30.6,
+            41.7,
+            27.7,
+            21.4,
+            37.1,
+            null,
+            null,
+            null
+          ],
+          [
+            126.8,
+            61.9,
+            31.3,
+            39.1,
+            27.6,
+            21.8,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            127.3,
+            61.8,
+            31.3,
+            38.8,
+            27.5,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            127.0,
+            57.9,
+            31.4,
+            38.0,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            126.1,
+            57.9,
+            31.2,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            123.6,
+            58.3,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            123.7,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ]
+        ]
+      },
+      "source_type": "syndicate",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_6107_2019_llm.pdf",
+      "content_hash": "4535ac23b09ff6162957772ef18b426907ce0f6f279ea2e5ba9ab6086db01bef",
+      "standardized_at": "2026-07-05T19:57:23.978193+00:00",
+      "standardization_model": "gpt-5-mini",
+      "_extraction_meta": {
+        "model": "gpt-5-mini",
+        "input_tokens": 47934,
+        "output_tokens": 12187,
+        "total_tokens": 60121,
+        "cost_usd": 0.036358
+      }
+    }
+  },
+  "total_cost_usd": 0.042793,
+  "total_tokens": 81948,
+  "validation": {
+    "passed": false,
+    "total_discrepancies": 24,
+    "within_tolerance": 21,
+    "hard_failures": 3,
+    "hard_failure_details": [
+      {
+        "field": "direction",
+        "type": "value_mismatch",
+        "gemini-2.5-flash": "mixed",
+        "gpt-5-mini": "strengthening"
+      },
+      {
+        "field": "prior_year_development_gbp_m",
+        "type": "value_mismatch",
+        "gemini-2.5-flash": null,
+        "gpt-5-mini": 16.909161
+      },
+      {
+        "field": "prior_year_development_pct",
+        "type": "value_mismatch",
+        "gemini-2.5-flash": null,
+        "gpt-5-mini": 17.3108
+      }
+    ]
+  }
+}

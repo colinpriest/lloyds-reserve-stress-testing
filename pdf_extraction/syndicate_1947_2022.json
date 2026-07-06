@@ -1,0 +1,552 @@
+{
+  "extraction_timestamp": "2026-07-05T09:55:35.370184+00:00",
+  "spec": {
+    "prompt_version": "2.10",
+    "field_definitions_version": "1.0",
+    "tolerance_rules_version": "1.0"
+  },
+  "source_file": "syndicate_reports\\pdfs\\syndicate_1947_2022.pdf",
+  "models": {
+    "gemini-2.5-flash": {
+      "syndicate": 1947,
+      "year": 2022,
+      "opening_reserves_gbp_m": 116.515,
+      "opening_reserves_page": 3,
+      "opening_reserves_confidence": 1.0,
+      "prior_year_development_gbp_m": -14.449,
+      "prior_year_development_pct": -12.4,
+      "direction": "release",
+      "prior_year_movement_page": 12,
+      "prior_year_movement_confidence": 1.0,
+      "exact_reserve_text": "Claims incurred, net of reinsurance, include adverse prior year development of GBP 12.3m (2021: favourable development of GBP 5.1m).",
+      "primary_causes": [
+        "Adverse claims development",
+        "Economic inflation / claims cost inflation"
+      ],
+      "specific_events": [],
+      "specific_years_affected": [],
+      "prior_year_events": [],
+      "named_events": [
+        {
+          "event_name": "Hurricane Ian",
+          "event_year": 2022,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "catastrophe loss ratio for the year has improved, despite exposure to Hurricane Ian",
+          "lobs_affected": [
+            "Property",
+            "Reinsurance - Property"
+          ],
+          "page": 1,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "conflict in Ukraine",
+          "event_year": 2022,
+          "event_type": "geopolitical",
+          "net_loss_gbp_m": 1.5,
+          "loss_description": "limited exposure to the conflict in Ukraine, with ultimate losses currently estimated to be GBP 1.5m",
+          "lobs_affected": [
+            "Property",
+            "Marine",
+            "Specialty",
+            "Treaty"
+          ],
+          "page": 1,
+          "confidence": 0.8
+        }
+      ],
+      "standardized_narrative": "The syndicate experienced adverse prior year development of GBP 12.39 million in 2022, primarily driven by strengthening in Reinsurance and Property lines. This adverse development is attributed in part to the current inflationary environment impacting reserving results.",
+      "raw_causal_phrases": [
+        "adverse prior year development",
+        "The current inflationary environment impacted the Syndicate's results and is reflected in the reserving results"
+      ],
+      "lob_movements": [
+        {
+          "line_of_business": "Property",
+          "direction": "strengthening",
+          "amount_gbp_m": 0.198,
+          "percentage": null,
+          "confidence": 1.0
+        },
+        {
+          "line_of_business": "Treaty",
+          "direction": "strengthening",
+          "amount_gbp_m": 12.192,
+          "percentage": null,
+          "confidence": 1.0
+        }
+      ],
+      "gross_premiums_written_gbp_m": 177.4,
+      "gross_premium_mix": [
+        {
+          "line_of_business": "Marine aviation and transport",
+          "amount_gbp_m": 0.0,
+          "percentage_of_total": 0.0
+        },
+        {
+          "line_of_business": "Fire and other damage to property",
+          "amount_gbp_m": 28.6,
+          "percentage_of_total": 16.1
+        },
+        {
+          "line_of_business": "Miscellaneous",
+          "amount_gbp_m": 0.1,
+          "percentage_of_total": 0.1
+        },
+        {
+          "line_of_business": "Reinsurance",
+          "amount_gbp_m": 148.7,
+          "percentage_of_total": 83.8
+        }
+      ],
+      "gross_premium_page": 11,
+      "gross_premium_confidence": 1.0,
+      "currency": "GBP",
+      "data_quality_notes": "The narrative on page 12 states 'adverse prior year development of GBP 12.3m' (net), while the 'Prior year claims development' table on the same page shows a gross movement of -GBP 12.390m. Given the table's heading '(Adverse)/favourable development' and the 2021 comparative (positive = favourable), the 2022 negative figure implies adverse development. This interpretation aligns the table's sign convention with the narrative's 'adverse' description. [RAG OVERRIDE: Model said PYD=12.39, RAG triangle computed -14.449. Using RAG value.]",
+      "_claims_triangle": {
+        "type": "gross",
+        "currency": "GBP",
+        "units": "thousands",
+        "page": 12,
+        "underwriting_years": [
+          2018,
+          2019,
+          2020,
+          2021,
+          2022
+        ],
+        "development_rows": [
+          [
+            26197,
+            27943,
+            43944,
+            61874,
+            78113
+          ],
+          [
+            36869,
+            61480,
+            69836,
+            104354,
+            null
+          ],
+          [
+            32927,
+            58673,
+            61825,
+            null,
+            null
+          ],
+          [
+            30563,
+            59310,
+            null,
+            null,
+            null
+          ],
+          [
+            23488,
+            null,
+            null,
+            null,
+            null
+          ]
+        ]
+      },
+      "source_type": "syndicate",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_1947_2022_llm.pdf",
+      "content_hash": "a8b9a46134f5a3fa4d99afe03ac2ed7d0f8b71c7c2de93bfef764f5258f76fd0",
+      "standardized_at": "2026-07-05T09:54:29.333095+00:00",
+      "standardization_model": "gemini-2.5-flash",
+      "_extraction_meta": {
+        "model": "gemini-2.5-flash",
+        "input_tokens": 10121,
+        "output_tokens": 1414,
+        "total_tokens": 17970,
+        "cost_usd": 0.006571
+      },
+      "_rag_triangle": {
+        "type": "gross",
+        "currency": "GBP",
+        "units": "thousands",
+        "underwriting_years": [
+          2018,
+          2019,
+          2020,
+          2021,
+          2022
+        ],
+        "development_rows": [
+          [
+            26197.0,
+            27943.0,
+            43944.0,
+            61874.0,
+            78113.0
+          ],
+          [
+            36869.0,
+            61480.0,
+            69836.0,
+            104354.0,
+            null
+          ],
+          [
+            32927.0,
+            58673.0,
+            61825.0,
+            null,
+            null
+          ],
+          [
+            30563.0,
+            59310.0,
+            null,
+            null,
+            null
+          ],
+          [
+            23488.0,
+            null,
+            null,
+            null,
+            null
+          ]
+        ]
+      },
+      "_adobe_lob": {
+        "gross_premium_mix": [
+          {
+            "line_of_business": "Marine aviation and transport",
+            "amount_gbp_m": 0.0,
+            "percentage_of_total": 0.0
+          },
+          {
+            "line_of_business": "Fire and other damage to property",
+            "amount_gbp_m": 28.6,
+            "percentage_of_total": 16.1
+          },
+          {
+            "line_of_business": "Miscellaneous",
+            "amount_gbp_m": 0.1,
+            "percentage_of_total": 0.1
+          },
+          {
+            "line_of_business": "Reinsurance",
+            "amount_gbp_m": 148.7,
+            "percentage_of_total": 83.8
+          }
+        ],
+        "gross_premiums_written_gbp_m": 177.4,
+        "claims_incurred_by_lob": [
+          {
+            "line_of_business": "Marine aviation and transport",
+            "amount_gbp_m": 0.0
+          },
+          {
+            "line_of_business": "Fire and other damage to property",
+            "amount_gbp_m": -21.2
+          },
+          {
+            "line_of_business": "Miscellaneous",
+            "amount_gbp_m": -0.1
+          },
+          {
+            "line_of_business": "Reinsurance",
+            "amount_gbp_m": -85.4
+          }
+        ],
+        "currency": "GBP",
+        "method": "azure"
+      },
+      "_adobe_provisions": {
+        "opening_gross_claims_outstanding": 116.515
+      }
+    },
+    "gpt-5-mini": {
+      "syndicate": 1947,
+      "year": 2022,
+      "opening_reserves_gbp_m": 116.515,
+      "opening_reserves_page": 14,
+      "opening_reserves_confidence": 1.0,
+      "prior_year_development_gbp_m": -14.449,
+      "prior_year_development_pct": -12.4,
+      "direction": "release",
+      "prior_year_movement_page": 28,
+      "prior_year_movement_confidence": 0.8,
+      "exact_reserve_text": "Claims incurred, net of reinsurance, include adverse prior year development of GBP 12.3m (2021: favourable development of GBP 5.1m). Prior year claims development is analysed by line of business in the table below.",
+      "primary_causes": [
+        "Favorable claims development",
+        "Economic inflation / claims cost inflation",
+        "Reinsurance recoveries"
+      ],
+      "specific_events": [
+        "Hurricane Ian 2022",
+        "Conflict in Ukraine 2022"
+      ],
+      "specific_years_affected": [
+        2018,
+        2019,
+        2020
+      ],
+      "prior_year_events": [
+        {
+          "event_name": "Commutation of cession business attaching to 2018-2020 underwriting years",
+          "event_year": 2022,
+          "impact_description": "The cession business attaching to the 2018 to 2020 underwriting years of account was commuted effective 30 November 2022. The liability of the Syndicate for future claims therefore ceased. Final premiums and claims on these years were GBP 68.1m and GBP 56.9m respectively.",
+          "lobs_affected": [
+            "Treaty"
+          ],
+          "amount_gbp_m": null,
+          "confidence": 0.8
+        }
+      ],
+      "named_events": [
+        {
+          "event_name": "Hurricane Ian",
+          "event_year": 2022,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "The catastrophe loss ratio for the year has improved, despite exposure to Hurricane Ian.",
+          "lobs_affected": [
+            "Property"
+          ],
+          "page": 5,
+          "confidence": 0.7
+        },
+        {
+          "event_name": "Conflict in Ukraine",
+          "event_year": 2022,
+          "event_type": "political",
+          "net_loss_gbp_m": 1.5,
+          "loss_description": "The syndicate has limited exposure to the conflict in Ukraine, with ultimate losses currently estimated to be GBP 1.5m.",
+          "lobs_affected": [
+            "Treaty"
+          ],
+          "page": 5,
+          "confidence": 0.9
+        }
+      ],
+      "standardized_narrative": "On a gross basis the claims development triangle indicates a net release of approximately GBP 14.45m on prior years (primarily older underwriting years 2018-2020). The P&L however records an adverse prior year development on a net basis of GBP 12.3m, reflecting the effect of reinsurance and other movements (including commutation of cessions on 2018-2020). Drivers cited in the report include favourable claims experience in certain areas, the impact of the inflationary environment on reserving, and movements in reinsurance recoveries. Named current year events included Hurricane Ian and limited exposure to the conflict in Ukraine.",
+      "raw_causal_phrases": [
+        "favourable claims experience.",
+        "The current inflationary environment impacted the Syndicate's results and is reflected in the reserving results",
+        "Claims incurred, net of reinsurance, include adverse prior year development of GBP 12.3m (2021: favourable development of GBP 5.1m).",
+        "the cession business attaching to the 2018 to 2020 underwriting years of account was commuted effective 30 November 2022.",
+        "limited exposure to the conflict in Ukraine, with ultimate losses currently estimated to be GBP 1.5m."
+      ],
+      "lob_movements": [
+        {
+          "line_of_business": "Property",
+          "direction": "strengthening",
+          "amount_gbp_m": 0.198,
+          "percentage": null,
+          "confidence": 0.5
+        },
+        {
+          "line_of_business": "Treaty",
+          "direction": "strengthening",
+          "amount_gbp_m": 12.192,
+          "percentage": null,
+          "confidence": 0.5
+        }
+      ],
+      "gross_premiums_written_gbp_m": 177.4,
+      "gross_premium_mix": [
+        {
+          "line_of_business": "Marine aviation and transport",
+          "amount_gbp_m": 0.0,
+          "percentage_of_total": 0.0
+        },
+        {
+          "line_of_business": "Fire and other damage to property",
+          "amount_gbp_m": 28.6,
+          "percentage_of_total": 16.1
+        },
+        {
+          "line_of_business": "Miscellaneous",
+          "amount_gbp_m": 0.1,
+          "percentage_of_total": 0.1
+        },
+        {
+          "line_of_business": "Reinsurance",
+          "amount_gbp_m": 148.7,
+          "percentage_of_total": 83.8
+        }
+      ],
+      "gross_premium_page": 27,
+      "gross_premium_confidence": 1.0,
+      "currency": "GBP",
+      "data_quality_notes": "Gross prior year development was calculated from the gross claims development triangle (triangle in GBP 000s) and yields a net release of ~GBP 14.45m. The report also states an adverse prior year development of GBP 12.3m on a net (after reinsurance) basis - the difference is due to reinsurance recoveries and the commutation of cessions affecting the relationship between gross and net movements. Per-LOB prior year movements in the notes appear only on a net basis; gross per-LOB movements were not provided. Where per-LOB figures are reported above they are taken from net P&L movement lines and carry lower confidence.",
+      "_claims_triangle": {
+        "type": "gross",
+        "currency": "GBP",
+        "units": "thousands",
+        "page": 28,
+        "underwriting_years": [
+          2018,
+          2019,
+          2020,
+          2021,
+          2022
+        ],
+        "development_rows": [
+          [
+            26197,
+            27943,
+            43944,
+            61874,
+            78113
+          ],
+          [
+            36869,
+            61480,
+            69836,
+            104354,
+            null
+          ],
+          [
+            32927,
+            58673,
+            61825,
+            null,
+            null
+          ],
+          [
+            30563,
+            59310,
+            null,
+            null,
+            null
+          ],
+          [
+            23488,
+            null,
+            null,
+            null,
+            null
+          ]
+        ]
+      },
+      "source_type": "syndicate",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_1947_2022_llm.pdf",
+      "content_hash": "a8b9a46134f5a3fa4d99afe03ac2ed7d0f8b71c7c2de93bfef764f5258f76fd0",
+      "standardized_at": "2026-07-05T09:55:35.369196+00:00",
+      "standardization_model": "gpt-5-mini",
+      "_extraction_meta": {
+        "model": "gpt-5-mini",
+        "input_tokens": 23617,
+        "output_tokens": 9327,
+        "total_tokens": 32944,
+        "cost_usd": 0.024558
+      },
+      "_rag_triangle": {
+        "type": "gross",
+        "currency": "GBP",
+        "units": "thousands",
+        "underwriting_years": [
+          2018,
+          2019,
+          2020,
+          2021,
+          2022
+        ],
+        "development_rows": [
+          [
+            26197.0,
+            27943.0,
+            43944.0,
+            61874.0,
+            78113.0
+          ],
+          [
+            36869.0,
+            61480.0,
+            69836.0,
+            104354.0,
+            null
+          ],
+          [
+            32927.0,
+            58673.0,
+            61825.0,
+            null,
+            null
+          ],
+          [
+            30563.0,
+            59310.0,
+            null,
+            null,
+            null
+          ],
+          [
+            23488.0,
+            null,
+            null,
+            null,
+            null
+          ]
+        ]
+      },
+      "_adobe_lob": {
+        "gross_premium_mix": [
+          {
+            "line_of_business": "Marine aviation and transport",
+            "amount_gbp_m": 0.0,
+            "percentage_of_total": 0.0
+          },
+          {
+            "line_of_business": "Fire and other damage to property",
+            "amount_gbp_m": 28.6,
+            "percentage_of_total": 16.1
+          },
+          {
+            "line_of_business": "Miscellaneous",
+            "amount_gbp_m": 0.1,
+            "percentage_of_total": 0.1
+          },
+          {
+            "line_of_business": "Reinsurance",
+            "amount_gbp_m": 148.7,
+            "percentage_of_total": 83.8
+          }
+        ],
+        "gross_premiums_written_gbp_m": 177.4,
+        "claims_incurred_by_lob": [
+          {
+            "line_of_business": "Marine aviation and transport",
+            "amount_gbp_m": 0.0
+          },
+          {
+            "line_of_business": "Fire and other damage to property",
+            "amount_gbp_m": -21.2
+          },
+          {
+            "line_of_business": "Miscellaneous",
+            "amount_gbp_m": -0.1
+          },
+          {
+            "line_of_business": "Reinsurance",
+            "amount_gbp_m": -85.4
+          }
+        ],
+        "currency": "GBP",
+        "method": "azure"
+      },
+      "_adobe_provisions": {
+        "opening_gross_claims_outstanding": 116.515
+      }
+    }
+  },
+  "total_cost_usd": 0.031129,
+  "total_tokens": 50914,
+  "validation": {
+    "passed": true,
+    "total_discrepancies": 24,
+    "within_tolerance": 24,
+    "hard_failures": 0,
+    "hard_failure_details": []
+  }
+}

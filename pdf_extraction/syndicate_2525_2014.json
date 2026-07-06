@@ -1,0 +1,169 @@
+{
+  "extraction_timestamp": "2026-07-05T12:45:16.127056+00:00",
+  "spec": {
+    "prompt_version": "2.10",
+    "field_definitions_version": "1.0",
+    "tolerance_rules_version": "1.0"
+  },
+  "source_file": "syndicate_reports\\pdfs\\syndicate_2525_2014.pdf",
+  "models": {
+    "gemini-2.5-flash": {
+      "syndicate": 2525,
+      "year": 2014,
+      "opening_reserves_gbp_m": 130.318,
+      "opening_reserves_page": 9,
+      "opening_reserves_confidence": 1.0,
+      "prior_year_development_gbp_m": -24.8,
+      "prior_year_development_pct": -19.03,
+      "direction": "release",
+      "prior_year_movement_page": 13,
+      "prior_year_movement_confidence": 1.0,
+      "exact_reserve_text": "There were favourable movements during the year of GBP 24.8 million, (2013: GBP 15.6 million), on prior year gross claims reserves, held at 31 December 2013.",
+      "primary_causes": [
+        "Favorable claims development"
+      ],
+      "specific_events": [],
+      "specific_years_affected": [],
+      "prior_year_events": [],
+      "named_events": [],
+      "standardized_narrative": "The syndicate reported favourable movements of GBP 24.8 million on its prior year gross claims reserves as at 31 December 2013, resulting in a release of 19.03% relative to the opening gross reserves. This positive development is attributed to favourable claims experience.",
+      "raw_causal_phrases": [
+        "favourable movements",
+        "prior year gross claims reserves"
+      ],
+      "lob_movements": [],
+      "gross_premiums_written_gbp_m": 42.243,
+      "gross_premium_mix": [
+        {
+          "line_of_business": "Employers' liability",
+          "amount_gbp_m": 23.843,
+          "percentage_of_total": 56.44
+        },
+        {
+          "line_of_business": "Public liability",
+          "amount_gbp_m": 18.4,
+          "percentage_of_total": 43.56
+        }
+      ],
+      "gross_premium_page": 4,
+      "gross_premium_confidence": 1.0,
+      "currency": "GBP",
+      "data_quality_notes": "",
+      "_claims_triangle": {
+        "type": "none",
+        "currency": null,
+        "units": null,
+        "page": null,
+        "underwriting_years": [],
+        "development_rows": []
+      },
+      "source_type": "syndicate",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_2525_2014_llm.pdf",
+      "content_hash": "236ad33c4865c9c1f243c706b8bb5fef2336625f41a7087feec2869571b5ca75",
+      "standardized_at": "2026-07-05T12:44:25.121461+00:00",
+      "standardization_model": "gemini-2.5-flash",
+      "_extraction_meta": {
+        "model": "gemini-2.5-flash",
+        "input_tokens": 9605,
+        "output_tokens": 616,
+        "total_tokens": 12455,
+        "cost_usd": 0.004422
+      },
+      "_adobe_provisions": {
+        "opening_gross_claims_outstanding": 130.318
+      }
+    },
+    "gpt-5-mini": {
+      "syndicate": 2525,
+      "year": 2014,
+      "opening_reserves_gbp_m": 130.318,
+      "opening_reserves_page": 16,
+      "opening_reserves_confidence": 0.5,
+      "prior_year_development_gbp_m": null,
+      "prior_year_development_pct": null,
+      "direction": "release",
+      "prior_year_movement_page": 2,
+      "prior_year_movement_confidence": 0.5,
+      "exact_reserve_text": "The profit in the calendar year has largely come from reserve releases from 2012 and prior years which are displayed in the table provided.",
+      "primary_causes": [
+        "Favorable claims development"
+      ],
+      "specific_events": [],
+      "specific_years_affected": [
+        2012
+      ],
+      "prior_year_events": [],
+      "named_events": [],
+      "standardized_narrative": "The syndicate reports that the calendar year profit was largely driven by reserve releases on 2012 and earlier years. The report describes these as reserve releases (favourable claims development). No gross prior-year movement amount is clearly extractable from the published tables in the provided images; detailed technical notes appear present but the gross PY movement figure could not be unambiguously read.",
+      "raw_causal_phrases": [
+        "reserve releases from 2012 and prior years"
+      ],
+      "lob_movements": [
+        {
+          "line_of_business": "Treaty",
+          "direction": "release",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.3
+        }
+      ],
+      "gross_premiums_written_gbp_m": 42.243,
+      "gross_premium_mix": [
+        {
+          "line_of_business": "Reinsurance",
+          "amount_gbp_m": 42.243,
+          "percentage_of_total": 100.0
+        }
+      ],
+      "gross_premium_page": 22,
+      "gross_premium_confidence": 0.8,
+      "currency": "GBP",
+      "data_quality_notes": "Source images are low-resolution and rotated. Balance sheet and technical provisions tables are present but some numeric cells are difficult to read. Opening gross claims outstanding was read from the Liabilities (Claims outstanding) prior-year column but is not crystal-clear (confidence 0.5). The report text explicitly mentions 'reserve releases from 2012 and prior years' (so direction = release) but no unambiguous GROSS prior-year movement amount could be located in the readable images; therefore prior_year_development_gbp_m is null. Gross premium is taken from the gross written premium line (42,243) -> 42.243m. No clear claims development triangle was readable; none is provided here. [RAG OVERRIDE: Model said opening_reserves=116.166, balance sheet gives 130.318m. Using RAG value.]",
+      "_claims_triangle": {
+        "type": "none",
+        "currency": "GBP",
+        "units": "millions",
+        "page": null,
+        "underwriting_years": [],
+        "development_rows": []
+      },
+      "source_type": "syndicate",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_2525_2014_llm.pdf",
+      "content_hash": "236ad33c4865c9c1f243c706b8bb5fef2336625f41a7087feec2869571b5ca75",
+      "standardized_at": "2026-07-05T12:45:16.123059+00:00",
+      "standardization_model": "gpt-5-mini",
+      "_extraction_meta": {
+        "model": "gpt-5-mini",
+        "input_tokens": 18681,
+        "output_tokens": 3383,
+        "total_tokens": 22064,
+        "cost_usd": 0.011436
+      },
+      "_adobe_provisions": {
+        "opening_gross_claims_outstanding": 130.318
+      }
+    }
+  },
+  "total_cost_usd": 0.015858,
+  "total_tokens": 34519,
+  "validation": {
+    "passed": false,
+    "total_discrepancies": 18,
+    "within_tolerance": 16,
+    "hard_failures": 2,
+    "hard_failure_details": [
+      {
+        "field": "prior_year_development_gbp_m",
+        "type": "value_mismatch",
+        "gemini-2.5-flash": -24.8,
+        "gpt-5-mini": null
+      },
+      {
+        "field": "prior_year_development_pct",
+        "type": "value_mismatch",
+        "gemini-2.5-flash": -19.03,
+        "gpt-5-mini": null
+      }
+    ]
+  }
+}

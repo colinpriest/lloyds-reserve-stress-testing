@@ -1785,15 +1785,30 @@ def _parse_pyd_from_general_narrative(page_text):
                    f" = {pyd_m:+.3f}m")
 
 
+def _normalize_top_level(obj, raw):
+    """All callers expect a JSON object. LLMs occasionally wrap the object in
+    a one-element array — unwrap that. Any other top-level type is treated as
+    malformed so the caller's retry / fix-prompt logic kicks in."""
+    if isinstance(obj, list) and len(obj) == 1 and isinstance(obj[0], dict):
+        return obj[0]
+    if not isinstance(obj, dict):
+        raise json.JSONDecodeError(
+            f"top-level JSON is {type(obj).__name__}, expected object", raw, 0)
+    return obj
+
+
 def parse_json_response(text):
-    """Parse JSON from LLM response, stripping markdown fences if present."""
+    """Parse JSON from LLM response, stripping markdown fences if present.
+
+    Always returns a JSON object (dict); raises json.JSONDecodeError otherwise.
+    """
     raw = text.strip()
     if raw.startswith("```"):
         raw = raw.split("\n", 1)[1].rsplit("```", 1)[0].strip()
 
     # Try direct parse first
     try:
-        return json.loads(raw)
+        return _normalize_top_level(json.loads(raw), raw)
     except json.JSONDecodeError:
         pass
 
@@ -1803,7 +1818,7 @@ def parse_json_response(text):
     if brace_start != -1 and brace_end > brace_start:
         candidate = raw[brace_start:brace_end + 1]
         try:
-            return json.loads(candidate)
+            return _normalize_top_level(json.loads(candidate), candidate)
         except json.JSONDecodeError:
             pass
 
@@ -1821,12 +1836,12 @@ def parse_json_response(text):
         if '"' not in fixed.replace('\\"', ''):
             fixed = fixed.replace("'", '"')
         try:
-            return json.loads(fixed)
+            return _normalize_top_level(json.loads(fixed), fixed)
         except json.JSONDecodeError:
             pass
 
     # Re-raise with original text for debugging
-    return json.loads(raw)
+    return _normalize_top_level(json.loads(raw), raw)
 
 
 def extract_with_gemini(report_path, file_bytes, content_hash, syndicate_num, report_year, model=GEMINI_MODEL):
