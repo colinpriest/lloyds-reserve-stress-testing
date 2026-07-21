@@ -154,6 +154,7 @@ structured JSON.
 | `PERPLEXITY_API_KEY` | Yes | Perplexity API for source discovery | pplx-... |
 | `OPENAI_API_KEY` | Yes | GPT extraction + ChatGPT summarization | sk-proj-... |
 | `GEMINI_API_KEY` | Yes | Gemini extraction | ... |
+| `ANTHROPIC_API_KEY` | Yes | Claude API for extraction adjudication (`adjudicate.py`) | sk-ant-... |
 | `AZURE_DOCUMENT_INTELLIGENCE_ENDPOINT` | Yes | Table extraction (default backend) | https://... |
 | `AZURE_DOCUMENT_INTELLIGENCE_KEY` | Yes | Azure Document Intelligence key | ... |
 | `NUTRIENT_API_KEY` | No | Nutrient.io table backend (optional) | ... |
