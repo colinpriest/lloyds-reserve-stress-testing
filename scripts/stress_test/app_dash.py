@@ -587,7 +587,7 @@ def get_data_extraction_status() -> Dict:
             pass
 
     # Check size metrics
-    size_path = project_root / "size_metrics.json"
+    size_path = project_root / "data" / "size_metrics.json"
     if size_path.exists():
         status['size_metrics_date'] = datetime.fromtimestamp(
             size_path.stat().st_mtime

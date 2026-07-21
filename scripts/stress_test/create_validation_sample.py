@@ -32,8 +32,8 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 VALIDATION_DIR = PROJECT_ROOT / "docs" / "validation"
 
 CORPUS_PATH = PROJECT_ROOT / "results" / "combined" / "enhanced_corpus.json"
-LOB_WEIGHTS_PATH = PROJECT_ROOT / "lob_weights.json"
-SIZE_METRICS_PATH = PROJECT_ROOT / "size_metrics.json"
+LOB_WEIGHTS_PATH = PROJECT_ROOT / "data" / "lob_weights.json"
+SIZE_METRICS_PATH = PROJECT_ROOT / "data" / "size_metrics.json"
 QUALITY_REPORT_PATH = PROJECT_ROOT / "syndicate_reports" / "quality_report.json"
 
 FROZEN_CSV = VALIDATION_DIR / "syndicate_corpus_v1.0.csv"

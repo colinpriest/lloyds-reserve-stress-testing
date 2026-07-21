@@ -219,9 +219,9 @@ def build_analysis_table(
     if corpus_path is None:
         corpus_path = str(_PROJECT_ROOT / "results" / "combined" / "enhanced_corpus.json")
     if lob_weights_path is None:
-        lob_weights_path = str(_PROJECT_ROOT / "lob_weights.json")
+        lob_weights_path = str(_PROJECT_ROOT / "data" / "lob_weights.json")
     if size_metrics_path is None:
-        size_metrics_path = str(_PROJECT_ROOT / "size_metrics.json")
+        size_metrics_path = str(_PROJECT_ROOT / "data" / "size_metrics.json")
 
     logger.info("Loading corpus from %s", corpus_path)
     movements = _load_corpus(corpus_path)

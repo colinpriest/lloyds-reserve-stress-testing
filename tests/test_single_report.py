@@ -14,7 +14,7 @@ import sys
 import json
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).parent))
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from test_gemini import process_one_report, GEMINI_MODEL, OPENAI_MODEL
 
 report_path = Path("syndicate_reports/pdfs/syndicate_2987_2018.pdf")

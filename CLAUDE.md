@@ -1,16 +1,15 @@
-# Lloyd's Reserve Stress Testing
+# Lloyd's Reserve Data Collection & Extraction
 
-A comprehensive Python toolkit for collecting, analyzing, and stress-testing insurance reserve data from Lloyd's of London using LLMs, Extreme Value Theory (EVT), and semantic-numeric joint embeddings for academic research.
+A Python toolkit for collecting, extracting, and standardizing insurance reserve data from Lloyd's of London syndicate reports and market commentary, to support academic research on insurance reserve movements.
 
 ## Quick Summary
 
-This project enables quantitative stress testing of insurance reserve movements by:
-1. **Scraping** syndicate reports and market commentary (2014-2024)
+This project builds research-ready reserve datasets by:
+1. **Scraping** syndicate annual reports and market commentary (2014-2024)
 2. **Classifying** quality of reserve commentary (4-tier system)
-3. **Standardizing** reserve movements using ChatGPT summarization
-4. **Embedding** historical narratives in joint semantic-numeric space
-5. **Generating** synthetic stress scenarios via EVT and LLMs
-6. **Querying** portfolio-specific scenarios by return period
+3. **Extracting** structured reserve data (prior year development, LOB breakdowns, claims triangles) from syndicate PDFs using a RAG-lite pipeline (deterministic table extraction + dual-LLM verification)
+4. **Standardizing** market reserve movements using ChatGPT summarization
+5. **Merging** syndicate and market data into a unified corpus
 
 ## Tech Stack
 
@@ -19,360 +18,149 @@ This project enables quantitative stress testing of insurance reserve movements 
 | Language | Python | 3.8+ | Core implementation |
 | Web Scraping | requests, BeautifulSoup4, lxml | Latest | Download and parse PDFs and web pages |
 | PDF Processing | PyMuPDF, pdfplumber, pdf2image | 1.23.0+ | Extract text from PDFs |
+| Table Extraction | Azure Document Intelligence (default), Nutrient, Adobe PDF Extract | Latest | Deterministic table/triangle extraction |
 | Data Processing | pandas | 2.0.0+ | Tabular data manipulation |
-| LLM APIs | openai | 1.0.0+ | ChatGPT summarization |
+| LLM APIs | openai (GPT), Gemini | 1.0.0+ | Dual-LLM extraction + ChatGPT summarization |
 | LLM APIs | requests | 2.31.0+ | Perplexity API (custom implementation) |
-| Embeddings | sentence-transformers | Latest | Semantic text embedding |
-| ML/Statistics | scikit-learn, scipy, statsmodels | Latest | EVT, clustering, statistics |
-| Vector Index | FAISS | Latest | Semantic similarity search |
-| Visualization | matplotlib, plotly, altair | Latest | Analysis and diagnostics |
-| UI Framework | streamlit, dash | Latest | Web interfaces for queries |
+| Visualization | matplotlib | Latest | Diagnostics |
 | OCR | pytesseract, Pillow | Latest | Scanned PDF text extraction |
 | Rate Limiting | ratelimit | 2.2.1+ | API rate limit compliance |
 
-## Quick Start
+## Setup
 
-### Prerequisites
+- Python 3.8+, `pip install -r requirements.txt` (use a venv)
+- System dependencies: Poppler (PDF rendering); Tesseract OCR (optional, for scanned PDFs)
+- API keys go in a local `.env` file (gitignored) — see Environment Variables below
 
-```bash
-# System requirements
-Python 3.8+
-Poppler utilities (for PDF processing)
-  - Windows: download from https://github.com/oschwartz10612/poppler-windows/releases
-  - Linux: sudo apt-get install poppler-utils
-  - macOS: brew install poppler
+## End-to-End Pipeline
 
-# Optional: OCR for scanned PDFs
-Tesseract OCR
-  - Windows: conda install -c conda-forge tesseract
-  - Linux: sudo apt-get install tesseract-ocr
-  - macOS: brew install tesseract
-
-# API Keys required
-.env file with:
-  PERPLEXITY_API_KEY=...      # Source discovery
-  OPENAI_API_KEY=...          # ChatGPT summarization
-  GOOGLE_API_KEY=...          # Optional: enhanced search
-  GOOGLE_CSE_ID=...           # Optional: custom search engine
-```
-
-### Installation & Setup
+Commands in pipeline order:
 
 ```bash
-# Clone and enter directory
-git clone [repository-url]
-cd lloyds_reserve_stress_testing
-
-# Create virtual environment
-python -m venv venv
-source venv/bin/activate      # On Windows: venv\Scripts\activate
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Verify setup
-python -c "import requests, pandas, openai; print('✓ Dependencies OK')"
-```
-
-### First Run: End-to-End Pipeline
-
-```bash
-# Step 1: Download syndicate reports (takes 2-4 hours)
+# 1. Download syndicate reports (2-4 hours for all; or --syndicates 1209,2488 --years 2020,2021)
 python scripts/lloyds_scraper.py --all --output ./syndicate_reports --delay 1.5
 
-# Step 2: Classify quality (takes 30-60 min depending on volume)
+# 2. Classify reserve commentary quality (add --single-file <pdf> for one report)
 python scripts/quality_classifier.py --pdf-dir ./syndicate_reports/pdfs --output ./syndicate_reports/quality_report.json
 
-# Step 3: Scrape market commentary from official sources
+# 2a. OCR scanned PDFs if text extraction fails
+python scripts/ocr_scanned_pdfs.py --pdf-dir ./syndicate_reports/pdfs
+
+# 3. Extract structured reserve data (Azure backend default; also: nutrient, adobe)
+python test_gemini.py --table-backend azure
+python test_gemini.py --syndicates 1110 --years 2022   # specific reports
+python test_gemini.py --batch                          # non-interactive, no human adjudication
+
+# 3a. Rebuild coverage/audit outputs after new downloads or extractions
+python scripts/build_coverage_status.py
+
+# 4. Scrape market commentary from official sources
 python scripts/market_commentary_scraper.py --years 2022 2023 2024
 
-# Step 4: Discover additional sources with Perplexity
+# 5. Discover additional sources with Perplexity
 python scripts/perplexity_discovery.py --years 2022 2023 2024
 
-# Step 5: Summarize and standardize with ChatGPT
+# 6. Summarize/standardize with ChatGPT
 python scripts/chatgpt_summarizer.py --input market_commentary/market_commentary.json
+python scripts/syndicate_summarizer.py --input ./syndicate_reports
 
-# Step 6: Prepare data for stress testing
+# 7. Merge syndicate + market data into unified corpus
 python scripts/merge_corpus.py --syndicate results/syndicate/ --market results/market/
-
-# Step 7: Build stress test library (runs full pipeline)
-python scripts/stress_test/pipeline.py build --corpus results/combined/unified_corpus.json --output results/stress_test/
-
-# Step 8: Query for specific portfolio
-python scripts/stress_test/pipeline.py query --library results/stress_test/validated_scenario_library.json --reserves 200 --return-period 100 --lobs Property Casualty
 ```
 
 ## Project Structure
 
+Key locations (full tree: [file_and_folder_structure.md](file_and_folder_structure.md)):
+
 ```
-lloyds_reserve_stress_testing/
-├── .env                                    # API keys (gitignored)
-├── .gitignore
-├── requirements.txt                        # Python dependencies
-├── README.md                               # Full documentation
-├── CLAUDE.md                               # This file
-├── file_and_folder_structure.md           # Detailed structure reference
-├── simulation-workflow.md                  # Technical stress test architecture
-│
-├── data/
-│   ├── syndicate_numbers.py                # ALL_SYNDICATES list (~300 syndicates)
-│   └── __init__.py
-│
-├── syndicate_reports/                      # Syndicate report outputs
-│   ├── pdfs/                               # Downloaded PDF/HTML files (~600+)
-│   ├── metadata/
-│   │   ├── reports.json                    # Metadata for all found reports
-│   │   ├── summary.json                    # Summary statistics
-│   │   └── errors.json                     # Download errors
-│   └── quality_report.json                 # Classification results (VERY_HIGH/HIGH/MEDIUM/LOW)
-│
-├── market_commentary/                      # Market commentary outputs
-│   ├── pdfs/
-│   │   ├── lloyds_official/                # Lloyd's Annual Reports (2014-2024)
-│   │   └── am_best/                        # Rating agency reports
-│   ├── full_text/                          # Extracted text (audit trail)
-│   │   ├── lloyds_official/
-│   │   ├── am_best/
-│   │   └── trade_press/
-│   ├── market_commentary.json              # Scraped data with reserve movements
-│   ├── audit_manifest.json                 # File hashes for verification
-│   ├── discovered_sources.json             # Perplexity discovery results
-│   └── discovered_sources_urls.json        # Extracted URLs
-│
-├── results/
-│   ├── market/                             # ChatGPT market outputs
-│   │   ├── standardized_movements_YYYY.json
-│   │   ├── lob_summaries_YYYY.json
-│   │   └── market_report_YYYY.md
-│   ├── syndicate/                          # ChatGPT syndicate outputs
-│   │   ├── standardized_syndicate_movements.json
-│   │   ├── syndicate_summary.json
-│   │   ├── year_summary.json
-│   │   └── lob_summary.json
-│   ├── combined/                           # Unified corpus for stress testing
-│   │   ├── unified_corpus.json             # Market + syndicate merged
-│   │   ├── corpus_by_lob.json              # Organized by line of business
-│   │   ├── corpus_by_year.json             # Organized by year
-│   │   ├── corpus_summary.json             # Summary statistics
-│   │   ├── embedding_inputs.json           # Prepared for embedding
-│   │   └── training_pairs.json             # Training pairs for model
-│   ├── stress_test/                        # Stress test outputs
-│   │   ├── validated_scenario_library.json # Final synthetic scenarios
-│   │   ├── gpd_fit.json                    # EVT GPD parameters
-│   │   ├── portfolio_stress_scenarios.json # Query results
-│   │   ├── diagnostics/                    # Plots and analysis
-│   │   └── logs/
-│   └── index/                              # Vector index
-│       ├── vector_store.pkl                # FAISS index
-│       └── index_config.json
-│
-├── scripts/
-│   ├── lloyds_scraper.py                   # Syndicate report downloader
-│   ├── quality_classifier.py               # Reserve commentary classifier
-│   ├── ocr_scanned_pdfs.py                 # OCR for image-based PDFs
-│   ├── syndicate_summarizer.py             # ChatGPT syndicate summary
-│   ├── market_commentary_scraper.py        # Official market source scraper
-│   ├── chatgpt_summarizer.py               # ChatGPT market summary
-│   ├── perplexity_discovery.py             # Perplexity source discovery
-│   ├── merge_corpus.py                     # Merge market + syndicate data
-│   ├── embedding_retrieval.py              # Embedding and retrieval
-│   ├── portfolio_query.py                  # Portfolio-specific queries
-│   ├── analyse_strengthenings.py           # Analysis utilities
-│   └── stress_test/                        # Stress testing pipeline
-│       ├── __init__.py
-│       ├── config.py                       # Constants and config classes
-│       ├── pipeline.py                     # Main orchestrator (build & query phases)
-│       ├── data_preparation.py             # Severity/complexity scoring
-│       ├── joint_embedding.py              # Semantic-numeric embedding space
-│       ├── evt_threshold.py                # GPD threshold selection
-│       ├── synthetic_generation.py         # LLM scenario generation
-│       ├── importance_sampling.py          # GPD-weighted sampling
-│       ├── coherence_validation.py         # Scenario validation
-│       ├── coverage_validation.py          # Coverage validation
-│       ├── visualization.py                # General plots
-│       ├── evt_visualization.py            # EVT-specific plots
-│       └── README.md                       # Module-specific docs
-│
-├── analysis/                               # Analysis outputs (gitignored)
-│   └── quality.json
-│
-└── .claude/
-    └── [configuration files - Step 2 & 3]
+table_extraction.py          # Deterministic table extraction (triangle, LOB, provisions)
+test_gemini.py               # Main extraction pipeline (RAG-lite + dual-LLM)
+adjudicate.py                # LLM disagreement adjudication
+manual_override.py           # Manual override for extraction results
+data/syndicate_numbers.py    # ALL_SYNDICATES list (~300 syndicates)
+scripts/                     # Scrapers, classifiers, summarizers, corpus merge
+tests/                       # Ad-hoc test scripts (run from project root)
+docs/                        # Methodology docs + validation artefacts
+syndicate_reports/           # Downloaded PDFs (gitignored), metadata, coverage/audit, quality_report.json
+market_commentary/           # Market PDFs, full text audit trail, scraped JSON
+pdf_extraction/              # Per-report extraction JSON, API caches, LLM cache, audit logs
+results/                     # ChatGPT outputs (market/, syndicate/) + combined/unified_corpus.json
 ```
 
 ## Architecture Overview
 
-### Two-Phase Workflow
+### Data Collection & Extraction Workflow
 
-**PHASE 1: Scenario Library Construction (one-time, ~2 hours)**
+**1. Syndicate reports.** Download annual reports (2014-2024) from Lloyd's, classify reserve
+commentary quality, then extract structured reserve fields (prior year development, opening
+reserves, LOB mix, claims triangle) from each PDF.
 
-The system builds a validated library of synthetic stress scenarios from historical data:
+**2. RAG-lite PDF extraction.** Each syndicate PDF is processed through layered extraction:
+- **Page classification** (PyMuPDF / Tesseract OCR) tags relevant pages
+- **Deterministic table extraction** (Azure by default; Nutrient/Adobe optional) pulls the
+  claims development triangle, LOB breakdown, and provisions movement
+- **Triangle post-processing** in Python computes prior year development from diagonal
+  differences (no LLM arithmetic)
+- **Dual-LLM verification**: Gemini and GPT independently extract the same fields, compared
+  field-by-field with tolerance rules; the deterministic triangle PYD overrides the LLMs when
+  available
+- Output: `pdf_extraction/syndicate_NNNN_YYYY.json`
 
-1. **Data Preparation**: Compute severity ratios (PYD % of reserves) and complexity scores (portfolio diversification)
-2. **Joint Embedding**: Project historical narratives into 3D latent space (severity axis, semantic axis, structure axis)
-3. **EVT Threshold Selection**: Find optimal GPD threshold using MRL plot, parameter stability, and A-D goodness-of-fit
-4. **Stratified Generation**: LLM generates synthetic scenarios filling severity × complexity grid with few-shot prompts
-5. **Semantic Coverage Validation**: Ensure synthetic scenarios maintain semantic diversity
-6. **Importance Sampling**: Re-weight scenarios to match GPD tail distribution
-7. **Coherence Validation**: Verify scenario narratives align with economic logic
+See [README.md](README.md) for the full extraction-pipeline reference.
 
-Output: `validated_scenario_library.json` (hundreds of scenarios with narrative + metrics)
+**3. Market commentary.** Perplexity discovers sources; the market scraper collects official
+reports, rating agencies, and trade press; ChatGPT standardizes reserve movements into
+structured JSON.
 
-**PHASE 2: Portfolio Query (per-request, <5 seconds)**
-
-Given a portfolio and return period, retrieve and customize stress scenarios:
-
-1. **Return Period → Severity**: Convert (e.g., 100-year → 8% severity threshold)
-2. **Scenario Filtering**: Retrieve scenarios matching portfolio's LOB composition
-3. **Portfolio Fine-tuning**: Adjust severity/impact based on portfolio reserves and concentration
-4. **Narrative Generation**: Create explanatory text for selected scenarios
-
-Output: `portfolio_stress_scenarios.json` (5-10 scenarios with explanations)
+**4. Corpus merge.** `merge_corpus.py` combines syndicate and market data into
+`results/combined/unified_corpus.json`.
 
 ### Key Modules
 
 | Module | Location | Purpose |
 |--------|----------|---------|
-| **Syndicate Scraper** | `scripts/lloyds_scraper.py` | Download annual reports from Lloyd's website (~600 PDFs) |
+| **Syndicate Scraper** | `scripts/lloyds_scraper.py`, `scripts/download_from_xlsx.py` | Download annual reports from Lloyd's website |
 | **Quality Classifier** | `scripts/quality_classifier.py` | Score reserve commentary quality (VERY_HIGH/HIGH/MEDIUM/LOW) |
+| **PDF Extraction Pipeline** | `test_gemini.py` | RAG-lite + dual-LLM extraction of reserve fields |
+| **Table Extraction** | `table_extraction.py` | Deterministic triangle/LOB/provisions extraction (Azure/Nutrient/Adobe) |
+| **Coverage/Audit** | `scripts/build_coverage_status.py` | Per-syndicate-year status, source attribution, reconciliation |
 | **Market Scraper** | `scripts/market_commentary_scraper.py` | Extract official market sources |
 | **Perplexity Discovery** | `scripts/perplexity_discovery.py` | Find trade press and rating agency sources |
 | **ChatGPT Summarizers** | `scripts/chatgpt_summarizer.py`, `syndicate_summarizer.py` | Standardize commentary into structured JSON |
-| **Data Preparation** | `scripts/stress_test/data_preparation.py` | Compute severity ratios and complexity scores |
-| **Joint Embedding** | `scripts/stress_test/joint_embedding.py` | Build semantic-numeric embedding space |
-| **EVT Threshold** | `scripts/stress_test/evt_threshold.py` | Fit GPD and select optimal threshold |
-| **Synthetic Generation** | `scripts/stress_test/synthetic_generation.py` | Generate scenarios via LLM |
-| **Pipeline Orchestrator** | `scripts/stress_test/pipeline.py` | Coordinate full workflow (build & query) |
+| **Corpus Merge** | `scripts/merge_corpus.py` | Merge syndicate + market data into unified corpus |
 
 ## Development Guidelines
 
 ### Code Style (Python)
 
 - **File naming**: `snake_case` (e.g., `lloyds_scraper.py`, `quality_classifier.py`)
-- **Function naming**: `snake_case` with verb prefix (e.g., `extract_text()`, `fit_gpd()`)
-- **Variable naming**: `snake_case` (e.g., `pdf_url`, `severity_ratio`)
-- **Constants**: `SCREAMING_SNAKE_CASE` (e.g., `DEFAULT_YEARS`, `LLOYDS_LOBS`)
-- **Classes/Dataclasses**: `PascalCase` (e.g., `ReportInfo`, `SyntheticScenario`)
+- **Function naming**: `snake_case` with verb prefix (e.g., `extract_text()`, `compute_pyd()`)
+- **Variable naming**: `snake_case` (e.g., `pdf_url`, `opening_reserves`)
+- **Constants**: `SCREAMING_SNAKE_CASE` (e.g., `DEFAULT_YEARS`, `PROMPT_VERSION`)
+- **Classes/Dataclasses**: `PascalCase` (e.g., `ReportInfo`, `ExtractionResult`)
 
-### Import Organization
+### Conventions
 
-1. Standard library (os, sys, json, logging, etc.)
-2. Third-party packages (requests, pandas, openai, etc.)
-3. Relative imports (from data_preparation import ...)
-4. Type hints: from typing import ... (with TYPE_CHECKING for circular imports)
-
-### Key Patterns
-
-**Dataclass for structured data:**
-```python
-from dataclasses import dataclass, field
-from typing import List, Dict, Optional
-
-@dataclass
-class SyntheticScenario:
-    severity_pct: float
-    complexity_score: float
-    narrative: str
-    lob_breakdown: Dict[str, float]
-    cause_category: str
-    confidence: float
-```
-
-**Logging for debugging:**
-```python
-import logging
-logger = logging.getLogger(__name__)
-logger.info(f"Processing {num_reports} reports")
-logger.error(f"Failed to extract: {error}")
-```
-
-**Error handling with graceful fallback:**
-```python
-try:
-    text = extract_with_pymupdf(pdf_path)
-except Exception as e:
-    logger.warning(f"PyMuPDF failed, trying pdfplumber: {e}")
-    text = extract_with_pdfplumber(pdf_path)
-```
-
-**JSON I/O with Path:**
-```python
-from pathlib import Path
-import json
-
-output_file = Path(output_dir) / "results.json"
-output_file.parent.mkdir(parents=True, exist_ok=True)
-
-with open(output_file, 'w') as f:
-    json.dump(data, f, indent=2)
-```
-
-## Available Commands
-
-### Data Collection
-
-```bash
-# Download syndicate reports (all or specific)
-python scripts/lloyds_scraper.py --all --output ./syndicate_reports --delay 1.5
-python scripts/lloyds_scraper.py --syndicates 1209,2488,1274 --years 2020,2021,2022
-
-# Classify report quality
-python scripts/quality_classifier.py --pdf-dir ./syndicate_reports/pdfs
-python scripts/quality_classifier.py --pdf-dir ./syndicate_reports/pdfs --single-file ./syndicate_reports/pdfs/syndicate_1209_2016.pdf
-
-# OCR scanned PDFs
-python scripts/ocr_scanned_pdfs.py --pdf-dir ./syndicate_reports/pdfs
-
-# Scrape market commentary
-python scripts/market_commentary_scraper.py --years 2022 2023 2024
-python scripts/perplexity_discovery.py --years 2023 --lob "casualty_reinsurance"
-```
-
-### Data Processing
-
-```bash
-# Summarize with ChatGPT
-python scripts/chatgpt_summarizer.py --input market_commentary/market_commentary.json
-python scripts/syndicate_summarizer.py --input ./syndicate_reports
-
-# Merge data sources
-python scripts/merge_corpus.py --syndicate results/syndicate/ --market results/market/
-```
-
-### Stress Testing
-
-```bash
-# Build scenario library (Phase 1: ~2 hours)
-python scripts/stress_test/pipeline.py build --corpus results/combined/unified_corpus.json --output results/stress_test/
-
-# Query for specific portfolio (Phase 2: <5 seconds)
-python scripts/stress_test/pipeline.py query \
-  --library results/stress_test/validated_scenario_library.json \
-  --gpd results/stress_test/gpd_fit.json \
-  --reserves 200 \
-  --return-period 100 \
-  --lobs Property Casualty
-
-# With optional fine-tuning
-python scripts/stress_test/pipeline.py query \
-  --library results/stress_test/validated_scenario_library.json \
-  --gpd results/stress_test/gpd_fit.json \
-  --reserves 500 \
-  --return-period 200 \
-  --lobs "Reinsurance - Property" "Reinsurance - Casualty" \
-  --concentration 0.3 \
-  --output custom_scenarios.json
-```
+- Use `@dataclass` for structured records (e.g. `ReserveMovement`, `ExtractionResult`); monetary fields use the `_gbp_m` suffix regardless of actual currency (a separate `currency` field records the true denomination)
+- Module-level `logger = logging.getLogger(__name__)` for debug/audit output
+- Graceful fallback chains for extraction (PyMuPDF → pdfplumber → OCR), logging each failure
+- JSON I/O via `pathlib.Path` with `parent.mkdir(parents=True, exist_ok=True)`
+- Imports: stdlib, then third-party, then local
 
 ## Environment Variables
 
 | Variable | Required | Description | Example |
 |----------|----------|-------------|---------|
 | `PERPLEXITY_API_KEY` | Yes | Perplexity API for source discovery | pplx-... |
-| `OPENAI_API_KEY` | Yes | ChatGPT for summarization | sk-proj-... |
+| `OPENAI_API_KEY` | Yes | GPT extraction + ChatGPT summarization | sk-proj-... |
+| `GEMINI_API_KEY` | Yes | Gemini extraction | ... |
+| `AZURE_DOCUMENT_INTELLIGENCE_ENDPOINT` | Yes | Table extraction (default backend) | https://... |
+| `AZURE_DOCUMENT_INTELLIGENCE_KEY` | Yes | Azure Document Intelligence key | ... |
+| `NUTRIENT_API_KEY` | No | Nutrient.io table backend (optional) | ... |
+| `ADOBE_PDF_SERVICES_CLIENT_ID` | No | Adobe PDF Extract backend (optional) | ... |
+| `ADOBE_PDF_SERVICES_CLIENT_SECRET` | No | Adobe PDF Extract secret (optional) | ... |
 | `GOOGLE_API_KEY` | No | Google Custom Search | AIza... |
 | `GOOGLE_CSE_ID` | No | Custom Search Engine ID | 164801ff... |
-| `ANTHROPIC_API_KEY` | No | Claude API (future use) | sk-ant-... |
 
 **⚠️ SECURITY**: Store API keys in local `.env` file (never commit). File is gitignored.
 
@@ -391,7 +179,7 @@ Syndicate reports are classified into 4 tiers based on reserve commentary qualit
 
 ## Data Schema
 
-### Historical Movement (from corpus)
+### Reserve Movement (from corpus)
 
 ```json
 {
@@ -399,7 +187,6 @@ Syndicate reports are classified into 4 tiers based on reserve commentary qualit
   "year": 2023,
   "opening_reserves": 450.0,
   "prior_year_development": -18.5,
-  "severity_pct": 4.11,
   "lines_of_business": {"Property": 0.35, "Casualty": 0.65},
   "narrative": "Property releases due to favourable claims experience...",
   "causal_category": "Social inflation / litigation trends",
@@ -407,114 +194,26 @@ Syndicate reports are classified into 4 tiers based on reserve commentary qualit
 }
 ```
 
-### Synthetic Scenario (from library)
-
-```json
-{
-  "scenario_id": "synthetic_0042",
-  "severity_pct": 8.7,
-  "complexity_score": 245.0,
-  "narrative": "Economic inflation-driven strengthening across property portfolio...",
-  "lob_breakdown": {"Property": 0.45, "Casualty": 0.35, "Marine": 0.20},
-  "cause_category": "Economic inflation / claims cost inflation",
-  "confidence": 0.82,
-  "source_historical_examples": [
-    "syndicate_1209_2022",
-    "syndicate_2488_2021"
-  ]
-}
-```
-
-### Portfolio Query Result
-
-```json
-{
-  "portfolio": {
-    "reserves": 500,
-    "return_period": 100,
-    "lines_of_business": {"Property": 0.40, "Casualty": 0.60}
-  },
-  "scenarios": [
-    {
-      "scenario_id": "synthetic_0042",
-      "severity_pct": 8.7,
-      "narrative_original": "...",
-      "narrative_portfolio_tuned": "For a £500m portfolio with 60% Casualty exposure...",
-      "lob_impact": {"Property": "9.2%", "Casualty": "8.1%"}
-    }
-  ]
-}
-```
+See [README.md](README.md) for the full `pdf_extraction/syndicate_NNNN_YYYY.json` extraction
+output schema (dual-LLM outputs, RAG triangle, validation results).
 
 ## Testing
 
-- **Unit tests**: Not currently organized; `temp.py` used for ad-hoc testing
+- **Unit tests**: Not formally organized; ad-hoc test scripts under `tests/`
 - **Integration tests**: Full pipeline tested via command-line runs
-- **Coverage**: Focus on scrapers, classifiers, and stress test generation
-- **Validation**: Quality classifier tested against manually-labeled reports
-
-## Deployment & Usage
-
-### Local Development
-
-```bash
-# Virtual environment with all dependencies
-python -m venv venv && source venv/bin/activate && pip install -r requirements.txt
-
-# Test individual components
-python scripts/lloyds_scraper.py --syndicates 1209 --years 2023
-python scripts/quality_classifier.py --single-file ./syndicate_reports/pdfs/syndicate_1209_2023.pdf
-```
-
-### Stress Testing Pipeline
-
-```bash
-# Full end-to-end (requires ~6 hours for complete data + 2 hours for library)
-./scripts/stress_test/pipeline.py build --corpus results/combined/unified_corpus.json
-./scripts/stress_test/pipeline.py query --library results/stress_test/validated_scenario_library.json --reserves 200 --return-period 100
-```
-
-### Web Interface (Future)
-
-```bash
-# Streamlit interface for portfolio queries
-streamlit run scripts/stress_test/app.py
-```
+- **Coverage**: Focus on scrapers, classifiers, and PDF extraction
+- **Validation**: Quality classifier and extraction tested against manually-labeled reports (`docs/validation/`)
 
 ## Additional Resources
 
-- **Full documentation**: @README.md
-- **Detailed structure**: @file_and_folder_structure.md
-- **Stress test architecture**: @simulation-workflow.md
-- **Stress test module**: @scripts/stress_test/README.md
-- **Syndicate numbers data**: @data/syndicate_numbers.py
+Read these on demand — do not assume their content from this file alone:
+
+- **Full documentation**: [README.md](README.md) — extraction pipeline reference, output schemas, data locations, audit trail
+- **Detailed structure**: [file_and_folder_structure.md](file_and_folder_structure.md)
+- **Data construction methodology**: [docs/data-construction.md](docs/data-construction.md)
+- **OCR/extraction pipeline internals**: [docs/ocr-pipeline.md](docs/ocr-pipeline.md) — page classification, triangle parsers, PYD computation, troubleshooting
+- **Syndicate numbers data**: [data/syndicate_numbers.py](data/syndicate_numbers.py) — `ALL_SYNDICATES` (~300 syndicates), 2014-2024
 - **API Keys security**: See `.env.example` pattern (never commit `.env`)
-
-## Key Research Parameters
-
-These values in `scripts/stress_test/config.py` control the stress testing behavior:
-
-```python
-LLOYDS_LOBS = [
-    "Property", "Casualty", "Marine", "Energy", "Motor",
-    "Aviation", "Reinsurance - Property", "Reinsurance - Casualty",
-    "Reinsurance - Specialty", "Professional Lines", "Accident & Health",
-    "Cyber", "Aggregate"
-]
-
-# Severity grid for synthetic generation
-SEVERITY_BINS = [0-5%, 5-10%, 10-15%, ..., 45-50%+]
-
-# Complexity bins (portfolio diversification score)
-COMPLEXITY_BINS = [0-100, 100-300, 300-600, 600+]
-
-# EVT tail model
-GPD_PARAMETERS = {
-    "shape": ξ,
-    "scale": σ,
-    "threshold": u
-}
-```
 
 ## Common Issues
 
@@ -524,40 +223,19 @@ GPD_PARAMETERS = {
 **"Failed to extract text from PDF"**
 → Older PDFs may be scanned; run OCR: `python scripts/ocr_scanned_pdfs.py`
 
+**"No triangle found" / "no_triangle_data"**
+→ Some run-off syndicate reports genuinely lack a claims triangle; check the Azure cached output
+
 **"API rate limit exceeded"**
 → Increase delay in scraper: `python scripts/lloyds_scraper.py --delay 3.0`
 
 **"Poppler not found"**
 → Install system dependency (see Prerequisites section above)
 
-**"FAISS index not found"**
-→ Build index first: `python scripts/stress_test/pipeline.py build ...`
+**Stale extraction cache**
+→ Bump `_CACHE_VERSION` in `table_extraction.py` to invalidate cached table extractions;
+delete `pdf_extraction/llm_cache/` to force LLM re-extraction
 
+## Skill Usage
 
-## Skill Usage Guide
-
-When working on tasks involving these technologies, invoke the corresponding skill:
-
-| Skill | Invoke When |
-|-------|-------------|
-| scikit-learn | Implements machine learning models, EVT fitting, and statistical analysis for scenarios |
-| scipy | Handles statistical distributions, EVT calculations, and numerical methods |
-| sentence-transformers | Manages semantic text embeddings and similarity calculations for narratives |
-| python | Manages Python 3.8+ code, imports, and script execution for data science workflows |
-| requests | Handles HTTP requests for web scraping and API interactions |
-| openai | Integrates ChatGPT API for reserve commentary summarization and scenario generation |
-| pandas | Processes tabular reserve data, LOB breakdowns, and statistical aggregations |
-| beautifulsoup4 | Parses HTML and XML content from scraped web pages and PDFs |
-| pymupdf | Extracts text and metadata from PDF syndicate reports and market documents |
-| faiss | Manages vector indexing and semantic similarity search for scenario retrieval |
-| pdfplumber | Alternative PDF text extraction with table parsing for financial data |
-| matplotlib | Generates diagnostic plots for EVT analysis and embedding space visualization |
-| plotly | Creates interactive visualizations for stress test results and coverage analysis |
-| altair | Builds declarative visualization specifications for exploratory data analysis |
-| streamlit | Develops web interfaces for portfolio query interactions and result display |
-| pillow | Processes image files for OCR preprocessing and visual analysis |
-| pytesseract | Performs OCR text extraction from scanned PDF images |
-| ratelimit | Enforces API rate limiting and request throttling for web scrapers |
-| statsmodels | Provides statistical modeling and hypothesis testing for EVT validation |
-| json | Serializes and deserializes structured data schemas for scenarios and corpus |
-| logging | Configures debugging output and audit trails for pipeline execution |
+When a task involves one of the project's installed technology skills (python, requests, beautifulsoup4, pymupdf, pdfplumber, pytesseract, pillow, openai, pandas, matplotlib, ratelimit, json, logging), invoke that skill before writing code. The skill descriptions in the session's skill list say when each applies.
