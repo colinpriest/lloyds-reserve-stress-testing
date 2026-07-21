@@ -432,7 +432,7 @@ lloyds_reserve_stress_testing/
 ├── .env                                    # API keys (gitignored)
 ├── requirements.txt                        # Python dependencies
 ├── README.md
-├── CLAUDE.md                               # Project documentation for AI assistants
+├── CLAUDE.md                               # AI assistant context (gitignored, local only)
 ├── table_extraction.py                     # Deterministic table extraction (triangle, LOB, provisions)
 ├── test_gemini.py                          # Main extraction pipeline (RAG-lite + dual-LLM)
 ├── adjudicate.py                           # LLM disagreement adjudication
@@ -721,7 +721,6 @@ For academic research use only. Lloyd's syndicate reports are copyright of respe
 | Document | Description |
 |----------|-------------|
 | [README.md](README.md) | This file — project overview |
-| [CLAUDE.md](CLAUDE.md) | AI assistant project documentation |
 | [file_and_folder_structure.md](file_and_folder_structure.md) | Complete directory tree |
 | [docs/data-construction.md](docs/data-construction.md) | Data construction methodology |
 | [docs/exposure-adjustment.md](docs/exposure-adjustment.md) | Exposure adjustment documentation |

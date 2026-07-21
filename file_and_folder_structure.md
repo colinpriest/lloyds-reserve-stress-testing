@@ -4,8 +4,8 @@ lloyds_reserve_stress_testing/
 ├── .gitignore
 ├── requirements.txt                        # Python dependencies
 ├── README.md
-├── CLAUDE.md                               # Project documentation for AI assistants
-├── AGENTS.md                               # Agent configuration
+├── CLAUDE.md                               # AI assistant context (gitignored, local only)
+├── AGENTS.md                               # Agent instructions (gitignored, local only)
 ├── file_and_folder_structure.md            # This file
 │
 ├── table_extraction.py                     # Deterministic table extraction (triangle, LOB, provisions)
