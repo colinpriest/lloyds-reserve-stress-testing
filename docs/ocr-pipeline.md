@@ -137,7 +137,7 @@ PDF input
 |   _normalize_currency_fields() on each result  |
 |     (remap _usd_m/_eur_m → _gbp_m)            |
 |   verify_triangles() resolves disagreements    |
-|   RAG triangle PYD overrides LLM values        |
+|   Triangle PYD prevails (see 10.3 sign rule)   |
 |     (except loss ratio: fallback only)         |
 |   RAG balance sheet opening overrides reserves |
 |     (proactive: both models, always)           |
@@ -1899,7 +1899,11 @@ hierarchy; every other document defers to it.
 4. Otherwise the triangle PYD replaces both LLM-extracted
    values -- regardless of how close an LLM value is -- and any
    LLM override is logged.
-5. When no deterministic source is available, the reconciled
+5. Where no absolute-amount triangle yields a PYD, a
+   loss-ratio triangle is used as a deterministic fallback
+   (fallback-only: it never overrides an absolute-amount
+   triangle).
+6. When no deterministic source is available, the reconciled
    dual-LLM text extraction is used.
 
 The RAG triangle is computed deterministically from the claims
@@ -2040,9 +2044,10 @@ This runs **before** the comparison/tolerance check
 contradicts the PYD is overridden before it can cause a hard
 failure.
 
-**Rationale**: the triangle-computed PYD is the authoritative
-source of truth for the magnitude and sign of reserve
-development.  The LLM `direction` field is a textual
+**Rationale**: the triangle-computed PYD is ordinarily the
+prevailing source for the magnitude and sign of reserve
+development (subject to the provisions sign-disagreement rule
+of section 10.3).  The LLM `direction` field is a textual
 interpretation that can be wrong (e.g. GPT reporting
 "strengthening" when PYD = 0 for a zero-claims syndicate).
 Forcing direction from PYD eliminates these spurious
@@ -2077,7 +2082,7 @@ of whether they agree**:
    `[RAG OVERRIDE]` note is appended to `data_quality_notes`.
 
 This is analogous to the RAG triangle PYD override (section 9)
--- the deterministic extraction is authoritative over LLMs.
+-- the deterministic extraction is authoritative over LLMs (for PYD, within the section 10.3 hierarchy: the qualification there is triangle-versus-provisions, not triangle-versus-LLM).
 
 **Log messages**:
 
