@@ -18,6 +18,13 @@ import zipfile
 import logging
 from pathlib import Path
 
+import pytest
+
+# Optional paid-integration dependency: skip cleanly rather than fail
+# collection when it is not installed. This is a manual integration
+# script first and a pytest-collected file second.
+pytest.importorskip("adobe.pdfservices", reason="optional Adobe PDF Services SDK not installed")
+
 from dotenv import load_dotenv
 
 from adobe.pdfservices.operation.auth.service_principal_credentials import ServicePrincipalCredentials

@@ -735,3 +735,16 @@ For academic research use only. Lloyd's syndicate reports are copyright of respe
 - Lloyd's Annual Reports: https://www.lloyds.com/about-lloyds/investor-relations/financial-results
 - AM Best Lloyd's Methodology: https://www.ambest.com/ratings/methodology
 - CAS E-Forum: https://www.casact.org/publications/e-forum
+
+## Running the tests
+
+```
+pytest -q
+```
+
+collects the offline suites (the novelty/unit tests under
+`scripts/stress_test/novelty/tests/` and the scripts under `tests/`) as pinned by
+`pytest.ini`. The integration scripts in `tests/` skip cleanly when their optional
+SDKs, API credentials or source PDFs are absent -- they exercise paid extraction
+services and are also runnable directly (`python tests/test_azure.py <pdf>`). No
+paid service is contacted by the default command.

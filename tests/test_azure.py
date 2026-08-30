@@ -22,6 +22,13 @@ import time
 from pathlib import Path
 
 import fitz  # PyMuPDF
+import pytest
+
+# Optional paid-integration dependency: skip cleanly rather than fail
+# collection when it is not installed. This is a manual integration
+# script first and a pytest-collected file second.
+pytest.importorskip("azure.ai.documentintelligence", reason="optional Azure Document Intelligence SDK not installed")
+
 from dotenv import load_dotenv
 from azure.core.credentials import AzureKeyCredential
 from azure.ai.documentintelligence import DocumentIntelligenceClient
