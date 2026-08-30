@@ -1,5 +1,15 @@
 # HHI vs Entropy for LoB Diversification Measurement
 
+> **Status: this documents the stress-test pipeline, NOT the BAJ model.**
+> The concentration measure described here is the complexity score
+> $R\times(1-\mathrm{HHI})$ used by this repository's stress-test scripts. The
+> manuscript *Portfolio-aware scenario transfer of reserve movements* uses a different
+> construction: a **premium-weighted** HHI entering an effective size
+> $R^{\mathrm{eff}} = R\,(1/H)^{\gamma}$ with $\gamma$ fitted. The two are not
+> interchangeable and no result here carries over to the paper. For the paper's current
+> position see the analysis repository's `docs/current-results.md` and the manuscript.
+
+
 This document records the rationale for using the Herfindahl-Hirschman Index
 (HHI) rather than Shannon entropy as the concentration measure in the portfolio
 complexity score.
@@ -73,12 +83,19 @@ the correct behaviour.
 
 ### 3.3  HHI has a direct actuarial interpretation
 
-HHI equals the probability that two randomly selected pounds of reserve come
+HHI equals the probability that two independent draws from the stated weight
+distribution come
 from the same LoB.  This maps naturally to correlated reserve deterioration: when
 HHI is high, a single-LoB reserve shock affects most of the portfolio.
 
 Entropy's information-theoretic interpretation (average surprise per LoB
 observation) lacks a direct connection to reserve risk mechanics.
+
+> **What the weights actually are.** `scripts/stress_test/data_preparation.py`
+> builds these LoB weights from the **absolute extracted movement amounts** per line,
+> falling back to **equal weights** when amounts are unavailable. They are not reserve
+> pounds and not premium, so the "pounds of reserve" reading above would be wrong even
+> for this pipeline.
 
 ### 3.4  Complexity score interaction
 

@@ -1,5 +1,15 @@
 # Table 4 Explanation
 
+> **Status: superseded.**
+> This note describes the earlier line-level projection and the power-law mix adjustment
+> with $\beta\approx-0.24$. Both were replaced by the robust Bayesian pooling operator
+> (size and concentration, Student-$t$ errors, two-regime RITC tail, an undiversifiable
+> floor). Table 4 as reproduced in the manuscript is produced by that operator, not by
+> the method described here. This file is retained as a record of the earlier stage:
+> see the analysis repository's `docs/current-results.md` and the manuscript for the
+> current method.
+
+
 This note answers the questions a reviewer would ask about Table 4
 (capital distortion from omitting exposure adjustments).
 
