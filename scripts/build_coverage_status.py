@@ -530,7 +530,7 @@ def main() -> int:
     n_full = int(detail['full_success'].sum())
 
     waterfall = [
-        ('Syndicate-years in spreadsheet (active list)', total, None),
+        ('Rows in spreadsheet (year-of-account candidate list, not the active denominator)', total, None),
         ('Less: report unavailable (not published / download failed)', -n_unavailable, total - n_unavailable),
         ('Reports downloaded', None, n_downloaded),
         ('Less: not yet through extraction pipeline', -n_not_extracted, n_downloaded - n_not_extracted),

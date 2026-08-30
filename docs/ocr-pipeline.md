@@ -2654,7 +2654,7 @@ updated slim PDF containing the Balance Sheet page.
         "development_rows": [["...NxN matrix..."]]
       }
     },
-    "gpt-4.1-mini": { "...same fields..." }
+    "gpt-5-mini": { "...same fields..." }
   },
   "validation": {
     "passed": true,

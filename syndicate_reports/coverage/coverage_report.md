@@ -5,7 +5,7 @@ Generated: 2026-07-06T03:11:55.170258+00:00
 
 | Step | Change | Running total |
 |---|---|---|
-| Syndicate-years in spreadsheet (active list) | 1125 |  |
+| Rows in spreadsheet (year-of-account candidate list, not the active denominator) | 1125 |  |
 | Less: report unavailable (not published / download failed) | -93 | 1032 |
 | Reports downloaded |  | 1032 |
 | Less: not yet through extraction pipeline | 0 | 1032 |
