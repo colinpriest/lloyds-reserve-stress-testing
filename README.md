@@ -31,7 +31,9 @@ The three datasets an analysis project needs, and where to find them:
 | **Extraction audit trail** (LLM disagreements, rejections, run statistics) | `pdf_extraction/audit/` (`disagreement_log.json`, `rejection_log.json`, `run_manifest.json`) | JSON | Yes |
 
 The syndicate-year denominator is `syndicate_reports/Lloyds_syndicates_2014_2024.xlsx`
-(1,125 active syndicate-years with report URLs). A written summary of the audit is in
+(1,125 rows in the broader year-of-account candidate list with report URLs; this is
+NOT the active-market denominator, which is the 1,040 SFCR count the spreadsheet's own
+note directs use of). A written summary of the audit is in
 [docs/data-audit-results.md](docs/data-audit-results.md). To rebuild the coverage outputs
 after new downloads or extractions, run `python scripts/build_coverage_status.py`.
 
@@ -331,7 +333,7 @@ Reports where no claims triangle and no reserve movement text can be found are f
 After deterministic table extraction, the pipeline runs two independent LLMs on the full PDF:
 
 1. **Gemini** (gemini-2.5-flash) — extracts all structured fields
-2. **GPT** (gpt-4.1-mini) — independently extracts the same fields
+2. **GPT** (gpt-5-mini) — independently extracts the same fields
 
 The outputs are compared field-by-field with tolerance rules:
 
@@ -389,7 +391,7 @@ Each processed report produces a JSON file in `pdf_extraction/`:
         "development_rows": [["...NxN matrix..."]]
       }
     },
-    "gpt-4.1-mini": { "...same fields..." }
+    "gpt-5-mini": { "...same fields..." }
   },
   "validation": {
     "passed": true,

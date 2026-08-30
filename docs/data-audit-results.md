@@ -1,7 +1,7 @@
 # Data Audit Results — Syndicate-Year Coverage
 
 Audit date: 2026-07-06
-Denominator: `syndicate_reports/Lloyds_syndicates_2014_2024.xlsx` (1,125 active syndicate-years, 2014–2024)
+Retrieval denominator: `syndicate_reports/Lloyds_syndicates_2014_2024.xlsx` (1,125 rows, 2014–2024). This is the broader **year-of-account candidate list**, not the active-market denominator: the spreadsheet's own note directs use of the SFCR count, **1,040** active syndicate-years. The coverage percentages below are against the 1,125 candidate rows.
 Machine-readable detail: `syndicate_reports/coverage/coverage_status.xlsx` / `.json`
 Rebuild with: `python scripts/build_coverage_status.py`
 
@@ -23,7 +23,7 @@ development tables', p.36 — computed from triangle diagonals"*).
 
 | Step | Change | Running total |
 |---|---:|---:|
-| Syndicate-years in spreadsheet (active list) | | 1,125 |
+| Rows in spreadsheet (year-of-account candidate list, not the active denominator) | | 1,125 |
 | Less: report unavailable (not published online / download failed) | −93 | 1,032 |
 | Reports downloaded | | 1,032 |
 | Less: not yet through extraction pipeline | 0 | 1,032 |
