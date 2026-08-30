@@ -14,9 +14,9 @@ Generated: 2026-07-06T03:11:55.170258+00:00
 | Less: other field failures (PYD/LoB/opening not all extracted) | -45 | 847 |
 | Fully successful syndicate-years (a+b+c+d) |  | 847 |
 
-## By year (active vs full success)
+## By year (candidate-list rows vs full success)
 
-|   year |   active_syndicate_years |   downloaded |   report_unavailable |   pyd_ok |   lob_ok |   opening_ok |   full_success |   fail_pyd |   fail_lob |   fail_opening |   first_year_excl |   no_triangle_excl |   ritc_occurred |
+|   year |   candidate_syndicate_years |   downloaded |   report_unavailable |   pyd_ok |   lob_ok |   opening_ok |   full_success |   fail_pyd |   fail_lob |   fail_opening |   first_year_excl |   no_triangle_excl |   ritc_occurred |
 |-------:|-------------------------:|-------------:|---------------------:|---------:|---------:|-------------:|---------------:|-----------:|-----------:|---------------:|------------------:|-------------------:|----------------:|
 |   2014 |                      105 |           94 |                   11 |       53 |       78 |           60 |             52 |         41 |         16 |             34 |                 4 |                 28 |               8 |
 |   2015 |                      110 |          101 |                    9 |       89 |       96 |           83 |             82 |         12 |          5 |             18 |                 9 |                  2 |               7 |
@@ -48,7 +48,7 @@ Generated: 2026-07-06T03:11:55.170258+00:00
 
 ## By syndicate (top 40 by active years)
 
-|   syndicate |   active_syndicate_years |   downloaded |   report_unavailable |   pyd_ok |   lob_ok |   opening_ok |   full_success |   fail_pyd |   fail_lob |   fail_opening |   first_year_excl |   no_triangle_excl |   ritc_occurred |
+|   syndicate |   candidate_syndicate_years |   downloaded |   report_unavailable |   pyd_ok |   lob_ok |   opening_ok |   full_success |   fail_pyd |   fail_lob |   fail_opening |   first_year_excl |   no_triangle_excl |   ritc_occurred |
 |------------:|-------------------------:|-------------:|---------------------:|---------:|---------:|-------------:|---------------:|-----------:|-----------:|---------------:|------------------:|-------------------:|----------------:|
 |         382 |                       11 |           11 |                    0 |       11 |       11 |           11 |             11 |          0 |          0 |              0 |                 0 |                  0 |               0 |
 |         386 |                       11 |           11 |                    0 |       11 |       11 |           11 |             11 |          0 |          0 |              0 |                 0 |                  0 |               0 |

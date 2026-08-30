@@ -1,5 +1,13 @@
 # Exposure Adjustment Methodology
 
+> **Status: superseded.**
+> This describes the earlier sequential line-of-business standardisation and power-law
+> adjustment. That method was replaced by the robust Bayesian pooling operator (size and
+> concentration, Student-t, two-regime RITC tail). It is retained as a record of that
+> stage and is **not** the current method: see the analysis repository's
+> `scaling_analysis_writeup.md` and the manuscript.
+
+
 This document describes how the stress testing system adjusts historical Lloyd's
 reserve blowout data for differences in **syndicate size** and **lines of business
 (LoB) mix** between the source syndicates in the historical corpus and the target

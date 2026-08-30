@@ -1,5 +1,13 @@
 # Data Construction
 
+> **Status: historical.**
+> This describes the earlier 621-report / 435-accepted quality-classifier corpus and a
+> single-model GPT-4o standardisation. The current pipeline retrieves 1,065 filings and
+> uses a dual-model design (`gemini-2.5-flash` and `gpt-5-mini`) with deterministic
+> table extraction taking precedence. See `README.md` and `docs/data-audit-results.md`
+> for the current construction, and the manuscript for the modelling corpus.
+
+
 This document specifies exactly how the analysis table is built from
 the unified corpus, LoB weight extractions, and size metrics.  Every
 decision rule is stated once; the code references point to

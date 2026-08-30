@@ -32,9 +32,11 @@ development tables', p.36 — computed from triangle diagonals"*).
 | Less: other field failures (PYD/LoB/opening not all extracted) | −45 | 847 |
 | **Fully successful syndicate-years (a+b+c+d)** | | **847 (75.3%)** |
 
-## By year: active vs full success, with failure modes
+## By year: candidate-list rows vs full success, with failure modes
 
-| Year | Active | Downloaded | Unavailable | PYD ok | LoB ok | Opening ok | **Full success** | fail: PYD | fail: LoB | fail: opening | 1st-yr excl | no-triangle excl | RITC occurred |
+The **Candidates** column counts rows of the year-of-account candidate list (1,125 in total), not active syndicate-years. The active-market denominator is the SFCR count, **1,040**.
+
+| Year | Candidates | Downloaded | Unavailable | PYD ok | LoB ok | Opening ok | **Full success** | fail: PYD | fail: LoB | fail: opening | 1st-yr excl | no-triangle excl | RITC occurred |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
 | 2014 | 105 | 94 | 11 | 53 | 78 | 60 | **52** | 41 | 16 | 34 | 4 | 28 | 8 |
 | 2015 | 110 | 101 | 9 | 89 | 96 | 83 | **82** | 12 | 5 | 18 | 9 | 2 | 7 |
@@ -67,7 +69,11 @@ equivalent of this table (across all ~180 syndicates) is the `by_syndicate` shee
 
 ## Extraction audit
 
-- 1,065 extraction JSONs (`pdf_extraction/syndicate_{N}_{YYYY}.json`), one per
+- 1,065 extraction JSONs (`pdf_extraction/syndicate_{N}_{YYYY}.json`). That is more
+  than the 1,032 downloads recorded above: 33 filings were obtained in an earlier
+  collection pass and are flagged `already_present` rather than logged as
+  downloads, so the gap is a **ledger-completeness gap of 3.1%**, not missing data.
+  No downloaded record lacks an extraction. One per
   downloaded report.
 - PYD provenance hierarchy: deterministic claims-development-triangle computation
   (authoritative, overrides LLMs) → claims-provisions movement note → dual-LLM

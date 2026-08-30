@@ -496,7 +496,10 @@ def main() -> int:
     # ---- by-year report ---------------------------------------------------
     def agg_group(g: pd.DataFrame) -> pd.Series:
         return pd.Series({
-            'active_syndicate_years': len(g),
+            # NOT the active-market denominator: these are rows of the
+            # year-of-account candidate list. The active count is the SFCR
+            # figure, 1,040, which the spreadsheet's own note directs use of.
+            'candidate_syndicate_years': len(g),
             'downloaded': int((g['download_status'] == 'report downloaded').sum()),
             'report_unavailable': int((g['download_status'] != 'report downloaded').sum()),
             'pyd_ok': int((g['pyd_status'] == 'successful').sum()),
@@ -576,7 +579,7 @@ def main() -> int:
                      f"| {running if running is not None else ''} |")
     lines += [
         "",
-        "## By year (active vs full success)",
+        "## By year (candidate-list rows vs full success)",
         "",
         by_year.to_markdown(index=False),
         "",
@@ -588,7 +591,7 @@ def main() -> int:
         "",
         "## By syndicate (top 40 by active years)",
         "",
-        by_synd.sort_values(['active_syndicate_years', 'full_success'],
+        by_synd.sort_values(['candidate_syndicate_years', 'full_success'],
                             ascending=False).head(40).to_markdown(index=False),
         "",
         f"(Full by-syndicate table: coverage_status.xlsx, 'by_syndicate' sheet — "
