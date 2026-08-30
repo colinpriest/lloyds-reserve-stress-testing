@@ -80,7 +80,7 @@ The PDF extraction pipeline (`test_gemini.py` + `table_extraction.py`) uses a la
 │  Step 4: LLM Extraction (Gemini + GPT)                              │
 │  ├── Independent extraction of all reserve fields                   │
 │  ├── Field-by-field comparison with tolerance rules                 │
-│  ├── RAG triangle PYD overrides LLM when available                  │
+│  ├── Triangle PYD authoritative (provisions wins on sign clash)     │
 │  └── Interactive adjudication for unresolved discrepancies          │
 │                                                                     │
 │  Step 5: Report Classification                                      │
@@ -98,7 +98,7 @@ The PDF extraction pipeline (`test_gemini.py` + `table_extraction.py`) uses a la
 - **Deterministic-first**: Claims development triangles are extracted by table parsing APIs (not LLMs), then PYD is computed in Python. This eliminates LLM arithmetic errors.
 - **LLM as fallback**: When table extraction fails, LLM vision can read triangles from page images, or LLM text extraction reads PYD from reserve narrative text.
 - **Dual-LLM verification**: Two independent LLMs (Gemini and GPT) extract the same fields. Disagreements trigger adjudication, either automated (Claude verification) or human review.
-- **RAG triangle authority**: When a valid triangle is extracted deterministically, its computed PYD overrides any LLM-extracted value, with the override recorded in the audit trail.
+- **RAG triangle authority (qualified)**: When a valid triangle is extracted deterministically, its computed PYD ordinarily overrides any LLM-extracted value -- unless the gross provisions movement disagrees with it in sign, in which case provisions is authoritative (the full five-step hierarchy is canonical in `docs/ocr-pipeline.md` section 10.3), with the override recorded in the audit trail.
 
 ## Installation
 
@@ -346,9 +346,10 @@ The outputs are compared field-by-field with tolerance rules:
 | `direction` | Must match exactly |
 | `gross_premium_mix` | LOB names fuzzy-matched, amounts within ±10% |
 
-When the deterministic RAG triangle PYD is available, it takes precedence over both LLMs:
-- If an LLM agrees with the RAG value (within ±0.5m), the LLM value is confirmed
-- If an LLM disagrees, the RAG value overrides and the override is recorded in `data_quality_notes`
+When the deterministic RAG triangle PYD is available, it ordinarily takes precedence over both LLMs:
+- First, where the gross provisions movement is also available, the two are sign-compared; on sign disagreement the provisions movement overrides the triangle (canonical hierarchy: `docs/ocr-pipeline.md` section 10.3)
+- If an LLM agrees with the prevailing deterministic value (within ±0.5m), the LLM value is confirmed
+- If an LLM disagrees, the deterministic value overrides and the override is recorded in `data_quality_notes`
 
 ### LLM Output Caching
 
@@ -628,7 +629,7 @@ The system identifies these causal categories:
 
 **Triangle PYD disagrees with LLM**
 
-- The RAG triangle PYD is authoritative when available — LLM overrides are logged
+- The RAG triangle PYD is authoritative when available and the provisions-movement sign agrees; on sign disagreement the provisions movement overrides it (`docs/ocr-pipeline.md` section 10.3). LLM overrides are logged
 - Check `data_quality_notes` in the output JSON for override details
 - Common causes: LLM reading net instead of gross triangle, or including summary rows
 

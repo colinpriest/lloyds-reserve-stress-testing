@@ -1882,12 +1882,27 @@ When both models extract triangles:
    confidence).
 5. **Only one has triangle**: use it if it passes sanity checks.
 
-### 10.3  RAG override priority
+### 10.3  RAG override priority (canonical PYD hierarchy)
 
-When the deterministic table extraction produces a valid PYD,
-it **always replaces** both LLM-extracted values -- regardless
-of how close the LLM value is to the triangle value.  The RAG
-triangle is computed deterministically from the claims
+This section is the canonical statement of the PYD source
+hierarchy; every other document defers to it.
+
+1. When the deterministic table extraction produces a valid
+   triangle PYD, it is ordinarily authoritative.
+2. Where the gross claims-provisions movement is also
+   available, the two are compared (section 11.3.1).
+3. **If their signs disagree, the provisions movement is
+   authoritative and overrides the triangle**; the override is
+   recorded in `data_quality_notes`. This matters most for
+   RITC acceptors, where the triangle tracks only organic
+   development (see the RITC caveat below).
+4. Otherwise the triangle PYD replaces both LLM-extracted
+   values -- regardless of how close an LLM value is -- and any
+   LLM override is logged.
+5. When no deterministic source is available, the reconciled
+   dual-LLM text extraction is used.
+
+The RAG triangle is computed deterministically from the claims
 development table and is authoritative over any LLM-extracted
 figure.
 

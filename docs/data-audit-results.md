@@ -76,8 +76,11 @@ equivalent of this table (across all ~180 syndicates) is the `by_syndicate` shee
   No downloaded record lacks an extraction. One per
   downloaded report.
 - PYD provenance hierarchy: deterministic claims-development-triangle computation
-  (authoritative, overrides LLMs) → claims-provisions movement note → dual-LLM
-  cross-validated text extraction. The chosen source for each value is named in the
+  (ordinarily authoritative and overriding LLMs -- but where the gross provisions
+  movement disagrees with it in sign, provisions overrides the triangle; canonical
+  five-step rule in `ocr-pipeline.md` section 10.3) → claims-provisions movement
+  note → dual-LLM cross-validated text extraction. The chosen source for each value
+  is named in the
   coverage table.
 - Dual-LLM validation (Gemini + GPT, field tolerances ±2.0m/±5% PYD, ±5% reserves):
   in the two extraction runs covering the 372 newly added reports, 337 passed
