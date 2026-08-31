@@ -4,8 +4,12 @@
 > This describes the earlier sequential line-of-business standardisation and power-law
 > adjustment. That method was replaced by the robust Bayesian pooling operator (size and
 > concentration, Student-t, two-regime RITC tail). It is retained as a record of that
-> stage and is **not** the current method: see the analysis repository's
-> `scaling_analysis_writeup.md` and the manuscript.
+> stage and is **not** the current method. For the current account see the analysis
+> repository's generated current-results reference,
+> [`docs/current-results.md`](https://github.com/colinpriest/lloyds-exposure-composition-analysis/blob/main/docs/current-results.md),
+> and the manuscript; the exact commit is pinned in the manuscript's Data
+> Availability Statement. Do **not** follow `scaling_analysis_writeup.md`, which is
+> itself a development archive rather than the current account.
 
 
 This document describes how the stress testing system adjusts historical Lloyd's
