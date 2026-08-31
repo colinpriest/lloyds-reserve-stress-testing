@@ -4542,6 +4542,68 @@ def write_run_manifest(run_stats):
     print(f"  Run manifest updated: {manifest_path} ({len(manifest['runs'])} runs total)")
 
 
+def _pyd_direction(value):
+    """Return the reserve-development direction implied by a numeric PYD."""
+    return "release" if value < 0 else "strengthening" if value > 0 else "flat"
+
+
+def _apply_loss_ratio_fallback(result, rag_pyd, model_name):
+    """Apply the conditional hierarchy for a managed-level loss-ratio PYD.
+
+    A deterministic loss-ratio result fills a narrative blank.  A syndicate-specific
+    narrative value is retained when its direction agrees, but a sign contradiction
+    is resolved in favour of the deterministic result.  The return value names the
+    exercised branch so focused behavioural tests can verify the hierarchy.
+    """
+    model_pyd = result.get("prior_year_development_gbp_m")
+    rag_dir = _pyd_direction(rag_pyd)
+    if model_pyd is None:
+        result["prior_year_development_gbp_m"] = rag_pyd
+        opening = result.get("opening_reserves_gbp_m")
+        if rag_pyd == 0:
+            result["prior_year_development_pct"] = 0.0
+        elif opening and opening > 0:
+            result["prior_year_development_pct"] = round(rag_pyd / opening * 100, 2)
+        result["direction"] = rag_dir
+        old_notes = result.get("data_quality_notes", "") or ""
+        result["data_quality_notes"] = (
+            f"{old_notes} [MANAGED LEVEL: PYD from loss ratio triangle is at "
+            f"managed/group level, not syndicate share. May differ from "
+            f"syndicate-level figure.]"
+        ).strip()
+        print(f"  [{model_name}] PYD filled from RAG triangle (managed level): "
+              f"{rag_pyd:+.3f}m")
+        return "filled_blank"
+
+    try:
+        old_pyd = float(model_pyd)
+    except (ValueError, TypeError):
+        return "invalid_narrative"
+    llm_dir = _pyd_direction(old_pyd)
+    if llm_dir != rag_dir and rag_dir != "flat":
+        result["prior_year_development_gbp_m"] = rag_pyd
+        opening = result.get("opening_reserves_gbp_m")
+        if rag_pyd == 0:
+            result["prior_year_development_pct"] = 0.0
+        elif opening and opening > 0:
+            result["prior_year_development_pct"] = round(rag_pyd / opening * 100, 2)
+        result["direction"] = rag_dir
+        old_notes = result.get("data_quality_notes", "") or ""
+        result["data_quality_notes"] = (
+            f"{old_notes} [RAG DIRECTION OVERRIDE: LLM said PYD={old_pyd} "
+            f"({llm_dir}), loss ratio triangle computed {rag_pyd:+.3f}m "
+            f"({rag_dir}). LLM direction contradicts deterministic RAG; "
+            f"overriding with RAG value.]"
+        ).strip()
+        print(f"  [{model_name}] RAG DIRECTION OVERRIDE: LLM PYD={old_pyd} "
+              f"({llm_dir}) contradicts RAG {rag_pyd:+.3f}m ({rag_dir})")
+        return "overrode_contradiction"
+
+    print(f"  [{model_name}] Keeping LLM PYD={old_pyd} "
+          f"(loss ratio triangle gives {rag_pyd:+.3f}m at managed/group level)")
+    return "kept_agreement"
+
+
 def process_one_report(report_path, inception_cache=None):
     """Process a single report with both models.
 
@@ -4685,8 +4747,8 @@ def process_one_report(report_path, inception_cache=None):
     # Use the cached result — no need to re-run.
     rag_method = rag_result.get("method", "")
     # Loss ratio triangle PYD is often at managed/group level rather than
-    # syndicate level (e.g. Beazley 2623).  It should only fill in blanks,
-    # never override an LLM-extracted syndicate-level figure.
+    # syndicate level (e.g. Beazley 2623). It fills a narrative blank and otherwise
+    # retains the syndicate-level value unless their directions contradict.
     # Net triangles are treated as authoritative — the deterministic PYD
     # computation is more reliable than LLM extraction, even for net
     # triangles (e.g. syndicate 386/2018 where LLMs wildly disagree).
@@ -4739,6 +4801,9 @@ def process_one_report(report_path, inception_cache=None):
                 (result_gemini, GEMINI_MODEL),
                 (result_openai, OPENAI_MODEL),
             ]:
+                if rag_is_fallback_only:
+                    _apply_loss_ratio_fallback(result, rag_pyd, model_name)
+                    continue
                 model_pyd = result.get("prior_year_development_gbp_m")
                 if model_pyd is None:
                     result["prior_year_development_gbp_m"] = rag_pyd
@@ -4753,13 +4818,7 @@ def process_one_report(report_path, inception_cache=None):
                     level = " (managed level)" if rag_method == "loss_ratio_triangle" else ""
                     net_note = " (net triangle)" if rag_tri_type == "net" else ""
                     print(f"  [{model_name}] PYD filled from RAG triangle{level}{net_note}: {rag_pyd:+.3f}m")
-                    if rag_is_fallback_only:
-                        old_notes = result.get("data_quality_notes", "") or ""
-                        result["data_quality_notes"] = (
-                            f"{old_notes} [LOSS RATIO TRIANGLE: PYD from loss ratio "
-                            f"triangle is gross. May differ from net figure in narrative.]"
-                        ).strip()
-                    elif rag_tri_type == "net":
+                    if rag_tri_type == "net":
                         old_notes = result.get("data_quality_notes", "") or ""
                         result["data_quality_notes"] = (
                             f"{old_notes} [NET TRIANGLE: PYD from net-of-reinsurance "
@@ -4770,67 +4829,28 @@ def process_one_report(report_path, inception_cache=None):
                         old_pyd = float(model_pyd)
                         diff = abs(old_pyd - rag_pyd)
 
-                        if rag_is_fallback_only:
-                            # Net triangle or loss ratio triangle — keep the
-                            # LLM value which comes from gross narrative text,
-                            # UNLESS the LLM direction contradicts the RAG
-                            # (indicates LLM computed PYD from triangle
-                            # incorrectly and got the wrong sign).
-                            rag_dir = "release" if rag_pyd < 0 else "strengthening" if rag_pyd > 0 else "flat"
-                            llm_dir = "release" if old_pyd < 0 else "strengthening" if old_pyd > 0 else "flat"
-                            if rag_tri_type == "net":
-                                reason = f"net triangle gives {rag_pyd:+.3f}m"
-                            else:
-                                reason = f"loss ratio triangle gives {rag_pyd:+.3f}m (gross)"
-                            if llm_dir != rag_dir and rag_dir != "flat":
-                                # LLM direction contradicts deterministic RAG —
-                                # LLM likely computed its own triangle PYD and
-                                # got the sign wrong.  Override with RAG value.
-                                result["prior_year_development_gbp_m"] = rag_pyd
-                                _op = result.get("opening_reserves_gbp_m")
-                                if rag_pyd == 0:
-                                    result["prior_year_development_pct"] = 0.0
-                                elif _op and _op > 0:
-                                    result["prior_year_development_pct"] = round(
-                                        rag_pyd / _op * 100, 2
-                                    )
-                                result["direction"] = rag_dir
-                                old_notes = result.get("data_quality_notes", "") or ""
-                                result["data_quality_notes"] = (
-                                    f"{old_notes} [RAG DIRECTION OVERRIDE: LLM said "
-                                    f"PYD={old_pyd} ({llm_dir}), RAG triangle "
-                                    f"computed {rag_pyd:+.3f}m ({rag_dir}). LLM "
-                                    f"direction contradicts deterministic RAG — "
-                                    f"overriding with RAG value.]"
-                                ).strip()
-                                print(f"  [{model_name}] RAG DIRECTION OVERRIDE: "
-                                      f"LLM PYD={old_pyd} ({llm_dir}) contradicts "
-                                      f"RAG {rag_pyd:+.3f}m ({rag_dir})")
-                            else:
-                                print(f"  [{model_name}] Keeping LLM PYD={old_pyd} ({reason})")
+                        # Standard claims triangle — deterministic PYD is
+                        # authoritative over LLM-extracted values (which may
+                        # come from wrong sources like net movements or P&L
+                        # gross change in provision).
+                        result["prior_year_development_gbp_m"] = rag_pyd
+                        _op = result.get("opening_reserves_gbp_m")
+                        if rag_pyd == 0:
+                            result["prior_year_development_pct"] = 0.0
+                        elif _op and _op > 0:
+                            result["prior_year_development_pct"] = round(
+                                rag_pyd / _op * 100, 2
+                            )
+                        result["direction"] = "release" if rag_pyd < 0 else "strengthening" if rag_pyd > 0 else "flat"
+                        if diff >= 0.5:
+                            old_notes = result.get("data_quality_notes", "") or ""
+                            result["data_quality_notes"] = (
+                                f"{old_notes} [RAG OVERRIDE: Model said PYD={old_pyd}, "
+                                f"RAG triangle computed {rag_pyd}. Using RAG value.]"
+                            )
+                            print(f"  [{model_name}] PYD overridden by RAG triangle: {old_pyd} -> {rag_pyd:+.3f}m")
                         else:
-                            # Standard claims triangle — deterministic PYD is
-                            # authoritative over LLM-extracted values (which may
-                            # come from wrong sources like net movements or P&L
-                            # gross change in provision).
-                            result["prior_year_development_gbp_m"] = rag_pyd
-                            _op = result.get("opening_reserves_gbp_m")
-                            if rag_pyd == 0:
-                                result["prior_year_development_pct"] = 0.0
-                            elif _op and _op > 0:
-                                result["prior_year_development_pct"] = round(
-                                    rag_pyd / _op * 100, 2
-                                )
-                            result["direction"] = "release" if rag_pyd < 0 else "strengthening" if rag_pyd > 0 else "flat"
-                            if diff >= 0.5:
-                                old_notes = result.get("data_quality_notes", "") or ""
-                                result["data_quality_notes"] = (
-                                    f"{old_notes} [RAG OVERRIDE: Model said PYD={old_pyd}, "
-                                    f"RAG triangle computed {rag_pyd}. Using RAG value.]"
-                                )
-                                print(f"  [{model_name}] PYD overridden by RAG triangle: {old_pyd} -> {rag_pyd:+.3f}m")
-                            else:
-                                print(f"  [{model_name}] PYD confirmed by RAG triangle: {model_pyd} -> {rag_pyd:+.3f}m")
+                            print(f"  [{model_name}] PYD confirmed by RAG triangle: {model_pyd} -> {rag_pyd:+.3f}m")
                     except (ValueError, TypeError):
                         pass
 

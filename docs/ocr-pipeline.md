@@ -98,7 +98,8 @@ PDF input
 |     Compute PYD per UW year from ratio changes  |
 |     Gross/net section separation                |
 |     "ae" aggregate column handling              |
-|   Result is managed-level (fallback only)       |
+|   Managed-level conditional fallback: fill an   |
+|   LLM blank; override only a contrary direction |
 +-----------------------------------------------+
   |
   v
@@ -138,7 +139,7 @@ PDF input
 |     (remap _usd_m/_eur_m → _gbp_m)            |
 |   verify_triangles() resolves disagreements    |
 |   Triangle PYD prevails (see 10.3 sign rule)   |
-|     (except loss ratio: fallback only)         |
+|     (loss ratio uses conditional fallback)     |
 |   RAG balance sheet opening overrides reserves |
 |     (proactive: both models, always)           |
 |   Net-of-reinsurance PYD fallback if null      |
@@ -1709,9 +1710,10 @@ when:
 **managed/group level** (e.g. "Beazley managed level"), not
 syndicate level.  The computed PYD may differ significantly
 from the syndicate-share figure in the narrative text.
-Accordingly, the loss ratio PYD is marked as **fallback only**:
-it fills in LLM blanks but never overrides an LLM-extracted
-syndicate-level value (see section 10.3).
+Accordingly, the loss ratio PYD is a **conditional fallback**:
+it fills an LLM blank and otherwise retains an LLM-extracted
+syndicate-level value, unless that value's direction contradicts
+the deterministic loss-ratio result (see section 10.3).
 
 **Known syndicates using loss ratio triangles**: Beazley
 syndicates 623 and 2623.  Syndicate 623 uses "Gross ratios" /
@@ -1896,23 +1898,27 @@ hierarchy; every other document defers to it.
    recorded in `data_quality_notes`. This matters most for
    RITC acceptors, where the triangle tracks only organic
    development (see the RITC caveat below).
-4. Otherwise the triangle PYD replaces both LLM-extracted
-   values -- regardless of how close an LLM value is -- and any
-   LLM override is logged.
+4. Otherwise the absolute-amount triangle PYD replaces both
+   LLM-extracted values -- regardless of how close an LLM value
+   is -- and any LLM override is logged.
 5. Where no absolute-amount triangle yields a PYD, a
-   loss-ratio triangle is used as a deterministic fallback
-   (fallback-only: it never overrides an absolute-amount
-   triangle).
+   loss-ratio triangle is a conditional deterministic fallback.
+   Because it is ordinarily managed- or group-level, it fills an
+   LLM blank and otherwise retains the syndicate-specific LLM
+   value, unless the two directions contradict; a contradiction
+   is resolved in favour of the deterministic loss-ratio result.
+   It never overrides an absolute-amount triangle.
 6. When no deterministic source is available, the reconciled
    dual-LLM text extraction is used.
 
-The RAG triangle is computed deterministically from the claims
-development table and is authoritative over any LLM-extracted
-figure.
+An absolute-amount RAG triangle is computed deterministically
+from the claims development table and is authoritative over any
+LLM-extracted figure.  A loss-ratio triangle is not: see the
+exception below.
 
 **Exception -- loss ratio triangles**: when the RAG PYD comes
 from a loss ratio triangle (`method = "loss_ratio_triangle"`),
-it is treated as **fallback only**.  Loss ratio triangles are
+it is treated as a **conditional fallback**.  Loss ratio triangles are
 typically at managed/group level (e.g. "Beazley managed level")
 rather than syndicate level.  The managed-level PYD can differ
 from the syndicate-share figure in both magnitude and
@@ -1920,8 +1926,10 @@ direction.
 
 - If an LLM extracts a PYD value from narrative text (e.g.
   "the syndicate released prior year reserves of $150.8m"),
-  that syndicate-level value is **kept** -- the loss ratio
-  PYD does not override it.
+  that syndicate-level value is **kept when its direction agrees**
+  with the loss-ratio result. If their directions contradict, the
+  deterministic loss-ratio result overrides it and the direction
+  override is logged.
 - If both LLMs return null PYD, the loss ratio PYD is used
   as a fallback, with a `data_quality_notes` annotation:
 
@@ -2082,7 +2090,15 @@ of whether they agree**:
    `[RAG OVERRIDE]` note is appended to `data_quality_notes`.
 
 This is analogous to the RAG triangle PYD override (section 9)
--- the deterministic extraction is authoritative over LLMs (for PYD, within the section 10.3 hierarchy: the qualification there is triangle-versus-provisions, not triangle-versus-LLM).
+-- for opening reserves the deterministic extraction is
+authoritative over LLMs outright, while for PYD that authority is
+scoped, within the section 10.3 hierarchy, to an **absolute-amount**
+triangle, whose only qualification is triangle-versus-provisions
+rather than triangle-versus-LLM.  A
+**loss-ratio** triangle is a conditional fallback instead: being
+managed- or group-level it fills a blank narrative value and
+overrides a syndicate-specific one only where the two directions
+contradict.
 
 **Log messages**:
 
@@ -3246,10 +3262,11 @@ managed-level PYD can differ from syndicate-level PYD in both
 magnitude and direction.
 
 **Resolution**: the pipeline marks loss ratio triangle PYD as
-**fallback only** (`rag_is_fallback_only = True`).  When both
-LLMs extract a syndicate-level PYD from the narrative text,
-their value is kept and the managed-level figure is logged but
-not applied.  The loss ratio PYD only fills in LLM blanks.
+**conditional fallback** (`rag_is_fallback_only = True`).  It fills
+an LLM blank. When an LLM extracts a syndicate-level PYD from the
+narrative, that value is kept if its direction agrees with the
+managed-level result; a direction contradiction is resolved in
+favour of the deterministic loss-ratio result and logged.
 
 **Affected syndicates**: 2623/2016 through 2623/2022.
 
