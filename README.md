@@ -457,12 +457,12 @@ lloyds_reserve_stress_testing/
 │   └── validation/                         # Validation artefacts (xlsx, csv)
 │
 ├── syndicate_reports/                      # Syndicate report outputs (gitignored)
-│   ├── pdfs/                               # Downloaded PDF and HTML files (~600+)
+│   ├── pdfs/                               # Downloaded PDF and HTML files (one per syndicate-year; count in the dataset table above)
 │   ├── metadata/                           # reports.json, summary.json, errors.json
 │   └── quality_report.json                 # Quality classification results
 │
 ├── pdf_extraction/                         # Extraction pipeline outputs
-│   ├── syndicate_NNNN_YYYY.json            # Structured extraction results (~622 files)
+│   ├── syndicate_NNNN_YYYY.json            # Structured extraction results (one per syndicate-year; count in the dataset table above)
 │   ├── audit/                              # Disagreement/rejection logs, run manifest
 │   ├── adobe_output/                       # Adobe PDF Extract API raw outputs
 │   ├── azure_output/                       # Azure Document Intelligence cached results
