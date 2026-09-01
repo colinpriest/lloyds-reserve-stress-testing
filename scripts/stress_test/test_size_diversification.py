@@ -544,7 +544,7 @@ def identify_common_events(df: pd.DataFrame,
     return df_with_events
 
 
-def test_approach_1_common_events(df: pd.DataFrame, n_bootstrap: int = 200) -> ApproachDiagnostics:
+def run_approach_1_common_events(df: pd.DataFrame, n_bootstrap: int = 200) -> ApproachDiagnostics:
     """
     Test Approach 1: Common Event Matching
     
@@ -697,7 +697,7 @@ def test_approach_1_common_events(df: pd.DataFrame, n_bootstrap: int = 200) -> A
 # Approach 2: Within-Syndicate Volatility Scaling
 # =============================================================================
 
-def test_approach_2_volatility_scaling(df: pd.DataFrame, n_bootstrap: int = 200) -> ApproachDiagnostics:
+def run_approach_2_volatility_scaling(df: pd.DataFrame, n_bootstrap: int = 200) -> ApproachDiagnostics:
     """
     Test Approach 2: Within-Syndicate Volatility Scaling
     
@@ -869,7 +869,7 @@ def test_approach_2_volatility_scaling(df: pd.DataFrame, n_bootstrap: int = 200)
 # Approach 3: LOB-Specific Size Effects with Hierarchical Shrinkage
 # =============================================================================
 
-def test_approach_3_lob_specific(df: pd.DataFrame, n_bootstrap: int = 200) -> ApproachDiagnostics:
+def run_approach_3_lob_specific(df: pd.DataFrame, n_bootstrap: int = 200) -> ApproachDiagnostics:
     """
     Test Approach 3: LOB-Specific Size Effects with Hierarchical Shrinkage
     
@@ -1030,7 +1030,7 @@ def test_approach_3_lob_specific(df: pd.DataFrame, n_bootstrap: int = 200) -> Ap
 # Approach 4: Relative Severity Rankings Within Event Cohorts
 # =============================================================================
 
-def test_approach_4_relative_rankings(df: pd.DataFrame, n_bootstrap: int = 200) -> ApproachDiagnostics:
+def run_approach_4_relative_rankings(df: pd.DataFrame, n_bootstrap: int = 200) -> ApproachDiagnostics:
     """
     Test Approach 4: Relative Severity Rankings Within Event Cohorts
     
@@ -1252,25 +1252,25 @@ def run_analysis(corpus_path: str, output_path: Optional[str] = None, n_bootstra
     logger.info("\n" + "=" * 70)
     logger.info("APPROACH 1: Common Event Matching")
     logger.info("=" * 70)
-    results['approach_1_common_events'] = test_approach_1_common_events(df, n_bootstrap)
+    results['approach_1_common_events'] = run_approach_1_common_events(df, n_bootstrap)
     logger.info(f"Result: {results['approach_1_common_events'].recommendation}")
     
     logger.info("\n" + "=" * 70)
     logger.info("APPROACH 2: Within-Syndicate Volatility Scaling")
     logger.info("=" * 70)
-    results['approach_2_volatility'] = test_approach_2_volatility_scaling(df, n_bootstrap)
+    results['approach_2_volatility'] = run_approach_2_volatility_scaling(df, n_bootstrap)
     logger.info(f"Result: {results['approach_2_volatility'].recommendation}")
     
     logger.info("\n" + "=" * 70)
     logger.info("APPROACH 3: LOB-Specific Size Effects")
     logger.info("=" * 70)
-    results['approach_3_lob_specific'] = test_approach_3_lob_specific(df, n_bootstrap)
+    results['approach_3_lob_specific'] = run_approach_3_lob_specific(df, n_bootstrap)
     logger.info(f"Result: {results['approach_3_lob_specific'].recommendation}")
     
     logger.info("\n" + "=" * 70)
     logger.info("APPROACH 4: Relative Severity Rankings")
     logger.info("=" * 70)
-    results['approach_4_rankings'] = test_approach_4_relative_rankings(df, n_bootstrap)
+    results['approach_4_rankings'] = run_approach_4_relative_rankings(df, n_bootstrap)
     logger.info(f"Result: {results['approach_4_rankings'].recommendation}")
     
     # Convergence analysis
