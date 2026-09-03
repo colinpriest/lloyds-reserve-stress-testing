@@ -571,13 +571,14 @@ Azure is the default.  The backend is selected via the
 ### 6.1  Azure Document Intelligence
 
 - Model: `prebuilt-layout`
-- **Free tier (F0)**: 2 pages per API call.  Pages are split into
-  batches of 2 and sent sequentially.  This is the default.
 - **Paid tier (S0)**: all relevant pages sent in a single API call.
-  Enabled with the `--azure-paid` CLI flag, which sets
-  `azure_paid=True` on `extract_tables()`.  Reduces the number of
-  API round-trips from `ceil(N/2)` to 1, which is faster for
-  reports with many relevant pages (typically 4--8).
+  This is the default (`AZURE_PAID = True` in `test_gemini.py`), and it
+  is the tier that processed the corpus; it reduces the number of API
+  round-trips from `ceil(N/2)` to 1, which is faster for reports with
+  many relevant pages (typically 4--8).
+- **Free tier (F0)**: 2 pages per API call.  Pages are split into
+  batches of 2 and sent sequentially.  Selected with the `--azure-free`
+  CLI flag, which sets `azure_paid=False` on `extract_tables()`.
 - Retry policy: 3 retries with 1-second backoff (max 10 seconds).
 - Timeout: 120-second polling deadline per batch.
 - Tables are extracted with row/column structure.
@@ -586,11 +587,11 @@ Azure is the default.  The backend is selected via the
 **Usage**:
 
 ```bash
-# Free tier (default): batches of 2 pages
+# Paid tier (default): all relevant pages in one request
 python test_gemini.py
 
-# Paid tier: all relevant pages in one request
-python test_gemini.py --azure-paid
+# Free tier: batches of 2 pages
+python test_gemini.py --azure-free
 ```
 
 The cache key includes a `_batch_mode` field (`"paid"` or `"free"`)
