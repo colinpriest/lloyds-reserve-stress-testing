@@ -47,6 +47,19 @@ def test_every_stated_extraction_count_matches_the_directory():
         "the README states two different corpus sizes: %s" % stated
 
 
+TREE_DOC = os.path.join(HERE, "file_and_folder_structure.md")
+
+
+def test_the_complete_directory_tree_carries_no_hand_counts():
+    """The README calls file_and_folder_structure.md the complete directory tree;
+    round 47 found it still saying ~581 PDFs / ~40 HTMLs from the first collection.
+    The same one-place rule applies: no numeric file counts in a tree."""
+    text = _read(TREE_DOC)
+    hits = re.findall(r"[~\u2248]?\s*\d[\d,]*\+?\s*(?:files?|PDFs?|HTMLs?|JSONs?)\b",
+                      text)
+    assert not hits, "hand-maintained counts in the directory tree: %s" % hits
+
+
 def test_the_project_tree_carries_no_hand_counts():
     """The tree said ~622 while the table said 1,065; counts live in one place."""
     text = _read(README)

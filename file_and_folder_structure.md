@@ -39,8 +39,9 @@ lloyds_reserve_stress_testing/
 │
 ├── syndicate_reports/                      # Syndicate report outputs (gitignored PDFs/HTMLs)
 │   ├── Lloyds_syndicates_2014_2024.xlsx    # Syndicate-year denominator with report URLs
-│   ├── pdfs/                               # Downloaded PDF and HTML files
-│   │   └── syndicate_NNNN_YYYY.pdf         # ~581 PDFs, ~40 HTMLs
+│   ├── pdfs/                               # Downloaded source documents, one per syndicate-year
+│   │   ├── syndicate_NNNN_YYYY.pdf         # PDF filings
+│   │   └── syndicate_NNNN_YYYY.html        # iXBRL HTML filings (2024); counts live in README.md's dataset table
 │   ├── metadata/
 │   │   ├── reports.json                    # Metadata for all found reports
 │   │   ├── summary.json                    # Summary statistics
