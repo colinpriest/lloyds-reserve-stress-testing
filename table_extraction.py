@@ -737,7 +737,7 @@ def _parse_transposed_triangle_from_text(text: str, report_year: int):
     # Validate year range
     if max(uw_years) > report_year:
         return None, f"max UW year {max(uw_years)} > report year {report_year}"
-    if max(uw_years) < report_year - 5:
+    if max(uw_years) < report_year - MAX_UW_YEAR_LAG:
         return None, f"max UW year {max(uw_years)} too old for report year {report_year}"
 
     if len(uw_years) < 3:
@@ -811,6 +811,16 @@ def _year_has_prior_context(line: str, year_str: str) -> bool:
     return "prior" in before or "prior" in after
 
 
+# Triangle validation and PYD rules, defined once so the README can be checked
+# against them (tests/test_triangle_rules_doc.py):
+#   a triangle's most recent underwriting year may lag the report year by up to
+#   MAX_UW_YEAR_LAG years (run-off syndicates stop writing before the report date);
+#   the PYD sum excludes the PYD_EXCLUDED_RECENT_UW_YEARS most recent underwriting
+#   years, which are still in their initial development period.
+MAX_UW_YEAR_LAG = 5
+PYD_EXCLUDED_RECENT_UW_YEARS = 2
+
+
 def _parse_triangle_from_text(text: str, report_year: int):
     """Parse a claims development triangle from raw page text.
 
@@ -881,7 +891,7 @@ def _parse_triangle_from_text(text: str, report_year: int):
         return None, "no UW year header found in page text"
 
     # Check max year is within range
-    if max(uw_years) > report_year or max(uw_years) < report_year - 5:
+    if max(uw_years) > report_year or max(uw_years) < report_year - MAX_UW_YEAR_LAG:
         return None, f"max UW year {max(uw_years)} outside range for report year {report_year}"
 
     n_cols = len(uw_years)
@@ -1135,7 +1145,7 @@ def _parse_nutrient_triangle(grid: list[list[str]], report_year: int):
     # equal it — run-off syndicates stop writing new business before the report date.
     if max(uw_years) > report_year:
         return None, f"max UW year {max(uw_years)} > report year {report_year}"
-    if max(uw_years) < report_year - 5:
+    if max(uw_years) < report_year - MAX_UW_YEAR_LAG:
         return None, f"max UW year {max(uw_years)} too old for report year {report_year}"
 
     if len(uw_years) < 3:
@@ -1143,7 +1153,7 @@ def _parse_nutrient_triangle(grid: list[list[str]], report_year: int):
         # (i.e., at least 2 years before the report year so there's a
         # previous diagonal to compare against).  Single-column triangles
         # with enough development rows ARE valid for PYD computation.
-        usable = [y for y in uw_years if y <= report_year - 2]
+        usable = [y for y in uw_years if y <= report_year - PYD_EXCLUDED_RECENT_UW_YEARS]
         if not usable:
             return "new_syndicate", f"{len(uw_years)} UW year(s) ({min(uw_years)}-{max(uw_years)})"
         # Fall through to parse the triangle normally
@@ -1374,7 +1384,7 @@ def _parse_transposed_triangle(grid: list[list[str]], report_year: int):
     # Validate year range
     if max(uw_years) > report_year:
         return None, f"max UW year {max(uw_years)} > report year {report_year}"
-    if max(uw_years) < report_year - 5:
+    if max(uw_years) < report_year - MAX_UW_YEAR_LAG:
         return None, f"max UW year {max(uw_years)} too old for report year {report_year}"
 
     if len(uw_years) < 3:

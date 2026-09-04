@@ -113,6 +113,7 @@ from adjudicate import (
     ADJUDICATOR_MODEL,
 )
 from table_extraction import extract_tables, TableBackend, _extract_pages_to_pdf
+from table_extraction import MAX_UW_YEAR_LAG, PYD_EXCLUDED_RECENT_UW_YEARS
 
 load_dotenv()
 
@@ -1144,7 +1145,7 @@ def _extract_pyd_from_loss_ratio_triangle(page_text, report_year):
     n_cols_total = len(all_years_sorted)  # includes ae columns (for ultimates)
     n_cols = len(uw_years)                # ratio-bearing columns only
 
-    if max(uw_years) > report_year or max(uw_years) < report_year - 5:
+    if max(uw_years) > report_year or max(uw_years) < report_year - MAX_UW_YEAR_LAG:
         return None, f"max UW year {max(uw_years)} outside range for report year {report_year}"
 
     # ── Step 3: Parse the loss ratio grid ──
@@ -1444,8 +1445,8 @@ def _extract_pyd_from_loss_ratio_triangle(page_text, report_year):
     used_years = 0
 
     for col_idx, uw_year in enumerate(uw_years):
-        # Exclude two most recent UW years
-        if uw_year >= report_year - 1:
+        # Exclude the PYD_EXCLUDED_RECENT_UW_YEARS most recent UW years
+        if uw_year > report_year - PYD_EXCLUDED_RECENT_UW_YEARS:
             continue
 
         # Find current (last non-null) and previous diagonal
@@ -3106,7 +3107,7 @@ def extract_pyd_from_relevant_pages(pdf_path, report_year):
     if extraction.triangle:
         tri_data = extraction.triangle.to_dict()
         uw_years = tri_data.get("underwriting_years", [])
-        usable_years = [y for y in uw_years if int(y) <= report_year - 2]
+        usable_years = [y for y in uw_years if int(y) <= report_year - PYD_EXCLUDED_RECENT_UW_YEARS]
         if len(usable_years) == 0:
             oldest = min(uw_years) if uw_years else "?"
             print(f"  [{backend_name}] NEW SYNDICATE: triangle spans {oldest}-{report_year} "
@@ -3460,7 +3461,7 @@ def compute_pyd_from_triangle(triangle_data, report_year):
         max_uw = max(int(y) for y in uw_years)
     except (ValueError, TypeError):
         return None, "cannot parse UW years"
-    if max_uw > report_year or max_uw < report_year - 5:
+    if max_uw > report_year or max_uw < report_year - MAX_UW_YEAR_LAG:
         return None, (f"triangle max UW year ({max_uw}) outside range for report year ({report_year}) "
                      f"— likely misaligned extraction")
 
@@ -3615,8 +3616,8 @@ def compute_pyd_from_triangle(triangle_data, report_year):
         except (ValueError, TypeError):
             continue
 
-        # Exclude two most recent UW years
-        if uw_year >= report_year - 1:
+        # Exclude the PYD_EXCLUDED_RECENT_UW_YEARS most recent UW years
+        if uw_year > report_year - PYD_EXCLUDED_RECENT_UW_YEARS:
             continue
 
         # Find last non-null value in this column (= current estimate)

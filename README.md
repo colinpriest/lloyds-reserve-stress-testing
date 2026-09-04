@@ -266,7 +266,7 @@ The triangle is the primary source of truth for prior year development. The extr
 
 Extracted triangles undergo structural validation before PYD computation:
 
-- **UW year range**: Max underwriting year must be within 2 years of the report year (accommodates run-off syndicates)
+- **UW year range**: the most recent underwriting year must satisfy `report_year - 5 <= max_uw_year <= report_year` (`MAX_UW_YEAR_LAG = 5` in `table_extraction.py`; run-off syndicates stop writing before the report date). The Excel-triangle parser (`_parse_triangle_xlsx`) applies its own stricter two-year window.
 - **Row/column ratio**: Number of development rows must be consistent with number of UW year columns, accounting for extra development rows in run-off triangles
 - **Column fill pattern**: Oldest column must have the most non-null values (upper-left triangle shape)
 - **Gross vs net**: Gross triangles are preferred; net-only triangles are used as fallback
@@ -280,7 +280,7 @@ Run-off syndicates (e.g., syndicate 1110) stopped writing new business but their
 - Max UW year earlier than the report year (e.g., max UW year 2022 in a 2023 report)
 
 The pipeline handles this by:
-- Accepting triangles where `max_uw_year` is within 2 years of `report_year` (not requiring exact match)
+- Accepting triangles where `max_uw_year` is within 5 years of `report_year` (`MAX_UW_YEAR_LAG`; not requiring exact match)
 - Computing `extra_dev_years = report_year - max_uw_year` to adjust row count validation
 - Using `report_year - uw_year >= dev_period` for row sizing in the text-based parser
 
@@ -303,10 +303,11 @@ For each underwriting year column:
   previous_estimate = value one row above (previous diagonal)
   pyd_for_year = current_estimate - previous_estimate
 
-Total PYD = sum of pyd_for_year across all columns except the most recent
+Total PYD = sum of pyd_for_year over columns with uw_year <= report_year - 2
+            (the two most recent underwriting years are excluded)
 ```
 
-The most recent UW year column is excluded because it has only one development period — there is no "previous" estimate to compare against.
+The two most recent underwriting years (`report_year` and `report_year - 1`; `PYD_EXCLUDED_RECENT_UW_YEARS = 2`) are excluded: they are still in their initial development period, and the newest column has no previous estimate to compare against. The manuscript states the same rule (mature years only, $u \le t-2$).
 
 **Unit handling**: If the triangle is in thousands (£000), the total PYD is divided by 1000 to convert to millions (£m). This is detected from page text keywords ("£000", "£'000", "thousands").
 
