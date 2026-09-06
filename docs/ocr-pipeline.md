@@ -1097,6 +1097,35 @@ The regulatory segmental analysis on page 25 has a single row:
 But the page text contains "segmental analysis", so the
 threshold drops to 1 and the single-LOB breakdown is accepted.
 
+#### 7.7.1  Which axis carries the classes (round 52)
+
+Many segmental analyses are **transposed**: the classes run across
+the header and the profit-and-loss items down the first column
+(Beazley 2623/623: `2015 | Marine $m | Political risks &
+contingency $m | Property $m | Reinsurance $m | Specialty lines $m`,
+rows `Gross premiums written`, `Net premiums written`, ...).  The
+row-wise parser returned those rows as classes, so 23 committed
+records carried mixes such as "Gross premiums written 268.8 / Net
+premiums written 239.0".  `_parse_transposed_lob()` now reads such a
+table from its gross-premiums-written row with the header cells as
+the classes; it needs two or more classes, at least one a recognised
+class of business, and ignores note, year, units and "restated"
+columns so an ordinary profit-and-loss statement is never read as a
+mix.  Three further rules follow from the same review:
+
+* a row-wise mix in which half or more of the labels are
+  profit-and-loss items (`_is_pl_label`; "Pecuniary loss" and "Legal
+  expenses" are classes and are not caught) is rejected;
+* the prose fallback (`_parse_lob_from_text`) must find at least two
+  classes -- a single line is a stray sentence, not a mix (2623/2015
+  had returned one class at 4.0m for a 1.5bn book);
+* the driver applies a deterministic mix over the models' only when
+  it has two or more classes or its single class agrees with a
+  model-read premium total within 25% (`_lob_override_gate`); a
+  monoline special purpose syndicate passes, a stray row does not,
+  and the refusal is recorded as `[LOB NOT APPLIED]`.  The
+  deterministic table is kept in `_adobe_lob` for audit either way.
+
 ### 7.8  Provisions and balance sheet grid parsing
 
 **Functions**: `_parse_nutrient_provisions(grid, report_year)`,
@@ -1900,8 +1929,23 @@ hierarchy; every other document defers to it.
    RITC acceptors, where the triangle tracks only organic
    development (see the RITC caveat below).
 4. Otherwise the absolute-amount triangle PYD replaces both
-   LLM-extracted values -- regardless of how close an LLM value
-   is -- and any LLM override is logged.
+   LLM-extracted values -- however close an LLM value is -- and any
+   LLM override is logged, subject to the round-52 gate: the
+   deterministic figure is **not applied** when both LLM values
+   agree in sign with each other and it has the opposite sign, or
+   when it implies a movement above 50% of opening reserves while
+   both LLM values imply under 10% (`_pyd_override_gate`).  The
+   models' values then stand and a `[RAG PYD NOT APPLIED]` note
+   records the figure.  The corrected page binding of round 52
+   exposed deterministic figures that were a wrong-year provisions
+   column or a mis-columned triangle; the gate is the safeguard.
+   The same gate guards the earlier code recomputation from the
+   models' own extracted triangles (`verify_triangles`, note prefix
+   `[CODE PYD NOT APPLIED]`): 1084/2022 and 510/2018 had reached
+   the record by that path (+581.7m and +429.3m against two models
+   agreeing on a release) once the RAG triangle was blocked.  A
+   deterministic figure therefore never displaces two agreeing
+   model values by any of the three routes.
 5. Where no absolute-amount triangle yields a PYD, a
    loss-ratio triangle is a conditional deterministic fallback.
    Because it is ordinarily managed- or group-level, it fills an
@@ -1995,18 +2039,23 @@ triangles, provisions note):
 4. If successful, fill in the PYD value and compute the
    percentage against opening reserves.
 
-**Source priority chain** (highest to lowest):
+**Source decision rule** (the conditional form of the canonical
+hierarchy in section 10.3; this table is not an unconditional
+ranking):
 
-| Priority | Source | Gross/Net |
-|----------|--------|-----------|
-| 1 | RAG deterministic triangle PYD | Gross |
-| 2 | LLM-extracted "Movement in prior year's provision" note | Gross |
-| 3 | LLM-extracted narrative text (gross amount) | Gross |
-| 4 | LLM-extracted year-of-account result breakdown | Net* |
-| 5 | LLM-extracted loss ratio development table | Gross |
-| 6 | Narrative text net-of-reinsurance figure (parsed post-hoc) | Net |
+| Step | Source | Applies when | Gross/Net |
+|------|--------|--------------|-----------|
+| 1 | Deterministic *absolute-amount* triangle PYD, from a table bound to the requested syndicate's annual accounts (section 10.8) | A valid triangle was parsed and no gross provisions movement contradicts its sign | Gross |
+| 1a | Deterministic gross provisions movement | It is available and its sign disagrees with the triangle: provisions override the triangle (section 11.3.1) | Gross |
+| 2 | LLM-extracted "Movement in prior year's provision" note | No deterministic source of steps 1 and 1a | Gross |
+| 3 | LLM-extracted narrative text (gross amount) | As step 2 | Gross |
+| 4 | Deterministic *loss-ratio* triangle PYD | Fills a blank LLM value; overrides a syndicate-specific LLM value only when their directions contradict; never overrides an absolute-amount triangle | Gross |
+| 5 | LLM-extracted year-of-account result breakdown | No gross source | Net* |
+| 6 | Narrative text net-of-reinsurance figure (parsed post-hoc, section 10.4) | Both LLM values are null and the narrative quantifies a net movement | Net |
 
 \* Year-of-account results are inherently net of reinsurance.
+The analysis repository records the basis of every figure it
+uses and admits only gross-basis records to its working sample.
 
 When the net fallback is used, a `[NET FALLBACK]` note is
 appended to `data_quality_notes`:
@@ -2080,22 +2129,51 @@ After LLM extraction completes, the pipeline checks whether
 `_adobe_provisions` contains an `opening_gross_claims_outstanding`
 value (from sections 7.8.2 or 7.8.3).
 
-If available, the RAG value **overrides both models regardless
-of whether they agree**:
+If available, the RAG value overrides both models **when its unit
+is resolved from report evidence** (round 52, review finding M01):
 
-1. Both models' `opening_reserves_gbp_m` are set to the RAG
-   value.
-2. `prior_year_development_pct` is recomputed using the
-   corrected opening reserves.
-3. If the override differs from the LLM value by >= 0.5m, a
-   `[RAG OVERRIDE]` note is appended to `data_quality_notes`.
+1. The table parser scales the figure from the table's header
+   rows, then the page text, then the document's unit declaration
+   ("amounts are rounded to the nearest thousand", `$'000` note
+   headers on two or more pages), and only then from magnitude (a
+   value above 50,000 cannot be millions for any syndicate).  The
+   source is recorded in `opening_provenance.unit_source`
+   (`header`, `page`, `document`, `magnitude`, `unresolved`),
+   with the raw value, multiplier, page, entity and table kind.
+2. The figure is then applied by a two-of-three rule
+   (`_resolve_rag_opening`): it must agree with at least one model
+   value within 2% at scale 1, or with every model value at x1000
+   or /1000 (then it is rescaled, whatever the unit source said:
+   2988/2024's table read 347,898 under a mistaken document
+   declaration), or the two model values must disagree with each
+   other by more than 5% (the table breaks the tie, the earlier
+   behaviour; 2357/2016 is the example).  When both models agree
+   with each other and the table contradicts them at every scale --
+   a wrong column (382/2018), a wrong entity, a sign flip -- the
+   models stand and a `[RAG OPENING NOT APPLIED]` note records the
+   table value.  The disagreement fallback of 10.6.2 goes through
+   the same rule.  A negative or zero opening balance is a misread
+   column and is never returned by the parsers.
+3. When applied, both models' `opening_reserves_gbp_m` are set to
+   the RAG value, `prior_year_development_pct` is recomputed, and
+   an override differing from the LLM value by >= 0.5m is logged
+   as `[RAG OVERRIDE]`; `opening_reserves_provenance` carries the
+   applied value and the unit resolution.
+
+The frozen review's case: syndicate 1416/2024's cached provisions
+table had lost its `US$000` marker, the parser treated 46,378 as
+millions and overrode the models' correct 46.378, and the
+syndicate entered the analysis with £37bn of reserves.  With the
+document declaration on the accounting-policies page the value
+resolves to 46.378; without it the models' agreement would have
+decided; with neither, nothing would have been overridden.
 
 This is analogous to the RAG triangle PYD override (section 9)
 -- for opening reserves the deterministic extraction is
-authoritative over LLMs outright, while for PYD that authority is
-scoped, within the section 10.3 hierarchy, to an **absolute-amount**
-triangle, whose only qualification is triangle-versus-provisions
-rather than triangle-versus-LLM.  A
+authoritative over LLMs once its unit is evidenced, while for PYD
+that authority is scoped, within the section 10.3 hierarchy, to an
+**absolute-amount** triangle, whose only qualification is
+triangle-versus-provisions rather than triangle-versus-LLM.  A
 **loss-ratio** triangle is a conditional fallback instead: being
 managed- or group-level it fills a blank narrative value and
 overrides a syndicate-specific one only where the two directions
@@ -2135,6 +2213,12 @@ sheet figures:
 | Net claims outstanding | After reinsurance deduction |
 | Reinsurers' share (assets) | Only the ceded portion |
 
+The provisions-movement parser reads the **current-year** gross
+column: the block whose own header cells carry the report year,
+else the first gross block (movement notes print the current year
+first and the comparative after it).  Before round 52 it took the
+last gross column, the prior-year comparative.
+
 The RAG value comes from one of two deterministic sources:
 
 1. **Provisions movement note** (section 7.8.2): the "Balance at
@@ -2165,6 +2249,78 @@ outstanding -- Gross amount" prior year column.
   [gemini-2.5-flash] Opening reserves confirmed by RAG balance sheet: 12.121 -> 12.121m
   [gpt-5-mini] Opening reserves overridden by RAG balance sheet: 78.049 -> 12.121m
 ```
+
+### 10.8  Entity binding and section kind (combined filings)
+
+Some managing agents file one document for several syndicates
+(Tokio Marine Kiln: syndicates 510, 557 and 308 for 2014-2019;
+Hiscox: 33 and 6104 for 2014-2024; a dozen special-purpose
+syndicates filed with their hosts), and most filings append
+three-year *underwriting-year* (closed-year) accounts after the
+annual accounts.  Before round 52 the backends took the first
+matching table in the document, so 510/2018 and 510/2019 carried
+syndicate 557's reserves and 6104/2015, 2016, 2018 and 2024
+carried syndicate 33's (review finding M02).
+
+Every page is now assigned an **entity** (the syndicate whose
+section it belongs to) and a **section kind** (`annual` or
+`underwriting_year`) by `page_sections()` in
+`table_extraction.py`:
+
+1. A filing that prints a chapter index on its pages (the
+   HTML-converted Hiscox filings: "Chapter 3 / 59 / Hiscox
+   Syndicate 6104 / annual accounts") is sectioned by each page's
+   printed page number against that index.
+2. Otherwise a same-line section marker decides -- "Syndicate 510
+   Annual accounts under UK GAAP", "Hiscox Syndicate 33 annual
+   accounts", "Syndicate 510 Underwriting year accounts" -- when
+   it heads its line.  A list such as "Syndicates 510, 557 and
+   308" or "Syndicates 0033 and 6104" names every member and is
+   never a marker; a cross-reference inside a sentence is not one.
+3. A page without a marker that names exactly one relevant
+   syndicate (the requested one, or a companion with markers on
+   two or more pages) takes that syndicate; every other page
+   inherits the previous page's entity.
+4. The kind is decided by the page's own evidence: a marker of
+   underwriting-year kind, a title line "Underwriting year
+   accounts", or a statement heading for a closed year of account
+   or a 36-month period.  A policy note that mentions closed years
+   does not make its page a closed-year page.
+
+A table on a companion syndicate's page, or in an
+underwriting-year section, is never admitted as a triangle,
+provisions movement, opening reserve or business mix; the counts
+of skipped tables and the entity/page map are recorded in the
+output under `_entity_binding`, and every admitted table carries
+`source_page` and `entity`.  When no admitted table yields a
+figure, the reconciled dual-LLM values stand (they were read
+from the whole document with the syndicate named in the prompt,
+and for the combined filings above they were correct).
+
+#### 10.8.1  Cached page mapping
+
+The slim PDF sent to Azure is assembled in ascending page order,
+but caches written before round 52 recorded each table's page
+through the priority-sorted batch, so their `orig_page` values are
+scrambled whenever priority order differs from page order.  New
+caches record pages through the order actually sent
+(`_page_mapping: ascending-v1`); legacy caches are remapped on
+load by reconstructing the batches as sent
+(`remap_cached_page`) and the result is verified against the
+page whose text contains the table's own numbers
+(`locate_table_page`).  The committed caches are the record of
+the Azure run and are not re-fetched.
+
+#### 10.8.2  Offline re-extraction
+
+`python test_gemini.py --single syndicate_NNNN_YYYY --offline`
+re-runs a record from the committed LLM, table-backend and
+inception caches; any cache miss aborts the run instead of calling
+an external API (`LLOYDS_EXTRACTION_OFFLINE=1`), so a
+re-extraction changes only what the parsing rules change.  In
+offline mode a cache whose relevant-page set no longer matches the
+current page classifier is still used, with table pages located
+from their own numbers.
 
 ### 10.7  Currency field normalization
 

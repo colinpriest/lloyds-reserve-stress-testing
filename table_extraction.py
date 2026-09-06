@@ -23,6 +23,7 @@ import os
 import re
 import sys
 import time
+from collections import Counter
 from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
@@ -45,6 +46,376 @@ _CACHE_VERSION = 6  # v6: fix uw-year regex in _classify_table_content (non-capt
                     #     add "underlying pure year" + dev-period labels as transposed-triangle signal
 
 
+# ── Entity binding and unit resolution (round 52: review findings M01 and M02) ──
+#
+# Two failure modes were demonstrated on the frozen corpus.  (1) Units: a cached
+# balance-sheet table had lost its thousands marker, the parser saw no unit in the
+# header rows, treated 46,378 (US$ thousand) as millions and overrode the correctly
+# scaled model value (1416/2024).  (2) Entity: combined managing-agent filings carry
+# several syndicates' accounts in one document, and the first matching reserve table
+# in the document belonged to a companion syndicate (510/2018 and 2019 took syndicate
+# 557's reserves; 6104/2015, 2016, 2018 and 2024 took syndicate 33's).  Every table is
+# therefore bound to the syndicate whose section it sits in, and every reserve
+# carries its unit evidence; a value whose unit cannot be resolved does not override
+# the model value.
+
+_NOT_A_SYNDICATE = r"(?!\s*(?:months?|years?|%|underwriting account|year of account|closed year|open year))"
+_SYNDICATE_MENTION = re.compile(
+    r"\bsyndicates?\s*(?:no\.?|number)?\s*(\d{2,4})\b" + _NOT_A_SYNDICATE, re.I)
+# a mention with its list continuation: "Syndicates 510, 557 and 308", "Syndicates 0033 and 6104"
+_SYNDICATE_LIST = re.compile(
+    r"\bsyndicates?\s*(?:no\.?|number)?\s*(\d{2,4}(?:\s*(?:,|and|&)\s*\d{2,4})*)\b"
+    + _NOT_A_SYNDICATE, re.I)
+_LIST_SPLIT = re.compile(r"\s*(?:,|and|&)\s*", re.I)
+# the chapter navigation block an HTML-converted filing prints on every page:
+#   "Chapter 1 / 2 / Hiscox Syndicate 0033 / annual accounts / Chapter 2 / 43 / ..."
+_NAV_BLOCK = re.compile(
+    r"chapter\s+\d+\s*\n\s*\d{1,3}\s*\n[^\n]{0,40}?syndicates?\s+\d{2,4}\s*\n\s*"
+    r"(?:annual accounts|underwriting year accounts)\s*\n?", re.I)
+
+
+def _strip_navigation(text: str) -> str:
+    return _NAV_BLOCK.sub("\n", text or "")
+
+
+def _mentions(text: str):
+    """Every syndicate mention as (numbers, rest_of_line, chars_before): a list mention
+    names several syndicates."""
+    out = []
+    for line in (text or "").splitlines():
+        for m in _SYNDICATE_LIST.finditer(line):
+            nums = tuple(int(x) for x in _LIST_SPLIT.split(m.group(1)) if x.strip().isdigit())
+            if nums:
+                out.append((nums, line[m.end():], m.start()))
+    return out
+
+
+_CHAPTER_ENTRY = re.compile(
+    r"chapter\s+(\d+)\s*\n\s*(\d{1,3})\s*\n[^\n]{0,40}?syndicates?\s+(\d{2,4})\s*\n\s*"
+    r"(annual accounts|underwriting year accounts)", re.I)
+_PRINTED_PAGE = re.compile(r"^\s*(\d{1,3})\s*$", re.M)
+
+
+def chapter_index(page_texts: dict):
+    """The chapter index some filings print on every page, as a sorted list of
+    (printed start page, syndicate, kind); empty when no page carries two or more
+    chapter entries (HTML-converted Hiscox filings do; most filings do not)."""
+    best = {}
+    for text in page_texts.values():
+        entries = {}
+        for m in _CHAPTER_ENTRY.finditer(text or ""):
+            kind = "underwriting_year" if m.group(4).lower().startswith("underwriting") else "annual"
+            entries[int(m.group(1))] = (int(m.group(2)), int(m.group(3)), kind)
+        if len(entries) >= 2 and len(entries) > len(best):
+            best = entries
+    return sorted(best.values())
+
+
+def _printed_page(text: str):
+    """The printed page number: the first line of the page that is a bare 1-3 digit
+    number, when the page has one within its first lines."""
+    head = "\n".join((text or "").splitlines()[:4])
+    m = _PRINTED_PAGE.search(head)
+    return int(m.group(1)) if m else None
+
+
+def _sections_from_chapters(page_texts: dict, chapters: list) -> dict:
+    """Assign pages by printed page number against the chapter index; pages without a
+    printed number inherit from the previous page."""
+    sections = {}
+    current = (None, "annual")
+    for p in sorted(page_texts):
+        printed = _printed_page(page_texts[p])
+        if printed is not None:
+            for start, syn, kind in chapters:
+                if printed >= start:
+                    current = (syn, kind)
+        sections[p] = current
+    return sections
+
+
+def _mention_counts(text: str) -> Counter:
+    c = Counter()
+    for nums, _, _ in _mentions(text):
+        for s in nums:
+            c[s] += 1
+    return c
+
+
+_KIND_AFTER = re.compile(
+    r"^\s{0,6}(annual accounts|annual report|report and accounts|accounts under uk gaap|"
+    r"underwriting year accounts|underwriting year|closed year of account|financial statements)", re.I)
+
+
+def _section_markers(text: str):
+    """Same-line markers "Syndicate N <kind>" from single-number mentions only: a list
+    ("Syndicates 0033 and 6104 Report and Accounts") is a document title, not a
+    section marker."""
+    out = []
+    for nums, rest, before in _mentions(text):
+        if len(nums) != 1 or before > 60:
+            continue
+        m = _KIND_AFTER.match(rest)
+        if m and len(rest[m.end():].strip()) <= 16:
+            kind = "underwriting_year" if m.group(1).lower() in _UWY_KINDS else "annual"
+            out.append((nums[0], kind))
+    return out
+_UNIT_THOUSANDS = ("'000", "\u2019000", "\u00a3000", "$000", "\u20ac000", "000s", "(000)",
+                   "in thousands", "nearest thousand", "thousands of", "us$000")
+_UNIT_MILLIONS = ("\u00a3m ", "\u00a3m\n", "$m ", "$m\n", "\u00a3 million", "$ million",
+                  "in millions", "nearest million", "millions of", "(\u00a3m)", "($m)",
+                  "\u00a3'm", "$'m")
+_HEADING_LINES = 8
+
+
+def requested_syndicate(pdf_path) -> Optional[int]:
+    """The syndicate a filing was retrieved for, from its filename syndicate_N_YYYY."""
+    m = re.match(r"syndicate_(\d+)_(\d{4})", Path(pdf_path).stem)
+    return int(m.group(1)) if m else None
+
+
+def _heading_zone(text: str, n: int = _HEADING_LINES) -> str:
+    lines = [l.strip() for l in (text or "").splitlines() if l.strip()]
+    return "\n".join(lines[:n])
+
+
+_SECTION_MARKER = re.compile(
+    r"syndicates?\s*(?:no\.?|number)?\s*(\d{2,4})\s{1,6}"
+    r"(annual accounts|annual report|report and accounts|accounts under uk gaap|"
+    r"underwriting year accounts|underwriting year|closed year of account|"
+    r"financial statements)", re.I)
+_UWY_TITLE = re.compile(
+    r"^\s*(?:\w[\w&\.\- ]{0,40}\s+)?underwriting year accounts\s*$", re.I | re.M)
+_UWY_STATEMENT = re.compile(
+    r"(?:balance sheet|statement of|cash flow statement|technical account|segmental analysis)"
+    r"[^\n]{0,80}\n?[^\n]{0,80}(?:closed year of account|for the 36 months ended|"
+    r"36 months to|three[- ]year (?:funded )?accounts)|"
+    r"for the 36 months ended|36 months to 31 december|closed year of account as at", re.I)
+_UWY_KINDS = ("underwriting year accounts", "underwriting year", "closed year of account")
+
+
+def page_sections(page_texts: dict, requested: Optional[int]) -> dict:
+    """Assign every page an (entity, kind) pair: the syndicate whose section the page
+    belongs to, and whether that section is the annual accounts or the closed-year
+    underwriting-year accounts.
+
+    Combined managing-agent filings carry several syndicates' accounts in one
+    document, and most filings append three-year underwriting-year accounts after the
+    annual accounts.  A same-line section marker ("Syndicate 510   Annual accounts
+    under UK GAAP", "Hiscox Syndicate 6104 annual accounts", "Syndicate 510
+    Underwriting year accounts") decides both.  A navigation block printed on every
+    page of an HTML-converted filing splits the number and the section kind across
+    lines, so it never matches.  Without a marker, a page naming exactly one syndicate
+    that is the requested one or a companion (a syndicate with markers on two or more
+    pages, or heading-zone mentions on three or more) takes that syndicate; a heading
+    zone reading "Underwriting year accounts" without a number switches the kind.
+    Every other page inherits from the preceding page; pages before any evidence
+    carry (None, "annual").
+    """
+    if requested is None:
+        return {p: (None, "annual") for p in page_texts}
+    chapters = chapter_index(page_texts)
+    if chapters:
+        return _sections_from_chapters(page_texts, chapters)
+    marker_pages, heading_pages, per_page = {}, {}, {}
+    for p, text in page_texts.items():
+        text = _strip_navigation(text or "")
+        markers = _section_markers(text)
+        counts = _mention_counts(text)
+        head = _heading_zone(text)
+        head_counts = _mention_counts(head)
+        per_page[p] = (markers, counts, head, head_counts)
+        for s, _ in markers:
+            marker_pages.setdefault(s, set()).add(p)
+        for s in head_counts:
+            heading_pages.setdefault(s, set()).add(p)
+    companions = {s for s, pgs in marker_pages.items() if s != requested and len(pgs) >= 2}
+    companions |= {s for s, pgs in heading_pages.items() if s != requested and len(pgs) >= 3}
+    relevant = companions | {requested}
+    sections = {}
+    entity = None
+    for p in sorted(page_texts):
+        markers, counts, head, head_counts = per_page[p]
+        marked = {s for s, _ in markers if s in relevant}
+        if len(marked) == 1:
+            entity = marked.pop()
+        elif not marked:
+            named = {s for s in counts if s in relevant}
+            if len(named) == 1:
+                entity = named.pop()
+        # several relevant syndicates marked on one page: a contents or cover page;
+        # the entity does not change.  The section KIND is decided by the page's
+        # own evidence only: a marker of underwriting-year kind, a title line
+        # "Underwriting year accounts", or a statement heading for a closed year
+        # of account or a 36-month period.  A policy note that merely mentions
+        # closed years does not make its page a closed-year account page.
+        uwy_marked = any(k == "underwriting_year" for s, k in markers)
+        annual_marked = any(k == "annual" for s, k in markers)
+        if uwy_marked and not annual_marked:
+            kind = "underwriting_year"
+        elif annual_marked:
+            kind = "annual"
+        elif _UWY_TITLE.search(head) or _UWY_STATEMENT.search(head):
+            kind = "underwriting_year"
+        else:
+            kind = "annual"
+        sections[p] = (entity, kind)
+    return sections
+
+
+def page_entities(page_texts: dict, requested: Optional[int]) -> dict:
+    """Entity per page (see page_sections)."""
+    return {p: e for p, (e, _) in page_sections(page_texts, requested).items()}
+
+
+def entity_page_summary(entities: dict) -> dict:
+    out = {}
+    for p, e in entities.items():
+        out.setdefault("none" if e is None else str(e), []).append(int(p))
+    return {k: sorted(v) for k, v in out.items()}
+
+
+def unit_multiplier_from_text(text: str) -> Optional[float]:
+    """0.001 when the text declares thousands, 1.0 when it declares millions, else None."""
+    low = (text or "").lower() + " "
+    if any(k in low for k in _UNIT_THOUSANDS):
+        return 0.001
+    if any(k in low for k in _UNIT_MILLIONS):
+        return 1.0
+    return None
+
+
+def _header_unit_multiplier(grid: list) -> Optional[float]:
+    for row in grid[:4]:
+        m = unit_multiplier_from_text(" ".join(str(c) for c in row))
+        if m is not None:
+            return m
+    return None
+
+
+def document_unit_hint(page_texts: dict) -> Optional[float]:
+    """A document-level unit declaration: an accounting-policies statement ('amounts
+    are rounded to the nearest thousand', 'in thousands') decides; otherwise the
+    unit marker that appears on more pages, if it appears on at least two."""
+    thousands = millions = 0
+    for text in page_texts.values():
+        low = (text or "").lower()
+        if any(k in low for k in ("nearest thousand", "in thousands", "thousands of")):
+            return 0.001
+        if any(k in low for k in ("nearest million", "in millions", "millions of")):
+            return 1.0
+        m = unit_multiplier_from_text(low)
+        if m == 0.001:
+            thousands += 1
+        elif m == 1.0:
+            millions += 1
+    if thousands >= 2 and thousands > millions:
+        return 0.001
+    if millions >= 2 and millions > thousands:
+        return 1.0
+    return None
+
+
+@dataclass
+class OpeningClaims:
+    """An opening gross claims-outstanding figure with its unit evidence.
+
+    value_m is in millions when the unit is resolved (header, page, document or
+    magnitude evidence) and is the raw table value when it is not; the driver decides
+    what an unresolved value may do (it may not override the model value on its own).
+    """
+    raw_value: float
+    unit_multiplier: Optional[float]
+    unit_source: str
+    value_m: float
+    page: Optional[int] = None
+    entity: Optional[int] = None
+    backend: str = ""
+    table_kind: str = ""
+
+    def to_dict(self) -> dict:
+        return {"raw_value": self.raw_value, "unit_multiplier": self.unit_multiplier,
+                "unit_source": self.unit_source, "value_m": self.value_m,
+                "page": None if self.page is None else int(self.page) + 1,
+                "entity": self.entity, "backend": self.backend, "table_kind": self.table_kind}
+
+
+def resolve_units(raw: float, header_mult: Optional[float], page_text: str = "",
+                  doc_unit: Optional[float] = None, magnitude_floor: float = 50_000,
+                  table_kind: str = "") -> Optional[OpeningClaims]:
+    """Scale a table value to millions from evidence, in order: the table's header
+    rows, the page text, the document's unit declaration, and finally magnitude (a
+    value above the floor cannot be millions for any syndicate); with none of these
+    the value is returned unresolved."""
+    if table_kind in ("balance_sheet_liabilities", "provisions_movement") and raw <= 0:
+        # a claims-outstanding balance is positive; a negative or zero cell is a
+        # misread column (1225/2016 produced -441.4 before round 52)
+        return None
+    if header_mult is not None:
+        return OpeningClaims(raw, header_mult, "header", round(raw * header_mult, 3), table_kind=table_kind)
+    m = unit_multiplier_from_text(page_text)
+    if m is not None:
+        return OpeningClaims(raw, m, "page", round(raw * m, 3), table_kind=table_kind)
+    if doc_unit is not None:
+        return OpeningClaims(raw, doc_unit, "document", round(raw * doc_unit, 3), table_kind=table_kind)
+    if abs(raw) > magnitude_floor:
+        return OpeningClaims(raw, 0.001, "magnitude", round(raw / 1_000, 3), table_kind=table_kind)
+    return OpeningClaims(raw, None, "unresolved", raw, table_kind=table_kind)
+
+
+_NUMERIC_TOKEN = re.compile(r"\d[\d,]{2,}")
+
+
+def _priority_sorted(pages, page_matches) -> list:
+    """The order in which relevant pages were batched for the table backend."""
+    priority_order = ["claims_triangle", "premium_mix", "provisions", "pl_account", "balance_sheet"]
+
+    def prio(pg):
+        best = len(priority_order)
+        for cat in page_matches.get(pg, set()):
+            if cat in priority_order:
+                best = min(best, priority_order.index(cat))
+        return best
+    return sorted(pages, key=prio)
+
+
+def remap_cached_page(recorded: int, batches: list) -> int:
+    """Undo the recorded-page defect of caches written before round 52.
+
+    The slim PDF was assembled in ascending page order (`_extract_pages_to_pdf` sorts),
+    but the table's page was recorded as `batch_pages[slim_idx]` with `batch_pages` in
+    priority order.  The recorded page therefore identifies the slim index, and the
+    true page is the same index in the ascending batch.
+    """
+    for batch in batches:
+        if recorded in batch:
+            return sorted(batch)[batch.index(recorded)]
+    return recorded
+
+
+def locate_table_page(grid: list, page_texts: dict, candidates) -> Optional[int]:
+    """The candidate page whose text contains the most of the table's numeric cells;
+    None when the table carries fewer than three usable numbers."""
+    tokens = {tok for row in grid for cell in row for tok in _NUMERIC_TOKEN.findall(str(cell))}
+    tokens = {tok for tok in tokens if len(tok.replace(",", "")) >= 3}
+    if len(tokens) < 3:
+        return None
+    best, best_page = 0, None
+    for pg in candidates:
+        text = page_texts.get(pg, "") or ""
+        score = sum(1 for tok in tokens if tok in text)
+        if score > best:
+            best, best_page = score, pg
+    return best_page if best >= max(3, len(tokens) // 2) else None
+
+
+def _offline_guard(what: str) -> None:
+    """In offline mode (LLOYDS_EXTRACTION_OFFLINE=1) a cache miss is an error, never
+    a paid API call: re-extraction from the committed caches must be reproducible."""
+    if os.getenv("LLOYDS_EXTRACTION_OFFLINE") == "1":
+        raise RuntimeError(f"offline mode: {what} would call an external API (cache miss)")
+
+
 # ── Data structures ───────────────────────────────────────────────────────
 
 class TableBackend(Enum):
@@ -61,15 +432,22 @@ class TriangleData:
     units: str  # "millions", "thousands"
     underwriting_years: list[int] = field(default_factory=list)
     development_rows: list[list] = field(default_factory=list)
+    page: Optional[int] = None      # 0-based page the table was read from
+    entity: Optional[int] = None    # syndicate whose section the page belongs to
 
     def to_dict(self) -> dict:
-        return {
+        d = {
             "type": self.type,
             "currency": self.currency,
             "units": self.units,
             "underwriting_years": self.underwriting_years,
             "development_rows": self.development_rows,
         }
+        if self.page is not None:
+            d["source_page"] = int(self.page) + 1
+        if self.entity is not None:
+            d["entity"] = self.entity
+        return d
 
 
 @dataclass
@@ -80,15 +458,22 @@ class LOBData:
     claims_incurred_by_lob: Optional[list[dict]] = None
     currency: str = "GBP"
     method: str = "nutrient"
+    page: Optional[int] = None
+    entity: Optional[int] = None
 
     def to_dict(self) -> dict:
-        return {
+        d = {
             "gross_premium_mix": self.gross_premium_mix,
             "gross_premiums_written_gbp_m": self.gross_premiums_written_gbp_m,
             "claims_incurred_by_lob": self.claims_incurred_by_lob,
             "currency": self.currency,
             "method": self.method,
         }
+        if self.page is not None:
+            d["source_page"] = int(self.page) + 1
+        if self.entity is not None:
+            d["entity"] = self.entity
+        return d
 
 
 @dataclass
@@ -98,9 +483,21 @@ class ProvisionsData:
     ri_share_prior_year: Optional[float] = None
     net_prior_year_claims: Optional[float] = None
     opening_gross_claims_outstanding: Optional[float] = None
+    unit_source: Optional[str] = None          # how the movement figures were scaled
+    page: Optional[int] = None
+    entity: Optional[int] = None
+    opening_provenance: Optional[dict] = None  # OpeningClaims.to_dict()
 
     def to_dict(self) -> dict:
         d = {}
+        if self.unit_source is not None:
+            d["unit_source"] = self.unit_source
+        if self.page is not None:
+            d["source_page"] = int(self.page) + 1
+        if self.entity is not None:
+            d["entity"] = self.entity
+        if self.opening_provenance is not None:
+            d["opening_provenance"] = self.opening_provenance
         if self.gross_prior_year_claims is not None:
             d["gross_prior_year_claims"] = self.gross_prior_year_claims
         if self.ri_share_prior_year is not None:
@@ -124,6 +521,13 @@ class ExtractionResult:
     elapsed_s: float = 0.0
     relevant_pages: list[int] = field(default_factory=list)
     rotated_pages: set[int] = field(default_factory=set)
+    requested_syndicate: Optional[int] = None
+    entity_pages: dict = field(default_factory=dict)     # entity -> 1-based pages
+    foreign_tables_skipped: int = 0
+    foreign_pages: list[int] = field(default_factory=list)  # 1-based
+    underwriting_year_pages: list[int] = field(default_factory=list)  # 1-based
+    underwriting_year_tables_skipped: int = 0
+    document_unit_hint: Optional[float] = None
 
 
 # ── Public API ────────────────────────────────────────────────────────────
@@ -317,11 +721,35 @@ def _find_pages_ocr(pdf_path: Path) -> tuple[dict, dict, str, set]:
     page_matches = {}
     page_texts = {}
     rotated_pages = set()  # pages that needed rotation for correct OCR
-
     doc = fitz.open(pdf_path)
     n_pages = len(doc)
+
+    # OCR page-text cache (round 52): the driver keeps per-filing OCR records as a
+    # list of {"page": 1-based, "text": ...}; reuse them, and write one when absent,
+    # so a scanned filing is OCR'd once rather than on every re-extraction.
+    ocr_cache = Path("pdf_extraction") / "ocr_page_cache" / f"{Path(pdf_path).stem}.json"
+    cached_texts = {}
+    if ocr_cache.exists():
+        try:
+            with open(ocr_cache, "r", encoding="utf-8") as fh:
+                for entry in json.load(fh):
+                    cached_texts[int(entry["page"]) - 1] = entry.get("text", "")
+        except (json.JSONDecodeError, OSError, KeyError, TypeError, ValueError):
+            cached_texts = {}
+    use_cache = len(cached_texts) == n_pages and n_pages > 0
+    if use_cache:
+        logger.info(f"  OCR page texts from cache ({n_pages} pages)")
+    fresh_texts = []
+
     # First pass: OCR all pages in normal orientation
     for page_num in range(n_pages):
+        if use_cache:
+            text = cached_texts[page_num]
+            page_texts[page_num] = text
+            categories = _classify_page(text)
+            if categories:
+                page_matches[page_num] = categories
+            continue
         page = doc[page_num]
         # Remove incorrect /Rotate flags before rendering.  Some scanned PDFs
         # have landscape pages with rotation=270 that renders content upside-down.
@@ -331,11 +759,19 @@ def _find_pages_ocr(pdf_path: Path) -> tuple[dict, dict, str, set]:
         image = Image.open(BytesIO(pix.tobytes("png")))
         text = _pytesseract.image_to_string(image)
         page_texts[page_num] = text
+        fresh_texts.append({"page": page_num + 1, "text": text})
         categories = _classify_page(text)
         if categories:
             page_matches[page_num] = categories
         if (page_num + 1) % 10 == 0:
             logger.info(f"  OCR'd {page_num + 1}/{n_pages} pages")
+    if fresh_texts and not use_cache:
+        try:
+            ocr_cache.parent.mkdir(parents=True, exist_ok=True)
+            with open(ocr_cache, "w", encoding="utf-8") as fh:
+                json.dump(fresh_texts, fh, ensure_ascii=True)
+        except OSError:
+            pass
 
     # Second pass: re-scan unclassified non-blank pages at 90° CW rotation.
     # Some scanned syndicate reports have landscape claims development
@@ -1499,6 +1935,92 @@ _SKIP_ROW_LABELS = {
 }
 
 
+# Row labels that are profit-and-loss items, not classes of business.  "Pecuniary loss"
+# and "Legal expenses" are Solvency II classes, so the bare words "loss" and "expenses"
+# are not on the list.
+_PL_LABELS = ("premium", "claims", "operating expenses", "acquisition", "earned",
+              "balance on", "technical", "investment", "profit", "commission", "outward",
+              "unearned", "result", "reinsurers' share", "reinsurers share")
+
+
+def _is_pl_label(label: str) -> bool:
+    l = (label or "").lower()
+    return any(k in l for k in _PL_LABELS)
+
+
+def _strip_unit_suffix(cell: str) -> str:
+    c = re.sub(r"\s*(?:us\$|\$|£|€|gbp|usd|eur)?\s*['\u2018\u2019]?\s*(?:m|000|k|million|thousand)s?\s*$",
+               "", str(cell or "").strip(), flags=re.I)
+    return c.strip(" :")
+
+
+def _parse_transposed_lob(grid, report_year, flat):
+    """A segmental analysis with the classes across the header and the profit-and-loss
+    items down the first column (round 52; Beazley 2623/623: "2015 | Marine $m | Political
+    risks & contingency $m | Property $m | Reinsurance $m | Specialty lines $m", rows
+    "Gross premiums written", "Net premiums written", ...).  The row-wise parser read the
+    rows as classes.  Returns LOBData from the gross-premiums-written row, or None."""
+    if not grid or len(grid) < 2 or len(grid[0]) < 3:
+        return None
+    gpw_row = None
+    for row in grid[1:]:
+        if not row:
+            continue
+        l = str(row[0] or "").strip().lower()
+        if l.startswith(("gross premiums written", "gross written premium", "gross premium written")):
+            gpw_row = row
+            break
+    if gpw_row is None:
+        return None
+    header = grid[0]
+    # a comparative table (a header year other than the report year) is not this
+    # year's mix: 2623/2015's filing prints the 2014 table beside the 2015 one
+    head_years = {int(y) for y in re.findall(r"\b((?:19|20)\d\d)\b", " ".join(str(c) for c in header))}
+    if head_years and report_year not in head_years:
+        return None
+    entries, total = [], None
+    for i in range(1, min(len(header), len(gpw_row))):
+        name = _strip_unit_suffix(header[i])
+        low = name.lower()
+        # a class header is words, not a year, a note column, a units cell or "restated"
+        if (not name or re.search(r"(19|20)\d\d", name) or not re.search(r"[a-z]{3,}", low)
+                or "note" in low or "restated" in low):
+            continue
+        val = _clean_cell(gpw_row[i])
+        if not isinstance(val, (int, float)):
+            continue
+        if low.startswith("total"):
+            total = abs(val)
+            continue
+        if _is_pl_label(name):
+            return None
+        if val > 0:
+            entries.append({"line_of_business": name, "amount_raw": abs(val)})
+    # two or more classes, at least one of them a recognised class of business
+    if len(entries) < 2 or not any(kw in e["line_of_business"].lower() for e in entries for kw in _LOB_KEYWORDS):
+        return None
+    currency = "USD"
+    if "gbp" in flat or chr(163) in flat or "£" in flat:
+        currency = "GBP"
+    elif "eur" in flat or chr(8364) in flat:
+        currency = "EUR"
+    lob_sum = sum(e["amount_raw"] for e in entries)
+    if not total or total > lob_sum * 1.1:
+        total = lob_sum
+    units_divisor = 1.0
+    if total > 10_000_000:
+        units_divisor = 1_000_000.0
+    elif total > 10_000:
+        units_divisor = 1_000.0
+    total_m = round(total / units_divisor, 1)
+    for e in entries:
+        raw = e.pop("amount_raw")
+        e["amount_gbp_m"] = round(raw / units_divisor, 1)
+        e["percentage_of_total"] = round(e["amount_gbp_m"] / total_m * 100, 1) if total_m > 0 else 0
+    return LOBData(gross_premium_mix=entries, gross_premiums_written_gbp_m=total_m,
+                   claims_incurred_by_lob=None, currency=currency, method="nutrient_transposed")
+
+
 def _parse_nutrient_lob(grid: list[list[str]], report_year: int,
                         page_text: str = ""):
     """Parse a Nutrient table grid as a segmental analysis / LOB breakdown.
@@ -1522,6 +2044,10 @@ def _parse_nutrient_lob(grid: list[list[str]], report_year: int,
     min_lob_hits = 1 if is_explicit_lob_table else 3
     if lob_hits < min_lob_hits:
         return None
+    # A premium mix is read from a table that carries premiums: a strategic-report
+    # class table (capacity, underwriting result by division) is not one (round 52).
+    if not any(kw in flat for kw in ("premium", "gwp", "gross written")):
+        return None
 
     # Reject tables that are not segmental analysis:
     # (a) Provisions movement tables with date/movement row labels
@@ -1540,6 +2066,11 @@ def _parse_nutrient_lob(grid: list[list[str]], report_year: int,
     )
     if non_lob_hits >= 2:
         return None
+
+    # Transposed layout (classes across the header): parse the premiums row (round 52)
+    transposed = _parse_transposed_lob(grid, report_year, flat)
+    if transposed is not None:
+        return transposed
 
     # Check this is for the report year (not a comparative)
     # Look at header row for year
@@ -1647,6 +2178,11 @@ def _parse_nutrient_lob(grid: list[list[str]], report_year: int,
             claims_entries.append({"line_of_business": label, "amount_raw": claims_val})
 
     if not lob_entries:
+        return None
+
+    # A segmental table's row labels are classes; when half or more are profit-and-loss
+    # items the table is transposed or is not a segmental analysis at all (round 52)
+    if 2 * sum(1 for e in lob_entries if _is_pl_label(e["line_of_business"])) >= len(lob_entries):
         return None
 
     # Recalculate total from LOB entries — the "Total" row in the table may
@@ -1841,7 +2377,8 @@ def _parse_lob_from_text(text: str, report_year: int) -> Optional[LOBData]:
 
 # ── Nutrient: parse provisions ────────────────────────────────────────────
 
-def _parse_nutrient_provisions(grid: list[list[str]], report_year: int):
+def _parse_nutrient_provisions(grid: list[list[str]], report_year: int,
+                               page_text: str = "", doc_unit: Optional[float] = None):
     """Parse a Nutrient table grid for claims provisions movement.
 
     Returns ProvisionsData or None.
@@ -1850,18 +2387,45 @@ def _parse_nutrient_provisions(grid: list[list[str]], report_year: int):
     if "prior" not in flat:
         return None
 
-    # Detect column layout from header
+    # Detect column layout from the header rows.  Movement notes print the current
+    # year's block first and the comparative year's block after it (or a single
+    # comparative gross column); each block may be headed by its year on one row and
+    # "Gross provisions / Reinsurance assets / Net" on the next.  Round 52: the
+    # parser took the LAST gross column, i.e. the prior-year comparative (1221/2023:
+    # 194,595 where the current-year change was 78,241).  The current-year block is
+    # the one whose header carries the report year, else the first gross block.
     gross_col = ri_col = net_col = None
     claims_outstanding_col = None
     if grid:
+        header_rows = [r for r in grid[:2] if r]
+        ncol = max((len(r) for r in header_rows), default=0)
+        col_text = [" ".join(str(r[i]).lower() for r in header_rows if i < len(r)) for i in range(ncol)]
+        # the year a column names in its OWN header cells (a label is not carried
+        # to unlabelled neighbours: the comparative block often carries no year)
+        own_year = []
+        for i in range(ncol):
+            m = re.search(r"\b(20\d\d)\b", col_text[i])
+            own_year.append(int(m.group(1)) if m else None)
+        gross_cols = [i for i in range(ncol) if "gross" in col_text[i]]
+        if gross_cols:
+            in_year = [i for i in gross_cols if own_year[i] == report_year]
+            other_year = [i for i in gross_cols if own_year[i] not in (None, report_year)]
+            if in_year:
+                gross_col = in_year[0]
+            else:
+                # the first gross block that is not labelled with another year
+                first_ok = [i for i in gross_cols if i not in other_year]
+                gross_col = first_ok[0] if first_ok else gross_cols[0]
+            for i in range(gross_col + 1, ncol):
+                if "gross" in col_text[i] or (own_year[i] not in (None, own_year[gross_col])):
+                    break  # the next block
+                h = col_text[i]
+                if ri_col is None and ("reinsur" in h or "share" in h or "ceded" in h):
+                    ri_col = i
+                elif net_col is None and "net" in h and "gross" not in h:
+                    net_col = i
         for i, val in enumerate(grid[0]):
             h = val.lower()
-            if "gross" in h:
-                gross_col = i
-            elif "reinsur" in h or "share" in h or "ceded" in h:
-                ri_col = i
-            elif "net" in h:
-                net_col = i
             # Track "Claims outstanding" column separately — some tables
             # have "Provision for unearned premiums | Claims outstanding | Total"
             # layout where gross/RI/net are section headers (rows) rather than
@@ -1896,9 +2460,19 @@ def _parse_nutrient_provisions(grid: list[list[str]], report_year: int):
                 if col is not None and col < len(row):
                     val = _clean_cell(row[col])
                     if isinstance(val, (int, float)):
-                        # Auto-detect units from magnitude
-                        if abs(val) > 10_000:
-                            val = round(val / 1_000, 1)
+                        # Units from the table header, the page, the document
+                        # declaration, and only then magnitude (a movement above
+                        # 10,000 cannot be millions); the source is recorded.
+                        oc = resolve_units(float(val), _header_unit_multiplier(grid),
+                                           page_text, doc_unit, magnitude_floor=10_000,
+                                           table_kind="provisions_movement_row")
+                        if oc is None:
+                            continue
+                        if oc.unit_source == "unresolved":
+                            val = round(float(val), 1)
+                        else:
+                            val = round(oc.value_m, 1)
+                        result.unit_source = oc.unit_source
                         setattr(result, attr, val)
                         has_data = True
 
@@ -1908,7 +2482,9 @@ def _parse_nutrient_provisions(grid: list[list[str]], report_year: int):
     return None
 
 
-def _parse_balance_sheet_claims_outstanding(grid: list[list[str]], report_year: int) -> Optional[float]:
+def _parse_balance_sheet_claims_outstanding(grid: list[list[str]], report_year: int,
+                                            page_text: str = "",
+                                            doc_unit: Optional[float] = None) -> Optional["OpeningClaims"]:
     """Extract gross claims outstanding from the balance sheet LIABILITIES section.
 
     Looks for "Claims outstanding" under "Technical provisions" in the liabilities
@@ -1987,19 +2563,14 @@ def _parse_balance_sheet_claims_outstanding(grid: list[list[str]], report_year: 
             return numerics[-1]
         return None
 
-    def _to_millions(val: float) -> float:
-        """Convert raw value to millions based on detected units."""
-        if in_thousands:
-            return round(val / 1_000, 3)
-        if in_millions:
-            return round(val, 3)
-        # No unit detected — infer from magnitude.  Claims outstanding values
-        # >50,000 are almost certainly in thousands (no syndicate has >£50bn
-        # reserves).  Values 50–50,000 are ambiguous but likely already in
-        # millions for most syndicates.
-        if abs(val) > 50_000:
-            return round(val / 1_000, 3)
-        return round(val, 3)
+    header_mult = 0.001 if in_thousands else (1.0 if in_millions else _header_unit_multiplier(grid))
+
+    def _to_millions(val: float) -> "OpeningClaims":
+        """Scale from evidence (header, page, document, then magnitude above
+        50,000); a value with no evidence is returned unresolved, and the caller
+        may not let it override the model value on its own."""
+        return resolve_units(float(val), header_mult, page_text, doc_unit,
+                             table_kind="balance_sheet_liabilities")
 
     # Walk through rows looking for "Claims outstanding" in the liabilities section
     for j, row in enumerate(grid):
@@ -2025,7 +2596,9 @@ def _parse_balance_sheet_claims_outstanding(grid: list[list[str]], report_year: 
     return None
 
 
-def _parse_opening_claims_outstanding(grid: list[list[str]], report_year: int) -> Optional[float]:
+def _parse_opening_claims_outstanding(grid: list[list[str]], report_year: int,
+                                      page_text: str = "",
+                                      doc_unit: Optional[float] = None) -> Optional["OpeningClaims"]:
     """Extract opening gross claims outstanding from a provisions movement table.
 
     Looks for the "Balance at 1 January" row within a "Claims outstanding" section
@@ -2047,6 +2620,7 @@ def _parse_opening_claims_outstanding(grid: list[list[str]], report_year: int) -
                                           "£000", "$000", "\u00a3000")):
             in_thousands = True
             break
+    header_mult = 0.001 if in_thousands else _header_unit_multiplier(grid)
 
     # Detect column layout from header rows — look for "Gross" column
     # Also detect the current year column (report_year values are in the
@@ -2091,13 +2665,8 @@ def _parse_opening_claims_outstanding(grid: list[list[str]], report_year: int) -
             if gross_col < len(row):
                 val = _clean_cell(row[gross_col])
                 if isinstance(val, (int, float)):
-                    if in_thousands:
-                        val = round(val / 1_000, 3)
-                    elif abs(val) > 50_000:
-                        # Magnitude fallback: no syndicate has >£50bn
-                        # reserves, so values > 50,000 are in thousands
-                        val = round(val / 1_000, 3)
-                    return val
+                    return resolve_units(float(val), header_mult, page_text, doc_unit,
+                                         table_kind="provisions_movement")
 
     # --- Pattern B: "Claims outstanding" is a COLUMN header ---
     # Some syndicates (e.g. 780) present provisions movement as a columnar
@@ -2135,11 +2704,8 @@ def _parse_opening_claims_outstanding(grid: list[list[str]], report_year: int) -
                 if claims_col < len(row):
                     val = _clean_cell(row[claims_col])
                     if isinstance(val, (int, float)):
-                        if in_thousands:
-                            val = round(val / 1_000, 3)
-                        elif abs(val) > 50_000:
-                            val = round(val / 1_000, 3)
-                        return val
+                        return resolve_units(float(val), header_mult, page_text, doc_unit,
+                                             table_kind="provisions_movement")
 
     return None
 
@@ -2193,6 +2759,7 @@ def _extract_nutrient(pdf_path: Path, report_year: int, cache_dir: Path) -> Extr
         with open(cache_file) as f:
             nutrient_result = json.load(f)
     else:
+        _offline_guard(f"Nutrient table extraction for {pdf_path.name}")
         print(f"  [Nutrient] Sending to API...")
         try:
             nutrient_result = _call_nutrient_api(slim_pdf, api_key)
@@ -2217,6 +2784,30 @@ def _extract_nutrient(pdf_path: Path, report_year: int, cache_dir: Path) -> Extr
     best_lob_count = 0
     best_provisions = None
     opening_claims = None
+    requested = requested_syndicate(pdf_path)
+    sections = page_sections(page_texts, requested)
+    entities = {pg: e for pg, (e, _) in sections.items()}
+    doc_unit = document_unit_hint(page_texts)
+    result.requested_syndicate = requested
+    result.entity_pages = entity_page_summary(entities)
+    result.underwriting_year_pages = sorted(int(pg) + 1 for pg, (_, k) in sections.items()
+                                            if k == "underwriting_year")
+    result.document_unit_hint = doc_unit
+    foreign_skipped = []
+    uwy_skipped = []
+
+    def _foreign(page):
+        """A table on a companion syndicate's page is never admitted."""
+        ent, _ = sections.get(page, (None, "annual"))
+        return requested is not None and ent is not None and ent != requested
+
+    def _closed_year(page):
+        """A table in an underwriting-year (closed-year) accounts section is not a
+        source of annual-accounts reserves, provisions or business mix; a claims
+        development triangle there is the same syndicate's triangle and is kept,
+        with the annual-accounts triangle preferred when both exist."""
+        _, kind = sections.get(page, (None, "annual"))
+        return kind == "underwriting_year"
 
     for slim_idx, page in enumerate(pages):
         orig_page = page_index_to_orig.get(slim_idx, -1)
@@ -2227,6 +2818,15 @@ def _extract_nutrient(pdf_path: Path, report_year: int, cache_dir: Path) -> Extr
             grid = _cells_to_grid(cells)
             if len(grid) < 2:
                 continue
+            if _foreign(orig_page):
+                foreign_skipped.append(orig_page)
+                continue
+            closed_year = _closed_year(orig_page)
+            if closed_year and not ("claims_triangle" in cats):
+                uwy_skipped.append(orig_page)
+                continue
+            ent = entities.get(orig_page)
+            pt = page_texts.get(orig_page, "")
 
             # Try triangle (on triangle-tagged pages)
             if "claims_triangle" in cats and best_triangle is None:
@@ -2236,6 +2836,7 @@ def _extract_nutrient(pdf_path: Path, report_year: int, cache_dir: Path) -> Extr
                     result.triangle_details = details
                     print(f"  [Nutrient] NEW SYNDICATE: {details}")
                 elif isinstance(tri_result, TriangleData):
+                    tri_result.page, tri_result.entity = orig_page, ent
                     n_years = len(tri_result.underwriting_years)
                     # Prefer gross over net, and more years over fewer
                     if (best_triangle is None
@@ -2245,26 +2846,32 @@ def _extract_nutrient(pdf_path: Path, report_year: int, cache_dir: Path) -> Extr
                         best_triangle_details = details
                         print(f"  [Nutrient] Triangle: {details}")
 
-            # Try LOB (on premium_mix-tagged pages)
-            if "premium_mix" in cats:
-                lob = _parse_nutrient_lob(grid, report_year,
-                                          page_text=page_texts.get(page_num, ""))
+            # Try LOB (on premium_mix-tagged pages; never from closed-year accounts)
+            if "premium_mix" in cats and not closed_year:
+                lob = _parse_nutrient_lob(grid, report_year, page_text=pt)
+                if lob:
+                    lob.page, lob.entity = orig_page, ent
                 if lob and len(lob.gross_premium_mix) > best_lob_count:
                     best_lob = lob
                     best_lob_count = len(lob.gross_premium_mix)
 
             # Try provisions (on provisions-tagged pages)
+            if closed_year:
+                uwy_skipped.append(orig_page)
+                continue
             if "provisions" in cats and best_provisions is None:
-                prov = _parse_nutrient_provisions(grid, report_year)
+                prov = _parse_nutrient_provisions(grid, report_year, page_text=pt, doc_unit=doc_unit)
                 if prov:
+                    prov.page, prov.entity = orig_page, ent
                     best_provisions = prov
 
             # Extract opening claims outstanding
             if opening_claims is None and any(
                 t in cats for t in ("provisions", "balance_sheet")
             ):
-                oc = _parse_opening_claims_outstanding(grid, report_year)
+                oc = _parse_opening_claims_outstanding(grid, report_year, page_text=pt, doc_unit=doc_unit)
                 if oc is not None:
+                    oc.page, oc.entity, oc.backend = orig_page, ent, "nutrient"
                     opening_claims = oc
 
             # Extract opening claims from balance sheet liabilities section.
@@ -2273,14 +2880,15 @@ def _extract_nutrient(pdf_path: Path, report_year: int, cache_dir: Path) -> Extr
             if opening_claims is None and any(
                 t in cats for t in ("balance_sheet", "pl_account")
             ):
-                oc = _parse_balance_sheet_claims_outstanding(grid, report_year)
+                oc = _parse_balance_sheet_claims_outstanding(grid, report_year, page_text=pt, doc_unit=doc_unit)
                 if oc is not None:
+                    oc.page, oc.entity, oc.backend = orig_page, ent, "nutrient"
                     opening_claims = oc
 
     # Text-based triangle fallback
     if best_triangle is None:
         for page_num in sorted(page_matches):
-            if "claims_triangle" not in page_matches[page_num]:
+            if "claims_triangle" not in page_matches[page_num] or _foreign(page_num):
                 continue
             text = page_texts.get(page_num, "")
             if not text:
@@ -2298,13 +2906,14 @@ def _extract_nutrient(pdf_path: Path, report_year: int, cache_dir: Path) -> Extr
     # Text-based LOB fallback
     if best_lob is None:
         for page_num in sorted(page_matches):
-            if "premium_mix" not in page_matches[page_num]:
+            if "premium_mix" not in page_matches[page_num] or _foreign(page_num) or _closed_year(page_num):
                 continue
             text = page_texts.get(page_num, "")
             if not text:
                 continue
             lob = _parse_lob_from_text(text, report_year)
-            if lob and len(lob.gross_premium_mix) > best_lob_count:
+            # a single class read from prose is a stray line, not a mix (round 52)
+            if lob and len(lob.gross_premium_mix) >= 2 and len(lob.gross_premium_mix) > best_lob_count:
                 lob.method = "nutrient_text_fallback"
                 best_lob = lob
                 best_lob_count = len(lob.gross_premium_mix)
@@ -2315,11 +2924,22 @@ def _extract_nutrient(pdf_path: Path, report_year: int, cache_dir: Path) -> Extr
     result.triangle_details = best_triangle_details or result.triangle_details
     result.lob = best_lob
     result.provisions = best_provisions
-    # Attach opening claims outstanding to provisions data
+    # Attach opening claims outstanding to provisions data, with its unit and
+    # entity evidence; an unresolved unit is passed through for the driver to judge
     if opening_claims is not None:
         if result.provisions is None:
             result.provisions = ProvisionsData()
-        result.provisions.opening_gross_claims_outstanding = opening_claims
+        result.provisions.opening_gross_claims_outstanding = opening_claims.value_m
+        result.provisions.opening_provenance = opening_claims.to_dict()
+    result.foreign_tables_skipped = len(foreign_skipped)
+    result.foreign_pages = sorted({int(p) + 1 for p in foreign_skipped})
+    result.underwriting_year_tables_skipped = len(uwy_skipped)
+    if foreign_skipped:
+        print(f"  [entity] {len(foreign_skipped)} table(s) on companion-syndicate pages "
+              f"{result.foreign_pages} skipped; requested syndicate {requested}")
+    if uwy_skipped:
+        print(f"  [entity] {len(uwy_skipped)} non-triangle table(s) in underwriting-year account "
+              f"sections (pages {sorted({int(p) + 1 for p in uwy_skipped})}) skipped")
     # Valid triangle trumps new_syndicate flag from a partial/different table
     if best_triangle is not None:
         result.first_year_syndicate = False
@@ -2644,22 +3264,63 @@ def _extract_azure(pdf_path: Path, report_year: int, cache_dir: Path,
         cached_ver = cached.get("_cache_version") if isinstance(cached, dict) else None
         cached_pages = cached.get("_pages_hash") if isinstance(cached, dict) else None
         cached_batch = cached.get("_batch_mode") if isinstance(cached, dict) else None
-        if not isinstance(cached, dict) or cached_ver != _CACHE_VERSION:
+        offline = os.getenv("LLOYDS_EXTRACTION_OFFLINE") == "1"
+        if not isinstance(cached, dict):
+            if offline:
+                # the committed record is never deleted; a legacy list cache carries
+                # no page or category information and cannot be used
+                _offline_guard(f"Azure Document Intelligence for {pdf_path.name} (legacy cache format)")
             cache_file.unlink()
-            reason = "legacy format" if not isinstance(cached, dict) else "code changed"
-            print(f"  [Azure] Cache invalidated ({reason}) — re-extracting")
-        elif cached_pages != pages_hash:
+            print(f"  [Azure] Cache invalidated (legacy format) — re-extracting")
+        elif cached_ver != _CACHE_VERSION and not offline:
+            cache_file.unlink()
+            print(f"  [Azure] Cache invalidated (code changed) — re-extracting")
+        elif cached_pages != pages_hash and os.getenv("LLOYDS_EXTRACTION_OFFLINE") != "1":
             cache_file.unlink()
             print(f"  [Azure] Cache invalidated (page set changed) -- re-extracting")
-        elif cached_batch is not None and cached_batch != batch_mode:
+        elif (cached_batch is not None and cached_batch != batch_mode
+              and os.getenv("LLOYDS_EXTRACTION_OFFLINE") != "1"):
             cache_file.unlink()
             print(f"  [Azure] Cache invalidated (batch mode changed: {cached_batch} -> {batch_mode}) -- re-extracting")
         else:
             cache_valid = True
-            print(f"  [Azure] Using cached result")
+            page_set_current = (cached_pages == pages_hash)
+            if cached_ver != _CACHE_VERSION:
+                print(f"  [Azure] Offline: using the committed cache written by code version "
+                      f"{cached_ver} (current {_CACHE_VERSION}); its tables are the raw Azure output")
+                page_set_current = False
+            if not page_set_current:
+                print(f"  [Azure] Offline: using the committed cache although the relevant "
+                      f"page set changed; table pages located from their own numbers")
+            else:
+                print(f"  [Azure] Using cached result")
+            # Caches written before round 52 recorded each table's page through the
+            # priority-sorted batch while the slim PDF was ascending; undo that by
+            # reconstructing the batches as they were sent, then verify by content.
+            legacy_mapping = cached.get("_page_mapping") != "ascending-v1"
+            cached_page_list = [int(x) for x in (cached_pages or "").split("_") if x != ""]
+            cached_mode = cached_batch or batch_mode
+            cached_sorted = _priority_sorted(cached_page_list, page_matches)
+            cached_size = len(cached_sorted) if cached_mode == "paid" else 2
+            cached_batches = [cached_sorted[i:i + cached_size]
+                              for i in range(0, len(cached_sorted), max(1, cached_size))]
+            remapped = 0
             for entry in cached.get("tables", []):
                 grid = entry["grid"]
                 orig_page = entry["orig_page"]
+                if legacy_mapping:
+                    located = locate_table_page(grid, page_texts, cached_page_list)
+                    if page_set_current:
+                        mapped = remap_cached_page(orig_page, cached_batches)
+                        # content check: when the table has enough numbers and they
+                        # sit on another cached page, the content decides
+                        if located is not None and located != mapped:
+                            mapped = located
+                    else:
+                        mapped = located if located is not None else orig_page
+                    if mapped != orig_page:
+                        remapped += 1
+                    orig_page = mapped
                 cats = set(entry["categories"])
                 # Re-apply content classification to pick up new rules
                 # (e.g. bare "N year(s)" dev-period labels for syndicate 3902)
@@ -2669,8 +3330,11 @@ def _extract_azure(pdf_path: Path, report_year: int, cache_dir: Path,
                     cats.discard("claims_triangle")
                     cats.discard("_not_triangle")
                 all_grids.append((grid, orig_page, cats))
+            if remapped:
+                print(f"  [Azure] {remapped} cached table page(s) remapped to the pages actually sent")
 
     if not cache_valid:
+        _offline_guard(f"Azure Document Intelligence for {pdf_path.name}")
         # Clean up any leftover slim PDFs from previous interrupted runs
         for stale in cache_dir.glob(f"{pdf_path.stem}_slim*.pdf"):
             try:
@@ -2700,13 +3364,17 @@ def _extract_azure(pdf_path: Path, report_year: int, cache_dir: Path,
                         grid = _azure_table_to_grid(table)
                         if len(grid) < 2:
                             continue
-                        # Map slim page to original
-                        orig_page = batch_pages[0]
+                        # Map slim page to original.  _extract_pages_to_pdf writes
+                        # the batch in ASCENDING page order, so the slim index must
+                        # be read through the sorted batch (round 52: the priority
+                        # order used before scrambled the recorded pages).
+                        sent_order = sorted(batch_pages)
+                        orig_page = sent_order[0]
                         if table.bounding_regions:
                             for br in table.bounding_regions:
                                 slim_idx = br.page_number - 1
-                                if slim_idx < len(batch_pages):
-                                    orig_page = batch_pages[slim_idx]
+                                if slim_idx < len(sent_order):
+                                    orig_page = sent_order[slim_idx]
                                     break
 
                         page_cats = page_matches.get(orig_page, set())
@@ -2737,6 +3405,7 @@ def _extract_azure(pdf_path: Path, report_year: int, cache_dir: Path,
             "_cache_version": _CACHE_VERSION,
             "_pages_hash": pages_hash,
             "_batch_mode": batch_mode,
+            "_page_mapping": "ascending-v1",  # pages recorded through the sent order
             "tables": [
                 {"grid": grid, "orig_page": orig_page, "categories": sorted(cats)}
                 for grid, orig_page, cats in all_grids
@@ -2753,6 +3422,30 @@ def _extract_azure(pdf_path: Path, report_year: int, cache_dir: Path,
     best_lob_count = 0
     best_provisions = None
     opening_claims = None
+    requested = requested_syndicate(pdf_path)
+    sections = page_sections(page_texts, requested)
+    entities = {pg: e for pg, (e, _) in sections.items()}
+    doc_unit = document_unit_hint(page_texts)
+    result.requested_syndicate = requested
+    result.entity_pages = entity_page_summary(entities)
+    result.underwriting_year_pages = sorted(int(pg) + 1 for pg, (_, k) in sections.items()
+                                            if k == "underwriting_year")
+    result.document_unit_hint = doc_unit
+    foreign_skipped = []
+    uwy_skipped = []
+
+    def _foreign(page):
+        """A table on a companion syndicate's page is never admitted."""
+        ent, _ = sections.get(page, (None, "annual"))
+        return requested is not None and ent is not None and ent != requested
+
+    def _closed_year(page):
+        """A table in an underwriting-year (closed-year) accounts section is not a
+        source of annual-accounts reserves, provisions or business mix; a claims
+        development triangle there is the same syndicate's triangle and is kept,
+        with the annual-accounts triangle preferred when both exist."""
+        _, kind = sections.get(page, (None, "annual"))
+        return kind == "underwriting_year"
 
     def _triangle_completeness(tri: TriangleData) -> int:
         """Count non-null values in the triangle — higher is better."""
@@ -2764,17 +3457,29 @@ def _extract_azure(pdf_path: Path, report_year: int, cache_dir: Path,
         return count
 
     for grid, orig_page, cats in all_grids:
+        if _foreign(orig_page):
+            foreign_skipped.append(orig_page)
+            continue
+        closed_year = _closed_year(orig_page)
+        if closed_year and not ("claims_triangle" in cats):
+            uwy_skipped.append(orig_page)
+            continue
+        ent = entities.get(orig_page)
+        pt = page_texts.get(orig_page, "")
         if "claims_triangle" in cats:
             tri_result, details = _parse_nutrient_triangle(grid, report_year)
             if tri_result == "new_syndicate":
                 result.first_year_syndicate = True
                 result.triangle_details = details
             elif isinstance(tri_result, TriangleData):
+                tri_result.page, tri_result.entity = orig_page, ent
                 n_years = len(tri_result.underwriting_years)
                 completeness = _triangle_completeness(tri_result)
-                # Score: prefer gross, then more UW years, then more complete
+                # Score: prefer gross, then the annual accounts over a closed-year
+                # section, then more UW years, then more complete
                 score = (
                     (1000 if tri_result.type == "gross" else 0)
+                    + (0 if closed_year else 500)
                     + n_years * 10
                     + completeness
                 )
@@ -2783,10 +3488,13 @@ def _extract_azure(pdf_path: Path, report_year: int, cache_dir: Path,
                     best_triangle_details = details
                     best_triangle_score = score
 
+        if closed_year:
+            uwy_skipped.append(orig_page)
+            continue
         if "premium_mix" in cats and "provisions" not in cats:
-            pt = page_texts.get(orig_page, "")
             lob = _parse_nutrient_lob(grid, report_year, page_text=pt)
             if lob:
+                lob.page, lob.entity = orig_page, ent
                 # Score: strongly prefer tables with explicit segmental analysis
                 # signals (header with "premiums written") over incidental matches.
                 header_text = " ".join(grid[0]).lower() if grid else ""
@@ -2810,16 +3518,18 @@ def _extract_azure(pdf_path: Path, report_year: int, cache_dir: Path,
                     best_lob_count = lob_score
 
         if "provisions" in cats and best_provisions is None:
-            prov = _parse_nutrient_provisions(grid, report_year)
+            prov = _parse_nutrient_provisions(grid, report_year, page_text=pt, doc_unit=doc_unit)
             if prov:
+                prov.page, prov.entity = orig_page, ent
                 best_provisions = prov
 
         # Extract opening claims outstanding from provisions/balance_sheet tables
         if opening_claims is None and any(
             t in cats for t in ("provisions", "balance_sheet")
         ):
-            oc = _parse_opening_claims_outstanding(grid, report_year)
+            oc = _parse_opening_claims_outstanding(grid, report_year, page_text=pt, doc_unit=doc_unit)
             if oc is not None:
+                oc.page, oc.entity, oc.backend = orig_page, ent, "azure"
                 opening_claims = oc
 
         # Extract opening claims from balance sheet liabilities section.
@@ -2828,15 +3538,16 @@ def _extract_azure(pdf_path: Path, report_year: int, cache_dir: Path,
         if opening_claims is None and any(
             t in cats for t in ("balance_sheet", "pl_account")
         ):
-            oc = _parse_balance_sheet_claims_outstanding(grid, report_year)
+            oc = _parse_balance_sheet_claims_outstanding(grid, report_year, page_text=pt, doc_unit=doc_unit)
             if oc is not None:
+                oc.page, oc.entity, oc.backend = orig_page, ent, "azure"
                 opening_claims = oc
 
     # Step 4: Text-based triangle fallback — if Azure didn't find a triangle
     # table, try parsing from the raw page text on claims_triangle pages
     if best_triangle is None:
         for page_num in sorted(page_matches):
-            if "claims_triangle" not in page_matches[page_num]:
+            if "claims_triangle" not in page_matches[page_num] or _foreign(page_num):
                 continue
             text = page_texts.get(page_num, "")
             if not text:
@@ -2855,13 +3566,14 @@ def _extract_azure(pdf_path: Path, report_year: int, cache_dir: Path,
     # try parsing from the raw page text on premium_mix pages
     if best_lob is None:
         for page_num in sorted(page_matches):
-            if "premium_mix" not in page_matches[page_num]:
+            if "premium_mix" not in page_matches[page_num] or _foreign(page_num) or _closed_year(page_num):
                 continue
             text = page_texts.get(page_num, "")
             if not text:
                 continue
             lob = _parse_lob_from_text(text, report_year)
-            if lob and len(lob.gross_premium_mix) > best_lob_count:
+            # a single class read from prose is a stray line, not a mix (round 52)
+            if lob and len(lob.gross_premium_mix) >= 2 and len(lob.gross_premium_mix) > best_lob_count:
                 lob.method = "azure_text_fallback"
                 best_lob = lob
                 best_lob_count = len(lob.gross_premium_mix)
@@ -2872,11 +3584,22 @@ def _extract_azure(pdf_path: Path, report_year: int, cache_dir: Path,
     result.triangle_details = best_triangle_details or result.triangle_details
     result.lob = best_lob
     result.provisions = best_provisions
-    # Attach opening claims outstanding to provisions data
+    # Attach opening claims outstanding to provisions data, with its unit and
+    # entity evidence; an unresolved unit is passed through for the driver to judge
     if opening_claims is not None:
         if result.provisions is None:
             result.provisions = ProvisionsData()
-        result.provisions.opening_gross_claims_outstanding = opening_claims
+        result.provisions.opening_gross_claims_outstanding = opening_claims.value_m
+        result.provisions.opening_provenance = opening_claims.to_dict()
+    result.foreign_tables_skipped = len(foreign_skipped)
+    result.foreign_pages = sorted({int(p) + 1 for p in foreign_skipped})
+    result.underwriting_year_tables_skipped = len(uwy_skipped)
+    if foreign_skipped:
+        print(f"  [entity] {len(foreign_skipped)} table(s) on companion-syndicate pages "
+              f"{result.foreign_pages} skipped; requested syndicate {requested}")
+    if uwy_skipped:
+        print(f"  [entity] {len(uwy_skipped)} non-triangle table(s) in underwriting-year account "
+              f"sections (pages {sorted({int(p) + 1 for p in uwy_skipped})}) skipped")
     # Valid triangle trumps new_syndicate flag from a partial/different table
     if best_triangle is not None:
         result.first_year_syndicate = False

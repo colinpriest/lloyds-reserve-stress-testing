@@ -395,6 +395,7 @@ def _load_manual_overrides() -> set[int]:
 
 
 def _lookup_inception_year_perplexity(syndicate_num: int) -> int | None:
+    _offline_guard(f"Perplexity inception lookup for syndicate {syndicate_num}")
     """Query Perplexity API for the first underwriting year of a syndicate.
 
     Returns the year as int, or None if lookup fails.
@@ -574,6 +575,72 @@ def _llm_cache_key(model: str, prompt_text: str, syndicate_num: int,
 def _llm_cache_path(cache_key: str) -> Path:
     """Return the filesystem path for a given cache key."""
     return LLM_CACHE_DIR / f"{cache_key}.json"
+
+
+def _offline_guard(what: str) -> None:
+    """In offline mode (--offline, or LLOYDS_EXTRACTION_OFFLINE=1) a cache miss is an
+    error, never a paid API call: a re-extraction from the committed caches must be
+    reproducible and must not silently change what was extracted."""
+    if os.getenv("LLOYDS_EXTRACTION_OFFLINE") == "1":
+        raise RuntimeError(f"offline mode: {what} would call an external API (cache miss)")
+
+
+_LLM_META_INDEX = None
+
+
+def _llm_cache_by_meta(model: str, syndicate_num: int, report_year: int):
+    """Offline fallback: the committed document-level cache entry for (model,
+    syndicate, year, prompt version).  Entries written by the original run carry no
+    `cached_at`; when several match, the earliest record is preferred."""
+    global _LLM_META_INDEX
+    if _LLM_META_INDEX is None:
+        idx = {}
+        for path in sorted(LLM_CACHE_DIR.glob("*.json")):
+            try:
+                with open(path, "r", encoding="utf-8") as f:
+                    d = json.load(f)
+            except (json.JSONDecodeError, OSError):
+                continue
+            m = d.get("_cache_meta") or {}
+            if m.get("page_num") is not None or m.get("page") is not None:
+                continue
+            key = (m.get("model"), m.get("syndicate"), m.get("year"))
+            idx.setdefault(key, []).append((m.get("prompt_version") or "", m.get("cached_at") or "", path, d))
+        _LLM_META_INDEX = idx
+    hits = _LLM_META_INDEX.get((model, syndicate_num, report_year)) or []
+    if not hits:
+        return None, False
+
+    def _ver(v):
+        try:
+            return tuple(int(x) for x in v.split("."))
+        except ValueError:
+            return (0,)
+    # the newest prompt version the original runs used for this filing, and within it
+    # the earliest record (entries without cached_at were written by the original run)
+    hits.sort(key=lambda h: (-_ver(h[0])[0] if _ver(h[0]) else 0, -(_ver(h[0])[1] if len(_ver(h[0])) > 1 else 0), h[1]))
+    best = hits[0]
+    data = dict(best[3])
+    data["_served_from"] = {"cache_file": best[2].name, "prompt_version": best[0] or None}
+    return data, True
+
+
+def _llm_lookup(model, prompt_text, canonical_hash, legacy_hash, syndicate_num, report_year):
+    """Document-level cache lookup: canonical key, then legacy slim-PDF key, then (offline
+    only) the committed entry by metadata.  Returns (data, hit, how)."""
+    key = _llm_cache_key(model, prompt_text + "|" + canonical_hash, syndicate_num, report_year)
+    cached, hit = _llm_cache_load(key)
+    if hit:
+        return cached["data"], True, "canonical key"
+    if legacy_hash and legacy_hash != canonical_hash:
+        cached, hit = _llm_cache_load(_llm_cache_key(model, prompt_text + "|" + legacy_hash, syndicate_num, report_year))
+        if hit:
+            return cached["data"], True, "legacy slim-PDF key"
+    if os.getenv("LLOYDS_EXTRACTION_OFFLINE") == "1":
+        cached, hit = _llm_cache_by_meta(model, syndicate_num, report_year)
+        if hit:
+            return cached["data"], True, "committed entry by (model, syndicate, year)"
+    return None, False, None
 
 
 def _llm_cache_load(cache_key: str):
@@ -1845,16 +1912,19 @@ def parse_json_response(text):
     return _normalize_top_level(json.loads(raw), raw)
 
 
-def extract_with_gemini(report_path, file_bytes, content_hash, syndicate_num, report_year, model=GEMINI_MODEL):
+def extract_with_gemini(report_path, file_bytes, content_hash, syndicate_num, report_year, model=GEMINI_MODEL,
+                        legacy_hash=None):
     """Extract using Google Gemini."""
     prompt_text = build_prompt(syndicate_num, report_year)
-    # Include content_hash in cache key so that changes to the slim PDF
-    # (e.g. different page set after off-by-one fix) invalidate the cache.
+    # content_hash is the canonical document hash (source file + page set), so the
+    # cache key is stable across runs; legacy_hash is the slim PDF's byte hash under
+    # which entries were saved before round 52.
     cache_key = _llm_cache_key(model, prompt_text + "|" + content_hash, syndicate_num, report_year)
-    cached, hit = _llm_cache_load(cache_key)
+    data, hit, how = _llm_lookup(model, prompt_text, content_hash, legacy_hash, syndicate_num, report_year)
     if hit:
-        print(f"  [{model}] Cache hit — skipping API call")
-        return cached["data"]
+        print(f"  [{model}] Cache hit ({how}) — skipping API call")
+        return data
+    _offline_guard(f"{model} extraction of {report_path.name}")
 
     print(f"  [{model}] Uploading {report_path.name}...")
     client = genai.Client(api_key=os.getenv("GOOGLE_API_KEY"))
@@ -1925,16 +1995,16 @@ def extract_with_gemini(report_path, file_bytes, content_hash, syndicate_num, re
     return data
 
 
-def extract_with_openai(report_path, file_bytes, content_hash, syndicate_num, report_year, model=OPENAI_MODEL):
+def extract_with_openai(report_path, file_bytes, content_hash, syndicate_num, report_year, model=OPENAI_MODEL,
+                        legacy_hash=None):
     """Extract using OpenAI GPT with file upload."""
     prompt_text = build_prompt(syndicate_num, report_year)
-    # Include content_hash in cache key so that changes to the slim PDF
-    # (e.g. different page set after off-by-one fix) invalidate the cache.
     cache_key = _llm_cache_key(model, prompt_text + "|" + content_hash, syndicate_num, report_year)
-    cached, hit = _llm_cache_load(cache_key)
+    data, hit, how = _llm_lookup(model, prompt_text, content_hash, legacy_hash, syndicate_num, report_year)
     if hit:
-        print(f"  [{model}] Cache hit — skipping API call")
-        return cached["data"]
+        print(f"  [{model}] Cache hit ({how}) — skipping API call")
+        return data
+    _offline_guard(f"{model} extraction of {report_path.name}")
 
     print(f"  [{model}] Sending {report_path.name}...")
     client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
@@ -2958,6 +3028,25 @@ CRITICAL RULES:
 """
 
 
+def _parse_vision_json(text):
+    """The page-triangle prompt asks for one object; Gemini sometimes returns a list of
+    objects, one per table on the page.  Take the one that is a claims triangle (it
+    carries development rows or underwriting years), else the largest object."""
+    try:
+        return parse_json_response(text)
+    except json.JSONDecodeError:
+        stripped = re.sub(r"^```(?:json)?\s*|\s*```$", "", (text or "").strip(), flags=re.S)
+        obj = json.loads(stripped)
+        if isinstance(obj, list):
+            dicts = [o for o in obj if isinstance(o, dict)]
+            tri = [o for o in dicts if any(k in o for k in ("development_rows", "underwriting_years", "triangle"))]
+            if tri:
+                return tri[0]
+            if dicts:
+                return max(dicts, key=lambda o: len(json.dumps(o)))
+        raise
+
+
 def extract_triangle_from_page(pdf_path, page_num, report_year, model="gemini-2.5-flash"):
     """Send a single page image to an LLM to extract the triangle table.
 
@@ -2972,6 +3061,7 @@ def extract_triangle_from_page(pdf_path, page_num, report_year, model="gemini-2.
     cached, hit = _llm_cache_load(cache_key)
     if hit:
         return cached["data"], 0  # cost=0 for cached results
+    _offline_guard(f"{model} page-triangle extraction of {Path(pdf_path).name} p{page_num}")
 
     img_b64 = render_page_as_image_b64(pdf_path, page_num)
     if not img_b64:
@@ -2995,7 +3085,7 @@ def extract_triangle_from_page(pdf_path, page_num, report_year, model="gemini-2.
             config=config,
         ))
         try:
-            data = parse_json_response(response.text)
+            data = _parse_vision_json(response.text)
             usage = response.usage_metadata
             cost = (usage.prompt_token_count * PRICING[model]["input"] / 1_000_000 +
                     usage.candidates_token_count * PRICING[model]["output"] / 1_000_000)
@@ -3103,6 +3193,17 @@ def extract_pyd_from_relevant_pages(pdf_path, report_year):
                                 azure_paid=AZURE_PAID)
     result["relevant_pages"] = extraction.relevant_pages
     result["rotated_pages"] = extraction.rotated_pages
+    # Round 52: which syndicate each table was bound to, and what was skipped as a
+    # companion syndicate's table or a closed-year table; recorded for audit
+    result["entity_binding"] = {
+        "requested_syndicate": extraction.requested_syndicate,
+        "entity_pages": extraction.entity_pages,
+        "foreign_tables_skipped": extraction.foreign_tables_skipped,
+        "foreign_pages": extraction.foreign_pages,
+        "underwriting_year_pages": extraction.underwriting_year_pages,
+        "underwriting_year_tables_skipped": extraction.underwriting_year_tables_skipped,
+        "document_unit_hint": extraction.document_unit_hint,
+    }
 
     if extraction.triangle:
         tri_data = extraction.triangle.to_dict()
@@ -3846,6 +3947,15 @@ def verify_triangles(result_gemini, result_openai, gemini_name, openai_name, rep
             agreed_pyd = round((pyd_g + pyd_o) / 2, 3)
             messages.append(f"  Triangle cross-check: BOTH AGREE (Gemini={pyd_g}, GPT={pyd_o}, "
                            f"struct_g={struct_g:.2f}, struct_o={struct_o:.2f})")
+            _ok, _why = _pyd_override_gate(
+                agreed_pyd,
+                [result_gemini.get("prior_year_development_gbp_m"), result_openai.get("prior_year_development_gbp_m")],
+                opening)
+            if not _ok:
+                _why = _why.replace("[RAG PYD NOT APPLIED:", "[CODE PYD NOT APPLIED:")
+                result_gemini, result_openai = _note_pyd_not_applied(result_gemini, result_openai, _why)
+                messages.append(f"  {_why}")
+                return result_gemini, result_openai, messages
             # Apply to both models
             for result, model_name, details in [
                 (result_gemini, gemini_name, details_g),
@@ -3894,6 +4004,15 @@ def verify_triangles(result_gemini, result_openai, gemini_name, openai_name, rep
             return result_gemini, result_openai, messages
 
         messages.append(f"  Using {best_name}: PYD={best_pyd}")
+        _ok, _why = _pyd_override_gate(
+            best_pyd,
+            [result_gemini.get("prior_year_development_gbp_m"), result_openai.get("prior_year_development_gbp_m")],
+            opening)
+        if not _ok:
+            _why = _why.replace("[RAG PYD NOT APPLIED:", "[CODE PYD NOT APPLIED:")
+            result_gemini, result_openai = _note_pyd_not_applied(result_gemini, result_openai, _why)
+            messages.append(f"  {_why}")
+            return result_gemini, result_openai, messages
         for result, model_name, details in [
             (result_gemini, gemini_name, best_details),
             (result_openai, openai_name, best_details),
@@ -3937,6 +4056,15 @@ def verify_triangles(result_gemini, result_openai, gemini_name, openai_name, rep
 
     # Single triangle passes sanity — apply to both models
     messages.append(f"  [{source_name}] Triangle: PYD={single_pyd}, struct={single_struct:.2f}")
+    _ok, _why = _pyd_override_gate(
+        single_pyd,
+        [result_gemini.get("prior_year_development_gbp_m"), result_openai.get("prior_year_development_gbp_m")],
+        opening)
+    if not _ok:
+        _why = _why.replace("[RAG PYD NOT APPLIED:", "[CODE PYD NOT APPLIED:")
+        result_gemini, result_openai = _note_pyd_not_applied(result_gemini, result_openai, _why)
+        messages.append(f"  {_why}")
+        return result_gemini, result_openai, messages
     for result, model_name in [
         (result_gemini, gemini_name),
         (result_openai, openai_name),
@@ -4043,6 +4171,8 @@ SKIP_FIELDS = {
     "_rag_triangle",
     "_adobe_lob",
     "_adobe_provisions",
+    "_entity_binding",
+    "opening_reserves_provenance",
 }
 
 
@@ -4228,6 +4358,12 @@ def resolve_computed_fields(hard_failures, result_a, result_b, model_a, model_b,
             prov_a = result_a.get("_adobe_provisions") or {}
             rag_opening = prov_a.get("opening_gross_claims_outstanding")
             if rag_opening is not None:
+                # Round 52: the fallback goes through the same two-of-three rule as the
+                # proactive override (the models disagree here, so the table breaks the
+                # tie unless its unit is unresolved or it agrees with a model at x1000)
+                rag_opening, _label, _note = _resolve_rag_opening(
+                    rag_opening, prov_a.get("opening_provenance"), [d.get(model_a), d.get(model_b)])
+            if rag_opening is not None and rag_opening > 0:
                 val_a = d.get(model_a)
                 val_b = d.get(model_b)
                 # Use RAG value and accept whichever LLM is closer
@@ -4524,23 +4660,61 @@ def write_run_manifest(run_stats):
     }
 
     manifest_path = AUDIT_DIR / "run_manifest.json"
+    lock_path = AUDIT_DIR / "run_manifest.lock"
 
-    # Load existing runs or start fresh
-    if manifest_path.exists():
-        with open(manifest_path, "r") as f:
-            manifest = json.load(f)
-    else:
-        manifest = {"runs": []}
+    # Round 52: several re-extraction workers may finish at once; the append is done
+    # under a lock file and the manifest is written atomically, so a concurrent
+    # writer can neither corrupt it nor lose another worker's entry.
+    deadline = time.time() + 120
+    fd = None
+    while fd is None:
+        try:
+            fd = os.open(str(lock_path), os.O_CREAT | os.O_EXCL | os.O_WRONLY)
+        except FileExistsError:
+            if time.time() > deadline:
+                raise RuntimeError(f"run manifest lock {lock_path} held for over 120 s")
+            time.sleep(0.2)
+    try:
+        # Load existing runs or start fresh
+        if manifest_path.exists():
+            # a concurrent writer may be mid-replace: retry a half-written read briefly
+            for attempt in range(20):
+                try:
+                    with open(manifest_path, "r") as f:
+                        manifest = json.load(f)
+                    break
+                except (json.JSONDecodeError, PermissionError):
+                    if attempt == 19:
+                        raise
+                    time.sleep(0.25)
+        else:
+            manifest = {"runs": []}
 
-    # Migrate from old single-run format to runs list
-    if "runs" not in manifest:
-        manifest = {"runs": [manifest]}
+        # Migrate from old single-run format to runs list
+        if "runs" not in manifest:
+            manifest = {"runs": [manifest]}
 
-    manifest["runs"].append(entry)
+        manifest["runs"].append(entry)
 
-    with open(manifest_path, "w") as f:
-        json.dump(sanitize_json_ascii(manifest), f, indent=2, ensure_ascii=True)
-    print(f"  Run manifest updated: {manifest_path} ({len(manifest['runs'])} runs total)")
+        tmp_path = manifest_path.with_suffix(".json.tmp")
+        with open(tmp_path, "w") as f:
+            json.dump(sanitize_json_ascii(manifest), f, indent=2, ensure_ascii=True)
+        # a concurrent reader holding the file open makes os.replace fail on Windows
+        for attempt in range(20):
+            try:
+                os.replace(tmp_path, manifest_path)
+                break
+            except PermissionError:
+                if attempt == 19:
+                    raise
+                time.sleep(0.25)
+        print(f"  Run manifest updated: {manifest_path} ({len(manifest['runs'])} runs total)")
+    finally:
+        os.close(fd)
+        try:
+            os.unlink(lock_path)
+        except OSError:
+            pass
 
 
 def _pyd_direction(value):
@@ -4603,6 +4777,131 @@ def _apply_loss_ratio_fallback(result, rag_pyd, model_name):
     print(f"  [{model_name}] Keeping LLM PYD={old_pyd} "
           f"(loss ratio triangle gives {rag_pyd:+.3f}m at managed/group level)")
     return "kept_agreement"
+
+
+def _pyd_override_gate(rag_pyd, model_values, opening):
+    """Whether a deterministic development figure may override the model values.
+
+    Returns (ok, note).  Round 52: the corrected page binding exposed deterministic
+    figures that were a wrong-year provisions column or a mis-columned triangle, so
+    a figure is not applied when (a) both models carry values that agree in sign with
+    each other and the figure has the opposite sign, or (b) the figure implies a
+    movement above 50% of the opening reserves while both models imply under 10%.
+    The pre-existing -100% sanity gate stays.  In both cases the models' values stand
+    and the note records the figure for audit.  The gate guards every deterministic
+    development path: the RAG triangle, the provisions fallback routed through it, and
+    the code recomputation from the models' own triangles (verify_triangles, note
+    prefix CODE PYD NOT APPLIED).
+    """
+    vals = [float(v) for v in model_values if isinstance(v, (int, float))]
+    if len(vals) < 2 or rag_pyd is None:
+        return True, None
+
+    def sgn(x):
+        return (x > 0) - (x < 0)
+
+    if sgn(vals[0]) == sgn(vals[1]) != 0 and sgn(rag_pyd) == -sgn(vals[0]):
+        return False, ("[RAG PYD NOT APPLIED: deterministic figure %+.3fm has the opposite sign to both "
+                       "model values %s, which agree with each other; model values retained.]"
+                       % (rag_pyd, vals))
+    try:
+        op = float(opening) if opening else None
+    except (TypeError, ValueError):
+        op = None
+    if op and op > 0:
+        if abs(rag_pyd) / op > 0.5 and all(abs(v) / op < 0.10 for v in vals):
+            return False, ("[RAG PYD NOT APPLIED: deterministic figure %+.3fm is %.0f%% of opening reserves "
+                           "while both model values %s imply under 10%%; model values retained.]"
+                           % (rag_pyd, 100.0 * abs(rag_pyd) / op, vals))
+    return True, None
+
+
+def _lob_override_gate(adobe_lob, model_gwps):
+    """Whether a deterministic business mix may replace the models' mix (round 52).
+
+    It may when it has at least two classes, or when its single class carries a premium
+    that agrees with a model-read total within 25%.  A one-class mix that contradicts
+    the models is a stray row or prose line, not a segmental analysis (2623/2015's text
+    fallback gave one class at 4.0m against a 1.5bn book); a one-class mix that
+    matches the models is a monoline special purpose syndicate and is applied.
+    """
+    mix = adobe_lob.get("gross_premium_mix") or []
+    if len(mix) >= 2:
+        return True, None
+    gwp = adobe_lob.get("gross_premiums_written_gbp_m")
+    vals = [float(v) for v in model_gwps if isinstance(v, (int, float)) and v > 0]
+    try:
+        g = float(gwp) if gwp is not None else None
+    except (TypeError, ValueError):
+        g = None
+    if g and any(abs(g - v) / v <= 0.25 for v in vals):
+        return True, None
+    return False, ("[LOB NOT APPLIED: deterministic mix has %d class(es) with premium %s against "
+                   "model totals %s; model mix retained.]" % (len(mix), gwp, vals))
+
+
+def _note_pyd_not_applied(result_gemini, result_openai, why):
+    """Append the not-applied note to both model results (copies, as verify_triangles
+    treats the result dicts as values)."""
+    out = []
+    for r in (result_gemini, result_openai):
+        r = dict(r)
+        r["data_quality_notes"] = (f"{r.get('data_quality_notes', '') or ''} {why}").strip()
+        out.append(r)
+    return out[0], out[1]
+
+
+def _resolve_rag_opening(rag_opening, provenance, llm_values):
+    """Decide whether a table-derived opening reserve may override the model values.
+
+    Returns (value_in_millions or None, unit_resolution_label, note).  The rule is
+    two-of-three (round 52): the table figure is applied when it agrees with at least
+    one model value within 2% at scale 1, or with every available model value at
+    x1000 or /1000 (then rescaled: the unit was misread), or when the model values
+    disagree with each other by more than 5% (the table breaks the tie, the pre-round-52
+    behaviour).  When both models agree with each other and the table contradicts them
+    at every scale -- a wrong column, a wrong entity, a sign flip -- the models stand
+    and the note records the table value.  The frozen-review cases: 1416/2024 (46,378
+    US$ thousand read as millions) rescales by model agreement; 2988/2024 (347,898
+    thousand under a mistaken document declaration) rescales likewise; 382/2018 (the
+    prior-year column of a two-year provisions table) is not applied.
+    """
+    prov = provenance or {}
+    src = prov.get("unit_source") or "resolved"
+    raw = float(prov.get("raw_value", rag_opening)) if prov else float(rag_opening)
+    table = float(rag_opening)
+    vals = [float(v) for v in llm_values if isinstance(v, (int, float)) and v > 0]
+
+    def close(a, b, tol=0.02):
+        return b > 0 and abs(a / b - 1.0) <= tol
+
+    if not vals:
+        # nothing to compare with: a resolved or magnitude-scaled value is applied
+        if src in ("unresolved",):
+            return None, src, ("[RAG OPENING NOT APPLIED: table value %g (%s, page %s) has no unit "
+                               "evidence and no model value to compare with.]"
+                               % (raw, prov.get("table_kind", "table"), prov.get("page")))
+        return table, src, None
+    if any(close(table, v) for v in vals):
+        return table, src, None
+    # a x1000 unit misreading in either direction, agreed by every model value
+    for factor, label in ((1.0 / 1000.0, "model-agreement:thousands"), (1000.0, "model-agreement:millions")):
+        if all(close(table * factor, v) for v in vals) or all(close(raw * factor, v) for v in vals):
+            base = table if all(close(table * factor, v) for v in vals) else raw
+            return round(base * factor, 3), label, None
+    models_agree = len(vals) >= 2 and all(close(v, vals[0], 0.05) for v in vals[1:])
+    if not models_agree:
+        # the models disagree with each other: the deterministic figure is the tie-breaker
+        if src == "unresolved":
+            return None, src, ("[RAG OPENING NOT APPLIED: table value %g (%s, page %s) has no unit "
+                               "evidence and the model values %s disagree with each other.]"
+                               % (raw, prov.get("table_kind", "table"), prov.get("page"), vals))
+        return table, src + ":tie-break", None
+    note = ("[RAG OPENING NOT APPLIED: table value %g (%s, page %s, unit source %s) disagrees with "
+            "both model values %s, which agree with each other; the model value is retained and the "
+            "table value recorded for audit.]" % (table, prov.get("table_kind", "table"),
+                                                  prov.get("page"), src, vals))
+    return None, src, note
 
 
 def process_one_report(report_path, inception_cache=None):
@@ -4723,19 +5022,25 @@ def process_one_report(report_path, inception_cache=None):
               f"(full report: {len(file_bytes) / 1024:.0f} KB)")
         with open(llm_pdf, "rb") as f:
             llm_bytes = f.read()
-        llm_hash = hashlib.sha256(llm_bytes).hexdigest()
+        # legacy key: the slim PDF's bytes are not stable across runs (PDF ids and
+        # dates), so the canonical key hashes the source document and the page set
+        legacy_hash = hashlib.sha256(llm_bytes).hexdigest()
+        llm_hash = hashlib.sha256(
+            (content_hash + "|pages:" + ",".join(str(p) for p in sorted(relevant_pages))).encode("utf-8")
+        ).hexdigest()
     else:
         # Fallback: send full PDF if no relevant pages identified
         llm_pdf = actual_path
         llm_bytes = file_bytes
         llm_hash = content_hash
+        legacy_hash = None
 
     # Extract with both models (slim PDF with relevant pages only)
     result_gemini = extract_with_gemini(
-        llm_pdf, llm_bytes, llm_hash, syndicate_num, report_year
+        llm_pdf, llm_bytes, llm_hash, syndicate_num, report_year, legacy_hash=legacy_hash
     )
     result_openai = extract_with_openai(
-        llm_pdf, llm_bytes, llm_hash, syndicate_num, report_year
+        llm_pdf, llm_bytes, llm_hash, syndicate_num, report_year, legacy_hash=legacy_hash
     )
 
     # Normalize currency field names: some LLMs rename _gbp_m → _usd_m/_eur_m
@@ -4794,6 +5099,16 @@ def process_one_report(report_path, inception_cache=None):
             print(f"  [RAG] Triangle PYD {rag_pyd:+.3f}m but opening reserves = 0 "
                   f"— likely misidentified table or net triangle. Discarding RAG PYD.")
 
+        if rag_sane and not rag_is_fallback_only:
+            _ok, _why = _pyd_override_gate(
+                rag_pyd,
+                [result_gemini.get("prior_year_development_gbp_m"), result_openai.get("prior_year_development_gbp_m")],
+                result_gemini.get("opening_reserves_gbp_m") or result_openai.get("opening_reserves_gbp_m"))
+            if not _ok:
+                for result in (result_gemini, result_openai):
+                    result["data_quality_notes"] = (f"{result.get('data_quality_notes', '') or ''} {_why}").strip()
+                print(f"  [RAG] {_why}")
+                rag_sane = False
         if rag_sane:
             print(f"  [RAG] Triangle PYD: {rag_pyd:+.3f}m")
 
@@ -4885,18 +5200,24 @@ def process_one_report(report_path, inception_cache=None):
         for msg in tri_messages:
             print(msg)
 
-    # Apply Adobe LOB breakdown (deterministic override of LLM-extracted LOBs)
+    # Apply Adobe LOB breakdown (deterministic override of LLM-extracted LOBs), gated
     adobe_lob = rag_result.get("adobe_lob")
     if adobe_lob:
+        _ok, _why = _lob_override_gate(
+            adobe_lob, [result_gemini.get("gross_premiums_written_gbp_m"),
+                        result_openai.get("gross_premiums_written_gbp_m")])
         for result, model_name in [
             (result_gemini, GEMINI_MODEL),
             (result_openai, OPENAI_MODEL),
         ]:
-            result["gross_premium_mix"] = adobe_lob["gross_premium_mix"]
-            result["gross_premiums_written_gbp_m"] = adobe_lob["gross_premiums_written_gbp_m"]
-            result["gross_premium_confidence"] = 1.0
             result["_adobe_lob"] = adobe_lob
-        print(f"  [Adobe] LOB breakdown applied to both models")
+            if _ok:
+                result["gross_premium_mix"] = adobe_lob["gross_premium_mix"]
+                result["gross_premiums_written_gbp_m"] = adobe_lob["gross_premiums_written_gbp_m"]
+                result["gross_premium_confidence"] = 1.0
+            else:
+                result["data_quality_notes"] = (f"{result.get('data_quality_notes', '') or ''} {_why}").strip()
+        print(f"  [Adobe] LOB breakdown applied to both models" if _ok else f"  [Adobe] {_why}")
 
     # Apply Adobe provisions movement as cross-check
     adobe_prov = rag_result.get("adobe_provisions")
@@ -4924,6 +5245,25 @@ def process_one_report(report_path, inception_cache=None):
     # extraction found gross claims outstanding, use it authoritatively for both
     # models — similar to how RAG triangle PYD overrides LLM-extracted PYD.
     rag_opening = (adobe_prov or {}).get("opening_gross_claims_outstanding")
+    rag_opening_prov = (adobe_prov or {}).get("opening_provenance")
+    for result in (result_gemini, result_openai):
+        result["_entity_binding"] = rag_result.get("entity_binding")
+    rag_unit_label = "resolved"
+    if rag_opening is not None and rag_opening > 0:
+        # Round 52 (review finding M01): the table value overrides the model values
+        # only when its unit is resolved from report evidence, or when both model
+        # values agree with the table value at exactly one scale.  A value with no
+        # unit evidence that agrees with neither scale is recorded and not applied.
+        llm_values = [r.get("opening_reserves_gbp_m") for r in (result_gemini, result_openai)]
+        rag_opening, rag_unit_label, rag_note = _resolve_rag_opening(
+            rag_opening, rag_opening_prov, llm_values)
+        if rag_opening is None:
+            for result, model_name in [(result_gemini, GEMINI_MODEL), (result_openai, OPENAI_MODEL)]:
+                old_notes = result.get("data_quality_notes", "") or ""
+                result["data_quality_notes"] = f"{old_notes} {rag_note}".strip()
+                result["opening_reserves_provenance"] = {
+                    "source": "llm", "table_value_not_applied": rag_opening_prov}
+                print(f"  [{model_name}] {rag_note}")
     if rag_opening is not None and rag_opening > 0:
         for result, model_name in [
             (result_gemini, GEMINI_MODEL),
@@ -4931,6 +5271,11 @@ def process_one_report(report_path, inception_cache=None):
         ]:
             llm_opening = result.get("opening_reserves_gbp_m")
             result["opening_reserves_gbp_m"] = rag_opening
+            provenance = dict(rag_opening_prov or {})
+            provenance["source"] = (provenance.get("backend") or "rag") + "_table" if rag_opening_prov else "reserves_movement_note"
+            provenance["applied_value_m"] = rag_opening
+            provenance["unit_resolution"] = rag_unit_label
+            result["opening_reserves_provenance"] = provenance
             # Recompute PYD percentage with corrected opening reserves
             pyd = result.get("prior_year_development_gbp_m")
             if pyd is not None and rag_opening > 0:
@@ -5127,6 +5472,12 @@ if __name__ == "__main__":
         if arg == "--single" and idx + 1 < len(sys.argv):
             single_arg = sys.argv[idx + 1]
             break
+
+    # --offline flag: every LLM, table-backend and inception lookup must be served
+    # from the committed caches; a cache miss aborts instead of calling an API
+    if "--offline" in sys.argv:
+        os.environ["LLOYDS_EXTRACTION_OFFLINE"] = "1"
+        print("Offline mode: cache misses are errors; no external API will be called")
 
     # --clean flag: delete all existing outputs to force re-run under current spec
     if "--clean" in sys.argv:
