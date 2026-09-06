@@ -1,5 +1,5 @@
 {
-  "extraction_timestamp": "2026-07-05T12:00:56.542406+00:00",
+  "extraction_timestamp": "2026-09-05T19:58:12.461707+00:00",
   "spec": {
     "prompt_version": "2.10",
     "field_definitions_version": "1.0",
@@ -13,8 +13,8 @@
       "opening_reserves_gbp_m": 269.921,
       "opening_reserves_page": 4,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": -21.0,
-      "prior_year_development_pct": -7.78,
+      "prior_year_development_gbp_m": -0.021,
+      "prior_year_development_pct": -0.01,
       "direction": "release",
       "prior_year_movement_page": 15,
       "prior_year_movement_confidence": 1.0,
@@ -168,7 +168,7 @@
       "gross_premium_page": 13,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The LOB movements for prior year development are presented net of reinsurance in the document. The gross claims development triangle is present, but its reliability for calculating prior year development is impacted by the mention of a Reinsurance to Close (RITC) for the 2017 year of account into the 2018 year of account, which occurred at 31 December 2019. [RAG OVERRIDE: Model said PYD=-0.021, RAG triangle computed -21.0. Using RAG value.]",
+      "data_quality_notes": "The LOB movements for prior year development are presented net of reinsurance in the document. The gross claims development triangle is present, but its reliability for calculating prior year development is impacted by the mention of a Reinsurance to Close (RITC) for the 2017 year of account into the 2018 year of account, which occurred at 31 December 2019. [RAG PYD NOT APPLIED: deterministic figure +35.337m has the opposite sign to both model values [-0.021, -0.021], which agree with each other; model values retained.] [CODE PYD NOT APPLIED: deterministic figure +35.337m has the opposite sign to both model values [-0.021, -0.021], which agree with each other; model values retained.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -306,7 +306,9 @@
             null,
             null
           ]
-        ]
+        ],
+        "source_page": 28,
+        "entity": 2014
       },
       "_adobe_lob": {
         "gross_premium_mix": [
@@ -369,13 +371,115 @@
           }
         ],
         "currency": "GBP",
-        "method": "azure"
+        "method": "azure",
+        "source_page": 27,
+        "entity": 2014
       },
       "_adobe_provisions": {
-        "gross_prior_year_claims": -21.0,
-        "ri_share_prior_year": 43.0,
-        "net_prior_year_claims": 22.0,
+        "unit_source": "header",
+        "source_page": 32,
+        "entity": 2014,
+        "opening_provenance": {
+          "raw_value": 269921.0,
+          "unit_multiplier": 0.001,
+          "unit_source": "header",
+          "value_m": 269.921,
+          "page": 32,
+          "entity": 2014,
+          "backend": "azure",
+          "table_kind": "provisions_movement"
+        },
+        "gross_prior_year_claims": -0.0,
+        "net_prior_year_claims": 0.0,
         "opening_gross_claims_outstanding": 269.921
+      },
+      "_entity_binding": {
+        "requested_syndicate": 2014,
+        "entity_pages": {
+          "none": [
+            0
+          ],
+          "2014": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48
+          ]
+        },
+        "foreign_tables_skipped": 0,
+        "foreign_pages": [],
+        "underwriting_year_pages": [
+          34,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          48
+        ],
+        "underwriting_year_tables_skipped": 14,
+        "document_unit_hint": 0.001
+      },
+      "opening_reserves_provenance": {
+        "raw_value": 269921.0,
+        "unit_multiplier": 0.001,
+        "unit_source": "header",
+        "value_m": 269.921,
+        "page": 32,
+        "entity": 2014,
+        "backend": "azure",
+        "table_kind": "provisions_movement",
+        "source": "azure_table",
+        "applied_value_m": 269.921,
+        "unit_resolution": "header"
       }
     },
     "gpt-5-mini": {
@@ -384,8 +488,8 @@
       "opening_reserves_gbp_m": 269.921,
       "opening_reserves_page": 13,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": -21.0,
-      "prior_year_development_pct": -7.78,
+      "prior_year_development_gbp_m": -0.021,
+      "prior_year_development_pct": -0.01,
       "direction": "release",
       "prior_year_movement_page": 31,
       "prior_year_movement_confidence": 1.0,
@@ -539,7 +643,7 @@
       "gross_premium_page": 26,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Opening gross claims outstanding taken from Statement of Financial Position (gross claims outstanding). Prior year development gross figure taken from Technical Provisions note ('Change in prior year provisions' = (21) thousand = release). Line-by-line prior year movements are presented in the document only on a net (after reinsurance) basis; those net amounts were used for lob_movements with reduced confidence. Named event impacts are referenced in narrative but not quantified for gross reserve impact. Claims development triangle is present and was not distorted by an RITC in the 2019 reconciliation. [RAG OVERRIDE: Model said PYD=-0.021, RAG triangle computed -21.0. Using RAG value.]",
+      "data_quality_notes": "Opening gross claims outstanding taken from Statement of Financial Position (gross claims outstanding). Prior year development gross figure taken from Technical Provisions note ('Change in prior year provisions' = (21) thousand = release). Line-by-line prior year movements are presented in the document only on a net (after reinsurance) basis; those net amounts were used for lob_movements with reduced confidence. Named event impacts are referenced in narrative but not quantified for gross reserve impact. Claims development triangle is present and was not distorted by an RITC in the 2019 reconciliation. [RAG PYD NOT APPLIED: deterministic figure +35.337m has the opposite sign to both model values [-0.021, -0.021], which agree with each other; model values retained.] [CODE PYD NOT APPLIED: deterministic figure +35.337m has the opposite sign to both model values [-0.021, -0.021], which agree with each other; model values retained.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -677,7 +781,9 @@
             null,
             null
           ]
-        ]
+        ],
+        "source_page": 28,
+        "entity": 2014
       },
       "_adobe_lob": {
         "gross_premium_mix": [
@@ -740,13 +846,115 @@
           }
         ],
         "currency": "GBP",
-        "method": "azure"
+        "method": "azure",
+        "source_page": 27,
+        "entity": 2014
       },
       "_adobe_provisions": {
-        "gross_prior_year_claims": -21.0,
-        "ri_share_prior_year": 43.0,
-        "net_prior_year_claims": 22.0,
+        "unit_source": "header",
+        "source_page": 32,
+        "entity": 2014,
+        "opening_provenance": {
+          "raw_value": 269921.0,
+          "unit_multiplier": 0.001,
+          "unit_source": "header",
+          "value_m": 269.921,
+          "page": 32,
+          "entity": 2014,
+          "backend": "azure",
+          "table_kind": "provisions_movement"
+        },
+        "gross_prior_year_claims": -0.0,
+        "net_prior_year_claims": 0.0,
         "opening_gross_claims_outstanding": 269.921
+      },
+      "_entity_binding": {
+        "requested_syndicate": 2014,
+        "entity_pages": {
+          "none": [
+            0
+          ],
+          "2014": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48
+          ]
+        },
+        "foreign_tables_skipped": 0,
+        "foreign_pages": [],
+        "underwriting_year_pages": [
+          34,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          48
+        ],
+        "underwriting_year_tables_skipped": 14,
+        "document_unit_hint": 0.001
+      },
+      "opening_reserves_provenance": {
+        "raw_value": 269921.0,
+        "unit_multiplier": 0.001,
+        "unit_source": "header",
+        "value_m": 269.921,
+        "page": 32,
+        "entity": 2014,
+        "backend": "azure",
+        "table_kind": "provisions_movement",
+        "source": "azure_table",
+        "applied_value_m": 269.921,
+        "unit_resolution": "header"
       }
     }
   },

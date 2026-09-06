@@ -1,7 +1,7 @@
 {
-  "extraction_timestamp": "2026-03-17T23:54:16.386366+00:00",
+  "extraction_timestamp": "2026-09-05T19:59:10.770082+00:00",
   "spec": {
-    "prompt_version": "2.8",
+    "prompt_version": "2.10",
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -11,76 +11,64 @@
       "syndicate": 2015,
       "year": 2017,
       "opening_reserves_gbp_m": 210.466,
-      "opening_reserves_page": 5,
+      "opening_reserves_page": 6,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": 12.802,
       "prior_year_development_pct": 6.08,
       "direction": "strengthening",
-      "prior_year_movement_page": 16,
-      "prior_year_movement_confidence": 1.0,
+      "prior_year_movement_page": 17,
+      "prior_year_movement_confidence": 0.5,
       "exact_reserve_text": "Overall on an aggregate basis, reserve releases of GBP 0.8m net of reinsurance were made to prior year reserves during 2017.",
       "primary_causes": [
-        "Favorable claims development"
+        "Favorable claims development",
+        "Adverse claims development"
       ],
       "specific_events": [],
       "specific_years_affected": [],
-      "prior_year_events": [
+      "prior_year_events": [],
+      "named_events": [
         {
-          "event_name": "Property accounts",
-          "event_year": null,
-          "impact_description": "generated a surplus",
+          "event_name": "Hurricanes Harvey, Irma and Maria (HIM)",
+          "event_year": 2017,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "exceptional series of large natural catastrophe losses including Hurricanes Harvey, Irma and Maria (HIM) in the U.S. and the Caribbean",
           "lobs_affected": [
             "Property"
           ],
-          "amount_gbp_m": null,
-          "confidence": 0.5
+          "page": 2,
+          "confidence": 1.0
         },
         {
-          "event_name": "Marine accounts",
-          "event_year": null,
-          "impact_description": "generated a surplus",
+          "event_name": "Wildfires in California",
+          "event_year": 2017,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "exceptional series of large natural catastrophe losses including wildfires in California",
           "lobs_affected": [
-            "Marine"
+            "Property"
           ],
-          "amount_gbp_m": null,
-          "confidence": 0.5
+          "page": 2,
+          "confidence": 1.0
         },
         {
-          "event_name": "Credit and Political Risk accounts",
-          "event_year": null,
-          "impact_description": "generated a surplus",
+          "event_name": "FCA review into annuity sales",
+          "event_year": 2017,
+          "event_type": "liability",
+          "net_loss_gbp_m": null,
+          "loss_description": "strengthened reserves for two specific large claims on the Financial Institutions part of our Liability account during 2017 following the market wide FCA review into annuity sales",
           "lobs_affected": [
             "Professional Lines"
           ],
-          "amount_gbp_m": null,
-          "confidence": 0.5
-        },
-        {
-          "event_name": "Liability classes",
-          "event_year": null,
-          "impact_description": "strengthening",
-          "lobs_affected": [
-            "Casualty"
-          ],
-          "amount_gbp_m": null,
-          "confidence": 0.5
-        },
-        {
-          "event_name": "Accident and Health classes",
-          "event_year": null,
-          "impact_description": "strengthening",
-          "lobs_affected": [
-            "Accident & Health"
-          ],
-          "amount_gbp_m": null,
-          "confidence": 0.5
+          "page": 2,
+          "confidence": 1.0
         }
       ],
-      "named_events": [],
-      "standardized_narrative": "The syndicate reported a net release of GBP 0.8m from prior year reserves. This was driven by a surplus generated in the Property, Marine, and Credit and Political Risk accounts, which was partially offset by strengthening in the Liability and Accident and Health classes.",
+      "standardized_narrative": "The syndicate reported a net reserve release of GBP 0.8 million in 2017 for prior year reserves. This movement was mixed, with favorable development in Property, Marine, and Credit & Political Risk accounts, partially offset by strengthening in the Liability and Accident & Health classes.",
       "raw_causal_phrases": [
         "reserve releases of GBP 0.8m net of reinsurance were made to prior year reserves during 2017",
-        "The Property, Marine and Credit and Political Risk accounts generated a surplus which was partially offset by a strengthening in the Liability and Accident and Health classes"
+        "The Property, Marine and Credit and Political Risk accounts generated a surplus",
+        "partially offset by a strengthening in the Liability and Accident and Health classes"
       ],
       "lob_movements": [
         {
@@ -98,7 +86,7 @@
           "confidence": 0.5
         },
         {
-          "line_of_business": "Professional Lines",
+          "line_of_business": "Credit & Political Risk",
           "direction": "release",
           "amount_gbp_m": null,
           "percentage": null,
@@ -167,34 +155,15 @@
           "percentage_of_total": 16.6
         }
       ],
-      "gross_premium_page": 10,
+      "gross_premium_page": 1,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior year development is reported net of reinsurance as a gross figure was not explicitly available in the document. [RAG OVERRIDE: Model said PYD=-0.8, RAG triangle computed 12.802. Using RAG value.]",
+      "data_quality_notes": "Prior year development is reported as a net figure of reinsurance, as no gross figure was explicitly available in the report's narrative or movement notes. The claims development triangle was not used for prior year development calculation due to its format not directly supporting the diagonal comparison method for PYD. [RAG OVERRIDE: Model said PYD=-0.8, RAG triangle computed 12.802. Using RAG value.]",
       "_claims_triangle": {
-        "type": "none",
-        "currency": null,
-        "units": null,
-        "page": null,
-        "underwriting_years": null,
-        "development_rows": null
-      },
-      "source_type": "syndicate",
-      "source_file": "pdf_extraction\\llm_slim\\syndicate_2015_2017_llm.pdf",
-      "content_hash": "a9f00bcb30aa30d887f8cac0e57085bb430fef647ae35b0568ac83b08540ac22",
-      "standardized_at": "2026-03-17T23:53:17.940835+00:00",
-      "standardization_model": "gemini-2.5-flash",
-      "_extraction_meta": {
-        "model": "gemini-2.5-flash",
-        "input_tokens": 10140,
-        "output_tokens": 1689,
-        "total_tokens": 14714,
-        "cost_usd": 0.007265
-      },
-      "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "page": 16,
         "underwriting_years": [
           2011,
           2012,
@@ -269,6 +238,99 @@
             null
           ]
         ]
+      },
+      "source_type": "syndicate",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_2015_2017_llm.pdf",
+      "content_hash": "daadb4a5a4e16d3248d7c9220e9eeb3415dc2efe67e4d2e9f7cdc9314e7f3fb1",
+      "standardized_at": "2026-09-05T18:50:07.180390+00:00",
+      "standardization_model": "gemini-2.5-flash",
+      "_extraction_meta": {
+        "model": "gemini-2.5-flash",
+        "input_tokens": 10379,
+        "output_tokens": 1935,
+        "total_tokens": 15850,
+        "cost_usd": 0.007951
+      },
+      "_rag_triangle": {
+        "type": "gross",
+        "currency": "GBP",
+        "units": "thousands",
+        "underwriting_years": [
+          2011,
+          2012,
+          2013,
+          2014,
+          2015,
+          2016,
+          2017
+        ],
+        "development_rows": [
+          [
+            6807.0,
+            25223.0,
+            38550.0,
+            44974.0,
+            42301.0,
+            62741.0,
+            125372.0
+          ],
+          [
+            13959.0,
+            56337.0,
+            91719.0,
+            113376.0,
+            109090.0,
+            181544.0,
+            null
+          ],
+          [
+            13138.0,
+            56246.0,
+            97335.0,
+            133169.0,
+            117917.0,
+            null,
+            null
+          ],
+          [
+            12656.0,
+            59525.0,
+            93005.0,
+            138973.0,
+            null,
+            null,
+            null
+          ],
+          [
+            12230.0,
+            64164.0,
+            91681.0,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            11635.0,
+            63985.0,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            11309.0,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ]
+        ],
+        "source_page": 38,
+        "entity": 2015
       },
       "_adobe_lob": {
         "gross_premium_mix": [
@@ -358,34 +420,169 @@
           }
         ],
         "currency": "GBP",
-        "method": "azure"
+        "method": "azure",
+        "source_page": 24,
+        "entity": 2015
+      },
+      "_adobe_provisions": {
+        "opening_provenance": {
+          "raw_value": 210466.0,
+          "unit_multiplier": 0.001,
+          "unit_source": "header",
+          "value_m": 210.466,
+          "page": 18,
+          "entity": 2015,
+          "backend": "azure",
+          "table_kind": "balance_sheet_liabilities"
+        },
+        "opening_gross_claims_outstanding": 210.466
+      },
+      "_entity_binding": {
+        "requested_syndicate": 2015,
+        "entity_pages": {
+          "none": [
+            0
+          ],
+          "2015": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40
+          ]
+        },
+        "foreign_tables_skipped": 0,
+        "foreign_pages": [],
+        "underwriting_year_pages": [],
+        "underwriting_year_tables_skipped": 0,
+        "document_unit_hint": 0.001
+      },
+      "opening_reserves_provenance": {
+        "raw_value": 210466.0,
+        "unit_multiplier": 0.001,
+        "unit_source": "header",
+        "value_m": 210.466,
+        "page": 18,
+        "entity": 2015,
+        "backend": "azure",
+        "table_kind": "balance_sheet_liabilities",
+        "source": "azure_table",
+        "applied_value_m": 210.466,
+        "unit_resolution": "header"
       }
     },
     "gpt-5-mini": {
       "syndicate": 2015,
       "year": 2017,
       "opening_reserves_gbp_m": 210.466,
-      "opening_reserves_page": 38,
+      "opening_reserves_page": 16,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": 12.802,
       "prior_year_development_pct": 6.08,
       "direction": "strengthening",
-      "prior_year_movement_page": 38,
-      "prior_year_movement_confidence": 1.0,
+      "prior_year_movement_page": 36,
+      "prior_year_movement_confidence": 0.8,
       "exact_reserve_text": "Overall on an aggregate basis, reserve releases of GBP 0.8m net of reinsurance were made to prior year reserves during 2017. In 2016 there was a reserve release of GBP 1.4m.",
       "primary_causes": [
+        "Natural catastrophe events",
+        "Man-made catastrophe / large losses",
+        "Regulatory changes",
         "Favorable claims development",
         "Adverse claims development"
       ],
-      "specific_events": [],
-      "specific_years_affected": [],
+      "specific_events": [
+        "Hurricanes Harvey",
+        "Hurricane Irma",
+        "Hurricane Maria",
+        "Wildfires in California",
+        "FCA review into annuity sales"
+      ],
+      "specific_years_affected": [
+        2011,
+        2012,
+        2013,
+        2014,
+        2015
+      ],
       "prior_year_events": [],
-      "named_events": [],
-      "standardized_narrative": "The syndicate recorded a small net release of prior year reserves in 2017: overall reserve releases of GBP 0.8m (net of reinsurance). Opening gross claims reserves were GBP 210.466m at 1 January 2017, increasing to a closing gross claims position of GBP 321.768m at 31 December 2017 driven by movements recorded in the technical account and foreign exchange. The net prior year movement was favourable overall, with surplus (releases) in Property, Marine and Credit & Political Risk partly offset by strengthening in Liability (Casualty) and Accident & Health.",
+      "named_events": [
+        {
+          "event_name": "Hurricanes Harvey, Irma and Maria (HIM)",
+          "event_year": 2017,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "2017 was a year marked by an exceptional series of large natural catastrophe losses including Hurricanes Harvey, Irma and Maria (HIM) in the U.S. and the Caribbean. These catastrophe losses were compounded by a high frequency of large losses during 2017 but despite this elevated level of activity, the property account did benefit from a release of reserves during the financial year.",
+          "lobs_affected": [
+            "Property"
+          ],
+          "page": 4,
+          "confidence": 1.0
+        },
+        {
+          "event_name": "Wildfires in California",
+          "event_year": 2017,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "2017 was a year marked by an exceptional series of large natural catastrophe losses including ... wildfires in California.",
+          "lobs_affected": [
+            "Property"
+          ],
+          "page": 4,
+          "confidence": 1.0
+        },
+        {
+          "event_name": "FCA review into annuity sales",
+          "event_year": 2017,
+          "event_type": "other",
+          "net_loss_gbp_m": null,
+          "loss_description": "We strengthened reserves for two specific large claims on the Financial Institutions part of our Liability account during 2017 following the market wide FCA review into annuity sales.",
+          "lobs_affected": [
+            "Casualty"
+          ],
+          "page": 4,
+          "confidence": 1.0
+        }
+      ],
+      "standardized_narrative": "At 1 January 2017 the Syndicate had gross claims outstanding of GBP 210.466m. During 2017 cumulative gross ultimate claims movements (per the gross claims development table) produced a net adverse movement of approximately GBP 12.8m (gross strengthening) concentrated in several older underwriting years, while on a net-of-reinsurance basis the Syndicate reported an aggregate net reserve release of GBP 0.8m. The gross strengthening was driven by adverse development in parts of the Liability and Accident & Health portfolios (including two large Financial Institutions liability claims following the FCA annuity review), partially offset by favourable development / releases in the Property, Marine and Credit & Political Risk accounts. Major 2017 natural catastrophe activity (Hurricanes Harvey, Irma and Maria and California wildfires) influenced current year losses and reinsurance placements but reinsurance recoveries and reserve movements produced mixed impacts across lines.",
       "raw_causal_phrases": [
-        "Overall on an aggregate basis, reserve releases of GBP 0.8m net of reinsurance were made to prior year reserves during 2017.",
-        "In 2016 there was a reserve release of GBP 1.4m.",
-        "The Property, Marine and Credit and Political Risk accounts generated a surplus which was partially offset by a strengthening in the Liability and Accident and Health classes."
+        "2017 was a year marked by an exceptional series of large natural catastrophe losses including Hurricanes Harvey, Irma and Maria (HIM) in the U.S. and the Caribbean, and wildfires in California.",
+        "We strengthened reserves for two specific large claims on the Financial Institutions part of our Liability account during 2017 following the market wide FCA review into annuity sales.",
+        "Across all classes combined we had a net reserve release of GBP 0.8m."
       ],
       "lob_movements": [
         {
@@ -475,31 +672,12 @@
       "gross_premium_page": 3,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Gross prior year reserve movement (insurance liabilities) was not provided explicitly. The report explicitly states a net prior year release of GBP 0.8m (net of reinsurance) which has been used (flagged as net). Opening gross claims reserves were taken from Technical Provisions note (gross amounts). No gross prior-year-only movement line or gross claims development triangle was available in the extract; therefore gross PYD could not be calculated and net figure was used. [RAG OVERRIDE: Model said PYD=-0.8, RAG triangle computed 12.802. Using RAG value.]",
+      "data_quality_notes": "Prior year development (gross +12.802m) was calculated from the gross claims development triangle (cumulative ultimate claims) by comparing current estimates to the previous diagonal for underwriting years up to 2015 (triangle located on page 36). The report explicitly states a net reserve release of GBP 0.8m (net of reinsurance) - the gross strengthening vs net release difference indicates material reinsurer movements. No explicit single-line gross 'movement in prior year provision' figure was provided, so triangle-based calculation was used (confidence 0.8). Lob-level reserve amounts are not quantified in the notes, so LOB movements are directional only and inferred from text.",
       "_claims_triangle": {
-        "type": "none",
-        "currency": "GBP",
-        "units": "thousands",
-        "page": null,
-        "underwriting_years": [],
-        "development_rows": []
-      },
-      "source_type": "syndicate",
-      "source_file": "pdf_extraction\\llm_slim\\syndicate_2015_2017_llm.pdf",
-      "content_hash": "a9f00bcb30aa30d887f8cac0e57085bb430fef647ae35b0568ac83b08540ac22",
-      "standardized_at": "2026-03-17T23:54:16.384365+00:00",
-      "standardization_model": "gpt-5-mini",
-      "_extraction_meta": {
-        "model": "gpt-5-mini",
-        "input_tokens": 25595,
-        "output_tokens": 3897,
-        "total_tokens": 29492,
-        "cost_usd": 0.014193
-      },
-      "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "page": 36,
         "underwriting_years": [
           2011,
           2012,
@@ -574,6 +752,99 @@
             null
           ]
         ]
+      },
+      "source_type": "syndicate",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_2015_2017_llm.pdf",
+      "content_hash": "daadb4a5a4e16d3248d7c9220e9eeb3415dc2efe67e4d2e9f7cdc9314e7f3fb1",
+      "standardized_at": "2026-09-05T18:51:31.504427+00:00",
+      "standardization_model": "gpt-5-mini",
+      "_extraction_meta": {
+        "model": "gpt-5-mini",
+        "input_tokens": 26957,
+        "output_tokens": 8234,
+        "total_tokens": 35191,
+        "cost_usd": 0.023207
+      },
+      "_rag_triangle": {
+        "type": "gross",
+        "currency": "GBP",
+        "units": "thousands",
+        "underwriting_years": [
+          2011,
+          2012,
+          2013,
+          2014,
+          2015,
+          2016,
+          2017
+        ],
+        "development_rows": [
+          [
+            6807.0,
+            25223.0,
+            38550.0,
+            44974.0,
+            42301.0,
+            62741.0,
+            125372.0
+          ],
+          [
+            13959.0,
+            56337.0,
+            91719.0,
+            113376.0,
+            109090.0,
+            181544.0,
+            null
+          ],
+          [
+            13138.0,
+            56246.0,
+            97335.0,
+            133169.0,
+            117917.0,
+            null,
+            null
+          ],
+          [
+            12656.0,
+            59525.0,
+            93005.0,
+            138973.0,
+            null,
+            null,
+            null
+          ],
+          [
+            12230.0,
+            64164.0,
+            91681.0,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            11635.0,
+            63985.0,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            11309.0,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ]
+        ],
+        "source_page": 38,
+        "entity": 2015
       },
       "_adobe_lob": {
         "gross_premium_mix": [
@@ -663,16 +934,99 @@
           }
         ],
         "currency": "GBP",
-        "method": "azure"
+        "method": "azure",
+        "source_page": 24,
+        "entity": 2015
+      },
+      "_adobe_provisions": {
+        "opening_provenance": {
+          "raw_value": 210466.0,
+          "unit_multiplier": 0.001,
+          "unit_source": "header",
+          "value_m": 210.466,
+          "page": 18,
+          "entity": 2015,
+          "backend": "azure",
+          "table_kind": "balance_sheet_liabilities"
+        },
+        "opening_gross_claims_outstanding": 210.466
+      },
+      "_entity_binding": {
+        "requested_syndicate": 2015,
+        "entity_pages": {
+          "none": [
+            0
+          ],
+          "2015": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40
+          ]
+        },
+        "foreign_tables_skipped": 0,
+        "foreign_pages": [],
+        "underwriting_year_pages": [],
+        "underwriting_year_tables_skipped": 0,
+        "document_unit_hint": 0.001
+      },
+      "opening_reserves_provenance": {
+        "raw_value": 210466.0,
+        "unit_multiplier": 0.001,
+        "unit_source": "header",
+        "value_m": 210.466,
+        "page": 18,
+        "entity": 2015,
+        "backend": "azure",
+        "table_kind": "balance_sheet_liabilities",
+        "source": "azure_table",
+        "applied_value_m": 210.466,
+        "unit_resolution": "header"
       }
     }
   },
-  "total_cost_usd": 0.021458,
-  "total_tokens": 44206,
+  "total_cost_usd": 0.031158,
+  "total_tokens": 51041,
   "validation": {
     "passed": true,
-    "total_discrepancies": 13,
-    "within_tolerance": 13,
+    "total_discrepancies": 27,
+    "within_tolerance": 27,
     "hard_failures": 0,
     "hard_failure_details": []
   }

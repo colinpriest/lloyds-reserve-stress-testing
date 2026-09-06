@@ -1,5 +1,5 @@
 {
-  "extraction_timestamp": "2026-03-18T22:05:22.813017+00:00",
+  "extraction_timestamp": "2026-09-05T20:17:00.428763+00:00",
   "spec": {
     "prompt_version": "2.10",
     "field_definitions_version": "1.0",
@@ -118,7 +118,7 @@
       "gross_premium_page": 19,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The prior year development figure of -8.554m is taken from a table in the 'Claims incurred' note, which is titled 'Over/(under) provisions for claims... in respect of prior years' claims'. The narrative in the same section states 'Favourable prior year loss development of GBP 8.6 million was recorded in 2021', which is a slightly different figure and explicitly stated as 'net'. The table figure is used as it is more granular and likely gross, despite the narrative's 'net' phrasing. The 'Commercial' and 'Specialty' categories for LOB movements are broad and mapped to standard LOBs with 0.5 confidence. [RAG OVERRIDE: Model said PYD=-8.554, RAG triangle computed 20.409. Using RAG value.]",
+      "data_quality_notes": "The prior year development figure of -8.554m is taken from a table in the 'Claims incurred' note, which is titled 'Over/(under) provisions for claims... in respect of prior years' claims'. The narrative in the same section states 'Favourable prior year loss development of GBP 8.6 million was recorded in 2021', which is a slightly different figure and explicitly stated as 'net'. The table figure is used as it is more granular and likely gross, despite the narrative's 'net' phrasing. The 'Commercial' and 'Specialty' categories for LOB movements are broad and mapped to standard LOBs with 0.5 confidence. [RAG OVERRIDE: Model said PYD=-8.554, RAG triangle computed 20.409. Using RAG value.] [RAG OPENING NOT APPLIED: table value 482.119 (provisions_movement, page 45, unit source header) disagrees with both model values [498.085, 498.085], which agree with each other; the model value is retained and the table value recorded for audit.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -456,7 +456,9 @@
             null,
             null
           ]
-        ]
+        ],
+        "source_page": 46,
+        "entity": 382
       },
       "_adobe_lob": {
         "gross_premium_mix": [
@@ -537,7 +539,97 @@
           }
         ],
         "currency": "GBP",
-        "method": "azure"
+        "method": "azure",
+        "source_page": 39,
+        "entity": 382
+      },
+      "_adobe_provisions": {
+        "opening_provenance": {
+          "raw_value": 482119.0,
+          "unit_multiplier": 0.001,
+          "unit_source": "header",
+          "value_m": 482.119,
+          "page": 45,
+          "entity": 382,
+          "backend": "azure",
+          "table_kind": "provisions_movement"
+        },
+        "opening_gross_claims_outstanding": 482.119
+      },
+      "_entity_binding": {
+        "requested_syndicate": 382,
+        "entity_pages": {
+          "none": [
+            0
+          ],
+          "382": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47
+          ]
+        },
+        "foreign_tables_skipped": 0,
+        "foreign_pages": [],
+        "underwriting_year_pages": [],
+        "underwriting_year_tables_skipped": 0,
+        "document_unit_hint": 0.001
+      },
+      "opening_reserves_provenance": {
+        "source": "llm",
+        "table_value_not_applied": {
+          "raw_value": 482119.0,
+          "unit_multiplier": 0.001,
+          "unit_source": "header",
+          "value_m": 482.119,
+          "page": 45,
+          "entity": 382,
+          "backend": "azure",
+          "table_kind": "provisions_movement"
+        }
       }
     },
     "gpt-5-mini": {
@@ -632,7 +724,7 @@
       "gross_premium_page": 37,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior year development: narrative text reports a favorable NET prior-year release of GBP 8.6m, but the GROSS claims development table yields a net gross strengthening of c. GBP 20.409m. For this extraction the gross figure is taken from the gross claims development triangle (triangle used because it provides gross movements). Where report narrative provides only net figures they are noted in exact_reserve_text but were not used as the primary numeric (see prior_year_development_gbp_m). No specific named catastrophe events affecting prior-year reserves were identified. Lob-level gross prior-year movements are not explicitly provided by standard Lloyd's LOBs in gross terms, so lob_movements are omitted.",
+      "data_quality_notes": "Prior year development: narrative text reports a favorable NET prior-year release of GBP 8.6m, but the GROSS claims development table yields a net gross strengthening of c. GBP 20.409m. For this extraction the gross figure is taken from the gross claims development triangle (triangle used because it provides gross movements). Where report narrative provides only net figures they are noted in exact_reserve_text but were not used as the primary numeric (see prior_year_development_gbp_m). No specific named catastrophe events affecting prior-year reserves were identified. Lob-level gross prior-year movements are not explicitly provided by standard Lloyd's LOBs in gross terms, so lob_movements are omitted. [RAG OPENING NOT APPLIED: table value 482.119 (provisions_movement, page 45, unit source header) disagrees with both model values [498.085, 498.085], which agree with each other; the model value is retained and the table value recorded for audit.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -970,7 +1062,9 @@
             null,
             null
           ]
-        ]
+        ],
+        "source_page": 46,
+        "entity": 382
       },
       "_adobe_lob": {
         "gross_premium_mix": [
@@ -1051,7 +1145,97 @@
           }
         ],
         "currency": "GBP",
-        "method": "azure"
+        "method": "azure",
+        "source_page": 39,
+        "entity": 382
+      },
+      "_adobe_provisions": {
+        "opening_provenance": {
+          "raw_value": 482119.0,
+          "unit_multiplier": 0.001,
+          "unit_source": "header",
+          "value_m": 482.119,
+          "page": 45,
+          "entity": 382,
+          "backend": "azure",
+          "table_kind": "provisions_movement"
+        },
+        "opening_gross_claims_outstanding": 482.119
+      },
+      "_entity_binding": {
+        "requested_syndicate": 382,
+        "entity_pages": {
+          "none": [
+            0
+          ],
+          "382": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47
+          ]
+        },
+        "foreign_tables_skipped": 0,
+        "foreign_pages": [],
+        "underwriting_year_pages": [],
+        "underwriting_year_tables_skipped": 0,
+        "document_unit_hint": 0.001
+      },
+      "opening_reserves_provenance": {
+        "source": "llm",
+        "table_value_not_applied": {
+          "raw_value": 482119.0,
+          "unit_multiplier": 0.001,
+          "unit_source": "header",
+          "value_m": 482.119,
+          "page": 45,
+          "entity": 382,
+          "backend": "azure",
+          "table_kind": "provisions_movement"
+        }
       }
     }
   },

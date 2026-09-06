@@ -1,5 +1,5 @@
 {
-  "extraction_timestamp": "2026-03-18T09:56:23.951459+00:00",
+  "extraction_timestamp": "2026-09-05T20:13:32.251208+00:00",
   "spec": {
     "prompt_version": "2.10",
     "field_definitions_version": "1.0",
@@ -13,9 +13,9 @@
       "opening_reserves_gbp_m": 54.774,
       "opening_reserves_page": 3,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": -4.14,
-      "prior_year_development_pct": -7.56,
-      "direction": "release",
+      "prior_year_development_gbp_m": 20.1,
+      "prior_year_development_pct": 36.7,
+      "direction": "strengthening",
       "prior_year_movement_page": 13,
       "prior_year_movement_confidence": 1.0,
       "exact_reserve_text": "Change in prior year provisions 20,101",
@@ -54,22 +54,22 @@
         "favourable development on prior years"
       ],
       "lob_movements": [],
-      "gross_premiums_written_gbp_m": 84.7,
+      "gross_premiums_written_gbp_m": 48.2,
       "gross_premium_mix": [
         {
           "line_of_business": "Motor (other classes)",
           "amount_gbp_m": 1.0,
-          "percentage_of_total": 1.2
+          "percentage_of_total": 2.1
         },
         {
           "line_of_business": "Marine, aviation and transport",
           "amount_gbp_m": 30.5,
-          "percentage_of_total": 36.0
+          "percentage_of_total": 63.3
         },
         {
           "line_of_business": "Fire and other damage to property",
           "amount_gbp_m": 16.6,
-          "percentage_of_total": 19.6
+          "percentage_of_total": 34.4
         },
         {
           "line_of_business": "Credit and suretyship",
@@ -80,7 +80,7 @@
       "gross_premium_page": 11,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "The overall prior year development is a strengthening, but the narrative mentions \"favourable development on prior years\" for the 2016 year of account specifically, indicating mixed development across different prior years. The claims development triangle calculation for prior year development (-4.040m release) differs significantly from the \"Change in prior year provisions\" in Note 18 (+20.101m strengthening). Note 18 is used as the primary source for the overall reserve movement. [RAG OVERRIDE: Model said PYD=20.101, RAG triangle computed -4.14. Using RAG value.]",
+      "data_quality_notes": "The overall prior year development is a strengthening, but the narrative mentions \"favourable development on prior years\" for the 2016 year of account specifically, indicating mixed development across different prior years. The claims development triangle calculation for prior year development (-4.040m release) differs significantly from the \"Change in prior year provisions\" in Note 18 (+20.101m strengthening). Note 18 is used as the primary source for the overall reserve movement.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
@@ -370,24 +370,26 @@
             null,
             null
           ]
-        ]
+        ],
+        "source_page": 37,
+        "entity": 3010
       },
       "_adobe_lob": {
         "gross_premium_mix": [
           {
             "line_of_business": "Motor (other classes)",
             "amount_gbp_m": 1.0,
-            "percentage_of_total": 1.2
+            "percentage_of_total": 2.1
           },
           {
             "line_of_business": "Marine, aviation and transport",
             "amount_gbp_m": 30.5,
-            "percentage_of_total": 36.0
+            "percentage_of_total": 63.3
           },
           {
             "line_of_business": "Fire and other damage to property",
             "amount_gbp_m": 16.6,
-            "percentage_of_total": 19.6
+            "percentage_of_total": 34.4
           },
           {
             "line_of_business": "Credit and suretyship",
@@ -395,7 +397,7 @@
             "percentage_of_total": 0.0
           }
         ],
-        "gross_premiums_written_gbp_m": 84.7,
+        "gross_premiums_written_gbp_m": 48.2,
         "claims_incurred_by_lob": [
           {
             "line_of_business": "Motor (other classes)",
@@ -415,13 +417,96 @@
           }
         ],
         "currency": "USD",
-        "method": "azure"
+        "method": "azure",
+        "source_page": 32,
+        "entity": 3010
       },
       "_adobe_provisions": {
-        "gross_prior_year_claims": 15.0,
-        "ri_share_prior_year": 2665.0,
-        "net_prior_year_claims": 12.3,
+        "unit_source": "header",
+        "source_page": 38,
+        "entity": 3010,
+        "opening_provenance": {
+          "raw_value": 54774.0,
+          "unit_multiplier": 0.001,
+          "unit_source": "header",
+          "value_m": 54.774,
+          "page": 38,
+          "entity": 3010,
+          "backend": "azure",
+          "table_kind": "provisions_movement"
+        },
+        "gross_prior_year_claims": 20.1,
+        "ri_share_prior_year": 5.6,
         "opening_gross_claims_outstanding": 54.774
+      },
+      "_entity_binding": {
+        "requested_syndicate": 3010,
+        "entity_pages": {
+          "none": [
+            0,
+            1
+          ],
+          "3010": [
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41
+          ]
+        },
+        "foreign_tables_skipped": 0,
+        "foreign_pages": [],
+        "underwriting_year_pages": [],
+        "underwriting_year_tables_skipped": 0,
+        "document_unit_hint": 0.001
+      },
+      "opening_reserves_provenance": {
+        "raw_value": 54774.0,
+        "unit_multiplier": 0.001,
+        "unit_source": "header",
+        "value_m": 54.774,
+        "page": 38,
+        "entity": 3010,
+        "backend": "azure",
+        "table_kind": "provisions_movement",
+        "source": "azure_table",
+        "applied_value_m": 54.774,
+        "unit_resolution": "header"
       }
     },
     "gpt-5-mini": {
@@ -430,9 +515,9 @@
       "opening_reserves_gbp_m": 54.774,
       "opening_reserves_page": 14,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": -4.14,
-      "prior_year_development_pct": -7.56,
-      "direction": "release",
+      "prior_year_development_gbp_m": 20.1,
+      "prior_year_development_pct": 36.7,
+      "direction": "strengthening",
       "prior_year_movement_page": 34,
       "prior_year_movement_confidence": 1.0,
       "exact_reserve_text": "Change in prior year provisions 20,101 5,599 14,502 14,954 2,665 12,289",
@@ -491,22 +576,22 @@
           "confidence": 0.5
         }
       ],
-      "gross_premiums_written_gbp_m": 84.7,
+      "gross_premiums_written_gbp_m": 48.2,
       "gross_premium_mix": [
         {
           "line_of_business": "Motor (other classes)",
           "amount_gbp_m": 1.0,
-          "percentage_of_total": 1.2
+          "percentage_of_total": 2.1
         },
         {
           "line_of_business": "Marine, aviation and transport",
           "amount_gbp_m": 30.5,
-          "percentage_of_total": 36.0
+          "percentage_of_total": 63.3
         },
         {
           "line_of_business": "Fire and other damage to property",
           "amount_gbp_m": 16.6,
-          "percentage_of_total": 19.6
+          "percentage_of_total": 34.4
         },
         {
           "line_of_business": "Credit and suretyship",
@@ -517,7 +602,7 @@
       "gross_premium_page": 28,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "Opening reserves and prior year movement taken from the balance sheet (Technical provisions - Claims outstanding) and Note 18 (Technical Provisions) respectively (values presented in the report in $'000 and reported here in millions). The report provides the gross prior year movement as a numeric table entry but contains little narrative attributing causes; some narrative elsewhere references 'favourable development on prior years' for a specific closed year (2016) which appears inconsistent with the overall gross strengthening recorded in the Technical Provisions reconciliation. LOB-level prior-year movement amounts are not provided, so lob_movements are directional only with moderate confidence. [RAG OVERRIDE: Model said PYD=20.101, RAG triangle computed -4.14. Using RAG value.]",
+      "data_quality_notes": "Opening reserves and prior year movement taken from the balance sheet (Technical provisions - Claims outstanding) and Note 18 (Technical Provisions) respectively (values presented in the report in $'000 and reported here in millions). The report provides the gross prior year movement as a numeric table entry but contains little narrative attributing causes; some narrative elsewhere references 'favourable development on prior years' for a specific closed year (2016) which appears inconsistent with the overall gross strengthening recorded in the Technical Provisions reconciliation. LOB-level prior-year movement amounts are not provided, so lob_movements are directional only with moderate confidence.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
@@ -807,24 +892,26 @@
             null,
             null
           ]
-        ]
+        ],
+        "source_page": 37,
+        "entity": 3010
       },
       "_adobe_lob": {
         "gross_premium_mix": [
           {
             "line_of_business": "Motor (other classes)",
             "amount_gbp_m": 1.0,
-            "percentage_of_total": 1.2
+            "percentage_of_total": 2.1
           },
           {
             "line_of_business": "Marine, aviation and transport",
             "amount_gbp_m": 30.5,
-            "percentage_of_total": 36.0
+            "percentage_of_total": 63.3
           },
           {
             "line_of_business": "Fire and other damage to property",
             "amount_gbp_m": 16.6,
-            "percentage_of_total": 19.6
+            "percentage_of_total": 34.4
           },
           {
             "line_of_business": "Credit and suretyship",
@@ -832,7 +919,7 @@
             "percentage_of_total": 0.0
           }
         ],
-        "gross_premiums_written_gbp_m": 84.7,
+        "gross_premiums_written_gbp_m": 48.2,
         "claims_incurred_by_lob": [
           {
             "line_of_business": "Motor (other classes)",
@@ -852,13 +939,96 @@
           }
         ],
         "currency": "USD",
-        "method": "azure"
+        "method": "azure",
+        "source_page": 32,
+        "entity": 3010
       },
       "_adobe_provisions": {
-        "gross_prior_year_claims": 15.0,
-        "ri_share_prior_year": 2665.0,
-        "net_prior_year_claims": 12.3,
+        "unit_source": "header",
+        "source_page": 38,
+        "entity": 3010,
+        "opening_provenance": {
+          "raw_value": 54774.0,
+          "unit_multiplier": 0.001,
+          "unit_source": "header",
+          "value_m": 54.774,
+          "page": 38,
+          "entity": 3010,
+          "backend": "azure",
+          "table_kind": "provisions_movement"
+        },
+        "gross_prior_year_claims": 20.1,
+        "ri_share_prior_year": 5.6,
         "opening_gross_claims_outstanding": 54.774
+      },
+      "_entity_binding": {
+        "requested_syndicate": 3010,
+        "entity_pages": {
+          "none": [
+            0,
+            1
+          ],
+          "3010": [
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41
+          ]
+        },
+        "foreign_tables_skipped": 0,
+        "foreign_pages": [],
+        "underwriting_year_pages": [],
+        "underwriting_year_tables_skipped": 0,
+        "document_unit_hint": 0.001
+      },
+      "opening_reserves_provenance": {
+        "raw_value": 54774.0,
+        "unit_multiplier": 0.001,
+        "unit_source": "header",
+        "value_m": 54.774,
+        "page": 38,
+        "entity": 3010,
+        "backend": "azure",
+        "table_kind": "provisions_movement",
+        "source": "azure_table",
+        "applied_value_m": 54.774,
+        "unit_resolution": "header"
       }
     }
   },

@@ -1,7 +1,7 @@
 {
-  "extraction_timestamp": "2026-03-18T00:14:15.015509+00:00",
+  "extraction_timestamp": "2026-09-05T20:01:36.903235+00:00",
   "spec": {
-    "prompt_version": "2.8",
+    "prompt_version": "2.10",
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -13,9 +13,9 @@
       "opening_reserves_gbp_m": 81.142,
       "opening_reserves_page": 6,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": 62.437,
-      "prior_year_development_pct": 76.95,
-      "direction": "strengthening",
+      "prior_year_development_gbp_m": -1.1,
+      "prior_year_development_pct": -1.36,
+      "direction": "release",
       "prior_year_movement_page": 16,
       "prior_year_movement_confidence": 0.8,
       "exact_reserve_text": "A favourable run-off deviation (prior accident year release) of GBP 1.1m (2015: run-off deviation of GBP 0.4m) was experienced during the year, wholly in respect of reserve movements on the 2012 and 2013 year of account Whole Account Quota Share contracts with Syndicate 2003.",
@@ -63,7 +63,7 @@
       "gross_premium_page": 15,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The prior year development figure of GBP 1.1m is explicitly stated as a 'favourable run-off deviation' in Note 9, but it is not specified if this amount is gross or net of reinsurance. Given the absence of a gross/net breakdown in the note, and common reporting practices, it is assumed to be a net figure. The claims development triangle on page 14 does not provide the current year's (2016) estimates per underwriting year, making it unsuitable for calculating the 2016 prior year development using the specified method. [RAG OVERRIDE: Model said PYD=-1.1, RAG triangle computed 62.437. Using RAG value.]",
+      "data_quality_notes": "The prior year development figure of GBP 1.1m is explicitly stated as a 'favourable run-off deviation' in Note 9, but it is not specified if this amount is gross or net of reinsurance. Given the absence of a gross/net breakdown in the note, and common reporting practices, it is assumed to be a net figure. The claims development triangle on page 14 does not provide the current year's (2016) estimates per underwriting year, making it unsuitable for calculating the 2016 prior year development using the specified method. [RAG PYD NOT APPLIED: deterministic figure +62.437m has the opposite sign to both model values [-1.1, -1.1], which agree with each other; model values retained.] [CODE PYD NOT APPLIED: deterministic figure +1.423m has the opposite sign to both model values [-1.1, -1.1], which agree with each other; model values retained.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -131,11 +131,11 @@
         "currency": "GBP",
         "units": "thousands",
         "underwriting_years": [
-          "2012",
-          "2013",
-          "2014",
-          "2015",
-          "2016"
+          2012,
+          2013,
+          2014,
+          2015,
+          2016
         ],
         "development_rows": [
           [
@@ -153,7 +153,7 @@
             null
           ],
           [
-            18643.0,
+            18613.0,
             22659.0,
             34425.0,
             null,
@@ -218,7 +218,89 @@
           }
         ],
         "currency": "GBP",
-        "method": "azure"
+        "method": "azure",
+        "source_page": 35,
+        "entity": 2088
+      },
+      "_adobe_provisions": {
+        "opening_provenance": {
+          "raw_value": 81142.0,
+          "unit_multiplier": 0.001,
+          "unit_source": "header",
+          "value_m": 81.142,
+          "page": 15,
+          "entity": 2088,
+          "backend": "azure",
+          "table_kind": "balance_sheet_liabilities"
+        },
+        "opening_gross_claims_outstanding": 81.142
+      },
+      "_entity_binding": {
+        "requested_syndicate": 2088,
+        "entity_pages": {
+          "none": [
+            0
+          ],
+          "2088": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39
+          ]
+        },
+        "foreign_tables_skipped": 0,
+        "foreign_pages": [],
+        "underwriting_year_pages": [],
+        "underwriting_year_tables_skipped": 0,
+        "document_unit_hint": 0.001
+      },
+      "opening_reserves_provenance": {
+        "raw_value": 81142.0,
+        "unit_multiplier": 0.001,
+        "unit_source": "header",
+        "value_m": 81.142,
+        "page": 15,
+        "entity": 2088,
+        "backend": "azure",
+        "table_kind": "balance_sheet_liabilities",
+        "source": "azure_table",
+        "applied_value_m": 81.142,
+        "unit_resolution": "header"
       }
     },
     "gpt-5-mini": {
@@ -227,9 +309,9 @@
       "opening_reserves_gbp_m": 81.142,
       "opening_reserves_page": 28,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": 62.437,
-      "prior_year_development_pct": 76.95,
-      "direction": "strengthening",
+      "prior_year_development_gbp_m": -1.1,
+      "prior_year_development_pct": -1.36,
+      "direction": "release",
       "prior_year_movement_page": 32,
       "prior_year_movement_confidence": 1.0,
       "exact_reserve_text": "A favourable run-off deviation (prior accident year release) of GBP 1.1m (2015: run-off deviation of GBP 0.4m) was experienced during the year, wholly in respect of reserve movements on the 2012 and 2013 year of account Whole Account Quota Share contracts with Syndicate 2003.",
@@ -297,7 +379,7 @@
       "gross_premium_page": 31,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior-year development: the note explicitly states a run-off deviation of GBP 1.1m but does not present a gross (insurance liabilities) movement figure. A gross claims development triangle is present (note 6) but parsing and use as a primary gross PYD source was avoided due to potential distortion from reinsurance/quota-share restatement described elsewhere in the notes. Therefore the reported prior year movement is the net run-off release as stated in the movement note and is flagged as NET of reinsurance since no gross movement was clearly presented. [RAG OVERRIDE: Model said PYD=-1.1, RAG triangle computed 62.437. Using RAG value.]",
+      "data_quality_notes": "Prior-year development: the note explicitly states a run-off deviation of GBP 1.1m but does not present a gross (insurance liabilities) movement figure. A gross claims development triangle is present (note 6) but parsing and use as a primary gross PYD source was avoided due to potential distortion from reinsurance/quota-share restatement described elsewhere in the notes. Therefore the reported prior year movement is the net run-off release as stated in the movement note and is flagged as NET of reinsurance since no gross movement was clearly presented. [RAG PYD NOT APPLIED: deterministic figure +62.437m has the opposite sign to both model values [-1.1, -1.1], which agree with each other; model values retained.] [CODE PYD NOT APPLIED: deterministic figure +1.423m has the opposite sign to both model values [-1.1, -1.1], which agree with each other; model values retained.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -366,11 +448,11 @@
         "currency": "GBP",
         "units": "thousands",
         "underwriting_years": [
-          "2012",
-          "2013",
-          "2014",
-          "2015",
-          "2016"
+          2012,
+          2013,
+          2014,
+          2015,
+          2016
         ],
         "development_rows": [
           [
@@ -388,7 +470,7 @@
             null
           ],
           [
-            18643.0,
+            18613.0,
             22659.0,
             34425.0,
             null,
@@ -453,7 +535,89 @@
           }
         ],
         "currency": "GBP",
-        "method": "azure"
+        "method": "azure",
+        "source_page": 35,
+        "entity": 2088
+      },
+      "_adobe_provisions": {
+        "opening_provenance": {
+          "raw_value": 81142.0,
+          "unit_multiplier": 0.001,
+          "unit_source": "header",
+          "value_m": 81.142,
+          "page": 15,
+          "entity": 2088,
+          "backend": "azure",
+          "table_kind": "balance_sheet_liabilities"
+        },
+        "opening_gross_claims_outstanding": 81.142
+      },
+      "_entity_binding": {
+        "requested_syndicate": 2088,
+        "entity_pages": {
+          "none": [
+            0
+          ],
+          "2088": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39
+          ]
+        },
+        "foreign_tables_skipped": 0,
+        "foreign_pages": [],
+        "underwriting_year_pages": [],
+        "underwriting_year_tables_skipped": 0,
+        "document_unit_hint": 0.001
+      },
+      "opening_reserves_provenance": {
+        "raw_value": 81142.0,
+        "unit_multiplier": 0.001,
+        "unit_source": "header",
+        "value_m": 81.142,
+        "page": 15,
+        "entity": 2088,
+        "backend": "azure",
+        "table_kind": "balance_sheet_liabilities",
+        "source": "azure_table",
+        "applied_value_m": 81.142,
+        "unit_resolution": "header"
       }
     }
   },

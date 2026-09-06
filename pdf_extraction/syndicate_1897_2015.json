@@ -1,7 +1,7 @@
 {
-  "extraction_timestamp": "2026-03-17T12:13:23.396744+00:00",
+  "extraction_timestamp": "2026-09-05T19:43:32.106352+00:00",
   "spec": {
-    "prompt_version": "2.6",
+    "prompt_version": "2.10",
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -11,30 +11,26 @@
       "syndicate": 1897,
       "year": 2015,
       "opening_reserves_gbp_m": 71.636,
-      "opening_reserves_page": 25,
+      "opening_reserves_page": "15, 25",
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": -2.279,
       "prior_year_development_pct": -3.18,
       "direction": "release",
-      "prior_year_movement_page": 36,
-      "prior_year_movement_confidence": 0.8,
+      "prior_year_movement_page": 37,
+      "prior_year_movement_confidence": 1.0,
       "exact_reserve_text": "In 2015, there has been an overall surplus of GBP 4.8m (2014 deficit of GBP 1m). The surplus is primarily driven by reserve releases on the 2013 and prior year of account due to better than expected claims experience in the marine and energy classes of business.",
       "primary_causes": [
         "Favorable claims development"
       ],
       "specific_events": [],
       "specific_years_affected": [
-        2013,
-        2012,
-        2011
+        2013
       ],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "The Syndicate experienced a gross prior year reserve release of GBP 2.279 million in 2015, representing 3.18% of opening gross reserves. This release was primarily driven by better than expected claims experience on the 2013 and prior years of account, particularly in the Marine and Energy classes of business. The report notes an overall net surplus of GBP 4.8 million for prior year development.",
+      "standardized_narrative": "The syndicate experienced an overall prior year reserve release of GBP 4.8 million in 2015. This favorable development was primarily driven by better than expected claims experience in the marine and energy classes of business for the 2013 and prior years of account.",
       "raw_causal_phrases": [
-        "overall surplus of GBP 4.8m",
-        "primarily driven by reserve releases on the 2013 and prior year of account due to better than expected claims experience",
-        "marine and energy classes of business"
+        "primarily driven by reserve releases on the 2013 and prior year of account due to better than expected claims experience in the marine and energy classes of business."
       ],
       "lob_movements": [
         {
@@ -80,10 +76,10 @@
           "percentage_of_total": 17.2
         }
       ],
-      "gross_premium_page": 24,
+      "gross_premium_page": 5,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The prior year development amount is calculated from the gross claims development triangle. The narrative text on page 37 explicitly states a net prior year surplus of GBP 4.8m, which differs from the gross amount calculated.",
+      "data_quality_notes": "Discrepancy between prior year development stated in narrative (GBP 4.8m release) and calculated from gross claims development triangle (GBP 2.279m release). Narrative figure used due to explicit statement. [RAG OVERRIDE: Model said PYD=-4.8, RAG triangle computed -2.279. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -137,14 +133,14 @@
       "source_type": "syndicate",
       "source_file": "syndicate_reports\\pdfs\\syndicate_1897_2015.pdf",
       "content_hash": "784c7d121007d8d7d9a615f80c3d88cd592fe1afd3e7f19c0f447deb1c0afb85",
-      "standardized_at": "2026-03-17T12:10:47.969030+00:00",
+      "standardized_at": "2026-03-17T02:06:24.976200+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 16590,
-        "output_tokens": 1264,
-        "total_tokens": 23768,
-        "cost_usd": 0.008137
+        "input_tokens": 16462,
+        "output_tokens": 1659,
+        "total_tokens": 23200,
+        "cost_usd": 0.009086
       },
       "_rag_triangle": {
         "type": "gross",
@@ -193,7 +189,9 @@
             null,
             null
           ]
-        ]
+        ],
+        "source_page": 36,
+        "entity": 1897
       },
       "_adobe_lob": {
         "gross_premium_mix": [
@@ -247,7 +245,65 @@
           }
         ],
         "currency": "GBP",
-        "method": "azure"
+        "method": "azure",
+        "source_page": 24,
+        "entity": 1897
+      },
+      "_entity_binding": {
+        "requested_syndicate": 1897,
+        "entity_pages": {
+          "none": [
+            0
+          ],
+          "1897": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41
+          ]
+        },
+        "foreign_tables_skipped": 0,
+        "foreign_pages": [],
+        "underwriting_year_pages": [],
+        "underwriting_year_tables_skipped": 0,
+        "document_unit_hint": 0.001
       }
     },
     "gpt-5-mini": {
@@ -271,143 +327,25 @@
       ],
       "prior_year_events": [
         {
-          "event_name": "Loss of platform and total loss of mobile platform",
-          "event_year": null,
-          "impact_description": "Estimated gross and net loss shown in catastrophe exposures table",
+          "event_name": "Reserve releases on 2013 and prior years of account",
+          "event_year": 2013,
+          "impact_description": "Reserve releases due to better than expected claims experience in the marine and energy classes of business leading to an overall surplus reported for 2015",
           "lobs_affected": [
+            "Marine",
             "Energy"
           ],
-          "amount_gbp_m": 30.126,
-          "confidence": 1.0
-        },
-        {
-          "event_name": "Marine Loss, 1 vessel and 2 full cargo losses",
-          "event_year": null,
-          "impact_description": "Estimated gross and net loss shown in catastrophe exposures table",
-          "lobs_affected": [
-            "Marine"
-          ],
-          "amount_gbp_m": 11.41,
-          "confidence": 1.0
-        },
-        {
-          "event_name": "Loss of platform and adjacent drill rig",
-          "event_year": null,
-          "impact_description": "Estimated gross and net loss shown in catastrophe exposures table",
-          "lobs_affected": [
-            "Energy"
-          ],
-          "amount_gbp_m": 18.373,
-          "confidence": 1.0
-        },
-        {
-          "event_name": "European windstorm central track",
-          "event_year": null,
-          "impact_description": "Estimated gross and net loss shown in catastrophe exposures table",
-          "lobs_affected": [
-            "Marine"
-          ],
-          "amount_gbp_m": 13.415,
-          "confidence": 1.0
-        },
-        {
-          "event_name": "GOM windstorm - Major hurricane landing in Texas",
-          "event_year": null,
-          "impact_description": "Estimated gross and net loss shown in catastrophe exposures table",
-          "lobs_affected": [
-            "Energy"
-          ],
-          "amount_gbp_m": 10.589,
-          "confidence": 1.0
-        },
-        {
-          "event_name": "Marine collision in Prince William Sound",
-          "event_year": null,
-          "impact_description": "Estimated gross and net loss shown in catastrophe exposures table",
-          "lobs_affected": [
-            "Marine"
-          ],
-          "amount_gbp_m": 11.847,
-          "confidence": 1.0
+          "amount_gbp_m": -4.8,
+          "confidence": 0.8
         }
       ],
-      "named_events": [
-        {
-          "event_name": "Loss of platform and total loss of mobile platform",
-          "event_year": null,
-          "event_type": "man_made",
-          "net_loss_gbp_m": 7.026,
-          "loss_description": "Estimated net loss shown in catastrophe exposures table",
-          "lobs_affected": [
-            "Energy"
-          ],
-          "page": 31,
-          "confidence": 1.0
-        },
-        {
-          "event_name": "Marine Loss, 1 vessel and 2 full cargo losses",
-          "event_year": null,
-          "event_type": "man_made",
-          "net_loss_gbp_m": 3.628,
-          "loss_description": "Estimated net loss shown in catastrophe exposures table",
-          "lobs_affected": [
-            "Marine"
-          ],
-          "page": 31,
-          "confidence": 1.0
-        },
-        {
-          "event_name": "Loss of platform and adjacent drill rig",
-          "event_year": null,
-          "event_type": "man_made",
-          "net_loss_gbp_m": 6.824,
-          "loss_description": "Estimated net loss shown in catastrophe exposures table",
-          "lobs_affected": [
-            "Energy"
-          ],
-          "page": 31,
-          "confidence": 1.0
-        },
-        {
-          "event_name": "European windstorm central track",
-          "event_year": null,
-          "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": 5.116,
-          "loss_description": "Estimated net loss shown in catastrophe exposures table",
-          "lobs_affected": [
-            "Marine"
-          ],
-          "page": 31,
-          "confidence": 1.0
-        },
-        {
-          "event_name": "GOM windstorm - Major hurricane landing in Texas",
-          "event_year": null,
-          "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": 4.784,
-          "loss_description": "Estimated net loss shown in catastrophe exposures table",
-          "lobs_affected": [
-            "Energy"
-          ],
-          "page": 31,
-          "confidence": 1.0
-        },
-        {
-          "event_name": "Marine collision in Prince William Sound",
-          "event_year": null,
-          "event_type": "man_made",
-          "net_loss_gbp_m": 4.934,
-          "loss_description": "Estimated net loss shown in catastrophe exposures table",
-          "lobs_affected": [
-            "Marine"
-          ],
-          "page": 31,
-          "confidence": 1.0
-        }
-      ],
-      "standardized_narrative": "The syndicate recorded a small prior-year favourable development in 2015 amounting to a release of approximately GBP 2.28m (c. -3.18% of opening gross claims outstanding of GBP 71.636m). This release is attributed primarily to better-than-expected claims experience in the Marine and Energy classes, driven by reserve releases on the 2013 and prior years of account. The figure was derived from the gross claims development table (claims triangle) in the Technical Provisions note.",
+      "named_events": [],
+      "standardized_narrative": "At 1 January 2015 gross claims outstanding were GBP 71.636m. Using the syndicate's gross claims development table the aggregate prior-year development (excluding the two most recent underwriting years) is a net release of approximately GBP 2.28m. The Managing Agent's narrative notes an overall surplus of GBP 4.8m in 2015, driven by reserve releases on the 2013 and prior years predominantly in the Marine and Energy classes due to better-than-expected claims experience. The triangle-based calculation and the management narrative differ in magnitude but both indicate favourable prior-year development concentrated in marine and energy.",
       "raw_causal_phrases": [
-        "The surplus is primarily driven by reserve releases on the 2013 and prior year of account due to better than expected claims experience in the marine and energy classes of business."
+        "overall surplus of GBP 4.8m (2014 deficit of GBP 1m)",
+        "reserve releases",
+        "reserve releases on the 2013 and prior year of account",
+        "better than expected claims experience in the marine and energy classes of business",
+        "surplus is primarily driven by reserve releases"
       ],
       "lob_movements": [
         {
@@ -453,10 +391,10 @@
           "percentage_of_total": 17.2
         }
       ],
-      "gross_premium_page": 2,
+      "gross_premium_page": 21,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior year development (PYD) was not provided explicitly as a single gross figure in the movement notes; PYD has been calculated from the gross claims development table (claims triangle) on page 33 by excluding the two most recent underwriting years (2014, 2015) per the rules. Opening gross claims outstanding taken from Technical Provisions 'Balance at 1 January' (page 22). Some named catastrophe items are described generically (no calendar year provided) so event_year is null. LOB-specific PYD amounts are not quantified in the report; LOB movements are inferred from narrative and given low confidence.",
+      "data_quality_notes": "Opening gross claims outstanding taken from Technical Provisions note (page 22). Prior-year development derived from the gross claims development table (page 33) using the triangle diagonal method (excluded 2014 and 2015 as per methodology). The Managing Agent narrative cites reserve releases totalling GBP 4.8m driven by 2013 & prior years (which is larger than the triangle-derived aggregate release of ~GBP 2.28m) - both figures are reported above (triangle used for the prior_year_development_gbp_m field). No explicit single-line 'movement in prior year's provision (gross)' was presented separately in the notes; RITC was not evident. Some LOB-specific movement amounts are not disclosed, so LOB impacts are inferred from narrative.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -510,14 +448,14 @@
       "source_type": "syndicate",
       "source_file": "syndicate_reports\\pdfs\\syndicate_1897_2015.pdf",
       "content_hash": "784c7d121007d8d7d9a615f80c3d88cd592fe1afd3e7f19c0f447deb1c0afb85",
-      "standardized_at": "2026-03-17T12:13:23.392745+00:00",
+      "standardized_at": "2026-03-17T02:08:01.878115+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 44567,
-        "output_tokens": 10117,
-        "total_tokens": 54684,
-        "cost_usd": 0.031376
+        "input_tokens": 44440,
+        "output_tokens": 6397,
+        "total_tokens": 50837,
+        "cost_usd": 0.023904
       },
       "_rag_triangle": {
         "type": "gross",
@@ -566,7 +504,9 @@
             null,
             null
           ]
-        ]
+        ],
+        "source_page": 36,
+        "entity": 1897
       },
       "_adobe_lob": {
         "gross_premium_mix": [
@@ -620,12 +560,70 @@
           }
         ],
         "currency": "GBP",
-        "method": "azure"
+        "method": "azure",
+        "source_page": 24,
+        "entity": 1897
+      },
+      "_entity_binding": {
+        "requested_syndicate": 1897,
+        "entity_pages": {
+          "none": [
+            0
+          ],
+          "1897": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41
+          ]
+        },
+        "foreign_tables_skipped": 0,
+        "foreign_pages": [],
+        "underwriting_year_pages": [],
+        "underwriting_year_tables_skipped": 0,
+        "document_unit_hint": 0.001
       }
     }
   },
-  "total_cost_usd": 0.039513,
-  "total_tokens": 78452,
+  "total_cost_usd": 0.03299,
+  "total_tokens": 74037,
   "validation": {
     "passed": true,
     "total_discrepancies": 13,

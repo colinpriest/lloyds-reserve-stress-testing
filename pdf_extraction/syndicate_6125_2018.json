@@ -1,5 +1,5 @@
 {
-  "extraction_timestamp": "2026-07-05T21:08:55.661981+00:00",
+  "extraction_timestamp": "2026-09-05T20:39:53.031209+00:00",
   "spec": {
     "prompt_version": "2.10",
     "field_definitions_version": "1.0",
@@ -10,11 +10,11 @@
     "gemini-2.5-flash": {
       "syndicate": 6125,
       "year": 2018,
-      "opening_reserves_gbp_m": 4.571,
+      "opening_reserves_gbp_m": 12.683,
       "opening_reserves_page": 3,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": 0.274,
-      "prior_year_development_pct": 5.99,
+      "prior_year_development_pct": 2.16,
       "direction": "strengthening",
       "prior_year_movement_page": 11,
       "prior_year_movement_confidence": 1.0,
@@ -53,7 +53,7 @@
       "gross_premium_page": 1,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "No specific causal factors for the prior year reserve movement were identified in the document. No specific named events were mentioned. [RAG OVERRIDE: Model said PYD=3.248, RAG triangle computed 0.274. Using RAG value.] [RAG OVERRIDE: Model said opening_reserves=12.683, balance sheet gives 4.571m. Using RAG value.]",
+      "data_quality_notes": "No specific causal factors for the prior year reserve movement were identified in the document. No specific named events were mentioned. [RAG OVERRIDE: Model said PYD=3.248, RAG triangle computed 0.274. Using RAG value.] [RAG OPENING NOT APPLIED: table value 4.571 (provisions_movement, page 26, unit source header) disagrees with both model values [12.683, 12.683], which agree with each other; the model value is retained and the table value recorded for audit.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -119,22 +119,90 @@
             null,
             null
           ]
-        ]
+        ],
+        "source_page": 24,
+        "entity": 6125
       },
       "_adobe_provisions": {
-        "gross_prior_year_claims": 3138.0,
-        "net_prior_year_claims": 2893.0,
+        "unit_source": "header",
+        "source_page": 26,
+        "entity": 6125,
+        "opening_provenance": {
+          "raw_value": 4571.0,
+          "unit_multiplier": 0.001,
+          "unit_source": "header",
+          "value_m": 4.571,
+          "page": 26,
+          "entity": 6125,
+          "backend": "azure",
+          "table_kind": "provisions_movement"
+        },
+        "gross_prior_year_claims": 3.2,
         "opening_gross_claims_outstanding": 4.571
+      },
+      "_entity_binding": {
+        "requested_syndicate": 6125,
+        "entity_pages": {
+          "none": [
+            0
+          ],
+          "6125": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26
+          ]
+        },
+        "foreign_tables_skipped": 0,
+        "foreign_pages": [],
+        "underwriting_year_pages": [],
+        "underwriting_year_tables_skipped": 0,
+        "document_unit_hint": 0.001
+      },
+      "opening_reserves_provenance": {
+        "source": "llm",
+        "table_value_not_applied": {
+          "raw_value": 4571.0,
+          "unit_multiplier": 0.001,
+          "unit_source": "header",
+          "value_m": 4.571,
+          "page": 26,
+          "entity": 6125,
+          "backend": "azure",
+          "table_kind": "provisions_movement"
+        }
       }
     },
     "gpt-5-mini": {
       "syndicate": 6125,
       "year": 2018,
-      "opening_reserves_gbp_m": 4.571,
+      "opening_reserves_gbp_m": 12.683,
       "opening_reserves_page": 12,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": 0.274,
-      "prior_year_development_pct": 5.99,
+      "prior_year_development_pct": 2.16,
       "direction": "strengthening",
       "prior_year_movement_page": 25,
       "prior_year_movement_confidence": 1.0,
@@ -191,7 +259,7 @@
       "gross_premium_page": 4,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior year movement (gross +3,248k) was taken from Note 11 'Change in prior year provisions' (gross column). No textual explanation or event attribution provided. The syndicate underwrites quota-share treaty business so the PYD is attributed at syndicate/treaty level; LOB-specific reserve impacts are not disclosed. Claims development triangle is limited to UW years 2016-2018. [RAG OVERRIDE: Model said PYD=3.248, RAG triangle computed 0.274. Using RAG value.] [RAG OVERRIDE: Model said opening_reserves=12.683, balance sheet gives 4.571m. Using RAG value.]",
+      "data_quality_notes": "Prior year movement (gross +3,248k) was taken from Note 11 'Change in prior year provisions' (gross column). No textual explanation or event attribution provided. The syndicate underwrites quota-share treaty business so the PYD is attributed at syndicate/treaty level; LOB-specific reserve impacts are not disclosed. Claims development triangle is limited to UW years 2016-2018. [RAG OVERRIDE: Model said PYD=3.248, RAG triangle computed 0.274. Using RAG value.] [RAG OPENING NOT APPLIED: table value 4.571 (provisions_movement, page 26, unit source header) disagrees with both model values [12.683, 12.683], which agree with each other; the model value is retained and the table value recorded for audit.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -257,12 +325,80 @@
             null,
             null
           ]
-        ]
+        ],
+        "source_page": 24,
+        "entity": 6125
       },
       "_adobe_provisions": {
-        "gross_prior_year_claims": 3138.0,
-        "net_prior_year_claims": 2893.0,
+        "unit_source": "header",
+        "source_page": 26,
+        "entity": 6125,
+        "opening_provenance": {
+          "raw_value": 4571.0,
+          "unit_multiplier": 0.001,
+          "unit_source": "header",
+          "value_m": 4.571,
+          "page": 26,
+          "entity": 6125,
+          "backend": "azure",
+          "table_kind": "provisions_movement"
+        },
+        "gross_prior_year_claims": 3.2,
         "opening_gross_claims_outstanding": 4.571
+      },
+      "_entity_binding": {
+        "requested_syndicate": 6125,
+        "entity_pages": {
+          "none": [
+            0
+          ],
+          "6125": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26
+          ]
+        },
+        "foreign_tables_skipped": 0,
+        "foreign_pages": [],
+        "underwriting_year_pages": [],
+        "underwriting_year_tables_skipped": 0,
+        "document_unit_hint": 0.001
+      },
+      "opening_reserves_provenance": {
+        "source": "llm",
+        "table_value_not_applied": {
+          "raw_value": 4571.0,
+          "unit_multiplier": 0.001,
+          "unit_source": "header",
+          "value_m": 4.571,
+          "page": 26,
+          "entity": 6125,
+          "backend": "azure",
+          "table_kind": "provisions_movement"
+        }
       }
     }
   },

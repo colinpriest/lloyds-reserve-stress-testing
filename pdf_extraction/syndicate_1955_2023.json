@@ -1,5 +1,5 @@
 {
-  "extraction_timestamp": "2026-07-05T22:34:49.301261+00:00",
+  "extraction_timestamp": "2026-09-05T19:48:31.449681+00:00",
   "spec": {
     "prompt_version": "2.10",
     "field_definitions_version": "1.0",
@@ -18,10 +18,10 @@
       "direction": "strengthening",
       "prior_year_movement_page": 22,
       "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "Losses incurred in the year: Prior accident years: (10,400)",
+      "exact_reserve_text": "Losses incurred in the year Prior accident years (10,400)",
       "primary_causes": [
         "Favorable claims development",
-        "Natural catastrophe events"
+        "Reduced catastrophe claim activity"
       ],
       "specific_events": [
         "war in Ukraine",
@@ -32,9 +32,9 @@
       ],
       "prior_year_events": [
         {
-          "event_name": "War in Ukraine",
+          "event_name": "war in Ukraine",
           "event_year": 2022,
-          "impact_description": "Favourable development on claims related to the war in Ukraine, contributing to a decrease in claims incurred compared to 2022.",
+          "impact_description": "decrease of claims incurred compared to 2022, implying favorable development",
           "lobs_affected": [],
           "amount_gbp_m": null,
           "confidence": 0.8
@@ -42,7 +42,7 @@
         {
           "event_name": "Hurricane Ian",
           "event_year": 2022,
-          "impact_description": "Favourable development on claims related to Hurricane Ian, contributing to a decrease in claims incurred compared to 2022.",
+          "impact_description": "decrease of claims incurred compared to 2022, implying favorable development",
           "lobs_affected": [],
           "amount_gbp_m": null,
           "confidence": 0.8
@@ -54,9 +54,9 @@
           "event_year": 2022,
           "event_type": "political",
           "net_loss_gbp_m": null,
-          "loss_description": "impact of the war in Ukraine on claims incurred in 2022, leading to a decrease in claims incurred in 2023 compared to 2022",
+          "loss_description": "impacted 2022 claims incurred, which decreased in 2023",
           "lobs_affected": [],
-          "page": 3,
+          "page": 4,
           "confidence": 0.8
         },
         {
@@ -64,17 +64,16 @@
           "event_year": 2022,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "exposure to Hurricane Ian in 2022, leading to a decrease in claims incurred in 2023 compared to 2022",
+          "loss_description": "exposure in 2022, which decreased in 2023",
           "lobs_affected": [],
-          "page": 3,
+          "page": 4,
           "confidence": 0.8
         }
       ],
-      "standardized_narrative": "For the 2023 financial year, Syndicate 1955 reported a gross prior year reserve release of GBP 10.4 million. This release contributed to an overall underwriting profit and was primarily driven by a decrease in catastrophe claim activity and an improvement in underwriting performance across all years of account, with the 2022 year of account specifically contributing GBP 21.0 million to the underwriting result. The decrease in claims incurred in 2023 compared to 2022 was noted, with 2022 having seen impacts from the war in Ukraine and Hurricane Ian.",
+      "standardized_narrative": "The syndicate reported a gross prior year reserve release of GBP 10.4 million in 2023. This favorable development was primarily driven by an improvement in underwriting performance across all years of account, including reduced catastrophe claim activity. Specific prior year events like the war in Ukraine and Hurricane Ian (both 2022) are noted as having a decreased impact on claims incurred compared to the previous year, contributing to the overall release.",
       "raw_causal_phrases": [
         "reduced catastrophe claim activity",
         "improvement in underwriting performance across all YOA",
-        "2022 YOA contributed GBP 21.0 million to the underwriting result",
         "decrease of claims incurred compared to 2022 which saw the impact of the war in Ukraine and exposure to Hurricane Ian"
       ],
       "lob_movements": [],
@@ -169,7 +168,7 @@
       "gross_premium_page": 20,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The prior year development figure is explicitly stated as 'Losses incurred in the year: Prior accident years' in the reconciliation of claims technical provisions table. This is a table entry, not a full sentence. [CODE OVERRIDE: Model said PYD=-10.4, but code computed 6.565 from triangle (OVERRIDE from agreed triangles). Using code value.]",
+      "data_quality_notes": "The claims development triangle on page 23 shows a different prior year movement than the explicit 'Losses incurred in the year - Prior accident years' figure on page 22. This discrepancy is likely due to the significant RITC impact mentioned on page 24, which distorts the triangle for prior year development analysis. The explicit figure from page 22 is used as the primary source. [RAG OVERRIDE: Model said PYD=-10.4, RAG triangle computed 6.565. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -222,15 +221,64 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_1955_2023_llm.pdf",
-      "content_hash": "dddc36783a2d97c973749f7d9ff1f7e073139395aa22072eda65ae12af869147",
-      "standardized_at": "2026-07-05T22:33:07.446303+00:00",
+      "content_hash": "230738203586d58f9f77c4dc198d4f6062f5ac45a821729696a0de82919e74dc",
+      "standardized_at": "2026-09-05T18:47:10.798630+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
         "input_tokens": 19151,
-        "output_tokens": 1885,
-        "total_tokens": 29645,
-        "cost_usd": 0.010458
+        "output_tokens": 1864,
+        "total_tokens": 26730,
+        "cost_usd": 0.010405
+      },
+      "_rag_triangle": {
+        "type": "gross",
+        "currency": "GBP",
+        "units": "thousands",
+        "underwriting_years": [
+          2019,
+          2020,
+          2021,
+          2022,
+          2023
+        ],
+        "development_rows": [
+          [
+            126070,
+            112082,
+            152323,
+            268930,
+            160670
+          ],
+          [
+            239169,
+            185607,
+            279134,
+            377953,
+            null
+          ],
+          [
+            256725,
+            220184,
+            274748,
+            null,
+            null
+          ],
+          [
+            255948,
+            227857,
+            null,
+            null,
+            null
+          ],
+          [
+            259226,
+            null,
+            null,
+            null,
+            null
+          ]
+        ]
       },
       "_adobe_lob": {
         "gross_premium_mix": [
@@ -392,7 +440,132 @@
           }
         ],
         "currency": "GBP",
-        "method": "azure"
+        "method": "azure",
+        "source_page": 46,
+        "entity": 1955
+      },
+      "_entity_binding": {
+        "requested_syndicate": 1955,
+        "entity_pages": {
+          "none": [
+            0
+          ],
+          "1955": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48,
+            49,
+            50,
+            51,
+            52,
+            53,
+            54,
+            55,
+            56,
+            57,
+            58,
+            59,
+            60,
+            61,
+            62,
+            63,
+            64,
+            65,
+            66,
+            67,
+            68,
+            69,
+            70,
+            71,
+            72,
+            73,
+            74,
+            75,
+            76,
+            77,
+            78,
+            79,
+            80
+          ]
+        },
+        "foreign_tables_skipped": 0,
+        "foreign_pages": [],
+        "underwriting_year_pages": [
+          55,
+          56,
+          57,
+          58,
+          59,
+          60,
+          61,
+          62,
+          63,
+          64,
+          65,
+          66,
+          67,
+          68,
+          69,
+          70,
+          71,
+          72,
+          73,
+          74,
+          75,
+          76,
+          77,
+          78,
+          79,
+          80,
+          81
+        ],
+        "underwriting_year_tables_skipped": 15,
+        "document_unit_hint": 0.001
       }
     },
     "gpt-5-mini": {
@@ -404,17 +577,18 @@
       "prior_year_development_gbp_m": 6.565,
       "prior_year_development_pct": 0.81,
       "direction": "strengthening",
-      "prior_year_movement_page": 47,
-      "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "Prior accident years (10,400) 965",
+      "prior_year_movement_page": 48,
+      "prior_year_movement_confidence": 0.8,
+      "exact_reserve_text": "Losses incurred in the year\nCurrent accident year 239,754\nPrior accident years (10,400)\n229,354",
       "primary_causes": [
-        "Favorable claims development",
+        "Adverse claims development",
+        "Large loss development",
         "Natural catastrophe events",
         "Geopolitical events"
       ],
       "specific_events": [
-        "Hurricane Ian",
-        "War in Ukraine"
+        "Hurricane Ian 2022",
+        "War in Ukraine 2022"
       ],
       "specific_years_affected": [
         2019,
@@ -425,22 +599,33 @@
         {
           "event_name": "Hurricane Ian",
           "event_year": 2022,
-          "impact_description": "Reported exposure to Hurricane Ian in 2022 increased claims in that year; 2023 saw decreased claims activity versus 2022.",
+          "impact_description": "Exposure in 2022 contributed to elevated claims; referenced as a driver of 2022 claims experience compared to 2023",
           "lobs_affected": [
-            "Property"
+            "Property",
+            "Reinsurance - Property"
           ],
           "amount_gbp_m": null,
-          "confidence": 0.9
+          "confidence": 0.7
         },
         {
           "event_name": "War in Ukraine",
           "event_year": 2022,
-          "impact_description": "The war in Ukraine impacted 2022 claims activity; 2023 experienced lower claims versus 2022.",
+          "impact_description": "Geopolitical event referenced as impacting 2022 claims experience (increased claims in 2022 versus 2023)",
           "lobs_affected": [
             "Casualty",
-            "Energy"
+            "Reinsurance - Casualty"
           ],
           "amount_gbp_m": null,
+          "confidence": 0.7
+        },
+        {
+          "event_name": "2020 Year of Account recovery (distribution)",
+          "event_year": 2020,
+          "impact_description": "Recovery of the 2020 Year of Account loss from capital providers during the distribution process",
+          "lobs_affected": [
+            "Aggregate"
+          ],
+          "amount_gbp_m": -9.6,
           "confidence": 0.8
         }
       ],
@@ -450,82 +635,111 @@
           "event_year": 2022,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "Exposure to Hurricane Ian noted as contributing to 2022 claims; 2023 had decreased claims activity compared to 2022.",
+          "loss_description": "Exposure to Hurricane Ian noted as impacting 2022 claims experience",
           "lobs_affected": [
-            "Property"
+            "Property",
+            "Reinsurance - Property"
           ],
           "page": 3,
-          "confidence": 0.9
+          "confidence": 0.8
         },
         {
           "event_name": "War in Ukraine",
           "event_year": 2022,
           "event_type": "political",
           "net_loss_gbp_m": null,
-          "loss_description": "War in Ukraine cited as an impact on 2022 claims activity.",
+          "loss_description": "Referenced as an influence on elevated 2022 claims",
           "lobs_affected": [
             "Casualty",
-            "Energy"
+            "Reinsurance - Casualty"
           ],
           "page": 3,
           "confidence": 0.8
+        },
+        {
+          "event_name": "Japan Windstorm (exposure)",
+          "event_year": 2021,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "Listed as a largest exposure (1-in-250 year) for the 2021 underwriting year",
+          "lobs_affected": [
+            "Property"
+          ],
+          "page": 67,
+          "confidence": 0.8
         }
       ],
-      "standardized_narrative": "The Syndicate's opening gross claims reserves at 1 January 2023 were GBP 813.594m. During 2023 there was favourable prior-year development of approximately GBP 10.4m (gross), representing a ~1.28% release of opening gross claims reserves. The report attributes improved claims experience and reduced catastrophe activity relative to 2022 (which had been affected by the war in Ukraine and Hurricane Ian) as contributors to the improved reserve outcome.",
+      "standardized_narrative": "Opening gross claims outstanding were GBP 813.6m at 1 January 2023. Using the gross claims development triangle the syndicate recorded net adverse prior-year development of approximately GBP 6.6m (strengthening of reserves), driven by adverse claims development on older years (notably 2019 and 2020) partially offset by favourable movement on 2021. The movement is influenced by large loss development and natural catastrophe and geopolitical exposures (e.g. Hurricane Ian and the war in Ukraine), with RITC and exchange rate effects noted elsewhere in the notes.",
       "raw_causal_phrases": [
-        "decrease of claims incurred compared to 2022 which saw the impact of the war in Ukraine and exposure to Hurricane Ian.",
-        "Prior accident years (10,400) 965",
-        "recovery of the 2020 Year of Account (\"YOA\") loss from capital providers during the distribution process of GBP 9.6 million."
+        "a decrease of claims incurred compared to 2022 which saw the impact of the war in Ukraine and exposure to Hurricane Ian.",
+        "recovery of the 2020 Year of Account (\"YOA\") loss from capital providers during the distribution process of GBP 9.6 million.",
+        "Prior accident years (10,400)",
+        "RITC impact 26,528 (8,937) 17,591",
+        "Exchange rate impact (72,971) 45,825 (27,146)"
       ],
       "lob_movements": [
         {
           "line_of_business": "Property",
-          "direction": "release",
+          "direction": "strengthening",
           "amount_gbp_m": null,
           "percentage": null,
           "confidence": 0.2
         },
         {
           "line_of_business": "Casualty",
-          "direction": "release",
+          "direction": "strengthening",
           "amount_gbp_m": null,
           "percentage": null,
           "confidence": 0.2
         },
         {
           "line_of_business": "Marine",
-          "direction": "release",
+          "direction": "strengthening",
           "amount_gbp_m": null,
           "percentage": null,
           "confidence": 0.2
         },
         {
           "line_of_business": "Energy",
-          "direction": "release",
+          "direction": "strengthening",
           "amount_gbp_m": null,
           "percentage": null,
           "confidence": 0.2
         },
         {
           "line_of_business": "Motor",
-          "direction": "release",
+          "direction": "strengthening",
           "amount_gbp_m": null,
           "percentage": null,
           "confidence": 0.2
         },
         {
           "line_of_business": "Aviation",
-          "direction": "release",
+          "direction": "strengthening",
           "amount_gbp_m": null,
           "percentage": null,
           "confidence": 0.2
         },
         {
-          "line_of_business": "Treaty",
-          "direction": "release",
+          "line_of_business": "Reinsurance - Property",
+          "direction": "strengthening",
           "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.2
+          "confidence": 0.3
+        },
+        {
+          "line_of_business": "Reinsurance - Casualty",
+          "direction": "strengthening",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.3
+        },
+        {
+          "line_of_business": "Aggregate",
+          "direction": "strengthening",
+          "amount_gbp_m": 6.565,
+          "percentage": 0.81,
+          "confidence": 0.8
         }
       ],
       "gross_premiums_written_gbp_m": 588.8,
@@ -619,12 +833,73 @@
       "gross_premium_page": 43,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior-year development (GBP 10.4k) taken from the Technical Provisions reconciliation table row 'Prior accident years (10,400)'. That is a gross figure in the notes. exact_reserve_text is a table row rather than a prose sentence. The claims development triangle includes 2019-2023 gross columns and may be influenced by RITC and FX movements (RITC and exchange rate impacts are shown in the reconciliation), which can distort triangle-based PYD calculations; therefore the explicit prior-accident-years line in the reconciliation was used as the authoritative gross PYD. Some LOB-level prior-year movements are not provided; lob_movements entries are inferred directionally with low confidence and amounts are not quantified. [CODE OVERRIDE: Model said PYD=-10.4, but code computed 6.565 from triangle (OVERRIDE from agreed triangles). Using code value.]",
+      "data_quality_notes": "Prior-year development (PYD) was not explicitly provided as a single gross figure. PYD was calculated from the gross claims development triangle (note 14(c)) - this is a valid gross source but may be influenced by RITC and exchange rate movements (both noted in the technical provisions reconciliation). Where per-LOB prior-year movements are not stated, amounts are left null. The 2020 YOA recovery of GBP 9.6m is a distribution/capital recovery item mentioned in narrative and is included as a prior-year event but is not treated as a direct reserve movement in the triangle calculation.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
-        "units": "thousands",
+        "units": "millions",
         "page": 48,
+        "underwriting_years": [
+          2019,
+          2020,
+          2021,
+          2022,
+          2023
+        ],
+        "development_rows": [
+          [
+            126.07,
+            112.082,
+            152.323,
+            268.93,
+            160.67
+          ],
+          [
+            239.169,
+            185.607,
+            279.134,
+            377.953,
+            null
+          ],
+          [
+            256.725,
+            220.184,
+            274.748,
+            null,
+            null
+          ],
+          [
+            255.948,
+            227.857,
+            null,
+            null,
+            null
+          ],
+          [
+            259.226,
+            null,
+            null,
+            null,
+            null
+          ]
+        ]
+      },
+      "source_type": "syndicate",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_1955_2023_llm.pdf",
+      "content_hash": "230738203586d58f9f77c4dc198d4f6062f5ac45a821729696a0de82919e74dc",
+      "standardized_at": "2026-09-05T18:49:17.013703+00:00",
+      "standardization_model": "gpt-5-mini",
+      "_extraction_meta": {
+        "model": "gpt-5-mini",
+        "input_tokens": 44558,
+        "output_tokens": 9242,
+        "total_tokens": 53800,
+        "cost_usd": 0.029624
+      },
+      "_rag_triangle": {
+        "type": "gross",
+        "currency": "GBP",
+        "units": "thousands",
         "underwriting_years": [
           2019,
           2020,
@@ -669,18 +944,6 @@
             null
           ]
         ]
-      },
-      "source_type": "syndicate",
-      "source_file": "pdf_extraction\\llm_slim\\syndicate_1955_2023_llm.pdf",
-      "content_hash": "dddc36783a2d97c973749f7d9ff1f7e073139395aa22072eda65ae12af869147",
-      "standardized_at": "2026-07-05T22:34:49.299270+00:00",
-      "standardization_model": "gpt-5-mini",
-      "_extraction_meta": {
-        "model": "gpt-5-mini",
-        "input_tokens": 44558,
-        "output_tokens": 8558,
-        "total_tokens": 53116,
-        "cost_usd": 0.028255
       },
       "_adobe_lob": {
         "gross_premium_mix": [
@@ -842,16 +1105,141 @@
           }
         ],
         "currency": "GBP",
-        "method": "azure"
+        "method": "azure",
+        "source_page": 46,
+        "entity": 1955
+      },
+      "_entity_binding": {
+        "requested_syndicate": 1955,
+        "entity_pages": {
+          "none": [
+            0
+          ],
+          "1955": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48,
+            49,
+            50,
+            51,
+            52,
+            53,
+            54,
+            55,
+            56,
+            57,
+            58,
+            59,
+            60,
+            61,
+            62,
+            63,
+            64,
+            65,
+            66,
+            67,
+            68,
+            69,
+            70,
+            71,
+            72,
+            73,
+            74,
+            75,
+            76,
+            77,
+            78,
+            79,
+            80
+          ]
+        },
+        "foreign_tables_skipped": 0,
+        "foreign_pages": [],
+        "underwriting_year_pages": [
+          55,
+          56,
+          57,
+          58,
+          59,
+          60,
+          61,
+          62,
+          63,
+          64,
+          65,
+          66,
+          67,
+          68,
+          69,
+          70,
+          71,
+          72,
+          73,
+          74,
+          75,
+          76,
+          77,
+          78,
+          79,
+          80,
+          81
+        ],
+        "underwriting_year_tables_skipped": 15,
+        "document_unit_hint": 0.001
       }
     }
   },
-  "total_cost_usd": 0.038713,
-  "total_tokens": 82761,
+  "total_cost_usd": 0.040029,
+  "total_tokens": 80530,
   "validation": {
     "passed": true,
-    "total_discrepancies": 22,
-    "within_tolerance": 22,
+    "total_discrepancies": 32,
+    "within_tolerance": 32,
     "hard_failures": 0,
     "hard_failure_details": []
   }

@@ -1,7 +1,7 @@
 {
-  "extraction_timestamp": "2026-03-17T12:26:47.132047+00:00",
+  "extraction_timestamp": "2026-09-05T19:23:27.823047+00:00",
   "spec": {
-    "prompt_version": "2.6",
+    "prompt_version": "2.10",
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -21,31 +21,19 @@
       "exact_reserve_text": "During 2015 the estimated ultimate loss ratio (net of acquisitions costs) on certain lines of business for the 2014 and prior years of account was increased. These increases are set out in the table below together with their effect on ultimate claims reserves.",
       "primary_causes": [
         "Adverse claims development",
-        "Reserve methodology change"
+        "IBNR recalibration"
       ],
       "specific_events": [],
       "specific_years_affected": [
         2013,
         2014
       ],
-      "prior_year_events": [
-        {
-          "event_name": "US liability account adverse development",
-          "event_year": 2013,
-          "impact_description": "Worse than expected claims experienced primarily in the US liability account led to significant loss and reserve increases for the 2013 and prior years of account.",
-          "lobs_affected": [
-            "Casualty"
-          ],
-          "amount_gbp_m": null,
-          "confidence": 0.8
-        }
-      ],
+      "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "The syndicate experienced a strengthening of reserves totaling GBP 35.757 million for the 2014 and prior years of account. This adverse development was primarily driven by worse than expected claims experience, particularly in the US liability account. A detailed review of this account was undertaken in Q2 2015, leading to a substantial strengthening of reserves for the 2013 and prior years. The estimated ultimate loss ratios for Personal Accident & Sickness, Liability, and Special Lines were increased.",
+      "standardized_narrative": "The syndicate experienced a prior year reserve strengthening of GBP 35.757 million in 2015, primarily due to an increase in the estimated ultimate loss ratio for the 2014 and prior years of account. This adverse development was driven by worse than expected claims in the US liability account, leading to increased claims reserves across Personal Accident & Sickness, Liability, and Special Lines.",
       "raw_causal_phrases": [
-        "worse than expected claims experienced primarily in the US liability account",
-        "a detailed review was undertaken of this account and the reserves strengthened substantially",
-        "estimated ultimate loss ratio (net of acquisitions costs) on certain lines of business for the 2014 and prior years of account was increased"
+        "estimated ultimate loss ratio (net of acquisitions costs) on certain lines of business for the 2014 and prior years of account was increased",
+        "worse than expected claims experienced primarily in the US liability account"
       ],
       "lob_movements": [
         {
@@ -70,43 +58,48 @@
           "confidence": 1.0
         }
       ],
-      "gross_premiums_written_gbp_m": 154.4,
+      "gross_premiums_written_gbp_m": 154.445,
       "gross_premium_mix": [
         {
-          "line_of_business": "Accident and health",
-          "amount_gbp_m": 29.9,
-          "percentage_of_total": 19.4
+          "line_of_business": "Personal Accident & Sickness",
+          "amount_gbp_m": 32.45,
+          "percentage_of_total": 21.01
         },
         {
-          "line_of_business": "Motor (other classes)",
-          "amount_gbp_m": 0.0,
-          "percentage_of_total": 0.0
+          "line_of_business": "Property",
+          "amount_gbp_m": 85.822,
+          "percentage_of_total": 55.57
         },
         {
-          "line_of_business": "transport",
-          "amount_gbp_m": 1.1,
-          "percentage_of_total": 0.7
+          "line_of_business": "Special Lines",
+          "amount_gbp_m": 11.284,
+          "percentage_of_total": 7.31
         },
         {
-          "line_of_business": "Fire and other damage to property",
-          "amount_gbp_m": 62.5,
-          "percentage_of_total": 40.5
+          "line_of_business": "Treaty",
+          "amount_gbp_m": 17.926,
+          "percentage_of_total": 11.61
         },
         {
-          "line_of_business": "Third party liability",
-          "amount_gbp_m": 17.0,
-          "percentage_of_total": 11.0
+          "line_of_business": "Liability",
+          "amount_gbp_m": 4.692,
+          "percentage_of_total": 3.04
         },
         {
-          "line_of_business": "Pecuniary loss",
-          "amount_gbp_m": 5.6,
-          "percentage_of_total": 3.6
+          "line_of_business": "Extended Warranty",
+          "amount_gbp_m": 2.449,
+          "percentage_of_total": 1.59
+        },
+        {
+          "line_of_business": "Lines of business no longer written",
+          "amount_gbp_m": -0.178,
+          "percentage_of_total": -0.12
         }
       ],
       "gross_premium_page": 8,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The 'Lines of business no longer written' category shows a negative gross premium written, as reported in the document. [RAG OVERRIDE: Model said PYD=35.757, RAG triangle computed 25.063. Using RAG value.]",
+      "data_quality_notes": "There is a discrepancy between the prior year development calculated from Note 7 (GBP 35.757m strengthening) and the gross claims development triangle (GBP 25.063m strengthening). Note 7 is prioritized as it is an explicit statement of 'increase in claims reserves'. [RAG OVERRIDE: Model said PYD=35.757, RAG triangle computed 25.063. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -160,14 +153,14 @@
       "source_type": "syndicate",
       "source_file": "syndicate_reports\\pdfs\\syndicate_1206_2015.pdf",
       "content_hash": "7b333439abff2f94f7203017bab2b6b243c5459f17a5157135ab4a879d1ac03b",
-      "standardized_at": "2026-03-17T08:29:35.164880+00:00",
+      "standardized_at": "2026-03-16T10:35:52.494863+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 15300,
-        "output_tokens": 1568,
-        "total_tokens": 22199,
-        "cost_usd": 0.00851
+        "input_tokens": 15172,
+        "output_tokens": 1451,
+        "total_tokens": 20225,
+        "cost_usd": 0.008179
       },
       "_rag_triangle": {
         "type": "gross",
@@ -216,75 +209,90 @@
             null,
             null
           ]
-        ]
-      },
-      "_adobe_lob": {
-        "gross_premium_mix": [
-          {
-            "line_of_business": "Accident and health",
-            "amount_gbp_m": 29.9,
-            "percentage_of_total": 19.4
-          },
-          {
-            "line_of_business": "Motor (other classes)",
-            "amount_gbp_m": 0.0,
-            "percentage_of_total": 0.0
-          },
-          {
-            "line_of_business": "transport",
-            "amount_gbp_m": 1.1,
-            "percentage_of_total": 0.7
-          },
-          {
-            "line_of_business": "Fire and other damage to property",
-            "amount_gbp_m": 62.5,
-            "percentage_of_total": 40.5
-          },
-          {
-            "line_of_business": "Third party liability",
-            "amount_gbp_m": 17.0,
-            "percentage_of_total": 11.0
-          },
-          {
-            "line_of_business": "Pecuniary loss",
-            "amount_gbp_m": 5.6,
-            "percentage_of_total": 3.6
-          }
         ],
-        "gross_premiums_written_gbp_m": 154.4,
-        "claims_incurred_by_lob": [
-          {
-            "line_of_business": "Accident and health",
-            "amount_gbp_m": -16.1
-          },
-          {
-            "line_of_business": "Motor (other classes)",
-            "amount_gbp_m": -1.5
-          },
-          {
-            "line_of_business": "transport",
-            "amount_gbp_m": -0.1
-          },
-          {
-            "line_of_business": "Fire and other damage to property",
-            "amount_gbp_m": -21.7
-          },
-          {
-            "line_of_business": "Third party liability",
-            "amount_gbp_m": -58.9
-          },
-          {
-            "line_of_business": "Pecuniary loss",
-            "amount_gbp_m": -1.7
-          }
-        ],
-        "currency": "GBP",
-        "method": "azure"
+        "source_page": 34,
+        "entity": 1206
       },
       "_adobe_provisions": {
-        "gross_prior_year_claims": 97.9,
-        "ri_share_prior_year": -6290.0,
-        "net_prior_year_claims": 91.6
+        "unit_source": "header",
+        "source_page": 34,
+        "entity": 1206,
+        "opening_provenance": {
+          "raw_value": 321885.0,
+          "unit_multiplier": 0.001,
+          "unit_source": "header",
+          "value_m": 321.885,
+          "page": 34,
+          "entity": 1206,
+          "backend": "azure",
+          "table_kind": "provisions_movement"
+        },
+        "gross_prior_year_claims": 81.3,
+        "opening_gross_claims_outstanding": 321.885
+      },
+      "_entity_binding": {
+        "requested_syndicate": 1206,
+        "entity_pages": {
+          "none": [
+            0
+          ],
+          "1206": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36
+          ]
+        },
+        "foreign_tables_skipped": 0,
+        "foreign_pages": [],
+        "underwriting_year_pages": [],
+        "underwriting_year_tables_skipped": 0,
+        "document_unit_hint": 0.001
+      },
+      "opening_reserves_provenance": {
+        "raw_value": 321885.0,
+        "unit_multiplier": 0.001,
+        "unit_source": "header",
+        "value_m": 321.885,
+        "page": 34,
+        "entity": 1206,
+        "backend": "azure",
+        "table_kind": "provisions_movement",
+        "source": "azure_table",
+        "applied_value_m": 321.885,
+        "unit_resolution": "header"
       }
     },
     "gpt-5-mini": {
@@ -301,8 +309,8 @@
       "exact_reserve_text": "During 2015 the estimated ultimate loss ratio (net of acquisitions costs) on certain lines of business for the 2014 and prior years of account was increased. These increases are set out in the table below together with their effect on ultimate claims reserves.",
       "primary_causes": [
         "Adverse claims development",
-        "Man-made catastrophe / large losses",
-        "Social inflation / litigation trends"
+        "Social inflation / litigation trends",
+        "Large loss development"
       ],
       "specific_events": [],
       "specific_years_affected": [
@@ -311,57 +319,55 @@
       ],
       "prior_year_events": [
         {
-          "event_name": "US liability account deterioration",
+          "event_name": "Liability reserve deterioration (US liability account)",
           "event_year": 2013,
-          "impact_description": "Worse than expected claims experienced primarily in the US liability account leading to substantial reserve strengthening on 2013 and prior years.",
+          "impact_description": "Worse than expected claims experienced primarily in the US liability account leading to substantial reserve strengthening for 2013 and prior years of account.",
           "lobs_affected": [
             "Casualty"
           ],
           "amount_gbp_m": 30.486,
-          "confidence": 0.9
+          "confidence": 1.0
         },
         {
           "event_name": "Personal Accident & Sickness reserve increase",
           "event_year": 2014,
-          "impact_description": "Increase in estimated ultimate loss ratio for Personal Accident & Sickness leading to increased claims reserves.",
+          "impact_description": "Increase in estimated ultimate loss ratio for Personal Accident & Sickness leading to higher claims reserves.",
           "lobs_affected": [
             "Accident & Health"
           ],
           "amount_gbp_m": 3.638,
-          "confidence": 0.8
+          "confidence": 1.0
         },
         {
           "event_name": "Special Lines reserve increase",
           "event_year": 2014,
-          "impact_description": "Small increase in estimated ultimate loss ratio on Special Lines resulting in higher reserves.",
+          "impact_description": "Small increase in estimated ultimate loss ratio on Special Lines increasing claims reserves.",
           "lobs_affected": [
             "Professional Lines"
           ],
           "amount_gbp_m": 1.633,
-          "confidence": 0.8
+          "confidence": 1.0
         }
       ],
       "named_events": [],
-      "standardized_narrative": "Syndicate 1206 strengthened its prior years' claims reserves in 2015 (gross increase ~GBP 35.8m), driven primarily by adverse development in the US liability portfolio (the Liability line) and smaller increases in Personal Accident & Sickness and Special Lines. Management attribute the movement to worse-than-expected claims experience on older years, particularly 2013 and prior, prompting reserve increases reported in the Movement in prior year's provision note.",
+      "standardized_narrative": "During 2015 the Syndicate materially strengthened prior years' gross claims reserves, principally reflecting adverse development in the US liability account. Movement in estimated ultimate loss ratios for certain prior years increased gross claims reserves by GBP 35.757m (11.1% of opening gross claims outstanding), with the bulk of the strengthening in Liability (Casualty), and smaller increases in Personal Accident & Sickness and Special Lines.",
       "raw_causal_phrases": [
         "During 2015 the estimated ultimate loss ratio (net of acquisitions costs) on certain lines of business for the 2014 and prior years of account was increased.",
-        "These increases are set out in the table below together with their effect on ultimate claims reserves.",
-        "the deterioration arose on the 2013 and prior years of account and emanates primarily from the Liability account which is no longer written in that form.",
-        "The result was affected by worse than expected claims experienced primarily in the US liability account",
-        "exposures to more volatile sectors of industry in heavily litigious jurisdictions through poor coverholders has led to significant loss and reserve increases for the 2013 and prior years of account"
+        "The result was affected by worse than expected claims experienced primarily in the US liability account which is no longer written in that form and, as a result, significant amounts of Liability business has not been renewed into the 2014 or 2015 years of account.",
+        "During the second quarter of 2015 a detailed review was undertaken of this account and the reserves strengthened substantially for the 2013 and prior years of account."
       ],
       "lob_movements": [
-        {
-          "line_of_business": "Accident & Health",
-          "direction": "strengthening",
-          "amount_gbp_m": 3.638,
-          "percentage": null,
-          "confidence": 1.0
-        },
         {
           "line_of_business": "Casualty",
           "direction": "strengthening",
           "amount_gbp_m": 30.486,
+          "percentage": null,
+          "confidence": 1.0
+        },
+        {
+          "line_of_business": "Accident & Health",
+          "direction": "strengthening",
+          "amount_gbp_m": 3.638,
           "percentage": null,
           "confidence": 1.0
         },
@@ -373,43 +379,48 @@
           "confidence": 1.0
         }
       ],
-      "gross_premiums_written_gbp_m": 154.4,
+      "gross_premiums_written_gbp_m": 154.445,
       "gross_premium_mix": [
         {
-          "line_of_business": "Accident and health",
-          "amount_gbp_m": 29.9,
-          "percentage_of_total": 19.4
+          "line_of_business": "Personal Accident & Sickness",
+          "amount_gbp_m": 32.45,
+          "percentage_of_total": 21.01
         },
         {
-          "line_of_business": "Motor (other classes)",
-          "amount_gbp_m": 0.0,
-          "percentage_of_total": 0.0
+          "line_of_business": "Property",
+          "amount_gbp_m": 85.822,
+          "percentage_of_total": 55.57
         },
         {
-          "line_of_business": "transport",
-          "amount_gbp_m": 1.1,
-          "percentage_of_total": 0.7
+          "line_of_business": "Special Lines",
+          "amount_gbp_m": 11.284,
+          "percentage_of_total": 7.3
         },
         {
-          "line_of_business": "Fire and other damage to property",
-          "amount_gbp_m": 62.5,
-          "percentage_of_total": 40.5
+          "line_of_business": "Treaty",
+          "amount_gbp_m": 17.926,
+          "percentage_of_total": 11.61
         },
         {
-          "line_of_business": "Third party liability",
-          "amount_gbp_m": 17.0,
-          "percentage_of_total": 11.0
+          "line_of_business": "Liability",
+          "amount_gbp_m": 4.692,
+          "percentage_of_total": 3.04
         },
         {
-          "line_of_business": "Pecuniary loss",
-          "amount_gbp_m": 5.6,
-          "percentage_of_total": 3.6
+          "line_of_business": "Extended Warranty",
+          "amount_gbp_m": 2.449,
+          "percentage_of_total": 1.59
+        },
+        {
+          "line_of_business": "Lines of business no longer written",
+          "amount_gbp_m": -0.178,
+          "percentage_of_total": -0.12
         }
       ],
       "gross_premium_page": 8,
-      "gross_premium_confidence": 1.0,
+      "gross_premium_confidence": 0.8,
       "currency": "GBP",
-      "data_quality_notes": "Prior year development taken from Note 7 'Movement in prior year's provision for claims outstanding' which lists gross increases by class totaling GBP 35,757k. Note: Technical Provisions reconciliation (Note 18) shows a separate 'Changes for prior years' gross figure of GBP 81,311k, which is a larger gross movement and may reflect additional movements or reclassifications; reconciliation between these figures is not explicit in the report. The triangle is provided in Note 19 and matches gross reserves; no RITC noted. [RAG OVERRIDE: Model said PYD=35.757, RAG triangle computed 25.063. Using RAG value.]",
+      "data_quality_notes": "Opening gross claims outstanding and the prior year movement were taken from the Technical Provisions note (Note 18) and the Movement in prior year's provision note (Note 7) respectively. The prior year movement was computed as the sum of the explicit gross increases shown in Note 7. No specific named catastrophe events affecting prior years were listed. Page numbers are taken from the notes headings; if exact PDF pagination differs slightly, refer to Notes 7 and 18 in the financial statements. [RAG OVERRIDE: Model said PYD=35.757, RAG triangle computed 25.063. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -463,14 +474,14 @@
       "source_type": "syndicate",
       "source_file": "syndicate_reports\\pdfs\\syndicate_1206_2015.pdf",
       "content_hash": "7b333439abff2f94f7203017bab2b6b243c5459f17a5157135ab4a879d1ac03b",
-      "standardized_at": "2026-03-17T08:30:32.409880+00:00",
+      "standardized_at": "2026-03-16T10:38:09.338222+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 28745,
-        "output_tokens": 6031,
-        "total_tokens": 34776,
-        "cost_usd": 0.019248
+        "input_tokens": 28618,
+        "output_tokens": 5786,
+        "total_tokens": 34404,
+        "cost_usd": 0.018727
       },
       "_rag_triangle": {
         "type": "gross",
@@ -519,84 +530,99 @@
             null,
             null
           ]
-        ]
-      },
-      "_adobe_lob": {
-        "gross_premium_mix": [
-          {
-            "line_of_business": "Accident and health",
-            "amount_gbp_m": 29.9,
-            "percentage_of_total": 19.4
-          },
-          {
-            "line_of_business": "Motor (other classes)",
-            "amount_gbp_m": 0.0,
-            "percentage_of_total": 0.0
-          },
-          {
-            "line_of_business": "transport",
-            "amount_gbp_m": 1.1,
-            "percentage_of_total": 0.7
-          },
-          {
-            "line_of_business": "Fire and other damage to property",
-            "amount_gbp_m": 62.5,
-            "percentage_of_total": 40.5
-          },
-          {
-            "line_of_business": "Third party liability",
-            "amount_gbp_m": 17.0,
-            "percentage_of_total": 11.0
-          },
-          {
-            "line_of_business": "Pecuniary loss",
-            "amount_gbp_m": 5.6,
-            "percentage_of_total": 3.6
-          }
         ],
-        "gross_premiums_written_gbp_m": 154.4,
-        "claims_incurred_by_lob": [
-          {
-            "line_of_business": "Accident and health",
-            "amount_gbp_m": -16.1
-          },
-          {
-            "line_of_business": "Motor (other classes)",
-            "amount_gbp_m": -1.5
-          },
-          {
-            "line_of_business": "transport",
-            "amount_gbp_m": -0.1
-          },
-          {
-            "line_of_business": "Fire and other damage to property",
-            "amount_gbp_m": -21.7
-          },
-          {
-            "line_of_business": "Third party liability",
-            "amount_gbp_m": -58.9
-          },
-          {
-            "line_of_business": "Pecuniary loss",
-            "amount_gbp_m": -1.7
-          }
-        ],
-        "currency": "GBP",
-        "method": "azure"
+        "source_page": 34,
+        "entity": 1206
       },
       "_adobe_provisions": {
-        "gross_prior_year_claims": 97.9,
-        "ri_share_prior_year": -6290.0,
-        "net_prior_year_claims": 91.6
+        "unit_source": "header",
+        "source_page": 34,
+        "entity": 1206,
+        "opening_provenance": {
+          "raw_value": 321885.0,
+          "unit_multiplier": 0.001,
+          "unit_source": "header",
+          "value_m": 321.885,
+          "page": 34,
+          "entity": 1206,
+          "backend": "azure",
+          "table_kind": "provisions_movement"
+        },
+        "gross_prior_year_claims": 81.3,
+        "opening_gross_claims_outstanding": 321.885
+      },
+      "_entity_binding": {
+        "requested_syndicate": 1206,
+        "entity_pages": {
+          "none": [
+            0
+          ],
+          "1206": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36
+          ]
+        },
+        "foreign_tables_skipped": 0,
+        "foreign_pages": [],
+        "underwriting_year_pages": [],
+        "underwriting_year_tables_skipped": 0,
+        "document_unit_hint": 0.001
+      },
+      "opening_reserves_provenance": {
+        "raw_value": 321885.0,
+        "unit_multiplier": 0.001,
+        "unit_source": "header",
+        "value_m": 321.885,
+        "page": 34,
+        "entity": 1206,
+        "backend": "azure",
+        "table_kind": "provisions_movement",
+        "source": "azure_table",
+        "applied_value_m": 321.885,
+        "unit_resolution": "header"
       }
     }
   },
-  "total_cost_usd": 0.027758,
-  "total_tokens": 56975,
+  "total_cost_usd": 0.026906,
+  "total_tokens": 54629,
   "validation": {
     "passed": true,
-    "total_discrepancies": 15,
-    "within_tolerance": 15,
+    "total_discrepancies": 14,
+    "within_tolerance": 14,
     "hard_failures": 0,
     "hard_failure_details": []
   }

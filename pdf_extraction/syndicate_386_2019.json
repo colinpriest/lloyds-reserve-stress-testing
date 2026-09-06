@@ -1,5 +1,5 @@
 {
-  "extraction_timestamp": "2026-03-18T23:10:07.374015+00:00",
+  "extraction_timestamp": "2026-09-05T20:17:19.966298+00:00",
   "spec": {
     "prompt_version": "2.10",
     "field_definitions_version": "1.0",
@@ -128,23 +128,23 @@
           "confidence": 0.5
         }
       ],
-      "gross_premiums_written_gbp_m": 971.3,
+      "gross_premiums_written_gbp_m": 346.4,
       "gross_premium_mix": [
         {
           "line_of_business": "Third party liability",
-          "amount_gbp_m": 243.5,
-          "percentage_of_total": 25.1
+          "amount_gbp_m": 243.1,
+          "percentage_of_total": 70.18
         },
         {
-          "line_of_business": "Reinsurance to close",
-          "amount_gbp_m": 624.3,
-          "percentage_of_total": 64.3
+          "line_of_business": "Reinsurance acceptances",
+          "amount_gbp_m": 103.3,
+          "percentage_of_total": 29.82
         }
       ],
       "gross_premium_page": 14,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior year development calculated from gross claims development triangle. Individual LOB movements are qualitative as no specific amounts were provided. [RAG OVERRIDE: Model said PYD=143.6, RAG triangle computed 93.1. Using RAG value.]",
+      "data_quality_notes": "Prior year development calculated from gross claims development triangle. Individual LOB movements are qualitative as no specific amounts were provided. [RAG OVERRIDE: Model said PYD=143.6, RAG triangle computed 93.1. Using RAG value.] [LOB NOT APPLIED: deterministic mix has 1 class(es) with premium 243.1 against model totals [346.4, 346.4]; model mix retained.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -390,34 +390,120 @@
             null,
             null
           ]
-        ]
+        ],
+        "source_page": 40,
+        "entity": 386
       },
       "_adobe_lob": {
         "gross_premium_mix": [
           {
             "line_of_business": "Third party liability",
-            "amount_gbp_m": 243.5,
-            "percentage_of_total": 25.1
-          },
-          {
-            "line_of_business": "Reinsurance to close",
-            "amount_gbp_m": 624.3,
-            "percentage_of_total": 64.3
+            "amount_gbp_m": 243.1,
+            "percentage_of_total": 100.0
           }
         ],
-        "gross_premiums_written_gbp_m": 971.3,
+        "gross_premiums_written_gbp_m": 243.1,
         "claims_incurred_by_lob": [
           {
             "line_of_business": "Third party liability",
-            "amount_gbp_m": -177.0
-          },
-          {
-            "line_of_business": "Reinsurance to close",
-            "amount_gbp_m": -930.5
+            "amount_gbp_m": -232.8
           }
         ],
         "currency": "GBP",
-        "method": "azure"
+        "method": "azure",
+        "source_page": 30,
+        "entity": 386
+      },
+      "_entity_binding": {
+        "requested_syndicate": 386,
+        "entity_pages": {
+          "none": [
+            0
+          ],
+          "386": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48,
+            49,
+            50,
+            51,
+            52,
+            53,
+            54,
+            55,
+            56,
+            57,
+            58,
+            59,
+            60,
+            61,
+            62
+          ]
+        },
+        "foreign_tables_skipped": 0,
+        "foreign_pages": [],
+        "underwriting_year_pages": [
+          45,
+          48,
+          51,
+          52,
+          53,
+          54,
+          55,
+          56,
+          57,
+          58,
+          59,
+          60,
+          61
+        ],
+        "underwriting_year_tables_skipped": 16,
+        "document_unit_hint": 1.0
       }
     },
     "gpt-5-mini": {
@@ -477,23 +563,23 @@
           "confidence": 0.5
         }
       ],
-      "gross_premiums_written_gbp_m": 971.3,
+      "gross_premiums_written_gbp_m": 346.4,
       "gross_premium_mix": [
         {
           "line_of_business": "Third party liability",
-          "amount_gbp_m": 243.5,
-          "percentage_of_total": 25.1
+          "amount_gbp_m": 243.1,
+          "percentage_of_total": 70.2
         },
         {
-          "line_of_business": "Reinsurance to close",
-          "amount_gbp_m": 624.3,
-          "percentage_of_total": 64.3
+          "line_of_business": "Reinsurance acceptances",
+          "amount_gbp_m": 103.3,
+          "percentage_of_total": 29.8
         }
       ],
       "gross_premium_page": 27,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "No explicit GROSS prior-year reserve movement figure is provided in a dedicated 'movement in prior years' note. The gross claims development triangle was used as a fallback; when comparing the current estimates to the previous diagonal for underwriting years up to 2017 the net computed gross movement was effectively nil. The report does explicitly describe NET adverse prior year development (after reinsurance) related to PI and International Liability and cites the Ogden rate change impact, but a gross GBP m amount for prior year development is not disclosed. The underwriting-year reinsurance-to-close disclosures (for closed years) are present elsewhere and may distort simple year-to-year comparisons; users should treat the prior-year figure as calculated from the triangle and not as an explicitly reported gross PYD. [RAG OVERRIDE: Model said PYD=0.0, RAG triangle computed 93.1. Using RAG value.]",
+      "data_quality_notes": "No explicit GROSS prior-year reserve movement figure is provided in a dedicated 'movement in prior years' note. The gross claims development triangle was used as a fallback; when comparing the current estimates to the previous diagonal for underwriting years up to 2017 the net computed gross movement was effectively nil. The report does explicitly describe NET adverse prior year development (after reinsurance) related to PI and International Liability and cites the Ogden rate change impact, but a gross GBP m amount for prior year development is not disclosed. The underwriting-year reinsurance-to-close disclosures (for closed years) are present elsewhere and may distort simple year-to-year comparisons; users should treat the prior-year figure as calculated from the triangle and not as an explicitly reported gross PYD. [RAG OVERRIDE: Model said PYD=0.0, RAG triangle computed 93.1. Using RAG value.] [LOB NOT APPLIED: deterministic mix has 1 class(es) with premium 243.1 against model totals [346.4, 346.4]; model mix retained.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -750,34 +836,120 @@
             null,
             null
           ]
-        ]
+        ],
+        "source_page": 40,
+        "entity": 386
       },
       "_adobe_lob": {
         "gross_premium_mix": [
           {
             "line_of_business": "Third party liability",
-            "amount_gbp_m": 243.5,
-            "percentage_of_total": 25.1
-          },
-          {
-            "line_of_business": "Reinsurance to close",
-            "amount_gbp_m": 624.3,
-            "percentage_of_total": 64.3
+            "amount_gbp_m": 243.1,
+            "percentage_of_total": 100.0
           }
         ],
-        "gross_premiums_written_gbp_m": 971.3,
+        "gross_premiums_written_gbp_m": 243.1,
         "claims_incurred_by_lob": [
           {
             "line_of_business": "Third party liability",
-            "amount_gbp_m": -177.0
-          },
-          {
-            "line_of_business": "Reinsurance to close",
-            "amount_gbp_m": -930.5
+            "amount_gbp_m": -232.8
           }
         ],
         "currency": "GBP",
-        "method": "azure"
+        "method": "azure",
+        "source_page": 30,
+        "entity": 386
+      },
+      "_entity_binding": {
+        "requested_syndicate": 386,
+        "entity_pages": {
+          "none": [
+            0
+          ],
+          "386": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48,
+            49,
+            50,
+            51,
+            52,
+            53,
+            54,
+            55,
+            56,
+            57,
+            58,
+            59,
+            60,
+            61,
+            62
+          ]
+        },
+        "foreign_tables_skipped": 0,
+        "foreign_pages": [],
+        "underwriting_year_pages": [
+          45,
+          48,
+          51,
+          52,
+          53,
+          54,
+          55,
+          56,
+          57,
+          58,
+          59,
+          60,
+          61
+        ],
+        "underwriting_year_tables_skipped": 16,
+        "document_unit_hint": 1.0
       }
     }
   },
@@ -785,8 +957,8 @@
   "total_tokens": 67367,
   "validation": {
     "passed": true,
-    "total_discrepancies": 27,
-    "within_tolerance": 27,
+    "total_discrepancies": 29,
+    "within_tolerance": 29,
     "hard_failures": 0,
     "hard_failure_details": []
   }

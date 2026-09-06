@@ -1,5 +1,5 @@
 {
-  "extraction_timestamp": "2026-03-20T07:15:15.583261+00:00",
+  "extraction_timestamp": "2026-09-05T20:29:49.956256+00:00",
   "spec": {
     "prompt_version": "2.10",
     "field_definitions_version": "1.0",
@@ -166,8 +166,8 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_4711_2015_llm.pdf",
-      "content_hash": "ce584797bd2cfa8d84e8bed71f47ec8a925c39ffa1d7da685aea4b3a69d9acd9",
-      "standardized_at": "2026-03-20T07:12:57.226125+00:00",
+      "content_hash": "1caa46fbc94ab38c79074dd037382d41dbd32ab0174d313a8a86a876ca72d9e7",
+      "standardized_at": "2026-03-19T04:02:32.304530+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
@@ -223,7 +223,9 @@
             null,
             null
           ]
-        ]
+        ],
+        "source_page": 39,
+        "entity": 4711
       },
       "_adobe_lob": {
         "gross_premium_mix": [
@@ -304,10 +306,101 @@
           }
         ],
         "currency": "GBP",
-        "method": "azure"
+        "method": "azure",
+        "source_page": 33,
+        "entity": 4711
       },
       "_adobe_provisions": {
+        "opening_provenance": {
+          "raw_value": 344778.0,
+          "unit_multiplier": 0.001,
+          "unit_source": "header",
+          "value_m": 344.778,
+          "page": 40,
+          "entity": 4711,
+          "backend": "azure",
+          "table_kind": "provisions_movement"
+        },
         "opening_gross_claims_outstanding": 344.778
+      },
+      "_entity_binding": {
+        "requested_syndicate": 4711,
+        "entity_pages": {
+          "none": [
+            0
+          ],
+          "4711": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            15,
+            16,
+            18,
+            19,
+            20,
+            21,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43
+          ],
+          "4714": [
+            5,
+            6,
+            14,
+            17,
+            22,
+            23,
+            31
+          ]
+        },
+        "foreign_tables_skipped": 6,
+        "foreign_pages": [
+          15,
+          18,
+          23,
+          24,
+          32
+        ],
+        "underwriting_year_pages": [],
+        "underwriting_year_tables_skipped": 0,
+        "document_unit_hint": 1.0
+      },
+      "opening_reserves_provenance": {
+        "raw_value": 344778.0,
+        "unit_multiplier": 0.001,
+        "unit_source": "header",
+        "value_m": 344.778,
+        "page": 40,
+        "entity": 4711,
+        "backend": "azure",
+        "table_kind": "provisions_movement",
+        "source": "azure_table",
+        "applied_value_m": 344.778,
+        "unit_resolution": "header"
       }
     },
     "gpt-5-mini": {
@@ -319,25 +412,21 @@
       "prior_year_development_gbp_m": -54.854,
       "prior_year_development_pct": -15.91,
       "direction": "release",
-      "prior_year_movement_page": 39,
-      "prior_year_movement_confidence": 0.8,
-      "exact_reserve_text": "Claims development is shown in the tables below, both gross and net of reinsurance ceded, on an underwriting year basis. Balances have been translated at exchange rates prevailing at 31 December 2015 in all cases.",
+      "prior_year_movement_page": 34,
+      "prior_year_movement_confidence": 0.5,
+      "exact_reserve_text": "The table below illustrates the movement in the past year's provision for net claims outstanding less paid claims during the year. These arose in respect of the following classes of business",
       "primary_causes": [
         "Favorable claims development"
       ],
       "specific_events": [],
-      "specific_years_affected": [
-        2011,
-        2012,
-        2013
-      ],
+      "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "The syndicate recorded a gross prioryear reserve release of approximately GBP 54.9m (around 15.9% of opening gross claims outstanding) driven by favourable claims development across older underwriting years (notably 2011-2013). This result is evidenced by the gross claims development table which shows reductions in the latest estimates versus the prior diagonal for those years. The release is reflected across multiple classes (net breakout shows significant releases in Marine/Aviation & Miscellaneous, with pockets of strengthening in Third Party Liability and Accident & Health).",
+      "standardized_narrative": "Opening gross claims outstanding at 1 January 2015 were GBP 344.778m. The syndicate reports net prior-year development during 2015 of a release of GBP 57.637m (net of reinsurance). This release reflects favourable claims experience particularly in casualty/global casualty segments. A gross prior-year movement figure was not explicitly presented in a single gross 'movement in prior year provision' line in the notes, so the quantified PYD used here is the net movement disclosed in the movement table.",
       "raw_causal_phrases": [
-        "good claims experience for Global Casualty during the year.",
-        "Overall performance in this segment in 2015 has deteriorated as a result of losses over most classes.",
-        "The Company has taken advantage of the transitional rules of FRS 103 that permit only five years of information to be disclosed upon adoption."
+        "The table below illustrates the movement in the past year's provision for net claims outstanding less paid claims during the year.",
+        "The performance of this segment has improved as a result of good claims experience for Global Casualty during the year.",
+        "Overall performance in this segment in 2015 has deteriorated as a result of losses over most classes."
       ],
       "lob_movements": [
         {
@@ -345,35 +434,35 @@
           "direction": "strengthening",
           "amount_gbp_m": 0.373,
           "percentage": null,
-          "confidence": 0.5
+          "confidence": 0.8
         },
         {
           "line_of_business": "Marine",
           "direction": "release",
           "amount_gbp_m": -36.11,
           "percentage": null,
-          "confidence": 0.5
+          "confidence": 0.8
         },
         {
           "line_of_business": "Property",
           "direction": "release",
           "amount_gbp_m": -3.758,
           "percentage": null,
-          "confidence": 0.5
+          "confidence": 0.8
         },
         {
           "line_of_business": "Casualty",
           "direction": "strengthening",
           "amount_gbp_m": 11.332,
           "percentage": null,
-          "confidence": 0.5
+          "confidence": 0.8
         },
         {
           "line_of_business": "Reinsurance - Specialty",
           "direction": "release",
           "amount_gbp_m": -29.474,
           "percentage": null,
-          "confidence": 0.5
+          "confidence": 0.8
         }
       ],
       "gross_premiums_written_gbp_m": 330.5,
@@ -422,7 +511,7 @@
       "gross_premium_page": 23,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prioryear development (PYD) was calculated from the gross claims development triangle (gross figures) on page 39. The PYD figure is a triangle-derived gross amount (-GBP 54.854m release). LOB movements were not provided on a gross basis; net prior year movements by class were used (Note 8) and mapped to standard LOB names where reasonable - these are NET figures and mapping is approximate. Where only net per-LOB figures were available, confidence is reduced and this is noted above.",
+      "data_quality_notes": "The report does not present a single explicit GROSS 'movement in prior year's provision for claims outstanding' figure in the notes. The claims movement table available (Note 8) provides the movement in the past year's provision NET of reinsurance (total net release GBP 57.637k). A gross PYD figure could not be unambiguously extracted from the technical reserves reconciliation or triangle within the time available, so the net figure has been used as a fallback. Users should note this is NET of reinsurance. The gross claims development triangle is present (see page 39) but mapping its diagonals to compute a consolidated gross PYD would require detailed cell-level reconciliation and excluding 'and prior' aggregates; this was not used as primary here. [RAG OVERRIDE: Model said PYD=-57.637, RAG triangle computed -54.854. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -475,15 +564,15 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_4711_2015_llm.pdf",
-      "content_hash": "ce584797bd2cfa8d84e8bed71f47ec8a925c39ffa1d7da685aea4b3a69d9acd9",
-      "standardized_at": "2026-03-20T07:15:15.578261+00:00",
+      "content_hash": "1caa46fbc94ab38c79074dd037382d41dbd32ab0174d313a8a86a876ca72d9e7",
+      "standardized_at": "2026-03-19T04:03:43.589750+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
         "input_tokens": 26145,
-        "output_tokens": 6949,
-        "total_tokens": 33094,
-        "cost_usd": 0.020434
+        "output_tokens": 7205,
+        "total_tokens": 33350,
+        "cost_usd": 0.020946
       },
       "_rag_triangle": {
         "type": "gross",
@@ -532,7 +621,9 @@
             null,
             null
           ]
-        ]
+        ],
+        "source_page": 39,
+        "entity": 4711
       },
       "_adobe_lob": {
         "gross_premium_mix": [
@@ -613,19 +704,110 @@
           }
         ],
         "currency": "GBP",
-        "method": "azure"
+        "method": "azure",
+        "source_page": 33,
+        "entity": 4711
       },
       "_adobe_provisions": {
+        "opening_provenance": {
+          "raw_value": 344778.0,
+          "unit_multiplier": 0.001,
+          "unit_source": "header",
+          "value_m": 344.778,
+          "page": 40,
+          "entity": 4711,
+          "backend": "azure",
+          "table_kind": "provisions_movement"
+        },
         "opening_gross_claims_outstanding": 344.778
+      },
+      "_entity_binding": {
+        "requested_syndicate": 4711,
+        "entity_pages": {
+          "none": [
+            0
+          ],
+          "4711": [
+            1,
+            2,
+            3,
+            4,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            15,
+            16,
+            18,
+            19,
+            20,
+            21,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43
+          ],
+          "4714": [
+            5,
+            6,
+            14,
+            17,
+            22,
+            23,
+            31
+          ]
+        },
+        "foreign_tables_skipped": 6,
+        "foreign_pages": [
+          15,
+          18,
+          23,
+          24,
+          32
+        ],
+        "underwriting_year_pages": [],
+        "underwriting_year_tables_skipped": 0,
+        "document_unit_hint": 1.0
+      },
+      "opening_reserves_provenance": {
+        "raw_value": 344778.0,
+        "unit_multiplier": 0.001,
+        "unit_source": "header",
+        "value_m": 344.778,
+        "page": 40,
+        "entity": 4711,
+        "backend": "azure",
+        "table_kind": "provisions_movement",
+        "source": "azure_table",
+        "applied_value_m": 344.778,
+        "unit_resolution": "header"
       }
     }
   },
-  "total_cost_usd": 0.027815,
-  "total_tokens": 54806,
+  "total_cost_usd": 0.028327,
+  "total_tokens": 55062,
   "validation": {
     "passed": true,
-    "total_discrepancies": 23,
-    "within_tolerance": 23,
+    "total_discrepancies": 27,
+    "within_tolerance": 27,
     "hard_failures": 0,
     "hard_failure_details": []
   }

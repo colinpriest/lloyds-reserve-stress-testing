@@ -1,5 +1,5 @@
 {
-  "extraction_timestamp": "2026-07-05T21:11:01.551148+00:00",
+  "extraction_timestamp": "2026-09-05T20:39:58.840014+00:00",
   "spec": {
     "prompt_version": "2.10",
     "field_definitions_version": "1.0",
@@ -99,7 +99,7 @@
       "gross_premium_page": 1,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Typhoon Jebi occurred in 2018 but is mentioned as driving increased claims provisions for the 2019 year of account, which is unusual but stated in the report. [CODE OVERRIDE: Model said PYD=-2.309, but code computed -0.805 from triangle (OVERRIDE from agreed triangles). Using code value.]",
+      "data_quality_notes": "Typhoon Jebi occurred in 2018 but is mentioned as driving increased claims provisions for the 2019 year of account, which is unusual but stated in the report. [RAG OVERRIDE: Model said PYD=-2.309, RAG triangle computed -0.805. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -185,12 +185,82 @@
             null,
             null
           ]
-        ]
+        ],
+        "source_page": 25,
+        "entity": 6125
       },
       "_adobe_provisions": {
-        "gross_prior_year_claims": 3248.0,
-        "net_prior_year_claims": -1889.0,
+        "unit_source": "header",
+        "source_page": 27,
+        "entity": 6125,
+        "opening_provenance": {
+          "raw_value": 25176.0,
+          "unit_multiplier": 0.001,
+          "unit_source": "header",
+          "value_m": 25.176,
+          "page": 27,
+          "entity": 6125,
+          "backend": "azure",
+          "table_kind": "provisions_movement"
+        },
+        "gross_prior_year_claims": -2.3,
+        "net_prior_year_claims": -1.9,
         "opening_gross_claims_outstanding": 25.176
+      },
+      "_entity_binding": {
+        "requested_syndicate": 6125,
+        "entity_pages": {
+          "none": [
+            0
+          ],
+          "6125": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27
+          ]
+        },
+        "foreign_tables_skipped": 0,
+        "foreign_pages": [],
+        "underwriting_year_pages": [],
+        "underwriting_year_tables_skipped": 0,
+        "document_unit_hint": 0.001
+      },
+      "opening_reserves_provenance": {
+        "raw_value": 25176.0,
+        "unit_multiplier": 0.001,
+        "unit_source": "header",
+        "value_m": 25.176,
+        "page": 27,
+        "entity": 6125,
+        "backend": "azure",
+        "table_kind": "provisions_movement",
+        "source": "azure_table",
+        "applied_value_m": 25.176,
+        "unit_resolution": "header"
       }
     },
     "gpt-5-mini": {
@@ -322,7 +392,7 @@
       "gross_premium_page": 4,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior-year development sourced from Note 11 'Change in prior year provisions' (Gross = (GBP 2,309)k which is a release of GBP 2.309m). Opening reserves taken from Statement of Financial Position (gross claims outstanding balance at 1 January 2019 = GBP 25,176k). No LOB-specific prior-year movement amounts provided. Named catastrophe events are mentioned but not quantified. Page numbers correspond to the document's printed page headers. Claims development triangle present (gross) and was used for verification but not required for the primary prior-year movement figure. [CODE OVERRIDE: Model said PYD=-2.309, but code computed -0.805 from triangle (OVERRIDE from agreed triangles). Using code value.]",
+      "data_quality_notes": "Prior-year development sourced from Note 11 'Change in prior year provisions' (Gross = (GBP 2,309)k which is a release of GBP 2.309m). Opening reserves taken from Statement of Financial Position (gross claims outstanding balance at 1 January 2019 = GBP 25,176k). No LOB-specific prior-year movement amounts provided. Named catastrophe events are mentioned but not quantified. Page numbers correspond to the document's printed page headers. Claims development triangle present (gross) and was used for verification but not required for the primary prior-year movement figure. [RAG OVERRIDE: Model said PYD=-2.309, RAG triangle computed -0.805. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -408,12 +478,82 @@
             null,
             null
           ]
-        ]
+        ],
+        "source_page": 25,
+        "entity": 6125
       },
       "_adobe_provisions": {
-        "gross_prior_year_claims": 3248.0,
-        "net_prior_year_claims": -1889.0,
+        "unit_source": "header",
+        "source_page": 27,
+        "entity": 6125,
+        "opening_provenance": {
+          "raw_value": 25176.0,
+          "unit_multiplier": 0.001,
+          "unit_source": "header",
+          "value_m": 25.176,
+          "page": 27,
+          "entity": 6125,
+          "backend": "azure",
+          "table_kind": "provisions_movement"
+        },
+        "gross_prior_year_claims": -2.3,
+        "net_prior_year_claims": -1.9,
         "opening_gross_claims_outstanding": 25.176
+      },
+      "_entity_binding": {
+        "requested_syndicate": 6125,
+        "entity_pages": {
+          "none": [
+            0
+          ],
+          "6125": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27
+          ]
+        },
+        "foreign_tables_skipped": 0,
+        "foreign_pages": [],
+        "underwriting_year_pages": [],
+        "underwriting_year_tables_skipped": 0,
+        "document_unit_hint": 0.001
+      },
+      "opening_reserves_provenance": {
+        "raw_value": 25176.0,
+        "unit_multiplier": 0.001,
+        "unit_source": "header",
+        "value_m": 25.176,
+        "page": 27,
+        "entity": 6125,
+        "backend": "azure",
+        "table_kind": "provisions_movement",
+        "source": "azure_table",
+        "applied_value_m": 25.176,
+        "unit_resolution": "header"
       }
     }
   },

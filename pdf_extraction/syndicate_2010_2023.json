@@ -1,7 +1,7 @@
 {
-  "extraction_timestamp": "2026-03-17T23:33:28.354030+00:00",
+  "extraction_timestamp": "2026-09-05T19:53:50.509215+00:00",
   "spec": {
-    "prompt_version": "2.8",
+    "prompt_version": "2.10",
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -13,9 +13,9 @@
       "opening_reserves_gbp_m": 670.714,
       "opening_reserves_page": 14,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": -26.439,
-      "prior_year_development_pct": -3.94,
-      "direction": "release",
+      "prior_year_development_gbp_m": 16.0,
+      "prior_year_development_pct": 2.39,
+      "direction": "strengthening",
       "prior_year_movement_page": 14,
       "prior_year_movement_confidence": 1.0,
       "exact_reserve_text": "Change in prior year provisions",
@@ -113,28 +113,28 @@
         "The Russia/Ukraine conflict reserves are unchanged from prior year ($21.2m)."
       ],
       "lob_movements": [],
-      "gross_premiums_written_gbp_m": 449.1,
+      "gross_premiums_written_gbp_m": 209.4,
       "gross_premium_mix": [
         {
           "line_of_business": "Accident and health",
           "amount_gbp_m": 10.0,
-          "percentage_of_total": 2.2
+          "percentage_of_total": 4.8
         },
         {
           "line_of_business": "Marine, aviation and transport",
           "amount_gbp_m": 16.8,
-          "percentage_of_total": 3.7
+          "percentage_of_total": 8.0
         },
         {
           "line_of_business": "Fire and other damage to property",
           "amount_gbp_m": 182.6,
-          "percentage_of_total": 40.7
+          "percentage_of_total": 87.2
         }
       ],
       "gross_premium_page": 8,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "The 'Change in prior year provisions' in Note 19 indicates a gross strengthening of $15.992m. However, a calculation from the 'Underwriting Year - Gross' claims development triangle (page 13) suggests a gross release of approximately $24.965m for underwriting years up to 2021. The figure from Note 19 is used as it directly refers to the movement in provisions for claims outstanding. The report also notes that Russia/Ukraine conflict reserves were unchanged from the prior year, despite the overall gross strengthening. [RAG OVERRIDE: Model said PYD=15.992, RAG triangle computed -26.439. Using RAG value.]",
+      "data_quality_notes": "The 'Change in prior year provisions' in Note 19 indicates a gross strengthening of $15.992m. However, a calculation from the 'Underwriting Year - Gross' claims development triangle (page 13) suggests a gross release of approximately $24.965m for underwriting years up to 2021. The figure from Note 19 is used as it directly refers to the movement in provisions for claims outstanding. The report also notes that Russia/Ukraine conflict reserves were unchanged from the prior year, despite the overall gross strengthening.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
@@ -424,35 +424,147 @@
             null,
             null
           ]
-        ]
+        ],
+        "source_page": 42,
+        "entity": 2010
       },
       "_adobe_lob": {
         "gross_premium_mix": [
           {
             "line_of_business": "Accident and health",
             "amount_gbp_m": 10.0,
-            "percentage_of_total": 2.2
+            "percentage_of_total": 4.8
           },
           {
             "line_of_business": "Marine, aviation and transport",
             "amount_gbp_m": 16.8,
-            "percentage_of_total": 3.7
+            "percentage_of_total": 8.0
           },
           {
             "line_of_business": "Fire and other damage to property",
             "amount_gbp_m": 182.6,
-            "percentage_of_total": 40.7
+            "percentage_of_total": 87.2
           }
         ],
-        "gross_premiums_written_gbp_m": 449.1,
+        "gross_premiums_written_gbp_m": 209.4,
         "claims_incurred_by_lob": null,
         "currency": "USD",
-        "method": "azure"
+        "method": "azure",
+        "source_page": 36,
+        "entity": 2010
       },
       "_adobe_provisions": {
-        "gross_prior_year_claims": 88.7,
-        "ri_share_prior_year": 7420.0,
-        "net_prior_year_claims": 81.2
+        "unit_source": "header",
+        "source_page": 43,
+        "entity": 2010,
+        "opening_provenance": {
+          "raw_value": 670714.0,
+          "unit_multiplier": 0.001,
+          "unit_source": "header",
+          "value_m": 670.714,
+          "page": 43,
+          "entity": 2010,
+          "backend": "azure",
+          "table_kind": "provisions_movement"
+        },
+        "gross_prior_year_claims": 16.0,
+        "ri_share_prior_year": -41.3,
+        "opening_gross_claims_outstanding": 670.714
+      },
+      "_entity_binding": {
+        "requested_syndicate": 2010,
+        "entity_pages": {
+          "none": [
+            0
+          ],
+          "2010": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48,
+            49,
+            50,
+            51,
+            52,
+            53,
+            54,
+            55,
+            56,
+            57,
+            58,
+            59,
+            60,
+            61,
+            62,
+            63,
+            64,
+            65
+          ]
+        },
+        "foreign_tables_skipped": 0,
+        "foreign_pages": [],
+        "underwriting_year_pages": [
+          47
+        ],
+        "underwriting_year_tables_skipped": 0,
+        "document_unit_hint": 0.001
+      },
+      "opening_reserves_provenance": {
+        "raw_value": 670714.0,
+        "unit_multiplier": 0.001,
+        "unit_source": "header",
+        "value_m": 670.714,
+        "page": 43,
+        "entity": 2010,
+        "backend": "azure",
+        "table_kind": "provisions_movement",
+        "source": "azure_table",
+        "applied_value_m": 670.714,
+        "unit_resolution": "header"
       }
     },
     "gpt-5-mini": {
@@ -461,9 +573,9 @@
       "opening_reserves_gbp_m": 670.714,
       "opening_reserves_page": 40,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": -26.439,
-      "prior_year_development_pct": -3.94,
-      "direction": "release",
+      "prior_year_development_gbp_m": 16.0,
+      "prior_year_development_pct": 2.39,
+      "direction": "strengthening",
       "prior_year_movement_page": 40,
       "prior_year_movement_confidence": 1.0,
       "exact_reserve_text": "Change in prior year provisions 15,992 (41,279) 57,271",
@@ -612,28 +724,28 @@
           "confidence": 0.0
         }
       ],
-      "gross_premiums_written_gbp_m": 449.1,
+      "gross_premiums_written_gbp_m": 209.4,
       "gross_premium_mix": [
         {
           "line_of_business": "Accident and health",
           "amount_gbp_m": 10.0,
-          "percentage_of_total": 2.2
+          "percentage_of_total": 4.8
         },
         {
           "line_of_business": "Marine, aviation and transport",
           "amount_gbp_m": 16.8,
-          "percentage_of_total": 3.7
+          "percentage_of_total": 8.0
         },
         {
           "line_of_business": "Fire and other damage to property",
           "amount_gbp_m": 182.6,
-          "percentage_of_total": 40.7
+          "percentage_of_total": 87.2
         }
       ],
       "gross_premium_page": 33,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "All monetary values are reported in the syndicate's functional currency (USD). The field names containing '_gbp_m' follow the requested template but amounts are in USD millions (native currency). Prior year development gross figure taken from the 'Change in prior year provisions' row in Technical Provisions (explicit gross $'000). Claims development triangle present; RITC and reinsurance movements are present in notes and may distort development by year-movement used is the explicit gross prior year provision change. Some LOB-level prior-year movements are not disaggregated in the notes, so LOB movements are left unspecified. [RAG OVERRIDE: Model said PYD=15.992, RAG triangle computed -26.439. Using RAG value.]",
+      "data_quality_notes": "All monetary values are reported in the syndicate's functional currency (USD). The field names containing '_gbp_m' follow the requested template but amounts are in USD millions (native currency). Prior year development gross figure taken from the 'Change in prior year provisions' row in Technical Provisions (explicit gross $'000). Claims development triangle present; RITC and reinsurance movements are present in notes and may distort development by year-movement used is the explicit gross prior year provision change. Some LOB-level prior-year movements are not disaggregated in the notes, so LOB movements are left unspecified.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
@@ -923,35 +1035,147 @@
             null,
             null
           ]
-        ]
+        ],
+        "source_page": 42,
+        "entity": 2010
       },
       "_adobe_lob": {
         "gross_premium_mix": [
           {
             "line_of_business": "Accident and health",
             "amount_gbp_m": 10.0,
-            "percentage_of_total": 2.2
+            "percentage_of_total": 4.8
           },
           {
             "line_of_business": "Marine, aviation and transport",
             "amount_gbp_m": 16.8,
-            "percentage_of_total": 3.7
+            "percentage_of_total": 8.0
           },
           {
             "line_of_business": "Fire and other damage to property",
             "amount_gbp_m": 182.6,
-            "percentage_of_total": 40.7
+            "percentage_of_total": 87.2
           }
         ],
-        "gross_premiums_written_gbp_m": 449.1,
+        "gross_premiums_written_gbp_m": 209.4,
         "claims_incurred_by_lob": null,
         "currency": "USD",
-        "method": "azure"
+        "method": "azure",
+        "source_page": 36,
+        "entity": 2010
       },
       "_adobe_provisions": {
-        "gross_prior_year_claims": 88.7,
-        "ri_share_prior_year": 7420.0,
-        "net_prior_year_claims": 81.2
+        "unit_source": "header",
+        "source_page": 43,
+        "entity": 2010,
+        "opening_provenance": {
+          "raw_value": 670714.0,
+          "unit_multiplier": 0.001,
+          "unit_source": "header",
+          "value_m": 670.714,
+          "page": 43,
+          "entity": 2010,
+          "backend": "azure",
+          "table_kind": "provisions_movement"
+        },
+        "gross_prior_year_claims": 16.0,
+        "ri_share_prior_year": -41.3,
+        "opening_gross_claims_outstanding": 670.714
+      },
+      "_entity_binding": {
+        "requested_syndicate": 2010,
+        "entity_pages": {
+          "none": [
+            0
+          ],
+          "2010": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48,
+            49,
+            50,
+            51,
+            52,
+            53,
+            54,
+            55,
+            56,
+            57,
+            58,
+            59,
+            60,
+            61,
+            62,
+            63,
+            64,
+            65
+          ]
+        },
+        "foreign_tables_skipped": 0,
+        "foreign_pages": [],
+        "underwriting_year_pages": [
+          47
+        ],
+        "underwriting_year_tables_skipped": 0,
+        "document_unit_hint": 0.001
+      },
+      "opening_reserves_provenance": {
+        "raw_value": 670714.0,
+        "unit_multiplier": 0.001,
+        "unit_source": "header",
+        "value_m": 670.714,
+        "page": 43,
+        "entity": 2010,
+        "backend": "azure",
+        "table_kind": "provisions_movement",
+        "source": "azure_table",
+        "applied_value_m": 670.714,
+        "unit_resolution": "header"
       }
     }
   },

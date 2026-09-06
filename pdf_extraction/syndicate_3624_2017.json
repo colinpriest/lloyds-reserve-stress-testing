@@ -1,5 +1,5 @@
 {
-  "extraction_timestamp": "2026-03-18T12:09:02.186653+00:00",
+  "extraction_timestamp": "2026-09-05T20:16:38.818866+00:00",
   "spec": {
     "prompt_version": "2.10",
     "field_definitions_version": "1.0",
@@ -13,9 +13,9 @@
       "opening_reserves_gbp_m": 535.77,
       "opening_reserves_page": 6,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": 6.33,
-      "prior_year_development_pct": 1.18,
-      "direction": "strengthening",
+      "prior_year_development_gbp_m": -6.0,
+      "prior_year_development_pct": -1.12,
+      "direction": "release",
       "prior_year_movement_page": 15,
       "prior_year_movement_confidence": 1.0,
       "exact_reserve_text": "Over-provision in respect of prior claims and claim adjustment expenses (5,977)",
@@ -78,7 +78,7 @@
       "gross_premium_page": 2,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The 'exact_reserve_text' is a table line item as no narrative sentence explicitly describing the prior year movement amount was found. [RAG OVERRIDE: Model said PYD=-5.977, RAG triangle computed 6.33. Using RAG value.]",
+      "data_quality_notes": "The 'exact_reserve_text' is a table line item as no narrative sentence explicitly describing the prior year movement amount was found.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -248,7 +248,9 @@
             null,
             null
           ]
-        ]
+        ],
+        "source_page": 34,
+        "entity": 3624
       },
       "_adobe_lob": {
         "gross_premium_mix": [
@@ -329,12 +331,93 @@
           }
         ],
         "currency": "GBP",
-        "method": "azure"
+        "method": "azure",
+        "source_page": 29,
+        "entity": 3624
       },
       "_adobe_provisions": {
-        "gross_prior_year_claims": -5977.0,
-        "ri_share_prior_year": -883.0,
-        "net_prior_year_claims": -6860.0
+        "unit_source": "header",
+        "source_page": 33,
+        "entity": 3624,
+        "opening_provenance": {
+          "raw_value": 535770.0,
+          "unit_multiplier": 0.001,
+          "unit_source": "header",
+          "value_m": 535.77,
+          "page": 16,
+          "entity": 3624,
+          "backend": "azure",
+          "table_kind": "balance_sheet_liabilities"
+        },
+        "gross_prior_year_claims": -6.0,
+        "ri_share_prior_year": -0.9,
+        "net_prior_year_claims": -6.9,
+        "opening_gross_claims_outstanding": 535.77
+      },
+      "_entity_binding": {
+        "requested_syndicate": 3624,
+        "entity_pages": {
+          "none": [
+            0
+          ],
+          "3624": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37
+          ]
+        },
+        "foreign_tables_skipped": 0,
+        "foreign_pages": [],
+        "underwriting_year_pages": [],
+        "underwriting_year_tables_skipped": 0,
+        "document_unit_hint": 0.001
+      },
+      "opening_reserves_provenance": {
+        "raw_value": 535770.0,
+        "unit_multiplier": 0.001,
+        "unit_source": "header",
+        "value_m": 535.77,
+        "page": 16,
+        "entity": 3624,
+        "backend": "azure",
+        "table_kind": "balance_sheet_liabilities",
+        "source": "azure_table",
+        "applied_value_m": 535.77,
+        "unit_resolution": "header"
       }
     },
     "gpt-5-mini": {
@@ -343,9 +426,9 @@
       "opening_reserves_gbp_m": 535.77,
       "opening_reserves_page": 13,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": 6.33,
-      "prior_year_development_pct": 1.18,
-      "direction": "strengthening",
+      "prior_year_development_gbp_m": -6.0,
+      "prior_year_development_pct": -1.12,
+      "direction": "release",
       "prior_year_movement_page": 30,
       "prior_year_movement_confidence": 1.0,
       "exact_reserve_text": "Over-provision in respect of prior claims and claim adjustment expenses (5,977) (883) (6,860)",
@@ -408,7 +491,7 @@
       "gross_premium_page": 26,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior year development (gross) taken from the Technical Provisions reconciliation table line 'Over-provision in respect of prior claims and claim adjustment expenses' (Gross column). No narrative explanation tying the release to specific events or LOBs was provided. Claims development triangle is available (gross, in GBP 000) and was not required to compute prior year movement given explicit movement row. [RAG OVERRIDE: Model said PYD=-5.977, RAG triangle computed 6.33. Using RAG value.]",
+      "data_quality_notes": "Prior year development (gross) taken from the Technical Provisions reconciliation table line 'Over-provision in respect of prior claims and claim adjustment expenses' (Gross column). No narrative explanation tying the release to specific events or LOBs was provided. Claims development triangle is available (gross, in GBP 000) and was not required to compute prior year movement given explicit movement row.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -578,7 +661,9 @@
             null,
             null
           ]
-        ]
+        ],
+        "source_page": 34,
+        "entity": 3624
       },
       "_adobe_lob": {
         "gross_premium_mix": [
@@ -659,12 +744,93 @@
           }
         ],
         "currency": "GBP",
-        "method": "azure"
+        "method": "azure",
+        "source_page": 29,
+        "entity": 3624
       },
       "_adobe_provisions": {
-        "gross_prior_year_claims": -5977.0,
-        "ri_share_prior_year": -883.0,
-        "net_prior_year_claims": -6860.0
+        "unit_source": "header",
+        "source_page": 33,
+        "entity": 3624,
+        "opening_provenance": {
+          "raw_value": 535770.0,
+          "unit_multiplier": 0.001,
+          "unit_source": "header",
+          "value_m": 535.77,
+          "page": 16,
+          "entity": 3624,
+          "backend": "azure",
+          "table_kind": "balance_sheet_liabilities"
+        },
+        "gross_prior_year_claims": -6.0,
+        "ri_share_prior_year": -0.9,
+        "net_prior_year_claims": -6.9,
+        "opening_gross_claims_outstanding": 535.77
+      },
+      "_entity_binding": {
+        "requested_syndicate": 3624,
+        "entity_pages": {
+          "none": [
+            0
+          ],
+          "3624": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37
+          ]
+        },
+        "foreign_tables_skipped": 0,
+        "foreign_pages": [],
+        "underwriting_year_pages": [],
+        "underwriting_year_tables_skipped": 0,
+        "document_unit_hint": 0.001
+      },
+      "opening_reserves_provenance": {
+        "raw_value": 535770.0,
+        "unit_multiplier": 0.001,
+        "unit_source": "header",
+        "value_m": 535.77,
+        "page": 16,
+        "entity": 3624,
+        "backend": "azure",
+        "table_kind": "balance_sheet_liabilities",
+        "source": "azure_table",
+        "applied_value_m": 535.77,
+        "unit_resolution": "header"
       }
     }
   },

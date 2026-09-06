@@ -1,5 +1,5 @@
 {
-  "extraction_timestamp": "2026-03-19T02:52:07.481372+00:00",
+  "extraction_timestamp": "2026-09-05T20:24:34.464174+00:00",
   "spec": {
     "prompt_version": "2.10",
     "field_definitions_version": "1.0",
@@ -13,9 +13,9 @@
       "opening_reserves_gbp_m": 2244.4,
       "opening_reserves_page": 6,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": 36.9,
-      "prior_year_development_pct": 1.64,
-      "direction": "strengthening",
+      "prior_year_development_gbp_m": -36.839,
+      "prior_year_development_pct": -1.64,
+      "direction": "release",
       "prior_year_movement_page": 11,
       "prior_year_movement_confidence": 1.0,
       "exact_reserve_text": "Included within net claims incurred in the Technical Account - General Business is a release of GBP 36,839,000 (2013: strengthening of GBP 2,107,000) being the difference between the provision for claims outstanding at the beginning of the year less payments made during the year on account of claims incurred in previous years and the provision for claims outstanding at the end of the year for such claims. The net release in 2014 was the result of favourable development on prior year catastrophe and attritional losses, in particular on reinsurance segments, offsetting deterioration in the estimated ultimate Motor liabilities.",
@@ -139,7 +139,7 @@
       "gross_premium_page": 10,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "No specific claims development triangle was found in the report. LOB movements are qualitative, not quantitative. [RAG OVERRIDE: Model said PYD=-36.839, RAG triangle computed 36.9. Using RAG value.]",
+      "data_quality_notes": "No specific claims development triangle was found in the report. LOB movements are qualitative, not quantitative. [RAG PYD NOT APPLIED: deterministic figure +36.900m has the opposite sign to both model values [-36.839, -36.839], which agree with each other; model values retained.]",
       "_claims_triangle": {
         "type": "none",
         "currency": null,
@@ -239,7 +239,79 @@
           }
         ],
         "currency": "GBP",
-        "method": "azure"
+        "method": "azure",
+        "source_page": 22,
+        "entity": 4472
+      },
+      "_adobe_provisions": {
+        "opening_provenance": {
+          "raw_value": 2244.4,
+          "unit_multiplier": 1.0,
+          "unit_source": "header",
+          "value_m": 2244.4,
+          "page": 17,
+          "entity": 4472,
+          "backend": "azure",
+          "table_kind": "balance_sheet_liabilities"
+        },
+        "opening_gross_claims_outstanding": 2244.4
+      },
+      "_entity_binding": {
+        "requested_syndicate": 4472,
+        "entity_pages": {
+          "none": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "4472": [
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29
+          ]
+        },
+        "foreign_tables_skipped": 0,
+        "foreign_pages": [],
+        "underwriting_year_pages": [],
+        "underwriting_year_tables_skipped": 0,
+        "document_unit_hint": 1.0
+      },
+      "opening_reserves_provenance": {
+        "raw_value": 2244.4,
+        "unit_multiplier": 1.0,
+        "unit_source": "header",
+        "value_m": 2244.4,
+        "page": 17,
+        "entity": 4472,
+        "backend": "azure",
+        "table_kind": "balance_sheet_liabilities",
+        "source": "azure_table",
+        "applied_value_m": 2244.4,
+        "unit_resolution": "header"
       }
     },
     "gpt-5-mini": {
@@ -248,9 +320,9 @@
       "opening_reserves_gbp_m": 2244.4,
       "opening_reserves_page": 14,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": 36.9,
-      "prior_year_development_pct": 1.64,
-      "direction": "strengthening",
+      "prior_year_development_gbp_m": -36.839,
+      "prior_year_development_pct": -1.64,
+      "direction": "release",
       "prior_year_movement_page": 20,
       "prior_year_movement_confidence": 1.0,
       "exact_reserve_text": "Included within net claims incurred in the Technical Account - General Business is a release of GBP 36,839,000 (2013: strengthening of GBP 2,107,000) being the difference between the provision for claims outstanding at the beginning of the year less payments made during the year on account of claims incurred in previous years and the provision for claims outstanding at the end of the year for such claims. The net release in 2014 was the result of favourable development on prior year catastrophe and attritional losses, in particular on reinsurance segments, offsetting deterioration in the estimated ultimate Motor liabilities.",
@@ -349,7 +421,7 @@
       "gross_premium_page": 19,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "No gross prior-year movement (gross change in provision for prior years) was found in the reported notes. The report explicitly states a net prior-year release of GBP 36,839,000; per extraction rules this net figure (after reinsurance) is used as a fallback. Gross movement not available in the provided pages, so prior_year_development_gbp_m is NET of reinsurance. [RAG OVERRIDE: Model said PYD=-36.839, RAG triangle computed 36.9. Using RAG value.]",
+      "data_quality_notes": "No gross prior-year movement (gross change in provision for prior years) was found in the reported notes. The report explicitly states a net prior-year release of GBP 36,839,000; per extraction rules this net figure (after reinsurance) is used as a fallback. Gross movement not available in the provided pages, so prior_year_development_gbp_m is NET of reinsurance. [RAG PYD NOT APPLIED: deterministic figure +36.900m has the opposite sign to both model values [-36.839, -36.839], which agree with each other; model values retained.]",
       "_claims_triangle": {
         "type": "none",
         "currency": "GBP",
@@ -449,7 +521,79 @@
           }
         ],
         "currency": "GBP",
-        "method": "azure"
+        "method": "azure",
+        "source_page": 22,
+        "entity": 4472
+      },
+      "_adobe_provisions": {
+        "opening_provenance": {
+          "raw_value": 2244.4,
+          "unit_multiplier": 1.0,
+          "unit_source": "header",
+          "value_m": 2244.4,
+          "page": 17,
+          "entity": 4472,
+          "backend": "azure",
+          "table_kind": "balance_sheet_liabilities"
+        },
+        "opening_gross_claims_outstanding": 2244.4
+      },
+      "_entity_binding": {
+        "requested_syndicate": 4472,
+        "entity_pages": {
+          "none": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "4472": [
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29
+          ]
+        },
+        "foreign_tables_skipped": 0,
+        "foreign_pages": [],
+        "underwriting_year_pages": [],
+        "underwriting_year_tables_skipped": 0,
+        "document_unit_hint": 1.0
+      },
+      "opening_reserves_provenance": {
+        "raw_value": 2244.4,
+        "unit_multiplier": 1.0,
+        "unit_source": "header",
+        "value_m": 2244.4,
+        "page": 17,
+        "entity": 4472,
+        "backend": "azure",
+        "table_kind": "balance_sheet_liabilities",
+        "source": "azure_table",
+        "applied_value_m": 2244.4,
+        "unit_resolution": "header"
       }
     }
   },

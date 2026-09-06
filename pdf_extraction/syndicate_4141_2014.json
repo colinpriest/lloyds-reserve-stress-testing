@@ -1,5 +1,5 @@
 {
-  "extraction_timestamp": "2026-03-19T01:36:27.549732+00:00",
+  "extraction_timestamp": "2026-09-05T20:18:42.634524+00:00",
   "spec": {
     "prompt_version": "2.10",
     "field_definitions_version": "1.0",
@@ -89,8 +89,8 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_4141_2014_llm.pdf",
-      "content_hash": "2b7e7ff44cc76c9dca71f41ae45bf6595c06fe6972b3e99a1129b01ce5e8aeba",
-      "standardized_at": "2026-03-19T01:35:49.022733+00:00",
+      "content_hash": "2c2f39b46c9fd808c9424a73b7838870fb1b5fb01cfef741c7f2268a6d29b4a5",
+      "standardized_at": "2026-03-18T23:55:26.017655+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
@@ -178,7 +178,80 @@
           }
         ],
         "currency": "GBP",
-        "method": "azure"
+        "method": "azure",
+        "source_page": 23,
+        "entity": 4141
+      },
+      "_adobe_provisions": {
+        "opening_provenance": {
+          "raw_value": 157998.0,
+          "unit_multiplier": 0.001,
+          "unit_source": "header",
+          "value_m": 157.998,
+          "page": 18,
+          "entity": 4141,
+          "backend": "azure",
+          "table_kind": "balance_sheet_liabilities"
+        },
+        "opening_gross_claims_outstanding": 157.998
+      },
+      "_entity_binding": {
+        "requested_syndicate": 4141,
+        "entity_pages": {
+          "none": [
+            0
+          ],
+          "4141": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30
+          ]
+        },
+        "foreign_tables_skipped": 0,
+        "foreign_pages": [],
+        "underwriting_year_pages": [],
+        "underwriting_year_tables_skipped": 0,
+        "document_unit_hint": 0.001
+      },
+      "opening_reserves_provenance": {
+        "raw_value": 157998.0,
+        "unit_multiplier": 0.001,
+        "unit_source": "header",
+        "value_m": 157.998,
+        "page": 18,
+        "entity": 4141,
+        "backend": "azure",
+        "table_kind": "balance_sheet_liabilities",
+        "source": "azure_table",
+        "applied_value_m": 157.998,
+        "unit_resolution": "header"
       }
     },
     "gpt-5-mini": {
@@ -188,26 +261,68 @@
       "opening_reserves_page": 16,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": 4.1,
-      "prior_year_development_pct": 2.594,
+      "prior_year_development_pct": 2.59,
       "direction": "strengthening",
       "prior_year_movement_page": 22,
-      "prior_year_movement_confidence": 0.5,
+      "prior_year_movement_confidence": 1.0,
       "exact_reserve_text": "Net claims incurred includes prior accident year reserve strengthening totaling GBP 4.1 million (2013: GBP 0.5m release).",
       "primary_causes": [
-        "Adverse claims development",
-        "Large loss development"
+        "Adverse claims development"
       ],
       "specific_events": [],
       "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "Opening gross claims outstanding at 1 January 2014 were GBP 157.998m. The report records prior accident year reserve strengthening totalling GBP 4.1m (net) in 2014 (compared with a GBP 0.5m net release in 2013). No gross prior-year movement is disclosed in the Movement note, so the quantified movement available is net of reinsurance. The Managing Agent notes several large losses in 2014 but no significant catastrophe impact; the reported prior year movement is therefore a small adverse development relative to the opening reserves.",
+      "standardized_narrative": "At the 31 December 2014 year end the Syndicate carried gross claims outstanding of GBP 157.998m (opening balance). The Syndicate reports a prior accident year reserve strengthening of GBP 4.1m in 2014 (2013: GBP 0.5m release). The report does not quantify a gross movement by line of business or identify a specific named event as the cause; the movement is presented as an adverse prior year development (strengthening) in the claims provision.",
       "raw_causal_phrases": [
+        "Prior year reserve movements resulted in a GBP 4.1m strengthening in 2014, compared to a GBP 0.5m release in 2013 (see Note 2).",
         "Net claims incurred includes prior accident year reserve strengthening totaling GBP 4.1 million (2013: GBP 0.5m release).",
-        "benefitted from the relatively benign catastrophe environment in 2014 with no significant catastrophe loss impact",
-        "did experience several large losses, particularly towards the end of 2014"
+        "did experience several large losses, particularly towards the end of 2014."
       ],
-      "lob_movements": [],
+      "lob_movements": [
+        {
+          "line_of_business": "Accident & Health",
+          "direction": "strengthening",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.5
+        },
+        {
+          "line_of_business": "Property",
+          "direction": "strengthening",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.5
+        },
+        {
+          "line_of_business": "Energy",
+          "direction": "strengthening",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.5
+        },
+        {
+          "line_of_business": "Casualty",
+          "direction": "strengthening",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.5
+        },
+        {
+          "line_of_business": "Marine",
+          "direction": "strengthening",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.5
+        },
+        {
+          "line_of_business": "Motor",
+          "direction": "strengthening",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.5
+        }
+      ],
       "gross_premiums_written_gbp_m": 80.7,
       "gross_premium_mix": [
         {
@@ -254,26 +369,26 @@
       "gross_premium_page": 21,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Opening reserves taken from Balance Sheet (gross claims outstanding) - high confidence. The Movement in prior years' provision note only discloses a NET prior year strengthening (GBP 4.1m); no gross (insurance liabilities) prior year movement is shown. Per extraction rules, the NET figure has been used as a fallback and flagged. No claims development triangle or gross prior-year movement breakdown by LOB was provided.",
+      "data_quality_notes": "Opening gross claims outstanding taken from Balance Sheet (Claims outstanding, liabilities) 2013 comparative column. The report only discloses prior year reserve movement on a NET basis (GBP 4.1m strengthening) in Note 2; no gross (insurance liabilities) prior year movement figure is provided, therefore the NET figure has been used and flagged. No claims development triangle or per-line gross PYD amounts are provided; line-of-business impacts are not quantified in the report.",
       "_claims_triangle": {
         "type": "none",
         "currency": "GBP",
-        "units": null,
+        "units": "millions",
         "page": null,
         "underwriting_years": [],
         "development_rows": []
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_4141_2014_llm.pdf",
-      "content_hash": "2b7e7ff44cc76c9dca71f41ae45bf6595c06fe6972b3e99a1129b01ce5e8aeba",
-      "standardized_at": "2026-03-19T01:36:27.547220+00:00",
+      "content_hash": "2c2f39b46c9fd808c9424a73b7838870fb1b5fb01cfef741c7f2268a6d29b4a5",
+      "standardized_at": "2026-03-18T23:56:32.663571+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
         "input_tokens": 21801,
-        "output_tokens": 3920,
-        "total_tokens": 25721,
-        "cost_usd": 0.01329
+        "output_tokens": 4185,
+        "total_tokens": 25986,
+        "cost_usd": 0.01382
       },
       "_adobe_lob": {
         "gross_premium_mix": [
@@ -354,12 +469,85 @@
           }
         ],
         "currency": "GBP",
-        "method": "azure"
+        "method": "azure",
+        "source_page": 23,
+        "entity": 4141
+      },
+      "_adobe_provisions": {
+        "opening_provenance": {
+          "raw_value": 157998.0,
+          "unit_multiplier": 0.001,
+          "unit_source": "header",
+          "value_m": 157.998,
+          "page": 18,
+          "entity": 4141,
+          "backend": "azure",
+          "table_kind": "balance_sheet_liabilities"
+        },
+        "opening_gross_claims_outstanding": 157.998
+      },
+      "_entity_binding": {
+        "requested_syndicate": 4141,
+        "entity_pages": {
+          "none": [
+            0
+          ],
+          "4141": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30
+          ]
+        },
+        "foreign_tables_skipped": 0,
+        "foreign_pages": [],
+        "underwriting_year_pages": [],
+        "underwriting_year_tables_skipped": 0,
+        "document_unit_hint": 0.001
+      },
+      "opening_reserves_provenance": {
+        "raw_value": 157998.0,
+        "unit_multiplier": 0.001,
+        "unit_source": "header",
+        "value_m": 157.998,
+        "page": 18,
+        "entity": 4141,
+        "backend": "azure",
+        "table_kind": "balance_sheet_liabilities",
+        "source": "azure_table",
+        "applied_value_m": 157.998,
+        "unit_resolution": "header"
       }
     }
   },
-  "total_cost_usd": 0.018627,
-  "total_tokens": 38490,
+  "total_cost_usd": 0.019157,
+  "total_tokens": 38755,
   "validation": {
     "passed": true,
     "total_discrepancies": 14,

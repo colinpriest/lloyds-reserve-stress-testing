@@ -1,5 +1,5 @@
 {
-  "extraction_timestamp": "2026-03-18T11:24:59.177137+00:00",
+  "extraction_timestamp": "2026-09-05T19:48:20.551734+00:00",
   "spec": {
     "prompt_version": "2.10",
     "field_definitions_version": "1.0",
@@ -13,9 +13,9 @@
       "opening_reserves_gbp_m": 418.878,
       "opening_reserves_page": 6,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": 11.763,
-      "prior_year_development_pct": 2.81,
-      "direction": "strengthening",
+      "prior_year_development_gbp_m": -290.0,
+      "prior_year_development_pct": -69.23,
+      "direction": "release",
       "prior_year_movement_page": 18,
       "prior_year_movement_confidence": 1.0,
       "exact_reserve_text": "Claims incurred in prior accident years (289,988)",
@@ -122,7 +122,7 @@
       "gross_premium_page": 15,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "There is a discrepancy between the explicit accounting figure for 'Claims incurred in prior accident years' in Note 11, which shows a significant gross release of GBP 289.988m, and the narrative on page 2, which describes deterioration in specific Marine Insurance segments and the Solicitor's Professional Indemnity portfolio. The quantified figure from Note 11 is prioritized. Additionally, a calculation of prior year development from the gross claims development triangle on page 20 yields a strengthening of approximately GBP 16.223m, which also contradicts the Note 11 figure. The Note 11 figure is considered the most direct statement of prior year accounting impact. [RAG OVERRIDE: Model said PYD=-289.988, RAG triangle computed 11.763. Using RAG value.]",
+      "data_quality_notes": "There is a discrepancy between the explicit accounting figure for 'Claims incurred in prior accident years' in Note 11, which shows a significant gross release of GBP 289.988m, and the narrative on page 2, which describes deterioration in specific Marine Insurance segments and the Solicitor's Professional Indemnity portfolio. The quantified figure from Note 11 is prioritized. Additionally, a calculation of prior year development from the gross claims development triangle on page 20 yields a strengthening of approximately GBP 16.223m, which also contradicts the Note 11 figure. The Note 11 figure is considered the most direct statement of prior year accounting impact.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -214,7 +214,9 @@
             null,
             null
           ]
-        ]
+        ],
+        "source_page": 48,
+        "entity": 1955
       },
       "_adobe_lob": {
         "gross_premium_mix": [
@@ -304,13 +306,119 @@
           }
         ],
         "currency": "GBP",
-        "method": "azure"
+        "method": "azure",
+        "source_page": 33,
+        "entity": 1955
       },
       "_adobe_provisions": {
+        "unit_source": "header",
+        "source_page": 41,
+        "entity": 1955,
+        "opening_provenance": {
+          "raw_value": 418878.0,
+          "unit_multiplier": 0.001,
+          "unit_source": "header",
+          "value_m": 418.878,
+          "page": 41,
+          "entity": 1955,
+          "backend": "azure",
+          "table_kind": "provisions_movement"
+        },
         "gross_prior_year_claims": -290.0,
         "ri_share_prior_year": 143.4,
         "net_prior_year_claims": -146.5,
-        "opening_gross_claims_outstanding": 418878.0
+        "opening_gross_claims_outstanding": 418.878
+      },
+      "_entity_binding": {
+        "requested_syndicate": 1955,
+        "entity_pages": {
+          "none": [
+            0
+          ],
+          "1955": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48,
+            49,
+            50,
+            51,
+            52,
+            53,
+            54,
+            55,
+            56,
+            57,
+            58,
+            59,
+            60,
+            61,
+            62,
+            63
+          ]
+        },
+        "foreign_tables_skipped": 0,
+        "foreign_pages": [],
+        "underwriting_year_pages": [],
+        "underwriting_year_tables_skipped": 0,
+        "document_unit_hint": 0.001
+      },
+      "opening_reserves_provenance": {
+        "raw_value": 418878.0,
+        "unit_multiplier": 0.001,
+        "unit_source": "header",
+        "value_m": 418.878,
+        "page": 41,
+        "entity": 1955,
+        "backend": "azure",
+        "table_kind": "provisions_movement",
+        "source": "azure_table",
+        "applied_value_m": 418.878,
+        "unit_resolution": "header"
       }
     },
     "gpt-5-mini": {
@@ -319,9 +427,9 @@
       "opening_reserves_gbp_m": 418.878,
       "opening_reserves_page": 17,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": 11.763,
-      "prior_year_development_pct": 2.81,
-      "direction": "strengthening",
+      "prior_year_development_gbp_m": -290.0,
+      "prior_year_development_pct": -69.23,
+      "direction": "release",
       "prior_year_movement_page": 46,
       "prior_year_movement_confidence": 0.8,
       "exact_reserve_text": "The prior accident year experience has been less benign. Deterioration on the earned and booked position on some accounts has had a negative impact on the Syndicate's result for the year. In particular, deterioration on certain Marine Insurance segments has dragged back the performance of this class. The legacy Solicitor's Professional Indemnity portfolio, from which the Syndicate has now exited, also exhibited some deterioration in the first half of the calendar year based on claims development on prior years' exposures. Recent development has been more stable but reserves have nonetheless been strengthened.",
@@ -505,7 +613,7 @@
       "gross_premium_page": 31,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior-year development (PYD) was calculated from the published gross claims development triangle (page 46) as the sum of changes for underwriting years <= 2013 (excluding the '2011 & Prior' aggregate column). The syndicate also records a 2013 RITC arrangement (noted elsewhere) which can distort development patterns; the reported PYD is therefore calculated (confidence 0.8) rather than explicitly stated as a gross figure in a single 'movement' note. Some tables contain aggregate 'X & prior' columns which were excluded per instructions. Where per-LOB movements are reported, they reflect year-on-year gross claims outstanding change from the balance sheet (20142015).",
+      "data_quality_notes": "Prior-year development (PYD) was calculated from the published gross claims development triangle (page 46) as the sum of changes for underwriting years <= 2013 (excluding the '2011 & Prior' aggregate column). The syndicate also records a 2013 RITC arrangement (noted elsewhere) which can distort development patterns; the reported PYD is therefore calculated (confidence 0.8) rather than explicitly stated as a gross figure in a single 'movement' note. Some tables contain aggregate 'X & prior' columns which were excluded per instructions. Where per-LOB movements are reported, they reflect year-on-year gross claims outstanding change from the balance sheet (20142015). [RAG OVERRIDE: Model said PYD=11.763, RAG triangle computed -290.0. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -597,7 +705,9 @@
             null,
             null
           ]
-        ]
+        ],
+        "source_page": 48,
+        "entity": 1955
       },
       "_adobe_lob": {
         "gross_premium_mix": [
@@ -687,13 +797,119 @@
           }
         ],
         "currency": "GBP",
-        "method": "azure"
+        "method": "azure",
+        "source_page": 33,
+        "entity": 1955
       },
       "_adobe_provisions": {
+        "unit_source": "header",
+        "source_page": 41,
+        "entity": 1955,
+        "opening_provenance": {
+          "raw_value": 418878.0,
+          "unit_multiplier": 0.001,
+          "unit_source": "header",
+          "value_m": 418.878,
+          "page": 41,
+          "entity": 1955,
+          "backend": "azure",
+          "table_kind": "provisions_movement"
+        },
         "gross_prior_year_claims": -290.0,
         "ri_share_prior_year": 143.4,
         "net_prior_year_claims": -146.5,
-        "opening_gross_claims_outstanding": 418878.0
+        "opening_gross_claims_outstanding": 418.878
+      },
+      "_entity_binding": {
+        "requested_syndicate": 1955,
+        "entity_pages": {
+          "none": [
+            0
+          ],
+          "1955": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48,
+            49,
+            50,
+            51,
+            52,
+            53,
+            54,
+            55,
+            56,
+            57,
+            58,
+            59,
+            60,
+            61,
+            62,
+            63
+          ]
+        },
+        "foreign_tables_skipped": 0,
+        "foreign_pages": [],
+        "underwriting_year_pages": [],
+        "underwriting_year_tables_skipped": 0,
+        "document_unit_hint": 0.001
+      },
+      "opening_reserves_provenance": {
+        "raw_value": 418878.0,
+        "unit_multiplier": 0.001,
+        "unit_source": "header",
+        "value_m": 418.878,
+        "page": 41,
+        "entity": 1955,
+        "backend": "azure",
+        "table_kind": "provisions_movement",
+        "source": "azure_table",
+        "applied_value_m": 418.878,
+        "unit_resolution": "header"
       }
     }
   },
