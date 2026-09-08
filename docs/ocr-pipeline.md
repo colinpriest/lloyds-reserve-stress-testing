@@ -1957,9 +1957,26 @@ hierarchy; every other document defers to it.
    dual-LLM text extraction is used.
 
 An absolute-amount RAG triangle is computed deterministically
-from the claims development table and is authoritative over any
-LLM-extracted figure.  A loss-ratio triangle is not: see the
-exception below.
+from the claims development table and takes precedence over an
+LLM-extracted figure **unless a gate rejects it**.  Its authority
+is therefore conditional, on three counts and not one:
+
+* a gross provisions movement whose sign disagrees with the
+  triangle overrides the triangle (section 11.3.1);
+* `_pyd_override_gate` withholds the triangle value when both
+  model values agree in sign with each other and the triangle has
+  the opposite sign, or when the triangle implies a movement above
+  50% of opening reserves while both model values imply under 10%;
+* a loss-ratio triangle is a conditional fallback, never an
+  override: see the exception below.
+
+When the gate withholds the triangle the model value is retained,
+and what that value's basis rests on changes with it. Agreement of
+two model signs is evidence about the sign, not about whether the
+figure is gross or net: a gross and a net movement can share a
+sign. The basis of a retained model value is therefore whatever
+the models state for it, which the analysis reads before it treats
+any figure as gross (round 53).
 
 **Exception -- loss ratio triangles**: when the RAG PYD comes
 from a loss ratio triangle (`method = "loss_ratio_triangle"`),
@@ -1992,8 +2009,8 @@ RAG PYD is discarded and the pipeline falls back to
 cases where a non-triangle table (e.g. segmental analysis)
 was misidentified as a claims triangle by the API backend.
 
-This unconditional override (for non-loss-ratio triangles)
-is necessary because LLMs sometimes extract PYD from the
+This override (for non-loss-ratio triangles, and subject to the
+gate above) is necessary because LLMs sometimes extract PYD from the
 wrong source (e.g. P&L "gross change in provision" which
 includes current-year claims movements, or "net provision
 for claims outstanding" which is after reinsurance).  These
@@ -2045,10 +2062,10 @@ ranking):
 
 | Step | Source | Applies when | Gross/Net |
 |------|--------|--------------|-----------|
-| 1 | Deterministic *absolute-amount* triangle PYD, from a table bound to the requested syndicate's annual accounts (section 10.8) | A valid triangle was parsed and no gross provisions movement contradicts its sign | Gross |
+| 1 | Deterministic *absolute-amount* triangle PYD, from a table bound to the requested syndicate's annual accounts (section 10.8) | A valid triangle was parsed, no gross provisions movement contradicts its sign, and `_pyd_override_gate` does not withhold it (opposite sign to two agreeing model values, or above 50% of opening reserves while both models imply under 10%) | Gross |
 | 1a | Deterministic gross provisions movement | It is available and its sign disagrees with the triangle: provisions override the triangle (section 11.3.1) | Gross |
-| 2 | LLM-extracted "Movement in prior year's provision" note | No deterministic source of steps 1 and 1a | Gross |
-| 3 | LLM-extracted narrative text (gross amount) | As step 2 | Gross |
+| 2 | LLM-extracted "Movement in prior year's provision" note | No deterministic source of steps 1 and 1a, or the gate withheld one | As stated by the models; gross only where they say so |
+| 3 | LLM-extracted narrative text | As step 2 | As stated by the models; a narrative value declared net, or whose basis the filing does not state, is not admitted to the gross sample |
 | 4 | Deterministic *loss-ratio* triangle PYD | Fills a blank LLM value; overrides a syndicate-specific LLM value only when their directions contradict; never overrides an absolute-amount triangle | Gross |
 | 5 | LLM-extracted year-of-account result breakdown | No gross source | Net* |
 | 6 | Narrative text net-of-reinsurance figure (parsed post-hoc, section 10.4) | Both LLM values are null and the narrative quantifies a net movement | Net |
@@ -2172,8 +2189,10 @@ This is analogous to the RAG triangle PYD override (section 9)
 -- for opening reserves the deterministic extraction is
 authoritative over LLMs once its unit is evidenced, while for PYD
 that authority is scoped, within the section 10.3 hierarchy, to an
-**absolute-amount** triangle, whose only qualification is
-triangle-versus-provisions rather than triangle-versus-LLM.  A
+**absolute-amount** triangle, and it is qualified twice over:
+triangle-versus-provisions, and triangle-versus-model through
+`_pyd_override_gate`, which withholds the deterministic figure
+against two agreeing model signs or an implausible magnitude.  A
 **loss-ratio** triangle is a conditional fallback instead: being
 managed- or group-level it fills a blank narrative value and
 overrides a syndicate-specific one only where the two directions

@@ -3201,12 +3201,10 @@ def _extract_azure(pdf_path: Path, report_year: int, cache_dir: Path,
     relevant pages, then sends them in batches to Azure (F0 tier = 2 pages
     per request; paid S0 tier sends all relevant pages in one request).
     """
-    endpoint = os.getenv("DOCUMENTINTELLIGENCE_ENDPOINT")
-    api_key = os.getenv("DOCUMENTINTELLIGENCE_API_KEY")
-    if not endpoint or not api_key:
-        logger.error("DOCUMENTINTELLIGENCE_ENDPOINT or DOCUMENTINTELLIGENCE_API_KEY not set")
-        return ExtractionResult()
-
+    # Credentials are NOT read here. Locating the relevant pages and replaying the
+    # committed cache need no service access, and requiring the variables up front
+    # broke the offline replay this repository advertises. They are checked inside
+    # the cache-miss branch below, where the service is actually called.
     result = ExtractionResult(method="azure")
     t0 = time.time()
 
@@ -3335,6 +3333,14 @@ def _extract_azure(pdf_path: Path, report_year: int, cache_dir: Path,
 
     if not cache_valid:
         _offline_guard(f"Azure Document Intelligence for {pdf_path.name}")
+        # only now is a service call required
+        endpoint = os.getenv("DOCUMENTINTELLIGENCE_ENDPOINT")
+        api_key = os.getenv("DOCUMENTINTELLIGENCE_API_KEY")
+        if not endpoint or not api_key:
+            logger.error("DOCUMENTINTELLIGENCE_ENDPOINT or DOCUMENTINTELLIGENCE_API_KEY not "
+                         "set, and no usable cache for %s", pdf_path.name)
+            result.elapsed_s = time.time() - t0
+            return result
         # Clean up any leftover slim PDFs from previous interrupted runs
         for stale in cache_dir.glob(f"{pdf_path.stem}_slim*.pdf"):
             try:
