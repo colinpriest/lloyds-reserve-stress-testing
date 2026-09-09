@@ -1379,8 +1379,8 @@ This correctly handles year gaps.  For example, if UW years are
 | Period | Expected values |
 |--------|----------------|
 | d = 0  | 4 (all years)  |
-| d = 1  | 2 (2016, 2017) |
-| d = 2  | 1 (2016)       |
+| d = 1  | 3 (2016, 2017, 2019) |
+| d = 2  | 2 (2016, 2017)       |
 
 Run-off syndicates have extra development rows:
 `extra_dev_years = report_year - max(uw_years)`.
@@ -1589,8 +1589,12 @@ and a claims development triangle that is entirely
 dashes/zeros for prior underwriting years.  In this case:
 
 - **PYD = 0** (no prior year reserves → no development)
-- **PYD% = 0%** (not undefined -- zero development of zero
-  reserves is definitionally zero percent)
+- **PYD% = 0%** is what the pipeline stores: development of zero on
+  reserves of zero is 0/0, undefined, and the stored zero is a software
+  convention for a record that carries no prior-year reserves. Zero opening
+  reserves do not themselves establish that no subsequent development occurred;
+  the analysis excludes such records on the reserve test (opening reserves
+  below 0.1m), not on this value
 - **Non-zero RAG PYD is rejected**: when opening reserves = 0
   and the RAG triangle computes a non-trivial PYD
   (|PYD| > 0.1m), it is discarded.  This catches cases where
@@ -1643,9 +1647,12 @@ triangle has 8/17 values that look like calendar years
 (1980-2030) — likely a misidentified segmental table
 ```
 
-Real claims development triangles never contain year numbers
-as data values -- cumulative claims amounts are either very
-small (millions: 1--500) or very large (thousands: 1,000--
+Real claims development triangles rarely contain values that look like
+calendar years, but the monetary ranges overlap the year range
+(thousands: 1,000--500,000 plainly contains 1980--2030), so the rejection
+below is a heuristic that can reject a genuine amount printed as a bare
+four-digit year-like number, not an impossibility argument; cumulative
+claims amounts are either very small (millions: 1--500) or very large (thousands: 1,000--
 500,000), neither of which overlaps with calendar years.
 
 **Example**: syndicate 2001/2014 had an Azure-extracted table

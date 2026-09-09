@@ -81,7 +81,9 @@ equivalent of this table (across all ~180 syndicates) is the `by_syndicate` shee
   → a managed- or group-level loss-ratio triangle, which fills a blank narrative
   value and overrides a syndicate-specific one only where their directions
   contradict → claims-provisions movement note → dual-LLM cross-validated text
-  extraction. The canonical numbered rule is `ocr-pipeline.md` section 10.3. The chosen source for each value
+  extraction; on every deterministic route the figure is vetoed where the two
+  models agree on the opposite sign, or where it exceeds 50% of opening reserves
+  while both model movements are below 10%. The canonical numbered rule is `ocr-pipeline.md` section 10.3. The chosen source for each value
   is named in the
   coverage table.
 - Dual-LLM validation (Gemini + GPT, field tolerances ±2.0m/±5% PYD, ±5% reserves):

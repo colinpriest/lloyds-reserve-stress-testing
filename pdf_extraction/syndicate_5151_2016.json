@@ -1,5 +1,5 @@
 {
-  "extraction_timestamp": "2026-03-19T04:51:34.655572+00:00",
+  "extraction_timestamp": "2026-09-09T11:56:30.226117+00:00",
   "spec": {
     "prompt_version": "2.10",
     "field_definitions_version": "1.0",
@@ -13,9 +13,9 @@
       "opening_reserves_gbp_m": 244.293,
       "opening_reserves_page": 5,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": 15.108,
-      "prior_year_development_pct": 6.18,
-      "direction": "strengthening",
+      "prior_year_development_gbp_m": -24.7,
+      "prior_year_development_pct": -10.11,
+      "direction": "release",
       "prior_year_movement_page": 1,
       "prior_year_movement_confidence": 1.0,
       "exact_reserve_text": "Favourable prior year claims development of GBP 24.7m (2015 - GBP 20.2m) was experienced in 2016, predominantly in respect of Property and Marine & Energy lines of business, as a result of lower than expected claims activity due to the benign claims environment.",
@@ -111,7 +111,7 @@
       "gross_premium_page": 11,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The explicit narrative on pages 1 and 12 states a favourable prior year claims development of GBP 24.7m (release). However, a calculation based on the gross claims development triangle on page 14 for underwriting years 2011-2014 (excluding the two most recent years) indicates a net strengthening of approximately GBP 18.85m. The narrative figure is used as it is an explicit statement of prior year development. [RAG OVERRIDE: Model said PYD=-24.7, RAG triangle computed 15.108. Using RAG value.]",
+      "data_quality_notes": "The explicit narrative on pages 1 and 12 states a favourable prior year claims development of GBP 24.7m (release). However, a calculation based on the gross claims development triangle on page 14 for underwriting years 2011-2014 (excluding the two most recent years) indicates a net strengthening of approximately GBP 18.85m. The narrative figure is used as it is an explicit statement of prior year development. [RAG PYD NOT APPLIED: deterministic figure +15.108m has the opposite sign to both model values [-24.7, -24.7], which agree with each other; model values retained.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -241,7 +241,9 @@
             null,
             null
           ]
-        ]
+        ],
+        "source_page": 44,
+        "entity": 5151
       },
       "_adobe_lob": {
         "gross_premium_mix": [
@@ -349,7 +351,74 @@
           }
         ],
         "currency": "GBP",
-        "method": "azure"
+        "method": "azure",
+        "source_page": 27,
+        "entity": 5151
+      },
+      "_entity_binding": {
+        "requested_syndicate": 5151,
+        "entity_pages": {
+          "none": [
+            0,
+            1
+          ],
+          "5151": [
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48,
+            49,
+            50
+          ]
+        },
+        "foreign_tables_skipped": 0,
+        "foreign_pages": [],
+        "underwriting_year_pages": [],
+        "underwriting_year_tables_skipped": 0,
+        "document_unit_hint": 0.001
       }
     },
     "gpt-5-mini": {
@@ -358,9 +427,9 @@
       "opening_reserves_gbp_m": 244.293,
       "opening_reserves_page": 13,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": 15.108,
-      "prior_year_development_pct": 6.18,
-      "direction": "strengthening",
+      "prior_year_development_gbp_m": -24.7,
+      "prior_year_development_pct": -10.11,
+      "direction": "release",
       "prior_year_movement_page": 27,
       "prior_year_movement_confidence": 1.0,
       "exact_reserve_text": "Favourable prior year claims development of GBP 24.7m (2015 - GBP 20.2m) was experienced in 2016, predominantly in respect of Property and Marine & Energy lines of business, as a result of lower than expected claims activity due to the benign claims environment.",
@@ -460,7 +529,7 @@
       "gross_premium_page": 22,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Opening gross claims outstanding taken from Statement of Financial Position technical provisions (claims outstanding) prior-year column. Prior year development figure (GBP 24.7m) is reported in the Claims Outstanding note and director's narrative as 'favourable prior year claims development' - the note context is the gross claims outstanding note so this has been treated as a gross release. No LOB-level quantification provided. Claims development triangle present (gross) used for cross-checking but triangle contains an aggregate 'Pre-2011' column which was excluded. [RAG OVERRIDE: Model said PYD=-24.7, RAG triangle computed 15.108. Using RAG value.]",
+      "data_quality_notes": "Opening gross claims outstanding taken from Statement of Financial Position technical provisions (claims outstanding) prior-year column. Prior year development figure (GBP 24.7m) is reported in the Claims Outstanding note and director's narrative as 'favourable prior year claims development' - the note context is the gross claims outstanding note so this has been treated as a gross release. No LOB-level quantification provided. Claims development triangle present (gross) used for cross-checking but triangle contains an aggregate 'Pre-2011' column which was excluded. [RAG PYD NOT APPLIED: deterministic figure +15.108m has the opposite sign to both model values [-24.7, -24.7], which agree with each other; model values retained.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -509,14 +578,6 @@
           ],
           [
             84141,
-            null,
-            null,
-            null,
-            null,
-            null
-          ],
-          [
-            null,
             null,
             null,
             null,
@@ -590,7 +651,9 @@
             null,
             null
           ]
-        ]
+        ],
+        "source_page": 44,
+        "entity": 5151
       },
       "_adobe_lob": {
         "gross_premium_mix": [
@@ -698,7 +761,74 @@
           }
         ],
         "currency": "GBP",
-        "method": "azure"
+        "method": "azure",
+        "source_page": 27,
+        "entity": 5151
+      },
+      "_entity_binding": {
+        "requested_syndicate": 5151,
+        "entity_pages": {
+          "none": [
+            0,
+            1
+          ],
+          "5151": [
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48,
+            49,
+            50
+          ]
+        },
+        "foreign_tables_skipped": 0,
+        "foreign_pages": [],
+        "underwriting_year_pages": [],
+        "underwriting_year_tables_skipped": 0,
+        "document_unit_hint": 0.001
       }
     }
   },

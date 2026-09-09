@@ -190,7 +190,13 @@ _UWY_STATEMENT = re.compile(
     r"(?:balance sheet|statement of|cash flow statement|technical account|segmental analysis)"
     r"[^\n]{0,80}\n?[^\n]{0,80}(?:closed year of account|for the 36 months ended|"
     r"36 months to|three[- ]year (?:funded )?accounts)|"
-    r"for the 36 months ended|36 months to 31 december|closed year of account as at", re.I)
+    r"for the 36 months ended|36 months to 31 december|closed year of account as at|"
+    # a statement headed with a closed year of account: "Balance sheet / closed at
+    # 31 December 2022 / 2020 year of account", "Loss for the 2020 closed year of
+    # account", and the closed-year accounting policies (round 54, 623/2022)
+    r"(?:19|20)\d\d closed year of account|"
+    r"closed at 31 december (?:19|20)\d\d[^\n]{0,40}\n?[^\n]{0,40}\n?[^\n]{0,40}year of\s*\n?\s*account|"
+    r"these underwriting(?: year)? accounts have been prepared", re.I)
 _UWY_KINDS = ("underwriting year accounts", "underwriting year", "closed year of account")
 
 
@@ -232,8 +238,19 @@ def page_sections(page_texts: dict, requested: Optional[int]) -> dict:
     companions = {s for s, pgs in marker_pages.items() if s != requested and len(pgs) >= 2}
     companions |= {s for s, pgs in heading_pages.items() if s != requested and len(pgs) >= 3}
     relevant = companions | {requested}
+    # A marker printed on half the pages or more is the document's running header
+    # ("Beazley Syndicate 623 annual accounts" on every page of a filing whose last
+    # eleven pages are the closed 2020 year-of-account accounts); it names the
+    # entity but decides no page's kind (round 54).
+    marker_freq = Counter()
+    for p, (markers, _c, _h, _hc) in per_page.items():
+        for m in set(markers):
+            marker_freq[m] += 1
+    n_pages = max(1, len(page_texts))
+    running = {m for m, n in marker_freq.items() if n >= max(3, 0.5 * n_pages)}
     sections = {}
     entity = None
+    kind = "annual"
     for p in sorted(page_texts):
         markers, counts, head, head_counts = per_page[p]
         marked = {s for s, _ in markers if s in relevant}
@@ -249,16 +266,20 @@ def page_sections(page_texts: dict, requested: Optional[int]) -> dict:
         # "Underwriting year accounts", or a statement heading for a closed year
         # of account or a 36-month period.  A policy note that merely mentions
         # closed years does not make its page a closed-year account page.
-        uwy_marked = any(k == "underwriting_year" for s, k in markers)
-        annual_marked = any(k == "annual" for s, k in markers)
+        effective = [m for m in markers if m not in running]
+        uwy_marked = any(k == "underwriting_year" for s, k in effective)
+        annual_marked = any(k == "annual" for s, k in effective)
         if uwy_marked and not annual_marked:
+            kind = "underwriting_year"
+        elif _UWY_TITLE.search(head) or _UWY_STATEMENT.search(head):
+            # the page's own closed-year heading wins over a marker on the same
+            # page: the running header case, when the header is not frequent
+            # enough to be excluded above
             kind = "underwriting_year"
         elif annual_marked:
             kind = "annual"
-        elif _UWY_TITLE.search(head) or _UWY_STATEMENT.search(head):
-            kind = "underwriting_year"
-        else:
-            kind = "annual"
+        # otherwise the kind carries forward: the closed-year accounts run from
+        # their first statement to the end of the section (round 54)
         sections[p] = (entity, kind)
     return sections
 
@@ -1920,6 +1941,36 @@ _SECTION_HEADERS = {
     "reinsurance acceptances", "reinsurance acceptances:",
 }
 _TOTAL_LABELS = {"total", "sub-total", "subtotal", "grand total", "direct insurance"}
+# Any label that begins "Total ..." is a total or subtotal row, whatever follows:
+# "Total direct", "Total direct insurance", "Total Direct and Reinsurance accepted",
+# "Total - Direct", "Total reinsurance accepted" (round 54; 146 donor records carried
+# one of these as a class, and 623/2022's grand total doubled its premium sum).
+_TOTAL_LABEL_RE = re.compile(r"^\s*(?:grand\s+)?(?:sub-?\s?)?total\b", re.I)
+
+
+def _is_total_label(label_lower: str) -> bool:
+    return label_lower in _TOTAL_LABELS or bool(_TOTAL_LABEL_RE.match(label_lower))
+
+
+def _drop_subtotal_rows(entries: list, tol: float = 0.006) -> tuple:
+    """Remove rows whose amount equals the sum of the rows before them: an unlabelled
+    subtotal ("Direct 542.5" after four direct classes) or a grand total. Returns
+    (kept, dropped)."""
+    kept, dropped, block = [], [], []
+    for e in entries:
+        v = e["amount_raw"]
+        cands = []
+        if len(block) >= 2:
+            cands.append(sum(x["amount_raw"] for x in block))
+        if len(kept) >= 2:
+            cands.append(sum(x["amount_raw"] for x in kept))
+        if v > 0 and any(abs(v - s) <= max(tol * s, 0.15) for s in cands if s > 0):
+            dropped.append(e)
+            block = []
+            continue
+        kept.append(e)
+        block.append(e)
+    return kept, dropped
 
 # Row labels that should be skipped — not real LOBs.
 # RITC (reinsurance to close) rows inflate the total and are not a line of business.
@@ -2146,13 +2197,15 @@ def _parse_nutrient_lob(grid: list[list[str]], report_year: int,
         if label_lower in _SKIP_ROW_LABELS:
             continue
 
-        # Handle totals
-        is_total = label_lower in _TOTAL_LABELS
+        # Handle totals: any "Total ..." label, and the exact legacy set
+        is_total = _is_total_label(label_lower)
         if is_total:
             if gwp_col < len(row):
                 val = _clean_cell(row[gwp_col])
                 if isinstance(val, (int, float)):
-                    total_gwp = abs(val)
+                    # the largest total row is the table's grand total; a
+                    # "Total direct" subtotal must not replace it
+                    total_gwp = max(total_gwp, abs(val))
             continue
 
         # Get GWP value
@@ -2185,10 +2238,20 @@ def _parse_nutrient_lob(grid: list[list[str]], report_year: int,
     if 2 * sum(1 for e in lob_entries if _is_pl_label(e["line_of_business"])) >= len(lob_entries):
         return None
 
+    # An unlabelled subtotal or grand total row is a class to no one (round 54)
+    lob_entries, subtotal_rows = _drop_subtotal_rows(lob_entries)
+    if not lob_entries:
+        return None
+
     # Recalculate total from LOB entries — the "Total" row in the table may
     # include RITC or other skipped rows, making it larger than the sum of
     # the LOB entries we actually kept.
     lob_sum = sum(e["amount_raw"] for e in lob_entries)
+    # ... but classes summing to MORE than the table's own total are double
+    # counted (a subtotal or a comparative column read as a class), and a mix
+    # that does not reconcile with its total is no mix (round 54)
+    if total_gwp > 0 and lob_sum > total_gwp * 1.02:
+        return None
     if total_gwp == 0 or total_gwp > lob_sum * 1.1:
         total_gwp = lob_sum
 

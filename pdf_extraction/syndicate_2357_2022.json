@@ -1,5 +1,5 @@
 {
-  "extraction_timestamp": "2026-07-05T12:38:35.608340+00:00",
+  "extraction_timestamp": "2026-09-09T10:37:37.655774+00:00",
   "spec": {
     "prompt_version": "2.10",
     "field_definitions_version": "1.0",
@@ -10,11 +10,11 @@
     "gemini-2.5-flash": {
       "syndicate": 2357,
       "year": 2022,
-      "opening_reserves_gbp_m": 745.531,
+      "opening_reserves_gbp_m": 834.875,
       "opening_reserves_page": 5,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": 30.736,
-      "prior_year_development_pct": 4.12,
+      "prior_year_development_pct": 3.68,
       "direction": "strengthening",
       "prior_year_movement_page": 1,
       "prior_year_movement_confidence": 0.8,
@@ -49,7 +49,7 @@
       "gross_premium_page": 1,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "Prior year development is based on the net loss for the 2020 closed year of account, as a gross figure for prior year development was not explicitly available. The claims development triangle did not show changes in ultimate estimates from the prior reporting period. [RAG OVERRIDE: Model said PYD=53.171, RAG triangle computed 30.736. Using RAG value.] [RAG OVERRIDE: Model said opening_reserves=834.875, balance sheet gives 745.531m. Using RAG value.]",
+      "data_quality_notes": "Prior year development is based on the net loss for the 2020 closed year of account, as a gross figure for prior year development was not explicitly available. The claims development triangle did not show changes in ultimate estimates from the prior reporting period. [RAG OVERRIDE: Model said PYD=53.171, RAG triangle computed 30.736. Using RAG value.] [RAG OPENING NOT APPLIED: table value 745.531 (provisions_movement, page 33, unit source header) disagrees with both model values [834.875, 834.875], which agree with each other; the model value is retained and the table value recorded for audit.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
@@ -219,20 +219,97 @@
             null,
             null
           ]
-        ]
+        ],
+        "source_page": 26,
+        "entity": 2357
       },
       "_adobe_provisions": {
+        "opening_provenance": {
+          "raw_value": 745531.0,
+          "unit_multiplier": 0.001,
+          "unit_source": "header",
+          "value_m": 745.531,
+          "page": 33,
+          "entity": 2357,
+          "backend": "azure",
+          "table_kind": "provisions_movement"
+        },
         "opening_gross_claims_outstanding": 745.531
+      },
+      "_entity_binding": {
+        "requested_syndicate": 2357,
+        "entity_pages": {
+          "none": [
+            0
+          ],
+          "2357": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37
+          ]
+        },
+        "foreign_tables_skipped": 0,
+        "foreign_pages": [],
+        "underwriting_year_pages": [],
+        "underwriting_year_tables_skipped": 0,
+        "document_unit_hint": 0.001
+      },
+      "opening_reserves_provenance": {
+        "source": "llm",
+        "table_value_not_applied": {
+          "raw_value": 745531.0,
+          "unit_multiplier": 0.001,
+          "unit_source": "header",
+          "value_m": 745.531,
+          "page": 33,
+          "entity": 2357,
+          "backend": "azure",
+          "table_kind": "provisions_movement"
+        }
       }
     },
     "gpt-5-mini": {
       "syndicate": 2357,
       "year": 2022,
-      "opening_reserves_gbp_m": 745.531,
+      "opening_reserves_gbp_m": 834.875,
       "opening_reserves_page": 16,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": 30.736,
-      "prior_year_development_pct": 4.12,
+      "prior_year_development_pct": 3.68,
       "direction": "strengthening",
       "prior_year_movement_page": null,
       "prior_year_movement_confidence": 0.0,
@@ -289,7 +366,7 @@
       "gross_premium_page": 30,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "No explicit GROSS prior-year development (PYD) figure was found in the notes. The technical reserves reconciliation shows a gross movement in 'Claims outstanding' for the year (gross movement = -71,433 $'000) but that line includes current year activity and therefore was not used per the rules. A gross claims development triangle is present (pages 25) but the tabular formatting in the PDF makes diagonal extraction ambiguous; consequently a definitive gross PYD amount could not be computed with high confidence. Opening reserves were taken from the Balance Sheet (gross claims outstanding at 1 Jan 2022 = $834,875k). All monetary amounts are reported in the report's native currency (USD) and in millions (values converted from $'000). [RAG OVERRIDE: Model said opening_reserves=834.875, balance sheet gives 745.531m. Using RAG value.]",
+      "data_quality_notes": "No explicit GROSS prior-year development (PYD) figure was found in the notes. The technical reserves reconciliation shows a gross movement in 'Claims outstanding' for the year (gross movement = -71,433 $'000) but that line includes current year activity and therefore was not used per the rules. A gross claims development triangle is present (pages 25) but the tabular formatting in the PDF makes diagonal extraction ambiguous; consequently a definitive gross PYD amount could not be computed with high confidence. Opening reserves were taken from the Balance Sheet (gross claims outstanding at 1 Jan 2022 = $834,875k). All monetary amounts are reported in the report's native currency (USD) and in millions (values converted from $'000). [RAG OPENING NOT APPLIED: table value 745.531 (provisions_movement, page 33, unit source header) disagrees with both model values [834.875, 834.875], which agree with each other; the model value is retained and the table value recorded for audit.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
@@ -459,10 +536,87 @@
             null,
             null
           ]
-        ]
+        ],
+        "source_page": 26,
+        "entity": 2357
       },
       "_adobe_provisions": {
+        "opening_provenance": {
+          "raw_value": 745531.0,
+          "unit_multiplier": 0.001,
+          "unit_source": "header",
+          "value_m": 745.531,
+          "page": 33,
+          "entity": 2357,
+          "backend": "azure",
+          "table_kind": "provisions_movement"
+        },
         "opening_gross_claims_outstanding": 745.531
+      },
+      "_entity_binding": {
+        "requested_syndicate": 2357,
+        "entity_pages": {
+          "none": [
+            0
+          ],
+          "2357": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37
+          ]
+        },
+        "foreign_tables_skipped": 0,
+        "foreign_pages": [],
+        "underwriting_year_pages": [],
+        "underwriting_year_tables_skipped": 0,
+        "document_unit_hint": 0.001
+      },
+      "opening_reserves_provenance": {
+        "source": "llm",
+        "table_value_not_applied": {
+          "raw_value": 745531.0,
+          "unit_multiplier": 0.001,
+          "unit_source": "header",
+          "value_m": 745.531,
+          "page": 33,
+          "entity": 2357,
+          "backend": "azure",
+          "table_kind": "provisions_movement"
+        }
       }
     }
   },

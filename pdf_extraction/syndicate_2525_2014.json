@@ -1,5 +1,5 @@
 {
-  "extraction_timestamp": "2026-09-05T20:05:58.649251+00:00",
+  "extraction_timestamp": "2026-09-09T10:42:32.776963+00:00",
   "spec": {
     "prompt_version": "2.10",
     "field_definitions_version": "1.0",
@@ -69,19 +69,6 @@
         "total_tokens": 12455,
         "cost_usd": 0.004422
       },
-      "_adobe_provisions": {
-        "opening_provenance": {
-          "raw_value": 130318.0,
-          "unit_multiplier": 0.001,
-          "unit_source": "header",
-          "value_m": 130.318,
-          "page": 19,
-          "entity": 2525,
-          "backend": "azure",
-          "table_kind": "balance_sheet_liabilities"
-        },
-        "opening_gross_claims_outstanding": 130.318
-      },
       "_entity_binding": {
         "requested_syndicate": 2525,
         "entity_pages": {
@@ -124,28 +111,40 @@
         },
         "foreign_tables_skipped": 0,
         "foreign_pages": [],
-        "underwriting_year_pages": [],
-        "underwriting_year_tables_skipped": 0,
+        "underwriting_year_pages": [
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32
+        ],
+        "underwriting_year_tables_skipped": 12,
         "document_unit_hint": 0.001
-      },
-      "opening_reserves_provenance": {
-        "raw_value": 130318.0,
-        "unit_multiplier": 0.001,
-        "unit_source": "header",
-        "value_m": 130.318,
-        "page": 19,
-        "entity": 2525,
-        "backend": "azure",
-        "table_kind": "balance_sheet_liabilities",
-        "source": "azure_table",
-        "applied_value_m": 130.318,
-        "unit_resolution": "header"
       }
     },
     "gpt-5-mini": {
       "syndicate": 2525,
       "year": 2014,
-      "opening_reserves_gbp_m": 130.318,
+      "opening_reserves_gbp_m": 116.166,
       "opening_reserves_page": 16,
       "opening_reserves_confidence": 0.5,
       "prior_year_development_gbp_m": null,
@@ -187,7 +186,7 @@
       "gross_premium_page": 22,
       "gross_premium_confidence": 0.8,
       "currency": "GBP",
-      "data_quality_notes": "Source images are low-resolution and rotated. Balance sheet and technical provisions tables are present but some numeric cells are difficult to read. Opening gross claims outstanding was read from the Liabilities (Claims outstanding) prior-year column but is not crystal-clear (confidence 0.5). The report text explicitly mentions 'reserve releases from 2012 and prior years' (so direction = release) but no unambiguous GROSS prior-year movement amount could be located in the readable images; therefore prior_year_development_gbp_m is null. Gross premium is taken from the gross written premium line (42,243) -> 42.243m. No clear claims development triangle was readable; none is provided here. [RAG OVERRIDE: Model said opening_reserves=116.166, balance sheet gives 130.318m. Using RAG value.]",
+      "data_quality_notes": "Source images are low-resolution and rotated. Balance sheet and technical provisions tables are present but some numeric cells are difficult to read. Opening gross claims outstanding was read from the Liabilities (Claims outstanding) prior-year column but is not crystal-clear (confidence 0.5). The report text explicitly mentions 'reserve releases from 2012 and prior years' (so direction = release) but no unambiguous GROSS prior-year movement amount could be located in the readable images; therefore prior_year_development_gbp_m is null. Gross premium is taken from the gross written premium line (42,243) -> 42.243m. No clear claims development triangle was readable; none is provided here.",
       "_claims_triangle": {
         "type": "none",
         "currency": "GBP",
@@ -207,19 +206,6 @@
         "output_tokens": 3383,
         "total_tokens": 22064,
         "cost_usd": 0.011436
-      },
-      "_adobe_provisions": {
-        "opening_provenance": {
-          "raw_value": 130318.0,
-          "unit_multiplier": 0.001,
-          "unit_source": "header",
-          "value_m": 130.318,
-          "page": 19,
-          "entity": 2525,
-          "backend": "azure",
-          "table_kind": "balance_sheet_liabilities"
-        },
-        "opening_gross_claims_outstanding": 130.318
       },
       "_entity_binding": {
         "requested_syndicate": 2525,
@@ -263,22 +249,34 @@
         },
         "foreign_tables_skipped": 0,
         "foreign_pages": [],
-        "underwriting_year_pages": [],
-        "underwriting_year_tables_skipped": 0,
+        "underwriting_year_pages": [
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32
+        ],
+        "underwriting_year_tables_skipped": 12,
         "document_unit_hint": 0.001
-      },
-      "opening_reserves_provenance": {
-        "raw_value": 130318.0,
-        "unit_multiplier": 0.001,
-        "unit_source": "header",
-        "value_m": 130.318,
-        "page": 19,
-        "entity": 2525,
-        "backend": "azure",
-        "table_kind": "balance_sheet_liabilities",
-        "source": "azure_table",
-        "applied_value_m": 130.318,
-        "unit_resolution": "header"
       }
     }
   },
@@ -286,10 +284,16 @@
   "total_tokens": 34519,
   "validation": {
     "passed": false,
-    "total_discrepancies": 18,
+    "total_discrepancies": 19,
     "within_tolerance": 16,
-    "hard_failures": 2,
+    "hard_failures": 3,
     "hard_failure_details": [
+      {
+        "field": "opening_reserves_gbp_m",
+        "type": "value_mismatch",
+        "gemini-2.5-flash": 130.318,
+        "gpt-5-mini": 116.166
+      },
       {
         "field": "prior_year_development_gbp_m",
         "type": "value_mismatch",

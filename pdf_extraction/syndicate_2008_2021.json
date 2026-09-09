@@ -1,5 +1,5 @@
 {
-  "extraction_timestamp": "2026-07-05T23:30:52.033318+00:00",
+  "extraction_timestamp": "2026-09-09T10:16:41.414133+00:00",
   "spec": {
     "prompt_version": "2.10",
     "field_definitions_version": "1.0",
@@ -13,8 +13,8 @@
       "opening_reserves_gbp_m": 1297.112,
       "opening_reserves_page": 5,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": 186.8,
-      "prior_year_development_pct": 14.4,
+      "prior_year_development_gbp_m": 383.9,
+      "prior_year_development_pct": 29.6,
       "direction": "strengthening",
       "prior_year_movement_page": 20,
       "prior_year_movement_confidence": 1.0,
@@ -55,11 +55,6 @@
           "percentage_of_total": 0.2
         },
         {
-          "line_of_business": "Total direct",
-          "amount_gbp_m": 1.7,
-          "percentage_of_total": 0.4
-        },
-        {
           "line_of_business": "Reinsurance*",
           "amount_gbp_m": 416.7,
           "percentage_of_total": 99.6
@@ -68,7 +63,7 @@
       "gross_premium_page": 17,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "There is a discrepancy in the net prior year development figure between Note 6 (Claims) and Note 17 (Technical provisions). Note 6 states a net release of (GBP 374,859) while Note 17 states a net strengthening of 381,908. The gross figure from Note 17 (383,949) is used as per instructions to prioritize gross figures from the Technical Provisions note. [RAG OVERRIDE: Model said PYD=383.949, RAG triangle computed 186.8. Using RAG value.]",
+      "data_quality_notes": "There is a discrepancy in the net prior year development figure between Note 6 (Claims) and Note 17 (Technical provisions). Note 6 states a net release of (GBP 374,859) while Note 17 states a net strengthening of 381,908. The gross figure from Note 17 (383,949) is used as per instructions to prioritize gross figures from the Technical Provisions note.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -262,7 +257,9 @@
             null,
             null
           ]
-        ]
+        ],
+        "source_page": 53,
+        "entity": 2008
       },
       "_adobe_lob": {
         "gross_premium_mix": [
@@ -290,11 +287,6 @@
             "line_of_business": "Other",
             "amount_gbp_m": 0.7,
             "percentage_of_total": 0.2
-          },
-          {
-            "line_of_business": "Total direct",
-            "amount_gbp_m": 1.7,
-            "percentage_of_total": 0.4
           },
           {
             "line_of_business": "Reinsurance*",
@@ -325,22 +317,117 @@
             "amount_gbp_m": -0.0
           },
           {
-            "line_of_business": "Total direct",
-            "amount_gbp_m": -0.3
-          },
-          {
             "line_of_business": "Reinsurance*",
             "amount_gbp_m": -383.7
           }
         ],
         "currency": "GBP",
-        "method": "azure"
+        "method": "azure",
+        "source_page": 44,
+        "entity": 2008
       },
       "_adobe_provisions": {
-        "gross_prior_year_claims": 186.8,
-        "ri_share_prior_year": 0.0,
-        "net_prior_year_claims": 0.0,
+        "unit_source": "header",
+        "source_page": 54,
+        "entity": 2008,
+        "opening_provenance": {
+          "raw_value": 1297112.0,
+          "unit_multiplier": 0.001,
+          "unit_source": "header",
+          "value_m": 1297.112,
+          "page": 54,
+          "entity": 2008,
+          "backend": "azure",
+          "table_kind": "provisions_movement"
+        },
+        "gross_prior_year_claims": 383.9,
+        "ri_share_prior_year": -2.0,
+        "net_prior_year_claims": 381.9,
         "opening_gross_claims_outstanding": 1297.112
+      },
+      "_entity_binding": {
+        "requested_syndicate": 2008,
+        "entity_pages": {
+          "none": [
+            0
+          ],
+          "2008": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48,
+            49,
+            50,
+            51,
+            52,
+            53,
+            54,
+            55,
+            56
+          ]
+        },
+        "foreign_tables_skipped": 0,
+        "foreign_pages": [],
+        "underwriting_year_pages": [],
+        "underwriting_year_tables_skipped": 0,
+        "document_unit_hint": 0.001
+      },
+      "opening_reserves_provenance": {
+        "raw_value": 1297112.0,
+        "unit_multiplier": 0.001,
+        "unit_source": "header",
+        "value_m": 1297.112,
+        "page": 54,
+        "entity": 2008,
+        "backend": "azure",
+        "table_kind": "provisions_movement",
+        "source": "azure_table",
+        "applied_value_m": 1297.112,
+        "unit_resolution": "header"
       }
     },
     "gpt-5-mini": {
@@ -349,8 +436,8 @@
       "opening_reserves_gbp_m": 1297.112,
       "opening_reserves_page": 19,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": 186.8,
-      "prior_year_development_pct": 14.4,
+      "prior_year_development_gbp_m": 383.9,
+      "prior_year_development_pct": 29.6,
       "direction": "strengthening",
       "prior_year_movement_page": 52,
       "prior_year_movement_confidence": 1.0,
@@ -462,11 +549,6 @@
           "percentage_of_total": 0.2
         },
         {
-          "line_of_business": "Total direct",
-          "amount_gbp_m": 1.7,
-          "percentage_of_total": 0.4
-        },
-        {
           "line_of_business": "Reinsurance*",
           "amount_gbp_m": 416.7,
           "percentage_of_total": 99.6
@@ -475,7 +557,7 @@
       "gross_premium_page": 17,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior year development gross figure taken from Technical Provisions note 'Change in prior year provisions' (gross column) - high confidence. Some P&L lines in the report show net (after reinsurance) movements which were intentionally not used. The claims development triangle exists and includes individual UW years but the syndicate executed significant reinsurance/portfolio transactions (LPT; Part VII transfer) which may distort development patterns for some years; lob-level gross PYD amounts are not explicitly broken out in the notes so LOB-specific amounts are null. [RAG OVERRIDE: Model said PYD=383.949, RAG triangle computed 186.8. Using RAG value.]",
+      "data_quality_notes": "Prior year development gross figure taken from Technical Provisions note 'Change in prior year provisions' (gross column) - high confidence. Some P&L lines in the report show net (after reinsurance) movements which were intentionally not used. The claims development triangle exists and includes individual UW years but the syndicate executed significant reinsurance/portfolio transactions (LPT; Part VII transfer) which may distort development patterns for some years; lob-level gross PYD amounts are not explicitly broken out in the notes so LOB-specific amounts are null.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -669,7 +751,9 @@
             null,
             null
           ]
-        ]
+        ],
+        "source_page": 53,
+        "entity": 2008
       },
       "_adobe_lob": {
         "gross_premium_mix": [
@@ -697,11 +781,6 @@
             "line_of_business": "Other",
             "amount_gbp_m": 0.7,
             "percentage_of_total": 0.2
-          },
-          {
-            "line_of_business": "Total direct",
-            "amount_gbp_m": 1.7,
-            "percentage_of_total": 0.4
           },
           {
             "line_of_business": "Reinsurance*",
@@ -732,22 +811,117 @@
             "amount_gbp_m": -0.0
           },
           {
-            "line_of_business": "Total direct",
-            "amount_gbp_m": -0.3
-          },
-          {
             "line_of_business": "Reinsurance*",
             "amount_gbp_m": -383.7
           }
         ],
         "currency": "GBP",
-        "method": "azure"
+        "method": "azure",
+        "source_page": 44,
+        "entity": 2008
       },
       "_adobe_provisions": {
-        "gross_prior_year_claims": 186.8,
-        "ri_share_prior_year": 0.0,
-        "net_prior_year_claims": 0.0,
+        "unit_source": "header",
+        "source_page": 54,
+        "entity": 2008,
+        "opening_provenance": {
+          "raw_value": 1297112.0,
+          "unit_multiplier": 0.001,
+          "unit_source": "header",
+          "value_m": 1297.112,
+          "page": 54,
+          "entity": 2008,
+          "backend": "azure",
+          "table_kind": "provisions_movement"
+        },
+        "gross_prior_year_claims": 383.9,
+        "ri_share_prior_year": -2.0,
+        "net_prior_year_claims": 381.9,
         "opening_gross_claims_outstanding": 1297.112
+      },
+      "_entity_binding": {
+        "requested_syndicate": 2008,
+        "entity_pages": {
+          "none": [
+            0
+          ],
+          "2008": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48,
+            49,
+            50,
+            51,
+            52,
+            53,
+            54,
+            55,
+            56
+          ]
+        },
+        "foreign_tables_skipped": 0,
+        "foreign_pages": [],
+        "underwriting_year_pages": [],
+        "underwriting_year_tables_skipped": 0,
+        "document_unit_hint": 0.001
+      },
+      "opening_reserves_provenance": {
+        "raw_value": 1297112.0,
+        "unit_multiplier": 0.001,
+        "unit_source": "header",
+        "value_m": 1297.112,
+        "page": 54,
+        "entity": 2008,
+        "backend": "azure",
+        "table_kind": "provisions_movement",
+        "source": "azure_table",
+        "applied_value_m": 1297.112,
+        "unit_resolution": "header"
       }
     }
   },

@@ -1,7 +1,7 @@
 {
-  "extraction_timestamp": "2026-03-17T07:18:32.435945+00:00",
+  "extraction_timestamp": "2026-09-09T09:43:48.969761+00:00",
   "spec": {
-    "prompt_version": "2.6",
+    "prompt_version": "2.10",
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -78,11 +78,6 @@
           "percentage_of_total": 8.4
         },
         {
-          "line_of_business": "Total direct",
-          "amount_gbp_m": 162.4,
-          "percentage_of_total": 73.2
-        },
-        {
           "line_of_business": "Reinsurance",
           "amount_gbp_m": 59.6,
           "percentage_of_total": 26.8
@@ -91,7 +86,7 @@
       "gross_premium_page": 20,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The claims development triangle calculation for prior year development yielded a different amount (-GBP 4.908m) than the explicitly stated narrative figure (-GBP 9.0m). The narrative figure was used as it is more direct and specific to 'prior year reserves'. [RAG OVERRIDE: Model said PYD=-9.0, RAG triangle computed -4.908. Using RAG value.]",
+      "data_quality_notes": "The claims development triangle calculation for prior year development yielded a different amount (-GBP 4.908m) than the explicitly stated narrative figure (-GBP 9.0m). The narrative figure was used as it is more direct and specific to 'prior year reserves'. [RAG PYD NOT APPLIED: deterministic figure +12.900m has the opposite sign to both model values [-9.0, -4.908], which agree with each other; model values retained.] [CODE OVERRIDE: Model said PYD=-9.0, but code computed -4.908 from triangle (OVERRIDE from agreed triangles). Using code value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -201,7 +196,9 @@
             null,
             null
           ]
-        ]
+        ],
+        "source_page": 23,
+        "entity": 1861
       },
       "_adobe_lob": {
         "gross_premium_mix": [
@@ -236,11 +233,6 @@
             "percentage_of_total": 8.4
           },
           {
-            "line_of_business": "Total direct",
-            "amount_gbp_m": 162.4,
-            "percentage_of_total": 73.2
-          },
-          {
             "line_of_business": "Reinsurance",
             "amount_gbp_m": 59.6,
             "percentage_of_total": 26.8
@@ -273,21 +265,63 @@
             "amount_gbp_m": -6.3
           },
           {
-            "line_of_business": "Total direct",
-            "amount_gbp_m": -64.5
-          },
-          {
             "line_of_business": "Reinsurance",
             "amount_gbp_m": -26.9
           }
         ],
         "currency": "GBP",
-        "method": "azure"
+        "method": "azure",
+        "source_page": 20,
+        "entity": 1861
       },
       "_adobe_provisions": {
+        "unit_source": "header",
+        "source_page": 23,
+        "entity": 1861,
         "gross_prior_year_claims": 12.9,
         "ri_share_prior_year": 0.0,
         "net_prior_year_claims": 0.0
+      },
+      "_entity_binding": {
+        "requested_syndicate": 1861,
+        "entity_pages": {
+          "none": [
+            0
+          ],
+          "1861": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26
+          ]
+        },
+        "foreign_tables_skipped": 0,
+        "foreign_pages": [],
+        "underwriting_year_pages": [],
+        "underwriting_year_tables_skipped": 0,
+        "document_unit_hint": 0.001
       }
     },
     "gpt-5-mini": {
@@ -362,11 +396,6 @@
           "percentage_of_total": 8.4
         },
         {
-          "line_of_business": "Total direct",
-          "amount_gbp_m": 162.4,
-          "percentage_of_total": 73.2
-        },
-        {
           "line_of_business": "Reinsurance",
           "amount_gbp_m": 59.6,
           "percentage_of_total": 26.8
@@ -375,7 +404,7 @@
       "gross_premium_page": 34,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Gross prior-year movement was not stated explicitly as a single gross line in the movement note; a net favourable development of GBP 9.0m (after reinsurance) is reported in narrative. The gross prior-year development figure (-GBP 4.908m) was calculated from the gross claims development triangle (gross basis). Confidence is moderate-high for the triangle calculation (0.8). No RITC distortion was identified in the notes.",
+      "data_quality_notes": "Gross prior-year movement was not stated explicitly as a single gross line in the movement note; a net favourable development of GBP 9.0m (after reinsurance) is reported in narrative. The gross prior-year development figure (-GBP 4.908m) was calculated from the gross claims development triangle (gross basis). Confidence is moderate-high for the triangle calculation (0.8). No RITC distortion was identified in the notes. [RAG PYD NOT APPLIED: deterministic figure +12.900m has the opposite sign to both model values [-9.0, -4.908], which agree with each other; model values retained.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -485,7 +514,9 @@
             null,
             null
           ]
-        ]
+        ],
+        "source_page": 23,
+        "entity": 1861
       },
       "_adobe_lob": {
         "gross_premium_mix": [
@@ -520,11 +551,6 @@
             "percentage_of_total": 8.4
           },
           {
-            "line_of_business": "Total direct",
-            "amount_gbp_m": 162.4,
-            "percentage_of_total": 73.2
-          },
-          {
             "line_of_business": "Reinsurance",
             "amount_gbp_m": 59.6,
             "percentage_of_total": 26.8
@@ -557,21 +583,63 @@
             "amount_gbp_m": -6.3
           },
           {
-            "line_of_business": "Total direct",
-            "amount_gbp_m": -64.5
-          },
-          {
             "line_of_business": "Reinsurance",
             "amount_gbp_m": -26.9
           }
         ],
         "currency": "GBP",
-        "method": "azure"
+        "method": "azure",
+        "source_page": 20,
+        "entity": 1861
       },
       "_adobe_provisions": {
+        "unit_source": "header",
+        "source_page": 23,
+        "entity": 1861,
         "gross_prior_year_claims": 12.9,
         "ri_share_prior_year": 0.0,
         "net_prior_year_claims": 0.0
+      },
+      "_entity_binding": {
+        "requested_syndicate": 1861,
+        "entity_pages": {
+          "none": [
+            0
+          ],
+          "1861": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26
+          ]
+        },
+        "foreign_tables_skipped": 0,
+        "foreign_pages": [],
+        "underwriting_year_pages": [],
+        "underwriting_year_tables_skipped": 0,
+        "document_unit_hint": 0.001
       }
     }
   },

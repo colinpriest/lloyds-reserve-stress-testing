@@ -1,5 +1,5 @@
 {
-  "extraction_timestamp": "2026-09-05T19:45:15.068848+00:00",
+  "extraction_timestamp": "2026-09-09T09:51:55.882518+00:00",
   "spec": {
     "prompt_version": "2.10",
     "field_definitions_version": "1.0",
@@ -13,8 +13,8 @@
       "opening_reserves_gbp_m": 448.1,
       "opening_reserves_page": 6,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": -45.3,
-      "prior_year_development_pct": -10.11,
+      "prior_year_development_gbp_m": -45.34,
+      "prior_year_development_pct": -10.12,
       "direction": "release",
       "prior_year_movement_page": 19,
       "prior_year_movement_confidence": 1.0,
@@ -131,28 +131,33 @@
           "confidence": 0.5
         }
       ],
-      "gross_premiums_written_gbp_m": 733.7,
+      "gross_premiums_written_gbp_m": 1069.465,
       "gross_premium_mix": [
         {
+          "line_of_business": "Marine, aviation, and transport",
+          "amount_gbp_m": 5.209,
+          "percentage_of_total": 0.49
+        },
+        {
           "line_of_business": "Fire and other damage to property",
-          "amount_gbp_m": 4.5,
-          "percentage_of_total": 0.6
+          "amount_gbp_m": 9.893,
+          "percentage_of_total": 0.92
         },
         {
-          "line_of_business": "Other",
-          "amount_gbp_m": 1.1,
-          "percentage_of_total": 0.1
+          "line_of_business": "Miscellaneous",
+          "amount_gbp_m": 0.0,
+          "percentage_of_total": 0.0
         },
         {
-          "line_of_business": "Technical result before investment income",
-          "amount_gbp_m": 728.2,
-          "percentage_of_total": 99.3
+          "line_of_business": "Reinsurance acceptances",
+          "amount_gbp_m": 1054.363,
+          "percentage_of_total": 98.59
         }
       ],
       "gross_premium_page": 16,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The explicit 'Change in estimates of prior year provisions' figure of -GBP 45.340m (release) on page 19 is used as the primary source for prior year development. This figure is supported by narrative text on page 2 stating 'improvement in its prior year reserves'. However, a calculation from the gross claims development triangle on page 19 for years 2021 and 2022 (excluding the two most recent years) suggests a strengthening of +GBP 11.932m. The explicit note is prioritized as it directly addresses 'prior year provisions' and the triangle may be affected by other adjustments like Reinsurance to Close (RITC) for the 2022 year of account mentioned on page 30.",
+      "data_quality_notes": "The explicit 'Change in estimates of prior year provisions' figure of -GBP 45.340m (release) on page 19 is used as the primary source for prior year development. This figure is supported by narrative text on page 2 stating 'improvement in its prior year reserves'. However, a calculation from the gross claims development triangle on page 19 for years 2021 and 2022 (excluding the two most recent years) suggests a strengthening of +GBP 11.932m. The explicit note is prioritized as it directly addresses 'prior year provisions' and the triangle may be affected by other adjustments like Reinsurance to Close (RITC) for the 2022 year of account mentioned on page 30. [RAG PYD NOT APPLIED: deterministic figure +11.932m has the opposite sign to both model values [-45.34, -45.34], which agree with each other; model values retained.] [CODE PYD NOT APPLIED: deterministic figure +11.932m has the opposite sign to both model values [-45.34, -45.34], which agree with each other; model values retained.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -242,63 +247,6 @@
         "source_page": 39,
         "entity": 1910
       },
-      "_adobe_lob": {
-        "gross_premium_mix": [
-          {
-            "line_of_business": "Fire and other damage to property",
-            "amount_gbp_m": 4.5,
-            "percentage_of_total": 0.6
-          },
-          {
-            "line_of_business": "Other",
-            "amount_gbp_m": 1.1,
-            "percentage_of_total": 0.1
-          },
-          {
-            "line_of_business": "Technical result before investment income",
-            "amount_gbp_m": 728.2,
-            "percentage_of_total": 99.3
-          }
-        ],
-        "gross_premiums_written_gbp_m": 733.7,
-        "claims_incurred_by_lob": [
-          {
-            "line_of_business": "Fire and other damage to property",
-            "amount_gbp_m": -0.7
-          },
-          {
-            "line_of_business": "Other",
-            "amount_gbp_m": -0.8
-          },
-          {
-            "line_of_business": "Technical result before investment income",
-            "amount_gbp_m": -649.7
-          }
-        ],
-        "currency": "GBP",
-        "method": "azure",
-        "source_page": 56,
-        "entity": 1910
-      },
-      "_adobe_provisions": {
-        "unit_source": "header",
-        "source_page": 39,
-        "entity": 1910,
-        "opening_provenance": {
-          "raw_value": 448100.0,
-          "unit_multiplier": 0.001,
-          "unit_source": "header",
-          "value_m": 448.1,
-          "page": 39,
-          "entity": 1910,
-          "backend": "azure",
-          "table_kind": "provisions_movement"
-        },
-        "gross_prior_year_claims": -45.3,
-        "ri_share_prior_year": 10.1,
-        "net_prior_year_claims": -35.3,
-        "opening_gross_claims_outstanding": 448.1
-      },
       "_entity_binding": {
         "requested_syndicate": 1910,
         "entity_pages": {
@@ -372,25 +320,68 @@
         "foreign_pages": [],
         "underwriting_year_pages": [
           2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
           43,
+          44,
+          45,
           46,
-          52
+          47,
+          48,
+          49,
+          50,
+          51,
+          52,
+          53,
+          54,
+          55,
+          56,
+          57,
+          58,
+          59,
+          60,
+          61
         ],
-        "underwriting_year_tables_skipped": 2,
+        "underwriting_year_tables_skipped": 44,
         "document_unit_hint": 0.001
-      },
-      "opening_reserves_provenance": {
-        "raw_value": 448100.0,
-        "unit_multiplier": 0.001,
-        "unit_source": "header",
-        "value_m": 448.1,
-        "page": 39,
-        "entity": 1910,
-        "backend": "azure",
-        "table_kind": "provisions_movement",
-        "source": "azure_table",
-        "applied_value_m": 448.1,
-        "unit_resolution": "header"
       }
     },
     "gpt-5-mini": {
@@ -399,8 +390,8 @@
       "opening_reserves_gbp_m": 448.1,
       "opening_reserves_page": 17,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": -45.3,
-      "prior_year_development_pct": -10.11,
+      "prior_year_development_gbp_m": -45.34,
+      "prior_year_development_pct": -10.12,
       "direction": "release",
       "prior_year_movement_page": 39,
       "prior_year_movement_confidence": 1.0,
@@ -501,28 +492,33 @@
           "confidence": 0.2
         }
       ],
-      "gross_premiums_written_gbp_m": 733.7,
+      "gross_premiums_written_gbp_m": 1069.465,
       "gross_premium_mix": [
         {
+          "line_of_business": "Marine, aviation, and transport",
+          "amount_gbp_m": 5.209,
+          "percentage_of_total": 0.487
+        },
+        {
           "line_of_business": "Fire and other damage to property",
-          "amount_gbp_m": 4.5,
-          "percentage_of_total": 0.6
+          "amount_gbp_m": 9.893,
+          "percentage_of_total": 0.925
         },
         {
-          "line_of_business": "Other",
-          "amount_gbp_m": 1.1,
-          "percentage_of_total": 0.1
+          "line_of_business": "Miscellaneous",
+          "amount_gbp_m": 0.0,
+          "percentage_of_total": 0.0
         },
         {
-          "line_of_business": "Technical result before investment income",
-          "amount_gbp_m": 728.2,
-          "percentage_of_total": 99.3
+          "line_of_business": "Reinsurance acceptances",
+          "amount_gbp_m": 1054.363,
+          "percentage_of_total": 98.588
         }
       ],
       "gross_premium_page": 33,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior year development (gross) taken directly from the 'Change in estimates of prior year provisions' line in the technical provisions reconciliation (Note: amounts are presented in the accounts as GBP 000; converted to millions). The report references RITC activity and a prior year RITC (Syndicate 6117) which can distort comparative development; however the movement line used is explicit gross movement. No gross per-LOB prior-year movement amounts are provided, so lob-level amounts are not quantified. Named catastrophe events are mentioned but not quantified at LOB level.",
+      "data_quality_notes": "Prior year development (gross) taken directly from the 'Change in estimates of prior year provisions' line in the technical provisions reconciliation (Note: amounts are presented in the accounts as GBP 000; converted to millions). The report references RITC activity and a prior year RITC (Syndicate 6117) which can distort comparative development; however the movement line used is explicit gross movement. No gross per-LOB prior-year movement amounts are provided, so lob-level amounts are not quantified. Named catastrophe events are mentioned but not quantified at LOB level. [RAG PYD NOT APPLIED: deterministic figure +11.932m has the opposite sign to both model values [-45.34, -45.34], which agree with each other; model values retained.] [CODE PYD NOT APPLIED: deterministic figure +11.932m has the opposite sign to both model values [-45.34, -45.34], which agree with each other; model values retained.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -612,63 +608,6 @@
         "source_page": 39,
         "entity": 1910
       },
-      "_adobe_lob": {
-        "gross_premium_mix": [
-          {
-            "line_of_business": "Fire and other damage to property",
-            "amount_gbp_m": 4.5,
-            "percentage_of_total": 0.6
-          },
-          {
-            "line_of_business": "Other",
-            "amount_gbp_m": 1.1,
-            "percentage_of_total": 0.1
-          },
-          {
-            "line_of_business": "Technical result before investment income",
-            "amount_gbp_m": 728.2,
-            "percentage_of_total": 99.3
-          }
-        ],
-        "gross_premiums_written_gbp_m": 733.7,
-        "claims_incurred_by_lob": [
-          {
-            "line_of_business": "Fire and other damage to property",
-            "amount_gbp_m": -0.7
-          },
-          {
-            "line_of_business": "Other",
-            "amount_gbp_m": -0.8
-          },
-          {
-            "line_of_business": "Technical result before investment income",
-            "amount_gbp_m": -649.7
-          }
-        ],
-        "currency": "GBP",
-        "method": "azure",
-        "source_page": 56,
-        "entity": 1910
-      },
-      "_adobe_provisions": {
-        "unit_source": "header",
-        "source_page": 39,
-        "entity": 1910,
-        "opening_provenance": {
-          "raw_value": 448100.0,
-          "unit_multiplier": 0.001,
-          "unit_source": "header",
-          "value_m": 448.1,
-          "page": 39,
-          "entity": 1910,
-          "backend": "azure",
-          "table_kind": "provisions_movement"
-        },
-        "gross_prior_year_claims": -45.3,
-        "ri_share_prior_year": 10.1,
-        "net_prior_year_claims": -35.3,
-        "opening_gross_claims_outstanding": 448.1
-      },
       "_entity_binding": {
         "requested_syndicate": 1910,
         "entity_pages": {
@@ -742,25 +681,68 @@
         "foreign_pages": [],
         "underwriting_year_pages": [
           2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
           43,
+          44,
+          45,
           46,
-          52
+          47,
+          48,
+          49,
+          50,
+          51,
+          52,
+          53,
+          54,
+          55,
+          56,
+          57,
+          58,
+          59,
+          60,
+          61
         ],
-        "underwriting_year_tables_skipped": 2,
+        "underwriting_year_tables_skipped": 44,
         "document_unit_hint": 0.001
-      },
-      "opening_reserves_provenance": {
-        "raw_value": 448100.0,
-        "unit_multiplier": 0.001,
-        "unit_source": "header",
-        "value_m": 448.1,
-        "page": 39,
-        "entity": 1910,
-        "backend": "azure",
-        "table_kind": "provisions_movement",
-        "source": "azure_table",
-        "applied_value_m": 448.1,
-        "unit_resolution": "header"
       }
     }
   },
@@ -768,8 +750,8 @@
   "total_tokens": 57685,
   "validation": {
     "passed": true,
-    "total_discrepancies": 12,
-    "within_tolerance": 12,
+    "total_discrepancies": 15,
+    "within_tolerance": 15,
     "hard_failures": 0,
     "hard_failure_details": []
   }

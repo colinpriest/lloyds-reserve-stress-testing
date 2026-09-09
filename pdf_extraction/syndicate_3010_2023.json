@@ -1,5 +1,5 @@
 {
-  "extraction_timestamp": "2026-07-05T14:47:23.160741+00:00",
+  "extraction_timestamp": "2026-09-09T11:02:16.493131+00:00",
   "spec": {
     "prompt_version": "2.10",
     "field_definitions_version": "1.0",
@@ -13,8 +13,8 @@
       "opening_reserves_gbp_m": 262.068,
       "opening_reserves_page": 5,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": 146.6,
-      "prior_year_development_pct": 55.94,
+      "prior_year_development_gbp_m": 95.6,
+      "prior_year_development_pct": 36.48,
       "direction": "strengthening",
       "prior_year_movement_page": 17,
       "prior_year_movement_confidence": 1.0,
@@ -110,7 +110,7 @@
       "gross_premium_page": 15,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "The 'exact_reserve_text' is a table entry from the Technical Provisions note, not a narrative sentence. The claims development triangle does not show changes in estimates from the prior year's report, only the latest estimate for each development period. The prior year development figure is taken from the 'Change in prior year provisions' line in the Technical Provisions note. [RAG OVERRIDE: Model said PYD=95.571, RAG triangle computed 146.6. Using RAG value.]",
+      "data_quality_notes": "The 'exact_reserve_text' is a table entry from the Technical Provisions note, not a narrative sentence. The claims development triangle does not show changes in estimates from the prior year's report, only the latest estimate for each development period. The prior year development figure is taken from the 'Change in prior year provisions' line in the Technical Provisions note.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
@@ -400,7 +400,9 @@
             null,
             null
           ]
-        ]
+        ],
+        "source_page": 39,
+        "entity": 3010
       },
       "_adobe_lob": {
         "gross_premium_mix": [
@@ -457,10 +459,91 @@
         "method": "azure_text_fallback"
       },
       "_adobe_provisions": {
-        "gross_prior_year_claims": 146.6,
-        "ri_share_prior_year": 80.8,
-        "net_prior_year_claims": 65.8,
+        "unit_source": "header",
+        "source_page": 40,
+        "entity": 3010,
+        "opening_provenance": {
+          "raw_value": 262068.0,
+          "unit_multiplier": 0.001,
+          "unit_source": "header",
+          "value_m": 262.068,
+          "page": 40,
+          "entity": 3010,
+          "backend": "azure",
+          "table_kind": "provisions_movement"
+        },
+        "gross_prior_year_claims": 95.6,
+        "ri_share_prior_year": 33.5,
         "opening_gross_claims_outstanding": 262.068
+      },
+      "_entity_binding": {
+        "requested_syndicate": 3010,
+        "entity_pages": {
+          "none": [
+            0
+          ],
+          "3010": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41
+          ]
+        },
+        "foreign_tables_skipped": 0,
+        "foreign_pages": [],
+        "underwriting_year_pages": [],
+        "underwriting_year_tables_skipped": 0,
+        "document_unit_hint": 0.001
+      },
+      "opening_reserves_provenance": {
+        "raw_value": 262068.0,
+        "unit_multiplier": 0.001,
+        "unit_source": "header",
+        "value_m": 262.068,
+        "page": 40,
+        "entity": 3010,
+        "backend": "azure",
+        "table_kind": "provisions_movement",
+        "source": "azure_table",
+        "applied_value_m": 262.068,
+        "unit_resolution": "header"
       }
     },
     "gpt-5-mini": {
@@ -469,8 +552,8 @@
       "opening_reserves_gbp_m": 262.068,
       "opening_reserves_page": 14,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": 146.6,
-      "prior_year_development_pct": 55.94,
+      "prior_year_development_gbp_m": 95.6,
+      "prior_year_development_pct": 36.48,
       "direction": "strengthening",
       "prior_year_movement_page": 37,
       "prior_year_movement_confidence": 1.0,
@@ -584,7 +667,7 @@
       "gross_premium_page": 3,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "All amounts taken from the syndicate annual report which presents figures in US Dollars and in $'000. Values in the JSON numeric fields represent millions of the report currency (USD). The opening reserves and prior year development were taken from the Technical Provisions reconciliation (Note 19) gross columns. exact_reserve_text was taken from the numeric table row since no standalone sentence described the gross prior-year movement. Causes and LOB-specific movements are partly inferred from management commentary (confidence <1.0). The field names use '_gbp_m' per schema but values are in USD millions (native currency). [RAG OVERRIDE: Model said PYD=95.571, RAG triangle computed 146.6. Using RAG value.]",
+      "data_quality_notes": "All amounts taken from the syndicate annual report which presents figures in US Dollars and in $'000. Values in the JSON numeric fields represent millions of the report currency (USD). The opening reserves and prior year development were taken from the Technical Provisions reconciliation (Note 19) gross columns. exact_reserve_text was taken from the numeric table row since no standalone sentence described the gross prior-year movement. Causes and LOB-specific movements are partly inferred from management commentary (confidence <1.0). The field names use '_gbp_m' per schema but values are in USD millions (native currency).",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
@@ -874,7 +957,9 @@
             null,
             null
           ]
-        ]
+        ],
+        "source_page": 39,
+        "entity": 3010
       },
       "_adobe_lob": {
         "gross_premium_mix": [
@@ -931,10 +1016,91 @@
         "method": "azure_text_fallback"
       },
       "_adobe_provisions": {
-        "gross_prior_year_claims": 146.6,
-        "ri_share_prior_year": 80.8,
-        "net_prior_year_claims": 65.8,
+        "unit_source": "header",
+        "source_page": 40,
+        "entity": 3010,
+        "opening_provenance": {
+          "raw_value": 262068.0,
+          "unit_multiplier": 0.001,
+          "unit_source": "header",
+          "value_m": 262.068,
+          "page": 40,
+          "entity": 3010,
+          "backend": "azure",
+          "table_kind": "provisions_movement"
+        },
+        "gross_prior_year_claims": 95.6,
+        "ri_share_prior_year": 33.5,
         "opening_gross_claims_outstanding": 262.068
+      },
+      "_entity_binding": {
+        "requested_syndicate": 3010,
+        "entity_pages": {
+          "none": [
+            0
+          ],
+          "3010": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41
+          ]
+        },
+        "foreign_tables_skipped": 0,
+        "foreign_pages": [],
+        "underwriting_year_pages": [],
+        "underwriting_year_tables_skipped": 0,
+        "document_unit_hint": 0.001
+      },
+      "opening_reserves_provenance": {
+        "raw_value": 262068.0,
+        "unit_multiplier": 0.001,
+        "unit_source": "header",
+        "value_m": 262.068,
+        "page": 40,
+        "entity": 3010,
+        "backend": "azure",
+        "table_kind": "provisions_movement",
+        "source": "azure_table",
+        "applied_value_m": 262.068,
+        "unit_resolution": "header"
       }
     }
   },

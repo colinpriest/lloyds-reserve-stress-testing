@@ -1,5 +1,5 @@
 {
-  "extraction_timestamp": "2026-07-05T13:12:03.229126+00:00",
+  "extraction_timestamp": "2026-09-09T10:48:15.225498+00:00",
   "spec": {
     "prompt_version": "2.10",
     "field_definitions_version": "1.0",
@@ -13,9 +13,9 @@
       "opening_reserves_gbp_m": 184.618,
       "opening_reserves_page": 7,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": -3.651,
-      "prior_year_development_pct": -1.98,
-      "direction": "release",
+      "prior_year_development_gbp_m": 2.438,
+      "prior_year_development_pct": 1.32,
+      "direction": "strengthening",
       "prior_year_movement_page": 17,
       "prior_year_movement_confidence": 0.8,
       "exact_reserve_text": "In 2022, there has been an overall deterioration of $2,438k on prior year reserves (2021: deficit $2,626k).",
@@ -126,7 +126,7 @@
       "gross_premium_page": 13,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "The prior year development figure of $2.438 million is stated as a net figure in the report, as no gross figure was explicitly available. The claims development table is distorted by a significant External RITC of $101.597 million, making it unreliable for calculating prior year development. [RAG OVERRIDE: Model said PYD=2.438, RAG triangle computed -3.651. Using RAG value.]",
+      "data_quality_notes": "The prior year development figure of $2.438 million is stated as a net figure in the report, as no gross figure was explicitly available. The claims development table is distorted by a significant External RITC of $101.597 million, making it unreliable for calculating prior year development. [RAG PYD NOT APPLIED: deterministic figure -3.651m has the opposite sign to both model values [2.438, 2.438], which agree with each other; model values retained.] [CODE PYD NOT APPLIED: deterministic figure -3.651m has the opposite sign to both model values [2.438, 2.438], which agree with each other; model values retained.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
@@ -192,7 +192,9 @@
             null,
             null
           ]
-        ]
+        ],
+        "source_page": 46,
+        "entity": 2689
       },
       "_adobe_lob": {
         "gross_premium_mix": [
@@ -231,7 +233,96 @@
         "method": "azure_text_fallback"
       },
       "_adobe_provisions": {
+        "opening_provenance": {
+          "raw_value": 184618.0,
+          "unit_multiplier": 0.001,
+          "unit_source": "header",
+          "value_m": 184.618,
+          "page": 35,
+          "entity": 2689,
+          "backend": "azure",
+          "table_kind": "provisions_movement"
+        },
         "opening_gross_claims_outstanding": 184.618
+      },
+      "_entity_binding": {
+        "requested_syndicate": 2689,
+        "entity_pages": {
+          "none": [
+            0
+          ],
+          "2689": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48,
+            49,
+            50,
+            51
+          ]
+        },
+        "foreign_tables_skipped": 0,
+        "foreign_pages": [],
+        "underwriting_year_pages": [],
+        "underwriting_year_tables_skipped": 0,
+        "document_unit_hint": 0.001
+      },
+      "opening_reserves_provenance": {
+        "raw_value": 184618.0,
+        "unit_multiplier": 0.001,
+        "unit_source": "header",
+        "value_m": 184.618,
+        "page": 35,
+        "entity": 2689,
+        "backend": "azure",
+        "table_kind": "provisions_movement",
+        "source": "azure_table",
+        "applied_value_m": 184.618,
+        "unit_resolution": "header"
       }
     },
     "gpt-5-mini": {
@@ -240,9 +331,9 @@
       "opening_reserves_gbp_m": 184.618,
       "opening_reserves_page": 20,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": -3.651,
-      "prior_year_development_pct": -1.98,
-      "direction": "release",
+      "prior_year_development_gbp_m": 2.438,
+      "prior_year_development_pct": 1.32,
+      "direction": "strengthening",
       "prior_year_movement_page": 44,
       "prior_year_movement_confidence": 0.5,
       "exact_reserve_text": "In 2022, there has been an overall deterioration of $2,438k on prior year reserves (2021: deficit $2,626k).",
@@ -383,7 +474,7 @@
       "gross_premium_page": 31,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "No explicit GROSS prior-year movement figure was provided in a dedicated 'movement in prior years provision' table. The report explicitly states a prior-year deterioration of $2,438k but that appears to be a net (after reinsurance) figure; no gross prior-year movement was available. A large External RITC (101,597 $'000) is recorded in 2022 which distorts claims development triangle analysis; accordingly the narrative net figure was used as fallback. Confidence reduced for prior-year movement for this reason. [RAG OVERRIDE: Model said PYD=2.438, RAG triangle computed -3.651. Using RAG value.]",
+      "data_quality_notes": "No explicit GROSS prior-year movement figure was provided in a dedicated 'movement in prior years provision' table. The report explicitly states a prior-year deterioration of $2,438k but that appears to be a net (after reinsurance) figure; no gross prior-year movement was available. A large External RITC (101,597 $'000) is recorded in 2022 which distorts claims development triangle analysis; accordingly the narrative net figure was used as fallback. Confidence reduced for prior-year movement for this reason. [RAG PYD NOT APPLIED: deterministic figure -3.651m has the opposite sign to both model values [2.438, 2.438], which agree with each other; model values retained.] [CODE PYD NOT APPLIED: deterministic figure -3.651m has the opposite sign to both model values [2.438, 2.438], which agree with each other; model values retained.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
@@ -449,7 +540,9 @@
             null,
             null
           ]
-        ]
+        ],
+        "source_page": 46,
+        "entity": 2689
       },
       "_adobe_lob": {
         "gross_premium_mix": [
@@ -488,7 +581,96 @@
         "method": "azure_text_fallback"
       },
       "_adobe_provisions": {
+        "opening_provenance": {
+          "raw_value": 184618.0,
+          "unit_multiplier": 0.001,
+          "unit_source": "header",
+          "value_m": 184.618,
+          "page": 35,
+          "entity": 2689,
+          "backend": "azure",
+          "table_kind": "provisions_movement"
+        },
         "opening_gross_claims_outstanding": 184.618
+      },
+      "_entity_binding": {
+        "requested_syndicate": 2689,
+        "entity_pages": {
+          "none": [
+            0
+          ],
+          "2689": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48,
+            49,
+            50,
+            51
+          ]
+        },
+        "foreign_tables_skipped": 0,
+        "foreign_pages": [],
+        "underwriting_year_pages": [],
+        "underwriting_year_tables_skipped": 0,
+        "document_unit_hint": 0.001
+      },
+      "opening_reserves_provenance": {
+        "raw_value": 184618.0,
+        "unit_multiplier": 0.001,
+        "unit_source": "header",
+        "value_m": 184.618,
+        "page": 35,
+        "entity": 2689,
+        "backend": "azure",
+        "table_kind": "provisions_movement",
+        "source": "azure_table",
+        "applied_value_m": 184.618,
+        "unit_resolution": "header"
       }
     }
   },

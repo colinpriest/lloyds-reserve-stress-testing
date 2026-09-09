@@ -1,5 +1,5 @@
 {
-  "extraction_timestamp": "2026-03-19T05:03:02.245820+00:00",
+  "extraction_timestamp": "2026-09-09T11:57:27.628499+00:00",
   "spec": {
     "prompt_version": "2.10",
     "field_definitions_version": "1.0",
@@ -13,9 +13,9 @@
       "opening_reserves_gbp_m": 485.209,
       "opening_reserves_page": 5,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": -73.737,
-      "prior_year_development_pct": -15.2,
-      "direction": "release",
+      "prior_year_development_gbp_m": 2.1,
+      "prior_year_development_pct": 0.43,
+      "direction": "strengthening",
       "prior_year_movement_page": 1,
       "prior_year_movement_confidence": 1.0,
       "exact_reserve_text": "The Syndicate suffered from negative development on prior accident year claims reserves of GBP 2.1m (2018 - positive GBP 11.1m) across all lines of business, as a result of higher than expected claims development.",
@@ -131,7 +131,7 @@
       "gross_premium_page": 11,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The prior year development figure of GBP 2.1m is explicitly stated in the narrative. A calculation from the gross claims development triangle yields a significantly different result, likely due to the impact of Reinsurance to Close (RITC) or other accounting adjustments that distort the triangle for direct PYD calculation. [RAG OVERRIDE: Model said PYD=2.1, RAG triangle computed -73.737. Using RAG value.]",
+      "data_quality_notes": "The prior year development figure of GBP 2.1m is explicitly stated in the narrative. A calculation from the gross claims development triangle yields a significantly different result, likely due to the impact of Reinsurance to Close (RITC) or other accounting adjustments that distort the triangle for direct PYD calculation. [RAG PYD NOT APPLIED: deterministic figure -83.395m has the opposite sign to both model values [2.1, 2.1], which agree with each other; model values retained.] [CODE PYD NOT APPLIED: deterministic figure -153.910m has the opposite sign to both model values [2.1, 2.1], which agree with each other; model values retained.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -377,7 +377,9 @@
             0.0,
             0.0
           ]
-        ]
+        ],
+        "source_page": 45,
+        "entity": 5151
       },
       "_adobe_lob": {
         "gross_premium_mix": [
@@ -494,7 +496,75 @@
           }
         ],
         "currency": "GBP",
-        "method": "azure"
+        "method": "azure",
+        "source_page": 28,
+        "entity": 5151
+      },
+      "_entity_binding": {
+        "requested_syndicate": 5151,
+        "entity_pages": {
+          "none": [
+            0,
+            1
+          ],
+          "5151": [
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48,
+            49,
+            50,
+            51
+          ]
+        },
+        "foreign_tables_skipped": 0,
+        "foreign_pages": [],
+        "underwriting_year_pages": [],
+        "underwriting_year_tables_skipped": 0,
+        "document_unit_hint": 0.001
       }
     },
     "gpt-5-mini": {
@@ -503,9 +573,9 @@
       "opening_reserves_gbp_m": 485.209,
       "opening_reserves_page": 15,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": -73.737,
-      "prior_year_development_pct": -15.2,
-      "direction": "release",
+      "prior_year_development_gbp_m": 2.1,
+      "prior_year_development_pct": 0.433,
+      "direction": "strengthening",
       "prior_year_movement_page": 29,
       "prior_year_movement_confidence": 0.5,
       "exact_reserve_text": "Unfavourable prior accident year claims development of GBP 2.1m (2018 - GBP 11.1m favourable) was experienced in 2019, driven primarily by Specialty, which was a result of higher than expected claims development.",
@@ -635,7 +705,7 @@
       "gross_premium_page": 24,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "No explicit GROSS prior year movement figure was provided in a dedicated 'movement in prior year provision' table. The report explicitly states an adverse prior accident year development of GBP 2.1m but does not clarify whether this is gross or net; the gross claims development triangle included in the notes does not provide a clear aggregate gross PYD number. Following the guidance, the reported prior_year_development_gbp_m uses the documented GBP 2.1m figure from the notes (treated as gross for reporting here) but flagged with reduced confidence and a note that this is likely NET of reinsurance in the source text. [RAG OVERRIDE: Model said PYD=2.1, RAG triangle computed -73.737. Using RAG value.]",
+      "data_quality_notes": "No explicit GROSS prior year movement figure was provided in a dedicated 'movement in prior year provision' table. The report explicitly states an adverse prior accident year development of GBP 2.1m but does not clarify whether this is gross or net; the gross claims development triangle included in the notes does not provide a clear aggregate gross PYD number. Following the guidance, the reported prior_year_development_gbp_m uses the documented GBP 2.1m figure from the notes (treated as gross for reporting here) but flagged with reduced confidence and a note that this is likely NET of reinsurance in the source text. [RAG PYD NOT APPLIED: deterministic figure -83.395m has the opposite sign to both model values [2.1, 2.1], which agree with each other; model values retained.] [CODE PYD NOT APPLIED: deterministic figure -153.910m has the opposite sign to both model values [2.1, 2.1], which agree with each other; model values retained.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -881,7 +951,9 @@
             0.0,
             0.0
           ]
-        ]
+        ],
+        "source_page": 45,
+        "entity": 5151
       },
       "_adobe_lob": {
         "gross_premium_mix": [
@@ -998,7 +1070,75 @@
           }
         ],
         "currency": "GBP",
-        "method": "azure"
+        "method": "azure",
+        "source_page": 28,
+        "entity": 5151
+      },
+      "_entity_binding": {
+        "requested_syndicate": 5151,
+        "entity_pages": {
+          "none": [
+            0,
+            1
+          ],
+          "5151": [
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48,
+            49,
+            50,
+            51
+          ]
+        },
+        "foreign_tables_skipped": 0,
+        "foreign_pages": [],
+        "underwriting_year_pages": [],
+        "underwriting_year_tables_skipped": 0,
+        "document_unit_hint": 0.001
       }
     }
   },
@@ -1006,8 +1146,8 @@
   "total_tokens": 60883,
   "validation": {
     "passed": true,
-    "total_discrepancies": 16,
-    "within_tolerance": 16,
+    "total_discrepancies": 17,
+    "within_tolerance": 17,
     "hard_failures": 0,
     "hard_failure_details": []
   }

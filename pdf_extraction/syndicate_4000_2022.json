@@ -1,5 +1,5 @@
 {
-  "extraction_timestamp": "2026-07-05T16:27:41.140252+00:00",
+  "extraction_timestamp": "2026-09-09T11:21:17.111008+00:00",
   "spec": {
     "prompt_version": "2.10",
     "field_definitions_version": "1.0",
@@ -13,9 +13,9 @@
       "opening_reserves_gbp_m": 374.414,
       "opening_reserves_page": 6,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": 29.53,
-      "prior_year_development_pct": 7.89,
-      "direction": "strengthening",
+      "prior_year_development_gbp_m": -15.0,
+      "prior_year_development_pct": -4.01,
+      "direction": "release",
       "prior_year_movement_page": 18,
       "prior_year_movement_confidence": 1.0,
       "exact_reserve_text": "Claims incurred, net of reinsurance, include favourable prior year development of GBP 15.0m (2021: GBP 2.3m).",
@@ -141,7 +141,7 @@
       "gross_premium_page": 1,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The prior year development figure is reported as a net amount of GBP 15.0m. The gross claims development triangle was deemed unreliable for calculating gross prior year development due to the significant distortion caused by the reinsurance to close (RITC) of Syndicate 3334 into Syndicate 4000's 2020 underwriting year of account, effective 1 January 2022. [RAG OVERRIDE: Model said PYD=-15.0, RAG triangle computed 29.53. Using RAG value.]",
+      "data_quality_notes": "The prior year development figure is reported as a net amount of GBP 15.0m. The gross claims development triangle was deemed unreliable for calculating gross prior year development due to the significant distortion caused by the reinsurance to close (RITC) of Syndicate 3334 into Syndicate 4000's 2020 underwriting year of account, effective 1 January 2022. [RAG PYD NOT APPLIED: deterministic figure +29.530m has the opposite sign to both model values [-15.0, -15.026], which agree with each other; model values retained.] [CODE PYD NOT APPLIED: deterministic figure +29.530m has the opposite sign to both model values [-15.0, -15.026], which agree with each other; model values retained.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -347,7 +347,9 @@
             null,
             null
           ]
-        ]
+        ],
+        "source_page": 32,
+        "entity": 4000
       },
       "_adobe_lob": {
         "gross_premium_mix": [
@@ -410,10 +412,88 @@
           }
         ],
         "currency": "GBP",
-        "method": "azure"
+        "method": "azure",
+        "source_page": 31,
+        "entity": 4000
       },
       "_adobe_provisions": {
+        "opening_provenance": {
+          "raw_value": 374414.0,
+          "unit_multiplier": 0.001,
+          "unit_source": "header",
+          "value_m": 374.414,
+          "page": 37,
+          "entity": 4000,
+          "backend": "azure",
+          "table_kind": "provisions_movement"
+        },
         "opening_gross_claims_outstanding": 374.414
+      },
+      "_entity_binding": {
+        "requested_syndicate": 4000,
+        "entity_pages": {
+          "none": [
+            0
+          ],
+          "4000": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38
+          ]
+        },
+        "foreign_tables_skipped": 0,
+        "foreign_pages": [],
+        "underwriting_year_pages": [],
+        "underwriting_year_tables_skipped": 0,
+        "document_unit_hint": 0.001
+      },
+      "opening_reserves_provenance": {
+        "raw_value": 374414.0,
+        "unit_multiplier": 0.001,
+        "unit_source": "header",
+        "value_m": 374.414,
+        "page": 37,
+        "entity": 4000,
+        "backend": "azure",
+        "table_kind": "provisions_movement",
+        "source": "azure_table",
+        "applied_value_m": 374.414,
+        "unit_resolution": "header"
       }
     },
     "gpt-5-mini": {
@@ -422,9 +502,9 @@
       "opening_reserves_gbp_m": 374.414,
       "opening_reserves_page": 16,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": 29.53,
-      "prior_year_development_pct": 7.89,
-      "direction": "strengthening",
+      "prior_year_development_gbp_m": -15.026,
+      "prior_year_development_pct": -4.01,
+      "direction": "release",
       "prior_year_movement_page": 31,
       "prior_year_movement_confidence": 1.0,
       "exact_reserve_text": "Claims incurred, net of reinsurance, include favourable prior year development of GBP 15.0m (2021: GBP 2.3m). Prior year claims development is analysed by line of business in the table below.",
@@ -536,7 +616,7 @@
       "gross_premium_page": 4,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Opening gross claims outstanding taken from the prior-year column of the statutory Statement of Financial Position (clear). No explicit GROSS prior-year reserve movement is presented in the notes; only a NET prior-year favourable development of GBP 15.0k (listed as GBP 15,026k) is given and has been used as a fallback (NET of reinsurance). A large RITC (Syndicate 3334) of GBP 181,247k was recorded in 2022 and materially distorts gross development tables; therefore gross-triangle-based PYD calculations are unreliable. LOB movements use the net per-line prior-year development table (GBP 000) and have been converted to millions. Confidence lowered for LOB and PYD interpretations because gross figures by LOB were not provided and RITC distortion exists. [RAG OVERRIDE: Model said PYD=-15.026, RAG triangle computed 29.53. Using RAG value.]",
+      "data_quality_notes": "Opening gross claims outstanding taken from the prior-year column of the statutory Statement of Financial Position (clear). No explicit GROSS prior-year reserve movement is presented in the notes; only a NET prior-year favourable development of GBP 15.0k (listed as GBP 15,026k) is given and has been used as a fallback (NET of reinsurance). A large RITC (Syndicate 3334) of GBP 181,247k was recorded in 2022 and materially distorts gross development tables; therefore gross-triangle-based PYD calculations are unreliable. LOB movements use the net per-line prior-year development table (GBP 000) and have been converted to millions. Confidence lowered for LOB and PYD interpretations because gross figures by LOB were not provided and RITC distortion exists. [RAG PYD NOT APPLIED: deterministic figure +29.530m has the opposite sign to both model values [-15.0, -15.026], which agree with each other; model values retained.] [CODE PYD NOT APPLIED: deterministic figure +29.530m has the opposite sign to both model values [-15.0, -15.026], which agree with each other; model values retained.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -742,7 +822,9 @@
             null,
             null
           ]
-        ]
+        ],
+        "source_page": 32,
+        "entity": 4000
       },
       "_adobe_lob": {
         "gross_premium_mix": [
@@ -805,10 +887,88 @@
           }
         ],
         "currency": "GBP",
-        "method": "azure"
+        "method": "azure",
+        "source_page": 31,
+        "entity": 4000
       },
       "_adobe_provisions": {
+        "opening_provenance": {
+          "raw_value": 374414.0,
+          "unit_multiplier": 0.001,
+          "unit_source": "header",
+          "value_m": 374.414,
+          "page": 37,
+          "entity": 4000,
+          "backend": "azure",
+          "table_kind": "provisions_movement"
+        },
         "opening_gross_claims_outstanding": 374.414
+      },
+      "_entity_binding": {
+        "requested_syndicate": 4000,
+        "entity_pages": {
+          "none": [
+            0
+          ],
+          "4000": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38
+          ]
+        },
+        "foreign_tables_skipped": 0,
+        "foreign_pages": [],
+        "underwriting_year_pages": [],
+        "underwriting_year_tables_skipped": 0,
+        "document_unit_hint": 0.001
+      },
+      "opening_reserves_provenance": {
+        "raw_value": 374414.0,
+        "unit_multiplier": 0.001,
+        "unit_source": "header",
+        "value_m": 374.414,
+        "page": 37,
+        "entity": 4000,
+        "backend": "azure",
+        "table_kind": "provisions_movement",
+        "source": "azure_table",
+        "applied_value_m": 374.414,
+        "unit_resolution": "header"
       }
     }
   },
@@ -816,8 +976,8 @@
   "total_tokens": 59965,
   "validation": {
     "passed": true,
-    "total_discrepancies": 23,
-    "within_tolerance": 23,
+    "total_discrepancies": 24,
+    "within_tolerance": 24,
     "hard_failures": 0,
     "hard_failure_details": []
   }
