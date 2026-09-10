@@ -1,7 +1,12 @@
 {
-  "extraction_timestamp": "2026-09-09T10:01:58.033812+00:00",
+  "extraction_timestamp": "2026-09-10T10:40:28.874143+00:00",
   "spec": {
     "prompt_version": "2.10",
+    "driver_prompt_version": "2.11",
+    "responses_served_from_cache": {
+      "gemini-2.5-flash": "2.10",
+      "gpt-5-mini": "2.10"
+    },
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -13,8 +18,8 @@
       "opening_reserves_gbp_m": 165.426,
       "opening_reserves_page": 9,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": 2.3,
-      "prior_year_development_pct": 1.39,
+      "prior_year_development_gbp_m": 13.5,
+      "prior_year_development_pct": 8.16,
       "direction": "strengthening",
       "prior_year_movement_page": 24,
       "prior_year_movement_confidence": 1.0,
@@ -142,7 +147,7 @@
       "gross_premium_page": 23,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "The prior year development figure is stated as a net release in the narrative on page 24. This figure contradicts the derived net prior year development from the claims triangle on page 22, which indicates a net strengthening. The narrative figure is prioritized as per instructions. No gross prior year development figure was explicitly stated. [RAG OVERRIDE: Model said PYD=-3.362, RAG triangle computed 2.3. Using RAG value.]",
+      "data_quality_notes": "The prior year development figure is stated as a net release in the narrative on page 24. This figure contradicts the derived net prior year development from the claims triangle on page 22, which indicates a net strengthening. The narrative figure is prioritized as per instructions. No gross prior year development figure was explicitly stated. [RAG OVERRIDE: Model said PYD=-3.362, RAG triangle computed 13.5. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
@@ -218,6 +223,86 @@
         "output_tokens": 2004,
         "total_tokens": 26174,
         "cost_usd": 0.010291
+      },
+      "_served_from": {
+        "cache_file": "0a47aa1a288f2fccd682b128ab0492dfe3aa4a035648cb25abc65f8fc381922d.json",
+        "prompt_version": "2.10"
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 13.5,
+        "model_value": -3.362,
+        "triangle_type": "gross",
+        "triangle_units": "millions",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 62,
+        "note": "overrode the model value"
+      },
+      "_rag_triangle": {
+        "type": "gross",
+        "currency": "USD",
+        "units": "millions",
+        "units_evidence": "header",
+        "underwriting_years": [
+          2011,
+          2012,
+          2013,
+          2014,
+          2015,
+          2016
+        ],
+        "development_rows": [
+          [
+            39.9,
+            37.3,
+            50.1,
+            53.5,
+            58.3,
+            84.8
+          ],
+          [
+            75.6,
+            78.1,
+            95.3,
+            116.1,
+            137.8,
+            null
+          ],
+          [
+            75.4,
+            79.6,
+            97.8,
+            133.7,
+            null,
+            null
+          ],
+          [
+            74.0,
+            75.8,
+            95.7,
+            null,
+            null,
+            null
+          ],
+          [
+            72.8,
+            74.0,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            72.6,
+            null,
+            null,
+            null,
+            null,
+            null
+          ]
+        ],
+        "source_page": 62,
+        "entity": 1969
       },
       "_adobe_provisions": {
         "unit_source": "header",
@@ -381,8 +466,8 @@
       "opening_reserves_gbp_m": 165.426,
       "opening_reserves_page": 30,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": 2.3,
-      "prior_year_development_pct": 1.39,
+      "prior_year_development_gbp_m": 13.5,
+      "prior_year_development_pct": 8.16,
       "direction": "strengthening",
       "prior_year_movement_page": 56,
       "prior_year_movement_confidence": 0.8,
@@ -535,7 +620,7 @@
       "gross_premium_page": 58,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "All monetary figures are reported in the syndicate's presentation currency (USD). The Balance Sheet (liabilities) shows gross claims outstanding at 31/12/2015 = $165,426k used as opening reserves. No explicit GROSS 'movement in prior year's provision' figure is presented in note 6; note 6 instead states a NET release of $3,362k. Therefore the gross prior-year development was calculated from the gross claims development triangle (page 56) which yields a net adverse movement (strengthening) of $13.5m (USD). This differs from the net release quoted in note 6; the difference is due to reinsurance recoveries and classification of current-year vs prior-year movements. Prior-year development confidence rated 0.8 because it is calculated from the published gross triangle (explicit) rather than directly stated as a gross movement in the notes. [RAG OVERRIDE: Model said PYD=13.5, RAG triangle computed 2.3. Using RAG value.]",
+      "data_quality_notes": "All monetary figures are reported in the syndicate's presentation currency (USD). The Balance Sheet (liabilities) shows gross claims outstanding at 31/12/2015 = $165,426k used as opening reserves. No explicit GROSS 'movement in prior year's provision' figure is presented in note 6; note 6 instead states a NET release of $3,362k. Therefore the gross prior-year development was calculated from the gross claims development triangle (page 56) which yields a net adverse movement (strengthening) of $13.5m (USD). This differs from the net release quoted in note 6; the difference is due to reinsurance recoveries and classification of current-year vs prior-year movements. Prior-year development confidence rated 0.8 because it is calculated from the published gross triangle (explicit) rather than directly stated as a gross movement in the notes.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
@@ -611,6 +696,86 @@
         "output_tokens": 6655,
         "total_tokens": 72590,
         "cost_usd": 0.029794
+      },
+      "_served_from": {
+        "cache_file": "8e56239b568851db9240320f59cf0c4efce06879334105fefc2a41a7637a8c0a.json",
+        "prompt_version": "2.10"
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 13.5,
+        "model_value": 13.5,
+        "triangle_type": "gross",
+        "triangle_units": "millions",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 62,
+        "note": "confirmed by the model value"
+      },
+      "_rag_triangle": {
+        "type": "gross",
+        "currency": "USD",
+        "units": "millions",
+        "units_evidence": "header",
+        "underwriting_years": [
+          2011,
+          2012,
+          2013,
+          2014,
+          2015,
+          2016
+        ],
+        "development_rows": [
+          [
+            39.9,
+            37.3,
+            50.1,
+            53.5,
+            58.3,
+            84.8
+          ],
+          [
+            75.6,
+            78.1,
+            95.3,
+            116.1,
+            137.8,
+            null
+          ],
+          [
+            75.4,
+            79.6,
+            97.8,
+            133.7,
+            null,
+            null
+          ],
+          [
+            74.0,
+            75.8,
+            95.7,
+            null,
+            null,
+            null
+          ],
+          [
+            72.8,
+            74.0,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            72.6,
+            null,
+            null,
+            null,
+            null,
+            null
+          ]
+        ],
+        "source_page": 62,
+        "entity": 1969
       },
       "_adobe_provisions": {
         "unit_source": "header",

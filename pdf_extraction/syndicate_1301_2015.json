@@ -1,7 +1,12 @@
 {
-  "extraction_timestamp": "2026-09-05T19:30:55.947431+00:00",
+  "extraction_timestamp": "2026-09-10T10:36:26.773372+00:00",
   "spec": {
     "prompt_version": "2.10",
+    "driver_prompt_version": "2.11",
+    "responses_served_from_cache": {
+      "gemini-2.5-flash": "2.10",
+      "gpt-5-mini": "2.10"
+    },
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -13,8 +18,8 @@
       "opening_reserves_gbp_m": 95.746,
       "opening_reserves_page": 3,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": -13.6,
-      "prior_year_development_pct": -14.2,
+      "prior_year_development_gbp_m": -5.8,
+      "prior_year_development_pct": -6.06,
       "direction": "release",
       "prior_year_movement_page": 17,
       "prior_year_movement_confidence": 1.0,
@@ -111,7 +116,7 @@
       "gross_premium_page": 14,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The prior_year_development_gbp_m is the gross figure from the Technical Provisions note (page 17), while the exact_reserve_text describes the net movement. LOB movements are also presented net of reinsurance as a gross breakdown by LOB was not available.",
+      "data_quality_notes": "The prior_year_development_gbp_m is the gross figure from the Technical Provisions note (page 17), while the exact_reserve_text describes the net movement. LOB movements are also presented net of reinsurance as a gross breakdown by LOB was not available. [RAG OVERRIDE: Model said PYD=-13.638, RAG triangle computed -5.8. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -173,6 +178,72 @@
         "output_tokens": 1509,
         "total_tokens": 16843,
         "cost_usd": 0.007041
+      },
+      "_served_from": {
+        "cache_file": "f0415ab74ea9280046e09400380cd4ff7a6bdb5d537df7553b9927e1f827811f.json",
+        "prompt_version": "2.10"
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -5.8,
+        "model_value": -13.638,
+        "triangle_type": "gross",
+        "triangle_units": "millions",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 40,
+        "note": "overrode the model value"
+      },
+      "_rag_triangle": {
+        "type": "gross",
+        "currency": "GBP",
+        "units": "millions",
+        "units_evidence": "header",
+        "underwriting_years": [
+          2011,
+          2012,
+          2013,
+          2014,
+          2015
+        ],
+        "development_rows": [
+          [
+            65.8,
+            57.7,
+            82.5,
+            87.3,
+            102.7
+          ],
+          [
+            61.5,
+            50.2,
+            81.3,
+            81.9,
+            null
+          ],
+          [
+            61.4,
+            50.2,
+            76.9,
+            null,
+            null
+          ],
+          [
+            56.2,
+            49.0,
+            null,
+            null,
+            null
+          ],
+          [
+            56.0,
+            null,
+            null,
+            null,
+            null
+          ]
+        ],
+        "source_page": 40,
+        "entity": 1301
       },
       "_adobe_lob": {
         "gross_premium_mix": [
@@ -335,8 +406,8 @@
       "opening_reserves_gbp_m": 95.746,
       "opening_reserves_page": 13,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": -13.6,
-      "prior_year_development_pct": -14.2,
+      "prior_year_development_gbp_m": -5.8,
+      "prior_year_development_pct": -6.06,
       "direction": "release",
       "prior_year_movement_page": 40,
       "prior_year_movement_confidence": 1.0,
@@ -433,7 +504,7 @@
       "gross_premium_page": 32,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Opening reserves and prior-year movement taken from Statement of Financial Position (claims outstanding) and Technical Provisions note (Change in prior year provisions) respectively (both gross). Exact reserve narrative uses language that refers to net of reinsurance; the gross movement is taken from the technical provisions table. 'Miscellaneous' was mapped to 'Professional Lines' for LOB mapping (moderate confidence). The claims development triangle was transcribed visually from the report (rounded) and used as supporting information.",
+      "data_quality_notes": "Opening reserves and prior-year movement taken from Statement of Financial Position (claims outstanding) and Technical Provisions note (Change in prior year provisions) respectively (both gross). Exact reserve narrative uses language that refers to net of reinsurance; the gross movement is taken from the technical provisions table. 'Miscellaneous' was mapped to 'Professional Lines' for LOB mapping (moderate confidence). The claims development triangle was transcribed visually from the report (rounded) and used as supporting information. [RAG OVERRIDE: Model said PYD=-13.638, RAG triangle computed -5.8. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -495,6 +566,72 @@
         "output_tokens": 6220,
         "total_tokens": 29566,
         "cost_usd": 0.018277
+      },
+      "_served_from": {
+        "cache_file": "1d4372649ea2279b60ea6b7f0807ff464160ce5316dd69d04c4b5afd5dcc0c69.json",
+        "prompt_version": "2.10"
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -5.8,
+        "model_value": -13.638,
+        "triangle_type": "gross",
+        "triangle_units": "millions",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 40,
+        "note": "overrode the model value"
+      },
+      "_rag_triangle": {
+        "type": "gross",
+        "currency": "GBP",
+        "units": "millions",
+        "units_evidence": "header",
+        "underwriting_years": [
+          2011,
+          2012,
+          2013,
+          2014,
+          2015
+        ],
+        "development_rows": [
+          [
+            65.8,
+            57.7,
+            82.5,
+            87.3,
+            102.7
+          ],
+          [
+            61.5,
+            50.2,
+            81.3,
+            81.9,
+            null
+          ],
+          [
+            61.4,
+            50.2,
+            76.9,
+            null,
+            null
+          ],
+          [
+            56.2,
+            49.0,
+            null,
+            null,
+            null
+          ],
+          [
+            56.0,
+            null,
+            null,
+            null,
+            null
+          ]
+        ],
+        "source_page": 40,
+        "entity": 1301
       },
       "_adobe_lob": {
         "gross_premium_mix": [

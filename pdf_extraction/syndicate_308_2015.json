@@ -1,7 +1,12 @@
 {
-  "extraction_timestamp": "2026-09-05T20:12:40.033112+00:00",
+  "extraction_timestamp": "2026-09-10T10:41:13.481711+00:00",
   "spec": {
     "prompt_version": "2.10",
+    "driver_prompt_version": "2.11",
+    "responses_served_from_cache": {
+      "gemini-2.5-flash": "2.10",
+      "gpt-5-mini": "2.10"
+    },
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -151,10 +156,15 @@
         "total_tokens": 31875,
         "cost_usd": 0.010873
       },
+      "_served_from": {
+        "cache_file": "9d8cd3ded7e280d550adf696c922bb799259f5f9c8302d54a21ec6962a3c80af.json",
+        "prompt_version": "2.10"
+      },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "millions",
+        "units_evidence": "conflict",
         "underwriting_years": [
           2007,
           2008,
@@ -449,8 +459,11 @@
         "underwriting_year_pages": [
           112,
           113,
+          114,
           115,
+          116,
           117,
+          118,
           119,
           120,
           121,
@@ -458,9 +471,13 @@
           123,
           124,
           125,
+          126,
           127,
+          128,
           129,
+          130,
           131,
+          132,
           133,
           134,
           135,
@@ -468,15 +485,21 @@
           137,
           138,
           139,
+          140,
           141,
+          142,
           143,
+          144,
           145,
           146,
           147,
           148,
           149,
+          150,
           151,
+          152,
           153,
+          154,
           155
         ],
         "underwriting_year_tables_skipped": 14,
@@ -489,9 +512,9 @@
       "opening_reserves_gbp_m": 8.047,
       "opening_reserves_page": 146,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": null,
-      "prior_year_development_pct": null,
-      "direction": "mixed",
+      "prior_year_development_gbp_m": -0.3,
+      "prior_year_development_pct": -3.73,
+      "direction": "release",
       "prior_year_movement_page": null,
       "prior_year_movement_confidence": 0.0,
       "exact_reserve_text": "",
@@ -597,10 +620,15 @@
         "total_tokens": 80504,
         "cost_usd": 0.030355
       },
+      "_served_from": {
+        "cache_file": "8197bdea0a978255db7e1c5b320562701f9fd3953c39fcbde0a8c601f67d47a8.json",
+        "prompt_version": "2.10"
+      },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "millions",
+        "units_evidence": "conflict",
         "underwriting_years": [
           2007,
           2008,
@@ -895,8 +923,11 @@
         "underwriting_year_pages": [
           112,
           113,
+          114,
           115,
+          116,
           117,
+          118,
           119,
           120,
           121,
@@ -904,9 +935,13 @@
           123,
           124,
           125,
+          126,
           127,
+          128,
           129,
+          130,
           131,
+          132,
           133,
           134,
           135,
@@ -914,15 +949,21 @@
           137,
           138,
           139,
+          140,
           141,
+          142,
           143,
+          144,
           145,
           146,
           147,
           148,
           149,
+          150,
           151,
+          152,
           153,
+          154,
           155
         ],
         "underwriting_year_tables_skipped": 14,
@@ -933,29 +974,10 @@
   "total_cost_usd": 0.041228,
   "total_tokens": 112379,
   "validation": {
-    "passed": false,
-    "total_discrepancies": 25,
+    "passed": true,
+    "total_discrepancies": 22,
     "within_tolerance": 22,
-    "hard_failures": 3,
-    "hard_failure_details": [
-      {
-        "field": "direction",
-        "type": "value_mismatch",
-        "gemini-2.5-flash": "release",
-        "gpt-5-mini": "mixed"
-      },
-      {
-        "field": "prior_year_development_gbp_m",
-        "type": "value_mismatch",
-        "gemini-2.5-flash": -0.3,
-        "gpt-5-mini": null
-      },
-      {
-        "field": "prior_year_development_pct",
-        "type": "value_mismatch",
-        "gemini-2.5-flash": -3.73,
-        "gpt-5-mini": null
-      }
-    ]
+    "hard_failures": 0,
+    "hard_failure_details": []
   }
 }

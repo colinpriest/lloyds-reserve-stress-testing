@@ -1,7 +1,12 @@
 {
-  "extraction_timestamp": "2026-09-05T20:16:08.482931+00:00",
+  "extraction_timestamp": "2026-09-10T10:41:48.479883+00:00",
   "spec": {
     "prompt_version": "2.10",
+    "driver_prompt_version": "2.11",
+    "responses_served_from_cache": {
+      "gemini-2.5-flash": "2.10",
+      "gpt-5-mini": "2.10"
+    },
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -13,8 +18,8 @@
       "opening_reserves_gbp_m": 16.611,
       "opening_reserves_page": 4,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": -1.2857,
-      "prior_year_development_pct": -7.74,
+      "prior_year_development_gbp_m": -4.8,
+      "prior_year_development_pct": -28.9,
       "direction": "release",
       "prior_year_movement_page": 5,
       "prior_year_movement_confidence": 0.8,
@@ -51,7 +56,7 @@
       "gross_premium_page": 8,
       "gross_premium_confidence": 0.8,
       "currency": "GBP",
-      "data_quality_notes": "Prior year development is reported as a net figure of reinsurance; gross figure not explicitly available. The gross premium mix is derived from the 'Concentration of insurance risk' by type of business, not explicitly 'gross premiums written by class'. The claims development triangles provided are run-off triangles for ultimate losses, not standard cumulative incurred claims triangles, and thus cannot be used to calculate prior year development using the diagonal method.",
+      "data_quality_notes": "Prior year development is reported as a net figure of reinsurance; gross figure not explicitly available. The gross premium mix is derived from the 'Concentration of insurance risk' by type of business, not explicitly 'gross premiums written by class'. The claims development triangles provided are run-off triangles for ultimate losses, not standard cumulative incurred claims triangles, and thus cannot be used to calculate prior year development using the diagonal method. [RAG OVERRIDE: Model said PYD=-1.2857, RAG triangle computed -4.8. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -215,6 +220,162 @@
         "total_tokens": 16465,
         "cost_usd": 0.006199
       },
+      "_served_from": {
+        "cache_file": "9c234e2fb7dbc431d85ff863dc8fb2918670787075a3766a53ceed35f03750e1.json",
+        "prompt_version": "2.10"
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -4.8,
+        "model_value": -1.2857,
+        "triangle_type": "gross",
+        "triangle_units": "millions",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 36,
+        "note": "overrode the model value"
+      },
+      "_rag_triangle": {
+        "type": "gross",
+        "currency": "GBP",
+        "units": "millions",
+        "units_evidence": "header",
+        "underwriting_years": [
+          2014,
+          2015,
+          2016,
+          2017,
+          2018,
+          2019,
+          2020,
+          2021,
+          2022,
+          2023
+        ],
+        "development_rows": [
+          [
+            10.0,
+            10.2,
+            16.3,
+            11.5,
+            17.4,
+            13.4,
+            15.1,
+            16.5,
+            20.7,
+            22.7
+          ],
+          [
+            9.6,
+            9.6,
+            15.4,
+            11.5,
+            17.7,
+            14.3,
+            16.5,
+            16.9,
+            23.4,
+            null
+          ],
+          [
+            8.4,
+            9.8,
+            8.7,
+            11.6,
+            16.1,
+            12.1,
+            15.3,
+            15.4,
+            null,
+            null
+          ],
+          [
+            8.2,
+            9.4,
+            9.3,
+            10.9,
+            13.9,
+            10.3,
+            13.6,
+            null,
+            null,
+            null
+          ],
+          [
+            8.1,
+            9.3,
+            9.3,
+            10.9,
+            14.1,
+            9.8,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            8.1,
+            9.2,
+            9.2,
+            10.9,
+            13.0,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            8.1,
+            9.2,
+            9.2,
+            10.9,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            8.0,
+            9.1,
+            9.2,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            8.0,
+            9.1,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            8.0,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ]
+        ],
+        "source_page": 36,
+        "entity": 3622
+      },
       "_adobe_provisions": {
         "opening_provenance": {
           "raw_value": 16610.8,
@@ -300,8 +461,8 @@
       "opening_reserves_gbp_m": 16.611,
       "opening_reserves_page": 17,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": -1.2857,
-      "prior_year_development_pct": -7.74,
+      "prior_year_development_gbp_m": -4.8,
+      "prior_year_development_pct": -28.9,
       "direction": "release",
       "prior_year_movement_page": 19,
       "prior_year_movement_confidence": 1.0,
@@ -334,7 +495,7 @@
       "gross_premium_page": 15,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "No gross (insurance liabilities) figure for 'movement in prior year's provision for claims outstanding' was found in the disclosures. The only explicit quantified prior-year reserve movement is stated as a net release of GBP 1,285.7k (net of reinsurance) arising from a change of estimate; therefore the prior year development figure uses the NET of reinsurance amount. Segmental/regulatory premium breakdown was not present in the provided excerpts, so a single 'Life insurance' class has been used. A gross claims development triangle is present in the notes but the extracted text was ragged and not fully machine-aligned, so triangle development rows are not numerically parsed here. If a gross prior-year movement becomes available it should replace the net figure used here.",
+      "data_quality_notes": "No gross (insurance liabilities) figure for 'movement in prior year's provision for claims outstanding' was found in the disclosures. The only explicit quantified prior-year reserve movement is stated as a net release of GBP 1,285.7k (net of reinsurance) arising from a change of estimate; therefore the prior year development figure uses the NET of reinsurance amount. Segmental/regulatory premium breakdown was not present in the provided excerpts, so a single 'Life insurance' class has been used. A gross claims development triangle is present in the notes but the extracted text was ragged and not fully machine-aligned, so triangle development rows are not numerically parsed here. If a gross prior-year movement becomes available it should replace the net figure used here. [RAG OVERRIDE: Model said PYD=-1.2857, RAG triangle computed -4.8. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -366,6 +527,162 @@
         "output_tokens": 6304,
         "total_tokens": 22808,
         "cost_usd": 0.016734
+      },
+      "_served_from": {
+        "cache_file": "f2abe8d918d218cf3072e4b928c81e0a3855401c7024b0413f8081e4c852d872.json",
+        "prompt_version": "2.10"
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -4.8,
+        "model_value": -1.2857,
+        "triangle_type": "gross",
+        "triangle_units": "millions",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 36,
+        "note": "overrode the model value"
+      },
+      "_rag_triangle": {
+        "type": "gross",
+        "currency": "GBP",
+        "units": "millions",
+        "units_evidence": "header",
+        "underwriting_years": [
+          2014,
+          2015,
+          2016,
+          2017,
+          2018,
+          2019,
+          2020,
+          2021,
+          2022,
+          2023
+        ],
+        "development_rows": [
+          [
+            10.0,
+            10.2,
+            16.3,
+            11.5,
+            17.4,
+            13.4,
+            15.1,
+            16.5,
+            20.7,
+            22.7
+          ],
+          [
+            9.6,
+            9.6,
+            15.4,
+            11.5,
+            17.7,
+            14.3,
+            16.5,
+            16.9,
+            23.4,
+            null
+          ],
+          [
+            8.4,
+            9.8,
+            8.7,
+            11.6,
+            16.1,
+            12.1,
+            15.3,
+            15.4,
+            null,
+            null
+          ],
+          [
+            8.2,
+            9.4,
+            9.3,
+            10.9,
+            13.9,
+            10.3,
+            13.6,
+            null,
+            null,
+            null
+          ],
+          [
+            8.1,
+            9.3,
+            9.3,
+            10.9,
+            14.1,
+            9.8,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            8.1,
+            9.2,
+            9.2,
+            10.9,
+            13.0,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            8.1,
+            9.2,
+            9.2,
+            10.9,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            8.0,
+            9.1,
+            9.2,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            8.0,
+            9.1,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            8.0,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ]
+        ],
+        "source_page": 36,
+        "entity": 3622
       },
       "_adobe_provisions": {
         "opening_provenance": {

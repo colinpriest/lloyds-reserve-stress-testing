@@ -1,7 +1,12 @@
 {
-  "extraction_timestamp": "2026-09-05T19:32:15.414992+00:00",
+  "extraction_timestamp": "2026-09-10T10:37:36.599190+00:00",
   "spec": {
     "prompt_version": "2.10",
+    "driver_prompt_version": "2.11",
+    "responses_served_from_cache": {
+      "gemini-2.5-flash": "2.10",
+      "gpt-5-mini": "2.10"
+    },
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -13,8 +18,8 @@
       "opening_reserves_gbp_m": 203.717,
       "opening_reserves_page": 4,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": 77.1,
-      "prior_year_development_pct": 37.85,
+      "prior_year_development_gbp_m": 7.6,
+      "prior_year_development_pct": 3.73,
       "direction": "strengthening",
       "prior_year_movement_page": 21,
       "prior_year_movement_confidence": 1.0,
@@ -144,7 +149,7 @@
       "gross_premium_page": 16,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The prior_year_development_gbp_m is taken from the gross technical provisions reconciliation table (Note 16), which differs from the net figure (GBP 71.4m) mentioned in the narrative on page 18. The lob_movements are based on net figures as presented in the document (Note 6), as a gross breakdown by LOB for prior year development was not available.",
+      "data_quality_notes": "The prior_year_development_gbp_m is taken from the gross technical provisions reconciliation table (Note 16), which differs from the net figure (GBP 71.4m) mentioned in the narrative on page 18. The lob_movements are based on net figures as presented in the document (Note 6), as a gross breakdown by LOB for prior year development was not available. [RAG OVERRIDE: Model said PYD=77.132, RAG triangle computed 7.6. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -236,6 +241,102 @@
         "output_tokens": 2016,
         "total_tokens": 17917,
         "cost_usd": 0.008541
+      },
+      "_served_from": {
+        "cache_file": "cbfc2c65f3f3dc2be0c89755e85ba75374593d6c4505a31d92fb5a9439ebf022.json",
+        "prompt_version": "2.10"
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 7.6,
+        "model_value": 77.132,
+        "triangle_type": "gross",
+        "triangle_units": "millions",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 46,
+        "note": "overrode the model value"
+      },
+      "_rag_triangle": {
+        "type": "gross",
+        "currency": "GBP",
+        "units": "millions",
+        "units_evidence": "header",
+        "underwriting_years": [
+          2011,
+          2012,
+          2013,
+          2014,
+          2015,
+          2016,
+          2017
+        ],
+        "development_rows": [
+          [
+            29.5,
+            25.9,
+            49.9,
+            49.4,
+            62.0,
+            69.8,
+            116.5
+          ],
+          [
+            55.7,
+            52.0,
+            83.6,
+            86.7,
+            105.6,
+            141.9,
+            null
+          ],
+          [
+            61.8,
+            53.1,
+            80.8,
+            86.1,
+            115.7,
+            null,
+            null
+          ],
+          [
+            58.4,
+            51.9,
+            79.9,
+            82.9,
+            null,
+            null,
+            null
+          ],
+          [
+            58.3,
+            52.1,
+            80.7,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            58.4,
+            51.8,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            58.6,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ]
+        ],
+        "source_page": 46,
+        "entity": 1301
       },
       "_adobe_lob": {
         "gross_premium_mix": [
@@ -406,8 +507,8 @@
       "opening_reserves_gbp_m": 203.717,
       "opening_reserves_page": 14,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": 77.1,
-      "prior_year_development_pct": 37.85,
+      "prior_year_development_gbp_m": 7.6,
+      "prior_year_development_pct": 3.73,
       "direction": "strengthening",
       "prior_year_movement_page": 46,
       "prior_year_movement_confidence": 1.0,
@@ -551,7 +652,7 @@
       "gross_premium_page": 35,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Opening gross claims outstanding taken from the Statement of Financial Position (claims outstanding, prior year column). Prior year development (gross) taken from Technical Provisions note (Change in prior year provisions = GBP 77,132k). The descriptive sentence in the claims note reports net adverse movement (GBP 71.4m net of reinsurance); both figures are presented and the gross figure from the technical provisions note was used as primary. Per-class movements in the 'Claims' note are presented in the report in net form (table uses parentheses) and were used to populate LOB movements (absolute values, interpreted as adverse/strengthenings). Some per-LOB numbers in the textual notes are net of reinsurance; where only net numbers were available this is noted here. Confidence levels reflect explicit table values (1.0) vs. derived/inferred LOB mappings (0.8-0.9).",
+      "data_quality_notes": "Opening gross claims outstanding taken from the Statement of Financial Position (claims outstanding, prior year column). Prior year development (gross) taken from Technical Provisions note (Change in prior year provisions = GBP 77,132k). The descriptive sentence in the claims note reports net adverse movement (GBP 71.4m net of reinsurance); both figures are presented and the gross figure from the technical provisions note was used as primary. Per-class movements in the 'Claims' note are presented in the report in net form (table uses parentheses) and were used to populate LOB movements (absolute values, interpreted as adverse/strengthenings). Some per-LOB numbers in the textual notes are net of reinsurance; where only net numbers were available this is noted here. Confidence levels reflect explicit table values (1.0) vs. derived/inferred LOB mappings (0.8-0.9). [RAG OVERRIDE: Model said PYD=77.132, RAG triangle computed 7.6. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -643,6 +744,102 @@
         "output_tokens": 8117,
         "total_tokens": 34262,
         "cost_usd": 0.02277
+      },
+      "_served_from": {
+        "cache_file": "0526882ee8a0c422250fe6d83c04af4c794dc7fc6698521114c9929c9b78e0cf.json",
+        "prompt_version": "2.10"
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 7.6,
+        "model_value": 77.132,
+        "triangle_type": "gross",
+        "triangle_units": "millions",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 46,
+        "note": "overrode the model value"
+      },
+      "_rag_triangle": {
+        "type": "gross",
+        "currency": "GBP",
+        "units": "millions",
+        "units_evidence": "header",
+        "underwriting_years": [
+          2011,
+          2012,
+          2013,
+          2014,
+          2015,
+          2016,
+          2017
+        ],
+        "development_rows": [
+          [
+            29.5,
+            25.9,
+            49.9,
+            49.4,
+            62.0,
+            69.8,
+            116.5
+          ],
+          [
+            55.7,
+            52.0,
+            83.6,
+            86.7,
+            105.6,
+            141.9,
+            null
+          ],
+          [
+            61.8,
+            53.1,
+            80.8,
+            86.1,
+            115.7,
+            null,
+            null
+          ],
+          [
+            58.4,
+            51.9,
+            79.9,
+            82.9,
+            null,
+            null,
+            null
+          ],
+          [
+            58.3,
+            52.1,
+            80.7,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            58.4,
+            51.8,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            58.6,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ]
+        ],
+        "source_page": 46,
+        "entity": 1301
       },
       "_adobe_lob": {
         "gross_premium_mix": [

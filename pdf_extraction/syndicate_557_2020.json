@@ -1,7 +1,12 @@
 {
-  "extraction_timestamp": "2026-09-05T20:34:24.398305+00:00",
+  "extraction_timestamp": "2026-09-10T10:44:16.172240+00:00",
   "spec": {
     "prompt_version": "2.10",
+    "driver_prompt_version": "2.11",
+    "responses_served_from_cache": {
+      "gemini-2.5-flash": "2.10",
+      "gpt-5-mini": "2.10"
+    },
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -277,6 +282,162 @@
         "total_tokens": 22998,
         "cost_usd": 0.009806
       },
+      "_served_from": {
+        "cache_file": "16012eba572ebfc503ba7abfd075ddf61aa7cec32d641b24a68fb05cd1830a5f.json",
+        "prompt_version": "2.10"
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -0.4,
+        "model_value": -0.4,
+        "triangle_type": "gross",
+        "triangle_units": "millions",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 31,
+        "note": "confirmed by the model value"
+      },
+      "_rag_triangle": {
+        "type": "gross",
+        "currency": "GBP",
+        "units": "millions",
+        "units_evidence": "header",
+        "underwriting_years": [
+          2011,
+          2012,
+          2013,
+          2014,
+          2015,
+          2016,
+          2017,
+          2018,
+          2019,
+          2020
+        ],
+        "development_rows": [
+          [
+            23.5,
+            28.4,
+            14.1,
+            7.9,
+            3.3,
+            6.6,
+            24.1,
+            12.2,
+            4.3,
+            18.6
+          ],
+          [
+            21.3,
+            26.1,
+            15.9,
+            8.1,
+            4.2,
+            6.3,
+            21.1,
+            11.7,
+            14.6,
+            null
+          ],
+          [
+            20.0,
+            25.3,
+            15.3,
+            7.4,
+            3.6,
+            5.8,
+            20.1,
+            11.4,
+            null,
+            null
+          ],
+          [
+            18.9,
+            26.2,
+            14.8,
+            7.0,
+            3.3,
+            5.5,
+            20.0,
+            null,
+            null,
+            null
+          ],
+          [
+            18.1,
+            26.0,
+            14.5,
+            7.0,
+            3.0,
+            5.5,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            17.7,
+            25.9,
+            14.1,
+            6.9,
+            3.0,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            17.5,
+            25.9,
+            14.0,
+            6.9,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            17.5,
+            24.5,
+            14.0,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            17.4,
+            24.4,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            17.5,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ]
+        ],
+        "source_page": 31,
+        "entity": 557
+      },
       "_adobe_provisions": {
         "opening_provenance": {
           "raw_value": 22206.0,
@@ -360,12 +521,26 @@
         "foreign_tables_skipped": 0,
         "foreign_pages": [],
         "underwriting_year_pages": [
+          42,
+          43,
+          44,
+          45,
+          46,
           47,
           48,
           49,
-          50
+          50,
+          51,
+          52,
+          53,
+          54,
+          55,
+          56,
+          57,
+          58,
+          59
         ],
-        "underwriting_year_tables_skipped": 3,
+        "underwriting_year_tables_skipped": 10,
         "document_unit_hint": 0.001
       },
       "opening_reserves_provenance": {
@@ -388,8 +563,8 @@
       "opening_reserves_gbp_m": 22.206,
       "opening_reserves_page": 18,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": -0.966,
-      "prior_year_development_pct": -4.35,
+      "prior_year_development_gbp_m": -0.4,
+      "prior_year_development_pct": -1.8,
       "direction": "release",
       "prior_year_movement_page": 31,
       "prior_year_movement_confidence": 0.8,
@@ -540,7 +715,7 @@
       "gross_premium_page": 15,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "No explicit GROSS prior-year movement (insurance liabilities column) was provided in the 'movement in prior year provision' notes. The report explicitly states a net prior-year surplus of GBP 966,000; that net figure has been used as a fallback (NET of reinsurance). Gross prior-year development could not be located. A gross claims development triangle is present (used for cross-checking) but contains aggregate and formatting elements; RITC activity (Part VII transfer) is noted elsewhere but reported to have no net economic impact on the syndicate. Prior-year movement thus reported is NET of reinsurance - gross movement not available in the notes.",
+      "data_quality_notes": "No explicit GROSS prior-year movement (insurance liabilities column) was provided in the 'movement in prior year provision' notes. The report explicitly states a net prior-year surplus of GBP 966,000; that net figure has been used as a fallback (NET of reinsurance). Gross prior-year development could not be located. A gross claims development triangle is present (used for cross-checking) but contains aggregate and formatting elements; RITC activity (Part VII transfer) is noted elsewhere but reported to have no net economic impact on the syndicate. Prior-year movement thus reported is NET of reinsurance - gross movement not available in the notes. [RAG OVERRIDE: Model said PYD=-0.966, RAG triangle computed -0.4. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -681,6 +856,162 @@
         "total_tokens": 44397,
         "cost_usd": 0.027726
       },
+      "_served_from": {
+        "cache_file": "60b4a65bdbe73f5e3d56f3669c0f26c46e3a4713a0434e335b478b32f3049310.json",
+        "prompt_version": "2.10"
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -0.4,
+        "model_value": -0.966,
+        "triangle_type": "gross",
+        "triangle_units": "millions",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 31,
+        "note": "overrode the model value"
+      },
+      "_rag_triangle": {
+        "type": "gross",
+        "currency": "GBP",
+        "units": "millions",
+        "units_evidence": "header",
+        "underwriting_years": [
+          2011,
+          2012,
+          2013,
+          2014,
+          2015,
+          2016,
+          2017,
+          2018,
+          2019,
+          2020
+        ],
+        "development_rows": [
+          [
+            23.5,
+            28.4,
+            14.1,
+            7.9,
+            3.3,
+            6.6,
+            24.1,
+            12.2,
+            4.3,
+            18.6
+          ],
+          [
+            21.3,
+            26.1,
+            15.9,
+            8.1,
+            4.2,
+            6.3,
+            21.1,
+            11.7,
+            14.6,
+            null
+          ],
+          [
+            20.0,
+            25.3,
+            15.3,
+            7.4,
+            3.6,
+            5.8,
+            20.1,
+            11.4,
+            null,
+            null
+          ],
+          [
+            18.9,
+            26.2,
+            14.8,
+            7.0,
+            3.3,
+            5.5,
+            20.0,
+            null,
+            null,
+            null
+          ],
+          [
+            18.1,
+            26.0,
+            14.5,
+            7.0,
+            3.0,
+            5.5,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            17.7,
+            25.9,
+            14.1,
+            6.9,
+            3.0,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            17.5,
+            25.9,
+            14.0,
+            6.9,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            17.5,
+            24.5,
+            14.0,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            17.4,
+            24.4,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            17.5,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ]
+        ],
+        "source_page": 31,
+        "entity": 557
+      },
       "_adobe_provisions": {
         "opening_provenance": {
           "raw_value": 22206.0,
@@ -764,12 +1095,26 @@
         "foreign_tables_skipped": 0,
         "foreign_pages": [],
         "underwriting_year_pages": [
+          42,
+          43,
+          44,
+          45,
+          46,
           47,
           48,
           49,
-          50
+          50,
+          51,
+          52,
+          53,
+          54,
+          55,
+          56,
+          57,
+          58,
+          59
         ],
-        "underwriting_year_tables_skipped": 3,
+        "underwriting_year_tables_skipped": 10,
         "document_unit_hint": 0.001
       },
       "opening_reserves_provenance": {
@@ -790,23 +1135,10 @@
   "total_cost_usd": 0.037532,
   "total_tokens": 67395,
   "validation": {
-    "passed": false,
-    "total_discrepancies": 28,
+    "passed": true,
+    "total_discrepancies": 26,
     "within_tolerance": 26,
-    "hard_failures": 2,
-    "hard_failure_details": [
-      {
-        "field": "prior_year_development_gbp_m",
-        "type": "value_mismatch",
-        "gemini-2.5-flash": -0.4,
-        "gpt-5-mini": -0.966
-      },
-      {
-        "field": "prior_year_development_pct",
-        "type": "value_mismatch",
-        "gemini-2.5-flash": -1.8,
-        "gpt-5-mini": -4.35
-      }
-    ]
+    "hard_failures": 0,
+    "hard_failure_details": []
   }
 }

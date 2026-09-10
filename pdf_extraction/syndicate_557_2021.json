@@ -1,7 +1,12 @@
 {
-  "extraction_timestamp": "2026-09-05T20:34:30.630833+00:00",
+  "extraction_timestamp": "2026-09-10T10:44:22.696139+00:00",
   "spec": {
     "prompt_version": "2.10",
+    "driver_prompt_version": "2.11",
+    "responses_served_from_cache": {
+      "gemini-2.5-flash": "2.10",
+      "gpt-5-mini": "2.10"
+    },
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -13,8 +18,8 @@
       "opening_reserves_gbp_m": 36.46,
       "opening_reserves_page": 9,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": -1.3,
-      "prior_year_development_pct": -3.56,
+      "prior_year_development_gbp_m": -1.2,
+      "prior_year_development_pct": -3.29,
       "direction": "release",
       "prior_year_movement_page": 18,
       "prior_year_movement_confidence": 0.8,
@@ -321,10 +326,25 @@
         "total_tokens": 24346,
         "cost_usd": 0.010829
       },
+      "_served_from": {
+        "cache_file": "a553cca549531b2fbf3a39e18f8d955764559fd2e63583987db9c25f824d38cd.json",
+        "prompt_version": "2.10"
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -1.2,
+        "model_value": -1.3,
+        "triangle_type": "gross",
+        "triangle_units": "millions",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 33,
+        "note": "confirmed by the model value"
+      },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "millions",
+        "units_evidence": "header",
         "underwriting_years": [
           2012,
           2013,
@@ -457,20 +477,10 @@
             null,
             null,
             null
-          ],
-          [
-            -23.1,
-            -13.9,
-            -6.9,
-            -2.9,
-            -5.2,
-            -17.3,
-            -8.3,
-            -4.3,
-            -12.2,
-            -2.8
           ]
-        ]
+        ],
+        "source_page": 33,
+        "entity": 557
       },
       "_entity_binding": {
         "requested_syndicate": 557,
@@ -543,11 +553,26 @@
         "foreign_tables_skipped": 0,
         "foreign_pages": [],
         "underwriting_year_pages": [
+          43,
+          44,
+          45,
+          46,
+          47,
           48,
           49,
-          50
+          50,
+          51,
+          52,
+          53,
+          54,
+          55,
+          56,
+          57,
+          58,
+          59,
+          60
         ],
-        "underwriting_year_tables_skipped": 3,
+        "underwriting_year_tables_skipped": 10,
         "document_unit_hint": 0.001
       }
     },
@@ -557,8 +582,8 @@
       "opening_reserves_gbp_m": 36.46,
       "opening_reserves_page": 20,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": -1.983,
-      "prior_year_development_pct": -5.44,
+      "prior_year_development_gbp_m": -1.2,
+      "prior_year_development_pct": -3.29,
       "direction": "release",
       "prior_year_movement_page": 33,
       "prior_year_movement_confidence": 0.5,
@@ -708,7 +733,7 @@
       "gross_premium_page": 17,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "No gross-figure movement for 'movement in prior year's provision for claims outstanding' was explicitly provided. The report explicitly states a net prior-year favourable reassessment of GBP 1.983k; per extraction rules this NET figure was used as a fallback. A gross prior-year movement was not located; the claims development triangle (gross) is present and has been supplied, but extracting a single authoritative gross prior-year development from that triangle was not unambiguously possible given presentation; therefore the prior_year_development_gbp_m is NET of reinsurance and may understate or differ from any undisclosed gross movement.",
+      "data_quality_notes": "No gross-figure movement for 'movement in prior year's provision for claims outstanding' was explicitly provided. The report explicitly states a net prior-year favourable reassessment of GBP 1.983k; per extraction rules this NET figure was used as a fallback. A gross prior-year movement was not located; the claims development triangle (gross) is present and has been supplied, but extracting a single authoritative gross prior-year development from that triangle was not unambiguously possible given presentation; therefore the prior_year_development_gbp_m is NET of reinsurance and may understate or differ from any undisclosed gross movement. [RAG OVERRIDE: Model said PYD=-1.983, RAG triangle computed -1.2. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -861,10 +886,25 @@
         "total_tokens": 44851,
         "cost_usd": 0.0262
       },
+      "_served_from": {
+        "cache_file": "9b3fba6b50099fff87fb3f5c87aae6b653e991dd7babe6d411bcf4ca7097ec5a.json",
+        "prompt_version": "2.10"
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -1.2,
+        "model_value": -1.983,
+        "triangle_type": "gross",
+        "triangle_units": "millions",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 33,
+        "note": "overrode the model value"
+      },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "millions",
+        "units_evidence": "header",
         "underwriting_years": [
           2012,
           2013,
@@ -997,20 +1037,10 @@
             null,
             null,
             null
-          ],
-          [
-            -23.1,
-            -13.9,
-            -6.9,
-            -2.9,
-            -5.2,
-            -17.3,
-            -8.3,
-            -4.3,
-            -12.2,
-            -2.8
           ]
-        ]
+        ],
+        "source_page": 33,
+        "entity": 557
       },
       "_entity_binding": {
         "requested_syndicate": 557,
@@ -1083,11 +1113,26 @@
         "foreign_tables_skipped": 0,
         "foreign_pages": [],
         "underwriting_year_pages": [
+          43,
+          44,
+          45,
+          46,
+          47,
           48,
           49,
-          50
+          50,
+          51,
+          52,
+          53,
+          54,
+          55,
+          56,
+          57,
+          58,
+          59,
+          60
         ],
-        "underwriting_year_tables_skipped": 3,
+        "underwriting_year_tables_skipped": 10,
         "document_unit_hint": 0.001
       }
     }
@@ -1095,23 +1140,10 @@
   "total_cost_usd": 0.037029,
   "total_tokens": 69197,
   "validation": {
-    "passed": false,
-    "total_discrepancies": 25,
+    "passed": true,
+    "total_discrepancies": 23,
     "within_tolerance": 23,
-    "hard_failures": 2,
-    "hard_failure_details": [
-      {
-        "field": "prior_year_development_gbp_m",
-        "type": "value_mismatch",
-        "gemini-2.5-flash": -1.3,
-        "gpt-5-mini": -1.983
-      },
-      {
-        "field": "prior_year_development_pct",
-        "type": "value_mismatch",
-        "gemini-2.5-flash": -3.56,
-        "gpt-5-mini": -5.44
-      }
-    ]
+    "hard_failures": 0,
+    "hard_failure_details": []
   }
 }

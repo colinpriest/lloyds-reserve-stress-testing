@@ -1,7 +1,12 @@
 {
-  "extraction_timestamp": "2026-09-05T20:33:47.554831+00:00",
+  "extraction_timestamp": "2026-09-10T10:43:22.502580+00:00",
   "spec": {
     "prompt_version": "2.10",
+    "driver_prompt_version": "2.11",
+    "responses_served_from_cache": {
+      "gemini-2.5-flash": "2.10",
+      "gpt-5-mini": "2.10"
+    },
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -13,8 +18,8 @@
       "opening_reserves_gbp_m": 47.212,
       "opening_reserves_page": 25,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": -0.7,
-      "prior_year_development_pct": -1.48,
+      "prior_year_development_gbp_m": -1.4,
+      "prior_year_development_pct": -2.97,
       "direction": "release",
       "prior_year_movement_page": 10,
       "prior_year_movement_confidence": 0.8,
@@ -108,7 +113,7 @@
       "gross_premium_page": 26,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior year development figure is stated as net of reinsurance; gross figure not explicitly available.",
+      "data_quality_notes": "Prior year development figure is stated as net of reinsurance; gross figure not explicitly available. [RAG OVERRIDE: Model said PYD=-0.7, RAG triangle computed -1.4. Using RAG value.]",
       "_claims_triangle": {
         "type": "net",
         "currency": "GBP",
@@ -170,6 +175,14 @@
             null,
             null,
             null
+          ],
+          [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
           ]
         ]
       },
@@ -184,6 +197,86 @@
         "output_tokens": 1959,
         "total_tokens": 32937,
         "cost_usd": 0.011958
+      },
+      "_served_from": {
+        "cache_file": "10fce70afff6f80b20d11424442e16e5f593587167668bdf0ab4ebc58e6cacf2.json",
+        "prompt_version": "2.10"
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -1.4,
+        "model_value": -0.7,
+        "triangle_type": "gross",
+        "triangle_units": "millions",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 68,
+        "note": "overrode the model value"
+      },
+      "_rag_triangle": {
+        "type": "gross",
+        "currency": "GBP",
+        "units": "millions",
+        "units_evidence": "header",
+        "underwriting_years": [
+          2009,
+          2010,
+          2011,
+          2012,
+          2013,
+          2014
+        ],
+        "development_rows": [
+          [
+            18.5,
+            25.0,
+            24.0,
+            28.4,
+            16.1,
+            9.3
+          ],
+          [
+            14.8,
+            61.5,
+            19.5,
+            23.5,
+            14.9,
+            null
+          ],
+          [
+            12.0,
+            56.4,
+            18.2,
+            22.6,
+            null,
+            null
+          ],
+          [
+            11.6,
+            56.0,
+            17.1,
+            null,
+            null,
+            null
+          ],
+          [
+            10.8,
+            56.8,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            10.6,
+            null,
+            null,
+            null,
+            null,
+            null
+          ]
+        ],
+        "source_page": 68,
+        "entity": 557
       },
       "_entity_binding": {
         "requested_syndicate": 557,
@@ -384,8 +477,11 @@
         "underwriting_year_pages": [
           104,
           105,
+          106,
           107,
+          108,
           109,
+          110,
           111,
           112,
           113,
@@ -393,10 +489,15 @@
           115,
           116,
           117,
+          118,
           119,
+          120,
           121,
+          122,
           123,
+          124,
           125,
+          126,
           127,
           128,
           129,
@@ -404,17 +505,25 @@
           131,
           132,
           133,
+          134,
           135,
+          136,
           137,
+          138,
           139,
+          140,
           141,
           142,
           143,
           144,
           145,
+          146,
           147,
+          148,
           149,
+          150,
           151,
+          152,
           153
         ],
         "underwriting_year_tables_skipped": 16,
@@ -427,8 +536,8 @@
       "opening_reserves_gbp_m": 47.212,
       "opening_reserves_page": 64,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": -0.7,
-      "prior_year_development_pct": -1.48,
+      "prior_year_development_gbp_m": -1.4,
+      "prior_year_development_pct": -2.97,
       "direction": "release",
       "prior_year_movement_page": 17,
       "prior_year_movement_confidence": 0.5,
@@ -479,7 +588,7 @@
       "gross_premium_page": 66,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior-year development gross figure was not found in the movement note for Syndicate 557; the report explicitly states a GBP 0.7m improvement (release) in the underwriter's narrative but does not disclose the gross (insurance liabilities) movement amount. The GBP 0.7m used here is taken from that narrative and is likely a net/reported improvement; treated as net-of-reinsurance due to absence of an explicit gross PYD figure and flagged with reduced confidence. Opening reserves taken from balance sheet prior-year comparative column (explicit). No reliable gross claims development triangle was extracted for Syndicate 557.",
+      "data_quality_notes": "Prior-year development gross figure was not found in the movement note for Syndicate 557; the report explicitly states a GBP 0.7m improvement (release) in the underwriter's narrative but does not disclose the gross (insurance liabilities) movement amount. The GBP 0.7m used here is taken from that narrative and is likely a net/reported improvement; treated as net-of-reinsurance due to absence of an explicit gross PYD figure and flagged with reduced confidence. Opening reserves taken from balance sheet prior-year comparative column (explicit). No reliable gross claims development triangle was extracted for Syndicate 557. [RAG OVERRIDE: Model said PYD=-0.7, RAG triangle computed -1.4. Using RAG value.]",
       "_claims_triangle": {
         "type": "none",
         "currency": "GBP",
@@ -499,6 +608,86 @@
         "output_tokens": 5172,
         "total_tokens": 74233,
         "cost_usd": 0.027609
+      },
+      "_served_from": {
+        "cache_file": "eaa3380b9a047dc169acec9299a3c6b64de089b6be3f65c9790119503c6f7acc.json",
+        "prompt_version": "2.10"
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -1.4,
+        "model_value": -0.7,
+        "triangle_type": "gross",
+        "triangle_units": "millions",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 68,
+        "note": "overrode the model value"
+      },
+      "_rag_triangle": {
+        "type": "gross",
+        "currency": "GBP",
+        "units": "millions",
+        "units_evidence": "header",
+        "underwriting_years": [
+          2009,
+          2010,
+          2011,
+          2012,
+          2013,
+          2014
+        ],
+        "development_rows": [
+          [
+            18.5,
+            25.0,
+            24.0,
+            28.4,
+            16.1,
+            9.3
+          ],
+          [
+            14.8,
+            61.5,
+            19.5,
+            23.5,
+            14.9,
+            null
+          ],
+          [
+            12.0,
+            56.4,
+            18.2,
+            22.6,
+            null,
+            null
+          ],
+          [
+            11.6,
+            56.0,
+            17.1,
+            null,
+            null,
+            null
+          ],
+          [
+            10.8,
+            56.8,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            10.6,
+            null,
+            null,
+            null,
+            null,
+            null
+          ]
+        ],
+        "source_page": 68,
+        "entity": 557
       },
       "_entity_binding": {
         "requested_syndicate": 557,
@@ -699,8 +888,11 @@
         "underwriting_year_pages": [
           104,
           105,
+          106,
           107,
+          108,
           109,
+          110,
           111,
           112,
           113,
@@ -708,10 +900,15 @@
           115,
           116,
           117,
+          118,
           119,
+          120,
           121,
+          122,
           123,
+          124,
           125,
+          126,
           127,
           128,
           129,
@@ -719,17 +916,25 @@
           131,
           132,
           133,
+          134,
           135,
+          136,
           137,
+          138,
           139,
+          140,
           141,
           142,
           143,
           144,
           145,
+          146,
           147,
+          148,
           149,
+          150,
           151,
+          152,
           153
         ],
         "underwriting_year_tables_skipped": 16,

@@ -30,6 +30,7 @@ lloyds_reserve_stress_testing/
 │   ├── exposure-adjustment.md              # Exposure adjustment documentation
 │   ├── llm-prompt-development.md           # LLM prompt development notes
 │   ├── ocr-pipeline.md                     # OCR pipeline documentation
+│   ├── prompt-history.md                   # Generated: prompt versions behind the cached responses
 │   ├── table-4-explanation.md              # Table 4 explanation
 │   └── validation/                         # Validation artefacts
 │       ├── rejection_log.xlsx              # Rejected reports log

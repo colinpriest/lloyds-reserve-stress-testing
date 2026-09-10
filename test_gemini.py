@@ -276,7 +276,8 @@ GEMINI_MODEL = "gemini-2.5-flash"
 OPENAI_MODEL = "gpt-5-mini"
 
 # Frozen spec versions -- bump these when spec files change
-PROMPT_VERSION = "2.10"  # 2.10: add monoline LOB extraction, direction forced from triangle PYD
+PROMPT_VERSION = "2.11"  # 2.11 (round 55, T02): one business-mix hierarchy (the segmental note, else the divisional summary, never merged), the claims-incurred definition corrected, the loss-ratio route requires underwriting-year premiums; every committed response cache was produced under 2.10 or earlier (see docs/prompt-history.md)
+# 2.10: add monoline LOB extraction, direction forced from triangle PYD
 FIELD_DEFINITIONS_VERSION = "1.0"
 TOLERANCE_RULES_VERSION = "1.0"
 
@@ -639,7 +640,13 @@ def _llm_lookup(model, prompt_text, canonical_hash, legacy_hash, syndicate_num, 
     if os.getenv("LLOYDS_EXTRACTION_OFFLINE") == "1":
         cached, hit = _llm_cache_by_meta(model, syndicate_num, report_year)
         if hit:
-            return cached["data"], True, "committed entry by (model, syndicate, year)"
+            data = cached["data"]
+            if isinstance(data, dict) and cached.get("_served_from"):
+                # round 55 (T02): the record must say which prompt produced its
+                # responses; the marker was dropped here before
+                data = dict(data)
+                data["_served_from"] = cached["_served_from"]
+            return data, True, "committed entry by (model, syndicate, year)"
     return None, False, None
 
 
@@ -730,7 +737,7 @@ Return this JSON structure:
   "opening_reserves_gbp_m": <opening GROSS CLAIMS OUTSTANDING at start of year, in millions. PRIMARY SOURCE: the Balance Sheet / Statement of Financial Position — find "Claims outstanding" (or "Gross claims outstanding") in the LIABILITIES section under "Technical provisions". Use the PRIOR YEAR comparative column (e.g. in a 2019 report, use the 2018 column). This is ONLY claims reserves — do NOT include "Provision for unearned premiums". Do NOT use the reinsurers' share from the ASSETS side. SECONDARY SOURCE: Technical Reserves note "At 1 January" — but prefer Balance Sheet if both are available. null if not found>,
   "opening_reserves_page": <page number where found>,
   "opening_reserves_confidence": <0.0 to 1.0>,
-  "prior_year_development_gbp_m": <GROSS amount in millions as a SIGNED number: NEGATIVE for releases, POSITIVE for strengthenings/deteriorations. MUST be the GROSS figure (insurance liabilities), NOT net of reinsurance. If the note shows Insurance liabilities / Reinsurer's share / Net columns, use the INSURANCE LIABILITIES column. Use the figure from the "Movement in prior year's provision for claims outstanding" note. CRITICAL: Do NOT use the "Claims incurred in prior underwriting years" row from the Profit and Loss Account Technical Account — this is GROSS CLAIMS INCURRED (premiums earned minus claims paid minus reserve changes), NOT the reserve movement. It is a completely different accounting concept. Do NOT use narrative text that says "net releases of £X" or "net improvement of £X" — the word "net" means after reinsurance. Do NOT use the "Movement in provision" line from the Technical Reserves reconciliation table, which includes current year movements. null if not found>,
+  "prior_year_development_gbp_m": <GROSS amount in millions as a SIGNED number: NEGATIVE for releases, POSITIVE for strengthenings/deteriorations. MUST be the GROSS figure (insurance liabilities), NOT net of reinsurance. If the note shows Insurance liabilities / Reinsurer's share / Net columns, use the INSURANCE LIABILITIES column. Use the figure from the "Movement in prior year's provision for claims outstanding" note. CRITICAL: Do NOT use the "Claims incurred in prior underwriting years" row from the Profit and Loss Account Technical Account — this is GROSS CLAIMS INCURRED (claims paid in the year plus the change in the gross provision for claims outstanding, an income-statement charge that covers every underwriting year), NOT the prior-year reserve movement. It is a different accounting concept. Do NOT use narrative text that says "net releases of £X" or "net improvement of £X" — the word "net" means after reinsurance. Do NOT use the "Movement in provision" line from the Technical Reserves reconciliation table, which includes current year movements. null if not found>,
   "prior_year_development_pct": <as percentage of opening gross claims outstanding, NEGATIVE for releases, POSITIVE for strengthenings, null if not calculable>,
   "direction": "<release|strengthening|flat|mixed — also consider year-of-account closure language: 'profit on closed year' or 'improvement on forecast' typically indicates release; 'deterioration' or 'loss on closed year' indicates strengthening; both directions across LOBs = mixed>",
   "prior_year_movement_page": <page number>,
@@ -826,9 +833,9 @@ Rules:
   Source 6 (LAST RESORT): If NO gross figure is available from ANY of the above sources (no gross movement note, no gross triangle, no loss ratio table), but the narrative text or movement note explicitly states a NET (after reinsurance) prior year development figure, use the NET figure. Flag this clearly in data_quality_notes as "NET of reinsurance — no gross figure available". This is better than returning null when the report clearly quantifies the prior year movement, even if only net.
   IMPORTANT FALLBACK: If the movement note only shows NET figures AND a gross triangle exists, fall back to the GROSS claims development triangle (source 4). Only use Source 6 (net figure) if no gross source is available at all. Return null only if no figure (gross or net) is available.
 - IMPORTANT — sign convention for "surplus/(deficit)" language: When a report says "A surplus/(deficit) run-off deviation of (X) million", the PARENTHESES around the number indicate a DEFICIT. A deficit means prior reserves were INSUFFICIENT, which is ADVERSE development = STRENGTHENING (POSITIVE sign). Example: "surplus/(deficit) of (3.0) million" means a 3.0m deficit = prior_year_development_gbp_m: +3.0, direction: "strengthening". Conversely, an unparenthesized number means a surplus = release = NEGATIVE sign.
-- IMPORTANT — gross_premium_mix: Use the REGULATORY segmental analysis from the Notes to the Accounts. Copy the line of business names EXACTLY as printed (e.g. "Marine, aviation and transport", "Fire and other damage to property", "Third party liability", "Miscellaneous", "Reinsurance"). Do NOT rename them to standard Lloyd's LOB names. Do NOT split combined categories into separate entries. Do NOT use the underwriter's internal divisional breakdown. Even if the report has only ONE line of business (e.g. a monoline reinsurer writing 100% "Reinsurance"), still include it as a single entry in gross_premium_mix — do NOT return an empty array just because there is only one class. Also look for "Gross written premium income by class of business" tables in the Managing Agent's Report — these often provide a more granular divisional breakdown than the regulatory segmental analysis note.
+- IMPORTANT — gross_premium_mix: Use the REGULATORY segmental analysis from the Notes to the Accounts. Copy the line of business names EXACTLY as printed (e.g. "Marine, aviation and transport", "Fire and other damage to property", "Third party liability", "Miscellaneous", "Reinsurance"). Do NOT rename them to standard Lloyd's LOB names. Do NOT split combined categories into separate entries. Do NOT use the underwriter's internal divisional breakdown. Even if the report has only ONE line of business (e.g. a monoline reinsurer writing 100% "Reinsurance"), still include it as a single entry in gross_premium_mix — do NOT return an empty array just because there is only one class. Use ONLY that note when the report has one; do not combine it with, or replace it by, a divisional or business-class table from the Managing Agent's Report.
 - IMPORTANT — gross_premium_mix with "Direct insurance" and "Reinsurance acceptances" sub-tables: Some segmental analysis notes split gross premiums into "Direct insurance" and "Reinsurance acceptances" sub-tables, each with their own LOB categories (e.g. both may have "Fire and other damage to property"). In this case, list the individual Direct insurance categories with their amounts, then add a SINGLE consolidated "Reinsurance acceptances" line with the total of all reinsurance accepted premiums. Do NOT list the individual reinsurance sub-categories separately (they would create duplicate LOB names). The total should still equal gross_premiums_written_gbp_m.
-- IMPORTANT — gross_premium_mix: prefer DIVISIONAL TOTALS over regulatory sub-categories. When the report contains BOTH a regulatory segmental analysis (with fine-grained statutory classes like "Marine, aviation and transport", "Fire and other damage to property") AND a divisional/business class summary (e.g. "Marine", "Property", "Specialty", "Political Lines", "Treaty"), use the DIVISIONAL summary. The divisional breakdown aggregates across direct and reinsurance business to give the TOTAL premium per business class, which is what we need. The regulatory segmental analysis often shows only the direct insurance component for each statutory class, understating the true LOB total. Each entry in gross_premium_mix should represent the TOTAL premium for that business class (direct + reinsurance combined). The amounts must still sum to gross_premiums_written_gbp_m.
+- IMPORTANT — gross_premium_mix when the report has NO segmental analysis note: only then use the Managing Agent's divisional or business-class summary of gross written premium, copy its class names exactly, and record "mix from divisional summary" in data_quality_notes. Never merge the two sources or substitute one for the other when both exist. The amounts must still sum to gross_premiums_written_gbp_m.
 - IMPORTANT — year-of-account result breakdown: Many Lloyd's reports break down the overall result by year of account, e.g. "The result is a profit of £7,833,000, of which a loss of £5,556,000 is attributable to the {report_year} year of account, a profit of £14,806,000 is attributable to the {report_year - 1} year of account and a loss of £1,417,000 is attributable to the {report_year - 2} and prior years of account." In this example, the {report_year - 1} YOA profit (£14.806m) and the {report_year - 2} & prior YOA loss (-£1.417m) are BOTH prior year development. The NET prior year development = sum of all non-current-year components = £14.806m + (-£1.417m) = £13.389m. Since this is a net profit on prior years, direction = "release", prior_year_development_gbp_m = -13.389 (negative = release). This breakdown is a PRIMARY source for prior year development — look for it in the Managing Agent's Report or Underwriter's Report. Also look for "The [YYYY] & prior years of account is closing with a collectable loss/profit of £X" which indicates the closure result for older years.
 - IMPORTANT — Claims Development Table (triangle): LAST RESORT — only use this if the "Movement in prior year's provision" note, narrative text, and year-of-account result breakdown are all unavailable. Must use the GROSS claims development table, NOT the net. Most reports contain an "Analysis of claims development" or "Claims development table" showing cumulative gross claims by underwriting year across development periods. To extract the movement:
   1. Look at the BOTTOM ROW ("Current estimate of cumulative claims") — these are the latest estimates for each underwriting year.
@@ -866,7 +873,7 @@ Rules:
     Change:      -1%   -2%   -1%   -3%   -4%
   If gross premiums for 2008 were £100m: 2008 contribution = -1% × 100 = -£1.0m (release).
   Sum all UW year contributions for total PYD.
-  NOTE: You need the gross premiums per UW year — look in the premium development table, segmental analysis, or the premium line of the P&L Technical Account for each year. If premiums per UW year are not available, use the total gross premiums as an approximation with a data_quality_note.
+  NOTE: You need the gross premiums per UW year — look in the premium development table, segmental analysis, or the premium line of the P&L Technical Account for each year. If premiums per UW year are not available, this route cannot give a figure: do NOT substitute the total gross premiums (that discards the year weights); leave the loss-ratio route unused and record "loss-ratio table without underwriting-year premiums" in data_quality_notes.
 - IMPORTANT — year-of-account closure language: Lloyd's syndicates close years of account after 3 years. Phrases like "profit for the closed year of account", "improvement on forecast result", "return on capacity of X%" indicate favourable prior year development (release). Phrases like "deterioration on closed year", "loss on closed year of account" indicate adverse development (strengthening). The DIFFERENCE between the final result and the prior forecast is a useful cross-check for the prior year development amount (e.g. if profit improved from £40.1m forecast to £41.4m actual, the improvement of £1.3m suggests a release). Use this as supporting evidence alongside the primary reserve movement sources.
 - prior_year_events: List specific named events from years BEFORE the report year ({report_year}) that the document mentions as affecting claims or reserves. For a {report_year} report, any event from {report_year - 1} or earlier is a prior year event. Look in the Technical Reserves note for "{report_year - 1} events" subsections — these are prior year events. Also look in the Underwriter's Report for references to events from prior years (e.g. deterioration on older losses). Include both adverse and favourable impacts.
 - named_events: List ALL specific named catastrophe events, large losses, and significant incidents mentioned ANYWHERE in the document — including the Technical Reserves note (which often has "{report_year-1} events" and "{report_year} events" subsections), the Underwriter's Report divisional reviews, and the Managing Agent's Report. Include events from both the current year AND prior years. Look for: hurricanes, typhoons, earthquakes, floods, snowfall, hailstorms, tornadoes, vessel losses, industrial accidents, terrorist attacks, and any other specifically named loss events. Empty list only if genuinely no named events appear in the document."""
@@ -3529,6 +3536,27 @@ def _validate_triangle_structure(uw_years, rows, report_year):
     return matches / checks if checks > 0 else 0.0
 
 
+def _record_pyd_route(result, source, value, model_value=None, triangle=None, note=""):
+    """Why the record's development figure is what it is, in a field rather than in a
+    sentence. The loader reads this to assign the figure's basis; before round 55 it
+    read a `[RAG OVERRIDE: ...]` note that the extractor wrote only when the
+    deterministic figure disagreed with the model's by at least 0.5m, so a record whose
+    triangle agreed with the model carried no evidence of its own route."""
+    if not isinstance(result, dict):
+        return
+    route = {"source": source, "value": value}
+    if model_value is not None:
+        route["model_value"] = model_value
+    if isinstance(triangle, dict):
+        route["triangle_type"] = triangle.get("type")
+        route["triangle_units"] = triangle.get("units")
+        route["triangle_units_evidence"] = triangle.get("units_evidence")
+        route["triangle_source_page"] = triangle.get("source_page")
+    if note:
+        route["note"] = note
+    result["_pyd_route"] = route
+
+
 def compute_pyd_from_triangle(triangle_data, report_year):
     """Compute prior year development from extracted triangle data.
 
@@ -3641,11 +3669,21 @@ def compute_pyd_from_triangle(triangle_data, report_year):
         return None, (f"triangle has {year_like_count}/{total_vals} values that look like "
                      f"calendar years (1980-2030) — likely a misidentified segmental table")
 
-    # Validate: detect loss ratio triangles misidentified as claims triangles.
-    # Loss ratios are percentages (0-200%), while claims amounts are typically
-    # in the hundreds/thousands/millions.  If all non-null values are < 200,
-    # this is almost certainly a loss ratio triangle, not a claims triangle.
-    if total_vals > 3:
+    # Percentage against monetary (round 55, T03): decided from the triangle's own
+    # unit evidence before any magnitude heuristic. A triangle read as percentages
+    # takes the loss-ratio route. A triangle whose monetary unit is evidenced (a
+    # table marker, or the model's explicit unit) is never rejected on magnitude, so
+    # the same triangle in millions and in thousands gives the same movement. The
+    # magnitude heuristic applies only when the unit is the parser's default, and it
+    # is a heuristic with false positives, not a proof.
+    tri_units = str(triangle_data.get("units") or "").strip().lower()
+    if tri_units in ("percentage", "percentages", "percent", "%", "ratio", "ratios"):
+        return None, (f"triangle is in percentages (units={tri_units!r}) — a loss ratio "
+                      f"triangle, not a claims development triangle")
+    explicit_monetary = tri_units in ("millions", "thousands", "full")
+    unit_evidence = str(triangle_data.get("units_evidence")
+                        or ("explicit" if explicit_monetary else "default")).lower()
+    if total_vals > 3 and (unit_evidence in ("default", "conflict") or not explicit_monetary):
         pct_like_count = sum(
             1 for r in range(n_rows) for c in range(n_cols)
             if rows[r][c] is not None
@@ -3659,8 +3697,11 @@ def compute_pyd_from_triangle(triangle_data, report_year):
                 if rows[r][c] is not None and isinstance(rows[r][c], (int, float))
             )
             if max_val <= 200:
+                why = ("with a ratio marker beside the monetary one" if unit_evidence == "conflict"
+                       else "with no evidenced unit")
                 return None, (f"triangle has all {total_vals} values in 0-200 range "
-                             f"(max={max_val:.1f}) — likely a loss ratio triangle, "
+                             f"(max={max_val:.1f}) {why} — read as a "
+                             f"loss ratio triangle by the magnitude heuristic, "
                              f"not a claims development triangle")
 
     # Detect and strip "Current estimate" summary row if LLM included it.
@@ -3785,9 +3826,10 @@ def compute_pyd_from_triangle(triangle_data, report_year):
     #   Full integers: 1,000,000 - 500,000,000  (individual pounds)
     #   Thousands:     1,000 - 500,000           (£000)
     #   Millions:      1 - 500                   (£m)
-    if units not in ("thousands", "full", "percentage"):
-        # Auto-detect units from value magnitudes when header detection was ambiguous
-        # or returned an unknown unit string (e.g. "units").
+    if units not in ("thousands", "full", "percentage") and (
+            unit_evidence in ("default", "conflict") or not explicit_monetary):
+        # Auto-detect units from value magnitudes only when the unit was assumed or
+        # is in conflict (round 55, B15): an evidenced or explicit unit is final.
         sample_vals = [rows[r][c] for r in range(min(2, n_rows)) for c in range(n_cols)
                        if rows[r][c] is not None and isinstance(rows[r][c], (int, float))]
         if sample_vals:
@@ -4167,6 +4209,9 @@ def _normalize_currency_fields(result):
 SKIP_FIELDS = {
     "source_type", "source_file", "content_hash",
     "standardized_at", "standardization_model", "_extraction_meta",
+    # provenance of the response and of the adopted figure's route, not extracted
+    # fields: comparing them failed every replayed record (round 55, review B2-04)
+    "_served_from", "_pyd_route",
     "_claims_triangle",
     "_rag_triangle",
     "_adobe_lob",
@@ -5131,6 +5176,8 @@ def process_one_report(report_path, inception_cache=None):
                             rag_pyd / _op * 100, 2
                         )
                     result["direction"] = "release" if rag_pyd < 0 else "strengthening" if rag_pyd > 0 else "flat"
+                    _record_pyd_route(result, "rag_triangle", rag_pyd, None,
+                                      rag_result.get("triangle"), "filled a blank model value")
                     level = " (managed level)" if rag_method == "loss_ratio_triangle" else ""
                     net_note = " (net triangle)" if rag_tri_type == "net" else ""
                     print(f"  [{model_name}] PYD filled from RAG triangle{level}{net_note}: {rag_pyd:+.3f}m")
@@ -5158,6 +5205,9 @@ def process_one_report(report_path, inception_cache=None):
                                 rag_pyd / _op * 100, 2
                             )
                         result["direction"] = "release" if rag_pyd < 0 else "strengthening" if rag_pyd > 0 else "flat"
+                        _record_pyd_route(result, "rag_triangle", rag_pyd, old_pyd,
+                                          rag_result.get("triangle"),
+                                          "overrode the model value" if diff >= 0.5 else "confirmed by the model value")
                         if diff >= 0.5:
                             old_notes = result.get("data_quality_notes", "") or ""
                             result["data_quality_notes"] = (
@@ -5338,7 +5388,7 @@ def process_one_report(report_path, inception_cache=None):
             print(f"  [{model_name}] PYD filled from narrative net figure: {net_pyd:+.3f}m (net of reinsurance)")
 
     # Zero-opening override: if opening reserves = 0, PYD must be 0 and
-    # direction must be flat — there are no prior year reserves to develop
+    # direction must be flat — the stored zero is the convention for a record with no prior-year reserves, not a finding that nothing developed
     opening_g = result_gemini.get("opening_reserves_gbp_m")
     opening_o = result_openai.get("opening_reserves_gbp_m")
     if opening_g == 0 and opening_o == 0:
@@ -5381,10 +5431,19 @@ def process_one_report(report_path, inception_cache=None):
     total_cost = meta_g.get("cost_usd", 0) + meta_o.get("cost_usd", 0)
     total_tokens = meta_g.get("total_tokens", 0) + meta_o.get("total_tokens", 0)
 
+    # round 55 (T02): a record replayed from the committed caches states the prompt
+    # version its responses were produced under, not the driver's current version
+    served = {name: (r.get("_served_from") or {}).get("prompt_version")
+              for name, r in ((GEMINI_MODEL, result_gemini), (OPENAI_MODEL, result_openai))
+              if isinstance(r.get("_served_from"), dict)}
+    served_versions = sorted({v for v in served.values() if v})
     output_data = {
         "extraction_timestamp": datetime.now(timezone.utc).isoformat(),
         "spec": {
-            "prompt_version": PROMPT_VERSION,
+            "prompt_version": (served_versions[0] if len(served_versions) == 1 and len(served) == 2
+                               else PROMPT_VERSION),
+            "driver_prompt_version": PROMPT_VERSION,
+            "responses_served_from_cache": served or None,
             "field_definitions_version": FIELD_DEFINITIONS_VERSION,
             "tolerance_rules_version": TOLERANCE_RULES_VERSION,
         },
@@ -5494,11 +5553,9 @@ if __name__ == "__main__":
         if not to_process:
             print(f"Report '{single_arg}' not found in {REPORTS_DIR}")
             sys.exit(1)
-        # Delete existing output so it will be re-processed
-        existing_output = OUTPUT_DIR / f"{single_arg}.json"
-        if existing_output.exists():
-            existing_output.unlink()
-            print(f"  Deleted existing output: {existing_output}")
+        # The existing output is left in place and overwritten only by a completed
+        # run (round 55, B10): an offline replay that misses a cache used to delete
+        # the committed record and report success
         already_done = set()
         print(f"Single report mode: {single_arg}")
     else:
@@ -6301,3 +6358,8 @@ if __name__ == "__main__":
         "total_tokens": run_total_tokens,
         "total_cost": run_total_cost,
     })
+
+    if run_errored and os.getenv("LLOYDS_EXTRACTION_OFFLINE") == "1":
+        print(f"Offline replay: {run_errored} report(s) could not be served from the committed caches; "
+              "their committed records stand unchanged")
+        sys.exit(2)

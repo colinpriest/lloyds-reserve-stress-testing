@@ -306,6 +306,41 @@ def unit_multiplier_from_text(text: str) -> Optional[float]:
     return None
 
 
+def _triangle_units(text_lower: str, dev_rows=None):
+    """(units, evidence) for a parsed claims-development triangle.
+
+    Round 55 (T03): the percentage-against-monetary decision rests on the table's
+    own evidence, read before any magnitude heuristic. A ratio or percent marker with
+    no monetary marker makes it a percentage table; a thousands or millions marker
+    alone gives that unit with evidence 'header'; when both marker classes are present
+    the monetary unit is returned with evidence 'conflict' (the caller's magnitude
+    heuristic still applies, and the decision is never made by magnitude here); with
+    no marker at all the parser's default of millions is returned with evidence
+    'default', so the caller knows the unit was assumed, not read."""
+    low = (text_lower or "").lower()
+    vals = [abs(float(v)) for row in (dev_rows or []) for v in row
+            if isinstance(v, (int, float)) and not isinstance(v, bool)]
+    small = bool(vals) and all(0 < v <= 200 for v in vals)
+    ratio_marker = ("%" in low) or bool(re.search(r"\bratios?\b", low))
+    thousands = bool(re.search(r"[\u00a3$\u20ac]'?000", low) or "'000" in low
+                     or unit_multiplier_from_text(low) == 0.001)
+    millions = bool(unit_multiplier_from_text(low) == 1.0
+                    or re.search(r"[\u00a3$\u20ac]\s?m\b", low))
+    if ratio_marker and not (thousands or millions):
+        return "percentage", "header"
+    if ratio_marker:
+        # both marker classes are in the text (a ratio grid beside a monetary total
+        # row; a monetary triangle on a page that mentions a combined ratio): the
+        # monetary unit is kept, and the evidence is 'conflict' so that the caller's
+        # magnitude heuristic still applies instead of a decision by magnitude here
+        return ("thousands" if thousands else "millions"), "conflict"
+    if thousands:
+        return "thousands", "header"
+    if millions:
+        return "millions", "header"
+    return "millions", "default"
+
+
 def _header_unit_multiplier(grid: list) -> Optional[float]:
     for row in grid[:4]:
         m = unit_multiplier_from_text(" ".join(str(c) for c in row))
@@ -450,17 +485,19 @@ class TriangleData:
     """Claims development triangle extracted from a syndicate report."""
     type: str  # "gross" or "net"
     currency: str  # "GBP", "USD", "EUR"
-    units: str  # "millions", "thousands"
+    units: str  # "millions", "thousands", "percentage"
     underwriting_years: list[int] = field(default_factory=list)
     development_rows: list[list] = field(default_factory=list)
     page: Optional[int] = None      # 0-based page the table was read from
     entity: Optional[int] = None    # syndicate whose section the page belongs to
+    units_evidence: str = "default"  # "header" when the unit was read from the table text
 
     def to_dict(self) -> dict:
         d = {
             "type": self.type,
             "currency": self.currency,
             "units": self.units,
+            "units_evidence": self.units_evidence,
             "underwriting_years": self.underwriting_years,
             "development_rows": self.development_rows,
         }
@@ -1231,9 +1268,7 @@ def _parse_transposed_triangle_from_text(text: str, report_year: int):
     elif "eur" in text_lower or "€" in text_lower:
         currency = "EUR"
 
-    units = "millions"
-    if re.search(r"[£$]'?000", text_lower) or "'000" in text_lower:
-        units = "thousands"
+    units, units_evidence = _triangle_units(text_lower, dev_rows)
 
     # Detect type — check context before the triangle header for gross/net
     # Default to gross since gross triangles typically appear first
@@ -1245,7 +1280,7 @@ def _parse_transposed_triangle_from_text(text: str, report_year: int):
         tri_type = "gross"
 
     triangle = TriangleData(
-        type=tri_type, currency=currency, units=units,
+        type=tri_type, currency=currency, units=units, units_evidence=units_evidence,
         underwriting_years=uw_years, development_rows=dev_rows,
     )
     details = (f"{tri_type} {len(uw_years)} UW years "
@@ -1453,9 +1488,7 @@ def _parse_triangle_from_text(text: str, report_year: int):
     elif "eur" in text_lower or "€" in text_lower:
         currency = "EUR"
 
-    units = "millions"
-    if re.search(r"[£$]'?000", text_lower) or "'000" in text_lower:
-        units = "thousands"
+    units, units_evidence = _triangle_units(text_lower, dev_rows)
 
     # Detect type (gross vs net)
     tri_type = "gross" if "gross" in text_lower else "net"
@@ -1464,6 +1497,7 @@ def _parse_triangle_from_text(text: str, report_year: int):
         type=tri_type,
         currency=currency,
         units=units,
+        units_evidence=units_evidence,
         underwriting_years=[int(y) for y in uw_years],
         development_rows=dev_rows,
     )
@@ -1724,9 +1758,7 @@ def _parse_nutrient_triangle(grid: list[list[str]], report_year: int):
         currency = "EUR"
 
     # Detect units
-    units = "millions"
-    if re.search(r"[£$]'?000", flat) or "'000" in flat:
-        units = "thousands"
+    units, units_evidence = _triangle_units(flat, dev_rows)
 
     # Detect gross vs net
     tri_type = "gross"
@@ -1734,11 +1766,26 @@ def _parse_nutrient_triangle(grid: list[list[str]], report_year: int):
         tri_type = "net"
 
     tri = TriangleData(
-        type=tri_type, currency=currency, units=units,
+        type=tri_type, currency=currency, units=units, units_evidence=units_evidence,
         underwriting_years=uw_years, development_rows=dev_rows,
     )
     details = f"{len(uw_years)} UW years, {len(dev_rows)} dev rows"
     return tri, details
+
+
+
+def _basis_marker(label_lower: str):
+    """"gross" or "net" when a row label announces a basis block, else None. A page
+    that prints the gross triangle above the net one repeats the underwriting years
+    under a heading like "Net of reinsurance"; the captured block's own heading, not
+    the whole grid's text, says what the block is (round 55, review B2-05)."""
+    if not label_lower:
+        return None
+    if re.search(r"\bgross\b", label_lower) and not re.search(r"\bnet\b", label_lower):
+        return "gross"
+    if re.search(r"\bnet\b", label_lower) and not re.search(r"\bgross\b", label_lower):
+        return "net"
+    return None
 
 
 def _parse_transposed_triangle(grid: list[list[str]], report_year: int):
@@ -1822,9 +1869,18 @@ def _parse_transposed_triangle(grid: list[list[str]], report_year: int):
         "net unearned", "year of account", "underlying pure year",
         "underlying", "incurred at end",
     ]
+    block_basis = None          # the basis marker that governs the captured block
+    seen_a_year = False
     for row_idx in range(1, len(grid)):
         label = grid[row_idx][0].strip()
         label_lower = label.lower()
+        basis = _basis_marker(label_lower)
+        if basis:
+            if seen_a_year:
+                # a second block begins here (the net triangle under the gross one on
+                # 510/557/1880 2020-2023): the first block is the triangle
+                break
+            block_basis = basis
         # Skip currency/header rows and summary rows
         if not label or any(s in label_lower for s in skip_labels):
             continue
@@ -1832,8 +1888,12 @@ def _parse_transposed_triangle(grid: list[list[str]], report_year: int):
         if m:
             year = int(label)
             if 1990 <= year <= 2030:
+                if year in uw_years:
+                    # the same year again: a second block without its own heading
+                    break
                 uw_years.append(year)
                 uw_row_indices.append(row_idx)
+                seen_a_year = True
 
     if len(uw_years) < 1:
         return None, "no underwriting years found in row labels"
@@ -1908,20 +1968,19 @@ def _parse_transposed_triangle(grid: list[list[str]], report_year: int):
         currency = "EUR"
 
     # Detect units
-    units = "millions"
-    if re.search(r"[£$]'?000", flat) or "'000" in flat:
-        units = "thousands"
+    units, units_evidence = _triangle_units(flat, dev_rows)
 
-    # Detect gross vs net
-    tri_type = "gross"
-    if "net" in flat and "gross" not in flat:
-        tri_type = "net"
+    # Detect gross vs net: the captured block's own heading first (round 55, B2-05),
+    # the grid-wide text only when the block carried no heading of its own
+    tri_type = block_basis
+    if tri_type is None:
+        tri_type = "net" if ("net" in flat and "gross" not in flat) else "gross"
 
     tri = TriangleData(
-        type=tri_type, currency=currency, units=units,
+        type=tri_type, currency=currency, units=units, units_evidence=units_evidence,
         underwriting_years=uw_years, development_rows=dev_rows,
     )
-    details = f"{len(uw_years)} UW years, {len(dev_rows)} dev rows (transposed)"
+    details = f"{len(uw_years)} UW years, {len(dev_rows)} dev rows (transposed, {tri_type})"
     return tri, details
 
 
@@ -2867,8 +2926,12 @@ def _extract_nutrient(pdf_path: Path, report_year: int, cache_dir: Path) -> Extr
     def _closed_year(page):
         """A table in an underwriting-year (closed-year) accounts section is not a
         source of annual-accounts reserves, provisions or business mix; a claims
-        development triangle there is the same syndicate's triangle and is kept,
-        with the annual-accounts triangle preferred when both exist."""
+        development triangle there is the same syndicate's triangle and is kept.
+        Which triangle wins when several are admitted is the backend's rule: the
+        Azure path keeps the first admitted triangle unless a later one is gross
+        over net or carries more underwriting years (the section is not consulted);
+        the Adobe path additionally scores the annual-accounts section above a
+        closed-year one."""
         _, kind = sections.get(page, (None, "annual"))
         return kind == "underwriting_year"
 
@@ -3511,8 +3574,12 @@ def _extract_azure(pdf_path: Path, report_year: int, cache_dir: Path,
     def _closed_year(page):
         """A table in an underwriting-year (closed-year) accounts section is not a
         source of annual-accounts reserves, provisions or business mix; a claims
-        development triangle there is the same syndicate's triangle and is kept,
-        with the annual-accounts triangle preferred when both exist."""
+        development triangle there is the same syndicate's triangle and is kept.
+        Which triangle wins when several are admitted is the backend's rule: the
+        Azure path keeps the first admitted triangle unless a later one is gross
+        over net or carries more underwriting years (the section is not consulted);
+        the Adobe path additionally scores the annual-accounts section above a
+        closed-year one."""
         _, kind = sections.get(page, (None, "annual"))
         return kind == "underwriting_year"
 

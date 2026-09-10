@@ -1,7 +1,12 @@
 {
-  "extraction_timestamp": "2026-09-09T11:03:26.390766+00:00",
+  "extraction_timestamp": "2026-09-10T10:41:39.068500+00:00",
   "spec": {
     "prompt_version": "2.10",
+    "driver_prompt_version": "2.11",
+    "responses_served_from_cache": {
+      "gemini-2.5-flash": "2.10",
+      "gpt-5-mini": "2.10"
+    },
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -222,7 +227,7 @@
       "gross_premium_page": 20,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The claims development triangle on page 23 may be distorted by Reinsurance to Close (RITC) transactions for the 2015 year of account, as mentioned on pages 25 and 46. Therefore, the prior year development was extracted from the Technical Provisions reconciliation table on page 24. [RAG OVERRIDE: Model said PYD=-77.022, RAG triangle computed -13.025. Using RAG value.]",
+      "data_quality_notes": "The claims development triangle on page 23 may be distorted by Reinsurance to Close (RITC) transactions for the 2015 year of account, as mentioned on pages 25 and 46. Therefore, the prior year development was extracted from the Technical Provisions reconciliation table on page 24. [CODE OVERRIDE: Model said PYD=-77.022, but code computed -13.025 from triangle (OVERRIDE from agreed triangles). Using code value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -315,10 +320,15 @@
         "total_tokens": 28000,
         "cost_usd": 0.01306
       },
+      "_served_from": {
+        "cache_file": "4d9ecb8e7583b81cdd8d70fa29fa306e56519bebdff5e4c7e7ed34deff5e0179.json",
+        "prompt_version": "2.10"
+      },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "millions",
+        "units_evidence": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -755,7 +765,7 @@
       "gross_premium_page": 46,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Opening gross claims outstanding taken from Balance Sheet (Claims outstanding, prior year comparative). Prior-year movement is the GROSS 'Change in prior year provisions' from Technical Provisions note. Some event amounts in the narrative are reported in USD; where GBP equivalents were not provided the amount fields are left null. Allocation of reserve movement to individual LOBs is not quantified in the report; LOB movements are therefore directional only and estimated with moderate confidence. [RAG OVERRIDE: Model said PYD=-77.022, RAG triangle computed -13.025. Using RAG value.]",
+      "data_quality_notes": "Opening gross claims outstanding taken from Balance Sheet (Claims outstanding, prior year comparative). Prior-year movement is the GROSS 'Change in prior year provisions' from Technical Provisions note. Some event amounts in the narrative are reported in USD; where GBP equivalents were not provided the amount fields are left null. Allocation of reserve movement to individual LOBs is not quantified in the report; LOB movements are therefore directional only and estimated with moderate confidence. [CODE OVERRIDE: Model said PYD=-77.022, but code computed -13.025 from triangle (OVERRIDE from agreed triangles). Using code value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -848,10 +858,15 @@
         "total_tokens": 82957,
         "cost_usd": 0.035805
       },
+      "_served_from": {
+        "cache_file": "22fec2711730d6718a51b896942c4191f108a378f5d3e05d1433dd7bc3e545f2.json",
+        "prompt_version": "2.10"
+      },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "millions",
+        "units_evidence": "header",
         "underwriting_years": [
           2011,
           2012,

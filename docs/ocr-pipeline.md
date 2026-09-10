@@ -1588,7 +1588,9 @@ have zero gross claims outstanding at the start of the year
 and a claims development triangle that is entirely
 dashes/zeros for prior underwriting years.  In this case:
 
-- **PYD = 0** (no prior year reserves → no development)
+- **PYD = 0** is stored: a software convention for a record that
+  carries no prior-year reserves, not a finding that no development
+  occurred
 - **PYD% = 0%** is what the pipeline stores: development of zero on
   reserves of zero is 0/0, undefined, and the stored zero is a software
   convention for a record that carries no prior-year reserves. Zero opening
@@ -1606,7 +1608,7 @@ All PYD% calculations use a three-way branch:
 
 ```python
 if pyd == 0:
-    pyd_pct = 0.0        # definitionally zero
+    pyd_pct = 0.0        # stored convention: 0/0 is undefined
 elif opening > 0:
     pyd_pct = pyd / opening * 100
 else:
@@ -1651,9 +1653,7 @@ Real claims development triangles rarely contain values that look like
 calendar years, but the monetary ranges overlap the year range
 (thousands: 1,000--500,000 plainly contains 1980--2030), so the rejection
 below is a heuristic that can reject a genuine amount printed as a bare
-four-digit year-like number, not an impossibility argument; cumulative
-claims amounts are either very small (millions: 1--500) or very large (thousands: 1,000--
-500,000), neither of which overlaps with calendar years.
+four-digit year-like number, not an impossibility argument.
 
 **Example**: syndicate 2001/2014 had an Azure-extracted table
 from the segmental analysis page with UW years ["2001",
@@ -1679,29 +1679,47 @@ based on the expected staircase fill pattern:
 
 Triangles with structure score < 0.5 are rejected.
 
-### 9.7  Loss ratio triangle detection
+### 9.7  Percentage against monetary triangles
 
-**Function**: `compute_pyd_from_triangle()`, loss-ratio value
-check.
+**Function**: `compute_pyd_from_triangle()`, unit check;
+`_triangle_units()` in `table_extraction.py`.
 
 Some syndicates (notably Beazley syndicate 2623) present claims
 development as **cumulative loss ratios** (percentages) rather
-than absolute cumulative claims amounts.  When Azure or another
-backend extracts such a table, every value in the grid is between
-0 and 200 -- far too small to be claims amounts but consistent
-with loss ratio percentages.
+than absolute cumulative claims amounts, and a claims triangle
+reported in millions can have every value below 200 as well, so
+magnitude alone cannot tell the two apart.  The decision is made
+from the triangle's own unit evidence first (round 55, T03):
 
-The pipeline counts non-null values in the 0--200 range.  If
-**all** values fall in this range and the maximum value is <= 200,
-the triangle is rejected:
+- a ratio or percent marker in the table text makes the triangle
+  a **percentage** table (`units = "percentage"`), which takes the
+  loss-ratio route of section 9.8 and is never read as money;
+- a thousands or millions marker in the table text gives that
+  monetary unit with `units_evidence = "header"`, and the model
+  prompts return an explicit `millions|thousands|percentage`; an
+  evidenced monetary triangle is never rejected on magnitude, so
+  the same triangle in millions and in thousands gives the same
+  movement;
+- when the text carries both a monetary marker and a ratio or
+  percent marker (a ratio grid beside a monetary total row; a
+  monetary triangle on a page that mentions a combined ratio) the
+  monetary unit is kept with `units_evidence = "conflict"`, and the
+  magnitude heuristic below still applies, so the equivalence above
+  is guaranteed only for a table whose unit evidence is unambiguous;
+- only for `units_evidence` of `"default"` or `"conflict"` does
+  the magnitude heuristic apply: if all of at least four non-null
+  values lie in 0--200 the triangle is read as a loss-ratio table
+  and rejected with a note naming the heuristic.  That fallback is a
+  heuristic with false positives, not a proof.
 
 ```
-triangle has all 21 values in 0-200 range (max=66.5)
-— likely a loss ratio triangle, not a claims development triangle
+triangle has all 21 values in 0-200 range (max=66.5) with no
+evidenced unit — read as a loss ratio triangle by the magnitude
+heuristic, not a claims development triangle
 ```
 
-The check requires at least 4 non-null values to avoid
-false-positives on very sparse triangles.
+`tests/test_unit_equivalence.py` holds the million/thousand
+equivalence, the percentage route and the default-unit fallback.
 
 Loss ratio triangles are handled separately by
 `_extract_pyd_from_loss_ratio_triangle()` (section 9.8).
@@ -2313,9 +2331,16 @@ section it belongs to) and a **section kind** (`annual` or
    or a 36-month period.  A policy note that mentions closed years
    does not make its page a closed-year page.
 
-A table on a companion syndicate's page, or in an
-underwriting-year section, is never admitted as a triangle,
-provisions movement, opening reserve or business mix; the counts
+A table on a companion syndicate's page is never admitted.  A
+table in an underwriting-year (closed-year) section is not admitted
+as a provisions movement, opening reserve or business mix; a
+claims-development triangle in that section is the same syndicate's
+triangle and is admitted.  Which admitted triangle is used is the
+backend's rule: the Azure path keeps the first admitted triangle
+unless a later one is gross over net or carries more underwriting
+years, without consulting the section; the Adobe path additionally
+scores the annual-accounts section above a closed-year one
+(`_closed_year()` in both backends); the counts
 of skipped tables and the entity/page map are recorded in the
 output under `_entity_binding`, and every admitted table carries
 `source_page` and `entity`.  When no admitted table yields a

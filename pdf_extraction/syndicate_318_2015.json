@@ -1,7 +1,12 @@
 {
-  "extraction_timestamp": "2026-09-09T11:03:13.375988+00:00",
+  "extraction_timestamp": "2026-09-10T10:41:34.165490+00:00",
   "spec": {
     "prompt_version": "2.10",
+    "driver_prompt_version": "2.11",
+    "responses_served_from_cache": {
+      "gemini-2.5-flash": "2.10",
+      "gpt-5-mini": "2.10"
+    },
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -214,7 +219,7 @@
       "gross_premium_page": 19,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The 'exact_reserve_text' is a table row, not a sentence, but it provides the gross figure directly. Narrative descriptions of prior year development on pages 5 and 20 refer to net figures, while the extracted 'prior_year_development_gbp_m' is the gross figure from the technical provisions table. [RAG OVERRIDE: Model said PYD=-73.108, RAG triangle computed -13.978. Using RAG value.]",
+      "data_quality_notes": "The 'exact_reserve_text' is a table row, not a sentence, but it provides the gross figure directly. Narrative descriptions of prior year development on pages 5 and 20 refer to net figures, while the extracted 'prior_year_development_gbp_m' is the gross figure from the technical provisions table. [CODE OVERRIDE: Model said PYD=-73.108, but code computed -13.978 from triangle (OVERRIDE from agreed triangles). Using code value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -277,10 +282,15 @@
         "total_tokens": 25203,
         "cost_usd": 0.011918
       },
+      "_served_from": {
+        "cache_file": "3a70e4fde6bb57aa41ab50eec09e485015b2d617d6c12113940a9203f8be52af.json",
+        "prompt_version": "2.10"
+      },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "millions",
+        "units_evidence": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -716,7 +726,7 @@
       "gross_premium_page": 44,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Primary gross prior year movement taken from Technical Provisions reconciliation (Change in prior year provisions = (73,108) shown in the Insurance liabilities / Gross column). Net movements reported elsewhere differ due to reinsurer's share (+6,997); narrative references to closed-years improvements (eg GBP 14.1m) refer to subsets (closed year results) and to net impacts. Reinsurance-to-close (RITC) entries are present in the notes and could distort comparisons; the claims development triangle is available but includes RITC disclosure and '2010 and prior' aggregate columns which were excluded from diagonal calculations when used as cross-checks. [RAG OVERRIDE: Model said PYD=-73.108, RAG triangle computed -13.978. Using RAG value.]",
+      "data_quality_notes": "Primary gross prior year movement taken from Technical Provisions reconciliation (Change in prior year provisions = (73,108) shown in the Insurance liabilities / Gross column). Net movements reported elsewhere differ due to reinsurer's share (+6,997); narrative references to closed-years improvements (eg GBP 14.1m) refer to subsets (closed year results) and to net impacts. Reinsurance-to-close (RITC) entries are present in the notes and could distort comparisons; the claims development triangle is available but includes RITC disclosure and '2010 and prior' aggregate columns which were excluded from diagonal calculations when used as cross-checks. [CODE OVERRIDE: Model said PYD=-73.108, but code computed -13.978 from triangle (OVERRIDE from agreed triangles). Using code value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -779,10 +789,15 @@
         "total_tokens": 78713,
         "cost_usd": 0.033003
       },
+      "_served_from": {
+        "cache_file": "e7582c23a699210fbb7a0942235eb3c488a66c0d7c615ac74b5f3e089e032a2b.json",
+        "prompt_version": "2.10"
+      },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "millions",
+        "units_evidence": "header",
         "underwriting_years": [
           2011,
           2012,
