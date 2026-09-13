@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-05T20:42:52.889970+00:00",
+  "extraction_timestamp": "2026-09-13T04:08:52.068688+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -18,31 +20,15 @@
       "direction": "release",
       "prior_year_movement_page": 10,
       "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "Prior year: (32,195)",
+      "exact_reserve_text": "Movements in provisions - Prior year (32,195)",
       "primary_causes": [
         "Favorable claims development"
       ],
       "specific_events": [],
-      "specific_years_affected": [
-        2013,
-        2014
-      ],
+      "specific_years_affected": [],
       "prior_year_events": [],
-      "named_events": [
-        {
-          "event_name": "USA North East Windstorm",
-          "event_year": 2015,
-          "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": 29.4,
-          "loss_description": "estimated after tax loss of $29.4 million for a 2015 scenario",
-          "lobs_affected": [
-            "Property"
-          ],
-          "page": 10,
-          "confidence": 0.8
-        }
-      ],
-      "standardized_narrative": "For the year ended 31 December 2015, Syndicate 780 reported a gross prior year reserve release of $32.195 million, representing an 8.59% reduction of its opening gross claims outstanding. This release was primarily driven by favorable claims development across prior years of account, including profits on the 2013 and prior, and 2014 years of account.",
+      "named_events": [],
+      "standardized_narrative": "The syndicate experienced a gross prior year reserve release of $32.195 million, representing a favorable development of 8.59% against opening gross claims outstanding. This release contributed to an overall improvement in prior years' claims.",
       "raw_causal_phrases": [
         "prior years' reserve releases",
         "improvement in prior years' claims"
@@ -89,7 +75,7 @@
       "gross_premium_page": 8,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "The prior year development figure is taken from the explicit 'Movements in provisions - Prior year' line in the claims outstanding reconciliation table. The claims development triangle shows a different total prior year movement, but the explicit line item is considered more authoritative. [RAG OVERRIDE: Model said PYD=-32.195, RAG triangle computed -20.251. Using RAG value.]",
+      "data_quality_notes": "The sum of gross premium mix components ($240.534m) has a slight discrepancy with the total gross premiums written ($240.488m) reported in the Statement of Comprehensive Income, likely due to rounding. [RAG OVERRIDE: Model said PYD=-32.195, RAG triangle computed -20.251. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
@@ -104,35 +90,35 @@
         ],
         "development_rows": [
           [
-            241898,
             108080,
             87421,
             75551,
-            75192
+            75192,
+            null
           ],
           [
-            273675,
             143551,
             123086,
             130878,
+            null,
             null
           ],
           [
-            271086,
             134331,
             114824,
             null,
+            null,
             null
           ],
           [
-            258337,
             124949,
             null,
             null,
+            null,
             null
           ],
           [
-            255730,
+            null,
             null,
             null,
             null,
@@ -142,20 +128,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_780_2015_llm.pdf",
-      "content_hash": "376794eb8ca7e66a2cfd252be380785c005ec08bf6d76f45437e8710a605467b",
-      "standardized_at": "2026-03-19T07:58:44.204216+00:00",
+      "content_hash": "f0e5bda39120fd3eb0a1d9eda802b8936a8262d5a755fca412112130a7bbcca4",
+      "standardized_at": "2026-09-11T13:59:58.157344+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 10378,
-        "output_tokens": 1265,
-        "total_tokens": 18577,
-        "cost_usd": 0.006276
+        "input_tokens": 11440,
+        "output_tokens": 1112,
+        "total_tokens": 16585,
+        "cost_usd": 0.006212
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -20.251,
+        "model_value": -32.195,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 28,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -290,6 +288,13 @@
           "entity": 780,
           "backend": "azure",
           "table_kind": "balance_sheet_liabilities"
+        },
+        "movement_semantics": {
+          "row_label": "- Prior year",
+          "row_index": 7,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": true,
+          "column_index": 2
         },
         "gross_prior_year_claims": -32.2,
         "net_prior_year_claims": -32.2,
@@ -371,122 +376,69 @@
       "year": 2015,
       "opening_reserves_gbp_m": 374.617,
       "opening_reserves_page": 14,
-      "opening_reserves_confidence": 1.0,
+      "opening_reserves_confidence": 0.8,
       "prior_year_development_gbp_m": -20.251,
       "prior_year_development_pct": -5.41,
       "direction": "release",
-      "prior_year_movement_page": 27,
-      "prior_year_movement_confidence": 0.5,
-      "exact_reserve_text": "The movement in the Syndicate's claims reserves for the year ended 31 December 2015 is set out below:",
-      "primary_causes": [
-        "Large loss development",
-        "Adverse claims development",
-        "Natural catastrophe events"
-      ],
-      "specific_events": [
-        "US Windstorm",
-        "Florida Windstorm - Miami",
-        "Los Angeles earthquake",
-        "Japan Earthquake"
-      ],
-      "specific_years_affected": [
-        2010,
-        2011,
-        2012,
-        2013,
-        2014
-      ],
-      "prior_year_events": [
-        {
-          "event_name": "Adverse development on 2013 underwriting year",
-          "event_year": 2013,
-          "impact_description": "Significant adverse development on the 2013 underwriting year observed in the claims development table (large increase between 'at end of year' and later development diagonals).",
-          "lobs_affected": [
-            "Casualty",
-            "Property"
-          ],
-          "amount_gbp_m": 55.327,
-          "confidence": 0.5
-        },
-        {
-          "event_name": "Favourable development on 2010 & prior",
-          "event_year": 2010,
-          "impact_description": "Minor favourable development on the aggregated 2010 & prior years (current estimate slightly below previous diagonal).",
-          "lobs_affected": [
-            "Casualty"
-          ],
-          "amount_gbp_m": -2.607,
-          "confidence": 0.5
-        },
-        {
-          "event_name": "Favourable development on 2011 and 2012",
-          "event_year": 2011,
-          "impact_description": "Releases observed for 2011 and 2012 in the development triangle.",
-          "lobs_affected": [
-            "Casualty"
-          ],
-          "amount_gbp_m": -17.644,
-          "confidence": 0.5
-        }
-      ],
+      "prior_year_movement_page": null,
+      "prior_year_movement_confidence": 0.0,
+      "exact_reserve_text": "",
+      "primary_causes": [],
+      "specific_events": [],
+      "specific_years_affected": [],
+      "prior_year_events": [],
       "named_events": [
-        {
-          "event_name": "US Windstorm",
-          "event_year": null,
-          "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": null,
-          "loss_description": "Listed in catastrophe exposure table as a material peril/driver of exposure",
-          "lobs_affected": [
-            "Property"
-          ],
-          "page": 23,
-          "confidence": 0.8
-        },
-        {
-          "event_name": "Florida Windstorm - Miami",
-          "event_year": null,
-          "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": null,
-          "loss_description": "Included in catastrophe exposure listing",
-          "lobs_affected": [
-            "Property"
-          ],
-          "page": 23,
-          "confidence": 0.8
-        },
         {
           "event_name": "Los Angeles earthquake",
           "event_year": null,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "Listed among modeled catastrophic scenarios/exposures",
+          "loss_description": "Listed in catastrophe exposure table (exposure listing)",
           "lobs_affected": [
             "Property"
           ],
           "page": 23,
-          "confidence": 0.8
+          "confidence": 0.4
+        },
+        {
+          "event_name": "Florida Windstorm",
+          "event_year": null,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "Listed in catastrophe exposure table (exposure listing)",
+          "lobs_affected": [
+            "Property"
+          ],
+          "page": 23,
+          "confidence": 0.4
+        },
+        {
+          "event_name": "US North East Windstorm",
+          "event_year": null,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "Listed in catastrophe exposure table (exposure listing)",
+          "lobs_affected": [
+            "Property"
+          ],
+          "page": 23,
+          "confidence": 0.4
         },
         {
           "event_name": "Japan Earthquake",
           "event_year": null,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "Included in catastrophe exposures table",
+          "loss_description": "Listed in catastrophe exposure table (exposure listing)",
           "lobs_affected": [
             "Property"
           ],
           "page": 23,
-          "confidence": 0.8
+          "confidence": 0.4
         }
       ],
-      "standardized_narrative": "At 31 December 2015 Syndicate 780 shows an opening gross claims outstanding (comparative 2014) of GBP 374.617m. Analysis of the gross claims development triangle and the reserves movement table indicates a net adverse (strengthening) prior-year development of approximately GBP 35.1m (around 9.4% of opening reserves), driven primarily by adverse development on the 2013 underwriting year partially offset by releases on older years. Named catastrophe exposures (US/Florida windstorms, Los Angeles and Japan earthquakes) are presented in the catastrophe exposure tables and form part of the risk drivers; however the principal prior-year reserve movement appears related to large loss and claims development on earlier underwriting years.",
-      "raw_causal_phrases": [
-        "The movement in the Syndicate's claims reserves for the year ended 31 December 2015 is set out below:",
-        "Catastrophe exposure",
-        "claims reserves",
-        "prior years",
-        "claims outstanding"
-      ],
+      "standardized_narrative": "The report shows gross claims outstanding at 31 December 2014 (the prior-year comparative column) of GBP 90.652m. The document does not present an explicitly identifiable gross prior-year movement (re-estimation of years prior to 2015) in a clearly labelled 'movement in prior year's provision' note that could be unambiguously extracted. The syndicate discloses catastrophe exposures (eg. Los Angeles earthquake, Florida windstorm, US North East windstorm, Japan earthquake) and states total gross premiums written of c.GBP 474.3m for 2015. Because a definitive gross prior-year movement figure could not be located in the readable pages, prior-year development is reported as null and the narrative is based on available balance sheet and premium disclosures.",
+      "raw_causal_phrases": [],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 397.4,
       "gross_premium_mix": [
@@ -526,76 +478,45 @@
           "percentage_of_total": 60.5
         }
       ],
-      "gross_premium_page": 11,
+      "gross_premium_page": 23,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Opening gross claims outstanding taken from the Statement of Financial Position (liabilities) comparative 2014 column (page 14) and converted from GBP 000 to millions. Prior year development figure is estimated from the gross claims development triangle (page 27) by comparing the current diagonal to the previous diagonal for underwriting years <= 2013; no explicit single-line 'Movement in prior year's provision for claims outstanding' gross figure was unambiguously located in the available images. As a result the prior year development amount is an approximation (confidence 0.5). The report contains a catastrophe exposure table (page 23) and multiple named event listings but net per-event losses are not quantified in the visible images. Gross premium segmentation (regulatory segmental analysis) could not be reliably extracted from the scanned images; gross premiums written total was taken from the Statement of Comprehensive Income (page 11). The claims development triangle is present but some cells/labels are partially obscured; numeric triangulation was inferred where clear and left null where not extractable. [RAG OVERRIDE: Model said PYD=35.076, RAG triangle computed -20.251. Using RAG value.]",
+      "data_quality_notes": "Extraction uncertainty: scanned pages are rotated and partially low resolution. The gross 'Claims outstanding' prior-year comparative value was read from the Statement of Financial Position (liabilities) where the 2014 column showed GBP 90,652 (000). No unambiguous GROSS 'movement in prior year's provision for claims outstanding' or a GROSS prior-year development figure was clearly legible in the notes; narrative mentions of 'net' releases or aggregate P&L prior-year claims were avoided per instructions. A catastrophe exposure table and total gross premiums (c.GBP 474.3m) were readable. Because no clear gross prior-year movement note or triangle could be confidently extracted, prior_year_development_gbp_m is null. If a higher-resolution original PDF is provided, a more precise extraction (including prior year movement and the claims development triangle) is likely possible. [RAG OVERRIDE: Model said opening_reserves=90.652, balance sheet gives 374.617m. Using RAG value.]",
       "_claims_triangle": {
-        "type": "gross",
+        "type": "none",
         "currency": "GBP",
-        "units": "thousands",
-        "page": 27,
-        "underwriting_years": [
-          2011,
-          2012,
-          2013,
-          2014,
-          2015
-        ],
-        "development_rows": [
-          [
-            108080,
-            87421,
-            75551,
-            75192,
-            null
-          ],
-          [
-            143551,
-            123086,
-            130878,
-            null,
-            null
-          ],
-          [
-            134331,
-            114824,
-            null,
-            null,
-            null
-          ],
-          [
-            124949,
-            null,
-            null,
-            null,
-            null
-          ],
-          [
-            null,
-            null,
-            null,
-            null,
-            null
-          ]
-        ]
+        "units": "millions",
+        "page": null,
+        "underwriting_years": [],
+        "development_rows": []
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_780_2015_llm.pdf",
-      "content_hash": "376794eb8ca7e66a2cfd252be380785c005ec08bf6d76f45437e8710a605467b",
-      "standardized_at": "2026-03-19T08:01:04.782652+00:00",
+      "content_hash": "f0e5bda39120fd3eb0a1d9eda802b8936a8262d5a755fca412112130a7bbcca4",
+      "standardized_at": "2026-09-11T14:01:26.945082+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 21478,
-        "output_tokens": 9123,
-        "total_tokens": 30601,
-        "cost_usd": 0.023615
+        "input_tokens": 23171,
+        "output_tokens": 4028,
+        "total_tokens": 27199,
+        "cost_usd": 0.013849
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -20.251,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 28,
+        "note": "filled a blank model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -731,6 +652,13 @@
           "backend": "azure",
           "table_kind": "balance_sheet_liabilities"
         },
+        "movement_semantics": {
+          "row_label": "- Prior year",
+          "row_index": 7,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": true,
+          "column_index": 2
+        },
         "gross_prior_year_claims": -32.2,
         "net_prior_year_claims": -32.2,
         "opening_gross_claims_outstanding": 374.617
@@ -807,12 +735,12 @@
       }
     }
   },
-  "total_cost_usd": 0.029891,
-  "total_tokens": 49178,
+  "total_cost_usd": 0.020061,
+  "total_tokens": 43784,
   "validation": {
     "passed": false,
-    "total_discrepancies": 28,
-    "within_tolerance": 27,
+    "total_discrepancies": 13,
+    "within_tolerance": 12,
     "hard_failures": 1,
     "hard_failure_details": [
       {

@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T10:03:19.153702+00:00",
+  "extraction_timestamp": "2026-09-13T04:04:13.981063+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -24,10 +26,7 @@
         "COVID-19 / pandemic effects"
       ],
       "specific_events": [],
-      "specific_years_affected": [
-        2018,
-        2019
-      ],
+      "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [
         {
@@ -35,10 +34,9 @@
           "event_year": 2020,
           "event_type": "other",
           "net_loss_gbp_m": 7.5,
-          "loss_description": "In terms of COVID-19 losses, the syndicate has recorded a net loss reserve of GBP 7.5m",
+          "loss_description": "net loss reserve of GBP 7.5m",
           "lobs_affected": [
             "Professional Lines",
-            "Accident & Health",
             "Casualty",
             "Treaty"
           ],
@@ -46,7 +44,7 @@
           "confidence": 1.0
         }
       ],
-      "standardized_narrative": "The syndicate recorded a gross prior year reserve strengthening of GBP 30.894 million for the 2018 and 2019 underwriting years, representing 77.5% of the opening gross claims outstanding. This adverse development was primarily driven by reserves strengthening on discontinued business and provisions for possible claims arising from the COVID-19 pandemic. The COVID-19 pandemic resulted in a net loss reserve of GBP 7.5 million, impacting Professional Lines, Accident & Health, Casualty, and Treaty business.",
+      "standardized_narrative": "The syndicate recorded a loss for the year 2020, primarily driven by a strengthening of reserves. This adverse development was attributed to reserves strengthening on discontinued business and provisions for possible claims arising from the COVID-19 pandemic. The gross prior year development, calculated from the claims development triangle for the 2018 underwriting year, indicates a strengthening of GBP 11.431 million, representing 28.67% of the opening gross claims outstanding.",
       "raw_causal_phrases": [
         "reserves strengthening on discontinued business",
         "reserves for possible claims arising from the COVID-19 pandemic"
@@ -68,7 +66,7 @@
       "gross_premium_page": 13,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": " [RAG OVERRIDE: Model said PYD=30.894, RAG triangle computed 11.431. Using RAG value.]",
+      "data_quality_notes": "",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -99,20 +97,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_1975_2020_llm.pdf",
-      "content_hash": "0855fdf7e95789b92b485697454e9498e206c9bde56a88da81e7f905860c8d26",
-      "standardized_at": "2026-07-05T10:26:06.635470+00:00",
+      "content_hash": "63878ba7aa7b22cba16916eaf411e044cc4b173c0ef36ef205079aeab4a6ca46",
+      "standardized_at": "2026-09-11T11:21:55.920220+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 9605,
-        "output_tokens": 953,
-        "total_tokens": 17394,
-        "cost_usd": 0.005264
+        "input_tokens": 10409,
+        "output_tokens": 906,
+        "total_tokens": 14674,
+        "cost_usd": 0.005388
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 11.431,
+        "model_value": 11.431,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 34,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2018,
           2019,
@@ -134,6 +144,11 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "After one year",
+          "After two years",
+          "After three years"
         ],
         "source_page": 34,
         "entity": 1975
@@ -249,22 +264,30 @@
           "event_year": 2020,
           "event_type": "other",
           "net_loss_gbp_m": 7.5,
-          "loss_description": "the syndicate has recorded a net loss reserve of GBP 7.5m",
+          "loss_description": "The syndicate has recorded a net loss reserve of GBP 7.5m",
           "lobs_affected": [
             "Professional Lines"
           ],
-          "page": 1,
+          "page": 4,
           "confidence": 1.0
         }
       ],
-      "standardized_narrative": "Opening gross claims reserves were GBP 39.864m. The syndicate recorded a gross prior-year strengthening of approximately GBP 11.431m (c. 28.7% of opening gross claims reserves). Management attributes the adverse reserve development primarily to reserve strengthening on discontinued business and additional provisions for possible COVID-19 related claims. The development was identified from the syndicate's gross claims development table and aligns with narrative disclosures about COVID-19 related uncertainty.",
+      "standardized_narrative": "At 1 January 2020 the syndicate's gross claims outstanding were GBP 39.864m. Using the gross claims development triangle the syndicate recorded adverse prior-year development of approximately GBP 11.431m (about 28.7% of opening reserves), driven by reserve strengthening on discontinued business and additional provisions for possible COVID-19-related claims. The movement principally relates to older underwriting years (notably 2018) and affects the syndicate's professional lines exposures.",
       "raw_causal_phrases": [
-        "reserves strengthening on discontinued business plus reserves for possible claims arising from the COVID-19 pandemic",
-        "there is uncertainty in all loss reserves but, in the case of COVID-19, that uncertainty is extended by the nature of the loss event and the fact that the loss is ongoing"
+        "reserves strengthening on discontinued business",
+        "reserves for possible claims arising from the COVID-19 pandemic",
+        "there is uncertainty in all loss reserves"
       ],
       "lob_movements": [
         {
           "line_of_business": "Professional Lines",
+          "direction": "strengthening",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.8
+        },
+        {
+          "line_of_business": "Reinsurance - Casualty",
           "direction": "strengthening",
           "amount_gbp_m": null,
           "percentage": null,
@@ -287,7 +310,7 @@
       "gross_premium_page": 31,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior-year development (11.431m) was calculated from the gross claims development triangle (gross) because no explicit gross 'movement in prior years' line was presented. Triangle includes only UW years 2018-2020; calculation excludes the two most recent UW years (2019, 2020) per methodology, so only 2018 contributed to PYD. Lob-level gross reserve movements are not explicitly quantified in the report; COVID-19 reserve numbers provided are net of reinsurance.",
+      "data_quality_notes": "Prior-year development was calculated from the gross claims development triangle (gross cumulative incurred claims) because there is no explicit 'movement in prior years' gross figure in the notes. The triangle only contains an individual older underwriting year (2018), so the PYD reflects changes in that year only. COVID-19 amounts quoted in the report are net reserves; gross by-LOB movements are not provided, so LOB amounts are null where gross figures are not available.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -299,11 +322,6 @@
           2020
         ],
         "development_rows": [
-          [
-            null,
-            null,
-            null
-          ],
           [
             14080,
             10967,
@@ -323,20 +341,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_1975_2020_llm.pdf",
-      "content_hash": "0855fdf7e95789b92b485697454e9498e206c9bde56a88da81e7f905860c8d26",
-      "standardized_at": "2026-07-05T10:27:04.834192+00:00",
+      "content_hash": "63878ba7aa7b22cba16916eaf411e044cc4b173c0ef36ef205079aeab4a6ca46",
+      "standardized_at": "2026-09-11T11:23:20.406381+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 14212,
-        "output_tokens": 4770,
-        "total_tokens": 18982,
-        "cost_usd": 0.013093
+        "input_tokens": 14972,
+        "output_tokens": 5429,
+        "total_tokens": 20401,
+        "cost_usd": 0.014601
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 11.431,
+        "model_value": 11.431,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 34,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2018,
           2019,
@@ -358,6 +388,11 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "After one year",
+          "After two years",
+          "After three years"
         ],
         "source_page": 34,
         "entity": 1975
@@ -447,12 +482,12 @@
       }
     }
   },
-  "total_cost_usd": 0.018357,
-  "total_tokens": 36376,
+  "total_cost_usd": 0.019989,
+  "total_tokens": 35075,
   "validation": {
     "passed": true,
-    "total_discrepancies": 11,
-    "within_tolerance": 11,
+    "total_discrepancies": 8,
+    "within_tolerance": 8,
     "hard_failures": 0,
     "hard_failure_details": []
   }

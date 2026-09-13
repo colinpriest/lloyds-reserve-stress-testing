@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T10:03:05.903184+00:00",
+  "extraction_timestamp": "2026-09-13T04:04:12.827177+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -11,48 +13,40 @@
       "syndicate": 1971,
       "year": 2024,
       "opening_reserves_gbp_m": 419.12,
-      "opening_reserves_page": 8,
+      "opening_reserves_page": 9,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": 10.055,
       "prior_year_development_pct": 2.4,
       "direction": "strengthening",
       "prior_year_movement_page": 28,
       "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "Change in estimates of prior year provisions Gross amount 15,642 Reinsurers' share (6,579) Net 9,063",
+      "exact_reserve_text": "Included within net calendar year claims incurred of $124,103,000 (2023: $106,371,000) is a deterioration of $9,063,000 in claims reserves established at the prior year end (2023: deterioration $10,197,000).",
       "primary_causes": [
-        "Adverse claims development",
         "IBNR recalibration",
         "Economic inflation / claims cost inflation",
-        "Reserve methodology change"
+        "Reserve methodology change",
+        "Adverse claims development"
       ],
       "specific_events": [],
-      "specific_years_affected": [],
-      "prior_year_events": [
-        {
-          "event_name": "2022 year of account closure",
-          "event_year": 2022,
-          "impact_description": "loss on the development of the prior years of account during the 2024 calendar year",
-          "lobs_affected": [
-            "Motor",
-            "Casualty"
-          ],
-          "amount_gbp_m": 1.1,
-          "confidence": 1.0
-        }
+      "specific_years_affected": [
+        2023,
+        2022,
+        2021,
+        2020,
+        2019
       ],
+      "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "The syndicate experienced a gross strengthening of $15.642 million in prior year claims reserves, representing a 3.73% increase relative to opening gross reserves. This deterioration in estimates for prior year provisions was primarily driven by adverse claims development, IBNR recalibration, economic inflation, and changes in reserve methodology. The managing agent noted that assumptions underlying their reserving methodology reflect additional information from pricing current and prospective business, including a loading for inflation and a margin above actuarial best estimates. Additionally, the 2022 year of account closure resulted in a $1.1 million loss on the development of prior years of account.",
+      "standardized_narrative": "The syndicate experienced a gross strengthening of $15.642 million in prior year claims reserves in 2024. This movement is attributed to a deterioration in claims reserves, influenced by reserving uncertainty, IBNR recalibration, and a loading for inflation, as well as adjustments to actuarial best estimates. The movement affects the 2023 and prior years of account.",
       "raw_causal_phrases": [
         "deterioration of $9,063,000 in claims reserves established at the prior year end",
-        "Notified claims experience... has been within expectations",
-        "provision within claims that have been incurred at the reporting date but have not yet been reported (\"IBNR\") in the calendar year to allow for this reserving uncertainty",
+        "reserving uncertainty",
+        "IBNR",
         "assumptions underlying our reserving methodology reflect additional information obtained from pricing current and prospective business",
-        "loading for inflation and a margin added over and above actuarial best estimates",
-        "IBNR and a confidence margin",
-        "statistical techniques of estimation",
-        "past is a reasonable indicator of the likely level of claims development",
-        "notified claims estimates are reasonable",
-        "rating, inflation and other models used for current business"
+        "loading for inflation",
+        "margin added over and above actuarial best estimates",
+        "risk that the reserves established in respect of insurance claims incurred are insufficient to settle the claims and associated expenses in full",
+        "analysis of claims development compared to the previous 'best estimate' projections"
       ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 410.828,
@@ -96,7 +90,7 @@
       "gross_premium_page": 25,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "The report states a 'profit on the 2023 and prior years of account of $30.6m' on page 3, which implies a net release. However, the Technical Provisions note on page 28 explicitly states a 'Change in estimates of prior year provisions Gross amount 15,642' which is a gross strengthening. The gross figure from the Technical Provisions note is used as per instructions, as it is a direct statement of reserve movement. [RAG OVERRIDE: Model said PYD=15.642, RAG triangle computed 10.055. Using RAG value.]",
+      "data_quality_notes": "The `prior_year_development_gbp_m` is based on the gross figure from Note 18. The narrative text on page 28 describes a *net* deterioration of $9.063 million, which differs from the gross figure. The year-of-account result breakdown on page 26 shows a *net profit* of $29.941 million on prior years, further highlighting discrepancies between gross/net and different reporting methods. The claims development triangle includes RITC accepted from Syndicate 1969 for 2019, 2020, and 2021 years of account, which could distort direct calculation of prior year development from the triangle. [RAG OVERRIDE: Model said PYD=15.642, RAG triangle computed 10.055. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
@@ -163,20 +157,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_1971_2024_llm.pdf",
-      "content_hash": "832148cae7e7f65a38ff08ce780bdaf5174769dde45f09fff537e30db95f237f",
-      "standardized_at": "2026-07-05T23:05:52.248081+00:00",
+      "content_hash": "0f9f688bc4b26a69be0646057c372de8c98d6bf94b454c2690c018ed6822c0a5",
+      "standardized_at": "2026-09-11T14:48:58.887834+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 17603,
-        "output_tokens": 1589,
-        "total_tokens": 26170,
-        "cost_usd": 0.009253
+        "input_tokens": 18407,
+        "output_tokens": 1580,
+        "total_tokens": 26237,
+        "cost_usd": 0.009472
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 10.055,
+        "model_value": 15.642,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 105,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2019,
           2020,
@@ -227,6 +233,13 @@
             null
           ]
         ],
+        "row_labels": [
+          "At end of underwriting year",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later"
+        ],
         "source_page": 105,
         "entity": 1971
       },
@@ -243,6 +256,13 @@
           "entity": 1971,
           "backend": "azure",
           "table_kind": "provisions_movement"
+        },
+        "movement_semantics": {
+          "row_label": "Change in estimates of prior year provisions",
+          "row_index": 5,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": false,
+          "column_index": 1
         },
         "gross_prior_year_claims": 15.6,
         "ri_share_prior_year": -6.6,
@@ -476,7 +496,7 @@
       "syndicate": 1971,
       "year": 2024,
       "opening_reserves_gbp_m": 419.12,
-      "opening_reserves_page": 22,
+      "opening_reserves_page": 21,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": 10.055,
       "prior_year_development_pct": 2.4,
@@ -486,21 +506,24 @@
       "exact_reserve_text": "Included within net calendar year claims incurred of $124,103,000 (2023: $106,371,000) is a deterioration of $9,063,000 in claims reserves established at the prior year end (2023: deterioration $10,197,000).",
       "primary_causes": [
         "Adverse claims development",
-        "Economic inflation / claims cost inflation",
         "IBNR recalibration",
-        "Reinsurance recoveries"
+        "Economic inflation / claims cost inflation"
       ],
       "specific_events": [],
-      "specific_years_affected": [],
+      "specific_years_affected": [
+        2019,
+        2020,
+        2021,
+        2022,
+        2023
+      ],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "The syndicate recorded a gross strengthening of prior year claims reserves of $15.642m (gross) at 31 December 2024 (a net deterioration cited of $9.063m). The movement reflects adverse claims development and an increase in reserves driven by IBNR recalibration and inflationary pressures. The syndicate's portfolio is predominantly US motor liability (Delivery and Rideshare), which is the primary exposure area for these reserve movements.",
+      "standardized_narrative": "The syndicate's gross claims outstanding at 1 January 2024 were $419.12m. During 2024 management increased prior-year gross claims provisions by $15.642m (a 3.73% strengthening of opening reserves), reflecting adverse development across prior periods and additional IBNR/inflationary loadings; after reinsurance the net deterioration reported was $9.063m. No single large named event is identified as the driver; the movement is explained as general adverse claims development and reserve margin/IBNR adjustments.",
       "raw_causal_phrases": [
-        "Included within net calendar year claims incurred of $124,103,000 (2023: $106,371,000) is a deterioration of $9,063,000 in claims reserves established at the prior year end (2023: deterioration $10,197,000).",
-        "have therefore made a provision within claims that have been incurred at the reporting date but have not yet been reported (\"IBNR\") in the calendar year to allow for this reserving uncertainty.",
-        "the assumptions underlying our reserving methodology reflect additional information obtained from pricing current and prospective business.",
-        "includes a loading for inflation and a margin added over and above actuarial best estimates set with reference to the margin policy.",
-        "Change in estimates of prior year provisions 15,642 (6,579) 9,063"
+        "a deterioration of $9,063,000 in claims reserves established at the prior year end (2023: deterioration $10,197,000).",
+        "we have therefore made a provision within claims that have been incurred at the reporting date but have not yet been reported (\"IBNR\") in the calendar year to allow for this reserving uncertainty.",
+        "the assumptions underlying our reserving methodology reflect additional information obtained from pricing current and prospective business. The implications of this analysis have been incorporated into our reserving approach for all years of account which includes a loading for inflation and a margin added over and above actuarial best estimates set with reference to the margin policy."
       ],
       "lob_movements": [
         {
@@ -508,48 +531,41 @@
           "direction": "strengthening",
           "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.0
+          "confidence": 0.5
         },
         {
           "line_of_business": "Casualty",
           "direction": "strengthening",
           "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.0
+          "confidence": 0.5
         },
         {
           "line_of_business": "Marine",
           "direction": "strengthening",
           "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.0
-        },
-        {
-          "line_of_business": "Accident & Health",
-          "direction": "strengthening",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.0
+          "confidence": 0.5
         },
         {
           "line_of_business": "Treaty",
           "direction": "strengthening",
           "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.0
+          "confidence": 0.5
         }
       ],
       "gross_premiums_written_gbp_m": 410.828,
       "gross_premium_mix": [
         {
           "line_of_business": "Accident and health",
-          "amount_gbp_m": 0.0,
-          "percentage_of_total": 0.0
+          "amount_gbp_m": 0.119,
+          "percentage_of_total": 0.03
         },
         {
           "line_of_business": "Motor (third party liability)",
           "amount_gbp_m": 186.413,
-          "percentage_of_total": 45.37
+          "percentage_of_total": 45.39
         },
         {
           "line_of_business": "Motor (other classes)",
@@ -574,13 +590,13 @@
         {
           "line_of_business": "Reinsurance acceptances",
           "amount_gbp_m": 84.472,
-          "percentage_of_total": 20.57
+          "percentage_of_total": 20.56
         }
       ],
       "gross_premium_page": 43,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "All monetary amounts are reported in the native report currency (USD) and presented in millions. Opening gross claims outstanding taken from Balance Sheet (Claims outstanding: $419,120 $'000). Prior year movement (gross) taken from Note 18 'Change in estimates of prior year provisions' (15,642 $'000). The verbatim sentence cited for exact_reserve_text reports a net deterioration ($9,063k); the gross movement is available in the technical provisions table. No LOB-specific gross prior year movement amounts are disclosed; LOB allocations for the reserve change are therefore not quantified. Claims development triangle used where available. No specific named catastrophe events quantified in the reserves note. [RAG OVERRIDE: Model said PYD=15.642, RAG triangle computed 10.055. Using RAG value.]",
+      "data_quality_notes": "All amounts are reported in the syndicate's presentation currency (USD). Opening gross claims outstanding taken from Balance Sheet (Claims outstanding, prior year column). Prior year movement (gross) taken from note 18 'Change in estimates of prior year provisions' = $15,642k (15.642m). Exact_reserve_text copies the document sentence which reports the NET deterioration of $9,063k (after reinsurance) - gross and net figures are both present in note 18. No per-line-of-business reserve movements are quantified in the notes, so LOB-specific amounts are null. Claims development triangle present (gross) and used for cross-checking. [RAG OVERRIDE: Model said PYD=15.642, RAG triangle computed 10.055. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
@@ -647,20 +663,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_1971_2024_llm.pdf",
-      "content_hash": "832148cae7e7f65a38ff08ce780bdaf5174769dde45f09fff537e30db95f237f",
-      "standardized_at": "2026-07-05T23:07:25.960749+00:00",
+      "content_hash": "0f9f688bc4b26a69be0646057c372de8c98d6bf94b454c2690c018ed6822c0a5",
+      "standardized_at": "2026-09-11T14:51:05.528154+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 73618,
-        "output_tokens": 5953,
-        "total_tokens": 79571,
-        "cost_usd": 0.030311
+        "input_tokens": 74378,
+        "output_tokens": 5412,
+        "total_tokens": 79790,
+        "cost_usd": 0.029419
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 10.055,
+        "model_value": 15.642,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 105,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2019,
           2020,
@@ -711,6 +739,13 @@
             null
           ]
         ],
+        "row_labels": [
+          "At end of underwriting year",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later"
+        ],
         "source_page": 105,
         "entity": 1971
       },
@@ -727,6 +762,13 @@
           "entity": 1971,
           "backend": "azure",
           "table_kind": "provisions_movement"
+        },
+        "movement_semantics": {
+          "row_label": "Change in estimates of prior year provisions",
+          "row_index": 5,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": false,
+          "column_index": 1
         },
         "gross_prior_year_claims": 15.6,
         "ri_share_prior_year": -6.6,
@@ -957,13 +999,20 @@
       }
     }
   },
-  "total_cost_usd": 0.039564,
-  "total_tokens": 105741,
+  "total_cost_usd": 0.038891,
+  "total_tokens": 106027,
   "validation": {
-    "passed": true,
-    "total_discrepancies": 28,
-    "within_tolerance": 28,
-    "hard_failures": 0,
-    "hard_failure_details": []
+    "passed": false,
+    "total_discrepancies": 22,
+    "within_tolerance": 21,
+    "hard_failures": 1,
+    "hard_failure_details": [
+      {
+        "field": "gross_premium_mix[Accident and health].amount_gbp_m",
+        "type": "value_mismatch",
+        "gemini-2.5-flash": 0.0,
+        "gpt-5-mini": 0.119
+      }
+    ]
   }
 }

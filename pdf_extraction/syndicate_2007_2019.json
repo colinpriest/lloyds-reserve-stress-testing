@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T10:13:42.267887+00:00",
+  "extraction_timestamp": "2026-09-13T04:09:48.043099+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -11,23 +13,20 @@
       "syndicate": 2007,
       "year": 2019,
       "opening_reserves_gbp_m": 965.311,
-      "opening_reserves_page": 11,
+      "opening_reserves_page": 7,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": 8.358,
       "prior_year_development_pct": 0.87,
       "direction": "strengthening",
-      "prior_year_movement_page": 13,
-      "prior_year_movement_confidence": 0.8,
-      "exact_reserve_text": "",
+      "prior_year_movement_page": null,
+      "prior_year_movement_confidence": 0.0,
+      "exact_reserve_text": null,
       "primary_causes": [],
       "specific_events": [],
-      "specific_years_affected": [
-        2016,
-        2017
-      ],
+      "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "The syndicate experienced a gross prior year reserve strengthening of GBP 8.358 million for the 2019 financial year. This was calculated from the claims development table, showing adverse development on the 2017 underwriting year and favourable development on the 2016 underwriting year. No specific causes or events for this movement were identified in the report.",
+      "standardized_narrative": "The document does not explicitly state a gross prior year reserve movement. The claims development table is distorted by a significant Reinsurance to Close (RITC) transaction in 2018, making it unreliable for calculating prior year development. No other clear gross or net prior year development figure is provided.",
       "raw_causal_phrases": [],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 194.4,
@@ -68,15 +67,15 @@
           "percentage_of_total": 4.2
         }
       ],
-      "gross_premium_page": 1,
+      "gross_premium_page": 11,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior year development was calculated from the gross claims development table on page 13, as no explicit narrative or movement note for prior year development was found. The calculation excludes the two most recent underwriting years (2019 and 2018) as per instructions. No specific causal phrases or named events for prior year development were identified in the document.",
+      "data_quality_notes": "No explicit gross prior year development figure was found. The claims development table is distorted by a significant Reinsurance to Close (RITC) transaction in 2018, making it unreliable for calculating prior year development. The 'Movement in provision' in the technical provisions note includes both current and prior year movements and is not solely prior year development.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
-        "page": 13,
+        "page": 14,
         "underwriting_years": [
           2016,
           2017,
@@ -107,20 +106,31 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_2007_2019_llm.pdf",
-      "content_hash": "9c7a39420a8959363946d819b192e25ba1abcb6757aceac75d8071f03638a527",
-      "standardized_at": "2026-03-17T22:52:45.023073+00:00",
+      "content_hash": "29c9f9007845dea12cb2a65b0d3274cce199ef1509b0313ed3ed27ca71279b6a",
+      "standardized_at": "2026-09-11T11:34:41.398285+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 10398,
-        "output_tokens": 1138,
-        "total_tokens": 15113,
-        "cost_usd": 0.005964
+        "input_tokens": 11441,
+        "output_tokens": 1007,
+        "total_tokens": 17252,
+        "cost_usd": 0.00595
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 8.358,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 30,
+        "note": "filled a blank model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2016,
           2017,
@@ -147,6 +157,12 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later"
         ],
         "source_page": 30,
         "entity": 2007
@@ -306,7 +322,7 @@
       "syndicate": 2007,
       "year": 2019,
       "opening_reserves_gbp_m": 965.311,
-      "opening_reserves_page": 21,
+      "opening_reserves_page": 15,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": 8.358,
       "prior_year_development_pct": 0.87,
@@ -317,8 +333,10 @@
       "primary_causes": [
         "Adverse claims development",
         "Favorable claims development",
+        "Large loss development",
         "Reinsurance recoveries",
-        "IBNR recalibration"
+        "Court rulings / legal developments",
+        "Economic inflation / claims cost inflation"
       ],
       "specific_events": [],
       "specific_years_affected": [
@@ -326,14 +344,25 @@
         2017,
         2018
       ],
-      "prior_year_events": [],
+      "prior_year_events": [
+        {
+          "event_name": "Reinsurance to Close (RITC) effect",
+          "event_year": 2018,
+          "impact_description": "Large reduction in gross claims outstanding due to RITC transfer",
+          "lobs_affected": [
+            "Treaty"
+          ],
+          "amount_gbp_m": -819.917,
+          "confidence": 1.0
+        }
+      ],
       "named_events": [],
-      "standardized_narrative": "Gross claims outstanding at 1 January 2019 were GBP 965.311m. Using the syndicate's gross claims development table (2016-2018), prior year development calculated for older underwriting years (excluding the two most recent years) shows a net adverse movement of GBP 8.358m (a strengthening of reserves). This result reflects a mix of favourable development in some older years (e.g. 2016) and adverse development in others (notably 2017). The 2018 Reinsurance to Close (RITC) noted in the technical provisions materially affects the reserves and distorts development comparators; therefore the triangle-based PYD should be treated with caution.",
+      "standardized_narrative": "Opening gross claims outstanding at 1 January 2019 were GBP 965.311m. Using the published gross claims development table, excluding the two most recent underwriting years, prior-year re-estimation produced a net adverse movement of approximately GBP 8.36m (strengthening), driven by adverse development in the 2017 underwriting year more than offsetting a release on the 2016 year. The claims development is presented gross and the 2018 effect of a significant RITC transfer materially affected prior-year balances and may distort comparability.",
       "raw_causal_phrases": [
-        "unforeseen loss trends resulting from court rulings, changes in the law, differences in loss adjustment practice, medical and long-term care, and economic factors such as inflation can have a considerable impact on run-off results.",
-        "Effect of RITC (819,917) 224,963 (594,954)",
-        "The tables below show the Syndicate's cumulative incurred claims development, including both claims notified and incurred but not reported for each underwriting year, together with the cumulative payments to date on a gross and net of reinsurance basis at the balance sheet date.",
-        "Reserves for losses and loss expenses are calculated in accordance with actuarial practice based on substantiated assumptions, methods and assessments."
+        "Unforeseen loss trends resulting from court rulings, changes in the law, differences in loss adjustment practice, medical and long-term care, and economic factors such as inflation can have a considerable impact on run-off results.",
+        "Large claims matters are reviewed during claims meetings.",
+        "As an example of this approach, an assessment of terrorism risk is based on a mixture of qualitative and quantitative data (e.g. for estimating property damage, business interruption, mortality and morbidity subsequent to an attack of a predefined magnitude), which is used to control, limit and manage aggregate terrorism exposure.",
+        "Included within reinsurance loss recoverable as at 31 December 2019 were amounts of GBP 33.8m (2018: GBP 33.0m) recoverable from a group company."
       ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 194.4,
@@ -377,7 +406,7 @@
       "gross_premium_page": 20,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior year development (PYD) gross figure not explicitly stated as a single 'movement in prior year provision' gross amount. PYD calculated from the gross claims development triangle (pages 28) per instructions (exclude two most recent underwriting years). The triangle and movements are distorted by a large 2018 Reinsurance to Close (RITC) item noted in the technical provisions; this reduces confidence in triangle-derived PYD.",
+      "data_quality_notes": "Prior-year development was calculated from the gross claims development table (cumulative gross claims incurred) on page 28 by excluding the two most recent underwriting years (2018 and 2019) and summing diagonal changes for 2016 and 2017. There is no single explicit textual sentence stating a gross prior-year movement. The 2018 'Effect of RITC' (gross -819.917k) is material and may distort comparability; the RITC is noted in the technical provisions reconciliation. exact_reserve_text not found.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -413,20 +442,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_2007_2019_llm.pdf",
-      "content_hash": "9c7a39420a8959363946d819b192e25ba1abcb6757aceac75d8071f03638a527",
-      "standardized_at": "2026-03-17T22:54:15.972208+00:00",
+      "content_hash": "29c9f9007845dea12cb2a65b0d3274cce199ef1509b0313ed3ed27ca71279b6a",
+      "standardized_at": "2026-09-11T11:37:15.307874+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 17876,
-        "output_tokens": 6196,
-        "total_tokens": 24072,
-        "cost_usd": 0.016861
+        "input_tokens": 19036,
+        "output_tokens": 6658,
+        "total_tokens": 25694,
+        "cost_usd": 0.018075
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 8.358,
+        "model_value": 8.358,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 30,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2016,
           2017,
@@ -453,6 +494,12 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later"
         ],
         "source_page": 30,
         "entity": 2007
@@ -609,12 +656,12 @@
       }
     }
   },
-  "total_cost_usd": 0.022825,
-  "total_tokens": 39185,
+  "total_cost_usd": 0.024025,
+  "total_tokens": 42946,
   "validation": {
     "passed": true,
-    "total_discrepancies": 14,
-    "within_tolerance": 14,
+    "total_discrepancies": 21,
+    "within_tolerance": 21,
     "hard_failures": 0,
     "hard_failure_details": []
   }

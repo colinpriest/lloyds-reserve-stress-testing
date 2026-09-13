@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-05T20:39:58.840014+00:00",
+  "extraction_timestamp": "2026-09-13T04:03:58.999663+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -18,12 +20,15 @@
       "direction": "release",
       "prior_year_movement_page": 12,
       "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "The net loss ratio for the financial year improved to 88.9% (2018: 104.2%) driven by reserve releases in older years of account due to better than expected claims experience.",
+      "exact_reserve_text": "The net loss ratio for the financial year improved to 88.9% (2018: 104.2%) driven by reserve releases in older years of account due to better than expected claims experience. However, increased claims provisions on the 2019 year of account offset these releases, driven by catastrophe events (Typhoon Hagibis, Typhoon Jebi and Hurricane Dorian) and other attritional losses related to wind, storm and hail.",
       "primary_causes": [
         "Favorable claims development"
       ],
       "specific_events": [],
-      "specific_years_affected": [],
+      "specific_years_affected": [
+        2017,
+        2016
+      ],
       "prior_year_events": [],
       "named_events": [
         {
@@ -55,22 +60,11 @@
           "lobs_affected": [],
           "page": 2,
           "confidence": 0.8
-        },
-        {
-          "event_name": "wind, storm and hail",
-          "event_year": 2019,
-          "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": null,
-          "loss_description": "other attritional losses related to wind, storm and hail",
-          "lobs_affected": [],
-          "page": 2,
-          "confidence": 0.8
         }
       ],
-      "standardized_narrative": "The syndicate reported a gross release of GBP 2.309 million in prior year reserves. This was primarily driven by better than expected claims experience in older years of account. However, increased claims provisions for the current 2019 year of account, due to catastrophe events such as Typhoon Hagibis, Typhoon Jebi, and Hurricane Dorian, offset these releases.",
+      "standardized_narrative": "The syndicate reported a gross prior year reserve release of GBP 2.309 million, primarily driven by favorable claims development in older years of account, which contributed to an improved net loss ratio. However, this release was partially offset by increased claims provisions for the current 2019 year of account, attributed to catastrophe events including Typhoon Hagibis, Typhoon Jebi (from 2018), and Hurricane Dorian, as well as other attritional losses related to wind, storm and hail.",
       "raw_causal_phrases": [
-        "reserve releases in older years of account due to better than expected claims experience",
-        "increased claims provisions on the 2019 year of account offset these releases, driven by catastrophe events (Typhoon Hagibis, Typhoon Jebi and Hurricane Dorian) and other attritional losses related to wind, storm and hail."
+        "reserve releases in older years of account due to better than expected claims experience"
       ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 23.909,
@@ -78,7 +72,7 @@
         {
           "line_of_business": "Property Treaty",
           "amount_gbp_m": 10.241,
-          "percentage_of_total": 42.8
+          "percentage_of_total": 42.84
         },
         {
           "line_of_business": "Accident and Health",
@@ -88,18 +82,18 @@
         {
           "line_of_business": "Specialty",
           "amount_gbp_m": 4.582,
-          "percentage_of_total": 19.2
+          "percentage_of_total": 19.16
         },
         {
           "line_of_business": "Marine Treaty",
           "amount_gbp_m": 7.246,
-          "percentage_of_total": 30.3
+          "percentage_of_total": 30.31
         }
       ],
       "gross_premium_page": 1,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Typhoon Jebi occurred in 2018 but is mentioned as driving increased claims provisions for the 2019 year of account, which is unusual but stated in the report. [RAG OVERRIDE: Model said PYD=-2.309, RAG triangle computed -0.805. Using RAG value.]",
+      "data_quality_notes": "Gross premium mix from divisional summary as no regulatory segmental analysis was provided. The narrative mentions Typhoon Jebi (2018) as contributing to increased claims provisions in the 2019 year of account, not as a prior year reserve movement for 2018 itself. [RAG OVERRIDE: Model said PYD=-2.309, RAG triangle computed -0.805. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -140,20 +134,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_6125_2019_llm.pdf",
-      "content_hash": "2487ad8a9c976efbd8f9436180d73ed8f83108f52297720c3d4d221ebdf125b5",
-      "standardized_at": "2026-07-05T21:09:42.836653+00:00",
+      "content_hash": "f0efeba801185ee449bcd7cf54c3f4dfeebea5d96f2adaf4c981aa3d2300db8a",
+      "standardized_at": "2026-09-11T13:42:39.506208+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 9347,
-        "output_tokens": 1420,
-        "total_tokens": 14458,
-        "cost_usd": 0.006354
+        "input_tokens": 10151,
+        "output_tokens": 1377,
+        "total_tokens": 15816,
+        "cost_usd": 0.006488
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -0.805,
+        "model_value": -2.309,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 25,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2016,
           2017,
@@ -186,6 +192,12 @@
             null
           ]
         ],
+        "row_labels": [
+          "At the end of the underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later"
+        ],
         "source_page": 25,
         "entity": 6125
       },
@@ -202,6 +214,13 @@
           "entity": 6125,
           "backend": "azure",
           "table_kind": "provisions_movement"
+        },
+        "movement_semantics": {
+          "row_label": "Change in prior year provisions",
+          "row_index": 5,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": true,
+          "column_index": 1
         },
         "gross_prior_year_claims": -2.3,
         "net_prior_year_claims": -1.9,
@@ -276,19 +295,14 @@
       "prior_year_movement_confidence": 1.0,
       "exact_reserve_text": "The net loss ratio for the financial year improved to 88.9% (2018: 104.2%) driven by reserve releases in older years of account due to better than expected claims experience. However, increased claims provisions on the 2019 year of account offset these releases, driven by catastrophe events (Typhoon Hagibis, Typhoon Jebi and Hurricane Dorian) and other attritional losses related to wind, storm and hail.",
       "primary_causes": [
-        "Favorable claims development",
-        "Natural catastrophe events"
+        "Favorable claims development"
       ],
       "specific_events": [
         "Typhoon Hagibis",
         "Typhoon Jebi",
         "Hurricane Dorian"
       ],
-      "specific_years_affected": [
-        2016,
-        2017,
-        2018
-      ],
+      "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [
         {
@@ -296,10 +310,11 @@
           "event_year": 2019,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "Increased claims provisions on the 2019 year of account driven by catastrophe events and other attritional losses related to wind, storm and hail.",
+          "loss_description": "driven by catastrophe events (Typhoon Hagibis, Typhoon Jebi and Hurricane Dorian) and other attritional losses related to wind, storm and hail",
           "lobs_affected": [
             "Property",
-            "Marine"
+            "Marine",
+            "Treaty"
           ],
           "page": 5,
           "confidence": 0.8
@@ -309,10 +324,11 @@
           "event_year": 2018,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "Included among catastrophe events cited as driving increased claims provisions on the 2019 year of account.",
+          "loss_description": "driven by catastrophe events (Typhoon Hagibis, Typhoon Jebi and Hurricane Dorian) and other attritional losses related to wind, storm and hail",
           "lobs_affected": [
             "Property",
-            "Marine"
+            "Marine",
+            "Treaty"
           ],
           "page": 5,
           "confidence": 0.8
@@ -322,48 +338,28 @@
           "event_year": 2019,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "Included among catastrophe events cited as driving increased claims provisions on the 2019 year of account.",
+          "loss_description": "driven by catastrophe events (Typhoon Hagibis, Typhoon Jebi and Hurricane Dorian) and other attritional losses related to wind, storm and hail",
           "lobs_affected": [
             "Property",
-            "Marine"
+            "Marine",
+            "Treaty"
           ],
           "page": 5,
           "confidence": 0.8
         }
       ],
-      "standardized_narrative": "The Syndicate reported a modest gross prior-year reserve release of GBP 2.309m in 2019 (a ~9.17% release relative to opening gross claims reserves of GBP 25.176m), driven by better-than-expected claims experience on older years. These favorable prior-year developments were partially offset by strengthening on the 2019 underwriting year due to catastrophe activity (Typhoon Hagibis, Typhoon Jebi and Hurricane Dorian) and other attritional wind/storm/hail losses. The release is reported at gross claim level in the technical provisions movement note; no LOB-specific prior-year amounts are disclosed.",
+      "standardized_narrative": "Syndicate 6125 recorded a gross prior-year reserve release of approximately GBP 2.31m (about 9.17% of opening gross claims reserves). The release is attributed to favourable claims development in older years of account (better than expected claims experience). These releases were partly offset in 2019 by increased provisions on the 2019 underwriting year driven by natural catastrophe events (Typhoon Hagibis, Typhoon Jebi and Hurricane Dorian) and other attritional wind/storm/hail losses. No quantification by individual prior underwriting year or by line of business is provided.",
       "raw_causal_phrases": [
         "reserve releases in older years of account due to better than expected claims experience",
         "increased claims provisions on the 2019 year of account offset these releases, driven by catastrophe events (Typhoon Hagibis, Typhoon Jebi and Hurricane Dorian) and other attritional losses related to wind, storm and hail"
       ],
       "lob_movements": [
         {
-          "line_of_business": "Property",
+          "line_of_business": "Treaty",
           "direction": "release",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.5
-        },
-        {
-          "line_of_business": "Accident & Health",
-          "direction": "release",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.5
-        },
-        {
-          "line_of_business": "Specialty",
-          "direction": "release",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.5
-        },
-        {
-          "line_of_business": "Marine",
-          "direction": "release",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.5
+          "amount_gbp_m": -2.309,
+          "percentage": -9.17,
+          "confidence": 0.8
         }
       ],
       "gross_premiums_written_gbp_m": 23.909,
@@ -371,7 +367,7 @@
         {
           "line_of_business": "Property Treaty",
           "amount_gbp_m": 10.241,
-          "percentage_of_total": 42.85
+          "percentage_of_total": 42.86
         },
         {
           "line_of_business": "Accident and Health",
@@ -386,13 +382,13 @@
         {
           "line_of_business": "Marine Treaty",
           "amount_gbp_m": 7.246,
-          "percentage_of_total": 30.31
+          "percentage_of_total": 30.29
         }
       ],
       "gross_premium_page": 4,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior-year development sourced from Note 11 'Change in prior year provisions' (Gross = (GBP 2,309)k which is a release of GBP 2.309m). Opening reserves taken from Statement of Financial Position (gross claims outstanding balance at 1 January 2019 = GBP 25,176k). No LOB-specific prior-year movement amounts provided. Named catastrophe events are mentioned but not quantified. Page numbers correspond to the document's printed page headers. Claims development triangle present (gross) and was used for verification but not required for the primary prior-year movement figure. [RAG OVERRIDE: Model said PYD=-2.309, RAG triangle computed -0.805. Using RAG value.]",
+      "data_quality_notes": "Opening reserves taken from Statement of Financial Position (Claims outstanding, prior year column). Prior year development taken from Technical Provisions note 'Change in prior year provisions' (Gross column). Premium mix is from the Managing Agent's divisional summary (no statutory segmental table present) - 'mix from divisional summary'. Named catastrophe events are mentioned but not quantified against reserves. No specific prior underwriting years were explicitly identified in narrative as driving the prior-year movement. [RAG OVERRIDE: Model said PYD=-2.309, RAG triangle computed -0.805. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -433,20 +429,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_6125_2019_llm.pdf",
-      "content_hash": "2487ad8a9c976efbd8f9436180d73ed8f83108f52297720c3d4d221ebdf125b5",
-      "standardized_at": "2026-07-05T21:11:01.549137+00:00",
+      "content_hash": "f0efeba801185ee449bcd7cf54c3f4dfeebea5d96f2adaf4c981aa3d2300db8a",
+      "standardized_at": "2026-09-11T13:44:17.705260+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 17316,
-        "output_tokens": 6330,
-        "total_tokens": 23646,
-        "cost_usd": 0.016989
+        "input_tokens": 18076,
+        "output_tokens": 6023,
+        "total_tokens": 24099,
+        "cost_usd": 0.016565
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -0.805,
+        "model_value": -2.309,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 25,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2016,
           2017,
@@ -479,6 +487,12 @@
             null
           ]
         ],
+        "row_labels": [
+          "At the end of the underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later"
+        ],
         "source_page": 25,
         "entity": 6125
       },
@@ -495,6 +509,13 @@
           "entity": 6125,
           "backend": "azure",
           "table_kind": "provisions_movement"
+        },
+        "movement_semantics": {
+          "row_label": "Change in prior year provisions",
+          "row_index": 5,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": true,
+          "column_index": 1
         },
         "gross_prior_year_claims": -2.3,
         "net_prior_year_claims": -1.9,
@@ -557,12 +578,12 @@
       }
     }
   },
-  "total_cost_usd": 0.023343,
-  "total_tokens": 38104,
+  "total_cost_usd": 0.023053,
+  "total_tokens": 39915,
   "validation": {
     "passed": true,
-    "total_discrepancies": 20,
-    "within_tolerance": 20,
+    "total_discrepancies": 17,
+    "within_tolerance": 17,
     "hard_failures": 0,
     "hard_failure_details": []
   }

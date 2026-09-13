@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-05T20:27:57.180192+00:00",
+  "extraction_timestamp": "2026-09-13T04:02:14.947455+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -13,12 +15,12 @@
       "opening_reserves_gbp_m": 670.419,
       "opening_reserves_page": 7,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": -27.0,
-      "prior_year_development_pct": -4.03,
+      "prior_year_development_gbp_m": -60.126,
+      "prior_year_development_pct": -8.97,
       "direction": "release",
-      "prior_year_movement_page": 18,
+      "prior_year_movement_page": 19,
       "prior_year_movement_confidence": 0.8,
-      "exact_reserve_text": "The 2018 net technical result of GBP 36.5m (2017: GBP 43.7m) includes GBP 27.0m (2017: GBP 51.2m) of releases from reserves in respect of prior accident years.",
+      "exact_reserve_text": "Claims development table gross of reinsurance",
       "primary_causes": [
         "Favorable claims development"
       ],
@@ -27,14 +29,12 @@
       "prior_year_events": [],
       "named_events": [
         {
-          "event_name": "US Californian Wildfires",
+          "event_name": "Californian Wildfires",
           "event_year": 2018,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "insured loss in the region of USD12bn",
-          "lobs_affected": [
-            "Property"
-          ],
+          "loss_description": "costliest single event of 2018 was the US Californian Wildfires which also became California's deadliest and most destructive fire on record with an insured loss in the region of USD12bn",
+          "lobs_affected": [],
           "page": 1,
           "confidence": 0.8
         },
@@ -43,10 +43,8 @@
           "event_year": 2018,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "significant losses from Hurricane Michael (USD10 billion)",
-          "lobs_affected": [
-            "Property"
-          ],
+          "loss_description": "market experienced significant losses from Hurricane Michael (USD10 billion)",
+          "lobs_affected": [],
           "page": 1,
           "confidence": 0.8
         },
@@ -55,10 +53,8 @@
           "event_year": 2018,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "significant losses from Hurricane Florence (USD4.5 billion)",
-          "lobs_affected": [
-            "Property"
-          ],
+          "loss_description": "Hurricane Florence (USD4.5 billion)",
+          "lobs_affected": [],
           "page": 1,
           "confidence": 0.8
         },
@@ -68,9 +64,7 @@
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
           "loss_description": "significant losses from Japanese typhoons Jebi",
-          "lobs_affected": [
-            "Property"
-          ],
+          "lobs_affected": [],
           "page": 1,
           "confidence": 0.8
         },
@@ -80,9 +74,7 @@
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
           "loss_description": "significant losses from Japanese typhoons Trami",
-          "lobs_affected": [
-            "Property"
-          ],
+          "lobs_affected": [],
           "page": 1,
           "confidence": 0.8
         },
@@ -91,15 +83,13 @@
           "event_year": 2018,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "significant losses from European windstorm Friederike",
-          "lobs_affected": [
-            "Property"
-          ],
+          "loss_description": "European windstorm Friederike",
+          "lobs_affected": [],
           "page": 1,
           "confidence": 0.8
         }
       ],
-      "standardized_narrative": "The syndicate reported a net release of GBP 27.0 million from reserves in respect of prior accident years, indicating favorable claims development.",
+      "standardized_narrative": "The syndicate experienced a gross release of GBP 50.176m in prior year reserves, calculated from the gross claims development triangle. This release indicates favorable claims development across older underwriting years. The report also mentions a net release of GBP 27.0m in its technical result.",
       "raw_causal_phrases": [
         "releases from reserves in respect of prior accident years"
       ],
@@ -137,10 +127,10 @@
           "percentage_of_total": 35.3
         }
       ],
-      "gross_premium_page": 16,
+      "gross_premium_page": 13,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior year development figure is stated as a component of the 'net technical result', implying it is a net figure after reinsurance. No gross prior year development figure was explicitly available. [RAG PYD NOT APPLIED: deterministic figure +60.126m has the opposite sign to both model values [-27.0, -60.126], which agree with each other; model values retained.]",
+      "data_quality_notes": "Prior year development calculated from the gross claims development triangle on page 19. This differs from the net release of GBP 27.0m mentioned in the Technical Provisions note on page 18, as the triangle provides a gross movement. [RAG OVERRIDE: Model said PYD=-50.176, RAG triangle computed -60.126. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -158,69 +148,59 @@
         ],
         "development_rows": [
           [
-            -135346,
-            -142687,
-            -161616,
-            -155511,
-            -161157,
-            -130767,
-            -173171,
-            -165031
+            -135.346,
+            -142.687,
+            -161.616,
+            -155.511,
+            -161.157,
+            -130.767,
+            -173.171,
+            -165.031
           ],
           [
-            -257822,
-            -292723,
-            -326138,
-            -297285,
-            -301128,
-            -275501,
-            -303458,
+            -257.822,
+            -292.723,
+            -326.138,
+            -297.285,
+            -301.128,
+            -275.501,
+            -303.458,
             null
           ],
           [
-            -270341,
-            -312678,
-            -325614,
-            -289955,
-            -264256,
-            -249891,
-            null,
-            null
-          ],
-          [
-            -265242,
-            -305984,
-            -305121,
-            -263410,
-            -238545,
-            null,
+            -270.341,
+            -312.678,
+            -325.614,
+            -289.955,
+            -264.256,
+            -249.891,
             null,
             null
           ],
           [
-            -282325,
-            -307371,
-            -310219,
-            -266462,
-            null,
+            -265.242,
+            -305.984,
+            -305.121,
+            -263.41,
+            -238.545,
             null,
             null,
             null
           ],
           [
-            -278238,
-            -288749,
-            -308801,
-            null,
+            -282.325,
+            -307.371,
+            -310.219,
+            -266.462,
             null,
             null,
             null,
             null
           ],
           [
-            -279512,
-            -283889,
-            null,
+            -278.238,
+            -288.749,
+            -308.801,
             null,
             null,
             null,
@@ -228,7 +208,17 @@
             null
           ],
           [
-            -273933,
+            -279.512,
+            -283.889,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            -273.933,
             null,
             null,
             null,
@@ -241,20 +231,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_457_2018_llm.pdf",
-      "content_hash": "2a587a547734b0d46a2596224b49507659bfa7dc86f476200173972afd0db045",
-      "standardized_at": "2026-03-19T03:33:04.260941+00:00",
+      "content_hash": "7435c58839e6496d5cd91514b207dc82252d60fe0934676ef260ccae62935289",
+      "standardized_at": "2026-09-11T13:13:54.875336+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 11410,
-        "output_tokens": 2090,
-        "total_tokens": 19174,
-        "cost_usd": 0.008648
+        "input_tokens": 12214,
+        "output_tokens": 2095,
+        "total_tokens": 19835,
+        "cost_usd": 0.008902
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -60.126,
+        "model_value": -50.176,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 41,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -347,8 +349,19 @@
             null
           ]
         ],
+        "row_labels": [
+          "At end of underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later",
+          "Seven years later"
+        ],
         "source_page": 41,
-        "entity": 457
+        "entity": 457,
+        "presentation_sign": "outflow"
       },
       "_adobe_lob": {
         "gross_premium_mix": [
@@ -507,14 +520,14 @@
       "syndicate": 457,
       "year": 2018,
       "opening_reserves_gbp_m": 670.419,
-      "opening_reserves_page": null,
-      "opening_reserves_confidence": 0.0,
+      "opening_reserves_page": 38,
+      "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": -60.126,
       "prior_year_development_pct": -8.97,
       "direction": "release",
-      "prior_year_movement_page": 39,
-      "prior_year_movement_confidence": 0.8,
-      "exact_reserve_text": "",
+      "prior_year_movement_page": 38,
+      "prior_year_movement_confidence": 1.0,
+      "exact_reserve_text": "The 2018 technical result of GBP 36.5m (2017, GBP 43.7m) includes GBP 27.0m (2017, GBP 51.2m) of releases from reserves in respect of prior accident years.",
       "primary_causes": [
         "Favorable claims development"
       ],
@@ -522,8 +535,10 @@
       "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "Using the gross claims development table (gross of reinsurance) the syndicate shows favourable prior-year development overall: aggregating movements for underwriting years up to 2016 produces a net release on prior years of approximately GBP 60.1m (gross). The report also references net prior-year releases in its technical results (net of reinsurance) but a gross movement figure is not clearly presented elsewhere; the gross figure above was calculated from the gross claims development table.",
-      "raw_causal_phrases": [],
+      "standardized_narrative": "Syndicate 457 recorded gross prior-year reserve releases of GBP 27.0m in 2018 (a release of approximately 4.0% of opening gross claims outstanding of GBP 670.4m). The movement is described in the technical provisions note as releases from reserves in respect of prior accident years and is attributed to favourable claims development on older vintages.",
+      "raw_causal_phrases": [
+        "includes GBP 27.0m (2017, GBP 51.2m) of releases from reserves in respect of prior accident years"
+      ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 523.2,
       "gross_premium_mix": [
@@ -561,11 +576,11 @@
       "gross_premium_page": 31,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Gross prior-year movement was computed from the gross claims development table (pages 39-40). The report contains statements referring to net releases (net of reinsurance) elsewhere but no clear gross 'movement in prior years' line was found; therefore the gross PYD above is calculated from the claims development triangle by comparing current estimates to the previous diagonal for underwriting years <= 2016 (per the instructions). Numbers in the triangle were presented in thousands in the report and have been converted to millions here. Opening (1 Jan 2018) gross claims outstanding on the balance sheet was not unambiguously located in the images provided, so opening_reserves_gbp_m is null. Exact verbatim narrative describing the prior-year movement was not clearly legible in the provided images, so exact_reserve_text is left blank. [RAG PYD NOT APPLIED: deterministic figure +60.126m has the opposite sign to both model values [-27.0, -60.126], which agree with each other; model values retained.]",
+      "data_quality_notes": "Opening reserves and prior-year movement taken from the Technical Provisions note (page 38). The report explicitly states GBP 27.0m of releases for 2018. Balance sheet prior-year comparative also appears consistent but the Technical Provisions note was used as the explicit source. Segmental (regulatory) premium breakdown could not be confidently transcribed from the images provided so gross_premium_mix is left empty. A claims development (gross) triangle is present in the report (pages ~39-40) but the detailed triangle cells were not reliably OCR'd from the supplied images, so the triangle is only indicated as present and not fully parsed here. [RAG OVERRIDE: Model said PYD=-27.0, RAG triangle computed -60.126. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
-        "units": "millions",
+        "units": "thousands",
         "page": 39,
         "underwriting_years": [
           2011,
@@ -577,105 +592,36 @@
           2017,
           2018
         ],
-        "development_rows": [
-          [
-            135.346,
-            142.687,
-            161.616,
-            155.511,
-            161.157,
-            130.767,
-            173.171,
-            165.031
-          ],
-          [
-            257.822,
-            292.723,
-            326.138,
-            297.285,
-            301.128,
-            275.501,
-            303.458,
-            null
-          ],
-          [
-            270.341,
-            312.678,
-            325.614,
-            289.955,
-            264.256,
-            249.891,
-            null,
-            null
-          ],
-          [
-            265.242,
-            305.984,
-            305.121,
-            263.41,
-            238.545,
-            null,
-            null,
-            null
-          ],
-          [
-            282.325,
-            307.371,
-            310.219,
-            266.462,
-            null,
-            null,
-            null,
-            null
-          ],
-          [
-            278.238,
-            288.749,
-            308.801,
-            null,
-            null,
-            null,
-            null,
-            null
-          ],
-          [
-            279.512,
-            283.889,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-          ],
-          [
-            273.933,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-          ]
-        ]
+        "development_rows": []
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_457_2018_llm.pdf",
-      "content_hash": "2a587a547734b0d46a2596224b49507659bfa7dc86f476200173972afd0db045",
-      "standardized_at": "2026-03-19T03:34:27.610351+00:00",
+      "content_hash": "7435c58839e6496d5cd91514b207dc82252d60fe0934676ef260ccae62935289",
+      "standardized_at": "2026-09-11T13:15:30.334617+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 25210,
-        "output_tokens": 5906,
-        "total_tokens": 31116,
-        "cost_usd": 0.018114
+        "input_tokens": 25970,
+        "output_tokens": 5207,
+        "total_tokens": 31177,
+        "cost_usd": 0.016906
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -60.126,
+        "model_value": -27.0,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 41,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -768,8 +714,19 @@
             null
           ]
         ],
+        "row_labels": [
+          "At end of underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later",
+          "Seven years later"
+        ],
         "source_page": 41,
-        "entity": 457
+        "entity": 457,
+        "presentation_sign": "outflow"
       },
       "_adobe_lob": {
         "gross_premium_mix": [
@@ -925,26 +882,13 @@
       }
     }
   },
-  "total_cost_usd": 0.026762,
-  "total_tokens": 50290,
+  "total_cost_usd": 0.025808,
+  "total_tokens": 51012,
   "validation": {
-    "passed": false,
-    "total_discrepancies": 11,
-    "within_tolerance": 9,
-    "hard_failures": 2,
-    "hard_failure_details": [
-      {
-        "field": "prior_year_development_gbp_m",
-        "type": "value_mismatch",
-        "gemini-2.5-flash": -27.0,
-        "gpt-5-mini": -60.126
-      },
-      {
-        "field": "prior_year_development_pct",
-        "type": "value_mismatch",
-        "gemini-2.5-flash": -4.03,
-        "gpt-5-mini": -8.97
-      }
-    ]
+    "passed": true,
+    "total_discrepancies": 10,
+    "within_tolerance": 10,
+    "hard_failures": 0,
+    "hard_failure_details": []
   }
 }

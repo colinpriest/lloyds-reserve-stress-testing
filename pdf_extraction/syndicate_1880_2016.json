@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T09:44:41.385376+00:00",
+  "extraction_timestamp": "2026-09-13T04:10:17.658438+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -11,16 +13,17 @@
       "syndicate": 1880,
       "year": 2016,
       "opening_reserves_gbp_m": 167.948,
-      "opening_reserves_page": 31,
+      "opening_reserves_page": 5,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": -16.4,
       "prior_year_development_pct": -9.76,
       "direction": "release",
-      "prior_year_movement_page": 32,
+      "prior_year_movement_page": 14,
       "prior_year_movement_confidence": 0.8,
       "exact_reserve_text": "Within the calendar year technical result, a surplus of GBP 15.6m (2015: GBP 3.9m) relates to the reassessment of net claims incurred for previous accident years.",
       "primary_causes": [
-        "Favorable claims development"
+        "Favorable claims development",
+        "IBNR recalibration"
       ],
       "specific_events": [],
       "specific_years_affected": [
@@ -36,9 +39,9 @@
           "event_year": 2016,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "greater level of catastrophe losses",
+          "loss_description": "contributed to a greater level of catastrophe losses and increased net claims ratio",
           "lobs_affected": [],
-          "page": 6,
+          "page": 2,
           "confidence": 0.8
         },
         {
@@ -46,16 +49,15 @@
           "event_year": 2016,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "greater level of catastrophe losses",
+          "loss_description": "contributed to a greater level of catastrophe losses and increased net claims ratio",
           "lobs_affected": [],
-          "page": 6,
+          "page": 2,
           "confidence": 0.8
         }
       ],
-      "standardized_narrative": "The syndicate experienced a gross prior year reserve release of GBP 16.4 million in 2016, representing a 9.76% reduction of its opening gross claims outstanding. This favorable development was primarily due to the reassessment of claims incurred for previous accident years, specifically underwriting years 2011, 2012, 2013, and 2014. The report also noted an increase in catastrophe losses in the current year from events such as Hurricane Matthew and the Canadian Wildfires, which impacted the net claims ratio.",
+      "standardized_narrative": "The syndicate reported a gross prior year reserve release of GBP 16.4 million for the 2016 calendar year, primarily driven by favorable claims development across underwriting years 2011 to 2014. This release is attributed to the reassessment of net claims incurred for previous accident years. The report also noted an increase in the net claims ratio for the current year due to catastrophe losses from Hurricane Matthew and the Canadian Wildfires.",
       "raw_causal_phrases": [
-        "a surplus of GBP 15.6m (2015: GBP 3.9m) relates to the reassessment of net claims incurred for previous accident years.",
-        "greater level of catastrophe losses compared to the prior year, following Hurricane Matthew and the Canadian Wildfires."
+        "reassessment of net claims incurred for previous accident years"
       ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 158.1,
@@ -81,15 +83,15 @@
           "percentage_of_total": 14.5
         }
       ],
-      "gross_premium_page": 27,
+      "gross_premium_page": 12,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior year development calculated from the gross claims development triangle for underwriting years 2011-2014, as the narrative text explicitly states a 'net' surplus.",
+      "data_quality_notes": "The narrative states a net prior year development surplus of GBP 15.6m, while the gross claims development triangle calculation yields a gross prior year development release of GBP 16.4m. The gross figure from the triangle is used as per instructions.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "millions",
-        "page": 32,
+        "page": 14,
         "underwriting_years": [
           2011,
           2012,
@@ -150,21 +152,33 @@
         ]
       },
       "source_type": "syndicate",
-      "source_file": "syndicate_reports\\pdfs\\syndicate_1880_2016.pdf",
-      "content_hash": "b4a8f6ad626d494ce1ea722026293c8544017d563faaed3eb4c1e6a2a2f17a47",
-      "standardized_at": "2026-03-17T01:04:51.616110+00:00",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_1880_2016_llm.pdf",
+      "content_hash": "7bda03a25f02da77430553c140829269c5066e81dcd6e2e3db29c7284ee416cd",
+      "standardized_at": "2026-09-11T10:53:22.709583+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 16204,
-        "output_tokens": 1445,
-        "total_tokens": 22925,
-        "cost_usd": 0.008474
+        "input_tokens": 10667,
+        "output_tokens": 1412,
+        "total_tokens": 16581,
+        "cost_usd": 0.00673
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -16.4,
+        "model_value": -16.4,
+        "triangle_type": "gross",
+        "triangle_units": "millions",
+        "triangle_units_evidence": "default",
+        "triangle_source_page": 32,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "millions",
+        "units_evidence": "default",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -222,6 +236,14 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "Year 1",
+          "Year 2",
+          "Year 3",
+          "Year 4",
+          "Year 5",
+          "Year 6"
         ],
         "source_page": 32,
         "entity": 1880
@@ -333,7 +355,7 @@
       "syndicate": 1880,
       "year": 2016,
       "opening_reserves_gbp_m": 167.948,
-      "opening_reserves_page": 31,
+      "opening_reserves_page": 17,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": -16.4,
       "prior_year_development_pct": -9.76,
@@ -342,8 +364,7 @@
       "prior_year_movement_confidence": 0.8,
       "exact_reserve_text": "Within the calendar year technical result, a surplus of GBP 15.6m (2015: GBP 3.9m) relates to the reassessment of net claims incurred for previous accident years.",
       "primary_causes": [
-        "Favorable claims development",
-        "IBNR recalibration"
+        "Favorable claims development"
       ],
       "specific_events": [],
       "specific_years_affected": [
@@ -359,66 +380,64 @@
           "event_year": 2016,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "Syndicate incurred a greater level of catastrophe losses compared to the prior year following Hurricane Matthew",
+          "loss_description": "syndicate incurred a greater level of catastrophe losses compared to the prior year, following Hurricane Matthew",
           "lobs_affected": [
-            "Property",
-            "Treaty"
+            "Property"
           ],
-          "page": 6,
-          "confidence": 0.8
+          "page": 5,
+          "confidence": 0.5
         },
         {
           "event_name": "Canadian Wildfires",
           "event_year": 2016,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "Syndicate incurred a greater level of catastrophe losses compared to the prior year following the Canadian Wildfires",
+          "loss_description": "syndicate incurred a greater level of catastrophe losses compared to the prior year, following the Canadian Wildfires",
           "lobs_affected": [
-            "Property",
-            "Treaty"
+            "Property"
           ],
-          "page": 6,
-          "confidence": 0.8
+          "page": 5,
+          "confidence": 0.5
         }
       ],
-      "standardized_narrative": "The syndicate recorded a gross prioryear release of approximately GBP 16.4m (about 9.8% of opening gross claims reserves) in 2016. Management attributes this to a reassessment of prior accident years resulting in favourable claims development / IBNR recalibration across older underwriting years (notably 2011-2014). The statement in the technical result highlights a net surplus of GBP 15.6m relating to prior years; the gross movement has been derived from the published gross claims development triangle.",
+      "standardized_narrative": "The syndicate reported a favourable prior-year development. Using the gross claims development table, older underwriting years (2011-2014) show an aggregate release of approximately GBP 16.4m (about 9.8% of opening gross claims outstanding). The annual report also records a net surplus of GBP 15.6m relating to reassessment of prior accident years. Current-year catastrophe activity (notably Hurricane Matthew and Canadian wildfires) increased the net claims ratio for 2016 but did not prevent the favourable re-estimation of older years.",
       "raw_causal_phrases": [
-        "a surplus of GBP 15.6m (2015: GBP 3.9m) relates to the reassessment of net claims incurred for previous accident years",
-        "The net claims ratio has increased as the syndicate incurred a greater level of catastrophe losses compared to the prior year, following Hurricane Matthew and the Canadian Wildfires"
+        "Within the calendar year technical result, a surplus of GBP 15.6m (2015: GBP 3.9m) relates to the reassessment of net claims incurred for previous accident years.",
+        "The net claims ratio has increased as the syndicate incurred a greater level of catastrophe losses compared to the prior year, following Hurricane Matthew and the Canadian Wildfires."
       ],
       "lob_movements": [
         {
-          "line_of_business": "Property",
+          "line_of_business": "Accident & Health",
           "direction": "release",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.5
-        },
-        {
-          "line_of_business": "Casualty",
-          "direction": "release",
-          "amount_gbp_m": null,
+          "amount_gbp_m": -0.875,
           "percentage": null,
           "confidence": 0.5
         },
         {
           "line_of_business": "Marine",
-          "direction": "release",
-          "amount_gbp_m": null,
+          "direction": "strengthening",
+          "amount_gbp_m": 3.277,
           "percentage": null,
           "confidence": 0.5
         },
         {
-          "line_of_business": "Accident & Health",
-          "direction": "release",
-          "amount_gbp_m": null,
+          "line_of_business": "Property",
+          "direction": "strengthening",
+          "amount_gbp_m": 36.091,
+          "percentage": null,
+          "confidence": 0.5
+        },
+        {
+          "line_of_business": "Casualty",
+          "direction": "strengthening",
+          "amount_gbp_m": 5.145,
           "percentage": null,
           "confidence": 0.5
         },
         {
           "line_of_business": "Treaty",
-          "direction": "release",
-          "amount_gbp_m": null,
+          "direction": "strengthening",
+          "amount_gbp_m": 21.138,
           "percentage": null,
           "confidence": 0.5
         }
@@ -449,7 +468,7 @@
       "gross_premium_page": 26,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Gross prioryear movement was not provided as a single explicit gross figure. The gross PYD was calculated from the published gross claims development triangle (note 10). The report explicitly states a net prioryear surplus of GBP 15.6m; the gross release derived from the triangle is approx GBP 16.4m. No LOBlevel prior year movement breakdown was provided.",
+      "data_quality_notes": "Prior-year development (PYD) gross amount is not explicitly stated as a gross figure in the narrative; gross PYD was computed from the gross claims development table (claim development triangle). The report explicitly states a net surplus of GBP 15.6m; the triangle-derived gross PYD is -GBP 16.4m. No RITC was identified to distort the triangle. LOB movements are inferred from change in gross claims provision between 2015 and 2016 (these are total reserve movements, not explicitly labelled as PYD).",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -515,21 +534,33 @@
         ]
       },
       "source_type": "syndicate",
-      "source_file": "syndicate_reports\\pdfs\\syndicate_1880_2016.pdf",
-      "content_hash": "b4a8f6ad626d494ce1ea722026293c8544017d563faaed3eb4c1e6a2a2f17a47",
-      "standardized_at": "2026-03-17T01:06:26.254300+00:00",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_1880_2016_llm.pdf",
+      "content_hash": "7bda03a25f02da77430553c140829269c5066e81dcd6e2e3db29c7284ee416cd",
+      "standardized_at": "2026-09-11T10:55:03.794216+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 42621,
-        "output_tokens": 5665,
-        "total_tokens": 48286,
-        "cost_usd": 0.021985
+        "input_tokens": 23020,
+        "output_tokens": 5245,
+        "total_tokens": 28265,
+        "cost_usd": 0.016245
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -16.4,
+        "model_value": -16.4,
+        "triangle_type": "gross",
+        "triangle_units": "millions",
+        "triangle_units_evidence": "default",
+        "triangle_source_page": 32,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "millions",
+        "units_evidence": "default",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -587,6 +618,14 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "Year 1",
+          "Year 2",
+          "Year 3",
+          "Year 4",
+          "Year 5",
+          "Year 6"
         ],
         "source_page": 32,
         "entity": 1880
@@ -695,12 +734,12 @@
       }
     }
   },
-  "total_cost_usd": 0.030459,
-  "total_tokens": 71211,
+  "total_cost_usd": 0.022975,
+  "total_tokens": 44846,
   "validation": {
     "passed": true,
-    "total_discrepancies": 10,
-    "within_tolerance": 10,
+    "total_discrepancies": 15,
+    "within_tolerance": 15,
     "hard_failures": 0,
     "hard_failure_details": []
   }

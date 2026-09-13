@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T10:59:03.400002+00:00",
+  "extraction_timestamp": "2026-09-13T04:00:19.582927+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -20,8 +22,8 @@
       "prior_year_movement_confidence": 1.0,
       "exact_reserve_text": "An unfavourable run off deviation (prior accident year strengthening driven by COVID-19 losses of GBP 1.9m (2021: GBP 4.1m release) was experienced during the year.",
       "primary_causes": [
-        "Adverse claims development",
-        "COVID-19 / pandemic effects"
+        "COVID-19 / pandemic effects",
+        "Adverse claims development"
       ],
       "specific_events": [
         "COVID-19 losses"
@@ -29,22 +31,10 @@
       "specific_years_affected": [],
       "prior_year_events": [
         {
-          "event_name": "2020 Year of Account Closure",
-          "event_year": 2020,
-          "impact_description": "closed with a loss of GBP 3.8m",
-          "lobs_affected": [
-            "Accident & Health"
-          ],
-          "amount_gbp_m": 3.8,
-          "confidence": 1.0
-        },
-        {
           "event_name": "COVID-19 losses",
           "event_year": null,
-          "impact_description": "prior accident year strengthening driven by COVID-19 losses",
-          "lobs_affected": [
-            "Accident & Health"
-          ],
+          "impact_description": "prior accident year strengthening driven by COVID-19 losses of GBP 1.9m",
+          "lobs_affected": [],
           "amount_gbp_m": 1.9,
           "confidence": 1.0
         }
@@ -54,33 +44,23 @@
           "event_name": "COVID-19 losses",
           "event_year": null,
           "event_type": "other",
-          "net_loss_gbp_m": 1.9,
+          "net_loss_gbp_m": null,
           "loss_description": "prior accident year strengthening driven by COVID-19 losses of GBP 1.9m",
-          "lobs_affected": [
-            "Accident & Health"
-          ],
+          "lobs_affected": [],
           "page": 14,
           "confidence": 1.0
         }
       ],
-      "standardized_narrative": "The syndicate experienced an unfavourable run-off deviation in 2022, resulting in a prior accident year strengthening of GBP 1.9 million, primarily driven by COVID-19 losses. Additionally, the 2020 year of account closed with a loss of GBP 3.8 million. The syndicate operates in a single business segment, long-term insurance.",
+      "standardized_narrative": "The syndicate experienced an unfavourable run-off deviation in 2022, resulting in a GBP 1.9 million strengthening of prior accident year reserves. This adverse development was primarily driven by COVID-19 related losses. The specific lines of business affected were not detailed.",
       "raw_causal_phrases": [
         "unfavourable run off deviation",
         "prior accident year strengthening driven by COVID-19 losses"
       ],
-      "lob_movements": [
-        {
-          "line_of_business": "Accident & Health",
-          "direction": "strengthening",
-          "amount_gbp_m": 1.9,
-          "percentage": 7.24,
-          "confidence": 1.0
-        }
-      ],
+      "lob_movements": [],
       "gross_premiums_written_gbp_m": 29.782,
       "gross_premium_mix": [
         {
-          "line_of_business": "Long-term insurance business",
+          "line_of_business": "long-term insurance business",
           "amount_gbp_m": 29.782,
           "percentage_of_total": 100.0
         }
@@ -88,7 +68,7 @@
       "gross_premium_page": 13,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The gross claims development triangle shows a much smaller prior year movement (+0.093m) than the explicit 'Movement in prior year's provision for claims outstanding' note (+1.9m). The explicit note is prioritized as the authoritative source for total prior year development. [RAG PYD NOT APPLIED: deterministic figure -0.018m has the opposite sign to both model values [1.9, 1.9], which agree with each other; model values retained.] [CODE OVERRIDE: Model said PYD=1.9, but code computed 2.557 from triangle (OVERRIDE from agreed triangles). Using code value.]",
+      "data_quality_notes": "The specific lines of business affected by the prior year development and specific events are not detailed in the report. The claims development triangle does not provide a clear prior year development figure in the standard way, so the explicit narrative statement was used. [RAG OVERRIDE: Model said PYD=1.9, RAG triangle computed 2.557. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -231,15 +211,25 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_3002_2022_llm.pdf",
-      "content_hash": "92a2ba9daefba659ed068de9dcd1c393fce2d7c917300aa15ed45f80f3e51833",
-      "standardized_at": "2026-07-05T14:38:00.468000+00:00",
+      "content_hash": "5ee5176f659aa26b3438c68386142dbe7fcd75f5acf0bf3eaa175729775ba8fe",
+      "standardized_at": "2026-09-11T12:07:32.627956+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 10379,
-        "output_tokens": 1780,
-        "total_tokens": 18792,
-        "cost_usd": 0.007564
+        "input_tokens": 11183,
+        "output_tokens": 1564,
+        "total_tokens": 16359,
+        "cost_usd": 0.007265
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 2.557,
+        "model_value": 1.9,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": null,
+        "triangle_source_page": null,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
@@ -259,8 +249,104 @@
         ],
         "development_rows": [
           [
-            4927.0,
+            3488,
+            1639,
+            15448,
+            9294,
+            11136,
+            13344,
+            12442,
+            10978,
+            10048,
+            8936
+          ],
+          [
+            5998,
+            5475,
+            14106,
+            17087,
+            27373,
+            33812,
+            35289,
+            17829,
+            17274,
+            null
+          ],
+          [
+            5243,
+            4885,
+            14719,
+            18623,
+            31510,
+            34719,
+            19645,
+            20278,
             null,
+            null
+          ],
+          [
+            5034,
+            4942,
+            16528,
+            18033,
+            32714,
+            34160,
+            24234,
+            null,
+            null,
+            null
+          ],
+          [
+            5180,
+            4804,
+            15734,
+            18811,
+            36849,
+            33437,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            4917,
+            5066,
+            15974,
+            19077,
+            33750,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            4927,
+            5259,
+            15546,
+            18413,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            4926,
+            5009,
+            15449,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            4909,
+            5018,
             null,
             null,
             null,
@@ -271,7 +357,7 @@
             null
           ],
           [
-            4909.0,
+            5002,
             null,
             null,
             null,
@@ -282,9 +368,7 @@
             null,
             null
           ]
-        ],
-        "source_page": 39,
-        "entity": 3002
+        ]
       },
       "_adobe_provisions": {
         "opening_provenance": {
@@ -387,14 +471,14 @@
         "Adverse claims development"
       ],
       "specific_events": [
-        "COVID-19"
+        "COVID-19 pandemic"
       ],
       "specific_years_affected": [],
       "prior_year_events": [
         {
           "event_name": "COVID-19 pandemic",
           "event_year": 2020,
-          "impact_description": "Prior accident year strengthening driven by COVID-19 losses resulting in an unfavourable run off deviation.",
+          "impact_description": "Prior accident year strengthening driven by COVID-19 losses of GBP 1.9m",
           "lobs_affected": [
             "Accident & Health"
           ],
@@ -408,7 +492,7 @@
           "event_year": 2020,
           "event_type": "other",
           "net_loss_gbp_m": null,
-          "loss_description": "prior accident year strengthening driven by COVID-19 losses",
+          "loss_description": "driven prior accident year strengthening of GBP 1.9m (prior accident year strengthening driven by COVID-19 losses of GBP 1.9m)",
           "lobs_affected": [
             "Accident & Health"
           ],
@@ -416,33 +500,51 @@
           "confidence": 1.0
         }
       ],
-      "standardized_narrative": "Opening gross claims outstanding at 1 January 2022 were GBP 26.214m. During 2022 the syndicate experienced prior year adverse development: an unfavourable run-off deviation representing a gross strengthening of GBP 1.9m (7.25% of opening reserves), which the report attributes to COVID-19 pandemic effects. Direction of prior year movement is strengthening and the syndicate's business is written as long-term life/health-type business.",
+      "standardized_narrative": "The Syndicate experienced an adverse prior-year reserve movement in 2022: an unfavourable run-off deviation (prior accident year strengthening) of GBP 1.9m was recorded during the year. The movement was driven by COVID-19 related losses and represents approximately 7.25% of the opening gross claims outstanding balance.",
       "raw_causal_phrases": [
-        "An unfavourable run off deviation (prior accident year strengthening driven by COVID-19 losses of GBP 1.9m (2021: GBP 4.1m release) was experienced during the year.",
-        "prior accident year strengthening driven by COVID-19 losses",
-        "unfavourable run off deviation"
+        "An unfavourable run off deviation (prior accident year strengthening driven by COVID-19 losses of GBP 1.9m (2021: GBP 4.1m release) was experienced during the year."
       ],
       "lob_movements": [
         {
           "line_of_business": "Accident & Health",
           "direction": "strengthening",
           "amount_gbp_m": 1.9,
-          "percentage": 7.246,
+          "percentage": 7.25,
           "confidence": 0.8
         }
       ],
       "gross_premiums_written_gbp_m": 29.782,
       "gross_premium_mix": [
         {
-          "line_of_business": "Long-term insurance business",
-          "amount_gbp_m": 29.782,
-          "percentage_of_total": 100.0
+          "line_of_business": "United Kingdom",
+          "amount_gbp_m": 10.467,
+          "percentage_of_total": 35.15
+        },
+        {
+          "line_of_business": "EU countries",
+          "amount_gbp_m": 0.0,
+          "percentage_of_total": 0.0
+        },
+        {
+          "line_of_business": "US",
+          "amount_gbp_m": 0.903,
+          "percentage_of_total": 3.03
+        },
+        {
+          "line_of_business": "Latin America",
+          "amount_gbp_m": 16.199,
+          "percentage_of_total": 54.43
+        },
+        {
+          "line_of_business": "Other Worldwide",
+          "amount_gbp_m": 2.213,
+          "percentage_of_total": 7.43
         }
       ],
-      "gross_premium_page": 12,
+      "gross_premium_page": 32,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Opening gross claims outstanding taken from Balance Sheet (Technical provisions: Long term business provision) prior-year comparative column. Prior year development taken from Note titled 'Movement in prior year's provision for claims outstanding' which explicitly states a gross strengthening of GBP 1.9m due to COVID-19; mapping of business to 'Accident & Health' is inferred from syndicate principal activity (term life business). Claims development triangle (gross) is present (page 35) in GBP 000s and could be used as cross-check but the movement note was used as the primary source. No specific prior accident years quantified in the narrative. [RAG PYD NOT APPLIED: deterministic figure -0.018m has the opposite sign to both model values [1.9, 1.9], which agree with each other; model values retained.] [CODE OVERRIDE: Model said PYD=1.9, but code computed 2.557 from triangle (OVERRIDE from agreed triangles). Using code value.]",
+      "data_quality_notes": "Prior year development amount sourced from Note 5 'Movement in prior year's provision for claims outstanding' which states a prior-accident-year strengthening of GBP 1.9m driven by COVID-19. The note does not explicitly show a multi-column reconciliation to prove gross vs net; it is treated as a gross movement per the note heading. LOB mapping to 'Accident & Health' is judgemental because the syndicate writes term life business (long-term business) and the standard Lloyd's list lacks a 'Life' label. Gross premium mix uses the geographic breakdown printed in the Segmental Analysis note (the report does not provide a regulatory class breakdown). [RAG OVERRIDE: Model said PYD=1.9, RAG triangle computed 2.557. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -581,20 +683,29 @@
             null,
             null
           ]
-        ],
-        "confidence": 1.0
+        ]
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_3002_2022_llm.pdf",
-      "content_hash": "92a2ba9daefba659ed068de9dcd1c393fce2d7c917300aa15ed45f80f3e51833",
-      "standardized_at": "2026-07-05T14:38:41.224177+00:00",
+      "content_hash": "5ee5176f659aa26b3438c68386142dbe7fcd75f5acf0bf3eaa175729775ba8fe",
+      "standardized_at": "2026-09-11T12:09:07.570592+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 15041,
-        "output_tokens": 5419,
-        "total_tokens": 20460,
-        "cost_usd": 0.014598
+        "input_tokens": 15801,
+        "output_tokens": 5660,
+        "total_tokens": 21461,
+        "cost_usd": 0.01527
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 2.557,
+        "model_value": 1.9,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": null,
+        "triangle_source_page": null,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
@@ -614,8 +725,104 @@
         ],
         "development_rows": [
           [
-            4927.0,
+            3488,
+            1639,
+            15448,
+            9294,
+            11136,
+            13344,
+            12442,
+            10978,
+            10048,
+            8936
+          ],
+          [
+            5998,
+            5475,
+            14106,
+            17087,
+            27373,
+            33812,
+            35289,
+            17829,
+            17274,
+            null
+          ],
+          [
+            5243,
+            4885,
+            14719,
+            18623,
+            31510,
+            34719,
+            19645,
+            20278,
             null,
+            null
+          ],
+          [
+            5034,
+            4942,
+            16528,
+            18033,
+            32714,
+            34160,
+            24234,
+            null,
+            null,
+            null
+          ],
+          [
+            5180,
+            4804,
+            15734,
+            18811,
+            36849,
+            33437,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            4917,
+            5066,
+            15974,
+            19077,
+            33750,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            4927,
+            5259,
+            15546,
+            18413,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            4926,
+            5009,
+            15449,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            4909,
+            5018,
             null,
             null,
             null,
@@ -626,7 +833,7 @@
             null
           ],
           [
-            4909.0,
+            5002,
             null,
             null,
             null,
@@ -637,9 +844,7 @@
             null,
             null
           ]
-        ],
-        "source_page": 39,
-        "entity": 3002
+        ]
       },
       "_adobe_provisions": {
         "opening_provenance": {
@@ -726,12 +931,12 @@
       }
     }
   },
-  "total_cost_usd": 0.022162,
-  "total_tokens": 39252,
+  "total_cost_usd": 0.022535,
+  "total_tokens": 37820,
   "validation": {
     "passed": true,
-    "total_discrepancies": 12,
-    "within_tolerance": 12,
+    "total_discrepancies": 18,
+    "within_tolerance": 18,
     "hard_failures": 0,
     "hard_failure_details": []
   }

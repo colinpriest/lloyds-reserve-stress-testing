@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-05T20:37:42.007503+00:00",
+  "extraction_timestamp": "2026-09-13T03:58:21.307833+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -13,9 +15,9 @@
       "opening_reserves_gbp_m": 121.331,
       "opening_reserves_page": 5,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": 39.043,
-      "prior_year_development_pct": 32.18,
-      "direction": "strengthening",
+      "prior_year_development_gbp_m": 0.0,
+      "prior_year_development_pct": 0.0,
+      "direction": "flat",
       "prior_year_movement_page": 16,
       "prior_year_movement_confidence": 1.0,
       "exact_reserve_text": "An adverse run-off deviation (prior accident year increase) of GBP 0.5m (2014: run-off deviation of GBP nil) was experienced during the year, wholly in respect of reserve movements on the 2012 year of account Whole Account Quota Share contract with Syndicate 2003.",
@@ -28,9 +30,10 @@
       ],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "The syndicate experienced a minor gross strengthening of GBP 0.5 million in prior year reserves, primarily attributable to an adverse run-off deviation on the 2012 year of account Whole Account Quota Share contract with Syndicate 2003. This represents a 0.41% strengthening relative to opening gross claims outstanding.",
+      "standardized_narrative": "The syndicate experienced a GBP 0.5 million strengthening in prior year reserves, primarily due to adverse claims development on the 2012 year of account.",
       "raw_causal_phrases": [
-        "adverse run-off deviation (prior accident year increase)"
+        "adverse run-off deviation (prior accident year increase)",
+        "reserve movements on the 2012 year of account Whole Account Quota Share contract"
       ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 131.0,
@@ -59,7 +62,7 @@
       "gross_premium_page": 15,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": " [RAG OVERRIDE: Model said PYD=0.5, RAG triangle computed 39.043. Using RAG value.]",
+      "data_quality_notes": "The claims development triangle on page 14 does not explicitly show the GBP 0.5m prior year strengthening mentioned in Note 9, possibly due to rounding or specific accounting adjustments not fully reflected in the triangle. [RAG OVERRIDE: Model said PYD=0.5, RAG triangle computed 0.0. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -95,25 +98,43 @@
             null,
             null,
             null
+          ],
+          [
+            null,
+            null,
+            null,
+            null
           ]
         ]
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_6111_2015_llm.pdf",
-      "content_hash": "8b4d8d42923d3a64365f992f9c47aa2693b1793f347136df02e9da12c1646b70",
-      "standardized_at": "2026-07-05T19:59:59.119989+00:00",
+      "content_hash": "84fd34f24ebe040b468a7d679f94d748d05b4a321342861e08656aa9fe1517b8",
+      "standardized_at": "2026-09-11T13:35:06.108861+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 10121,
-        "output_tokens": 928,
-        "total_tokens": 14329,
-        "cost_usd": 0.005356
+        "input_tokens": 10925,
+        "output_tokens": 979,
+        "total_tokens": 14377,
+        "cost_usd": 0.005725
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 0.0,
+        "model_value": 0.5,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 31,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2012,
           2013,
@@ -122,30 +143,45 @@
         ],
         "development_rows": [
           [
-            0.0,
-            0.0,
-            0.0,
-            0.0
-          ],
-          [
-            0.0,
-            12.0,
             22587.0,
-            null
-          ],
-          [
             26725.0,
             33380.0,
+            32400.0
+          ],
+          [
+            39442.0,
+            50793.0,
+            65779.0,
+            null
+          ],
+          [
+            39401.0,
+            50481.0,
             null,
             null
           ],
           [
-            32400.0,
+            40203.0,
             null,
             null,
             null
+          ],
+          [
+            40203.0,
+            50481.0,
+            65.779,
+            32.4
           ]
-        ]
+        ],
+        "row_labels": [
+          "After 12 months",
+          "After 24 months",
+          "After 36 months",
+          "After 48 months",
+          "After 60 months"
+        ],
+        "source_page": 31,
+        "entity": 6111
       },
       "_adobe_lob": {
         "gross_premium_mix": [
@@ -276,11 +312,11 @@
       "opening_reserves_gbp_m": 121.331,
       "opening_reserves_page": 11,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": 39.043,
-      "prior_year_development_pct": 32.18,
-      "direction": "strengthening",
+      "prior_year_development_gbp_m": 0.0,
+      "prior_year_development_pct": 0.0,
+      "direction": "flat",
       "prior_year_movement_page": 29,
-      "prior_year_movement_confidence": 0.8,
+      "prior_year_movement_confidence": 1.0,
       "exact_reserve_text": "An adverse run-off deviation (prior accident year increase) of GBP 0.5m (2014: run-off deviation of GBP nil) was experienced during the year, wholly in respect of reserve movements on the 2012 year of account Whole Account Quota Share contract with Syndicate 2003.",
       "primary_causes": [
         "Adverse claims development",
@@ -292,31 +328,145 @@
       ],
       "prior_year_events": [
         {
-          "event_name": "Whole Account Quota Share contract with Syndicate 2003 (reserve movement)",
+          "event_name": "Reserve movements on the 2012 year of account Whole Account Quota Share contract with Syndicate 2003",
           "event_year": 2012,
-          "impact_description": "Adverse run-off deviation on the 2012 year of account arising from reserve movements on the Whole Account Quota Share contract with Syndicate 2003.",
+          "impact_description": "Adverse run-off deviation of GBP 0.5m related wholly to reserve movements on the 2012 WQS contract with Syndicate 2003.",
           "lobs_affected": [
             "Treaty"
           ],
           "amount_gbp_m": 0.5,
-          "confidence": 0.8
+          "confidence": 1.0
         }
       ],
-      "named_events": [],
-      "standardized_narrative": "The syndicate reported a small adverse prior year development of GBP 0.5m in 2015 (strengthening of reserves), arising wholly from reserve movements on the 2012 year of account under a Whole Account Quota Share with Syndicate 2003. This movement is small relative to the opening gross claims outstanding of GBP 121.3m (approximately 0.4%) and primarily reflects reinsurance-related reserve adjustments rather than broad portfolio-wide deterioration.",
-      "raw_causal_phrases": [
-        "adverse run-off deviation (prior accident year increase) of GBP 0.5m",
-        "wholly in respect of reserve movements on the 2012 year of account Whole Account Quota Share contract with Syndicate 2003"
-      ],
-      "lob_movements": [
+      "named_events": [
         {
-          "line_of_business": "Treaty",
-          "direction": "strengthening",
-          "amount_gbp_m": 0.5,
-          "percentage": null,
-          "confidence": 0.8
+          "event_name": "Two consecutive Atlantic seaboard windstorms",
+          "event_year": null,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "Scenario monitored as part of catastrophe stress testing",
+          "lobs_affected": [
+            "Property"
+          ],
+          "page": 20,
+          "confidence": 0.5
+        },
+        {
+          "event_name": "Florida windstorm",
+          "event_year": null,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "Scenario monitored as part of catastrophe stress testing",
+          "lobs_affected": [
+            "Property"
+          ],
+          "page": 20,
+          "confidence": 0.5
+        },
+        {
+          "event_name": "Gulf of Mexico windstorm",
+          "event_year": null,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "Scenario monitored as part of catastrophe stress testing",
+          "lobs_affected": [
+            "Property"
+          ],
+          "page": 20,
+          "confidence": 0.5
+        },
+        {
+          "event_name": "European windstorm",
+          "event_year": null,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "Scenario monitored as part of catastrophe stress testing",
+          "lobs_affected": [
+            "Property"
+          ],
+          "page": 20,
+          "confidence": 0.5
+        },
+        {
+          "event_name": "Japanese windstorm",
+          "event_year": null,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "Scenario monitored as part of catastrophe stress testing",
+          "lobs_affected": [
+            "Property"
+          ],
+          "page": 20,
+          "confidence": 0.5
+        },
+        {
+          "event_name": "California earthquake",
+          "event_year": null,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "Scenario monitored as part of catastrophe stress testing",
+          "lobs_affected": [
+            "Property"
+          ],
+          "page": 20,
+          "confidence": 0.5
+        },
+        {
+          "event_name": "New Madrid earthquake",
+          "event_year": null,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "Scenario monitored as part of catastrophe stress testing",
+          "lobs_affected": [
+            "Property"
+          ],
+          "page": 20,
+          "confidence": 0.5
+        },
+        {
+          "event_name": "Japanese earthquake",
+          "event_year": null,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "Scenario monitored as part of catastrophe stress testing",
+          "lobs_affected": [
+            "Property"
+          ],
+          "page": 20,
+          "confidence": 0.5
+        },
+        {
+          "event_name": "UK flood",
+          "event_year": null,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "Scenario monitored as part of catastrophe stress testing",
+          "lobs_affected": [
+            "Property"
+          ],
+          "page": 20,
+          "confidence": 0.5
+        },
+        {
+          "event_name": "Terrorism",
+          "event_year": null,
+          "event_type": "man_made",
+          "net_loss_gbp_m": null,
+          "loss_description": "Scenario monitored as part of catastrophe stress testing",
+          "lobs_affected": [
+            "Property",
+            "Casualty"
+          ],
+          "page": 20,
+          "confidence": 0.5
         }
       ],
+      "standardized_narrative": "Opening gross claims outstanding at 1 January 2015 was GBP 121.331m. During 2015 the syndicate experienced an adverse prior accident year run-off deviation of GBP 0.5m, wholly in respect of reserve movements on the 2012 Whole Account Quota Share contract with Syndicate 2003, resulting in a small net strengthening of prior year reserves. The movement is described as an adverse run-off deviation and therefore reflects adverse claims development related to reinsurance arrangements (WQS).",
+      "raw_causal_phrases": [
+        "An adverse run-off deviation (prior accident year increase) of GBP 0.5m (2014: run-off deviation of GBP nil) was experienced during the year, wholly in respect of reserve movements on the 2012 year of account Whole Account Quota Share contract with Syndicate 2003.",
+        "fewer releases on prior year catastrophe loss reserves than compared with 2014"
+      ],
+      "lob_movements": [],
       "gross_premiums_written_gbp_m": 131.0,
       "gross_premium_mix": [
         {
@@ -343,7 +493,7 @@
       "gross_premium_page": 28,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Opening gross claims outstanding taken from Balance Sheet (Claims outstanding) 2014 column. Prior year development taken from note titled 'MOVEMENT IN PRIOR YEAR'S PROVISION FOR CLAIMS OUTSTANDING' which explicitly states an adverse run-off deviation of GBP 0.5m; the note does not explicitly state gross vs net wording but by context this is treated as the gross prior year movement. Confidence lowered to 0.8 for prior year movement due to ambiguity around gross/net labelling. A gross claims development triangle is present (page 27) and was available as a cross-check. [RAG OVERRIDE: Model said PYD=0.5, RAG triangle computed 39.043. Using RAG value.]",
+      "data_quality_notes": "Opening gross claims outstanding taken from Balance Sheet liabilities 'Claims outstanding' 2014 comparative column (GBP 121,331k). Prior year development (GBP 0.5m adverse run-off deviation) taken from Note 9 which explicitly states the GBP 0.5m; the note appears to describe this as the prior-year (2012) movement - treated as a gross strengthening. A gross claims development triangle (gross, in GBP 000s) is present on page 27 and was used to cross-check but the explicit movement note was used as primary. No line-by-line LOB prior-year movement amounts are provided in the notes, so lob_movements is empty. [RAG OVERRIDE: Model said PYD=0.5, RAG triangle computed 0.0. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -356,12 +506,6 @@
           2015
         ],
         "development_rows": [
-          [
-            null,
-            null,
-            null,
-            null
-          ],
           [
             22587,
             26725,
@@ -385,25 +529,43 @@
             null,
             null,
             null
+          ],
+          [
+            null,
+            null,
+            null,
+            null
           ]
         ]
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_6111_2015_llm.pdf",
-      "content_hash": "8b4d8d42923d3a64365f992f9c47aa2693b1793f347136df02e9da12c1646b70",
-      "standardized_at": "2026-07-05T20:00:56.029215+00:00",
+      "content_hash": "84fd34f24ebe040b468a7d679f94d748d05b4a321342861e08656aa9fe1517b8",
+      "standardized_at": "2026-09-11T13:36:54.284675+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 20547,
-        "output_tokens": 4697,
-        "total_tokens": 25244,
-        "cost_usd": 0.014531
+        "input_tokens": 21307,
+        "output_tokens": 5665,
+        "total_tokens": 26972,
+        "cost_usd": 0.016657
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 0.0,
+        "model_value": 0.5,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 31,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2012,
           2013,
@@ -412,30 +574,45 @@
         ],
         "development_rows": [
           [
-            0.0,
-            0.0,
-            0.0,
-            0.0
-          ],
-          [
-            0.0,
-            12.0,
             22587.0,
-            null
-          ],
-          [
             26725.0,
             33380.0,
+            32400.0
+          ],
+          [
+            39442.0,
+            50793.0,
+            65779.0,
+            null
+          ],
+          [
+            39401.0,
+            50481.0,
             null,
             null
           ],
           [
-            32400.0,
+            40203.0,
             null,
             null,
             null
+          ],
+          [
+            40203.0,
+            50481.0,
+            65.779,
+            32.4
           ]
-        ]
+        ],
+        "row_labels": [
+          "After 12 months",
+          "After 24 months",
+          "After 36 months",
+          "After 48 months",
+          "After 60 months"
+        ],
+        "source_page": 31,
+        "entity": 6111
       },
       "_adobe_lob": {
         "gross_premium_mix": [
@@ -561,8 +738,8 @@
       }
     }
   },
-  "total_cost_usd": 0.019887,
-  "total_tokens": 39573,
+  "total_cost_usd": 0.022382,
+  "total_tokens": 41349,
   "validation": {
     "passed": true,
     "total_discrepancies": 12,

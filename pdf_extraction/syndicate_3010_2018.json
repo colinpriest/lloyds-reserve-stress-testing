@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-05T20:13:32.251208+00:00",
+  "extraction_timestamp": "2026-09-13T04:02:45.529570+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -13,25 +15,25 @@
       "opening_reserves_gbp_m": 54.774,
       "opening_reserves_page": 3,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": 20.1,
+      "prior_year_development_gbp_m": 20.101,
       "prior_year_development_pct": 36.7,
       "direction": "strengthening",
-      "prior_year_movement_page": 13,
+      "prior_year_movement_page": 14,
       "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "Change in prior year provisions 20,101",
-      "primary_causes": [],
+      "exact_reserve_text": "Change in prior year provisions (2018): Gross 20,101, Reinsurance 5,599, Net 14,502",
+      "primary_causes": [
+        "Other"
+      ],
       "specific_events": [],
       "specific_years_affected": [],
       "prior_year_events": [
         {
           "event_name": "Benign catastrophe experience",
           "event_year": 2016,
-          "impact_description": "favourable development on 2016 year of account, contributing to a profit of $2.3m for that year",
-          "lobs_affected": [
-            "Aggregate"
-          ],
+          "impact_description": "favourable development on prior years",
+          "lobs_affected": [],
           "amount_gbp_m": null,
-          "confidence": 0.8
+          "confidence": 0.5
         }
       ],
       "named_events": [
@@ -40,19 +42,14 @@
           "event_year": 2016,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "All classes have made positive contributions to the underwriting balance with the year of account benefiting from relatively benign catastrophe experience",
-          "lobs_affected": [
-            "Aggregate"
-          ],
+          "loss_description": "favourable development on prior years",
+          "lobs_affected": [],
           "page": 1,
-          "confidence": 0.8
+          "confidence": 0.5
         }
       ],
-      "standardized_narrative": "The syndicate experienced an overall gross prior year reserve strengthening of $20.101 million, representing 36.69% of its opening gross claims outstanding. While the 2016 year of account closed with a profit of $2.3 million due to benign catastrophe experience and favourable development on prior years, this was offset by strengthening on other older years, leading to an overall adverse development.",
-      "raw_causal_phrases": [
-        "relatively benign catastrophe experience",
-        "favourable development on prior years"
-      ],
+      "standardized_narrative": "The syndicate reported a gross prior year reserve strengthening of USD 20.101 million in 2018, representing 36.69% of its opening gross claims outstanding. The specific causes for this overall strengthening were not explicitly detailed in the report. However, the 2016 underwriting year of account closed with a profit, benefiting from relatively benign catastrophe experience and favourable development on prior years for that specific year.",
+      "raw_causal_phrases": [],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 48.2,
       "gross_premium_mix": [
@@ -77,15 +74,15 @@
           "percentage_of_total": 0.0
         }
       ],
-      "gross_premium_page": 11,
+      "gross_premium_page": 12,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "The overall prior year development is a strengthening, but the narrative mentions \"favourable development on prior years\" for the 2016 year of account specifically, indicating mixed development across different prior years. The claims development triangle calculation for prior year development (-4.040m release) differs significantly from the \"Change in prior year provisions\" in Note 18 (+20.101m strengthening). Note 18 is used as the primary source for the overall reserve movement.",
+      "data_quality_notes": "The overall prior year development is a strengthening of USD 20.101 million as explicitly stated in the 'Technical Provisions' note. No specific causes for this overall strengthening were provided in the narrative. The claims development triangle shows a different, net release of USD 3.256 million for prior years, but the 'Change in prior year provisions' from the Technical Provisions note is considered the primary and most direct source for the total prior year movement. [RAG PYD NOT APPLIED: deterministic figure -4.140m has the opposite sign to both model values [20.101, 20.101], which agree with each other; model values retained. Sign agreement between the models is not a reconciliation: where they differ in value the cohort and accrual scope of each still has to be settled from the filing (R140).] [CODE PYD NOT APPLIED: deterministic figure -4.140m has the opposite sign to both model values [20.101, 20.101], which agree with each other; model values retained. Sign agreement between the models is not a reconciliation: where they differ in value the cohort and accrual scope of each still has to be settled from the filing (R140).]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "thousands",
-        "page": 12,
+        "page": 13,
         "underwriting_years": [
           2009,
           2010,
@@ -223,20 +220,22 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_3010_2018_llm.pdf",
-      "content_hash": "35bbe40528b9bf1d2cdb2d5218feff6372d13829c41b26381c22de76a493439c",
-      "standardized_at": "2026-03-18T09:54:54.006895+00:00",
+      "content_hash": "d4a1c5d6d9ba3269236972c797819c4f9114d59d85bdf244045082682b3b357b",
+      "standardized_at": "2026-09-11T12:32:26.072963+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 9605,
-        "output_tokens": 1845,
-        "total_tokens": 16343,
-        "cost_usd": 0.007494
+        "input_tokens": 10667,
+        "output_tokens": 1805,
+        "total_tokens": 16996,
+        "cost_usd": 0.007713
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2009,
           2010,
@@ -371,6 +370,18 @@
             null
           ]
         ],
+        "row_labels": [
+          "At end of the year of account",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later",
+          "Seven years later",
+          "Eight years later",
+          "Nine years later"
+        ],
         "source_page": 37,
         "entity": 3010
       },
@@ -434,6 +445,13 @@
           "entity": 3010,
           "backend": "azure",
           "table_kind": "provisions_movement"
+        },
+        "movement_semantics": {
+          "row_label": "Change in prior year provisions",
+          "row_index": 6,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": false,
+          "column_index": 1
         },
         "gross_prior_year_claims": 20.1,
         "ri_share_prior_year": 5.6,
@@ -515,35 +533,22 @@
       "opening_reserves_gbp_m": 54.774,
       "opening_reserves_page": 14,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": 20.1,
+      "prior_year_development_gbp_m": 20.101,
       "prior_year_development_pct": 36.7,
       "direction": "strengthening",
       "prior_year_movement_page": 34,
       "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "Change in prior year provisions 20,101 5,599 14,502 14,954 2,665 12,289",
+      "exact_reserve_text": "Change in prior year provisions 20,101 5,599 14,502",
       "primary_causes": [
-        "Adverse claims development",
-        "Reinsurance recoveries",
-        "Large loss development"
+        "Adverse claims development"
       ],
       "specific_events": [],
-      "specific_years_affected": [
-        2009,
-        2010,
-        2011,
-        2012,
-        2013,
-        2014,
-        2015,
-        2016,
-        2017
-      ],
+      "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "At 31 December 2018 the Syndicate's gross claims outstanding at the prior-year comparative (2017) was $54.774m. During 2018 the Syndicate increased (strengthened) its gross prior year reserves by $20.101m (gross), primarily recorded in the Technical Provisions reconciliation. The report provides no single-line narrative attribution for the movement; the technical tables show the gross strengthening and a related increase in reinsurers' share. No specific named catastrophes are cited in the reserves note as drivers of the prior-year movement.",
+      "standardized_narrative": "The syndicate's gross claims outstanding at 1 January 2018 were $54.774m. During 2018 gross prior-year reserves increased (strengthened) by $20.101m (gross), equivalent to c.36.7% of opening gross claims outstanding. The company's Technical Provisions reconciliation records this as a GBP 20.101k (thousands) gross movement in prior year provisions; no specific catastrophe or named event is identified as the primary cause in the notes, and no per-line breakdown of the prior-year movement is provided. The movement is described in the Technical Provisions table and appears to reflect adverse claims development on prior years.",
       "raw_causal_phrases": [
-        "Change in prior year provisions",
-        "favourable development on prior years",
+        "This includes movement on the closed years of account.",
         "In arriving at the level of claims provisions a margin is applied over and above the actuarial best estimate so as to minimise any adverse run-off deviation."
       ],
       "lob_movements": [
@@ -552,28 +557,42 @@
           "direction": "strengthening",
           "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.5
+          "confidence": 0.2
         },
         {
           "line_of_business": "Marine",
           "direction": "strengthening",
           "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.6
+          "confidence": 0.2
+        },
+        {
+          "line_of_business": "Aviation",
+          "direction": "strengthening",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.2
         },
         {
           "line_of_business": "Property",
           "direction": "strengthening",
           "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.5
+          "confidence": 0.2
+        },
+        {
+          "line_of_business": "Casualty",
+          "direction": "strengthening",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.2
         },
         {
           "line_of_business": "Treaty",
           "direction": "strengthening",
           "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.5
+          "confidence": 0.2
         }
       ],
       "gross_premiums_written_gbp_m": 48.2,
@@ -602,11 +621,11 @@
       "gross_premium_page": 28,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "Opening reserves and prior year movement taken from the balance sheet (Technical provisions - Claims outstanding) and Note 18 (Technical Provisions) respectively (values presented in the report in $'000 and reported here in millions). The report provides the gross prior year movement as a numeric table entry but contains little narrative attributing causes; some narrative elsewhere references 'favourable development on prior years' for a specific closed year (2016) which appears inconsistent with the overall gross strengthening recorded in the Technical Provisions reconciliation. LOB-level prior-year movement amounts are not provided, so lob_movements are directional only with moderate confidence.",
+      "data_quality_notes": "Prior-year movement (gross) taken from Technical Provisions reconciliation table row 'Change in prior year provisions' (Gross = 20,101 $'000). Opening gross claims outstanding taken from Statement of Financial Position (Claims outstanding 54,774 $'000 at 31 Dec 2017). No narrative explaining drivers of the gross strengthening is provided and no per-line breakdown of prior-year movements is available. exact_reserve_text is a table row from the Technical Provisions note rather than a full sentence paragraph. All monetary values are reported in the report's native currency (USD) and converted to millions. Confidence is high for numeric extraction; cause attribution is inferred due to lack of explicit causal statements. [RAG PYD NOT APPLIED: deterministic figure -4.140m has the opposite sign to both model values [20.101, 20.101], which agree with each other; model values retained. Sign agreement between the models is not a reconciliation: where they differ in value the cohort and accrual scope of each still has to be settled from the filing (R140).] [CODE PYD NOT APPLIED: deterministic figure -4.140m has the opposite sign to both model values [20.101, 20.101], which agree with each other; model values retained. Sign agreement between the models is not a reconciliation: where they differ in value the cohort and accrual scope of each still has to be settled from the filing (R140).]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
-        "units": "thousands",
+        "units": "millions",
         "page": 33,
         "underwriting_years": [
           2009,
@@ -622,83 +641,71 @@
         ],
         "development_rows": [
           [
-            6180,
-            7816,
-            12020,
-            11100,
-            16187,
-            16490,
-            13501,
-            14451,
-            14860,
-            19946
+            6.18,
+            7.816,
+            12.02,
+            11.1,
+            16.187,
+            16.49,
+            13.501,
+            14.451,
+            14.86,
+            19.946
           ],
           [
-            18003,
-            16335,
-            26325,
-            22778,
-            24159,
-            29979,
-            32998,
-            28173,
-            26472,
+            18.003,
+            16.335,
+            26.325,
+            22.778,
+            24.159,
+            29.979,
+            32.998,
+            28.173,
+            26.472,
             null
           ],
           [
-            19673,
-            20358,
-            29061,
-            21683,
-            25354,
-            26947,
-            33882,
-            25756,
-            null,
-            null
-          ],
-          [
-            18673,
-            19923,
-            23061,
-            21252,
-            26656,
-            24463,
-            32154,
-            null,
+            19.673,
+            20.358,
+            29.061,
+            21.683,
+            25.354,
+            26.947,
+            33.882,
+            25.756,
             null,
             null
           ],
           [
-            18172,
-            20379,
-            22307,
-            20912,
-            26492,
-            25265,
-            null,
+            18.673,
+            19.923,
+            23.061,
+            21.252,
+            26.656,
+            24.463,
+            32.154,
             null,
             null,
             null
           ],
           [
-            18097,
-            19751,
-            22229,
-            20652,
-            26289,
-            null,
+            18.172,
+            20.379,
+            22.307,
+            20.912,
+            26.492,
+            25.265,
             null,
             null,
             null,
             null
           ],
           [
-            17613,
-            19111,
-            22386,
-            20286,
-            null,
+            18.097,
+            19.751,
+            22.229,
+            20.652,
+            26.289,
             null,
             null,
             null,
@@ -706,10 +713,10 @@
             null
           ],
           [
-            17288,
-            18324,
-            22370,
-            null,
+            17.613,
+            19.111,
+            22.386,
+            20.286,
             null,
             null,
             null,
@@ -718,9 +725,9 @@
             null
           ],
           [
-            17009,
-            18196,
-            null,
+            17.288,
+            18.324,
+            22.37,
             null,
             null,
             null,
@@ -730,7 +737,19 @@
             null
           ],
           [
-            16925,
+            17.009,
+            18.196,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            16.925,
             null,
             null,
             null,
@@ -745,20 +764,22 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_3010_2018_llm.pdf",
-      "content_hash": "35bbe40528b9bf1d2cdb2d5218feff6372d13829c41b26381c22de76a493439c",
-      "standardized_at": "2026-03-18T09:56:23.948463+00:00",
+      "content_hash": "d4a1c5d6d9ba3269236972c797819c4f9114d59d85bdf244045082682b3b357b",
+      "standardized_at": "2026-09-11T12:34:30.801319+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 24860,
-        "output_tokens": 5543,
-        "total_tokens": 30403,
-        "cost_usd": 0.017301
+        "input_tokens": 26464,
+        "output_tokens": 6297,
+        "total_tokens": 32761,
+        "cost_usd": 0.01921
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2009,
           2010,
@@ -893,6 +914,18 @@
             null
           ]
         ],
+        "row_labels": [
+          "At end of the year of account",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later",
+          "Seven years later",
+          "Eight years later",
+          "Nine years later"
+        ],
         "source_page": 37,
         "entity": 3010
       },
@@ -956,6 +989,13 @@
           "entity": 3010,
           "backend": "azure",
           "table_kind": "provisions_movement"
+        },
+        "movement_semantics": {
+          "row_label": "Change in prior year provisions",
+          "row_index": 6,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": false,
+          "column_index": 1
         },
         "gross_prior_year_claims": 20.1,
         "ri_share_prior_year": 5.6,
@@ -1032,12 +1072,12 @@
       }
     }
   },
-  "total_cost_usd": 0.024795,
-  "total_tokens": 46746,
+  "total_cost_usd": 0.026923,
+  "total_tokens": 49757,
   "validation": {
     "passed": true,
-    "total_discrepancies": 23,
-    "within_tolerance": 23,
+    "total_discrepancies": 12,
+    "within_tolerance": 12,
     "hard_failures": 0,
     "hard_failure_details": []
   }

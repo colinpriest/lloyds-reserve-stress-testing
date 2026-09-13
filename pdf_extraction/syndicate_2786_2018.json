@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-05T20:09:33.366597+00:00",
+  "extraction_timestamp": "2026-09-13T03:58:14.421557+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -11,7 +13,7 @@
       "syndicate": 2786,
       "year": 2018,
       "opening_reserves_gbp_m": 79.102,
-      "opening_reserves_page": 5,
+      "opening_reserves_page": 6,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": 1.552,
       "prior_year_development_pct": 1.96,
@@ -23,15 +25,69 @@
         "Adverse claims development"
       ],
       "specific_events": [],
-      "specific_years_affected": [
-        2017
-      ],
+      "specific_years_affected": [],
       "prior_year_events": [],
-      "named_events": [],
-      "standardized_narrative": "The syndicate experienced a gross strengthening of GBP 6.6 million in prior year reserves, primarily due to adverse claims development related to the Property class of business, on reserves held at 31 December 2017.",
+      "named_events": [
+        {
+          "event_name": "Alternative RDS B (1:200 China Quake)",
+          "event_year": 2018,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": 6.35,
+          "loss_description": "Hypothetical claims arising out of the RDS on the Syndicates in-force exposure at 31 December 2018. Estimated Gross Loss: (63,500), Estimated Net Loss: (6,350)",
+          "lobs_affected": [],
+          "page": 15,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Cyber - Major Data Security Breach",
+          "event_year": 2018,
+          "event_type": "man_made",
+          "net_loss_gbp_m": 20.0,
+          "loss_description": "Hypothetical claims arising out of the RDS on the Syndicates in-force exposure at 31 December 2018. Estimated Gross Loss: (29,900), Estimated Net Loss: (20,000)",
+          "lobs_affected": [
+            "Cyber"
+          ],
+          "page": 15,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Alternative RDS A (A&H tour bus crash)",
+          "event_year": 2018,
+          "event_type": "man_made",
+          "net_loss_gbp_m": 18.7,
+          "loss_description": "Hypothetical claims arising out of the RDS on the Syndicates in-force exposure at 31 December 2018. Estimated Gross Loss: (22,400), Estimated Net Loss: (18,700)",
+          "lobs_affected": [
+            "Accident & Health"
+          ],
+          "page": 15,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "AEP Loss 30 Year Return Period - Whole World",
+          "event_year": 2018,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": 13.25,
+          "loss_description": "Hypothetical claims arising out of the RDS on the Syndicates in-force exposure at 31 December 2018. Estimated Gross Loss: (21,500), Estimated Net Loss: (13,250)",
+          "lobs_affected": [],
+          "page": 15,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Liability - Internal Scenario 2",
+          "event_year": 2018,
+          "event_type": "liability",
+          "net_loss_gbp_m": 7.5,
+          "loss_description": "Hypothetical claims arising out of the RDS on the Syndicates in-force exposure at 31 December 2018. Estimated Gross Loss: (20,500), Estimated Net Loss: (7,500)",
+          "lobs_affected": [
+            "Casualty"
+          ],
+          "page": 15,
+          "confidence": 0.8
+        }
+      ],
+      "standardized_narrative": "The syndicate experienced a gross strengthening of GBP 6.6 million in prior year reserves, representing an 8.34% deterioration of its opening gross claims outstanding. This adverse development primarily affected the Property class of business. The report also details hypothetical catastrophe scenarios for various event types, including a China earthquake, a cyber breach, an A&H tour bus crash, a whole world AEP loss, and a liability scenario.",
       "raw_causal_phrases": [
-        "deterioration during the year of GBP 6.6 million",
-        "gross incurred claims, on reserves held at 31 December 2017",
+        "deterioration during the year of GBP 6.6 million... in gross incurred claims",
         "majority of this relates to the Property class of business"
       ],
       "lob_movements": [
@@ -78,7 +134,7 @@
         {
           "line_of_business": "Fire and other damage of Property",
           "amount_gbp_m": 11.688,
-          "percentage_of_total": 10.05
+          "percentage_of_total": 10.04
         },
         {
           "line_of_business": "Third-party liability",
@@ -99,7 +155,7 @@
       "gross_premium_page": 11,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": " [RAG OVERRIDE: Model said PYD=6.6, RAG triangle computed 1.552. Using RAG value.]",
+      "data_quality_notes": "The claims development triangle on page 16 shows a different prior year movement (+1.552m for UW 2016 and prior) compared to the narrative statement (+6.6m). The narrative statement is used as it explicitly refers to 'gross incurred claims, on reserves held at 31 December 2017' and is considered more comprehensive for total prior year development. [RAG OVERRIDE: Model said PYD=6.6, RAG triangle computed 1.552. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -130,20 +186,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_2786_2018_llm.pdf",
-      "content_hash": "b42bfd9eeb1652cbb5a91bc27ad72735d569fe3291ffc84eab9d851e0ce87996",
-      "standardized_at": "2026-03-18T05:40:19.469879+00:00",
+      "content_hash": "de47a2ff983164fe18337a4d23c9f4a147109f6bc4dea90c9c7e54b3f60110da",
+      "standardized_at": "2026-09-11T12:15:14.165762+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 11153,
-        "output_tokens": 1230,
-        "total_tokens": 14670,
-        "cost_usd": 0.006421
+        "input_tokens": 11957,
+        "output_tokens": 2128,
+        "total_tokens": 19762,
+        "cost_usd": 0.008907
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 1.552,
+        "model_value": 6.6,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 40,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2016,
           2017,
@@ -165,6 +233,11 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of first underwriting year",
+          "One Year Later",
+          "Two Years Later"
         ],
         "source_page": 40,
         "entity": 2786
@@ -233,11 +306,11 @@
     "gpt-5-mini": {
       "syndicate": 2786,
       "year": 2018,
-      "opening_reserves_gbp_m": null,
-      "opening_reserves_page": null,
-      "opening_reserves_confidence": 0.0,
+      "opening_reserves_gbp_m": 37.982,
+      "opening_reserves_page": 14,
+      "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": 1.552,
-      "prior_year_development_pct": null,
+      "prior_year_development_pct": 4.09,
       "direction": "strengthening",
       "prior_year_movement_page": null,
       "prior_year_movement_confidence": 0.0,
@@ -247,45 +320,50 @@
       "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "Unable to extract gross claims outstanding or a gross prior-year movement from the provided scanned pages with sufficient confidence. The report images provided are rotated and low-resolution in places; gross written premium is visible in the managing agent's summary but detailed technical reserves movement (gross Insurance liabilities movement) is not reliably legible. A manual extract from the original PDF is required to provide authoritative reserve numbers and per-LOB movements.",
+      "standardized_narrative": "Opening (1 January 2018) gross claims outstanding per the Statement of Financial Position was GBP 37.982m. The report does not present an explicit gross prioryear (pre2017) movement figure in a clearly labelled 'movement in prior year's provision for claims outstanding' note that could be extracted unambiguously. No single gross prioryear strengthening or release amount could be located with confidence in the text or notes provided.",
       "raw_causal_phrases": [],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 116.351,
-      "gross_premium_mix": [
-        {
-          "line_of_business": "Reinsurance",
-          "amount_gbp_m": 116.351,
-          "percentage_of_total": 100.0
-        }
-      ],
-      "gross_premium_page": 2,
-      "gross_premium_confidence": 0.7,
+      "gross_premium_mix": [],
+      "gross_premium_page": 25,
+      "gross_premium_confidence": 0.8,
       "currency": "GBP",
-      "data_quality_notes": "Document pages were provided as rotated scanned images with limited legibility. I could not confidently locate the 'Claims outstanding' gross figure in the Statement of Financial Position nor a gross 'movement in prior year's provision for claims outstanding' table. The only clearly legible figure was the total gross written premiums (appears as GBP 116,351 thousand, interpreted as GBP 116.351m) in the managing agent's summary. All reserve-specific fields are left null to avoid reporting potentially incorrect figures. Recommend providing a higher-resolution, correctly oriented PDF (or the specific pages: Statement of Financial Position, Technical provisions note detailing 'claims outstanding' with prior-year comparatives, and the 'Movement in prior year's provision for claims outstanding' note) for precise extraction.",
+      "data_quality_notes": "Opening gross claims outstanding taken from Statement of Financial Position (Claims outstanding) 2017 comparative column (page 14). No unambiguous GROSS prioryear reserve movement figure (movement in prior years) was found in the available pages/notes; a claims development triangle appears in the notes but could not be reliably read/extracted from the scanned images, so prior_year_development is null. Segmental premium analysis is present (page 25) but individual class amounts could not be extracted with high confidence from the scans, so gross_premium_mix left empty. Where a figure could be read exactly (opening reserves, total gross premiums) those are provided. Report denominated in GBP (amounts shown in the report are in GBP '000).",
       "_claims_triangle": {
         "type": "none",
         "currency": "GBP",
-        "units": "millions",
+        "units": null,
         "page": null,
         "underwriting_years": [],
         "development_rows": []
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_2786_2018_llm.pdf",
-      "content_hash": "b42bfd9eeb1652cbb5a91bc27ad72735d569fe3291ffc84eab9d851e0ce87996",
-      "standardized_at": "2026-03-18T05:41:11.237326+00:00",
+      "content_hash": "de47a2ff983164fe18337a4d23c9f4a147109f6bc4dea90c9c7e54b3f60110da",
+      "standardized_at": "2026-09-11T12:16:51.523847+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 24279,
-        "output_tokens": 4003,
-        "total_tokens": 28282,
-        "cost_usd": 0.014076
+        "input_tokens": 25039,
+        "output_tokens": 4503,
+        "total_tokens": 29542,
+        "cost_usd": 0.015266
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 1.552,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 40,
+        "note": "filled a blank model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2016,
           2017,
@@ -307,6 +385,11 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of first underwriting year",
+          "One Year Later",
+          "Two Years Later"
         ],
         "source_page": 40,
         "entity": 2786
@@ -373,37 +456,25 @@
       }
     }
   },
-  "total_cost_usd": 0.020497,
-  "total_tokens": 42952,
+  "total_cost_usd": 0.024173,
+  "total_tokens": 49304,
   "validation": {
     "passed": false,
-    "total_discrepancies": 27,
-    "within_tolerance": 23,
-    "hard_failures": 4,
+    "total_discrepancies": 24,
+    "within_tolerance": 22,
+    "hard_failures": 2,
     "hard_failure_details": [
-      {
-        "field": "gross_premium_mix[Reinsurance].amount_gbp_m",
-        "type": "value_mismatch",
-        "gemini-2.5-flash": 18.911,
-        "gpt-5-mini": 116.351
-      },
-      {
-        "field": "gross_premium_mix[Reinsurance].percentage_of_total",
-        "type": "value_mismatch",
-        "gemini-2.5-flash": 16.25,
-        "gpt-5-mini": 100.0
-      },
       {
         "field": "opening_reserves_gbp_m",
         "type": "value_mismatch",
         "gemini-2.5-flash": 79.102,
-        "gpt-5-mini": null
+        "gpt-5-mini": 37.982
       },
       {
         "field": "prior_year_development_pct",
         "type": "value_mismatch",
         "gemini-2.5-flash": 1.96,
-        "gpt-5-mini": null
+        "gpt-5-mini": 4.09
       }
     ]
   }

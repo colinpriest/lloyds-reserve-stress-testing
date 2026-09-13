@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T10:37:24.537407+00:00",
+  "extraction_timestamp": "2026-09-13T04:13:10.481311+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -18,15 +20,19 @@
       "direction": "strengthening",
       "prior_year_movement_page": 11,
       "prior_year_movement_confidence": 0.8,
-      "exact_reserve_text": "The following tables show the Syndicate's cumulative incurred claims development, including both claims notified and IBNR for each underwriting year, together with the cumulative payments to date on a gross and net of reinsurance basis at the balance sheet date.",
-      "primary_causes": [],
-      "specific_events": [],
-      "specific_years_affected": [
-        2018,
-        2017,
-        2016,
-        2015
+      "exact_reserve_text": null,
+      "primary_causes": [
+        "COVID-19 / pandemic effects",
+        "Natural catastrophe events",
+        "Economic inflation / claims cost inflation",
+        "Regulatory changes",
+        "Court rulings / legal developments",
+        "Other"
       ],
+      "specific_events": [
+        "multiple landfalling hurricanes"
+      ],
+      "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [
         {
@@ -34,28 +40,41 @@
           "event_year": 2020,
           "event_type": "other",
           "net_loss_gbp_m": null,
-          "loss_description": "MGA Insurance segment was impacted by claims as a result of Covid-19",
+          "loss_description": "impacted by claims as a result of Covid-19",
           "lobs_affected": [
-            "Professional Lines"
+            "MGA Insurance"
           ],
           "page": 14,
-          "confidence": 0.8
+          "confidence": 1.0
         },
         {
-          "event_name": "Multiple landfalling hurricanes in the United States",
+          "event_name": "multiple landfalling hurricanes in the United States",
           "event_year": 2020,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "MGA Insurance segment was impacted by claims as a result of an above average year for natural catastrophe claims, particularly as a result of multiple landfalling hurricanes in the United States.",
+          "loss_description": "above average year for natural catastrophe claims, particularly as a result of multiple landfalling hurricanes in the United States",
           "lobs_affected": [
-            "Property"
+            "MGA Insurance"
           ],
           "page": 14,
-          "confidence": 0.8
+          "confidence": 1.0
         }
       ],
-      "standardized_narrative": "The syndicate experienced a significant gross claims reserve release of $687.5 million for underwriting years 2018 and prior, as calculated from the claims development table. This substantial release is not explicitly detailed with specific causes in the report, but the MGA Insurance segment was impacted by COVID-19 and an above-average year for natural catastrophe claims, particularly hurricanes in the United States, which contributed to overall claims incurred.",
-      "raw_causal_phrases": [],
+      "standardized_narrative": "The syndicate experienced a significant gross reserve strengthening of $833.86 million for prior underwriting years, primarily driven by adverse development on the 2015, 2016, and 2017 underwriting years, partially offset by releases on the 2018 underwriting year. The report also notes that the MGA Insurance segment in the current year was impacted by claims from COVID-19 and an above-average year for natural catastrophe claims, including multiple landfalling hurricanes in the United States. General risk factors affecting reserve reliability include claim costs, handling costs, inflation, regulatory changes, and economic conditions.",
+      "raw_causal_phrases": [
+        "claims as a result of Covid-19",
+        "above average year for natural catastrophe claims",
+        "multiple landfalling hurricanes in the United States",
+        "inaccurate or inadequate pricing of insurance policies",
+        "inappropriate or poorly controlled underwriting guidelines or authority limits (underwriting risk)",
+        "higher frequency or severity of claims experience (claims risk)",
+        "inadequate or insufficient loss reserving (reserving risk)",
+        "future claims development will follow a similar pattern to past claims development experience",
+        "assumptions in respect of average claim costs, claim handling costs, claim inflation factors and claim numbers for each underwriting year",
+        "one-off occurrence, changes in market factors such as public attitude to claiming, economic conditions, as well as internal factors such as portfolio mix, policy conditions and claims handling procedures",
+        "external factors such as judicial decisions and government legislation affect the estimates",
+        "variation in interest rates, delays in settlement and changes in foreign currency rates"
+      ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 521.821,
       "gross_premium_mix": [
@@ -70,10 +89,10 @@
           "percentage_of_total": 57.5
         }
       ],
-      "gross_premium_page": 1,
+      "gross_premium_page": 14,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "There is a significant discrepancy in the report regarding the total gross claims provision movement for the year. The Profit and Loss Account indicates a gross release of $77.17 million ('Change in the provision for claims: gross amount (77,170)'), while the 'Movement in technical provisions' table shows a gross strengthening of $77.17 million ('Movement in provision' for Claims outstanding 77,170). The prior year development figure is calculated from the gross claims development table, which shows a very large release, and this figure is not explicitly reconciled or explained by specific events or portfolio transfers in the narrative. The 2018 YOA closed with a loss, which typically implies adverse development, contradicting the large release from the triangle. [RAG OVERRIDE: Model said PYD=-687.487, RAG triangle computed 31.663. Using RAG value.] [RAG OPENING NOT APPLIED: table value 617.778 (provisions_movement, page 33, unit source header) disagrees with both model values [663.748, 663.748], which agree with each other; the model value is retained and the table value recorded for audit.]",
+      "data_quality_notes": "Prior year development calculated from the gross claims development triangle. The values for UW years 2015 and 2016 show unusually large increases, which may indicate a significant change in business profile or data reporting for those years, or a portfolio transfer not explicitly mentioned as Reinsurance to Close (RITC). No verbatim text for prior year development was found as it was derived from the claims triangle. [RAG OVERRIDE: Model said PYD=833.857, RAG triangle computed 31.663. Using RAG value.] [RAG OPENING NOT APPLIED: table value 617.778 (provisions_movement, page 33, unit source header) disagrees with both model values [663.748, 663.748], which agree with each other; the model value is retained and the table value recorded for audit.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
@@ -153,7 +172,7 @@
           [
             null,
             null,
-            null,
+            17,
             null,
             null,
             null,
@@ -163,7 +182,7 @@
           [
             null,
             null,
-            null,
+            17,
             null,
             null,
             null,
@@ -174,20 +193,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_2357_2020_llm.pdf",
-      "content_hash": "0491b11a41d8e62268f735ce4e3cc98ae499803c29a02bd86e7edbc1c6c838b4",
-      "standardized_at": "2026-07-05T12:32:43.007793+00:00",
+      "content_hash": "d2c5f5b61b916665bd5349fd9ab56de0a5ec7f20422aa19b2b8cc5b85621b691",
+      "standardized_at": "2026-09-11T11:51:15.497287+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 10121,
-        "output_tokens": 1508,
-        "total_tokens": 23157,
-        "cost_usd": 0.006806
+        "input_tokens": 10925,
+        "output_tokens": 1663,
+        "total_tokens": 24352,
+        "cost_usd": 0.007435
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 31.663,
+        "model_value": 833.857,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 26,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2013,
           2014,
@@ -279,6 +310,16 @@
             475286.0,
             379882.0
           ]
+        ],
+        "row_labels": [
+          "At end of first year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later",
+          "Seven years later"
         ],
         "source_page": 26,
         "entity": 2357
@@ -373,11 +414,10 @@
       "direction": "strengthening",
       "prior_year_movement_page": 25,
       "prior_year_movement_confidence": 0.8,
-      "exact_reserve_text": "Adjustments to the amounts of claims provisions established in prior years are reflected in the financial statements for the period in which the adjustments are made. The directors consider that the provisions for gross claims and related reinsurance recoveries are fairly stated on the basis of the information currently available to them. However, ultimate liability will vary as a result of subsequent information and events and this may result in significant adjustments to the amounts provided.",
+      "exact_reserve_text": "",
       "primary_causes": [
         "Natural catastrophe events",
-        "COVID-19 / pandemic effects",
-        "Adverse claims development"
+        "COVID-19 / pandemic effects"
       ],
       "specific_events": [],
       "specific_years_affected": [
@@ -385,28 +425,27 @@
       ],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "At 31 December 2020 the Syndicate's gross claims reserves showed a net prior-year adverse development (gross strengthening) of approximately $31.7m (about 4.8% of opening gross claims outstanding). This deterioration is driven primarily by adverse development on the 2017 and 2018 underwriting years as reflected in the gross claims development table, with the MGA/US property portfolios experiencing elevated natural catastrophe and large loss experience; the MGA segment was also impacted by COVID-19 related claims in 2020 which influenced overall reserve development.",
+      "standardized_narrative": "Gross claims outstanding at 1 January 2020 were $663.748m. Based on the syndicate's gross claims development table, there was effectively no material prior-year movement for underwriting years prior to 2019 (no net strengthenings or releases quantified). The business experienced COVID-19 related claims and an above-average natural catastrophe year in 2020, but these related primarily to the 2019/2020 years of account rather than producing measurable prior-year reserve movement on older years.",
       "raw_causal_phrases": [
         "impacted by claims as a result of Covid-19",
-        "above average year for natural catastrophe claims",
         "multiple landfalling hurricanes in the United States",
         "Adjustments to the amounts of claims provisions established in prior years are reflected in the financial statements for the period in which the adjustments are made.",
-        "The directors consider that the provisions for gross claims and related reinsurance recoveries are fairly stated on the basis of the information currently available to them. However, ultimate liability will vary as a result of subsequent information and events and this may result in significant adjustments to the amounts provided."
+        "The directors consider that the provisions for gross claims and related reinsurance recoveries are fairly stated on the basis of the information currently available to them."
       ],
       "lob_movements": [
         {
           "line_of_business": "Property",
-          "direction": "strengthening",
+          "direction": "flat",
           "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.5
+          "confidence": 0.0
         },
         {
           "line_of_business": "Treaty",
-          "direction": "strengthening",
+          "direction": "flat",
           "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.5
+          "confidence": 0.0
         }
       ],
       "gross_premiums_written_gbp_m": 521.821,
@@ -425,7 +464,7 @@
       "gross_premium_page": 30,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "Prior year development (31.663m) was calculated from the gross claims development table (gross triangle) at page 25 by comparing the current estimate to the previous diagonal for underwriting years 2015-2018 (excluded 2019 and 2020). There is no explicit single-line textual 'movement in prior years (gross)' figure in the notes; thus the triangle calculation was used (confidence 0.8). Some older UW columns (2013-2014) are blank. No individually named catastrophe events were provided in the text (only generic references to hurricanes and COVID-19). All monetary amounts are reported in the native currency (USD) and in millions. [RAG OPENING NOT APPLIED: table value 617.778 (provisions_movement, page 33, unit source header) disagrees with both model values [663.748, 663.748], which agree with each other; the model value is retained and the table value recorded for audit.]",
+      "data_quality_notes": "Opening gross claims outstanding taken from Balance Sheet 'Claims outstanding' (prior year comparative). Prior-year development derived from the gross claims development table (gross triangle) which shows no change between the previous diagonal and current estimates for underwriting years <=2018, resulting in a zero PYD. No explicit narrative quantifying gross prior-year movement was found. All main monetary amounts converted from report $'000 to millions (USD). Triangle is presented in thousands in the report; triangle units retained as 'thousands' in _claims_triangle. [RAG OVERRIDE: Model said PYD=0.0, RAG triangle computed 31.663. Using RAG value.] [RAG OPENING NOT APPLIED: table value 617.778 (provisions_movement, page 33, unit source header) disagrees with both model values [663.748, 663.748], which agree with each other; the model value is retained and the table value recorded for audit.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
@@ -501,45 +540,37 @@
             null,
             null,
             null
-          ],
-          [
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-          ],
-          [
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
           ]
         ]
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_2357_2020_llm.pdf",
-      "content_hash": "0491b11a41d8e62268f735ce4e3cc98ae499803c29a02bd86e7edbc1c6c838b4",
-      "standardized_at": "2026-07-05T12:34:02.388199+00:00",
+      "content_hash": "d2c5f5b61b916665bd5349fd9ab56de0a5ec7f20422aa19b2b8cc5b85621b691",
+      "standardized_at": "2026-09-11T11:53:15.730091+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 14616,
-        "output_tokens": 7270,
-        "total_tokens": 21886,
-        "cost_usd": 0.018194
+        "input_tokens": 15376,
+        "output_tokens": 6148,
+        "total_tokens": 21524,
+        "cost_usd": 0.01614
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 31.663,
+        "model_value": 0.0,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 26,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2013,
           2014,
@@ -632,6 +663,16 @@
             379882.0
           ]
         ],
+        "row_labels": [
+          "At end of first year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later",
+          "Seven years later"
+        ],
         "source_page": 26,
         "entity": 2357
       },
@@ -715,12 +756,12 @@
       }
     }
   },
-  "total_cost_usd": 0.025,
-  "total_tokens": 45043,
+  "total_cost_usd": 0.023575,
+  "total_tokens": 45876,
   "validation": {
     "passed": true,
-    "total_discrepancies": 18,
-    "within_tolerance": 18,
+    "total_discrepancies": 27,
+    "within_tolerance": 27,
     "hard_failures": 0,
     "hard_failure_details": []
   }

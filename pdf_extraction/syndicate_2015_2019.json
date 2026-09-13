@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-05T20:00:33.814303+00:00",
+  "extraction_timestamp": "2026-09-13T04:07:44.535276+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -11,35 +13,29 @@
       "syndicate": 2015,
       "year": 2019,
       "opening_reserves_gbp_m": 348.027,
-      "opening_reserves_page": 14,
+      "opening_reserves_page": 6,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": 30.341,
       "prior_year_development_pct": 8.72,
       "direction": "strengthening",
-      "prior_year_movement_page": 13,
+      "prior_year_movement_page": 14,
       "prior_year_movement_confidence": 0.8,
-      "exact_reserve_text": "Overall on an aggregate basis, a reserve release of GBP 1m net of reinsurance was made to prior year reserves during 2019. In 2018 there was a reserve strengthening of GBP 1m. The reserve release was due to the Property and PCR accounts partially offset by deterioration in the Professional Liability, Financial Institutions and Accident & Health classes.",
+      "exact_reserve_text": "Overall on an aggregate basis, a reserve release of GBP 1m net of reinsurance was made to prior year reserves during 2019. In 2018 there was a reserve strengthening of GBP 1m.",
       "primary_causes": [
-        "Favorable claims development",
-        "Adverse claims development"
+        "Adverse claims development",
+        "Favorable claims development"
       ],
       "specific_events": [],
       "specific_years_affected": [
-        2011,
-        2012,
-        2013,
-        2014,
-        2015,
-        2016,
         2017
       ],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "The syndicate experienced a gross prior year reserve strengthening of GBP 30.341 million for the 2019 calendar year, calculated from the claims development triangle. This was due to adverse development on the 2017, 2016, 2013, and 2019 underwriting years, partially offset by releases on the 2015, 2014, 2012, and 2011 underwriting years. The report also notes a net reserve release of GBP 1 million, attributed to favourable development in Property and Credit & Political Risk accounts, which was partially offset by deterioration in Professional Liability, Financial Institutions, and Accident & Health classes.",
+      "standardized_narrative": "The syndicate experienced a gross prior year reserve strengthening of GBP 30.341 million in 2019, calculated from the claims development triangle. This contrasts with a narrative statement of a net reserve release of GBP 1 million for prior year reserves. The net release was attributed to favorable development in Property and Credit & Political Risk accounts, partially offset by adverse development in Professional Liability, Financial Institutions, and Accident & Health classes. The syndicate also noted further deterioration from the run-off of exited Accident & Health, Marine, Professional Liability, and Financial Institutions classes.",
       "raw_causal_phrases": [
         "a reserve release of GBP 1m net of reinsurance was made to prior year reserves during 2019",
-        "reserve strengthening of GBP 1m",
-        "The reserve release was due to the Property and PCR accounts partially offset by deterioration in the Professional Liability, Financial Institutions and Accident & Health classes."
+        "The reserve release was due to the Property and PCR accounts partially offset by deterioration in the Professional Liability, Financial Institutions and Accident & Health classes.",
+        "further deterioration from the run off of these accounts"
       ],
       "lob_movements": [
         {
@@ -50,7 +46,7 @@
           "confidence": 0.5
         },
         {
-          "line_of_business": "Credit & Political Risk",
+          "line_of_business": "Professional Lines",
           "direction": "release",
           "amount_gbp_m": null,
           "percentage": null,
@@ -64,7 +60,21 @@
           "confidence": 0.5
         },
         {
+          "line_of_business": "Professional Lines",
+          "direction": "strengthening",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.5
+        },
+        {
           "line_of_business": "Accident & Health",
+          "direction": "strengthening",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.5
+        },
+        {
+          "line_of_business": "Marine",
           "direction": "strengthening",
           "amount_gbp_m": null,
           "percentage": null,
@@ -119,15 +129,15 @@
           "percentage_of_total": 21.5
         }
       ],
-      "gross_premium_page": 10,
+      "gross_premium_page": 12,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The gross prior year development of GBP 30.341m was calculated from the gross claims development triangle (page 12-13). This contrasts with the narrative text on page 13 which states a net release of GBP 1m. The gross figure from the triangle is used as the primary gross PYD. The LOB movements are based on the narrative describing the net release, and specific gross amounts per LOB are not provided. The subsequent event of RITC on 1 January 2020 will distort future claims development tables for prior years.",
+      "data_quality_notes": "Gross prior year development calculated from claims development triangle. Narrative states a net release of GBP 1m, which contradicts the gross strengthening from the triangle. The RITC mentioned for 2017 and prior years was effective 1 January 2020, so it should not distort the 2019 year-end claims development figures.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
-        "page": 12,
+        "page": 14,
         "underwriting_years": [
           2011,
           2012,
@@ -243,20 +253,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_2015_2019_llm.pdf",
-      "content_hash": "ec61dd5b93b405f8b3a663717096999a624c008da3602b458209a08465bed365",
-      "standardized_at": "2026-03-18T00:01:09.386783+00:00",
+      "content_hash": "75330af86c2b7a4c12aac77b8bb422971bba2b6e38a7ab6b8d737d80c53b85a5",
+      "standardized_at": "2026-09-11T11:35:50.643195+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 9366,
-        "output_tokens": 2188,
-        "total_tokens": 16822,
-        "cost_usd": 0.00828
+        "input_tokens": 10925,
+        "output_tokens": 2152,
+        "total_tokens": 20249,
+        "cost_usd": 0.008658
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 30.341,
+        "model_value": 30.341,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 39,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -525,26 +547,35 @@
       "syndicate": 2015,
       "year": 2019,
       "opening_reserves_gbp_m": 348.027,
-      "opening_reserves_page": 39,
+      "opening_reserves_page": 16,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": 30.341,
       "prior_year_development_pct": 8.72,
       "direction": "strengthening",
       "prior_year_movement_page": 37,
       "prior_year_movement_confidence": 0.8,
-      "exact_reserve_text": "Overall on an aggregate basis, a reserve release of GBP 1m net of reinsurance was made to prior year reserves during 2019. In 2018 there was a reserve strengthening of GBP 1m. The reserve release was due to the Property and PCR accounts partially offset by deterioration in the Professional Liability, Financial Institutions and Accident & Health classes.",
+      "exact_reserve_text": "Overall on an aggregate basis, a reserve release of GBP 1m net of reinsurance was made to prior year reserves during 2019. In 2018 there was a reserve strengthening of GBP 1m.",
       "primary_causes": [
+        "Adverse claims development",
         "Favorable claims development",
-        "Adverse claims development"
+        "Other"
       ],
       "specific_events": [],
-      "specific_years_affected": [],
+      "specific_years_affected": [
+        2011,
+        2012,
+        2013,
+        2014,
+        2015,
+        2016,
+        2017
+      ],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "The syndicate's gross claims outstanding at 1 January 2019 amounted to GBP 348.0m. Using the gross claims development triangle, older underwriting years (<=2017) show net adverse development of approximately GBP 30.3m (c.8.7% of opening gross claims), indicating a gross prior-year strengthening. The managing agent narrative reports a small net release of GBP 1m (net of reinsurance) driven by favourable development in Property and PCR partially offset by deterioration in Professional Liability, Financial Institutions and Accident & Health. The gross/net divergence reflects reinsurance recoveries and the difference between gross triangle movements and the net movement disclosed in narrative.",
+      "standardized_narrative": "The syndicate reports a small net release of prior year reserves on a net-of-reinsurance basis (a GBP 1m net release), however the gross claims development triangle indicates an overall gross strengthening of approximately GBP 30.3m (c.8.7% of opening gross claims outstanding), driven largely by adverse development on the 2016 and 2017 underwriting years and partly offset by releases on older Property and PCR accounts. Reinsurance recoveries and subsequent reinsurance-to-close arrangements materially mitigated the net impact.",
       "raw_causal_phrases": [
-        "Overall on an aggregate basis, a reserve release of GBP 1m net of reinsurance was made to prior year reserves during 2019.",
-        "In 2018 there was a reserve strengthening of GBP 1m.",
+        "Overall on an aggregate basis, a reserve release of GBP 1m net of reinsurance was made to prior year reserves during 2019. In 2018 there was a reserve strengthening of GBP 1m.",
+        "Across all classes combined we had a net reserve release of GBP 1m in 2019. In 2018 we had a net reserve strengthening of GBP 1m.",
         "The reserve release was due to the Property and PCR accounts partially offset by deterioration in the Professional Liability, Financial Institutions and Accident & Health classes."
       ],
       "lob_movements": [
@@ -563,11 +594,25 @@
           "confidence": 0.5
         },
         {
+          "line_of_business": "Professional Lines",
+          "direction": "strengthening",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.5
+        },
+        {
           "line_of_business": "Accident & Health",
           "direction": "strengthening",
           "amount_gbp_m": null,
           "percentage": null,
           "confidence": 0.5
+        },
+        {
+          "line_of_business": "Reinsurance - Specialty",
+          "direction": "release",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.4
         }
       ],
       "gross_premiums_written_gbp_m": 251.8,
@@ -621,7 +666,7 @@
       "gross_premium_page": 22,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior year development (PYD) was calculated from the gross claims development triangle (pages 37-38) because the narrative reports only a NET prior-year release of GBP 1m. The triangle gives a gross PYD of +GBP 30.341m (strengthening). The Technical Provisions reconciliation shows overall gross movements during the year but that line includes current year movements and was not used per instructions. A subsequent event (RITC effective 1 Jan 2020) transfers large gross/net technical provisions (gross GBP 184.6m, net GBP 110.8m) and may affect comparability; this transaction is after year-end. Some class mappings (e.g. 'PCR') do not map exactly to the provided standard LOB list; LOB movement amounts were not quantified in the report and are therefore null.",
+      "data_quality_notes": "Gross prior year development was calculated from the gross claims development triangle (pages 37-38). The managing agent narrative reports a net release of GBP 1m (net of reinsurance) in 2019; gross and net differ materially due to reinsurance recoveries and a subsequent RITC. A Reinsurance-to-Close (RITC) placed 1 Jan 2020 transferred gross technical provisions of GBP 184.6m and net technical provisions of GBP 110.8m (subsequent event) which distorts comparisons and may explain differences between gross triangle movements and the net narrative. Prior-year development derived from triangle (gross) - confidence 0.8; narrative net figure explicitly stated but is net of reinsurance.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -742,20 +787,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_2015_2019_llm.pdf",
-      "content_hash": "ec61dd5b93b405f8b3a663717096999a624c008da3602b458209a08465bed365",
-      "standardized_at": "2026-03-18T00:05:09.111677+00:00",
+      "content_hash": "75330af86c2b7a4c12aac77b8bb422971bba2b6e38a7ab6b8d737d80c53b85a5",
+      "standardized_at": "2026-09-11T11:38:47.916428+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 18445,
-        "output_tokens": 7220,
-        "total_tokens": 25665,
-        "cost_usd": 0.019051
+        "input_tokens": 21307,
+        "output_tokens": 7853,
+        "total_tokens": 29160,
+        "cost_usd": 0.021033
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 30.341,
+        "model_value": 30.341,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 39,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -1021,8 +1078,8 @@
       }
     }
   },
-  "total_cost_usd": 0.027331,
-  "total_tokens": 42487,
+  "total_cost_usd": 0.029691,
+  "total_tokens": 49409,
   "validation": {
     "passed": true,
     "total_discrepancies": 16,

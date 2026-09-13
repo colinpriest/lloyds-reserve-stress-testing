@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T12:35:45.885290+00:00",
+  "extraction_timestamp": "2026-09-13T04:11:18.027512+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -21,28 +23,28 @@
       "exact_reserve_text": "Change in estimates of technical provision provisions, including foreign exchange (17,705)",
       "primary_causes": [
         "Favorable claims development",
-        "IBNR recalibration"
+        "Other"
       ],
       "specific_events": [],
       "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [
         {
-          "event_name": "COVID-19",
+          "event_name": "COVID-19 / pandemic effects",
           "event_year": 2020,
           "event_type": "other",
           "net_loss_gbp_m": null,
-          "loss_description": "Syndicate 780 is judged not to have material insurance exposure to COVID-19 related claims and has experienced limited claims notifications in this regard during 2020.",
+          "loss_description": "not to have material insurance exposure to COVID-19 related claims and has experienced limited claims notifications in this regard during 2020.",
           "lobs_affected": [],
           "page": 8,
           "confidence": 0.8
         }
       ],
-      "standardized_narrative": "Syndicate 780 reported a gross prior year reserve release of $17.7 million in 2020, representing a 7.1% reduction of its opening gross claims outstanding. This favorable development is attributed to ongoing recalibration of technical provisions based on evolving claims experience and updated estimates of ultimate settlement costs. The syndicate noted limited claims notifications related to COVID-19 in 2020 and deemed its provisions sufficient for potential claims from the pandemic.",
+      "standardized_narrative": "For the year ended 31st December 2020, Syndicate 780 reported a gross prior year reserve release of $17.705 million, as detailed in the Technical Provisions note. This release is primarily attributed to favourable claims development, which also includes foreign exchange movements. The syndicate also noted that it did not have material insurance exposure to COVID-19 related claims in 2020.",
       "raw_causal_phrases": [
-        "favourable net claims incurred development of $12 million",
         "Change in estimates of technical provision provisions, including foreign exchange",
-        "The provision is revised as part of a regular ongoing process as claims experience develops, certain claims are settled and further claims are reported."
+        "favourable net claims incurred development of $12 million",
+        "Syndicate 780 is judged not to have material insurance exposure to COVID-19 related claims and has experienced limited claims notifications in this regard during 2020."
       ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 8899.0,
@@ -81,7 +83,7 @@
       "gross_premium_page": 12,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "The prior year development figure is taken from the 'Change in estimates of technical provision provisions' line in Note 7, which explicitly states the gross movement. No line of business specific prior year development figures were available. [RAG OVERRIDE: Model said PYD=-17.705, RAG triangle computed -12.336. Using RAG value.]",
+      "data_quality_notes": "The prior year development figure from Note 7 includes foreign exchange movements, which may contribute to the difference observed when comparing to the claims development triangle. The claims development triangle calculation for prior year development is -12.336 million, while Note 7 states -17.705 million. The Note 7 figure is used as it is explicitly stated as 'Change in estimates of technical provision provisions, including foreign exchange'. [RAG OVERRIDE: Model said PYD=-17.705, RAG triangle computed -12.336. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
@@ -202,20 +204,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_780_2020_llm.pdf",
-      "content_hash": "6a536c85e5d076b01d43d07a11d8f76d971bd30b170fdf14b005f9448f55f54e",
-      "standardized_at": "2026-03-19T09:36:27.139760+00:00",
+      "content_hash": "ff40e50675d48379cf7ba6455f4538d1a82a1b5a002e95c59d76947079c5bea8",
+      "standardized_at": "2026-09-11T13:59:32.930396+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 9604,
-        "output_tokens": 1797,
-        "total_tokens": 16466,
-        "cost_usd": 0.007374
+        "input_tokens": 10408,
+        "output_tokens": 1788,
+        "total_tokens": 16074,
+        "cost_usd": 0.007592
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -12.336,
+        "model_value": -17.705,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 23,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -327,6 +341,18 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of reporting year",
+          "- One year later",
+          "- Two years later",
+          "- Three years later",
+          "- Four years later",
+          "- Five years later",
+          "- Six years later",
+          "- Seven years later",
+          "- Eight years later",
+          "- Nine years later"
         ],
         "source_page": 23,
         "entity": 780
@@ -458,13 +484,13 @@
       "prior_year_development_gbp_m": -12.336,
       "prior_year_development_pct": -4.93,
       "direction": "release",
-      "prior_year_movement_page": 4,
-      "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "This comprises net earned premiums of $7.1 million (2019: $60.8 million), favourable net claims incurred development of $12 million (2019: unfavourable net incurred claims of $24.6 million) and Other technical income of $600,000 (2019: Nil) ,partially offset by net operating expenses of $5.6 million (2019: $25.2 million).",
+      "prior_year_movement_page": 22,
+      "prior_year_movement_confidence": 0.8,
+      "exact_reserve_text": "The change in the provisions for claims outstanding during the year was as follows:\n\nChange in estimates of technical provision provisions, including foreign exchange (17,705) (5,533) (12,172) 61,245 35,500 25,745",
       "primary_causes": [
         "Favorable claims development",
         "Reinsurance recoveries",
-        "COVID-19 / pandemic effects"
+        "Large loss development"
       ],
       "specific_events": [],
       "specific_years_affected": [
@@ -478,91 +504,76 @@
         2018
       ],
       "prior_year_events": [],
-      "named_events": [
-        {
-          "event_name": "COVID-19 pandemic",
-          "event_year": 2020,
-          "event_type": "other",
-          "net_loss_gbp_m": null,
-          "loss_description": "Syndicate 780 is judged not to have material insurance exposure to COVID-19 related claims and has experienced limited claims notifications in this regard during 2020. The 31st December 2020 technical provisions make allowance for potential claims arising in relation to this pandemic.",
-          "lobs_affected": [
-            "Accident & Health",
-            "Casualty"
-          ],
-          "page": 21,
-          "confidence": 1.0
-        }
-      ],
-      "standardized_narrative": "At 1 January 2020 gross claims outstanding were $250.154m. During 2020 Syndicate 780 recorded a favourable net prior year claims development of $12.0m (a release), driven by favourable claims development and reinsurance recoveries. The syndicate reports limited COVID-19 exposure and has made allowance for potential pandemic claims. No explicit gross prior-year strengthening/weakening figure is provided in the notes; the $12.0m figure is reported net of reinsurance.",
+      "named_events": [],
+      "standardized_narrative": "Syndicate 780 recorded a net release of prior year gross claims reserves in 2020 of approximately 12.3 (thousand-dollar) million (favourable development of ~4.9% of opening gross reserves). This movement is evident across multiple older underwriting years (2011-2018) in the gross claims development table and reflects generally favourable claims development, reinsurance recoveries and run-off payments as the syndicate moved further into run-off.",
       "raw_causal_phrases": [
         "favourable net claims incurred development of $12 million (2019: unfavourable net incurred claims of $24.6 million)",
-        "Syndicate 780 is judged not to have material insurance exposure to COVID-19 related claims and has experienced limited claims notifications in this regard during 2020.",
         "Decreases to the outstanding claims and cash balances predominantly relate to the payment of claims in relation to the run-off of the business.",
-        "Included within reinsurers' share of technical provisions - claims outstanding are amounts recoverable from affiliated companies of $50.7 million (2019: $30.6 million)."
+        "Syndicate 780 is judged not to have material insurance exposure to COVID-19 related claims and has experienced limited claims notifications in this regard during 2020."
       ],
       "lob_movements": [
         {
           "line_of_business": "Property",
           "direction": "release",
           "amount_gbp_m": -21.553,
-          "percentage": -8.613,
-          "confidence": 1.0
+          "percentage": null,
+          "confidence": 0.8
         },
         {
           "line_of_business": "Accident & Health",
-          "direction": "strengthening",
-          "amount_gbp_m": 2.378,
-          "percentage": 0.951,
-          "confidence": 1.0
+          "direction": "mixed",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.2
         },
         {
           "line_of_business": "Casualty",
           "direction": "release",
           "amount_gbp_m": -22.745,
-          "percentage": -9.089,
-          "confidence": 1.0
+          "percentage": null,
+          "confidence": 0.8
         },
         {
           "line_of_business": "Marine",
           "direction": "release",
           "amount_gbp_m": -4.73,
-          "percentage": -1.89,
-          "confidence": 1.0
+          "percentage": null,
+          "confidence": 0.8
         },
         {
-          "line_of_business": "Property",
+          "line_of_business": "Motor",
           "direction": "release",
           "amount_gbp_m": -1.184,
-          "percentage": -0.473,
-          "confidence": 1.0
+          "percentage": null,
+          "confidence": 0.6
         },
         {
           "line_of_business": "Casualty",
           "direction": "release",
           "amount_gbp_m": -5.929,
-          "percentage": -2.372,
-          "confidence": 1.0
+          "percentage": null,
+          "confidence": 0.8
         },
         {
           "line_of_business": "Reinsurance - Property",
           "direction": "release",
           "amount_gbp_m": -4.988,
-          "percentage": -1.994,
-          "confidence": 1.0
+          "percentage": null,
+          "confidence": 0.8
         },
         {
           "line_of_business": "Treaty",
           "direction": "release",
           "amount_gbp_m": -6.548,
-          "percentage": -2.619,
-          "confidence": 1.0
+          "percentage": null,
+          "confidence": 0.8
         },
         {
           "line_of_business": "Aggregate",
           "direction": "release",
           "amount_gbp_m": -4.214,
-          "percentage": -1.684,
-          "confidence": 1.0
+          "percentage": null,
+          "confidence": 0.8
         }
       ],
       "gross_premiums_written_gbp_m": 8899.0,
@@ -598,14 +609,14 @@
           "percentage_of_total": 2.3
         }
       ],
-      "gross_premium_page": 26,
+      "gross_premium_page": 27,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "Gross prior-year development (PYD) as a GROSS insurance-liabilities figure was not explicitly provided. The report explicitly states a favourable net (after reinsurance) prior-year claims development of $12.0m, which has been used as the PYD figure (net of reinsurance) and flagged accordingly. A gross claims development triangle is present and has been captured; however the movement note in the technical provisions includes current-year movements and foreign exchange and does not separately disclose a gross PYD figure. LOB movements are simple year-on-year changes in gross claims outstanding (2020 vs 2019). Premiums contain a negative Motor amount (report shows negative premium adjustment) which is reported as presented.",
+      "data_quality_notes": "Amounts are reported in the native currency of the financial statements (USD). Prior-year reserve movement was calculated from the disclosed gross claims development table (gross triangle) on page 22 because no single explicit gross prior-year movement sentence was provided. The triangle and other notes are expressed in $'000; figures above are converted to millions. Some segmental amounts (e.g. Motor) are negative in the statutory segment table (reflecting adjustments) which yields negative percentages; these are reported verbatim as printed. The 'Change in estimates' row in the Technical Provisions reconciliation shows a different gross movement (17,705k) which includes other movements and exchange effects; the PYD reported here is the triangle-derived prior-year development. Accident & Health 2019 gross amount was unclear in the table (printed as a negative/parenthesised figure) so a precise LOB movement for that line was not provided.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
-        "units": "thousands",
+        "units": "millions",
         "page": 22,
         "underwriting_years": [
           2011,
@@ -619,89 +630,79 @@
         ],
         "development_rows": [
           [
-            237734,
-            108765,
-            88733,
-            76650,
-            75346,
-            79494,
-            160567,
-            105240
+            237.734,
+            108.765,
+            88.733,
+            76.65,
+            75.346,
+            79.494,
+            160.567,
+            105.24
           ],
           [
-            270190,
-            144775,
-            124358,
-            132342,
-            160439,
-            199800,
-            229374,
-            168455
+            270.19,
+            144.775,
+            124.358,
+            132.342,
+            160.439,
+            199.8,
+            229.374,
+            168.455
           ],
           [
-            267570,
-            135444,
-            115978,
-            131438,
-            173919,
-            196279,
-            236618,
-            168289
+            267.57,
+            135.444,
+            115.978,
+            131.438,
+            173.919,
+            196.279,
+            236.618,
+            168.289
           ],
           [
-            252837,
-            132612,
-            106406,
-            121250,
-            171044,
-            191075,
-            234114,
+            252.837,
+            132.612,
+            106.406,
+            121.25,
+            171.044,
+            191.075,
+            234.114,
             null
           ],
           [
-            265289,
-            121166,
-            102115,
-            124646,
-            169029,
-            190267,
-            null,
-            null
-          ],
-          [
-            243271,
-            122224,
-            98983,
-            123663,
-            165940,
-            null,
+            265.289,
+            121.166,
+            102.115,
+            124.646,
+            169.029,
+            190.267,
             null,
             null
           ],
           [
-            241652,
-            122244,
-            97664,
-            123021,
-            null,
+            243.271,
+            122.224,
+            98.983,
+            123.663,
+            165.94,
             null,
             null,
             null
           ],
           [
-            240982,
-            119584,
-            94754,
-            null,
+            241.652,
+            122.244,
+            97.664,
+            123.021,
             null,
             null,
             null,
             null
           ],
           [
-            240257,
-            117407,
-            null,
+            240.982,
+            119.584,
+            94.754,
             null,
             null,
             null,
@@ -709,7 +710,17 @@
             null
           ],
           [
-            240217,
+            240.257,
+            117.407,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            240.217,
             null,
             null,
             null,
@@ -718,24 +729,37 @@
             null,
             null
           ]
-        ]
+        ],
+        "confidence": 1.0
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_780_2020_llm.pdf",
-      "content_hash": "6a536c85e5d076b01d43d07a11d8f76d971bd30b170fdf14b005f9448f55f54e",
-      "standardized_at": "2026-03-19T09:48:25.408862+00:00",
+      "content_hash": "ff40e50675d48379cf7ba6455f4538d1a82a1b5a002e95c59d76947079c5bea8",
+      "standardized_at": "2026-09-11T14:02:22.706619+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 16754,
-        "output_tokens": 10074,
-        "total_tokens": 26828,
-        "cost_usd": 0.024337
+        "input_tokens": 17502,
+        "output_tokens": 8855,
+        "total_tokens": 26357,
+        "cost_usd": 0.022086
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -12.336,
+        "model_value": -12.336,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 23,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -847,6 +871,18 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of reporting year",
+          "- One year later",
+          "- Two years later",
+          "- Three years later",
+          "- Four years later",
+          "- Five years later",
+          "- Six years later",
+          "- Seven years later",
+          "- Eight years later",
+          "- Nine years later"
         ],
         "source_page": 23,
         "entity": 780
@@ -970,12 +1006,12 @@
       }
     }
   },
-  "total_cost_usd": 0.031711,
-  "total_tokens": 43294,
+  "total_cost_usd": 0.029678,
+  "total_tokens": 42431,
   "validation": {
     "passed": true,
-    "total_discrepancies": 32,
-    "within_tolerance": 32,
+    "total_discrepancies": 30,
+    "within_tolerance": 30,
     "hard_failures": 0,
     "hard_failure_details": []
   }

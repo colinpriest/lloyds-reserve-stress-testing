@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T10:52:41.370638+00:00",
+  "extraction_timestamp": "2026-09-13T03:58:24.640505+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -11,27 +13,25 @@
       "syndicate": 2987,
       "year": 2015,
       "opening_reserves_gbp_m": 3213.5,
-      "opening_reserves_page": 5,
+      "opening_reserves_page": 4,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": 33.8,
       "prior_year_development_pct": 1.05,
       "direction": "strengthening",
-      "prior_year_movement_page": 14,
-      "prior_year_movement_confidence": 0.8,
-      "exact_reserve_text": "The following tables show the estimates of cumulative incurred claims, including both claims notified and IBNR for each successive underwriting year at each reporting date. The amounts are reported on an earned basis, which leads to a large increase in incurred claims in the second year, due to the premium earning pattern.",
+      "prior_year_movement_page": 17,
+      "prior_year_movement_confidence": 1.0,
+      "exact_reserve_text": "Claims incurred in prior underwriting years (1.4)",
       "primary_causes": [
-        "Other"
+        "Favorable claims development"
       ],
       "specific_events": [],
-      "specific_years_affected": [
-        2011,
-        2012,
-        2013
-      ],
+      "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "The syndicate experienced a net strengthening of prior year reserves by US$33.8 million, representing approximately 1.05% of opening gross claims outstanding. This development was calculated from the gross claims development triangle, showing mixed movements across underwriting years 2011, 2012, and 2013, with some years experiencing releases and others strengthenings. No specific named events or explicit causal factors for this prior year movement were detailed in the report.",
-      "raw_causal_phrases": [],
+      "standardized_narrative": "The syndicate experienced a very small gross reserve release of US$1.4 million for prior underwriting years, indicating favourable claims development. This movement is directly reported in the claims outstanding reconciliation note. No specific causes or events for this movement were detailed in the report, and the claims development triangle showed no changes for older years.",
+      "raw_causal_phrases": [
+        "Claims incurred in prior underwriting years (1.4)"
+      ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 1999.2,
       "gross_premium_mix": [
@@ -71,15 +71,15 @@
           "percentage_of_total": 38.9
         }
       ],
-      "gross_premium_page": 12,
+      "gross_premium_page": 14,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "Prior year development was calculated from the gross claims development triangle as no explicit statement or movement note was found. No specific named events with actual incurred losses were identified in the report.",
+      "data_quality_notes": "The claims development triangle on page 16 shows no prior year development for underwriting years 2011-2013, which contradicts the -1.4m release reported in Note 13. Note 13 is preferred as a direct movement figure. The 'exact_reserve_text' is a table entry, not a full sentence, due to the lack of specific narrative for this small movement. The 'Lloyd's Prescribed RDS Event' table on page 9 lists modelled losses, not actual incurred losses for the year, and the narrative states an 'absence of major claims for the Syndicate in 2015', so no specific named events are included. [RAG OVERRIDE: Model said PYD=-1.4, RAG triangle computed 33.8. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "millions",
-        "page": 14,
+        "page": 16,
         "underwriting_years": [
           2011,
           2012,
@@ -127,20 +127,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_2987_2015_llm.pdf",
-      "content_hash": "224bfb85734be1ee7902b9c1b54740a741a15fab6081cfd6a21782e91dd2de74",
-      "standardized_at": "2026-03-18T06:09:34.880265+00:00",
+      "content_hash": "778b0b7acf7d8f564b570bc5b0087447e176f7d05b4a620e90c0bc7c206ab3d5",
+      "standardized_at": "2026-09-11T12:07:14.348357+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 10637,
-        "output_tokens": 1208,
-        "total_tokens": 16122,
-        "cost_usd": 0.006211
+        "input_tokens": 11957,
+        "output_tokens": 1204,
+        "total_tokens": 17945,
+        "cost_usd": 0.006597
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 33.8,
+        "model_value": -1.4,
+        "triangle_type": "gross",
+        "triangle_units": "millions",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 36,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "millions",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -184,6 +196,13 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later"
         ],
         "source_page": 36,
         "entity": 2987
@@ -334,21 +353,26 @@
       "direction": "strengthening",
       "prior_year_movement_page": 34,
       "prior_year_movement_confidence": 0.8,
-      "exact_reserve_text": "Premium was lower in 2015 partly as a result of reduced levels of favourable ultimate premium development on prior years compared to 2014.",
+      "exact_reserve_text": "",
       "primary_causes": [
+        "Adverse claims development",
         "Favorable claims development",
-        "Other"
+        "IBNR recalibration"
       ],
       "specific_events": [],
-      "specific_years_affected": [],
+      "specific_years_affected": [
+        2011,
+        2012,
+        2013
+      ],
       "prior_year_events": [],
       "named_events": [
         {
           "event_name": "Gulf of Mexico Windstorm",
           "event_year": null,
           "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": 139.0,
-          "loss_description": "Modelled Syndicate Loss (Net) for the prescribed RDS",
+          "net_loss_gbp_m": 139,
+          "loss_description": "Modelled syndicate net loss shown in RDS table",
           "lobs_affected": [
             "Property"
           ],
@@ -359,8 +383,8 @@
           "event_name": "Florida Miami Windstorm",
           "event_year": null,
           "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": 119.0,
-          "loss_description": "Modelled Syndicate Loss (Net) for the prescribed RDS",
+          "net_loss_gbp_m": 119,
+          "loss_description": "Modelled syndicate net loss shown in RDS table",
           "lobs_affected": [
             "Property"
           ],
@@ -371,8 +395,8 @@
           "event_name": "US North East Windstorm",
           "event_year": null,
           "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": 124.0,
-          "loss_description": "Modelled Syndicate Loss (Net) for the prescribed RDS",
+          "net_loss_gbp_m": 124,
+          "loss_description": "Modelled syndicate net loss shown in RDS table",
           "lobs_affected": [
             "Property"
           ],
@@ -383,8 +407,8 @@
           "event_name": "San Francisco Earthquake",
           "event_year": null,
           "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": 178.0,
-          "loss_description": "Modelled Syndicate Loss (Net) for the prescribed RDS",
+          "net_loss_gbp_m": 178,
+          "loss_description": "Modelled syndicate net loss shown in RDS table",
           "lobs_affected": [
             "Property"
           ],
@@ -395,8 +419,8 @@
           "event_name": "Japan Earthquake",
           "event_year": null,
           "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": 120.0,
-          "loss_description": "Modelled Syndicate Loss (Net) for the prescribed RDS",
+          "net_loss_gbp_m": 120,
+          "loss_description": "Modelled syndicate net loss shown in RDS table",
           "lobs_affected": [
             "Property"
           ],
@@ -407,8 +431,8 @@
           "event_name": "Japan Windstorm",
           "event_year": null,
           "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": 41.0,
-          "loss_description": "Modelled Syndicate Loss (Net) for the prescribed RDS",
+          "net_loss_gbp_m": 41,
+          "loss_description": "Modelled syndicate net loss shown in RDS table",
           "lobs_affected": [
             "Property"
           ],
@@ -419,8 +443,8 @@
           "event_name": "European Windstorm",
           "event_year": null,
           "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": 102.0,
-          "loss_description": "Modelled Syndicate Loss (Net) for the prescribed RDS",
+          "net_loss_gbp_m": 102,
+          "loss_description": "Modelled syndicate net loss shown in RDS table",
           "lobs_affected": [
             "Property"
           ],
@@ -428,62 +452,14 @@
           "confidence": 0.8
         }
       ],
-      "standardized_narrative": "The syndicate's opening gross claims outstanding at 1 January 2015 was 3,213.5 (US$ millions). Analysis of the gross claims development triangle shows effectively no material prior year reserve movement for underwriting years prior to 2014 (net prior year development 0.0). Management commentary notes there were reduced levels of favourable ultimate premium development on prior years compared to 2014, but no quantified gross adverse or favourable movement is reported. The syndicate's overall claims experience for 2015 was in line with expectations and there were no major events impacting reserves.",
+      "standardized_narrative": "Using the syndicate's gross claims development triangle, older underwriting years (<=2013) show a net adverse prior-year movement of USD 33.8m (approximately 1.05% of opening gross claims outstanding of USD 3,213.5m). The movement reflects a mix of adverse development (notably on 2013) partially offset by favourable development (notably on 2012); the syndicate reports no major loss events in 2015 and notes generally that claims experience was in line with expectations.",
       "raw_causal_phrases": [
-        "reduced levels of favourable ultimate premium development on prior years compared to 2014.",
-        "Our overall claims experience in 2015 has been in line with expectations. An increase in the attritional loss ratio from rating pressures and a change in business mix was offset by the absence of major claims for the Syndicate in 2015."
+        "Our overall claims experience in 2015 has been in line with expectations.",
+        "An increase in the attritional loss ratio from rating pressures and a change in business mix was offset by the absence of major claims for the Syndicate in 2015.",
+        "Adjustments to the amounts of the claims provisions established in prior years are reflected in the profit and loss account for the period in which the adjustments are made.",
+        "Whilst the Directors consider that the estimate of claims outstanding is fairly calculated on the basis of the information currently available to them, there is inherent uncertainty in relation to the ultimate liability which will vary as a result of subsequent information and events."
       ],
-      "lob_movements": [
-        {
-          "line_of_business": "Property",
-          "direction": "flat",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.0
-        },
-        {
-          "line_of_business": "Casualty",
-          "direction": "flat",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.0
-        },
-        {
-          "line_of_business": "Marine",
-          "direction": "flat",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.0
-        },
-        {
-          "line_of_business": "Aviation",
-          "direction": "flat",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.0
-        },
-        {
-          "line_of_business": "Motor",
-          "direction": "flat",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.0
-        },
-        {
-          "line_of_business": "Accident & Health",
-          "direction": "flat",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.0
-        },
-        {
-          "line_of_business": "Treaty",
-          "direction": "flat",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.0
-        }
-      ],
+      "lob_movements": [],
       "gross_premiums_written_gbp_m": 1999.2,
       "gross_premium_mix": [
         {
@@ -525,7 +501,7 @@
       "gross_premium_page": 31,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "All amounts are reported in the native currency (US$) though field names reference GBP. No explicit gross 'movement in prior year's provision for claims outstanding' figure was provided; prior year development was calculated from the gross claims development triangle which shows effectively zero movement for underwriting years <=2013. Narrative references to 'reduced levels of favourable ultimate premium development' are qualitative and do not provide a gross-amount. Where per-LOB prior-year movements are not provided, lob_movements entries are left unquantified. [RAG OVERRIDE: Model said PYD=0.0, RAG triangle computed 33.8. Using RAG value.]",
+      "data_quality_notes": "Prior-year development (USD 33.8m) was calculated from the gross claims development triangle (Note 9) by excluding the two most recent underwriting years (2015 and 2014) and summing the diagonal changes for 2011-2013. No explicit single-sentence gross prior-year movement statement was found in the narrative; the reconciliation note contains 'Claims incurred in prior underwriting years' rows but these represent claims-incurred movements in that reconciliation. All amounts are reported in the native currency (USD millions) though field names use '_gbp_m' per requested schema. Confidence in the triangle-based PYD calculation is 0.8 per instructions.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
@@ -578,20 +554,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_2987_2015_llm.pdf",
-      "content_hash": "224bfb85734be1ee7902b9c1b54740a741a15fab6081cfd6a21782e91dd2de74",
-      "standardized_at": "2026-03-18T06:10:31.500958+00:00",
+      "content_hash": "778b0b7acf7d8f564b570bc5b0087447e176f7d05b4a620e90c0bc7c206ab3d5",
+      "standardized_at": "2026-09-11T12:09:35.817804+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 26839,
-        "output_tokens": 5887,
-        "total_tokens": 32726,
-        "cost_usd": 0.018484
+        "input_tokens": 31116,
+        "output_tokens": 6468,
+        "total_tokens": 37584,
+        "cost_usd": 0.020715
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 33.8,
+        "model_value": 33.8,
+        "triangle_type": "gross",
+        "triangle_units": "millions",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 36,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "millions",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -635,6 +623,13 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later"
         ],
         "source_page": 36,
         "entity": 2987
@@ -775,12 +770,12 @@
       }
     }
   },
-  "total_cost_usd": 0.024695,
-  "total_tokens": 48848,
+  "total_cost_usd": 0.027312,
+  "total_tokens": 55529,
   "validation": {
     "passed": true,
-    "total_discrepancies": 13,
-    "within_tolerance": 13,
+    "total_discrepancies": 18,
+    "within_tolerance": 18,
     "hard_failures": 0,
     "hard_failure_details": []
   }

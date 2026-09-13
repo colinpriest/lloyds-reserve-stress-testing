@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T10:44:23.741489+00:00",
+  "extraction_timestamp": "2026-09-13T04:18:53.125331+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -14,47 +16,52 @@
       "opening_reserves_page": 7,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": -18.6,
-      "prior_year_development_pct": -12.0,
+      "prior_year_development_pct": -11.967,
       "direction": "release",
       "prior_year_movement_page": 14,
       "prior_year_movement_confidence": 1.0,
       "exact_reserve_text": "There were favourable movements during the year of GBP 18.6m (2018: GBP 17.9m), on prior year gross claims reserves, held at 31 December 2019.",
       "primary_causes": [
-        "Favorable claims development",
-        "Reserve methodology change",
-        "Other"
+        "Favorable claims development"
       ],
       "specific_events": [],
-      "specific_years_affected": [
-        2017
+      "specific_years_affected": [],
+      "prior_year_events": [
+        {
+          "event_name": "2017 Year of Account closure",
+          "event_year": 2017,
+          "impact_description": "profit of GBP 4.3m on closed year of account",
+          "lobs_affected": [
+            "Casualty"
+          ],
+          "amount_gbp_m": -4.3,
+          "confidence": 1.0
+        }
       ],
-      "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "The syndicate reported a favourable movement of GBP 18.6 million on prior year gross claims reserves in 2019. This release was attributed to robust reserving philosophy, underwriting discipline, and portfolio management, contributing to a profit on the 2017 year of account.",
+      "standardized_narrative": "The syndicate reported a favourable movement of GBP 18.6 million on prior year gross claims reserves, indicating a release. This was primarily driven by favourable claims development across the portfolio. The 2017 Year of Account closed with a profit of GBP 4.3 million, contributing to the overall favourable development.",
       "raw_causal_phrases": [
-        "favourable movements during the year of GBP 18.6m... on prior year gross claims reserves",
-        "underwriting discipline and portfolio management that has been maintained throughout what has been an extremely challenging underwriting environment.",
-        "The Syndicate maintains its robust reserving philosophy",
-        "profit on all years under current management"
+        "favourable movements during the year of GBP 18.6m",
+        "robust reserving philosophy"
       ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 81.619,
       "gross_premium_mix": [
         {
-          "line_of_business": "Direct insurance: Third-party liability",
+          "line_of_business": "Third-party liability",
           "amount_gbp_m": 73.035,
-          "percentage_of_total": 89.5
+          "percentage_of_total": 89.48
         },
         {
           "line_of_business": "Reinsurance Acceptances",
           "amount_gbp_m": 8.584,
-          "percentage_of_total": 10.5
+          "percentage_of_total": 10.52
         }
       ],
       "gross_premium_page": 13,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "[RAG PYD NOT APPLIED: deterministic figure +1.328m has the opposite sign to both model values [-18.6, -18.6], which agree with each other; model values retained.] [CODE PYD NOT APPLIED: deterministic figure +1.328m has the opposite sign to both model values [-18.6, -18.6], which agree with each other; model values retained.]",
+      "data_quality_notes": "The explicit narrative figure for prior year development (GBP 18.6m release) was used as the primary source. A calculation from the gross claims development triangle for underwriting years <= 2017 yielded a strengthening of +1.328m, which is significantly different. The narrative figure is preferred due to its explicit statement of 'favourable movements... on prior year gross claims reserves'. The discrepancy may be due to other adjustments not reflected in the simple triangle calculation. [RAG PYD NOT APPLIED: deterministic figure +1.328m has the opposite sign to both model values [-18.6, -18.6], which agree with each other; model values retained. Sign agreement between the models is not a reconciliation: where they differ in value the cohort and accrual scope of each still has to be settled from the filing (R140).] [CODE PYD NOT APPLIED: deterministic figure +1.328m has the opposite sign to both model values [-18.6, -18.6], which agree with each other; model values retained. Sign agreement between the models is not a reconciliation: where they differ in value the cohort and accrual scope of each still has to be settled from the filing (R140).]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -137,20 +144,22 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_2525_2019_llm.pdf",
-      "content_hash": "23ab887546a9446d88f9e282c5551cba2c2e3c3e0c34d329320e7edca7058ebf",
-      "standardized_at": "2026-07-05T12:56:54.840873+00:00",
+      "content_hash": "a444a1a2f03fd5ff0ba58e33fd171279d316a299bf1f8552d05bf3b10136a87d",
+      "standardized_at": "2026-09-11T12:07:17.595021+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 11669,
-        "output_tokens": 1089,
-        "total_tokens": 18988,
-        "cost_usd": 0.006223
+        "input_tokens": 12473,
+        "output_tokens": 1228,
+        "total_tokens": 18379,
+        "cost_usd": 0.006812
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2013,
           2014,
@@ -224,6 +233,15 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of first underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later"
         ],
         "source_page": 44,
         "entity": 2525
@@ -346,7 +364,7 @@
       "opening_reserves_page": 17,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": -18.6,
-      "prior_year_development_pct": -11.97,
+      "prior_year_development_pct": -11.96,
       "direction": "release",
       "prior_year_movement_page": 29,
       "prior_year_movement_confidence": 1.0,
@@ -357,19 +375,54 @@
       "specific_events": [],
       "specific_years_affected": [],
       "prior_year_events": [],
-      "named_events": [],
-      "standardized_narrative": "The syndicate opened 2019 with gross claims outstanding of GBP 155.425m and reports a favourable prior-year movement (release) on gross claims reserves of GBP 18.6m during 2019 (11.97% of opening reserves). The report attributes this to favourable claims development across prior years; no specific loss events or LOB allocations for the movement are provided.",
+      "named_events": [
+        {
+          "event_name": "Alternative RDS A",
+          "event_year": null,
+          "event_type": "other",
+          "net_loss_gbp_m": 2.0,
+          "loss_description": "Hypothetical RDS scenario; estimated net loss",
+          "lobs_affected": [
+            "Casualty"
+          ],
+          "page": 39,
+          "confidence": 1.0
+        },
+        {
+          "event_name": "Alternative RDS B",
+          "event_year": null,
+          "event_type": "other",
+          "net_loss_gbp_m": 1.25,
+          "loss_description": "Hypothetical RDS scenario; estimated net loss",
+          "lobs_affected": [
+            "Casualty"
+          ],
+          "page": 39,
+          "confidence": 1.0
+        },
+        {
+          "event_name": "Loss of Major Complex",
+          "event_year": null,
+          "event_type": "other",
+          "net_loss_gbp_m": 1.5,
+          "loss_description": "Hypothetical major complex loss; estimated net loss",
+          "lobs_affected": [
+            "Casualty"
+          ],
+          "page": 39,
+          "confidence": 1.0
+        }
+      ],
+      "standardized_narrative": "The Syndicate reported a gross prior-year release of GBP 18.6m in 2019 (a favourable movement on prior year gross claims reserves). Opening gross claims outstanding at 1 January 2019 were GBP 155.425m. The release is described as arising from favourable claims development across prior years; the Syndicate principally writes employers' and public liability business (casualty exposures).",
       "raw_causal_phrases": [
         "There were favourable movements during the year of GBP 18.6m (2018: GBP 17.9m ), on prior year gross claims reserves, held at 31 December 2019.",
-        "robust reserving philosophy",
-        "effects of \"less adequate\" reserving amongst some of our competitors has become apparent as adverse developments begin to take hold.",
-        "The Syndicate reviewed the Ogden discount rate for reserves for large bodily injury claims and used an assumed rate of 0% for the purposes of reserving."
+        "The Syndicate reviewed the Ogden discount rate for reserves for large bodily injury claims and used an assumed rate of 0% for the purposes of reserving. The impact on the change in Ogden rate from prior year is not significant on a net basis."
       ],
       "lob_movements": [
         {
           "line_of_business": "Casualty",
           "direction": "release",
-          "amount_gbp_m": null,
+          "amount_gbp_m": -18.6,
           "percentage": null,
           "confidence": 0.5
         }
@@ -387,10 +440,10 @@
           "percentage_of_total": 57.22
         }
       ],
-      "gross_premium_page": 5,
+      "gross_premium_page": 4,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior year gross reserve movement is explicitly stated in the Technical Provisions note as a favourable movement of GBP 18.6m (used as gross PYD). No split of the PYD by line of business is provided. All financial statement amounts are presented in GBP '000 in the report; converted here to millions. Claims development triangle (gross) is present and was used for cross-checking. [RAG PYD NOT APPLIED: deterministic figure +1.328m has the opposite sign to both model values [-18.6, -18.6], which agree with each other; model values retained.] [CODE PYD NOT APPLIED: deterministic figure +1.328m has the opposite sign to both model values [-18.6, -18.6], which agree with each other; model values retained.]",
+      "data_quality_notes": "Prior year development figure taken from explicit narrative sentence in Technical Provisions note stating a gross favourable movement of GBP 18.6m. A gross claims development triangle is available (gross) and was captured; the narrative gross figure was preferred. Allocation of the PYD to Casualty is an inference because the syndicate predominantly writes Employers' and Public liability and the claims triangle is presented for Third party liability only. [RAG PYD NOT APPLIED: deterministic figure +1.328m has the opposite sign to both model values [-18.6, -18.6], which agree with each other; model values retained. Sign agreement between the models is not a reconciliation: where they differ in value the cohort and accrual scope of each still has to be settled from the filing (R140).] [CODE PYD NOT APPLIED: deterministic figure +1.328m has the opposite sign to both model values [-18.6, -18.6], which agree with each other; model values retained. Sign agreement between the models is not a reconciliation: where they differ in value the cohort and accrual scope of each still has to be settled from the filing (R140).]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -473,20 +526,22 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_2525_2019_llm.pdf",
-      "content_hash": "23ab887546a9446d88f9e282c5551cba2c2e3c3e0c34d329320e7edca7058ebf",
-      "standardized_at": "2026-07-05T12:57:24.060095+00:00",
+      "content_hash": "a444a1a2f03fd5ff0ba58e33fd171279d316a299bf1f8552d05bf3b10136a87d",
+      "standardized_at": "2026-09-11T12:10:06.314746+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 17798,
-        "output_tokens": 4331,
-        "total_tokens": 22129,
-        "cost_usd": 0.013111
+        "input_tokens": 18558,
+        "output_tokens": 5701,
+        "total_tokens": 24259,
+        "cost_usd": 0.016042
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2013,
           2014,
@@ -560,6 +615,15 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of first underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later"
         ],
         "source_page": 44,
         "entity": 2525
@@ -676,12 +740,12 @@
       }
     }
   },
-  "total_cost_usd": 0.019334,
-  "total_tokens": 41117,
+  "total_cost_usd": 0.022854,
+  "total_tokens": 42638,
   "validation": {
     "passed": true,
-    "total_discrepancies": 22,
-    "within_tolerance": 22,
+    "total_discrepancies": 18,
+    "within_tolerance": 18,
     "hard_failures": 0,
     "hard_failure_details": []
   }

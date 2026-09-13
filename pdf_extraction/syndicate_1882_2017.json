@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T09:46:39.488885+00:00",
+  "extraction_timestamp": "2026-09-13T04:11:16.174658+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -11,46 +13,67 @@
       "syndicate": 1882,
       "year": 2017,
       "opening_reserves_gbp_m": 188.563,
-      "opening_reserves_page": 25,
+      "opening_reserves_page": 6,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": 17.581,
       "prior_year_development_pct": 9.32,
       "direction": "strengthening",
-      "prior_year_movement_page": 21,
+      "prior_year_movement_page": 16,
       "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "Change in the provision for claims, gross amount 17,220",
+      "exact_reserve_text": "Prior period reserve deterioration was GBP 10.8 million (2016: deterioration of GBP 7.5 million) due to adverse experience across property, marine and third party liability.",
       "primary_causes": [
         "Adverse claims development"
       ],
       "specific_events": [],
-      "specific_years_affected": [],
+      "specific_years_affected": [
+        2011,
+        2012,
+        2013,
+        2014,
+        2015,
+        2016
+      ],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "Syndicate 1882 experienced a gross reserve strengthening of GBP 17.220 million for prior underwriting years in 2017. This strengthening was primarily driven by adverse claims development across property, marine, and third party liability lines of business, as noted in the Managing Agent's Report.",
+      "standardized_narrative": "The syndicate experienced a strengthening of prior year reserves by GBP 10.764 million (5.71% of opening reserves), primarily due to adverse claims development across property, marine, and third party liability lines of business for underwriting years prior to 2017. The report narrative stated a prior period reserve deterioration of GBP 10.8 million, which is consistent with the calculated figure.",
       "raw_causal_phrases": [
-        "Prior period reserve deterioration was GBP 10.8 million (2016: deterioration of GBP 7.5 million) due to adverse experience across property, marine and third party liability."
+        "adverse experience across property, marine and third party liability"
       ],
       "lob_movements": [
         {
           "line_of_business": "Property",
           "direction": "strengthening",
-          "amount_gbp_m": null,
+          "amount_gbp_m": 0.386,
           "percentage": null,
-          "confidence": 0.5
+          "confidence": 1.0
         },
         {
           "line_of_business": "Marine",
-          "direction": "strengthening",
-          "amount_gbp_m": null,
+          "direction": "release",
+          "amount_gbp_m": 3.104,
           "percentage": null,
-          "confidence": 0.5
+          "confidence": 1.0
+        },
+        {
+          "line_of_business": "Accident & Health",
+          "direction": "release",
+          "amount_gbp_m": 0.082,
+          "percentage": null,
+          "confidence": 1.0
         },
         {
           "line_of_business": "Casualty",
           "direction": "strengthening",
-          "amount_gbp_m": null,
+          "amount_gbp_m": 13.296,
           "percentage": null,
-          "confidence": 0.5
+          "confidence": 1.0
+        },
+        {
+          "line_of_business": "Reinsurance - Specialty",
+          "direction": "strengthening",
+          "amount_gbp_m": 0.268,
+          "percentage": null,
+          "confidence": 1.0
         }
       ],
       "gross_premiums_written_gbp_m": 62.4,
@@ -81,98 +104,38 @@
           "percentage_of_total": 49.7
         }
       ],
-      "gross_premium_page": 36,
+      "gross_premium_page": 15,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "There is a discrepancy in the sign of the gross provision movement between the Income Statement (page 21) which shows a positive 17,220k (strengthening) and the reconciliation table (page 45) which shows (17,220)k (release). The Income Statement figure is consistent with the net movement calculation (17,220k gross - 4,231k reinsurers' share = 12,989k net strengthening). The narrative on page 7 states a net deterioration of GBP 10.8m, while the Income Statement implies a net strengthening of GBP 12.989m. The table on page 37 also shows a net deficit (strengthening) of GBP 10.764m. The gross figure from the Income Statement was prioritized.",
-      "_claims_triangle": {
-        "type": "gross",
-        "currency": "GBP",
-        "units": "thousands",
-        "page": 44,
-        "underwriting_years": [
-          2011,
-          2012,
-          2013,
-          2014,
-          2015,
-          2016
-        ],
-        "development_rows": [
-          [
-            35212,
-            46783,
-            31858,
-            33758,
-            43772,
-            28008
-          ],
-          [
-            74389,
-            65148,
-            51356,
-            56962,
-            76493,
-            41497
-          ],
-          [
-            99052,
-            68559,
-            48175,
-            61515,
-            85410,
-            null
-          ],
-          [
-            107157,
-            71087,
-            51505,
-            64234,
-            null,
-            null
-          ],
-          [
-            118129,
-            73173,
-            55503,
-            null,
-            null,
-            null
-          ],
-          [
-            116702,
-            73231,
-            null,
-            null,
-            null,
-            null
-          ],
-          [
-            118591,
-            null,
-            null,
-            null,
-            null,
-            null
-          ]
-        ]
-      },
+      "data_quality_notes": "The prior year development figure is taken from the 'MOVEMENT IN PRIOR YEAR'S PROVISION FOR CLAIMS OUTSTANDING' table, which provides a net deficit of GBP 10.764m. This aligns closely with the narrative stating a GBP 10.8m prior period reserve deterioration. Gross premiums written for 2017 primarily relate to adjustments for prior year contracts, as the syndicate ceased trading on 31 December 2016. [RAG OVERRIDE: Model said PYD=10.764, RAG triangle computed 17.581. Using RAG value.]",
       "source_type": "syndicate",
-      "source_file": "syndicate_reports\\pdfs\\syndicate_1882_2017.pdf",
-      "content_hash": "1352240f5331a3bc2849504794eb3638ae1d9ce571f02b2f38d7440954606f2c",
-      "standardized_at": "2026-03-17T01:21:28.243209+00:00",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_1882_2017_llm.pdf",
+      "content_hash": "f4d0202c97687eb8f02d37f155bc7691ae39f8d0199e0bcc7dc71afdfd2786c7",
+      "standardized_at": "2026-09-11T10:59:09.749531+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 17236,
-        "output_tokens": 1495,
-        "total_tokens": 26786,
-        "cost_usd": 0.008908
+        "input_tokens": 5769,
+        "output_tokens": 1182,
+        "total_tokens": 10883,
+        "cost_usd": 0.004686
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 17.581,
+        "model_value": 10.764,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 44,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -238,6 +201,15 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "End of underwriting",
+          "One Year Later",
+          "Two Years Later",
+          "Three Years Later",
+          "Four Years Later",
+          "Five Years Later",
+          "Six Years Later"
         ],
         "source_page": 44,
         "entity": 1882
@@ -362,67 +334,61 @@
       "syndicate": 1882,
       "year": 2017,
       "opening_reserves_gbp_m": 188.563,
-      "opening_reserves_page": 44,
+      "opening_reserves_page": 24,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": 17.581,
       "prior_year_development_pct": 9.32,
       "direction": "strengthening",
-      "prior_year_movement_page": 44,
+      "prior_year_movement_page": 43,
       "prior_year_movement_confidence": 0.8,
-      "exact_reserve_text": "The prior year's net provision for claims outstanding generated a deficit for 2017 (2016: deficit) as detailed below:",
+      "exact_reserve_text": "Prior period reserve deterioration was GBP 10.8 million (2016: deterioration of GBP 7.5 million) due to adverse experience across property, marine and third party liability.",
       "primary_causes": [
         "Adverse claims development"
       ],
       "specific_events": [],
-      "specific_years_affected": [
-        2011,
-        2012,
-        2013,
-        2014,
-        2015
-      ],
+      "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "At 1 January 2017 gross claims outstanding were GBP 188.563m. Analysis of the gross claims development triangle indicates an adverse prior year development (strengthening) of approximately GBP 17.58m (c. 9.3% of opening gross claims reserves), driven by adverse claims experience across property, marine and third party liability classes.",
+      "standardized_narrative": "The gross claims development triangle shows a net adverse movement (strengthening) of approximately GBP 8.66m for prior years (2011-2014 aggregate movement when excluding the two most recent underwriting years). The managing agent's narrative reports a prior period reserve deterioration of GBP 10.8m (likely quoted on a net-of-reinsurance basis) attributed to adverse experience across property, marine and third party liability. PerLOB net movements in the Movement in Prior Year's Provision note show adverse development concentrated in Third Party Liability, partially offset by favourable movements in Marine and Accident & Health.",
       "raw_causal_phrases": [
-        "The prior year's net provision for claims outstanding generated a deficit for 2017 (2016: deficit) as detailed below:",
-        "Prior period reserve deterioration was GBP 10.8 million (2016: deterioration of GBP 7.5 million) due to adverse experience across property, marine and third party liability."
+        "Prior period reserve deterioration was GBP 10.8 million (2016: deterioration of GBP 7.5 million) due to adverse experience across property, marine and third party liability.",
+        "The prior year's net provision for claims outstanding generated a deficit for 2017 (2016: deficit) as detailed below:"
       ],
       "lob_movements": [
         {
-          "line_of_business": "Fire and other damage to property",
+          "line_of_business": "Property",
           "direction": "strengthening",
           "amount_gbp_m": 0.386,
           "percentage": null,
-          "confidence": 0.5
+          "confidence": 0.8
         },
         {
-          "line_of_business": "Marine, aviation and transport",
+          "line_of_business": "Marine",
           "direction": "release",
           "amount_gbp_m": -3.104,
           "percentage": null,
-          "confidence": 0.5
+          "confidence": 0.8
         },
         {
-          "line_of_business": "Accident and health",
+          "line_of_business": "Accident & Health",
           "direction": "release",
           "amount_gbp_m": -0.082,
           "percentage": null,
-          "confidence": 0.5
+          "confidence": 0.8
         },
         {
-          "line_of_business": "Third party liability",
+          "line_of_business": "Casualty",
           "direction": "strengthening",
           "amount_gbp_m": 13.296,
           "percentage": null,
-          "confidence": 0.5
+          "confidence": 0.8
         },
         {
-          "line_of_business": "Reinsurance acceptances",
+          "line_of_business": "Treaty",
           "direction": "strengthening",
           "amount_gbp_m": 0.268,
           "percentage": null,
-          "confidence": 0.5
+          "confidence": 0.8
         }
       ],
       "gross_premiums_written_gbp_m": 62.4,
@@ -456,12 +422,12 @@
       "gross_premium_page": 35,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The officially labeled 'Movement in prior year's provision for claims outstanding' note in the report provides only net (after reinsurance) figures. Therefore the prior year development was calculated from the gross claims development triangle (note 17). Lob movement amounts shown above are taken from the document's 'prior year' table but those are net figures (after reinsurance) and thus have lower confidence for representing gross movements. One regulatory premium line shows a negative gross premium (Marine) in 2017; values are reported as published.",
+      "data_quality_notes": "Primary prior-year development figure derived from the GROSS claims development table (triangle) per instructions. The movement note titled 'Movement in prior year's provision for claims outstanding' in the notes appears to present NET amounts (the note header states 'net provision'), which total a net deterioration of GBP 10.764m; that net figure differs from the gross triangle-derived movement of +GBP 8.664m. PerLOB movements shown in the Movement note are therefore treated as net amounts and are included in lob_movements with lower confidence. Gross triangle was used as the authoritative gross PYD source per extraction rules. [RAG OVERRIDE: Model said PYD=8.664, RAG triangle computed 17.581. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
-        "page": 44,
+        "page": 43,
         "underwriting_years": [
           2011,
           2012,
@@ -530,21 +496,33 @@
         ]
       },
       "source_type": "syndicate",
-      "source_file": "syndicate_reports\\pdfs\\syndicate_1882_2017.pdf",
-      "content_hash": "1352240f5331a3bc2849504794eb3638ae1d9ce571f02b2f38d7440954606f2c",
-      "standardized_at": "2026-03-17T01:23:10.945169+00:00",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_1882_2017_llm.pdf",
+      "content_hash": "f4d0202c97687eb8f02d37f155bc7691ae39f8d0199e0bcc7dc71afdfd2786c7",
+      "standardized_at": "2026-09-11T11:02:16.127563+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 34444,
-        "output_tokens": 6687,
-        "total_tokens": 41131,
-        "cost_usd": 0.021985
+        "input_tokens": 20294,
+        "output_tokens": 7711,
+        "total_tokens": 28005,
+        "cost_usd": 0.020495
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 17.581,
+        "model_value": 8.664,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 44,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -610,6 +588,15 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "End of underwriting",
+          "One Year Later",
+          "Two Years Later",
+          "Three Years Later",
+          "Four Years Later",
+          "Five Years Later",
+          "Six Years Later"
         ],
         "source_page": 44,
         "entity": 1882
@@ -731,12 +718,12 @@
       }
     }
   },
-  "total_cost_usd": 0.030893,
-  "total_tokens": 67917,
+  "total_cost_usd": 0.025181,
+  "total_tokens": 38888,
   "validation": {
     "passed": true,
-    "total_discrepancies": 18,
-    "within_tolerance": 18,
+    "total_discrepancies": 23,
+    "within_tolerance": 23,
     "hard_failures": 0,
     "hard_failure_details": []
   }

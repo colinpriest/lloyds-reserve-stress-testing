@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-05T20:28:03.071571+00:00",
+  "extraction_timestamp": "2026-09-13T04:03:45.818984+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -13,44 +15,31 @@
       "opening_reserves_gbp_m": 925.386,
       "opening_reserves_page": 8,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": -68.297,
-      "prior_year_development_pct": -7.38,
+      "prior_year_development_gbp_m": -68.771,
+      "prior_year_development_pct": -7.43,
       "direction": "release",
       "prior_year_movement_page": 19,
       "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "The 2022 net technical result of GBP 81.0m (2021: GBP 96.9m) includes GBP 68.3m (2021: GBP 68.4m) of releases from reserves in respect of prior accident years.",
+      "exact_reserve_text": null,
       "primary_causes": [
         "Favorable claims development"
       ],
       "specific_events": [],
       "specific_years_affected": [],
-      "prior_year_events": [
-        {
-          "event_name": "South African riots",
-          "event_year": 2021,
-          "impact_description": "funding requirements maintained to cover the liabilities",
-          "lobs_affected": [
-            "Casualty"
-          ],
-          "amount_gbp_m": null,
-          "confidence": 0.8
-        }
-      ],
+      "prior_year_events": [],
       "named_events": [
         {
           "event_name": "South African riots",
           "event_year": 2021,
           "event_type": "political",
           "net_loss_gbp_m": null,
-          "loss_description": "funding requirements maintained to cover the liabilities",
-          "lobs_affected": [
-            "Casualty"
-          ],
+          "loss_description": "funding requirements maintained to cover the liabilities in respect of the South African riots",
+          "lobs_affected": [],
           "page": 16,
-          "confidence": 0.8
+          "confidence": 0.5
         }
       ],
-      "standardized_narrative": "The syndicate experienced a gross prior year reserve release of GBP 68.297 million in 2022, primarily driven by favorable claims development across most lines of business including Marine, Property, Energy, Aviation, and Casualty. A small strengthening was noted in Reinsurance. The overall movement contributed to the net technical result for the year. The report also mentions funding requirements related to the 2021 South African riots affecting liabilities.",
+      "standardized_narrative": "For the 2022 financial year, Syndicate 457 reported a gross release of GBP 68.297 million from prior accident years' reserves, representing a 7.38% reduction of the opening gross claims outstanding of GBP 925.386 million. This favourable development was observed across most lines of business, with significant releases in Marine, Energy, Aviation, Property, and Casualty, while Reinsurance showed a minor strengthening. Gross written premiums for 2022 totaled GBP 1,041.1 million, with the largest proportions in Marine, Energy, Aviation and Transport (37.06%) and Fire and Other Damage to Property (24.76%).",
       "raw_causal_phrases": [
         "releases from reserves in respect of prior accident years"
       ],
@@ -134,7 +123,7 @@
       "gross_premium_page": 17,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The prior year development figure is taken from the explicit 'Total prior year releases' table on page 19, which provides a breakdown of gross releases by line of business. This figure closely aligns with the net figure stated in the narrative on page 19. [RAG PYD NOT APPLIED: deterministic figure +68.771m has the opposite sign to both model values [-68.297, -119.092], which agree with each other; model values retained.] [CODE PYD NOT APPLIED: deterministic figure +68.771m has the opposite sign to both model values [-68.297, -119.092], which agree with each other; model values retained.]",
+      "data_quality_notes": "The 'exact_reserve_text' is null because the report only provides a narrative sentence for 'net' releases, and the gross prior year development figure was derived from the 'Total prior year releases' table by line of business, which is not a narrative sentence.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -277,20 +266,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_457_2022_llm.pdf",
-      "content_hash": "1bcb7c2a7fe9a9a8a4017d6edfedd8548060905721269418aa3296a5ba5723b4",
-      "standardized_at": "2026-03-19T03:47:57.463618+00:00",
+      "content_hash": "3b3d3b778816de40237a3adb57b640e5bbc4b2496c807240e1157307685f9208",
+      "standardized_at": "2026-09-11T13:29:42.705753+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 11668,
-        "output_tokens": 2356,
-        "total_tokens": 18585,
-        "cost_usd": 0.00939
+        "input_tokens": 12472,
+        "output_tokens": 2266,
+        "total_tokens": 20843,
+        "cost_usd": 0.009407
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -68.771,
+        "model_value": -68.297,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 46,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2013,
           2014,
@@ -425,8 +426,21 @@
             null
           ]
         ],
+        "row_labels": [
+          "At end of underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later",
+          "Seven years later",
+          "Eight years later",
+          "Nine years later"
+        ],
         "source_page": 46,
-        "entity": 457
+        "entity": 457,
+        "presentation_sign": "outflow"
       },
       "_adobe_lob": {
         "gross_premium_mix": [
@@ -592,35 +606,49 @@
       "opening_reserves_gbp_m": 925.386,
       "opening_reserves_page": 20,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": -119.092,
-      "prior_year_development_pct": -12.87,
+      "prior_year_development_gbp_m": -68.771,
+      "prior_year_development_pct": -7.43,
       "direction": "release",
-      "prior_year_movement_page": 45,
+      "prior_year_movement_page": 21,
       "prior_year_movement_confidence": 0.8,
       "exact_reserve_text": "The 2022 net technical result of GBP 81.0m (2021: GBP 96.9m) includes GBP 68.3m (2021: GBP 68.4m) of releases from reserves in respect of prior accident years.",
       "primary_causes": [
         "Favorable claims development"
       ],
-      "specific_events": [],
+      "specific_events": [
+        "South African riots"
+      ],
       "specific_years_affected": [],
-      "prior_year_events": [],
+      "prior_year_events": [
+        {
+          "event_name": "South African riots",
+          "event_year": 2021,
+          "impact_description": "Funding requirements maintained to cover the liabilities in respect of the South African riots",
+          "lobs_affected": [
+            "Property"
+          ],
+          "amount_gbp_m": null,
+          "confidence": 0.5
+        }
+      ],
       "named_events": [
         {
           "event_name": "South African riots",
-          "event_year": null,
+          "event_year": 2021,
           "event_type": "man_made",
           "net_loss_gbp_m": null,
           "loss_description": "funding requirements maintained to cover the liabilities in respect of the South African riots",
-          "lobs_affected": [],
-          "page": 34,
+          "lobs_affected": [
+            "Property"
+          ],
+          "page": 16,
           "confidence": 0.6
         }
       ],
-      "standardized_narrative": "The Syndicate recorded net releases from prior accident years (net GBP 68.3m) in 2022. Analysis of the gross claims development triangle indicates an aggregate gross favorable development of approximately GBP 119.1m across underwriting years up to 2020, driven primarily by releases in Marine, Property and Energy lines, with the largest net releases recorded in Marine. The net release after reinsurance was GBP 68.3m and was reflected in the 2022 technical result.",
+      "standardized_narrative": "The Syndicate closed 2022 with an opening gross claims outstanding of GBP 925.386m and recorded a net prior year release. Analysis of the gross claims development triangle and the technical provisions note shows an aggregate gross release of approximately GBP 68.3m in respect of prior accident years, driven by favourable development predominantly in Marine, Energy and Property, with smaller releases in Aviation and Casualty; reinsurance experienced a small adverse movement. The overall reserve movement reduced the gross outstanding claims balance and contributed to the positive technical result for the year.",
       "raw_causal_phrases": [
-        "includes GBP 68.3m (2021: GBP 68.4m) of releases from reserves in respect of prior accident years.",
-        "prior year releases",
-        "funding requirements maintained to cover the liabilities in respect of the South African riots"
+        "includes GBP 68.3m (2021: GBP 68.4m) of releases from reserves in respect of prior accident years",
+        "The amount in \"Other\" in the current year predominantly relates to the funding requirements maintained to cover the liabilities in respect of the South African riots."
       ],
       "lob_movements": [
         {
@@ -628,42 +656,42 @@
           "direction": "release",
           "amount_gbp_m": -35.257,
           "percentage": null,
-          "confidence": 1.0
+          "confidence": 0.8
         },
         {
           "line_of_business": "Property",
           "direction": "release",
           "amount_gbp_m": -6.577,
           "percentage": null,
-          "confidence": 1.0
+          "confidence": 0.8
         },
         {
           "line_of_business": "Energy",
           "direction": "release",
           "amount_gbp_m": -19.844,
           "percentage": null,
-          "confidence": 1.0
-        },
-        {
-          "line_of_business": "Treaty",
-          "direction": "strengthening",
-          "amount_gbp_m": 0.343,
-          "percentage": null,
-          "confidence": 1.0
+          "confidence": 0.8
         },
         {
           "line_of_business": "Aviation",
           "direction": "release",
           "amount_gbp_m": -4.761,
           "percentage": null,
-          "confidence": 1.0
+          "confidence": 0.8
         },
         {
           "line_of_business": "Casualty",
           "direction": "release",
           "amount_gbp_m": -2.201,
           "percentage": null,
-          "confidence": 1.0
+          "confidence": 0.8
+        },
+        {
+          "line_of_business": "Treaty",
+          "direction": "strengthening",
+          "amount_gbp_m": 0.343,
+          "percentage": null,
+          "confidence": 0.8
         }
       ],
       "gross_premiums_written_gbp_m": 1041.1,
@@ -699,15 +727,15 @@
           "percentage_of_total": 19.7
         }
       ],
-      "gross_premium_page": 30,
+      "gross_premium_page": 14,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Gross prior year development was calculated from the gross claims development triangle (pages 45). The report explicitly states a NET prior year release of GBP 68.3m; a gross movement is not tabulated directly, so the triangle calculation (gross release GBP 119.092m) was used as the primary gross figure. No explicit gross 'movement in prior year provision' line was found. Page references for some tables were inferred from parsed page headers. [RAG PYD NOT APPLIED: deterministic figure +68.771m has the opposite sign to both model values [-68.297, -119.092], which agree with each other; model values retained.] [CODE PYD NOT APPLIED: deterministic figure +68.771m has the opposite sign to both model values [-68.297, -119.092], which agree with each other; model values retained.]",
+      "data_quality_notes": "Prior year development (gross) was calculated from the gross claims development triangle (pages 21) by excluding the two most recent underwriting years (2022 and 2021) and summing diagonal changes; this yields a gross release of GBP 68.271m which aligns closely with the note's reported GBP 68.3m release phrase. The triangle is presented as outflows (negative/parenthesised numbers) so magnitudes were compared per the guidance. Some LOB-level prior year figures are small and the reinsurance line shows an adverse movement (quoted as (343) in the note) which was treated as a strengthening of +GBP 0.343m. Confidence levels reflect explicit table values (0.8) and explicit balance sheet figures (1.0). [RAG OVERRIDE: Model said PYD=-68.271, RAG triangle computed -68.771. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
-        "page": 45,
+        "page": 21,
         "underwriting_years": [
           2013,
           2014,
@@ -845,20 +873,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_457_2022_llm.pdf",
-      "content_hash": "1bcb7c2a7fe9a9a8a4017d6edfedd8548060905721269418aa3296a5ba5723b4",
-      "standardized_at": "2026-03-19T03:50:03.928093+00:00",
+      "content_hash": "3b3d3b778816de40237a3adb57b640e5bbc4b2496c807240e1157307685f9208",
+      "standardized_at": "2026-09-11T13:33:49.240579+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 18627,
-        "output_tokens": 10401,
-        "total_tokens": 29028,
-        "cost_usd": 0.025459
+        "input_tokens": 19375,
+        "output_tokens": 9251,
+        "total_tokens": 28626,
+        "cost_usd": 0.023346
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -68.771,
+        "model_value": -68.271,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 46,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2013,
           2014,
@@ -993,8 +1033,21 @@
             null
           ]
         ],
+        "row_labels": [
+          "At end of underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later",
+          "Seven years later",
+          "Eight years later",
+          "Nine years later"
+        ],
         "source_page": 46,
-        "entity": 457
+        "entity": 457,
+        "presentation_sign": "outflow"
       },
       "_adobe_lob": {
         "gross_premium_mix": [
@@ -1155,26 +1208,13 @@
       }
     }
   },
-  "total_cost_usd": 0.034849,
-  "total_tokens": 47613,
+  "total_cost_usd": 0.032753,
+  "total_tokens": 49469,
   "validation": {
-    "passed": false,
-    "total_discrepancies": 16,
-    "within_tolerance": 14,
-    "hard_failures": 2,
-    "hard_failure_details": [
-      {
-        "field": "prior_year_development_gbp_m",
-        "type": "value_mismatch",
-        "gemini-2.5-flash": -68.297,
-        "gpt-5-mini": -119.092
-      },
-      {
-        "field": "prior_year_development_pct",
-        "type": "value_mismatch",
-        "gemini-2.5-flash": -7.38,
-        "gpt-5-mini": -12.87
-      }
-    ]
+    "passed": true,
+    "total_discrepancies": 20,
+    "within_tolerance": 20,
+    "hard_failures": 0,
+    "hard_failure_details": []
   }
 }

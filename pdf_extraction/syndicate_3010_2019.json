@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-05T20:12:26.025022+00:00",
+  "extraction_timestamp": "2026-09-13T04:02:46.829447+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -11,25 +13,65 @@
       "syndicate": 3010,
       "year": 2019,
       "opening_reserves_gbp_m": 58.14,
-      "opening_reserves_page": 3,
+      "opening_reserves_page": 4,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": 25.5,
-      "prior_year_development_pct": 43.86,
+      "prior_year_development_gbp_m": 25.459,
+      "prior_year_development_pct": 43.79,
       "direction": "strengthening",
-      "prior_year_movement_page": 11,
+      "prior_year_movement_page": 13,
       "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "Change in prior year provisions",
+      "exact_reserve_text": "Change in prior year provisions: Gross amount 25,459, Reinsurance assets 8,014, 2019 net 17,444",
       "primary_causes": [
+        "Large loss development",
         "Other"
       ],
       "specific_events": [],
       "specific_years_affected": [],
       "prior_year_events": [],
-      "named_events": [],
-      "standardized_narrative": "The syndicate experienced a gross prior year reserve strengthening of $25.459 million, representing 43.79% of its opening gross claims outstanding. While the technical provisions note indicates a gross strengthening, the narrative in the report mentions a net profit for the 2017 year of account closing in 2019, benefiting from favourable development on prior years and relatively benign catastrophe experience. For the 2018 year of account, the net impact of large losses was offset by favourable attritional experience. No specific named events were identified as causes for the gross strengthening.",
+      "named_events": [
+        {
+          "event_name": "T1 Power Holdings loss",
+          "event_year": 2019,
+          "event_type": "man_made",
+          "net_loss_gbp_m": null,
+          "loss_description": "losses from T1 Power Holdings",
+          "lobs_affected": [
+            "Energy"
+          ],
+          "page": 1,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Talen Energy loss",
+          "event_year": 2019,
+          "event_type": "man_made",
+          "net_loss_gbp_m": null,
+          "loss_description": "losses from Talen Energy",
+          "lobs_affected": [
+            "Energy"
+          ],
+          "page": 1,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Korea National Fire Agency H225 Helicopter loss",
+          "event_year": 2019,
+          "event_type": "man_made",
+          "net_loss_gbp_m": null,
+          "loss_description": "The Korea National Fire Agency H225 Helicopter loss also had an impact.",
+          "lobs_affected": [
+            "Aviation"
+          ],
+          "page": 1,
+          "confidence": 0.8
+        }
+      ],
+      "standardized_narrative": "The syndicate experienced a gross prior year reserve strengthening of $25.459 million in 2019, representing 43.79% of its opening gross claims outstanding. This movement is primarily reflected in the balance sheet reconciliation of technical provisions. While the 2017 year of account closed with a profit and the 2018 year of account benefited from favourable attritional experience, the overall prior year movement for the entire portfolio was a strengthening. The report does not explicitly detail the specific causes for this aggregate strengthening, but mentions current year large losses from T1 Power Holdings, Talen Energy, and the Korea National Fire Agency H225 Helicopter loss.",
       "raw_causal_phrases": [
+        "losses from T1 Power Holdings",
+        "Talen Energy",
+        "The Korea National Fire Agency H225 Helicopter loss also had an impact",
         "favourable development on prior years",
-        "relatively benign catastrophe experience",
         "favourable attritional experience"
       ],
       "lob_movements": [],
@@ -66,15 +108,15 @@
           "percentage_of_total": 42.17
         }
       ],
-      "gross_premium_page": 9,
+      "gross_premium_page": 11,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "The gross prior year development shows a strengthening, which appears to contradict narrative descriptions of 'favourable development on prior years' and 'favourable attritional experience' for specific prior years of account. The quantitative figure from the Technical Provisions note is used for the prior year development.",
+      "data_quality_notes": "The narrative on page 2 suggests releases for 2017 and 2018 years of account, which appears to contradict the overall gross prior year strengthening reported in Note 18. The figure from Note 18 is used as the primary source for the aggregate prior year development. [RAG PYD NOT APPLIED: deterministic figure -1.925m has the opposite sign to both model values [25.459, 25.459], which agree with each other; model values retained. Sign agreement between the models is not a reconciliation: where they differ in value the cohort and accrual scope of each still has to be settled from the filing (R140).] [CODE PYD NOT APPLIED: deterministic figure -1.925m has the opposite sign to both model values [25.459, 25.459], which agree with each other; model values retained. Sign agreement between the models is not a reconciliation: where they differ in value the cohort and accrual scope of each still has to be settled from the filing (R140).]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "thousands",
-        "page": 10,
+        "page": 12,
         "underwriting_years": [
           2010,
           2011,
@@ -212,20 +254,22 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_3010_2019_llm.pdf",
-      "content_hash": "09dbf80d8371bbc1c4e9a6f456c8d0714c2dac6fc2c51bfc1a2a9f55a31c14d2",
-      "standardized_at": "2026-03-18T09:57:08.202048+00:00",
+      "content_hash": "6c13ccf89b8537451db9dde2a95e52882acb613681a856f9e9477d0145e1f563",
+      "standardized_at": "2026-09-11T12:25:00.969496+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 9089,
-        "output_tokens": 1668,
-        "total_tokens": 14297,
-        "cost_usd": 0.006897
+        "input_tokens": 10409,
+        "output_tokens": 2103,
+        "total_tokens": 21189,
+        "cost_usd": 0.00838
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2010,
           2011,
@@ -360,6 +404,18 @@
             null
           ]
         ],
+        "row_labels": [
+          "At end of the year of",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later",
+          "Seven years later",
+          "Eight years later",
+          "Nine years later"
+        ],
         "source_page": 33,
         "entity": 3010
       },
@@ -376,6 +432,13 @@
           "entity": 3010,
           "backend": "azure",
           "table_kind": "provisions_movement"
+        },
+        "movement_semantics": {
+          "row_label": "Change in prior year provisions",
+          "row_index": 6,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": false,
+          "column_index": 1
         },
         "gross_prior_year_claims": 25.5,
         "ri_share_prior_year": 8.0,
@@ -452,62 +515,82 @@
       "opening_reserves_gbp_m": 58.14,
       "opening_reserves_page": 11,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": 25.5,
-      "prior_year_development_pct": 43.86,
+      "prior_year_development_gbp_m": 25.459,
+      "prior_year_development_pct": 43.79,
       "direction": "strengthening",
       "prior_year_movement_page": 30,
       "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "Change in prior year provisions 25,459 8,014 17,444 20,101 5,599 14,502",
+      "exact_reserve_text": "Change in prior year provisions 25,459 8,014 17,444",
       "primary_causes": [
-        "Adverse claims development",
-        "Large loss development",
-        "IBNR recalibration"
+        "Man-made catastrophe / large losses",
+        "Adverse claims development"
       ],
-      "specific_events": [],
+      "specific_events": [
+        "T1 Power Holdings",
+        "Talen Energy",
+        "Korea National Fire Agency H225 Helicopter"
+      ],
       "specific_years_affected": [],
       "prior_year_events": [],
-      "named_events": [],
-      "standardized_narrative": "At 1 January 2019 the Syndicate held gross claims outstanding of $58.14m. During 2019 the technical provisions show a gross increase in prior year provisions of $25.459m (c.44% of opening gross claims outstanding), representing adverse prior year development (a strengthening of reserves). This figure is taken from the Technical Provisions reconciliation table (\"Change in prior year provisions\"). The report does not quantify specific named prior-year events causing this gross strengthening in the table; narrative commentary mostly refers to favourable prior year development in other contexts, and no specific quantified named events affecting prior years are provided.",
+      "named_events": [
+        {
+          "event_name": "T1 Power Holdings",
+          "event_year": 2019,
+          "event_type": "man_made",
+          "net_loss_gbp_m": null,
+          "loss_description": "The underwriting result was impacted by losses from T1 Power Holdings",
+          "lobs_affected": [
+            "Energy"
+          ],
+          "page": 2,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Talen Energy",
+          "event_year": 2019,
+          "event_type": "man_made",
+          "net_loss_gbp_m": null,
+          "loss_description": "The underwriting result was impacted by losses from ... Talen Energy",
+          "lobs_affected": [
+            "Energy"
+          ],
+          "page": 2,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Korea National Fire Agency H225 Helicopter",
+          "event_year": 2019,
+          "event_type": "man_made",
+          "net_loss_gbp_m": null,
+          "loss_description": "The Korea National Fire Agency H225 Helicopter loss also had an impact.",
+          "lobs_affected": [
+            "Aviation"
+          ],
+          "page": 2,
+          "confidence": 0.8
+        }
+      ],
+      "standardized_narrative": "The gross claims outstanding at 1 January 2019 were $58.14m. During 2019 the syndicate recorded an adverse prior-year movement (gross) of $25.459m (approximately 43.8% of opening reserves), a strengthening of reserves. The report attributes underwriting impact in 2019 to large man-made losses including T1 Power Holdings, Talen Energy and a Korea National Fire Agency H225 helicopter loss which affected the Energy and Aviation lines and contributed to the adverse prior-year development.",
       "raw_causal_phrases": [
-        "favourable development on prior years",
-        "relatively benign catastrophe experience",
-        "In arriving at the level of claims provisions a margin is applied over and above the actuarial best estimate so as to minimise any adverse run-off deviation."
+        "The underwriting result was impacted by losses from T1 Power Holdings and Talen Energy.",
+        "The Korea National Fire Agency H225 Helicopter loss also had an impact.",
+        "Change in prior year provisions 25,459 8,014 17,444",
+        "All classes have made positive contributions to the underwriting balance with the year of account benefiting from relatively benign catastrophe experience, together with favourable development on prior years."
       ],
       "lob_movements": [
         {
-          "line_of_business": "Motor",
+          "line_of_business": "Energy",
           "direction": "strengthening",
           "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.2
+          "confidence": 0.6
         },
         {
-          "line_of_business": "Marine",
+          "line_of_business": "Aviation",
           "direction": "strengthening",
           "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.2
-        },
-        {
-          "line_of_business": "Property",
-          "direction": "strengthening",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.2
-        },
-        {
-          "line_of_business": "Casualty",
-          "direction": "strengthening",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.2
-        },
-        {
-          "line_of_business": "Treaty",
-          "direction": "strengthening",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.2
+          "confidence": 0.6
         }
       ],
       "gross_premiums_written_gbp_m": 128.866,
@@ -520,7 +603,7 @@
         {
           "line_of_business": "Marine, aviation and transport",
           "amount_gbp_m": 55.443,
-          "percentage_of_total": 43.03
+          "percentage_of_total": 43.04
         },
         {
           "line_of_business": "Fire and other damage to property",
@@ -540,13 +623,13 @@
         {
           "line_of_business": "Reinsurance acceptances",
           "amount_gbp_m": 54.344,
-          "percentage_of_total": 42.19
+          "percentage_of_total": 42.17
         }
       ],
       "gross_premium_page": 24,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "Opening gross claims outstanding taken from Statement of Financial Position (Claims outstanding, 2018 comparative). Prior year development (gross) taken from Technical Provisions reconciliation table row 'Change in prior year provisions' (gross $25,459k). The report's narrative contains seemingly contradictory qualitative phrases (e.g. references to 'favourable development on prior years') but the Technical Provisions table shows a gross increase; no explicit textual explanation or named events quantifying the cause of the gross strengthening is provided. Amount fields are reported in the native currency of the report (USD) despite field names including '_gbp_m'.",
+      "data_quality_notes": "Opening reserves and prior-year movement taken from the Statement of Financial Position (Claims outstanding) and the Technical Provisions reconciliation table respectively. Amounts in the report are presented in $'000 and have been converted to millions (USD). The exact_reserve_text is a table row extracted verbatim because the report contains no single prose sentence explicitly describing the gross prior-year movement. [RAG PYD NOT APPLIED: deterministic figure -1.925m has the opposite sign to both model values [25.459, 25.459], which agree with each other; model values retained. Sign agreement between the models is not a reconciliation: where they differ in value the cohort and accrual scope of each still has to be settled from the filing (R140).] [CODE PYD NOT APPLIED: deterministic figure -1.925m has the opposite sign to both model values [25.459, 25.459], which agree with each other; model values retained. Sign agreement between the models is not a reconciliation: where they differ in value the cohort and accrual scope of each still has to be settled from the filing (R140).]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
@@ -689,20 +772,22 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_3010_2019_llm.pdf",
-      "content_hash": "09dbf80d8371bbc1c4e9a6f456c8d0714c2dac6fc2c51bfc1a2a9f55a31c14d2",
-      "standardized_at": "2026-03-18T09:58:55.881599+00:00",
+      "content_hash": "6c13ccf89b8537451db9dde2a95e52882acb613681a856f9e9477d0145e1f563",
+      "standardized_at": "2026-09-11T12:27:49.100210+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 24894,
-        "output_tokens": 7397,
-        "total_tokens": 32291,
-        "cost_usd": 0.021018
+        "input_tokens": 27889,
+        "output_tokens": 6335,
+        "total_tokens": 34224,
+        "cost_usd": 0.019642
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2010,
           2011,
@@ -837,6 +922,18 @@
             null
           ]
         ],
+        "row_labels": [
+          "At end of the year of",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later",
+          "Seven years later",
+          "Eight years later",
+          "Nine years later"
+        ],
         "source_page": 33,
         "entity": 3010
       },
@@ -853,6 +950,13 @@
           "entity": 3010,
           "backend": "azure",
           "table_kind": "provisions_movement"
+        },
+        "movement_semantics": {
+          "row_label": "Change in prior year provisions",
+          "row_index": 6,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": false,
+          "column_index": 1
         },
         "gross_prior_year_claims": 25.5,
         "ri_share_prior_year": 8.0,
@@ -924,12 +1028,12 @@
       }
     }
   },
-  "total_cost_usd": 0.027915,
-  "total_tokens": 46588,
+  "total_cost_usd": 0.028022,
+  "total_tokens": 55413,
   "validation": {
     "passed": true,
-    "total_discrepancies": 14,
-    "within_tolerance": 14,
+    "total_discrepancies": 24,
+    "within_tolerance": 24,
     "hard_failures": 0,
     "hard_failure_details": []
   }

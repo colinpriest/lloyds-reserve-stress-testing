@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-05T19:48:39.650113+00:00",
+  "extraction_timestamp": "2026-09-13T04:01:51.276098+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -16,28 +18,37 @@
       "prior_year_development_gbp_m": 11.689,
       "prior_year_development_pct": 15.15,
       "direction": "strengthening",
-      "prior_year_movement_page": 15,
-      "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "Claims incurred in prior underwriting years 12,581",
+      "prior_year_movement_page": 19,
+      "prior_year_movement_confidence": 0.8,
+      "exact_reserve_text": "The prior year development was calculated from the 'Estimate of incurred gross claims' table on page 19.",
       "primary_causes": [
-        "Other"
+        "IBNR recalibration"
       ],
       "specific_events": [],
-      "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [
         {
-          "event_name": "Natural catastrophe in September 2017 / Storm and earthquake losses",
+          "event_name": "Natural catastrophe events",
           "event_year": 2017,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "adversely impacted the 2017 claims ratio",
+          "loss_description": "claims arising from natural catastrophe in September 2017",
+          "lobs_affected": [],
+          "page": 2,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Storm and earthquake losses",
+          "event_year": 2017,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "The 2017 claims ratio has been adversely impacted by the storm and earthquake losses experienced in the third quarter",
           "lobs_affected": [],
           "page": 2,
           "confidence": 0.8
         }
       ],
-      "standardized_narrative": "The syndicate experienced a gross prior year reserve strengthening of GBP 12.581 million, representing a 16.29% increase relative to opening gross reserves. This strengthening is indicated by the 'Claims incurred in prior underwriting years' line in the claims outstanding reconciliation. No specific causes for this strengthening were provided. The 2017 claims ratio was adversely impacted by storm and earthquake losses in the third quarter.",
+      "standardized_narrative": "The syndicate experienced a gross prior year reserve strengthening of GBP 35.826 million, representing a 46.42% increase compared to the opening gross reserves. This movement was derived from the gross claims development triangle, indicating an increase in the estimated ultimate cost of claims for underwriting years 2015 and prior. No specific events or detailed causes for this gross strengthening were explicitly stated, suggesting a general recalibration of IBNR estimates.",
       "raw_causal_phrases": [],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 110.8,
@@ -68,15 +79,15 @@
           "percentage_of_total": 38.9
         }
       ],
-      "gross_premium_page": 2,
+      "gross_premium_page": 16,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The narrative on page 16 states 'The syndicate has experienced a positive run off deviation of GBP 3,714k in the year', which implies a release. This contradicts the 'Claims incurred in prior underwriting years' figure of GBP 12,581k (a strengthening) from the claims outstanding reconciliation table on page 15. The table figure is used as it is a direct line item in the reconciliation. [RAG OVERRIDE: Model said PYD=12.581, RAG triangle computed 11.689. Using RAG value.]",
+      "data_quality_notes": "The gross prior year development was calculated from the gross claims development triangle (page 19) as no explicit gross prior year movement figure was provided in narrative or a dedicated note. The narrative on page 17 mentions a 'positive run off deviation of GBP 3,714k' which is a net release, contradicting the gross strengthening derived from the triangle. The gross triangle was prioritized as per instructions. [RAG OVERRIDE: Model said PYD=35.826, RAG triangle computed 11.689. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
-        "page": 18,
+        "page": 19,
         "underwriting_years": [
           2011,
           2012,
@@ -154,20 +165,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_1945_2017_llm.pdf",
-      "content_hash": "3ab05816d83b889fcde50e4a136f571a26b89ab43ce2200c6427ad2a02d29a5a",
-      "standardized_at": "2026-03-18T11:17:38.276304+00:00",
+      "content_hash": "fea0b176fb4f41dc9d86e80438d78aa919603083f2275506202787daabbb6ab5",
+      "standardized_at": "2026-09-11T11:19:49.138912+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 10895,
-        "output_tokens": 1342,
-        "total_tokens": 20345,
-        "cost_usd": 0.006624
+        "input_tokens": 11957,
+        "output_tokens": 1467,
+        "total_tokens": 20294,
+        "cost_usd": 0.007255
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 11.689,
+        "model_value": 35.826,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 39,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -242,6 +265,15 @@
             null
           ]
         ],
+        "row_labels": [
+          "At end of underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later"
+        ],
         "source_page": 39,
         "entity": 1945
       },
@@ -314,6 +346,13 @@
           "entity": 1945,
           "backend": "azure",
           "table_kind": "balance_sheet_liabilities"
+        },
+        "movement_semantics": {
+          "row_label": "Claims incurred in prior underwriting years",
+          "row_index": 5,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": false,
+          "column_index": 1
         },
         "gross_prior_year_claims": 12.6,
         "ri_share_prior_year": 2.5,
@@ -399,43 +438,19 @@
       "prior_year_development_pct": 15.15,
       "direction": "strengthening",
       "prior_year_movement_page": 32,
-      "prior_year_movement_confidence": 0.8,
+      "prior_year_movement_confidence": 1.0,
       "exact_reserve_text": "The syndicate has experienced a positive run off deviation of GBP 3,714k in the year, predominately in respect of Accident and Health business (2016: GBP 3,031k, predominately in respect of Property and Accident and Health businesses).",
       "primary_causes": [
-        "Favorable claims development",
-        "Natural catastrophe events"
+        "Favorable claims development"
       ],
       "specific_events": [],
-      "specific_years_affected": [
-        2011,
-        2012,
-        2013,
-        2014,
-        2015
-      ],
+      "specific_years_affected": [],
       "prior_year_events": [],
-      "named_events": [
-        {
-          "event_name": "Storm and earthquake losses (third quarter)",
-          "event_year": 2017,
-          "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": null,
-          "loss_description": "The 2017 claims ratio has been adversely impacted by the storm and earthquake losses experienced in the third quarter.",
-          "lobs_affected": [
-            "Property",
-            "Marine",
-            "Energy"
-          ],
-          "page": 5,
-          "confidence": 0.5
-        }
-      ],
-      "standardized_narrative": "Gross prior year reserves increased (strengthened) by approximately GBP 11.7m on a gross basis in 2017 (c. +15.1% of opening gross reserves). The managing agent narrative refers to a net positive run-off (a GBP 3.714m favourable run-off) predominately in Accident & Health (and previously Property) but the gross claims development triangle shows a net gross deterioration driven by older underwriting years (notably 2013 and 2015 movements) partially offset by releases in the oldest years. The syndicate also notes that current-year results were adversely affected by storm and earthquake losses in Q3 2017.",
+      "named_events": [],
+      "standardized_narrative": "Opening gross claims outstanding at 1 January 2017 were GBP 77.173m. During 2017 the syndicate recorded a positive run-off deviation of GBP 3.714m (a release), predominately in Accident & Health lines, representing an approximate 4.8% release relative to opening gross claims outstanding. The report also notes current-year adverse impact on the 2017 claims ratio from storm and earthquake losses in Q3, but the prior-year movement is described as favourable run-off.",
       "raw_causal_phrases": [
-        "positive run off deviation of GBP 3,714k in the year",
-        "predominately in respect of Accident and Health business",
-        "predominately in respect of Property and Accident and Health businesses",
-        "adversely impacted by the storm and earthquake losses experienced in the third quarter"
+        "positive run off deviation of GBP 3,714k in the year, predominately in respect of Accident and Health business",
+        "The 2017 claims ratio has been adversely impacted by the storm and earthquake losses experienced in the third quarter"
       ],
       "lob_movements": [
         {
@@ -444,27 +459,6 @@
           "amount_gbp_m": null,
           "percentage": null,
           "confidence": 0.5
-        },
-        {
-          "line_of_business": "Property",
-          "direction": "release",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.5
-        },
-        {
-          "line_of_business": "Marine",
-          "direction": "mixed",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.3
-        },
-        {
-          "line_of_business": "Energy",
-          "direction": "mixed",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.3
         }
       ],
       "gross_premiums_written_gbp_m": 110.8,
@@ -498,7 +492,7 @@
       "gross_premium_page": 5,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Gross prior year development was calculated from the GROSS claims development triangle (page 37). The managing agent narrative on page 32 reports a net favourable run-off of GBP 3,714k (net of reinsurance) which conflicts with the gross triangle-derived result (gross strengthening of ~GBP 11.7m). The prior_year_development_gbp_m above is the gross figure derived from the triangle per the extraction rules; the narrative net figure is reported verbatim in exact_reserve_text. Some LOB-level movements are described qualitatively only (hence null amounts). Triangle is reported in original units (thousands) in _claims_triangle.",
+      "data_quality_notes": "Prior year development figure sourced from narrative sentence describing a 'positive run off deviation of GBP 3,714k'. The report also contains a gross claims development triangle (page 37) which could be used to compute an alternative gross PYD, but the narrative explicitly quantifies a run-off deviation. It is not explicitly labelled gross or net in the sentence; interpreted here as a gross release and recorded accordingly. A gross claims development triangle is present (page 37) in thousands which was not fully reconciled to the narrative amount in this extraction. [RAG OVERRIDE: Model said PYD=-3.714, RAG triangle computed 11.689. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -581,20 +575,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_1945_2017_llm.pdf",
-      "content_hash": "3ab05816d83b889fcde50e4a136f571a26b89ab43ce2200c6427ad2a02d29a5a",
-      "standardized_at": "2026-03-18T11:19:47.580829+00:00",
+      "content_hash": "fea0b176fb4f41dc9d86e80438d78aa919603083f2275506202787daabbb6ab5",
+      "standardized_at": "2026-09-11T11:22:17.013317+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 23346,
-        "output_tokens": 8530,
-        "total_tokens": 31876,
-        "cost_usd": 0.022897
+        "input_tokens": 25039,
+        "output_tokens": 6243,
+        "total_tokens": 31282,
+        "cost_usd": 0.018746
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 11.689,
+        "model_value": -3.714,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 39,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -669,6 +675,15 @@
             null
           ]
         ],
+        "row_labels": [
+          "At end of underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later"
+        ],
         "source_page": 39,
         "entity": 1945
       },
@@ -741,6 +756,13 @@
           "entity": 1945,
           "backend": "azure",
           "table_kind": "balance_sheet_liabilities"
+        },
+        "movement_semantics": {
+          "row_label": "Claims incurred in prior underwriting years",
+          "row_index": 5,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": false,
+          "column_index": 1
         },
         "gross_prior_year_claims": 12.6,
         "ri_share_prior_year": 2.5,
@@ -817,12 +839,12 @@
       }
     }
   },
-  "total_cost_usd": 0.029521,
-  "total_tokens": 52221,
+  "total_cost_usd": 0.026001,
+  "total_tokens": 51576,
   "validation": {
     "passed": true,
-    "total_discrepancies": 20,
-    "within_tolerance": 20,
+    "total_discrepancies": 12,
+    "within_tolerance": 12,
     "hard_failures": 0,
     "hard_failure_details": []
   }

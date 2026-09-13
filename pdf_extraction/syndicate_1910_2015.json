@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T09:50:24.345488+00:00",
+  "extraction_timestamp": "2026-09-13T04:13:52.357411+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -11,14 +13,14 @@
       "syndicate": 1910,
       "year": 2015,
       "opening_reserves_gbp_m": 76.621,
-      "opening_reserves_page": 26,
+      "opening_reserves_page": 7,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": -6.283,
       "prior_year_development_pct": -8.2,
       "direction": "release",
-      "prior_year_movement_page": 37,
+      "prior_year_movement_page": 17,
       "prior_year_movement_confidence": 0.8,
-      "exact_reserve_text": "The Syndicate's cumulative incurred claims development table shows a decrease in the estimated ultimate gross claims for underwriting years 2011, 2012, and 2013 during 2015.",
+      "exact_reserve_text": "Estimate of cumulative gross claims incurred: At end of underwriting year 35,300 (2011), 61,490 (2012), 24,654 (2013), 42,673 (2014), 41,733 (2015); One year later 34,656 (2011), 62,004 (2012), 32,245 (2013), 44,605 (2014); Two years later 32,138 (2011), 62,503 (2012), 29,124 (2013); Three years later 32,763 (2011), 60,089 (2012); Four years later 32,015 (2011).",
       "primary_causes": [
         "Favorable claims development"
       ],
@@ -30,10 +32,10 @@
       ],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "The syndicate experienced a gross prior year reserve release of GBP 6.283 million, representing an 8.2% reduction in opening gross reserves. This favorable development was calculated from the gross claims development table, showing decreases in the estimated ultimate gross claims for the 2011, 2012, and 2013 underwriting years. No specific events or lines of business were identified as driving these movements.",
+      "standardized_narrative": "The syndicate experienced a favorable prior year development of GBP 6.283 million, representing a release of 8.2% of its opening gross claims outstanding. This was calculated from the gross claims development triangle, showing a decrease in the ultimate estimates for the 2011, 2012, and 2013 underwriting years.",
       "raw_causal_phrases": [
-        "past experience of the development of claims over time",
-        "Adjustments to the amounts of claims provisions established in prior years are reflected in the financial statements for the period in which the adjustments are made."
+        "The principal assumption underlying the liability estimates is that the future claims development will follow a similar pattern to past claims development experience.",
+        "As claims develop, and the ultimate cost of the claims becomes more certain, the relative level of margin should decrease."
       ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 274.656,
@@ -54,15 +56,15 @@
           "percentage_of_total": 93.53
         }
       ],
-      "gross_premium_page": 25,
+      "gross_premium_page": 12,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior year development was calculated from the gross claims development table as no explicit 'Movement in prior year's provision' note was available. LOB-specific movements could not be determined as the claims development table is not broken down by LOB.",
+      "data_quality_notes": "",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
-        "page": 37,
+        "page": 17,
         "underwriting_years": [
           2011,
           2012,
@@ -109,21 +111,33 @@
         ]
       },
       "source_type": "syndicate",
-      "source_file": "syndicate_reports\\pdfs\\syndicate_1910_2015.pdf",
-      "content_hash": "81ae9826929a8838502b55fee719108e5fb179023447f644327dba7a285ee1b6",
-      "standardized_at": "2026-03-17T02:28:58.073815+00:00",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_1910_2015_llm.pdf",
+      "content_hash": "a35e57f2a4fdd153b2ab436a3ec586f0d711ccdb0fda6318228e41030493f016",
+      "standardized_at": "2026-09-11T11:04:06.775345+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 16462,
-        "output_tokens": 1029,
-        "total_tokens": 22146,
-        "cost_usd": 0.007511
+        "input_tokens": 11957,
+        "output_tokens": 1147,
+        "total_tokens": 15317,
+        "cost_usd": 0.006455
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -6.283,
+        "model_value": -6.283,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 37,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -167,6 +181,13 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later"
         ],
         "source_page": 37,
         "entity": 1910
@@ -269,7 +290,7 @@
       "syndicate": 1910,
       "year": 2015,
       "opening_reserves_gbp_m": 76.621,
-      "opening_reserves_page": 22,
+      "opening_reserves_page": 12,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": -6.283,
       "prior_year_development_pct": -8.2,
@@ -278,17 +299,9 @@
       "prior_year_movement_confidence": 0.8,
       "exact_reserve_text": "The tables below show the Syndicate's cumulative incurred claims development, including both claims notified and IBNR for each underwriting year, together with the cumulative payments to date on a gross and net of reinsurance basis at the balance sheet date.",
       "primary_causes": [
-        "Favorable claims development",
-        "Reinsurance recoveries"
+        "Favorable claims development"
       ],
-      "specific_events": [
-        "Two events - North East Windstorm",
-        "Florida Windstorm - Miami Dade",
-        "Florida Windstorm - Pinellas",
-        "Gulf of Mexico Windstorm - Major Hurricane landing in Galveston, Texas",
-        "California Earthquake - San Francisco",
-        "AEP Loss 30 Year Return Period - US WS (Incl GM WS)"
-      ],
+      "specific_events": [],
       "specific_years_affected": [
         2011,
         2012,
@@ -301,7 +314,7 @@
           "event_year": null,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": 58.808,
-          "loss_description": "Estimated Net loss shown in catastrophe exposure table",
+          "loss_description": "Estimated net loss under the Syndicate's in-force exposure at 31 December 2015",
           "lobs_affected": [
             "Property"
           ],
@@ -313,7 +326,7 @@
           "event_year": null,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": 42.573,
-          "loss_description": "Estimated Net loss shown in catastrophe exposure table",
+          "loss_description": "Estimated net loss under the Syndicate's in-force exposure at 31 December 2015",
           "lobs_affected": [
             "Property"
           ],
@@ -325,7 +338,7 @@
           "event_year": null,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": 69.783,
-          "loss_description": "Estimated Net loss shown in catastrophe exposure table",
+          "loss_description": "Estimated net loss under the Syndicate's in-force exposure at 31 December 2015",
           "lobs_affected": [
             "Property"
           ],
@@ -337,7 +350,7 @@
           "event_year": null,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": 65.026,
-          "loss_description": "Estimated Net loss shown in catastrophe exposure table",
+          "loss_description": "Estimated net loss under the Syndicate's in-force exposure at 31 December 2015",
           "lobs_affected": [
             "Property"
           ],
@@ -349,7 +362,7 @@
           "event_year": null,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": 53.106,
-          "loss_description": "Estimated Net loss shown in catastrophe exposure table",
+          "loss_description": "Estimated net loss under the Syndicate's in-force exposure at 31 December 2015",
           "lobs_affected": [
             "Property"
           ],
@@ -361,7 +374,7 @@
           "event_year": null,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": 74.482,
-          "loss_description": "Estimated Net loss shown in catastrophe exposure table",
+          "loss_description": "Estimated net loss under the Syndicate's in-force exposure at 31 December 2015",
           "lobs_affected": [
             "Property"
           ],
@@ -369,35 +382,50 @@
           "confidence": 0.8
         }
       ],
-      "standardized_narrative": "The syndicate shows modest favourable prior-year development at year end 2015. Analysis of the gross claims development table indicates an aggregate release on older underwriting years (2011-2013) of approximately GBP 6.3m, driven by favourable claims development and recoveries from reinsurance. The overall gross claims outstanding increased year-on-year due to current-year claims and movements, but the prior-years (excluding 2014-2015) show net improvement.",
+      "standardized_narrative": "The syndicate had opening gross claims outstanding of GBP 76.621m at 1 January 2015. Using the gross claims development table the syndicate shows favourable prior-year development of approximately GBP 6.28m (a release, ~8.2% of opening reserves), driven by reductions in the cumulative estimates for underwriting years 2011-2013. No single prior-year large loss is identified as the primary cause in the notes; the movement is reported via the claims development table and attributed to favourable claims development across older years.",
       "raw_causal_phrases": [
         "The tables below show the Syndicate's cumulative incurred claims development, including both claims notified and IBNR for each underwriting year, together with the cumulative payments to date on a gross and net of reinsurance basis at the balance sheet date.",
-        "The uncertainty associated with the ultimate claims experience of an underwriting year is greatest when the underwriting year is at an early stage of development and the margin for future experience potentially being more adverse than assumed is at its highest.",
-        "The Syndicate purchases reinsurance as part of its risks mitigation programme."
+        "The provision for claims comprises amounts set aside for claims notified and claims incurred but not yet reported (IBNR).",
+        "The amount included in respect of IBNR is based on statistical techniques of estimation applied by external consulting actuaries."
       ],
-      "lob_movements": [],
+      "lob_movements": [
+        {
+          "line_of_business": "Property",
+          "direction": "release",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.5
+        },
+        {
+          "line_of_business": "Treaty",
+          "direction": null,
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.0
+        }
+      ],
       "gross_premiums_written_gbp_m": 274.656,
       "gross_premium_mix": [
         {
           "line_of_business": "Fire and other damage to property",
           "amount_gbp_m": 3.618,
-          "percentage_of_total": 1.317
+          "percentage_of_total": 1.32
         },
         {
           "line_of_business": "Pecuniary loss",
           "amount_gbp_m": 14.15,
-          "percentage_of_total": 5.156
+          "percentage_of_total": 5.15
         },
         {
           "line_of_business": "Reinsurance",
           "amount_gbp_m": 256.888,
-          "percentage_of_total": 93.527
+          "percentage_of_total": 93.53
         }
       ],
       "gross_premium_page": 21,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior-year development amount derived by applying the triangle diagonal comparison method to the gross claims development table (page 33) excluding the two most recent underwriting years (2015 and 2014). No single explicit gross prior-year movement sentence was provided; the reconciliation/movement line in the technical provisions table includes current year movements and therefore was not used for PYD. RITC / reinsurance interactions and the presence of reinsurance acceptances may distort comparisons; numbers in development table are presented in '000. Confidence in PYD is moderate (0.8).",
+      "data_quality_notes": "Opening gross claims outstanding taken from Statement of Financial Position liabilities (Claims outstanding) 2014 comparative column. Prior-year development calculated from the gross claims development triangle (page 33) by comparing the latest diagonal vs prior diagonal for underwriting years 2011-2013 (excluded 2014 and 2015). No explicit single sentence quantifying gross prior-year movement was found; triangle-derived value used (confidence 0.8). Exact_reserve_text uses the table description as the report contains no explicit sentence summarising the gross prior-year movement. Premium mix taken from segmental analysis (page 21).",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -449,21 +477,33 @@
         ]
       },
       "source_type": "syndicate",
-      "source_file": "syndicate_reports\\pdfs\\syndicate_1910_2015.pdf",
-      "content_hash": "81ae9826929a8838502b55fee719108e5fb179023447f644327dba7a285ee1b6",
-      "standardized_at": "2026-03-17T02:30:45.090060+00:00",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_1910_2015_llm.pdf",
+      "content_hash": "a35e57f2a4fdd153b2ab436a3ec586f0d711ccdb0fda6318228e41030493f016",
+      "standardized_at": "2026-09-11T11:06:58.152382+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 44440,
-        "output_tokens": 6756,
-        "total_tokens": 51196,
-        "cost_usd": 0.024622
+        "input_tokens": 25039,
+        "output_tokens": 7435,
+        "total_tokens": 32474,
+        "cost_usd": 0.02113
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -6.283,
+        "model_value": -6.283,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 37,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -507,6 +547,13 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later"
         ],
         "source_page": 37,
         "entity": 1910
@@ -606,12 +653,12 @@
       }
     }
   },
-  "total_cost_usd": 0.032133,
-  "total_tokens": 73342,
+  "total_cost_usd": 0.027585,
+  "total_tokens": 47791,
   "validation": {
     "passed": true,
-    "total_discrepancies": 22,
-    "within_tolerance": 22,
+    "total_discrepancies": 12,
+    "within_tolerance": 12,
     "hard_failures": 0,
     "hard_failure_details": []
   }

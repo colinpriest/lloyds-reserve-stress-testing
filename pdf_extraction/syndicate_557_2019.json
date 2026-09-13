@@ -1,12 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-10T10:44:09.527909+00:00",
+  "extraction_timestamp": "2026-09-13T04:12:06.042425+00:00",
   "spec": {
-    "prompt_version": "2.10",
-    "driver_prompt_version": "2.11",
-    "responses_served_from_cache": {
-      "gemini-2.5-flash": "2.10",
-      "gpt-5-mini": "2.10"
-    },
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -18,15 +15,15 @@
       "opening_reserves_gbp_m": 31.399,
       "opening_reserves_page": 21,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": -3.4,
-      "prior_year_development_pct": -10.83,
+      "prior_year_development_gbp_m": -2.3,
+      "prior_year_development_pct": -7.33,
       "direction": "release",
-      "prior_year_movement_page": 25,
+      "prior_year_movement_page": 4,
       "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "Within the calendar year technical result, a surplus of GBP 5.2m (2018: GBP 9.6m) relates to the reassessment of net claims incurred for previous accident years.",
+      "exact_reserve_text": "The Syndicate also benefitted from GBP 2.3 million of releases on prior year catastrophe events including the California Wildfires and Superstorm Sandy.",
       "primary_causes": [
         "Favorable claims development",
-        "Reinsurance recoveries"
+        "Natural catastrophe events"
       ],
       "specific_events": [
         "California Wildfires",
@@ -40,7 +37,7 @@
           "impact_description": "releases on prior year catastrophe events",
           "lobs_affected": [],
           "amount_gbp_m": null,
-          "confidence": 0.5
+          "confidence": 0.8
         },
         {
           "event_name": "Superstorm Sandy",
@@ -48,7 +45,7 @@
           "impact_description": "releases on prior year catastrophe events",
           "lobs_affected": [],
           "amount_gbp_m": null,
-          "confidence": 0.5
+          "confidence": 0.8
         }
       ],
       "named_events": [
@@ -83,10 +80,11 @@
           "confidence": 0.8
         }
       ],
-      "standardized_narrative": "Syndicate 557 reported a net release of GBP 5.2 million in prior year reserves, contributing to a surplus in the calendar year technical result. This favorable development was partly driven by releases on prior year catastrophe events, including the California Wildfires and Superstorm Sandy.",
+      "standardized_narrative": "Syndicate 557 reported a net release of GBP 2.3 million in prior year reserves, primarily due to favorable claims development on prior year catastrophe events, specifically mentioning the California Wildfires and Superstorm Sandy. This contributed to a positive overall result for the year.",
       "raw_causal_phrases": [
-        "surplus of GBP 5.2m relates to the reassessment of net claims incurred for previous accident years",
-        "benefitted from GBP 2.3 million of releases on prior year catastrophe events including the California Wildfires and Superstorm Sandy"
+        "releases on prior year catastrophe events",
+        "California Wildfires",
+        "Superstorm Sandy"
       ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 1450.0,
@@ -125,9 +123,9 @@
       "gross_premium_page": 23,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The prior year development figure of -5.2m is explicitly stated as 'net claims incurred' in the narrative. A gross prior year development figure could not be directly identified from the 'Reconciliation of insurance balances' note or other narrative, and the gross claims development triangle calculation yielded a strengthening (+7.7m) which contradicts the narrative's stated net release. Therefore, the explicit net figure from the narrative is used, and this discrepancy is noted. [CODE OVERRIDE: Model said PYD=-5.2, but code computed -3.4 from triangle (OVERRIDE from gemini-2.5-flash triangle). Using code value.]",
+      "data_quality_notes": "Prior year development figure is net of reinsurance as no gross figure was explicitly stated or derivable from available tables. The claims development table on page 25 shows cumulative claims paid and outstanding claims reserve, not cumulative claims incurred, making it unsuitable for standard PYD calculation.",
       "_claims_triangle": {
-        "type": "gross",
+        "type": "none",
         "currency": "GBP",
         "units": "millions",
         "page": 25,
@@ -246,117 +244,21 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_557_2019_llm.pdf",
-      "content_hash": "22a5b6408e821c8803b1213945912faad528750f3abe818e1e66a15b7f84da6f",
-      "standardized_at": "2026-07-05T18:51:11.701814+00:00",
+      "content_hash": "ad1070f72f488ea4abe72ddc0db68697c921c5ed37c6f0611e17ba583970c39d",
+      "standardized_at": "2026-09-11T13:21:39.033591+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 24568,
-        "output_tokens": 1573,
-        "total_tokens": 35750,
-        "cost_usd": 0.011303
+        "input_tokens": 25372,
+        "output_tokens": 1631,
+        "total_tokens": 29955,
+        "cost_usd": 0.011689
       },
-      "_served_from": {
-        "cache_file": "969e27f44386551fe87b661a4db92bea73e879436690424f2f2a7ef4ad956f7b.json",
-        "prompt_version": "2.10"
-      },
-      "_rag_triangle": {
-        "type": "gross",
-        "currency": "GBP",
-        "units": "millions",
-        "units_evidence": "conflict",
-        "underwriting_years": [
-          2011,
-          2012,
-          2013,
-          2014,
-          2015,
-          2016,
-          2017
-        ],
-        "development_rows": [
-          [
-            59.87,
-            56.27,
-            45.82,
-            39.28,
-            34.87,
-            34.71,
-            34.06
-          ],
-          [
-            1144.0,
-            1086.0,
-            932.0,
-            810.0,
-            770.0,
-            818.0,
-            801.0
-          ],
-          [
-            25.72,
-            28.06,
-            26.06,
-            22.18,
-            17.13,
-            15.64,
-            15.24
-          ],
-          [
-            6.12,
-            3.27,
-            7.02,
-            10.77,
-            10.44,
-            8.9,
-            null
-          ],
-          [
-            5.0,
-            10000.0,
-            4876.0,
-            5954.0,
-            6637.0,
-            null,
-            null
-          ],
-          [
-            6295.0,
-            5387.0,
-            4976.0,
-            4894.0,
-            null,
-            null,
-            null
-          ],
-          [
-            0.0,
-            49.0,
-            60.0,
-            null,
-            null,
-            null,
-            null
-          ],
-          [
-            66.0,
-            63.0,
-            null,
-            null,
-            null,
-            null,
-            null
-          ],
-          [
-            54.0,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-          ]
-        ]
+      "_pyd_route": {
+        "source": "rag_general_narrative",
+        "value": -2.3,
+        "model_value": -2.3,
+        "note": "confirmed by the model value"
       },
       "_adobe_lob": {
         "gross_premium_mix": [
@@ -670,12 +572,12 @@
       "opening_reserves_gbp_m": 31.399,
       "opening_reserves_page": 50,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": -3.4,
-      "prior_year_development_pct": -10.83,
+      "prior_year_development_gbp_m": -2.3,
+      "prior_year_development_pct": -7.33,
       "direction": "release",
       "prior_year_movement_page": 7,
       "prior_year_movement_confidence": 0.5,
-      "exact_reserve_text": "The Syndicate also benefited from GBP 2.3 million of releases on prior year catastrophe events including the California Wildfires and Superstorm Sandy.",
+      "exact_reserve_text": "The Syndicate also benefitted from GBP 2.3 million of releases on prior year catastrophe events including the California Wildfires and Superstorm Sandy.",
       "primary_causes": [
         "Favorable claims development",
         "Natural catastrophe events"
@@ -689,9 +591,10 @@
         {
           "event_name": "California Wildfires",
           "event_year": null,
-          "impact_description": "Releases on prior year catastrophe events",
+          "impact_description": "Releases on prior year catastrophe events contributed to an aggregate release on prior years.",
           "lobs_affected": [
-            "Reinsurance - Property"
+            "Reinsurance - Specialty",
+            "Treaty"
           ],
           "amount_gbp_m": null,
           "confidence": 0.6
@@ -699,12 +602,13 @@
         {
           "event_name": "Superstorm Sandy",
           "event_year": 2012,
-          "impact_description": "Releases on prior year catastrophe events",
+          "impact_description": "Listed as a prior year catastrophe event from which the Syndicate benefitted from releases.",
           "lobs_affected": [
-            "Reinsurance - Property"
+            "Reinsurance - Specialty",
+            "Treaty"
           ],
           "amount_gbp_m": null,
-          "confidence": 0.7
+          "confidence": 0.6
         }
       ],
       "named_events": [
@@ -713,21 +617,23 @@
           "event_year": 2019,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "losses from Hurricane Dorian remaining within the Syndicate's planned catastrophe expectations.",
+          "loss_description": "losses from Hurricane Dorian remaining within the Syndicate's planned catastrophe expectations",
           "lobs_affected": [
-            "Reinsurance - Property"
+            "Reinsurance - Specialty",
+            "Treaty"
           ],
           "page": 7,
-          "confidence": 1.0
+          "confidence": 0.7
         },
         {
           "event_name": "California Wildfires",
           "event_year": null,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "mentioned as a prior year catastrophe event contributing to releases",
+          "loss_description": "included in releases on prior year catastrophe events",
           "lobs_affected": [
-            "Reinsurance - Property"
+            "Reinsurance - Specialty",
+            "Treaty"
           ],
           "page": 7,
           "confidence": 0.6
@@ -737,18 +643,19 @@
           "event_year": 2012,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "mentioned as a prior year catastrophe event contributing to releases",
+          "loss_description": "included in releases on prior year catastrophe events",
           "lobs_affected": [
-            "Reinsurance - Property"
+            "Reinsurance - Specialty",
+            "Treaty"
           ],
           "page": 7,
-          "confidence": 0.7
+          "confidence": 0.6
         }
       ],
-      "standardized_narrative": "Syndicate 557 closed 2019 with opening (2018) gross claims outstanding of GBP 31.399m and reported releases on prior year catastrophe items. The managing agent states the Syndicate \"benefited from GBP 2.3 million of releases on prior year catastrophe events including the California Wildfires and Superstorm Sandy\", indicating a favourable prior-year reserve development. The Syndicate writes primarily reinsurance business (quota share of property catastrophe risk) so the release is attributed to prior catastrophe claims experience re-assessment in the reinsurance/property book.",
+      "standardized_narrative": "Opening gross claims outstanding at 1 January 2019 were GBP 31.399m (2018 column). During 2019 the syndicate reported releases on prior years, with the managing agent stating that the syndicate \"benefitted from GBP 2.3 million of releases on prior year catastrophe events including the California Wildfires and Superstorm Sandy.\" The movement is described as a prior-year release (favourable development), driven by lower-than-expected outcomes on earlier catastrophe exposures and general favourable prior-year claims development. No gross prior-year movement breakdown by individual event or LOB is provided in the notes for Syndicate 557.",
       "raw_causal_phrases": [
-        "The Syndicate also benefited from GBP 2.3 million of releases on prior year catastrophe events including the California Wildfires and Superstorm Sandy.",
-        "the lack of significant catastrophe events impacting the Syndicate during the year with losses from Hurricane Dorian remaining within the Syndicate's planned catastrophe expectations."
+        "benefitted from GBP 2.3 million of releases on prior year catastrophe events including the California Wildfires and Superstorm Sandy.",
+        "lack of significant catastrophe events impacting its mix during the year with losses from Hurricane Dorian remaining within the Syndicate's planned catastrophe expectations."
       ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 1450.0,
@@ -784,14 +691,14 @@
           "percentage_of_total": 4.6
         }
       ],
-      "gross_premium_page": 47,
+      "gross_premium_page": 53,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior-year development amount used is the managing agent's narrative statement of GBP 2.3m releases (page 7). The report does not present an explicit GROSS total prior-year movement in a single labelled 'movement in prior year's provision' gross column for Syndicate 557 that was readily extractable from the images; the GBP 2.3m figure may represent catastrophe-related releases (possible net or gross ambiguity). A gross claims development triangle exists (page 58) but was not fully parsed from the scanned images - therefore the prior year development value is taken from narrative (confidence moderate). If a precise gross prior-year movement is required, consult the gross movement column in the detailed reserves note/triangle on page 58 or the statutory 'Movement in prior year's provision for claims outstanding' note. [CODE OVERRIDE: Model said PYD=-2.3, but code computed -3.4 from triangle (OVERRIDE from gemini-2.5-flash triangle). Using code value.]",
+      "data_quality_notes": "Opening reserves taken from Balance Sheet liabilities 'Claims outstanding' 2018 comparative column (31,399 GBP '000 = 31.399m) - high confidence. Prior year development: the report text explicitly cites a GBP 2.3m release on prior year catastrophe events; the report does not state clearly whether this GBP 2.3m is a gross (insurance liabilities) or net (after reinsurance) figure. Per rules a gross figure was preferred but not explicitly available; therefore the GBP 2.3m prior-year movement has been recorded as a release (negative) but with moderate confidence and flagged here as potentially net-of-reinsurance. A gross claims development triangle is present in the notes (claims development tables) but was not used to compute an alternative total due to readability limits in the source images; triangle data is available on page 58 but was not relied on for the prior-year movement number above. Users should treat the prior_year_development_gbp_m as an inferred release from narrative rather than a reconciled gross movements table.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
-        "units": "thousands",
+        "units": "millions",
         "page": 58,
         "underwriting_years": [
           2011,
@@ -804,105 +711,56 @@
           2018,
           2019
         ],
-        "development_rows": []
-      },
-      "source_type": "syndicate",
-      "source_file": "pdf_extraction\\llm_slim\\syndicate_557_2019_llm.pdf",
-      "content_hash": "22a5b6408e821c8803b1213945912faad528750f3abe818e1e66a15b7f84da6f",
-      "standardized_at": "2026-07-05T18:52:32.184236+00:00",
-      "standardization_model": "gpt-5-mini",
-      "_extraction_meta": {
-        "model": "gpt-5-mini",
-        "input_tokens": 72793,
-        "output_tokens": 6375,
-        "total_tokens": 79168,
-        "cost_usd": 0.030948
-      },
-      "_served_from": {
-        "cache_file": "dd9e8c3a71c58100e9ff1bdaa555e58f9a7a631fd987c77fa54595332d4a08b4.json",
-        "prompt_version": "2.10"
-      },
-      "_rag_triangle": {
-        "type": "gross",
-        "currency": "GBP",
-        "units": "millions",
-        "units_evidence": "conflict",
-        "underwriting_years": [
-          2011,
-          2012,
-          2013,
-          2014,
-          2015,
-          2016,
-          2017
-        ],
         "development_rows": [
           [
-            59.87,
-            56.27,
-            45.82,
-            39.28,
-            34.87,
-            34.71,
-            34.06
+            24.1,
+            29.3,
+            14.4,
+            8.2,
+            3.4,
+            6.7,
+            24.9,
+            12.6,
+            4.5
           ],
           [
-            1144.0,
-            1086.0,
-            932.0,
-            810.0,
-            770.0,
-            818.0,
-            801.0
+            21.8,
+            27.0,
+            16.3,
+            8.4,
+            4.3,
+            6.4,
+            21.8,
+            12.0,
+            4.0
           ],
           [
-            25.72,
-            28.06,
-            26.06,
-            22.18,
-            17.13,
-            15.64,
-            15.24
+            20.6,
+            26.2,
+            15.6,
+            7.7,
+            3.7,
+            6.0,
+            20.8,
+            7.7,
+            4.0
           ],
           [
-            6.12,
-            3.27,
-            7.02,
-            10.77,
-            10.44,
-            8.9,
-            null
-          ],
-          [
-            5.0,
-            10000.0,
-            4876.0,
-            5954.0,
-            6637.0,
-            null,
-            null
-          ],
-          [
-            6295.0,
-            5387.0,
-            4976.0,
-            4894.0,
+            19.4,
+            27.1,
+            15.1,
+            7.3,
+            3.4,
+            5.7,
             null,
             null,
             null
           ],
           [
-            0.0,
-            49.0,
-            60.0,
-            null,
-            null,
-            null,
-            null
-          ],
-          [
-            66.0,
-            63.0,
+            18.6,
+            26.9,
+            14.8,
+            7.2,
             null,
             null,
             null,
@@ -910,7 +768,42 @@
             null
           ],
           [
-            54.0,
+            18.2,
+            26.8,
+            14.4,
+            7.1,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            18.0,
+            26.7,
+            14.3,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            18.0,
+            25.3,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            17.9,
+            null,
+            null,
             null,
             null,
             null,
@@ -919,6 +812,24 @@
             null
           ]
         ]
+      },
+      "source_type": "syndicate",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_557_2019_llm.pdf",
+      "content_hash": "ad1070f72f488ea4abe72ddc0db68697c921c5ed37c6f0611e17ba583970c39d",
+      "standardized_at": "2026-09-11T13:23:52.780402+00:00",
+      "standardization_model": "gpt-5-mini",
+      "_extraction_meta": {
+        "model": "gpt-5-mini",
+        "input_tokens": 73553,
+        "output_tokens": 5730,
+        "total_tokens": 79283,
+        "cost_usd": 0.029848
+      },
+      "_pyd_route": {
+        "source": "rag_general_narrative",
+        "value": -2.3,
+        "model_value": -2.3,
+        "note": "confirmed by the model value"
       },
       "_adobe_lob": {
         "gross_premium_mix": [
@@ -1227,12 +1138,12 @@
       }
     }
   },
-  "total_cost_usd": 0.042251,
-  "total_tokens": 114918,
+  "total_cost_usd": 0.041537,
+  "total_tokens": 109238,
   "validation": {
     "passed": true,
-    "total_discrepancies": 15,
-    "within_tolerance": 15,
+    "total_discrepancies": 13,
+    "within_tolerance": 13,
     "hard_failures": 0,
     "hard_failure_details": []
   }

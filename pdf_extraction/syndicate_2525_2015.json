@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-05T20:07:02.609039+00:00",
+  "extraction_timestamp": "2026-09-13T04:18:16.158091+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -28,28 +30,23 @@
       ],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "The Syndicate experienced favourable development of GBP 28.9 million on its prior year gross claims reserves, indicating a release of reserves during 2015.",
+      "standardized_narrative": "The Syndicate experienced favourable development of GBP 28.9 million on its prior year gross claims reserves, which were held at 31 December 2014. This represents a release of 24.88% of the opening gross reserves. The 2013 year of account is also expected to close with a profit, further indicating favourable development on older years.",
       "raw_causal_phrases": [
-        "favourable movements"
+        "favourable movements during the year of GBP 28.9m... on prior year gross claims reserves"
       ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 44.308,
       "gross_premium_mix": [
         {
-          "line_of_business": "Employers' liability",
-          "amount_gbp_m": 23.445,
-          "percentage_of_total": 52.91
-        },
-        {
-          "line_of_business": "Public liability",
-          "amount_gbp_m": 20.863,
-          "percentage_of_total": 47.09
+          "line_of_business": "Third-party liability",
+          "amount_gbp_m": 44.308,
+          "percentage_of_total": 100.0
         }
       ],
-      "gross_premium_page": 2,
+      "gross_premium_page": 12,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The claims development triangle calculation for prior year development did not align with the explicitly stated gross prior year reserve movement in the narrative, so the narrative figure was used as the primary source. [RAG OVERRIDE: Model said PYD=-28.9, RAG triangle computed -5.018. Using RAG value.]",
+      "data_quality_notes": "The gross prior year development figure of -28.9m is taken from a direct narrative statement. A calculation from the gross claims development triangle yields -5.018m, indicating a significant discrepancy. The direct statement is prioritized as it explicitly refers to 'prior year gross claims reserves'. [RAG OVERRIDE: Model said PYD=-28.9, RAG triangle computed -5.018. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -102,20 +99,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_2525_2015_llm.pdf",
-      "content_hash": "745ba8c557f493851aee131f7d6d302df4b0a62c5cfd35d97b04c216acd88ac5",
-      "standardized_at": "2026-07-05T12:48:43.657326+00:00",
+      "content_hash": "ab3416f860170ac10da8d4cfa62bee28186b52a8f1b3f6c6213c2529fbe1218c",
+      "standardized_at": "2026-09-11T11:49:48.299453+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 11153,
-        "output_tokens": 849,
-        "total_tokens": 17392,
-        "cost_usd": 0.005468
+        "input_tokens": 11957,
+        "output_tokens": 887,
+        "total_tokens": 18539,
+        "cost_usd": 0.005805
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -5.018,
+        "model_value": -28.9,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 43,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -159,6 +168,13 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of first underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later"
         ],
         "source_page": 43,
         "entity": 2525
@@ -222,8 +238,50 @@
         },
         "foreign_tables_skipped": 0,
         "foreign_pages": [],
-        "underwriting_year_pages": [],
-        "underwriting_year_tables_skipped": 0,
+        "underwriting_year_pages": [
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          48,
+          49
+        ],
+        "underwriting_year_tables_skipped": 19,
         "document_unit_hint": 0.001
       }
     },
@@ -246,7 +304,7 @@
       "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "The syndicate opened 2015 with gross claims outstanding of GBP 116.166m (2014). During 2015 there were favourable movements on prior year gross claims reserves of GBP 28.9m (a c.24.9% release of opening reserves). The report attributes this to favourable claims development; no specific prior-year catastrophe or named event is cited as driving the movement and the report does not break down the reserve movement by line of business.",
+      "standardized_narrative": "The syndicate closed 2014 with gross claims outstanding of GBP 116.166m (opening for 2015). During 2015 there were favourable movements on prior year gross claims reserves totalling GBP 28.9m (a release), representing approximately 24.9% of the opening gross claims outstanding. The syndicate's business is predominantly third-party liability (casualty), and the release reflects favourable claims development across prior years as reported in the Technical Provisions note.",
       "raw_causal_phrases": [
         "There were favourable movements during the year of GBP 28.9m (2014: GBP 24.8m), on prior year gross claims reserves, held at 31 December 2014."
       ],
@@ -254,7 +312,7 @@
         {
           "line_of_business": "Casualty",
           "direction": "release",
-          "amount_gbp_m": null,
+          "amount_gbp_m": -28.9,
           "percentage": null,
           "confidence": 0.5
         }
@@ -262,20 +320,15 @@
       "gross_premiums_written_gbp_m": 44.308,
       "gross_premium_mix": [
         {
-          "line_of_business": "Employers' liability",
-          "amount_gbp_m": 23.445,
-          "percentage_of_total": 52.9
-        },
-        {
-          "line_of_business": "Public liability",
-          "amount_gbp_m": 20.863,
-          "percentage_of_total": 47.1
+          "line_of_business": "Third-party liability",
+          "amount_gbp_m": 44.308,
+          "percentage_of_total": 100.0
         }
       ],
-      "gross_premium_page": 5,
+      "gross_premium_page": 27,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Opening gross claims outstanding taken from Statement of Financial Position (Liabilities - Claims outstanding) 2014 comparative column. Prior year development is explicitly stated as a gross figure (GBP 28.9m favourable) in the Technical Provisions note. No breakdown of prior year movement by line of business is provided. A gross claims development table (triangle) is present and included below as a cross-check. [RAG OVERRIDE: Model said PYD=-28.9, RAG triangle computed -5.018. Using RAG value.]",
+      "data_quality_notes": "Opening gross claims outstanding taken from the Statement of Financial Position (Claims outstanding 2014 column). Prior year development taken from Technical Provisions note sentence explicitly stating 'favourable movements ... GBP 28.9m' (gross). The syndicate writes predominantly employers' and public liability (mapped to 'Casualty') - attribution of the aggregate prior year release to Casualty is an inference. A gross claims development triangle (page 40) is present and was not required to compute the prior year movement but is provided for cross-check. [RAG OVERRIDE: Model said PYD=-28.9, RAG triangle computed -5.018. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -328,20 +381,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_2525_2015_llm.pdf",
-      "content_hash": "745ba8c557f493851aee131f7d6d302df4b0a62c5cfd35d97b04c216acd88ac5",
-      "standardized_at": "2026-07-05T12:49:32.228099+00:00",
+      "content_hash": "ab3416f860170ac10da8d4cfa62bee28186b52a8f1b3f6c6213c2529fbe1218c",
+      "standardized_at": "2026-09-11T11:51:27.287179+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 24279,
-        "output_tokens": 3917,
-        "total_tokens": 28196,
-        "cost_usd": 0.013904
+        "input_tokens": 25039,
+        "output_tokens": 5089,
+        "total_tokens": 30128,
+        "cost_usd": 0.016438
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -5.018,
+        "model_value": -28.9,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 43,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -385,6 +450,13 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of first underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later"
         ],
         "source_page": 43,
         "entity": 2525
@@ -448,18 +520,60 @@
         },
         "foreign_tables_skipped": 0,
         "foreign_pages": [],
-        "underwriting_year_pages": [],
-        "underwriting_year_tables_skipped": 0,
+        "underwriting_year_pages": [
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          48,
+          49
+        ],
+        "underwriting_year_tables_skipped": 19,
         "document_unit_hint": 0.001
       }
     }
   },
-  "total_cost_usd": 0.019372,
-  "total_tokens": 45588,
+  "total_cost_usd": 0.022243,
+  "total_tokens": 48667,
   "validation": {
     "passed": true,
-    "total_discrepancies": 10,
-    "within_tolerance": 10,
+    "total_discrepancies": 9,
+    "within_tolerance": 9,
     "hard_failures": 0,
     "hard_failure_details": []
   }

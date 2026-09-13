@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T10:58:57.057140+00:00",
+  "extraction_timestamp": "2026-09-13T04:00:19.076359+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -23,40 +25,41 @@
         "Favorable claims development"
       ],
       "specific_events": [],
-      "specific_years_affected": [
-        2019
-      ],
-      "prior_year_events": [
-        {
-          "event_name": "2019 Year of Account closure",
-          "event_year": 2019,
-          "impact_description": "benefited from a positive prior year claims development of GBP 1.3m",
-          "lobs_affected": [
-            "Long-term insurance business"
-          ],
-          "amount_gbp_m": -1.3,
-          "confidence": 1.0
-        }
-      ],
+      "specific_years_affected": [],
+      "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "The syndicate experienced a favourable prior year reserve release of GBP 4.1 million in 2021. This release was primarily driven by favourable claims development, including a positive prior year claims development of GBP 1.3 million for the 2019 year of account.",
+      "standardized_narrative": "The syndicate reported a favourable prior year development of GBP 4.1 million, representing a 12.43% release of its opening gross claims outstanding. This release is described as a \"favourable run off deviation\" for prior accident years. The gross premium mix is provided by geographical location, with the United Kingdom and Latin America being the largest contributors. No specific named events were mentioned as impacting reserves.",
       "raw_causal_phrases": [
-        "favourable run off deviation",
-        "positive prior year claims development"
+        "A favourable run off deviation (prior accident year release)"
       ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 25.973,
       "gross_premium_mix": [
         {
-          "line_of_business": "Long-term insurance business",
-          "amount_gbp_m": 25.973,
-          "percentage_of_total": 100.0
+          "line_of_business": "EU countries",
+          "amount_gbp_m": 1.02,
+          "percentage_of_total": 3.93
+        },
+        {
+          "line_of_business": "US",
+          "amount_gbp_m": 0.96,
+          "percentage_of_total": 3.7
+        },
+        {
+          "line_of_business": "Latin America",
+          "amount_gbp_m": 10.55,
+          "percentage_of_total": 40.62
+        },
+        {
+          "line_of_business": "Other Worldwide",
+          "amount_gbp_m": 2.313,
+          "percentage_of_total": 8.9
         }
       ],
       "gross_premium_page": 13,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The prior year development figure is stated as a \"run off deviation\" without explicit gross/net clarification, but typically implies gross. The syndicate operates in a single business segment, so LOB breakdown for reserve movements is not applicable. [RAG OVERRIDE: Model said PYD=-4.1, RAG triangle computed -11.426. Using RAG value.]",
+      "data_quality_notes": "Gross premium mix is based on geographical location of risk, not standard lines of business, as per the segmental analysis note. [RAG OVERRIDE: Model said PYD=-4.1, RAG triangle computed -11.426. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -199,20 +202,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_3002_2021_llm.pdf",
-      "content_hash": "66a2c8f98a10bcd9d7887e31cb6bbc90fd0349c3380206fbd3dccf9e82f7d92d",
-      "standardized_at": "2026-07-05T14:36:26.433778+00:00",
+      "content_hash": "a0a9f98bb18d02d26a43ef2866949e205719f47c9e8f4e1ceb5eaf4f75ddb02e",
+      "standardized_at": "2026-09-11T12:19:30.758443+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 10379,
-        "output_tokens": 1437,
-        "total_tokens": 15993,
-        "cost_usd": 0.006706
+        "input_tokens": 11183,
+        "output_tokens": 1509,
+        "total_tokens": 15733,
+        "cost_usd": 0.007127
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -11.426,
+        "model_value": -4.1,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 38,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2012,
           2013,
@@ -323,6 +338,16 @@
             null
           ]
         ],
+        "row_labels": [
+          "24 months",
+          "36 months",
+          "48 months",
+          "72 months",
+          "84 months",
+          "96 months",
+          "108 months",
+          "120 months"
+        ],
         "source_page": 38,
         "entity": 3002
       },
@@ -413,47 +438,60 @@
       "syndicate": 3002,
       "year": 2021,
       "opening_reserves_gbp_m": 32.968,
-      "opening_reserves_page": 34,
+      "opening_reserves_page": 15,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": -11.426,
       "prior_year_development_pct": -34.66,
       "direction": "release",
       "prior_year_movement_page": 32,
-      "prior_year_movement_confidence": 0.9,
+      "prior_year_movement_confidence": 1.0,
       "exact_reserve_text": "A favourable run off deviation (prior accident year release) of GBP 4.1m (2020: GBP 2.2m strengthening) was experienced during the year.",
       "primary_causes": [
         "Favorable claims development"
       ],
       "specific_events": [],
-      "specific_years_affected": [],
-      "prior_year_events": [],
+      "specific_years_affected": [
+        2019
+      ],
+      "prior_year_events": [
+        {
+          "event_name": "2019 year of account prior claims development",
+          "event_year": 2019,
+          "impact_description": "Positive prior year claims development benefiting the 2019 year of account (release of GBP 1.3m during 2021).",
+          "lobs_affected": [
+            "Accident & Health"
+          ],
+          "amount_gbp_m": -1.3,
+          "confidence": 0.8
+        }
+      ],
       "named_events": [],
-      "standardized_narrative": "The Syndicate's opening gross claims outstanding at 1 January 2021 was GBP 32.968m. During 2021 there was a favourable prior accident year run-off deviation of GBP 4.1m (a release), equivalent to a c.12.4% reduction versus opening gross claims outstanding. The improvement is described as prior year claims development.",
+      "standardized_narrative": "Opening gross claims outstanding at 1 January 2021 was GBP 32.968m. During 2021 the Syndicate experienced a favourable prior-accident-year run-off giving a release of GBP 4.1m, driven by favourable claims development (including a noted GBP 1.3m positive prior year development on the 2019 year of account). The movement reduced gross reserves and benefited the closed years; the Syndicate writes long-term life/term business (reported as long-term insurance business) and the release is reported at a syndicate-wide level.",
       "raw_causal_phrases": [
         "A favourable run off deviation (prior accident year release) of GBP 4.1m (2020: GBP 2.2m strengthening) was experienced during the year.",
-        "This year of account benefited from a positive prior year claims development of GBP 1.3m occurring during 2021."
+        "positive prior year claims development of GBP 1.3m occurring during 2021"
       ],
       "lob_movements": [
         {
           "line_of_business": "Accident & Health",
           "direction": "release",
           "amount_gbp_m": -4.1,
-          "percentage": null,
-          "confidence": 0.6
+          "percentage": -12.43,
+          "confidence": 0.5
         }
       ],
       "gross_premiums_written_gbp_m": 25.973,
       "gross_premium_mix": [
         {
-          "line_of_business": "Long-term insurance business",
+          "line_of_business": "long-term insurance business",
           "amount_gbp_m": 25.973,
           "percentage_of_total": 100.0
         }
       ],
-      "gross_premium_page": 12,
+      "gross_premium_page": 31,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior year movement taken from Note 5 narrative which states a prior accident year release of GBP 4.1m; the note does not explicitly label this as gross or net but is presented in the 'Movement in prior year's provision for claims outstanding' note and is therefore taken as gross. A gross claims development triangle is present and broadly consistent with reserve levels but was not used to compute the PY movement due to complexity of diagonal extraction and small reconciliation differences. [RAG OVERRIDE: Model said PYD=-4.1, RAG triangle computed -11.426. Using RAG value.]",
+      "data_quality_notes": "Prior-year movement sourced from Note 5 narrative which reports a GBP 4.1m prior-accident-year release; the note does not explicitly label the amount 'gross' vs 'net', but it is presented in the 'Movement in prior year's provision for claims outstanding' note and is treated as gross. The syndicate writes long-term life/term business (not a named Lloyd's LOB); 'Accident & Health' used as closest mapping. Gross premium mix is a single-line summary 'long-term insurance business' from the segment note. Claims development triangle is available (gross) and was used as a cross-check. [RAG OVERRIDE: Model said PYD=-4.1, RAG triangle computed -11.426. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -596,20 +634,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_3002_2021_llm.pdf",
-      "content_hash": "66a2c8f98a10bcd9d7887e31cb6bbc90fd0349c3380206fbd3dccf9e82f7d92d",
-      "standardized_at": "2026-07-05T14:37:04.748668+00:00",
+      "content_hash": "a0a9f98bb18d02d26a43ef2866949e205719f47c9e8f4e1ceb5eaf4f75ddb02e",
+      "standardized_at": "2026-09-11T12:20:53.706115+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 15022,
-        "output_tokens": 5081,
-        "total_tokens": 20103,
-        "cost_usd": 0.013917
+        "input_tokens": 15782,
+        "output_tokens": 5824,
+        "total_tokens": 21606,
+        "cost_usd": 0.015593
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -11.426,
+        "model_value": -4.1,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 38,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2012,
           2013,
@@ -720,6 +770,16 @@
             null
           ]
         ],
+        "row_labels": [
+          "24 months",
+          "36 months",
+          "48 months",
+          "72 months",
+          "84 months",
+          "96 months",
+          "108 months",
+          "120 months"
+        ],
         "source_page": 38,
         "entity": 3002
       },
@@ -807,12 +867,12 @@
       }
     }
   },
-  "total_cost_usd": 0.020623,
-  "total_tokens": 36096,
+  "total_cost_usd": 0.02272,
+  "total_tokens": 37339,
   "validation": {
     "passed": true,
-    "total_discrepancies": 13,
-    "within_tolerance": 13,
+    "total_discrepancies": 16,
+    "within_tolerance": 16,
     "hard_failures": 0,
     "hard_failure_details": []
   }

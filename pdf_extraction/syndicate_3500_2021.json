@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T11:09:53.497180+00:00",
+  "extraction_timestamp": "2026-09-13T03:58:15.672905+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -16,23 +18,19 @@
       "prior_year_development_gbp_m": 109.086,
       "prior_year_development_pct": 14.16,
       "direction": "strengthening",
-      "prior_year_movement_page": 16,
-      "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "Change in estimates of technical provision provisions, including foreign exchange",
+      "prior_year_movement_page": 3,
+      "prior_year_movement_confidence": 0.8,
+      "exact_reserve_text": "Excluding the portfolios acquired during 2021 which are described above, gross loss reserves decreased by 23% and third party reinsurance recoverables (excluding group reinsurance protection) decreased by 22%.",
       "primary_causes": [
-        "Favorable claims development",
-        "Reserve methodology change",
-        "Other"
+        "Favorable claims development"
       ],
       "specific_events": [],
       "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "Syndicate 3500 reported a gross prior year reserve release of $60.641 million in 2021. This favorable development, which also includes foreign exchange movements, reflects a reduction in gross loss reserves for existing run-off portfolios, consistent with the Board's expectations and ongoing reserve reviews.",
+      "standardized_narrative": "For the 2021 financial year, Syndicate 3500 reported a release in prior year reserves. Excluding portfolios acquired during 2021, gross loss reserves decreased by 23% from the opening balance of $770.428 million, resulting in a release of $177.198 million. The report does not specify particular causes for this favorable development, nor does it mention any specific prior year events or named catastrophe losses impacting reserves.",
       "raw_causal_phrases": [
-        "reduction in gross loss reserves",
-        "in line with Board's expectations",
-        "Change in estimates of technical provision provisions, including foreign exchange"
+        "gross loss reserves decreased by 23%"
       ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 698.3,
@@ -71,23 +69,12 @@
       "gross_premium_page": 14,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "The claims development table on page 11 is missing underwriting years 2019 and 2020. Additionally, the table is significantly distorted by large Reinsurance to Close (RITC) transactions in 2021, making it unsuitable for calculating prior year development. [RAG OVERRIDE: Model said PYD=-60.641, RAG triangle computed 109.086. Using RAG value.]",
-      "source_type": "syndicate",
-      "source_file": "pdf_extraction\\llm_slim\\syndicate_3500_2021_llm.pdf",
-      "content_hash": "b9f3850336971650b57fe83e982b08c60a6471b41d28e94e8d7fe74d822625a0",
-      "standardized_at": "2026-07-05T15:21:30.968211+00:00",
-      "standardization_model": "gemini-2.5-flash",
-      "_extraction_meta": {
-        "model": "gemini-2.5-flash",
-        "input_tokens": 10379,
-        "output_tokens": 896,
-        "total_tokens": 16180,
-        "cost_usd": 0.005354
-      },
-      "_rag_triangle": {
+      "data_quality_notes": "The claims development triangle on page 11 is heavily distorted by significant Reinsurance to Close (RITC) and Loss Portfolio Transfer (LPT) transactions during 2021, making it unreliable for calculating organic prior year development. The 'Change in estimates of technical provision provisions' on page 16 is also present but not explicitly stated to exclude acquired portfolios. The narrative on page 3 is prioritized for PYD as it explicitly excludes acquired portfolios. No specific named events are mentioned as affecting reserves. [RAG OVERRIDE: Model said PYD=-177.198, RAG triangle computed 109.086. Using RAG value.]",
+      "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "thousands",
+        "page": 11,
         "underwriting_years": [
           2012,
           2013,
@@ -199,6 +186,159 @@
             null,
             null
           ]
+        ]
+      },
+      "source_type": "syndicate",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_3500_2021_llm.pdf",
+      "content_hash": "9d72eb7166cb8212d58fee18f6ec75a9d79a84ac8e204587d9073fe57f11f3da",
+      "standardized_at": "2026-09-11T12:38:08.743610+00:00",
+      "standardization_model": "gemini-2.5-flash",
+      "_extraction_meta": {
+        "model": "gemini-2.5-flash",
+        "input_tokens": 11183,
+        "output_tokens": 1842,
+        "total_tokens": 21082,
+        "cost_usd": 0.00796
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 109.086,
+        "model_value": -177.198,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 25,
+        "note": "overrode the model value"
+      },
+      "_rag_triangle": {
+        "type": "gross",
+        "currency": "USD",
+        "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
+        "underwriting_years": [
+          2012,
+          2013,
+          2014,
+          2015,
+          2016,
+          2017,
+          2018,
+          2021
+        ],
+        "development_rows": [
+          [
+            506448.0,
+            575824.0,
+            538886.0,
+            550687.0,
+            704185.0,
+            843957.0,
+            529996.0,
+            1078053.0
+          ],
+          [
+            953756.0,
+            1181521.0,
+            1147459.0,
+            1316927.0,
+            1686322.0,
+            1471540.0,
+            762365.0,
+            null
+          ],
+          [
+            972627.0,
+            1195706.0,
+            1295111.0,
+            1449816.0,
+            1883646.0,
+            1648352.0,
+            767445.0,
+            null
+          ],
+          [
+            955152.0,
+            1163788.0,
+            1322445.0,
+            1450804.0,
+            1948407.0,
+            1653011.0,
+            833123.0,
+            null
+          ],
+          [
+            960150.0,
+            1151253.0,
+            1363242.0,
+            1485642.0,
+            2011577.0,
+            1759449.0,
+            null,
+            null
+          ],
+          [
+            973246.0,
+            1127001.0,
+            1362851.0,
+            1493048.0,
+            2048622.0,
+            null,
+            null,
+            null
+          ],
+          [
+            963649.0,
+            1124106.0,
+            1403816.0,
+            1448892.0,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            963285.0,
+            1109927.0,
+            1366683.0,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            959698.0,
+            1094861.0,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            955978.0,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ]
+        ],
+        "row_labels": [
+          "At the end of the first year",
+          "- One year later",
+          "- Two years later",
+          "- Three years later",
+          "- Four years later",
+          "- Five years later",
+          "- Six years later",
+          "- Seven years later",
+          "- Eight years later",
+          "- Nine years later"
         ],
         "source_page": 25,
         "entity": 3500
@@ -336,12 +476,11 @@
       "direction": "strengthening",
       "prior_year_movement_page": 24,
       "prior_year_movement_confidence": 0.8,
-      "exact_reserve_text": "The following table presents the comparison of actual claims incurred to previous estimates for the last 10 years.\nThe change in the provisions for claims outstanding are as follows:",
+      "exact_reserve_text": "",
       "primary_causes": [
-        "Adverse claims development",
         "Favorable claims development",
-        "IBNR recalibration",
-        "Reinsurance recoveries"
+        "Reinsurance recoveries",
+        "IBNR recalibration"
       ],
       "specific_events": [],
       "specific_years_affected": [
@@ -350,121 +489,66 @@
         2014,
         2015,
         2016,
-        2017
+        2017,
+        2018
       ],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "Using the Syndicate's gross claims development table, prior-year development for underwriting years prior to the two most recent results in a net adverse movement of approximately 43.4 (USD) million (strengthening). This net deterioration arises from material adverse development in mid-tailed years (notably 2016 and 2017) partially offset by favourable development in older years (2012-2015). The portfolio and reported reserves are also affected by multiple reinsurance-to-close and loss portfolio transfer transactions during the year which materially increased gross technical provisions and can distort development patterns. The Syndicate cites standard drivers such as fluctuations in claim severity, late reporting, IBNR recalibration and reinsurance recoveries as contributing factors.",
+      "standardized_narrative": "Opening gross claims outstanding at 1 January 2021 (prior year comparative) per the Balance Sheet was $770.428m. Using the published gross claims development table, cumulative estimates for the older underwriting years (2012-2018) show no material movement versus the prior diagonal, giving an immaterial net prior-year development (0.0). The report notes significant reinsurance-to-close and portfolio transfers during 2021 which materially increased gross provisions in the reporting year and can distort comparability, but the older years' estimates themselves are essentially stable.",
       "raw_causal_phrases": [
-        "The following table presents the comparison of actual claims incurred to previous estimates for the last 10 years.",
-        "The change in the provisions for claims outstanding are as follows:",
-        "the principal risks faced by Syndicate 3500 arise from fluctuations in the severity of claims compared with expectations, late reporting of claims, inadequate reserving and inadequate reinsurance protection (including the credit worthiness of major reinsurers)."
+        "Reserve in respect of prior years 139,014",
+        "Excluding the portfolios acquired during 2021 which are described above, gross loss reserves decreased by 23% and third party reinsurance recoverables (excluding group reinsurance protection) decreased by 22%.",
+        "Syndicate 3500 is judged not to have material insurance exposure to COVID-19 related claims and has experienced limited claims notifications in this regard during 2020 and 2021."
       ],
       "lob_movements": [
         {
-          "line_of_business": "Annuities",
-          "direction": "strengthening",
-          "amount_gbp_m": 122.494,
+          "line_of_business": "Property",
+          "direction": "flat",
+          "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.9
+          "confidence": 0.0
         },
         {
-          "line_of_business": "Casualty reinsurance",
-          "direction": "release",
-          "amount_gbp_m": -35.134,
+          "line_of_business": "Casualty",
+          "direction": "flat",
+          "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.9
+          "confidence": 0.0
         },
         {
-          "line_of_business": "Credit and suretyship",
-          "direction": "strengthening",
-          "amount_gbp_m": 172.784,
+          "line_of_business": "Marine",
+          "direction": "flat",
+          "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.9
+          "confidence": 0.0
         },
         {
-          "line_of_business": "Fire and other damage to property",
-          "direction": "strengthening",
-          "amount_gbp_m": 17.454,
+          "line_of_business": "Motor",
+          "direction": "flat",
+          "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.9
+          "confidence": 0.0
         },
         {
-          "line_of_business": "General liability",
-          "direction": "release",
-          "amount_gbp_m": -110.137,
+          "line_of_business": "Accident & Health",
+          "direction": "flat",
+          "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.9
+          "confidence": 0.0
         },
         {
-          "line_of_business": "Health insurance",
-          "direction": "strengthening",
-          "amount_gbp_m": 1201.617,
+          "line_of_business": "Reinsurance - Casualty",
+          "direction": "flat",
+          "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.9
+          "confidence": 0.0
         },
         {
-          "line_of_business": "Income protection",
-          "direction": "strengthening",
-          "amount_gbp_m": 25.34,
+          "line_of_business": "Reinsurance - Property",
+          "direction": "flat",
+          "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.9
-        },
-        {
-          "line_of_business": "Legal Expenses",
-          "direction": "strengthening",
-          "amount_gbp_m": 58.895,
-          "percentage": null,
-          "confidence": 0.9
-        },
-        {
-          "line_of_business": "Marine, aviation and transport",
-          "direction": "release",
-          "amount_gbp_m": -98.965,
-          "percentage": null,
-          "confidence": 0.9
-        },
-        {
-          "line_of_business": "Medical expenses",
-          "direction": "strengthening",
-          "amount_gbp_m": 299.346,
-          "percentage": null,
-          "confidence": 0.9
-        },
-        {
-          "line_of_business": "Motor vehicle liability",
-          "direction": "release",
-          "amount_gbp_m": -1.846,
-          "percentage": null,
-          "confidence": 0.9
-        },
-        {
-          "line_of_business": "Other motor",
-          "direction": "strengthening",
-          "amount_gbp_m": 149.673,
-          "percentage": null,
-          "confidence": 0.9
-        },
-        {
-          "line_of_business": "Property reinsurance",
-          "direction": "strengthening",
-          "amount_gbp_m": 5.733,
-          "percentage": null,
-          "confidence": 0.9
-        },
-        {
-          "line_of_business": "Worker's compensation",
-          "direction": "strengthening",
-          "amount_gbp_m": 7.783,
-          "percentage": null,
-          "confidence": 0.9
-        },
-        {
-          "line_of_business": "Claims expense reserve",
-          "direction": "strengthening",
-          "amount_gbp_m": 26.271,
-          "percentage": null,
-          "confidence": 0.9
+          "confidence": 0.0
         }
       ],
       "gross_premiums_written_gbp_m": 698.3,
@@ -503,7 +587,7 @@
       "gross_premium_page": 30,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "Prior-year development was calculated from the gross claims development triangle (pages 24-25). The report contains multiple reinsurance-to-close and loss portfolio transfer transactions which materially changed gross technical provisions during 2021; these transactions can distort development patterns. No explicit single-sentence gross prior-year movement figure was provided in narrative; the PYD here is computed from the gross triangle (confidence 0.8). All monetary values are reported in the report's native currency (USD). [RAG OVERRIDE: Model said PYD=43.408, RAG triangle computed 109.086. Using RAG value.]",
+      "data_quality_notes": "Primary opening reserve taken from Balance Sheet prior-year column (770,428 $'000). Technical Reserves note shows a closely similar opening figure (774,037 $'000); Balance Sheet used per rules. Prior-year development derived from the gross claims development triangle (gross), which shows no net movement for underwriting years 2012-2018. 2021 includes multiple reinsurance-to-close and loss portfolio transfers that materially increased gross reserves in 2021 and can distort comparability of year-on-year movements; triangle appears final for older years. All monetary amounts are reported in the native currency (USD) and converted from $'000 to millions. Where per-line prior-year movements were not provided, lob_movements amounts are null. [RAG OVERRIDE: Model said PYD=0.0, RAG triangle computed 109.086. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
@@ -634,20 +718,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_3500_2021_llm.pdf",
-      "content_hash": "b9f3850336971650b57fe83e982b08c60a6471b41d28e94e8d7fe74d822625a0",
-      "standardized_at": "2026-07-05T15:22:58.425640+00:00",
+      "content_hash": "9d72eb7166cb8212d58fee18f6ec75a9d79a84ac8e204587d9073fe57f11f3da",
+      "standardized_at": "2026-09-11T12:44:11.522714+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 20166,
-        "output_tokens": 11160,
-        "total_tokens": 31326,
-        "cost_usd": 0.027362
+        "input_tokens": 20926,
+        "output_tokens": 7716,
+        "total_tokens": 28642,
+        "cost_usd": 0.020664
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 109.086,
+        "model_value": 0.0,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 25,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2012,
           2013,
@@ -759,6 +855,18 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At the end of the first year",
+          "- One year later",
+          "- Two years later",
+          "- Three years later",
+          "- Four years later",
+          "- Five years later",
+          "- Six years later",
+          "- Seven years later",
+          "- Eight years later",
+          "- Nine years later"
         ],
         "source_page": 25,
         "entity": 3500
@@ -886,12 +994,12 @@
       }
     }
   },
-  "total_cost_usd": 0.032716,
-  "total_tokens": 47506,
+  "total_cost_usd": 0.028624,
+  "total_tokens": 49724,
   "validation": {
     "passed": true,
-    "total_discrepancies": 39,
-    "within_tolerance": 39,
+    "total_discrepancies": 19,
+    "within_tolerance": 19,
     "hard_failures": 0,
     "hard_failure_details": []
   }

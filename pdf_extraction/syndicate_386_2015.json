@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-05T20:17:10.743055+00:00",
+  "extraction_timestamp": "2026-09-13T04:00:33.107399+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -11,37 +13,26 @@
       "syndicate": 386,
       "year": 2015,
       "opening_reserves_gbp_m": 1128.632,
-      "opening_reserves_page": 7,
+      "opening_reserves_page": 6,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": -7.197,
       "prior_year_development_pct": -0.64,
       "direction": "release",
       "prior_year_movement_page": 3,
-      "prior_year_movement_confidence": 0.5,
+      "prior_year_movement_confidence": 0.8,
       "exact_reserve_text": "The improvement in the combined operating ratio reflected a decrease in claims ratio (2015 53.7% versus 2014 57.1%), due to better than expected prior year development from within the Employers Liability and Public Liability classes, including a separate analysis of long-tail disease claims. The overall resultant benefit was a GBP 14,292,000 prior year contribution to the result (2014 GBP 23,233,000 adverse) on an annual accounting basis.",
       "primary_causes": [
         "Favorable claims development"
       ],
       "specific_events": [],
       "specific_years_affected": [],
-      "prior_year_events": [
-        {
-          "event_name": "Long-tail disease claims",
-          "event_year": null,
-          "impact_description": "better than expected prior year development",
-          "lobs_affected": [
-            "Casualty"
-          ],
-          "amount_gbp_m": null,
-          "confidence": 0.8
-        }
-      ],
+      "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "The syndicate reported a net prior year reserve release of GBP 14.292 million in 2015, contributing positively to the year's result. This favorable development was primarily driven by better than expected claims experience in Employers Liability and Public Liability classes, including a separate analysis of long-tail disease claims.",
+      "standardized_narrative": "The syndicate reported a net prior year reserve release of GBP 14.292 million in 2015, primarily driven by better than expected development in Employers Liability and Public Liability classes, including long-tail disease claims. This contributed to an improved combined operating ratio.",
       "raw_causal_phrases": [
-        "better than expected prior year development from within the Employers Liability and Public Liability classes",
-        "separate analysis of long-tail disease claims",
-        "GBP 14,292,000 prior year contribution to the result"
+        "better than expected prior year development",
+        "from within the Employers Liability and Public Liability classes",
+        "including a separate analysis of long-tail disease claims"
       ],
       "lob_movements": [
         {
@@ -63,9 +54,9 @@
       "gross_premium_page": 13,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior year development amount is stated as a 'contribution to the result' and is likely net of reinsurance, as a gross figure was not explicitly provided. [RAG OVERRIDE: Model said PYD=-14.292, RAG triangle computed -7.197. Using RAG value.]",
+      "data_quality_notes": "Prior year development figure is net of reinsurance as no gross figure was explicitly stated or derivable from a gross claims development triangle. [RAG OVERRIDE: Model said PYD=-14.292, RAG triangle computed -7.197. Using RAG value.]",
       "_claims_triangle": {
-        "type": "gross",
+        "type": "net",
         "currency": "GBP",
         "units": "thousands",
         "page": 16,
@@ -116,20 +107,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_386_2015_llm.pdf",
-      "content_hash": "9d0aa8870e8d4ae9bb1d625d6ad72b7fed7a92a8ffd2823b5753fa41e2d84940",
-      "standardized_at": "2026-03-18T22:17:36.067698+00:00",
+      "content_hash": "390587c28989415d0c94f30e47c5c6b3d10800a84f4a5763ad7686b9bacf5966",
+      "standardized_at": "2026-09-11T12:36:45.602906+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 14248,
-        "output_tokens": 1065,
-        "total_tokens": 23573,
-        "cost_usd": 0.006937
+        "input_tokens": 15052,
+        "output_tokens": 1002,
+        "total_tokens": 22246,
+        "cost_usd": 0.007021
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -7.197,
+        "model_value": -14.292,
+        "triangle_type": "net",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 36,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "net",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -173,6 +176,13 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later"
         ],
         "source_page": 36,
         "entity": 386
@@ -266,7 +276,10 @@
         "foreign_pages": [],
         "underwriting_year_pages": [
           41,
+          42,
+          43,
           44,
+          45,
           46,
           47,
           48,
@@ -276,9 +289,11 @@
           52,
           53,
           54,
-          55
+          55,
+          56,
+          57
         ],
-        "underwriting_year_tables_skipped": 15,
+        "underwriting_year_tables_skipped": 19,
         "document_unit_hint": 0.001
       }
     },
@@ -292,43 +307,23 @@
       "prior_year_development_pct": -0.64,
       "direction": "release",
       "prior_year_movement_page": 4,
-      "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "The overall resultant benefit was a GBP 14,292,000 prior year contribution to the result (2014 GBP 23,233,000 adverse) on an annual accounting basis.",
+      "prior_year_movement_confidence": 0.5,
+      "exact_reserve_text": "The improvement in the combined operating ratio reflected a decrease in claims ratio (2015 53.7% versus 2014 57.1%), due to better than expected prior year development from within the Employers Liability and Public Liability classes, including a separate analysis of long-tail disease claims. The overall resultant benefit was a GBP 14,292,000 prior year contribution to the result (2014 GBP 23,233,000 adverse) on an annual accounting basis.",
       "primary_causes": [
-        "Favorable claims development",
-        "Reinsurance recoveries"
+        "Favorable claims development"
       ],
       "specific_events": [],
       "specific_years_affected": [],
-      "prior_year_events": [
-        {
-          "event_name": "Reinsurance treaty commutations",
-          "event_year": 2015,
-          "impact_description": "Commuted two reinsurance treaty contracts based on the discounted value of the reinsurance asset held on the balance sheet.",
-          "lobs_affected": [
-            "Treaty"
-          ],
-          "amount_gbp_m": null,
-          "confidence": 0.8
-        }
-      ],
+      "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "Opening gross claims outstanding at 1 January 2015 were GBP 1,128.632m. The Syndicate reported a favourable prior year contribution of GBP 14.292m (net), driven by better than expected prior year development in Employers' Liability and Public Liability (long-tail disease) and influenced by reinsurance commutations at year end. No gross prior-year reserve movement (insurance liabilities) was disclosed; the stated prior year contribution is a net figure.",
+      "standardized_narrative": "The syndicate opened 2015 with gross claims outstanding of GBP 1,128.632m. Management reports a prior year contribution (a net release) of GBP 14.292m driven by better-than-expected development in Employers' Liability and Public Liability, including long-tail disease claims. No gross prior-year movement figure was disclosed; the GBP 14.292m figure reported by management is a net (after-reinsurance) amount and has been used as a fallback.",
       "raw_causal_phrases": [
-        "better than expected prior year development from within the Employers Liability and Public Liability classes, including a separate analysis of long-tail disease claims.",
-        "On 31 December 2015, the Syndicate commuted two reinsurance treaty contracts: GBP 9 million xs GBP 1 million (2008-2010) and; $13 million xs $2 million (2011-2013) based on the discounted value of the reinsurance asset held on the balance sheet.",
+        "better than expected prior year development from within the Employers Liability and Public Liability classes, including a separate analysis of long-tail disease claims",
         "The overall resultant benefit was a GBP 14,292,000 prior year contribution to the result (2014 GBP 23,233,000 adverse) on an annual accounting basis."
       ],
       "lob_movements": [
         {
           "line_of_business": "Casualty",
-          "direction": "release",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 1.0
-        },
-        {
-          "line_of_business": "Treaty",
           "direction": "release",
           "amount_gbp_m": null,
           "percentage": null,
@@ -346,7 +341,7 @@
       "gross_premium_page": 26,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "No gross (insurance liabilities) prior year movement note was found. The report explicitly states a prior year contribution of GBP 14,292k but this appears to be a NET figure (after reinsurance). A gross PYD amount was not disclosed; the claims development table provided is a NET triangle. The prior_year_development_gbp_m therefore uses the reported NET prior year contribution and is flagged as net-derived. [RAG OVERRIDE: Model said PYD=-14.292, RAG triangle computed -7.197. Using RAG value.]",
+      "data_quality_notes": "No gross prior-year reserve movement (Insurance liabilities) figure was found. The report provides an explicit net prior-year contribution (release) of GBP 14.292m in the Managing Agent commentary; that net figure has been used as a fallback. A claims development table is present but it is presented on a net basis (net of reinsurance). All source amounts in the accounts are presented in GBP '000; converted to millions for this output. [RAG OVERRIDE: Model said PYD=-14.292, RAG triangle computed -7.197. Using RAG value.]",
       "_claims_triangle": {
         "type": "net",
         "currency": "GBP",
@@ -399,20 +394,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_386_2015_llm.pdf",
-      "content_hash": "9d0aa8870e8d4ae9bb1d625d6ad72b7fed7a92a8ffd2823b5753fa41e2d84940",
-      "standardized_at": "2026-03-18T22:19:38.588644+00:00",
+      "content_hash": "390587c28989415d0c94f30e47c5c6b3d10800a84f4a5763ad7686b9bacf5966",
+      "standardized_at": "2026-09-11T12:38:36.844708+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 23618,
-        "output_tokens": 6942,
-        "total_tokens": 30560,
-        "cost_usd": 0.019789
+        "input_tokens": 24282,
+        "output_tokens": 5903,
+        "total_tokens": 30185,
+        "cost_usd": 0.017877
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -7.197,
+        "model_value": -14.292,
+        "triangle_type": "net",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 36,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "net",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -456,6 +463,13 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later"
         ],
         "source_page": 36,
         "entity": 386
@@ -549,7 +563,10 @@
         "foreign_pages": [],
         "underwriting_year_pages": [
           41,
+          42,
+          43,
           44,
+          45,
           46,
           47,
           48,
@@ -559,19 +576,21 @@
           52,
           53,
           54,
-          55
+          55,
+          56,
+          57
         ],
-        "underwriting_year_tables_skipped": 15,
+        "underwriting_year_tables_skipped": 19,
         "document_unit_hint": 0.001
       }
     }
   },
-  "total_cost_usd": 0.026726,
-  "total_tokens": 54133,
+  "total_cost_usd": 0.024898,
+  "total_tokens": 52431,
   "validation": {
     "passed": true,
-    "total_discrepancies": 16,
-    "within_tolerance": 16,
+    "total_discrepancies": 12,
+    "within_tolerance": 12,
     "hard_failures": 0,
     "hard_failure_details": []
   }

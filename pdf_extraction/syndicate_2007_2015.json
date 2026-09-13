@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T10:12:19.794221+00:00",
+  "extraction_timestamp": "2026-09-13T04:08:41.035139+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -17,7 +19,7 @@
       "prior_year_development_pct": -0.17,
       "direction": "release",
       "prior_year_movement_page": 3,
-      "prior_year_movement_confidence": 0.8,
+      "prior_year_movement_confidence": 1.0,
       "exact_reserve_text": "Included within the profit is an amount of GBP 33.6 million in respect of releases to reserves on 2013 and prior underwriting years (2014: GBP 26.8 million in respect of reserve releases from 2012 and prior underwriting years).",
       "primary_causes": [
         "Favorable claims development",
@@ -27,22 +29,12 @@
       "specific_years_affected": [
         2013
       ],
-      "prior_year_events": [
-        {
-          "event_name": "Incoming reinsurance to close",
-          "event_year": 2012,
-          "impact_description": "profit of GBP 34.7 million on business transacted in prior years inherited through the incoming reinsurance to close of the 2012 year of account.",
-          "lobs_affected": [],
-          "amount_gbp_m": -34.7,
-          "confidence": 0.8
-        }
-      ],
+      "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "For 2015, Syndicate 2007 reported a net release of GBP 33.6 million in reserves relating to the 2013 and prior underwriting years. This favorable development was primarily attributed to a comparatively benign natural catastrophe claims experience. Additionally, the syndicate recorded a profit of GBP 34.7 million from business inherited through the incoming reinsurance to close of the 2012 year of account.",
+      "standardized_narrative": "The syndicate reported a net release of GBP 33.6 million in reserves for 2013 and prior underwriting years in 2015. This favorable development was primarily driven by benign natural catastrophe and attritional claims experience.",
       "raw_causal_phrases": [
-        "Included within the profit is an amount of GBP 33.6 million in respect of releases to reserves on 2013 and prior underwriting years",
-        "comparatively benign natural catastrophe claims experience",
-        "a profit of GBP 34.7 million on business transacted in prior years inherited through the incoming reinsurance to close of the 2012 year of account."
+        "benign natural catastrophe claims experience",
+        "benign natural catastrophe and attritional claims experience"
       ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 600.5,
@@ -81,7 +73,7 @@
       "gross_premium_page": 16,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The prior year development figure of -33.6m is a net figure (after reinsurance) as explicitly stated in the Chairman's Statement. No gross prior year development figure was available due to distortions in the gross claims development triangle caused by significant Reinsurance to Close (RITC) transactions. There is a contradiction between the Chairman's Statement (page 3) which states 'releases to reserves' and the Notes to the Financial Statements (page 18, Note 6) which states 'increases to reserves' for the same GBP 33.6 million amount. The Chairman's Statement's 'releases' aligns with the overall profit and 'benign natural catastrophe claims experience' mentioned in the report, so 'release' has been assumed. [RAG OVERRIDE: Model said PYD=-33.6, RAG triangle computed -2.0. Using RAG value.]",
+      "data_quality_notes": "Prior year development figure is stated as net of reinsurance in the narrative. The gross claims development triangle is distorted by Reinsurance to Close (RITC) transactions, making it unreliable for calculating prior year development. [RAG PYD NOT APPLIED: deterministic figure +148.800m has the opposite sign to both model values [-33.6, -2.0], which agree with each other; model values retained. Sign agreement between the models is not a reconciliation: where they differ in value the cohort and accrual scope of each still has to be settled from the filing (R140).] [CODE OVERRIDE: Model said PYD=-33.6, but code computed -2.0 from triangle (OVERRIDE from agreed triangles). Using code value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -129,33 +121,29 @@
             null,
             null,
             null
-          ],
-          [
-            null,
-            null,
-            null,
-            null,
-            null
           ]
         ]
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_2007_2015_llm.pdf",
-      "content_hash": "1a5c499b19b0ee7e3be37502f44237d3353692c37f93d54841813cb6d7d7b66d",
-      "standardized_at": "2026-07-05T11:01:19.746830+00:00",
+      "content_hash": "bd5675ac884b183bc1965acb594140bb78144e5ed4c2a7c9c062851c11586763",
+      "standardized_at": "2026-09-11T11:21:16.597601+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 14765,
-        "output_tokens": 1530,
-        "total_tokens": 23244,
-        "cost_usd": 0.008254
+        "input_tokens": 15569,
+        "output_tokens": 1208,
+        "total_tokens": 26154,
+        "cost_usd": 0.007691
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "millions",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
+          2010,
           2011,
           2012,
           2013,
@@ -164,6 +152,7 @@
         ],
         "development_rows": [
           [
+            1260.6,
             389.1,
             null,
             null,
@@ -171,6 +160,7 @@
             434.7
           ],
           [
+            1335.5,
             366.8,
             339.4,
             318.9,
@@ -178,6 +168,7 @@
             null
           ],
           [
+            1338.2,
             380.0,
             344.0,
             317.3,
@@ -185,6 +176,7 @@
             null
           ],
           [
+            1377.9,
             380.3,
             340.4,
             null,
@@ -192,13 +184,35 @@
             null
           ],
           [
+            1408.5,
             383.5,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            1559.3,
+            null,
             null,
             null,
             null,
             null
           ]
         ],
+        "row_labels": [
+          "- at end of underwriting year",
+          "- one year later\n:unselected:",
+          "- two years later\n:unselected:",
+          "- three years later\n:unselected:",
+          "- four years later\n:unselected:",
+          "- five years later\n:unselected:"
+        ],
+        "aggregated_cohort": {
+          "anchor": 2010,
+          "label": "2010 & Prior Em",
+          "column": 1
+        },
         "source_page": 37,
         "entity": 2007
       },
@@ -418,13 +432,13 @@
       "prior_year_development_gbp_m": -2.0,
       "prior_year_development_pct": -0.17,
       "direction": "release",
-      "prior_year_movement_page": 53,
-      "prior_year_movement_confidence": 1.0,
+      "prior_year_movement_page": 36,
+      "prior_year_movement_confidence": 0.8,
       "exact_reserve_text": "Claims incurred, net of reinsurance, totalled GBP 308.2 million during the calendar year (2014: GBP 257.2 million). This includes an amount of GBP 33.6 million in respect of increases to reserves on 2013 and prior underwriting years (2014: GBP 26.8 million in respect of reserve releases from 2012 and prior underwriting years).",
       "primary_causes": [
-        "Adverse claims development",
-        "Reinsurance recoveries",
-        "Favorable claims development"
+        "Favorable claims development",
+        "Natural catastrophe events",
+        "Reinsurance recoveries"
       ],
       "specific_events": [],
       "specific_years_affected": [
@@ -433,36 +447,31 @@
       ],
       "prior_year_events": [
         {
-          "event_name": "Reserve movements on 2013 and prior underwriting years",
-          "event_year": 2013,
-          "impact_description": "Reported increase to reserves on 2013 and prior underwriting years (net figure disclosed in claims note).",
-          "lobs_affected": [
-            "Property",
-            "Casualty",
-            "Marine"
-          ],
-          "amount_gbp_m": 33.6,
-          "confidence": 1.0
-        },
-        {
           "event_name": "Incoming reinsurance to close of the 2012 year of account",
           "event_year": 2012,
-          "impact_description": "Included a profit of GBP 34.7 million on business transacted in prior years inherited through the incoming reinsurance to close of the 2012 year of account (beneficial prior-year item to the 2013 year closure).",
+          "impact_description": "Profit on business transacted in prior years inherited through the incoming reinsurance to close of the 2012 year of account contributing to the closed 2013 year result",
           "lobs_affected": [
-            "Treaty",
-            "Reinsurance - Specialty"
+            "Treaty"
           ],
           "amount_gbp_m": -34.7,
           "confidence": 1.0
+        },
+        {
+          "event_name": "Reserve movement on 2013 and prior underwriting years",
+          "event_year": 2013,
+          "impact_description": "Reported amount referenced in the accounts as a GBP 33.6m movement in respect of 2013 and prior underwriting years (narrative inconsistent across sections whether this represented a release or an increase)",
+          "lobs_affected": [],
+          "amount_gbp_m": -33.6,
+          "confidence": 0.8
         }
       ],
       "named_events": [],
-      "standardized_narrative": "At 31 December 2015 the syndicate reported opening gross claims outstanding of GBP 1,162.6m (comparative 2014). The notes disclose a net prior-year movement of GBP 33.6m in respect of 2013 and earlier underwriting years (reported as increases to reserves in the claims note), indicating a net strengthening of prior year reserves (2.9% of opening gross claims outstanding). The report also references an inherited profit of GBP 34.7m on prior-year business arising from the incoming 2012 reinsurance-to-close that impacted the closed 2013 year result. The syndicate commentary highlights benign natural catastrophe and attritional claims experience across 2014-2015, with reinsurance and reserve movements discussed in the actuarial and underwriting-year notes.",
+      "standardized_narrative": "The syndicate shows a small net gross prior-year release (approximately GBP 2.0m) on underwriting years 2013 and earlier based on the gross claims development table, driven by mixed movements across older years. Management narrative also references a significant prior-year item (~GBP 33.6m) and a GBP 34.7m profit attributable to business inherited via the 2012 reinsurance-to-close, indicating favourable prior-year outcomes and some reinsurance-related effects. The movement appears driven by favourable claims development and benign natural catastrophe experience, together with reinsurance to close impacts.",
       "raw_causal_phrases": [
-        "In 2015 much of Syndicate 2007's business benefited from a comparatively benign natural catastrophe claims experience.",
-        "This includes an amount of GBP 33.6 million in respect of increases to reserves on 2013 and prior underwriting years (2014: GBP 26.8 million in respect of reserve releases from 2012 and prior underwriting years).",
+        "comparatively benign natural catastrophe claims experience",
         "Included within the profit is an amount of GBP 33.6 million in respect of releases to reserves on 2013 and prior underwriting years (2014: GBP 26.8 million in respect of reserve releases from 2012 and prior underwriting years).",
-        "included within this result is a profit of GBP 34.7 million on business transacted in prior years inherited through the incoming reinsurance to close of the 2012 year of account."
+        "incoming reinsurance to close of the 2012 year of account",
+        "This includes an amount of GBP 33.6 million in respect of increases to reserves on 2013 and prior underwriting years (2014: GBP 26.8 million in respect of reserve releases from 2012 and prior underwriting years)."
       ],
       "lob_movements": [
         {
@@ -481,27 +490,6 @@
         },
         {
           "line_of_business": "Marine",
-          "direction": "mixed",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.0
-        },
-        {
-          "line_of_business": "Energy",
-          "direction": "mixed",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.0
-        },
-        {
-          "line_of_business": "Aviation",
-          "direction": "mixed",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.0
-        },
-        {
-          "line_of_business": "Motor",
           "direction": "mixed",
           "amount_gbp_m": null,
           "percentage": null,
@@ -544,7 +532,7 @@
       "gross_premium_page": 51,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "No explicit GROSS prior-year reserve movement figure was provided. The report explicitly states a GBP 33.6m movement for 2013 and prior years in the claims note, but that figure is presented in the P&L context (net of reinsurance). Per extraction rules this has been used as a NET fallback (flagged). There is a claims development triangle (gross) in the notes, but it includes an aggregate '2010 & Prior' column and reinsurance-to-close items that distort direct prior-year movement calculations; therefore the gross triangle was not used to compute PYD. Users should note the report contains some inconsistent wording (both 'increases to reserves' and 'releases to reserves' are used in different sections for the GBP 33.6m item); the value here follows the explicit claims-note figure and is treated as a strengthening (+33.6m) and is NET of reinsurance as no gross PYD was presented. [RAG OVERRIDE: Model said PYD=33.6, RAG triangle computed -2.0. Using RAG value.]",
+      "data_quality_notes": "Gross prior-year development computed from the gross claims development triangle (page 36) yields a small net release (~GBP 2.0m). However, narrative and other notes reference a much larger GBP 33.6m movement (described inconsistently across sections as a release or an increase) and a GBP 34.7m profit related to business inherited via the 2012 reinsurance-to-close. Reinsurance-to-close activity and differing narrative language create ambiguity between gross triangle-derived movement and management's described prior-year items. Per-line LOB movements are not quantified in the report. [RAG PYD NOT APPLIED: deterministic figure +148.800m has the opposite sign to both model values [-33.6, -2.0], which agree with each other; model values retained. Sign agreement between the models is not a reconciliation: where they differ in value the cohort and accrual scope of each still has to be settled from the filing (R140).]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -592,33 +580,30 @@
             null,
             null,
             null
-          ],
-          [
-            null,
-            null,
-            null,
-            null,
-            null
           ]
-        ]
+        ],
+        "confidence": 0.8
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_2007_2015_llm.pdf",
-      "content_hash": "1a5c499b19b0ee7e3be37502f44237d3353692c37f93d54841813cb6d7d7b66d",
-      "standardized_at": "2026-07-05T11:03:21.506463+00:00",
+      "content_hash": "bd5675ac884b183bc1965acb594140bb78144e5ed4c2a7c9c062851c11586763",
+      "standardized_at": "2026-09-11T11:24:45.510374+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 31595,
-        "output_tokens": 11719,
-        "total_tokens": 43314,
-        "cost_usd": 0.031337
+        "input_tokens": 32355,
+        "output_tokens": 9633,
+        "total_tokens": 41988,
+        "cost_usd": 0.027355
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "millions",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
+          2010,
           2011,
           2012,
           2013,
@@ -627,6 +612,7 @@
         ],
         "development_rows": [
           [
+            1260.6,
             389.1,
             null,
             null,
@@ -634,6 +620,7 @@
             434.7
           ],
           [
+            1335.5,
             366.8,
             339.4,
             318.9,
@@ -641,6 +628,7 @@
             null
           ],
           [
+            1338.2,
             380.0,
             344.0,
             317.3,
@@ -648,6 +636,7 @@
             null
           ],
           [
+            1377.9,
             380.3,
             340.4,
             null,
@@ -655,13 +644,35 @@
             null
           ],
           [
+            1408.5,
             383.5,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            1559.3,
+            null,
             null,
             null,
             null,
             null
           ]
         ],
+        "row_labels": [
+          "- at end of underwriting year",
+          "- one year later\n:unselected:",
+          "- two years later\n:unselected:",
+          "- three years later\n:unselected:",
+          "- four years later\n:unselected:",
+          "- five years later\n:unselected:"
+        ],
+        "aggregated_cohort": {
+          "anchor": 2010,
+          "label": "2010 & Prior Em",
+          "column": 1
+        },
         "source_page": 37,
         "entity": 2007
       },
@@ -873,12 +884,12 @@
       }
     }
   },
-  "total_cost_usd": 0.039591,
-  "total_tokens": 66558,
+  "total_cost_usd": 0.035046,
+  "total_tokens": 68142,
   "validation": {
     "passed": true,
-    "total_discrepancies": 19,
-    "within_tolerance": 19,
+    "total_discrepancies": 16,
+    "within_tolerance": 16,
     "hard_failures": 0,
     "hard_failure_details": []
   }

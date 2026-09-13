@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-05T19:27:22.728556+00:00",
+  "extraction_timestamp": "2026-09-13T04:14:33.189263+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -11,14 +13,14 @@
       "syndicate": 1221,
       "year": 2019,
       "opening_reserves_gbp_m": 516.08,
-      "opening_reserves_page": 42,
+      "opening_reserves_page": 5,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": 72.266,
       "prior_year_development_pct": 14.0,
       "direction": "strengthening",
-      "prior_year_movement_page": 42,
+      "prior_year_movement_page": 15,
       "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "Change in prior year provisions",
+      "exact_reserve_text": "The surpluses / (deficits) following the reassessment of claims outstanding held at the end of the previous year are set out below.",
       "primary_causes": [
         "Adverse claims development",
         "Reserve methodology change",
@@ -27,17 +29,86 @@
       "specific_events": [],
       "specific_years_affected": [],
       "prior_year_events": [],
-      "named_events": [],
-      "standardized_narrative": "The syndicate reported a gross prior year strengthening of GBP 51.449 million, representing 9.97% of opening gross reserves. This adverse development was primarily driven by historic large loss activity impacting the Financial Lines division, particularly D&O and E&O books, following a detailed reserving review and updated reserving assumptions. Additionally, current year large losses in the Technical Risks division (Downstream Energy) and catastrophic losses in the Global Re division contributed to the overall loss.",
+      "named_events": [
+        {
+          "event_name": "large losses within the Downstream Energy class",
+          "event_year": 2019,
+          "event_type": "man_made",
+          "net_loss_gbp_m": null,
+          "loss_description": "current accident year issues within our Technical Risks division due to a number of large losses within the Downstream Energy class",
+          "lobs_affected": [
+            "Energy"
+          ],
+          "page": 1,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "catastrophic loss issues within our Global Re division",
+          "event_year": 2019,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "catastrophic loss issues within our Global Re division",
+          "lobs_affected": [
+            "Treaty"
+          ],
+          "page": 1,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "large losses throughout the year in Downstream Energy and Power & Utilities",
+          "event_year": 2019,
+          "event_type": "man_made",
+          "net_loss_gbp_m": null,
+          "loss_description": "Downstream Energy and Power & Utilities saw an increasing and historically unprecedented instance of large losses throughout the year.",
+          "lobs_affected": [
+            "Energy"
+          ],
+          "page": 2,
+          "confidence": 0.8
+        }
+      ],
+      "standardized_narrative": "The Syndicate experienced a gross prior year reserve strengthening of GBP 42.0 million, primarily driven by adverse development in Third Party Liability and Reinsurance acceptance, and to a lesser extent in Marine and Energy. This was partially offset by a release in Fire and Other Damage to Property. The strengthening was attributed to a detailed reserving review and an update to certain reserving assumptions, particularly impacting the Financial Lines division due to historic large loss activity.",
       "raw_causal_phrases": [
         "prior year development in our Financial Lines division, following a detailed reserving review and an update to certain reserving assumptions during the year",
-        "historic large loss activity impact both the D&O and E&O books. Significant reserve strengthening in these classes, in particular in D&O, led to an overall loss in both classes.",
-        "current accident year issues within our Technical Risks division due to a number of large losses within the Downstream Energy class",
-        "catastrophic loss issues within our Global Re division",
-        "Downstream Energy and Power & Utilities saw an increasing and historically unprecedented instance of large losses throughout the year.",
-        "primarily due to catastrophic losses on the International Property Treaty segment and risk and individual risk losses on the Marine Portfolio."
+        "historic large loss activity impact both the D&O and E&O books. Significant reserve strengthening in these classes, in particular in D&O, led to an overall loss in both classes."
       ],
-      "lob_movements": [],
+      "lob_movements": [
+        {
+          "line_of_business": "Marine",
+          "direction": "strengthening",
+          "amount_gbp_m": 0.396,
+          "percentage": null,
+          "confidence": 1.0
+        },
+        {
+          "line_of_business": "Energy",
+          "direction": "strengthening",
+          "amount_gbp_m": 0.302,
+          "percentage": null,
+          "confidence": 1.0
+        },
+        {
+          "line_of_business": "Property",
+          "direction": "release",
+          "amount_gbp_m": -6.406,
+          "percentage": null,
+          "confidence": 1.0
+        },
+        {
+          "line_of_business": "Casualty",
+          "direction": "strengthening",
+          "amount_gbp_m": 36.021,
+          "percentage": null,
+          "confidence": 1.0
+        },
+        {
+          "line_of_business": "Treaty",
+          "direction": "strengthening",
+          "amount_gbp_m": 11.648,
+          "percentage": null,
+          "confidence": 1.0
+        }
+      ],
       "gross_premiums_written_gbp_m": 358.6,
       "gross_premium_mix": [
         {
@@ -76,15 +147,15 @@
           "percentage_of_total": 7.8
         }
       ],
-      "gross_premium_page": 40,
+      "gross_premium_page": 14,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Individual line of business movements for prior year development are only available on a net basis, not gross. Gross premium mix is based on regulatory/statutory classes as a quantified divisional breakdown is not provided. [RAG OVERRIDE: Model said PYD=51.449, RAG triangle computed 72.266. Using RAG value.]",
+      "data_quality_notes": " [RAG OVERRIDE: Model said PYD=41.961, RAG triangle computed 72.266. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
-        "page": 41,
+        "page": 15,
         "underwriting_years": [
           2012,
           2013,
@@ -97,69 +168,59 @@
         ],
         "development_rows": [
           [
-            81514,
-            77041,
-            87285,
-            82120,
-            106609,
-            129499,
-            94477,
-            97885
+            81514.0,
+            77041.0,
+            87285.0,
+            82120.0,
+            106609.0,
+            129499.0,
+            94477.0,
+            97885.0
           ],
           [
-            155636,
-            142831,
-            155629,
-            183373,
-            227465,
-            238181,
-            245871,
+            155636.0,
+            142831.0,
+            155629.0,
+            183373.0,
+            227465.0,
+            238181.0,
+            245871.0,
             null
           ],
           [
-            149595,
-            138631,
-            165046,
-            176792,
-            227708,
-            253653,
-            null,
-            null
-          ],
-          [
-            144832,
-            122242,
-            167878,
-            193316,
-            240281,
-            null,
+            149595.0,
+            138631.0,
+            165046.0,
+            176792.0,
+            227708.0,
+            253653.0,
             null,
             null
           ],
           [
-            141689,
-            124442,
-            178649,
-            211573,
-            null,
+            144832.0,
+            122242.0,
+            167878.0,
+            193316.0,
+            240281.0,
             null,
             null,
             null
           ],
           [
-            137586,
-            125134,
-            202116,
-            null,
+            141689.0,
+            124442.0,
+            178649.0,
+            211573.0,
             null,
             null,
             null,
             null
           ],
           [
-            149569,
-            125067,
-            null,
+            137586.0,
+            125134.0,
+            202116.0,
             null,
             null,
             null,
@@ -167,7 +228,17 @@
             null
           ],
           [
-            152133,
+            149569.0,
+            125067.0,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            152133.0,
             null,
             null,
             null,
@@ -179,21 +250,33 @@
         ]
       },
       "source_type": "syndicate",
-      "source_file": "syndicate_reports\\pdfs\\syndicate_1221_2019.pdf",
-      "content_hash": "8affb5f9f3ac5cc4bd08db03d08cf0026403b57adb176ea536abbe757dd9688a",
-      "standardized_at": "2026-03-16T12:14:36.067433+00:00",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_1221_2019_llm.pdf",
+      "content_hash": "927e04dbe94be4f566501b4691f8b8ca2fd4cf54242d7e70d965010586b98900",
+      "standardized_at": "2026-09-11T10:34:01.291996+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 17752,
-        "output_tokens": 1499,
-        "total_tokens": 25207,
-        "cost_usd": 0.009073
+        "input_tokens": 10925,
+        "output_tokens": 2249,
+        "total_tokens": 17318,
+        "cost_usd": 0.0089
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 72.266,
+        "model_value": 41.961,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 41,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2012,
           2013,
@@ -286,6 +369,16 @@
             null
           ]
         ],
+        "row_labels": [
+          "at end of underwriting year",
+          "one year later",
+          "two years later",
+          "three years later",
+          "four years later",
+          "five years later",
+          "six years later",
+          "seven years later"
+        ],
         "source_page": 41,
         "entity": 1221
       },
@@ -376,6 +469,13 @@
           "entity": 1221,
           "backend": "azure",
           "table_kind": "provisions_movement"
+        },
+        "movement_semantics": {
+          "row_label": "Change in prior year provisions",
+          "row_index": 6,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": true,
+          "column_index": 1
         },
         "gross_prior_year_claims": 51.4,
         "ri_share_prior_year": -14.4,
@@ -461,24 +561,25 @@
       "syndicate": 1221,
       "year": 2019,
       "opening_reserves_gbp_m": 516.08,
-      "opening_reserves_page": 41,
+      "opening_reserves_page": 22,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": 72.266,
       "prior_year_development_pct": 14.0,
       "direction": "strengthening",
       "prior_year_movement_page": 41,
       "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "Change in prior year provisions 51,449 (14,445) 37,004",
+      "exact_reserve_text": "prior year development in our Financial Lines division, following a detailed reserving review and an update to certain reserving assumptions during the year;",
       "primary_causes": [
         "Reserve methodology change",
-        "Man-made catastrophe / large losses",
-        "Adverse claims development"
+        "Large loss development",
+        "Adverse claims development",
+        "Natural catastrophe events"
       ],
       "specific_events": [],
       "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "The syndicate's gross claims outstanding at 1 January 2019 were GBP 516.08m. During 2019 there was adverse prior year development on gross claims of GBP 51.449m (a strengthening). The reported drivers include prior year development in Financial Lines following a detailed reserving review and update to reserving assumptions, current accident year large losses within Technical Risks (notably Downstream Energy) and catastrophic loss issues within the Global Re division. The movement is disclosed in the Technical Provisions reconciliation.",
+      "standardized_narrative": "The Syndicate recorded a gross strengthening in prior year reserves in 2019. The technical provisions note shows a gross increase in prior year provisions of GBP 51.449m. Management attribute the deterioration to prior year development in the Financial Lines division following a detailed reserving review and assumption updates, as well as large losses in Technical Risks (Downstream Energy) and catastrophic loss issues in the Global Re division.",
       "raw_causal_phrases": [
         "prior year development in our Financial Lines division, following a detailed reserving review and an update to certain reserving assumptions during the year;",
         "current accident year issues within our Technical Risks division due to a number of large losses within the Downstream Energy class; and",
@@ -486,25 +587,46 @@
       ],
       "lob_movements": [
         {
-          "line_of_business": "Professional Lines",
+          "line_of_business": "Marine",
           "direction": "strengthening",
-          "amount_gbp_m": null,
+          "amount_gbp_m": 0.396,
           "percentage": null,
-          "confidence": 0.5
+          "confidence": 1.0
         },
         {
           "line_of_business": "Energy",
           "direction": "strengthening",
-          "amount_gbp_m": null,
+          "amount_gbp_m": 0.302,
           "percentage": null,
-          "confidence": 0.5
+          "confidence": 1.0
+        },
+        {
+          "line_of_business": "Property",
+          "direction": "release",
+          "amount_gbp_m": -6.406,
+          "percentage": null,
+          "confidence": 1.0
+        },
+        {
+          "line_of_business": "Casualty",
+          "direction": "strengthening",
+          "amount_gbp_m": 36.021,
+          "percentage": null,
+          "confidence": 1.0
         },
         {
           "line_of_business": "Treaty",
           "direction": "strengthening",
-          "amount_gbp_m": null,
+          "amount_gbp_m": 11.648,
           "percentage": null,
-          "confidence": 0.5
+          "confidence": 1.0
+        },
+        {
+          "line_of_business": "Aggregate",
+          "direction": "strengthening",
+          "amount_gbp_m": 41.961,
+          "percentage": null,
+          "confidence": 1.0
         }
       ],
       "gross_premiums_written_gbp_m": 358.6,
@@ -548,31 +670,134 @@
       "gross_premium_page": 39,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Opening gross claims outstanding and the gross prior year movement were taken from the Technical Provisions reconciliation (page 41). The prior year development is the gross column value 'Change in prior year provisions' (51,449 in GBP 000). No explicit sentence describing the prior year movement was present aside from the table row, so that table row text was used verbatim. The report names divisional drivers (Financial Lines, Technical Risks, Global Re) but does not quantify the prior year movement by line of business, so LOB-level amounts are unavailable (lob_movements amounts left null). No specifically named catastrophe events affecting prior years are listed in the document. A claims development table appears in the notes but the explicit movement figure was available in the movement table so the triangle was not used as primary source. [RAG OVERRIDE: Model said PYD=51.449, RAG triangle computed 72.266. Using RAG value.]",
+      "data_quality_notes": "Primary opening reserves taken from Statement of Financial Position (Claims outstanding, prior year column). Prior year development taken from the Technical Provisions table row 'Change in prior year provisions' (gross = GBP 51,449k). Note: a separate 'Claims outstanding' note lists surpluses/(deficits) by class with a total of (GBP 41,961k) (a net release figure presented as 'surplus/(deficit)') which differs from the Technical Provisions gross movement; this extraction uses the Technical Provisions gross movement as the authoritative prior-year movement per instructions. Claims development triangle values were transcribed from the printed 'Pure Underwriting Year' table and are approximate (extracted from scanned images). [RAG OVERRIDE: Model said PYD=51.449, RAG triangle computed 72.266. Using RAG value.]",
       "_claims_triangle": {
-        "type": "none",
+        "type": "gross",
         "currency": "GBP",
-        "units": null,
-        "page": null,
-        "underwriting_years": [],
-        "development_rows": []
+        "units": "thousands",
+        "page": 40,
+        "underwriting_years": [
+          2012,
+          2013,
+          2014,
+          2015,
+          2016,
+          2017,
+          2018,
+          2019
+        ],
+        "development_rows": [
+          [
+            81514,
+            77041,
+            87285,
+            82120,
+            106609,
+            129499,
+            94477,
+            97885
+          ],
+          [
+            155636,
+            142831,
+            155629,
+            183373,
+            227465,
+            238181,
+            245871,
+            null
+          ],
+          [
+            149595,
+            138631,
+            165046,
+            176792,
+            227708,
+            238653,
+            null,
+            null
+          ],
+          [
+            144832,
+            122242,
+            167878,
+            193316,
+            240281,
+            null,
+            null,
+            null
+          ],
+          [
+            141689,
+            124442,
+            178649,
+            211573,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            137586,
+            125134,
+            202116,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            149569,
+            125067,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            152133,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ]
+        ],
+        "type_confidence": 0.8
       },
       "source_type": "syndicate",
-      "source_file": "syndicate_reports\\pdfs\\syndicate_1221_2019.pdf",
-      "content_hash": "8affb5f9f3ac5cc4bd08db03d08cf0026403b57adb176ea536abbe757dd9688a",
-      "standardized_at": "2026-03-16T12:16:35.180140+00:00",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_1221_2019_llm.pdf",
+      "content_hash": "927e04dbe94be4f566501b4691f8b8ca2fd4cf54242d7e70d965010586b98900",
+      "standardized_at": "2026-09-11T10:36:31.908253+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 49105,
-        "output_tokens": 5775,
-        "total_tokens": 54880,
-        "cost_usd": 0.023826
+        "input_tokens": 21307,
+        "output_tokens": 8722,
+        "total_tokens": 30029,
+        "cost_usd": 0.022771
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 72.266,
+        "model_value": 51.449,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 41,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2012,
           2013,
@@ -665,6 +890,16 @@
             null
           ]
         ],
+        "row_labels": [
+          "at end of underwriting year",
+          "one year later",
+          "two years later",
+          "three years later",
+          "four years later",
+          "five years later",
+          "six years later",
+          "seven years later"
+        ],
         "source_page": 41,
         "entity": 1221
       },
@@ -756,6 +991,13 @@
           "backend": "azure",
           "table_kind": "provisions_movement"
         },
+        "movement_semantics": {
+          "row_label": "Change in prior year provisions",
+          "row_index": 6,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": true,
+          "column_index": 1
+        },
         "gross_prior_year_claims": 51.4,
         "ri_share_prior_year": -14.4,
         "net_prior_year_claims": 37.0,
@@ -837,12 +1079,12 @@
       }
     }
   },
-  "total_cost_usd": 0.032899,
-  "total_tokens": 80087,
+  "total_cost_usd": 0.031671,
+  "total_tokens": 47347,
   "validation": {
     "passed": true,
-    "total_discrepancies": 17,
-    "within_tolerance": 17,
+    "total_discrepancies": 14,
+    "within_tolerance": 14,
     "hard_failures": 0,
     "hard_failure_details": []
   }

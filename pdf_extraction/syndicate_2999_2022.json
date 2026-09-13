@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T10:56:19.729319+00:00",
+  "extraction_timestamp": "2026-09-13T03:59:42.469170+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -18,9 +20,10 @@
       "direction": "strengthening",
       "prior_year_movement_page": 20,
       "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "Claims expense - previous financial year: 103.2 (Gross). Included within net claims incurred is adverse prior year development relating to certain financial lines classes; reduced by positive developments across a number of other classes.",
+      "exact_reserve_text": "Claims expense - previous financial year: 103.2",
       "primary_causes": [
         "Economic inflation / claims cost inflation",
+        "Ogden discount rate",
         "Adverse claims development",
         "Favorable claims development"
       ],
@@ -33,31 +36,51 @@
           "event_year": 2022,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "most significant natural disaster, net catastrophe loss experience was marginally worse than expectation",
+          "loss_description": "net catastrophe loss experience was marginally worse than expectation, albeit manageable",
           "lobs_affected": [],
           "page": 2,
           "confidence": 0.8
         },
         {
-          "event_name": "war in Ukraine",
+          "event_name": "War in Ukraine",
           "event_year": 2022,
           "event_type": "geopolitical",
           "net_loss_gbp_m": null,
-          "loss_description": "net catastrophe loss experience was marginally worse than expectation",
+          "loss_description": "net catastrophe loss experience was marginally worse than expectation, albeit manageable",
           "lobs_affected": [],
           "page": 2,
           "confidence": 0.8
         }
       ],
-      "standardized_narrative": "The syndicate experienced a net strengthening of prior year reserves by GBP 103.2 million, representing 3.98% of opening gross claims outstanding. This was primarily driven by an uplift for inflation loadings, particularly in liability and casualty lines, contributing to adverse development in certain financial lines classes. However, this was partially offset by positive developments across other classes.",
+      "standardized_narrative": "The syndicate reported a gross strengthening of GBP 103.2 million in prior accident year reserves. This was primarily driven by an uplift in reserves for inflation loadings, particularly in liability and casualty lines, as well as the impact of discounting outstanding reserves related to periodical payment orders on third party liability and motor lines of business, influenced by changes in the Ogden rate. The report also noted that net claims incurred included adverse prior year development for certain financial lines classes, partially offset by positive developments across other classes.",
       "raw_causal_phrases": [
-        "uplifted for inflation loadings",
-        "adverse prior year development relating to certain financial lines classes",
-        "reduced by positive developments across a number of other classes"
+        "prior accident year reserves, mainly in liability and casualty lines, have been uplifted for inflation loadings.",
+        "inflation remains higher than expected",
+        "impact on claims inflation is significantly higher with would lead to increased claims reserves",
+        "explicit allowance for the impact of increased levels of inflation",
+        "Social and economic trends, for example price and wage inflation and interest rates.",
+        "Claims expense - previous financial year: 103.2",
+        "discounting of outstanding reserves in respect of liabilities relating to periodical payment orders on third party liability and motor lines of business",
+        "Included within net claims incurred is adverse prior year development relating to certain financial lines classes; reduced by positive developments across a number of other classes.",
+        "Change in Ogden rate on certain long term personal injury claims"
       ],
       "lob_movements": [
         {
+          "line_of_business": "Liability",
+          "direction": "strengthening",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.5
+        },
+        {
           "line_of_business": "Casualty",
+          "direction": "strengthening",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.5
+        },
+        {
+          "line_of_business": "Motor",
           "direction": "strengthening",
           "amount_gbp_m": null,
           "percentage": null,
@@ -112,7 +135,7 @@
       "gross_premium_page": 16,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Line of business movements for prior year development are not quantified in the report. [RAG OVERRIDE: Model said PYD=103.2, RAG triangle computed 375.6. Using RAG value.]",
+      "data_quality_notes": " [RAG OVERRIDE: Model said PYD=103.2, RAG triangle computed 375.6. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -140,8 +163,7 @@
             321.2,
             381.7,
             504.3,
-            587.0,
-            null
+            587.0
           ],
           [
             466.7,
@@ -152,7 +174,6 @@
             717.6,
             703.3,
             990.1,
-            null,
             null
           ],
           [
@@ -164,7 +185,6 @@
             843.3,
             879.2,
             null,
-            null,
             null
           ],
           [
@@ -174,7 +194,6 @@
             1191.2,
             846.1,
             877.5,
-            null,
             null,
             null,
             null
@@ -188,7 +207,6 @@
             null,
             null,
             null,
-            null,
             null
           ],
           [
@@ -196,7 +214,6 @@
             688.8,
             812.9,
             1253.9,
-            null,
             null,
             null,
             null,
@@ -212,13 +229,11 @@
             null,
             null,
             null,
-            null,
             null
           ],
           [
             702.0,
             716.1,
-            null,
             null,
             null,
             null,
@@ -236,11 +251,9 @@
             null,
             null,
             null,
-            null,
             null
           ],
           [
-            null,
             null,
             null,
             null,
@@ -255,20 +268,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_2999_2022_llm.pdf",
-      "content_hash": "22fd90da976a4139678fdb78417084610e75012168e64d5679c6b578e5b0df84",
-      "standardized_at": "2026-07-05T13:59:35.800114+00:00",
+      "content_hash": "2924cd78abc87d2f6c07bf0348ac25964f23a7cb6e34b3004ea59a1f2d7dd003",
+      "standardized_at": "2026-09-11T12:22:00.586134+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 11927,
-        "output_tokens": 1843,
-        "total_tokens": 20778,
-        "cost_usd": 0.008186
+        "input_tokens": 12731,
+        "output_tokens": 2227,
+        "total_tokens": 22268,
+        "cost_usd": 0.009387
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 375.6,
+        "model_value": 103.2,
+        "triangle_type": "gross",
+        "triangle_units": "millions",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 48,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "millions",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2013,
           2014,
@@ -390,6 +415,17 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later",
+          "Seven years later",
+          "Eight years later"
         ],
         "source_page": 48,
         "entity": 2999
@@ -573,11 +609,11 @@
       "direction": "strengthening",
       "prior_year_movement_page": 42,
       "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "Additionally, prior accident year reserves, mainly in liability and casualty lines, have been uplifted for inflation loadings. Included within net claims incurred is adverse prior year development relating to certain financial lines classes; reduced by positive developments across a number of other classes.",
+      "exact_reserve_text": "Included within net claims incurred is adverse prior year development relating to certain financial lines classes; reduced by positive developments across a number of other classes.\nAdditionally, prior accident year reserves, mainly in liability and casualty lines, have been uplifted for inflation loadings.",
       "primary_causes": [
         "Economic inflation / claims cost inflation",
-        "Social inflation / litigation trends",
-        "Adverse claims development"
+        "Adverse claims development",
+        "Social inflation / litigation trends"
       ],
       "specific_events": [
         "Hurricane Ian 2022",
@@ -591,11 +627,12 @@
           "event_year": 2022,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "Hurricane Ian was the most significant natural disaster; the Syndicate's net catastrophe loss experience was marginally worse than expectation.",
+          "loss_description": "Hurricane Ian was the most significant natural disaster; losses from Hurricane Ian contributed to the Syndicate's net catastrophe loss experience being marginally worse than expectation.",
           "lobs_affected": [
             "Property",
-            "Casualty",
-            "Marine"
+            "Marine",
+            "Motor",
+            "Casualty"
           ],
           "page": 4,
           "confidence": 0.8
@@ -605,20 +642,20 @@
           "event_year": 2022,
           "event_type": "political",
           "net_loss_gbp_m": null,
-          "loss_description": "Losses from ... the war in Ukraine contributed to the Syndicate's net catastrophe loss experience being marginally worse than expectation.",
+          "loss_description": "The war in Ukraine contributed to the Syndicate's net catastrophe loss experience being marginally worse than expectation.",
           "lobs_affected": [
             "Property",
             "Casualty"
           ],
           "page": 4,
-          "confidence": 0.6
+          "confidence": 0.8
         }
       ],
-      "standardized_narrative": "Opening gross claims outstanding at 1 January 2022 amounted to GBP 2,590.2m. During 2022 there was adverse prior year development of GBP 103.2m (gross), representing a 3.99% strengthening of reserves versus opening, driven principally by uplifted prior accident year reserves for inflation (mainly in liability/casualty) and adverse development on certain financial/professional lines. Current year catastrophe events (notably Hurricane Ian) and geopolitical events (War in Ukraine) affected 2022 experience but the prior year strengthening disclosed is primarily due to inflation and adverse prior development in specific long-tail portfolios.",
+      "standardized_narrative": "Opening gross claims outstanding at 1 January 2022 were GBP 2,590.2m. During 2022 the Syndicate recorded gross adverse prior year development of GBP 103.2m (approximately 4.0% of opening reserves), driven primarily by uplift to prior accident year reserves for inflation (mainly in liability and casualty), adverse development in certain financial/professional lines, partially offset by favourable development in other classes. The net effect is a strengthening of reserves.",
       "raw_causal_phrases": [
-        "prior accident year reserves, mainly in liability and casualty lines, have been uplifted for inflation loadings",
-        "Included within net claims incurred is adverse prior year development relating to certain financial lines classes; reduced by positive developments across a number of other classes",
-        "With losses from Hurricane Ian and the war in Ukraine, the Syndicate's net catastrophe loss experience was marginally worse than expectation"
+        "Included within net claims incurred is adverse prior year development relating to certain financial lines classes; reduced by positive developments across a number of other classes.",
+        "prior accident year reserves, mainly in liability and casualty lines, have been uplifted for inflation loadings.",
+        "With losses from Hurricane Ian and the war in Ukraine, the Syndicate's net catastrophe loss experience was marginally worse than expectation, albeit manageable, due to the favourable rating environment, combined with a beneficial reinsurance programme"
       ],
       "lob_movements": [
         {
@@ -626,14 +663,14 @@
           "direction": "strengthening",
           "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.8
+          "confidence": 0.5
         },
         {
           "line_of_business": "Professional Lines",
           "direction": "strengthening",
           "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.7
+          "confidence": 0.5
         }
       ],
       "gross_premiums_written_gbp_m": 1264.3,
@@ -677,7 +714,7 @@
       "gross_premium_page": 33,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior year development (gross GBP 103.2m) taken from Technical Provisions note 'Claims expense - previous financial year' (gross). Narrative corroborates uplift for inflation mainly in liability/casualty. No gross per-LOB prior year movement amounts disclosed. Claims development triangle (gross and net) is present and could be used for cross-checks; no RITC distortion noted in the notes. Some event impacts (Hurricane Ian, War in Ukraine) are described qualitatively only and not quantified at syndicate gross level. [RAG OVERRIDE: Model said PYD=103.2, RAG triangle computed 375.6. Using RAG value.]",
+      "data_quality_notes": "Prior year development (gross GBP 103.2m) taken from the technical provisions note line 'Claims expense - previous financial year'. No per-line quantified prior-year movements provided. Claims development triangle is present (gross) and was used for verification; triangle includes an aggregate 'and prior' column which was excluded per instructions. Some narrative references to prior-year reserve uplift and causes are at various pages; individual event-level prior-year impacts are not quantified. [RAG OVERRIDE: Model said PYD=103.2, RAG triangle computed 375.6. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -709,6 +746,7 @@
             null
           ],
           [
+            520.6,
             466.7,
             543.8,
             684.6,
@@ -717,10 +755,10 @@
             717.6,
             703.3,
             990.1,
-            null,
             null
           ],
           [
+            595.7,
             605.7,
             636.3,
             789.7,
@@ -729,10 +767,10 @@
             843.3,
             879.2,
             null,
-            null,
             null
           ],
           [
+            615.0,
             608.8,
             667.3,
             785.3,
@@ -741,10 +779,10 @@
             877.5,
             null,
             null,
-            null,
             null
           ],
           [
+            576.2,
             654.2,
             655.5,
             785.3,
@@ -753,10 +791,10 @@
             null,
             null,
             null,
-            null,
             null
           ],
           [
+            591.2,
             660.2,
             688.8,
             812.9,
@@ -765,10 +803,10 @@
             null,
             null,
             null,
-            null,
             null
           ],
           [
+            599.5,
             682.4,
             693.4,
             838.1,
@@ -777,10 +815,10 @@
             null,
             null,
             null,
-            null,
             null
           ],
           [
+            602.8,
             702.0,
             716.1,
             null,
@@ -789,10 +827,10 @@
             null,
             null,
             null,
-            null,
             null
           ],
           [
+            601.2,
             709.6,
             null,
             null,
@@ -801,11 +839,10 @@
             null,
             null,
             null,
-            null,
             null
           ],
           [
-            null,
+            599.4,
             null,
             null,
             null,
@@ -820,20 +857,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_2999_2022_llm.pdf",
-      "content_hash": "22fd90da976a4139678fdb78417084610e75012168e64d5679c6b578e5b0df84",
-      "standardized_at": "2026-07-05T14:01:15.773761+00:00",
+      "content_hash": "2924cd78abc87d2f6c07bf0348ac25964f23a7cb6e34b3004ea59a1f2d7dd003",
+      "standardized_at": "2026-09-11T12:24:46.003601+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 21032,
-        "output_tokens": 9095,
-        "total_tokens": 30127,
-        "cost_usd": 0.023448
+        "input_tokens": 21792,
+        "output_tokens": 9517,
+        "total_tokens": 31309,
+        "cost_usd": 0.024482
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 375.6,
+        "model_value": 103.2,
+        "triangle_type": "gross",
+        "triangle_units": "millions",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 48,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "millions",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2013,
           2014,
@@ -955,6 +1004,17 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later",
+          "Seven years later",
+          "Eight years later"
         ],
         "source_page": 48,
         "entity": 2999
@@ -1128,12 +1188,12 @@
       }
     }
   },
-  "total_cost_usd": 0.031634,
-  "total_tokens": 50905,
+  "total_cost_usd": 0.033869,
+  "total_tokens": 53577,
   "validation": {
     "passed": true,
-    "total_discrepancies": 19,
-    "within_tolerance": 19,
+    "total_discrepancies": 20,
+    "within_tolerance": 20,
     "hard_failures": 0,
     "hard_failure_details": []
   }

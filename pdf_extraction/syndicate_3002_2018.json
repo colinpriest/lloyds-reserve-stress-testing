@@ -1,12 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-10T10:40:58.681301+00:00",
+  "extraction_timestamp": "2026-09-13T04:00:17.815789+00:00",
   "spec": {
-    "prompt_version": "2.10",
-    "driver_prompt_version": "2.11",
-    "responses_served_from_cache": {
-      "gemini-2.5-flash": "2.10",
-      "gpt-5-mini": "2.10"
-    },
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -22,7 +19,7 @@
       "prior_year_development_pct": 16.88,
       "direction": "strengthening",
       "prior_year_movement_page": 15,
-      "prior_year_movement_confidence": 0.8,
+      "prior_year_movement_confidence": 1.0,
       "exact_reserve_text": "An unfavourable run off deviation (prior accident year release) of GBP 0.5m (2017: GBP 3.3m favourable deviation) was experienced during the year.",
       "primary_causes": [
         "Adverse claims development"
@@ -31,31 +28,28 @@
       "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "In 2018, the syndicate experienced an unfavourable run-off deviation of GBP 0.5 million in its prior accident year reserves, indicating a strengthening of reserves. This follows a GBP 3.3 million favourable deviation in 2017.",
+      "standardized_narrative": "The syndicate experienced an unfavourable run-off deviation of GBP 0.5m in its prior year reserves, indicating a strengthening of reserves. This represents a 2.53% increase relative to the opening gross claims outstanding.",
       "raw_causal_phrases": [
-        "unfavourable run off deviation (prior accident year release)"
+        "unfavourable run off deviation"
       ],
-      "lob_movements": [
-        {
-          "line_of_business": "Accident & Health",
-          "direction": "strengthening",
-          "amount_gbp_m": 0.5,
-          "percentage": 2.53,
-          "confidence": 0.8
-        }
-      ],
+      "lob_movements": [],
       "gross_premiums_written_gbp_m": 42.882,
       "gross_premium_mix": [
         {
-          "line_of_business": "Long-term insurance business",
-          "amount_gbp_m": 42.882,
-          "percentage_of_total": 100.0
+          "line_of_business": "Individual premiums",
+          "amount_gbp_m": 1.396,
+          "percentage_of_total": 3.26
+        },
+        {
+          "line_of_business": "Premiums under group contracts",
+          "amount_gbp_m": 41.486,
+          "percentage_of_total": 96.74
         }
       ],
       "gross_premium_page": 14,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The prior year development narrative contains contradictory terms ('unfavourable run off deviation' and 'prior accident year release'). The 'unfavourable' term was used to determine the strengthening direction. The gross premium mix is presented as a single line of business as stated in the segmental analysis, rather than a breakdown by premium type, to align with the instruction to use divisional totals for LOBs. [RAG OVERRIDE: Model said PYD=0.5, RAG triangle computed 3.332. Using RAG value.]",
+      "data_quality_notes": "Discrepancy between explicit prior year movement statement (GBP 0.5m strengthening) and claims development triangle (showing no movement for prior years). Prioritized explicit statement. The 2016 and prior underwriting year was Reinsured to Close (RITC) into the Syndicate's 2017 underwriting year, which may distort the claims development triangle for prior years. [RAG OVERRIDE: Model said PYD=0.5, RAG triangle computed 3.332. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -156,19 +150,15 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_3002_2018_llm.pdf",
-      "content_hash": "fd93575935d7707d860d460b266d382ef6c7a6de6a3e29105fbc9604e2961b38",
-      "standardized_at": "2026-07-05T14:30:58.974753+00:00",
+      "content_hash": "648ef579960d08729f915d1fb1e3437116e0e4a3593e086b415c57c9199d78e0",
+      "standardized_at": "2026-09-11T12:10:18.295421+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 10637,
-        "output_tokens": 1173,
-        "total_tokens": 16044,
-        "cost_usd": 0.006124
-      },
-      "_served_from": {
-        "cache_file": "18afbd90b4fb9db03f9640b9b379e60a5f3a7ff0f22addc1d5cb2b383836c2d0.json",
-        "prompt_version": "2.10"
+        "input_tokens": 11441,
+        "output_tokens": 1141,
+        "total_tokens": 15820,
+        "cost_usd": 0.006285
       },
       "_pyd_route": {
         "source": "rag_triangle",
@@ -185,6 +175,7 @@
         "currency": "GBP",
         "units": "thousands",
         "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -276,6 +267,16 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "12 months",
+          "24 months",
+          "36 months",
+          "48 months",
+          "60 months",
+          "72 months",
+          "84 months",
+          "96 months"
         ],
         "source_page": 36,
         "entity": 3002
@@ -379,7 +380,7 @@
       "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "The Syndicate recorded a prior year reserve movement disclosed as an unfavourable run-off deviation of GBP 0.5m (i.e. a small strengthening of prior year reserves). Opening gross claims outstanding at 1 January 2018 were GBP 19.738m. The report provides a gross claims development triangle which shows movements by underwriting year; however an RITC into 2017 is disclosed and the note wording is ambiguous, so the GBP 0.5m movement from the dedicated prior-year movement note is taken as the primary figure.",
+      "standardized_narrative": "The syndicate opened the year with gross claims outstanding of GBP 19.738m. During 2018 there was an unfavourable run-off on prior accident years amounting to GBP 0.5m (a strengthening of reserves of c.2.5% of opening reserves). The report does not attribute this movement to any specific named event or line-by-line change.",
       "raw_causal_phrases": [
         "An unfavourable run off deviation (prior accident year release) of GBP 0.5m (2017: GBP 3.3m favourable deviation) was experienced during the year."
       ],
@@ -388,8 +389,8 @@
           "line_of_business": "Accident & Health",
           "direction": "strengthening",
           "amount_gbp_m": 0.5,
-          "percentage": 2.528,
-          "confidence": 0.8
+          "percentage": 2.53,
+          "confidence": 0.5
         }
       ],
       "gross_premiums_written_gbp_m": 42.882,
@@ -397,22 +398,22 @@
         {
           "line_of_business": "Individual premiums",
           "amount_gbp_m": 1.396,
-          "percentage_of_total": 3.255
+          "percentage_of_total": 3.25
         },
         {
           "line_of_business": "Premiums under group contracts",
           "amount_gbp_m": 41.486,
-          "percentage_of_total": 96.745
+          "percentage_of_total": 96.75
         }
       ],
       "gross_premium_page": 29,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Primary prior-year movement taken from 'Movement in prior year's provision for claims outstanding' note which explicitly states GBP 0.5m. Note wording is contradictory ('unfavourable' vs 'release') so interpretation as an adverse/strengthening movement is applied. A gross claims development triangle is provided and yields a different aggregate movement (~+3.332m) when computed from column diagonals - however an RITC into 2017 (RITC premium GBP 3.1m) is disclosed and may distort the triangle. No explicit gross/net split in the short movement note; assumed gross. Users should treat prior-year movement as low-medium confidence due to wording ambiguity and RITC distortion risk. [RAG OVERRIDE: Model said PYD=0.5, RAG triangle computed 3.332. Using RAG value.]",
+      "data_quality_notes": "Prior year development taken from Note 5 which explicitly states a GBP 0.5m unfavourable run-off deviation; phrasing in the note includes contradictory parenthetical wording ('prior accident year release') so confidence reduced. RITC activity is mentioned elsewhere in the report and could distort development patterns, but the GBP 0.5m figure is presented as the prior-year run-off deviation. Line of business mapping used 'Accident & Health' as closest standard LOB for term life business; the regulatory segmental breakdown by standard statutory classes was not provided, so premium mix is taken from the 'Individual premiums' / 'Premiums under group contracts' breakdown in the Segmental Analysis note. [RAG OVERRIDE: Model said PYD=0.5, RAG triangle computed 3.332. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
-        "units": "millions",
+        "units": "thousands",
         "page": 33,
         "underwriting_years": [
           2011,
@@ -426,69 +427,59 @@
         ],
         "development_rows": [
           [
-            4.062,
-            1.992,
-            3.42,
-            1.369,
-            14.932,
-            8.921,
-            10.682,
-            12.784
+            4062,
+            1992,
+            3420,
+            1369,
+            14932,
+            8921,
+            10682,
+            12784
           ],
           [
-            7.983,
-            4.096,
-            5.947,
-            5.194,
-            13.705,
-            16.546,
-            26.283,
+            7983,
+            4096,
+            5947,
+            5194,
+            13705,
+            16546,
+            26283,
             null
           ],
           [
-            9.142,
-            4.454,
-            5.201,
-            4.617,
-            14.296,
-            18.042,
-            null,
-            null
-          ],
-          [
-            8.511,
-            4.116,
-            4.991,
-            4.687,
-            16.009,
-            null,
+            9142,
+            4454,
+            5201,
+            4617,
+            14296,
+            18042,
             null,
             null
           ],
           [
-            8.497,
-            4.108,
-            5.129,
-            4.552,
-            null,
+            8511,
+            4116,
+            4991,
+            4687,
+            16009,
             null,
             null,
             null
           ],
           [
-            8.497,
-            3.967,
-            5.117,
-            null,
+            8497,
+            4108,
+            5129,
+            4552,
             null,
             null,
             null,
             null
           ],
           [
-            8.496,
-            4.098,
-            null,
+            8497,
+            3967,
+            5117,
             null,
             null,
             null,
@@ -496,7 +487,17 @@
             null
           ],
           [
-            8.635,
+            8496,
+            4098,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            8635,
             null,
             null,
             null,
@@ -509,19 +510,15 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_3002_2018_llm.pdf",
-      "content_hash": "fd93575935d7707d860d460b266d382ef6c7a6de6a3e29105fbc9604e2961b38",
-      "standardized_at": "2026-07-05T14:32:14.762636+00:00",
+      "content_hash": "648ef579960d08729f915d1fb1e3437116e0e4a3593e086b415c57c9199d78e0",
+      "standardized_at": "2026-09-11T12:11:32.230855+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 17820,
-        "output_tokens": 6558,
-        "total_tokens": 24378,
-        "cost_usd": 0.017571
-      },
-      "_served_from": {
-        "cache_file": "babc892652dc4a99eedfbd885b055716d2da487a1a3d040bd80955af568dc65b.json",
-        "prompt_version": "2.10"
+        "input_tokens": 18580,
+        "output_tokens": 3944,
+        "total_tokens": 22524,
+        "cost_usd": 0.012533
       },
       "_pyd_route": {
         "source": "rag_triangle",
@@ -538,6 +535,7 @@
         "currency": "GBP",
         "units": "thousands",
         "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -630,6 +628,16 @@
             null
           ]
         ],
+        "row_labels": [
+          "12 months",
+          "24 months",
+          "36 months",
+          "48 months",
+          "60 months",
+          "72 months",
+          "84 months",
+          "96 months"
+        ],
         "source_page": 36,
         "entity": 3002
       },
@@ -714,8 +722,8 @@
       }
     }
   },
-  "total_cost_usd": 0.023695,
-  "total_tokens": 40422,
+  "total_cost_usd": 0.018818,
+  "total_tokens": 38344,
   "validation": {
     "passed": true,
     "total_discrepancies": 11,

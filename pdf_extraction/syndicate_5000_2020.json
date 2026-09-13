@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T11:52:23.903064+00:00",
+  "extraction_timestamp": "2026-09-13T04:08:59.782665+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -18,10 +20,9 @@
       "direction": "strengthening",
       "prior_year_movement_page": 15,
       "prior_year_movement_confidence": 0.8,
-      "exact_reserve_text": "The (deficit)/surplus following the reassessment of claims outstanding, net of expected reinsurance recoveries, held at the end of the previous year are set out below:",
+      "exact_reserve_text": "Claims development is shown in the tables below, both gross and net of reinsurance ceded, on an underwriting year basis.",
       "primary_causes": [
-        "Favorable claims development",
-        "IBNR recalibration"
+        "Other"
       ],
       "specific_events": [],
       "specific_years_affected": [
@@ -41,17 +42,15 @@
           "event_year": 2021,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "net loss to be in the range of $10m to $20m.",
-          "lobs_affected": [
-            "Property"
-          ],
+          "loss_description": "net loss to be in the range of $10m to $20m",
+          "lobs_affected": [],
           "page": 2,
           "confidence": 0.8
         }
       ],
-      "standardized_narrative": "The syndicate experienced a gross prior year reserve release of GBP 2.4 million, primarily driven by favorable claims development and IBNR recalibration across underwriting years 2011 to 2018, as indicated by the gross claims development triangle. No specific LOB breakdown for gross prior year development was available.",
+      "standardized_narrative": "The syndicate experienced a gross reserve strengthening of GBP 8.4 million for prior underwriting years up to 2018, representing a 1.63% increase relative to its opening gross claims outstanding. This movement was calculated from the gross claims development triangle, which showed mixed development across individual prior underwriting years. No specific causal factors were identified for this overall gross movement.",
       "raw_causal_phrases": [
-        "reassessment of claims outstanding"
+        "Claims development is shown in the tables below, both gross and net of reinsurance ceded, on an underwriting year basis."
       ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 307.7,
@@ -95,7 +94,7 @@
       "gross_premium_page": 14,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior year development for individual lines of business could only be identified on a net of reinsurance basis, which was not used for the overall prior year development figure. The overall prior year development is calculated from the gross claims development triangle. [RAG OVERRIDE: Model said PYD=-2.4, RAG triangle computed 8.4. Using RAG value.]",
+      "data_quality_notes": "The prior year development figure is calculated from the gross claims development triangle as no explicit gross prior year movement figure was found in narrative or specific notes. The named event 'Winter Storm Uri' is a post-balance sheet event and its loss is stated in USD, not GBP, so the GBP equivalent is not provided.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -238,20 +237,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_5000_2020_llm.pdf",
-      "content_hash": "d1d53886bb925e634706baf495a0ad17ac7cba360d61323a09a4642b3fbc911e",
-      "standardized_at": "2026-07-05T18:04:08.472862+00:00",
+      "content_hash": "2a7deb6a4f8c95774dd3bfa169086731a64df67a3be2b8e162f0305d291e1327",
+      "standardized_at": "2026-09-11T13:08:57.489844+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 10121,
-        "output_tokens": 1837,
-        "total_tokens": 17200,
-        "cost_usd": 0.007629
+        "input_tokens": 10925,
+        "output_tokens": 1855,
+        "total_tokens": 20291,
+        "cost_usd": 0.007915
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 8.4,
+        "model_value": 8.4,
+        "triangle_type": "gross",
+        "triangle_units": "millions",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 35,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "millions",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -385,6 +396,18 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later",
+          "Seven years later",
+          "Eight years later",
+          "Nine years later"
         ],
         "source_page": 35,
         "entity": 5000
@@ -556,10 +579,21 @@
       "exact_reserve_text": "The (deficit)/surplus following the reassessment of claims outstanding, net of expected reinsurance recoveries, held at the end of the previous year are set out below:",
       "primary_causes": [
         "Adverse claims development",
-        "Favorable claims development"
+        "Favorable claims development",
+        "Large loss development",
+        "Reinsurance recoveries"
       ],
       "specific_events": [],
-      "specific_years_affected": [],
+      "specific_years_affected": [
+        2011,
+        2012,
+        2013,
+        2014,
+        2015,
+        2016,
+        2017,
+        2018
+      ],
       "prior_year_events": [],
       "named_events": [
         {
@@ -567,62 +601,60 @@
           "event_year": 2021,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "The Syndicate has exposure to the winter storm event, Winter Storm Uri... current estimate is for the net loss to be in the range of $10m to $20m.",
-          "lobs_affected": [
-            "Property",
-            "Energy"
-          ],
+          "loss_description": "Our current estimate is for the net loss to be in the range of $10m to $20m.",
+          "lobs_affected": [],
           "page": 3,
-          "confidence": 0.5
+          "confidence": 0.8
         }
       ],
-      "standardized_narrative": "Gross claims reserves at 1 January 2020 were GBP 513.98m. Analysis of the gross claims development triangle indicates a net adverse prior-year development of c.GBP 8.4m (about 1.6% of opening gross reserves) for underwriting years up to 2018, i.e. an overall strengthening of reserves. The syndicate's published net prior-year movements (presented net of reinsurance in the notes) show mixed movements by class; no single dominant cause is attributed in the report other than general adverse/favourable claims development and standard reserving judgement.",
+      "standardized_narrative": "Opening gross claims outstanding at 1 Jan 2020 were GBP 513.98m. The syndicate experienced a net adverse prior-year development of GBP 8.4m (approximately 1.63% of opening reserves), calculated from the gross claims development table for underwriting years 2011-2018. The movement reflects a mix of adverse and favourable developments across classes (notably adverse movements in marine/aviation and reinsurance acceptances offset by releases in some liability and accident & health lines); amounts shown by class in the reassessment table are presented net of expected reinsurance recoveries.",
       "raw_causal_phrases": [
-        "reassessment of claims outstanding, net of expected reinsurance recoveries",
-        "In arriving at the level of claims provisions a margin is applied over and above the actuarial best estimate"
+        "The (deficit)/surplus following the reassessment of claims outstanding, net of expected reinsurance recoveries, held at the end of the previous year are set out below:",
+        "In arriving at the level of claims provisions a margin is applied over and above the actuarial best estimate, to reduce the likelihood of adverse run-off deviation.",
+        "Reserve adequacy is monitored through quarterly internal actuarial review."
       ],
       "lob_movements": [
         {
           "line_of_business": "Accident & Health",
           "direction": "release",
-          "amount_gbp_m": null,
+          "amount_gbp_m": -0.299,
           "percentage": null,
-          "confidence": 0.5
+          "confidence": 1.0
         },
         {
           "line_of_business": "Marine",
           "direction": "strengthening",
-          "amount_gbp_m": null,
+          "amount_gbp_m": 1.956,
           "percentage": null,
-          "confidence": 0.5
+          "confidence": 1.0
         },
         {
           "line_of_business": "Property",
           "direction": "strengthening",
-          "amount_gbp_m": null,
+          "amount_gbp_m": 0.424,
           "percentage": null,
-          "confidence": 0.5
+          "confidence": 1.0
         },
         {
           "line_of_business": "Casualty",
           "direction": "release",
-          "amount_gbp_m": null,
+          "amount_gbp_m": -4.363,
           "percentage": null,
-          "confidence": 0.5
+          "confidence": 1.0
         },
         {
           "line_of_business": "Energy",
           "direction": "release",
-          "amount_gbp_m": null,
+          "amount_gbp_m": -0.01,
           "percentage": null,
-          "confidence": 0.5
+          "confidence": 1.0
         },
         {
           "line_of_business": "Treaty",
           "direction": "strengthening",
-          "amount_gbp_m": null,
+          "amount_gbp_m": 0.958,
           "percentage": null,
-          "confidence": 0.5
+          "confidence": 1.0
         }
       ],
       "gross_premiums_written_gbp_m": 307.7,
@@ -666,7 +698,7 @@
       "gross_premium_page": 28,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Gross prior-year movement was not provided as a single gross 'movement in prior year's provision' line in the notes (the notes show net movements). Therefore the gross prior-year development was calculated from the published GROSS claims development triangle. The report gives net (after reinsurance) prior-year reassessment figures by class; these were not used for the gross PYD calculation. The triangle approach is used as per the guidance; confidence is medium (0.8).",
+      "data_quality_notes": "Opening reserves taken from Balance Sheet technical provisions (Claims outstanding) comparative 2019 column. Prior-year development was calculated from the gross claims development triangle (gross, GBP m) by comparing current estimates to the prior diagonal for underwriting years 2011-2018 (triangle found on page 32). The per-class reassessment table shown in the notes is presented net of expected reinsurance recoveries; class movements taken from that table are therefore net figures. A named post-balance-sheet event (Winter Storm Uri) is disclosed in USD and not converted to GBP. No explicit single-line gross 'movement in prior year provision' note was provided; triangle was used as primary source for PYD.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -809,20 +841,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_5000_2020_llm.pdf",
-      "content_hash": "d1d53886bb925e634706baf495a0ad17ac7cba360d61323a09a4642b3fbc911e",
-      "standardized_at": "2026-07-05T18:05:50.348654+00:00",
+      "content_hash": "2a7deb6a4f8c95774dd3bfa169086731a64df67a3be2b8e162f0305d291e1327",
+      "standardized_at": "2026-09-11T13:12:21.923455+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 16900,
-        "output_tokens": 8648,
-        "total_tokens": 25548,
-        "cost_usd": 0.021521
+        "input_tokens": 17660,
+        "output_tokens": 9032,
+        "total_tokens": 26692,
+        "cost_usd": 0.022479
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 8.4,
+        "model_value": 8.4,
+        "triangle_type": "gross",
+        "triangle_units": "millions",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 35,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "millions",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -956,6 +1000,18 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later",
+          "Seven years later",
+          "Eight years later",
+          "Nine years later"
         ],
         "source_page": 35,
         "entity": 5000
@@ -1114,12 +1170,12 @@
       }
     }
   },
-  "total_cost_usd": 0.02915,
-  "total_tokens": 42748,
+  "total_cost_usd": 0.030394,
+  "total_tokens": 46983,
   "validation": {
     "passed": true,
-    "total_discrepancies": 19,
-    "within_tolerance": 19,
+    "total_discrepancies": 22,
+    "within_tolerance": 22,
     "hard_failures": 0,
     "hard_failure_details": []
   }

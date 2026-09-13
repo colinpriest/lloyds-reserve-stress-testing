@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T12:27:06.045605+00:00",
+  "extraction_timestamp": "2026-09-13T04:05:44.942842+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -13,11 +15,11 @@
       "opening_reserves_gbp_m": 271.047,
       "opening_reserves_page": 18,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": -16.0,
-      "prior_year_development_pct": -5.9,
-      "direction": "release",
-      "prior_year_movement_page": 1,
-      "prior_year_movement_confidence": 1.0,
+      "prior_year_development_gbp_m": 2.966,
+      "prior_year_development_pct": 1.09,
+      "direction": "strengthening",
+      "prior_year_movement_page": 29,
+      "prior_year_movement_confidence": 0.8,
       "exact_reserve_text": "Following the very satisfactory development of the old years during 2017, this number includes a release of GBP 13.8 million from the premium charged to close the 2014 Account twelve months ago, and a positive balance of GBP 3.7 million from investment earnings. Within this profit, there was a profit arising from the reinsurance to close received from 2014 year of account of GBP 13.8m before expenses and investment return. This arose largely from a reduction in the 2014 and prior years' liability reserves as a result of favourable settlements in 2017.",
       "primary_causes": [
         "Favorable claims development"
@@ -33,43 +35,31 @@
           "event_name": "hurricanes of late 2017",
           "event_year": 2017,
           "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": 4.7,
-          "loss_description": "current incurred loss from the hurricanes of late 2017 to the whole account is a gross loss of US$5.3 million and a net amount of US$4.7 million.",
-          "lobs_affected": [
-            "Reinsurance - Property"
-          ],
+          "net_loss_gbp_m": null,
+          "loss_description": "current incurred loss from the hurricanes of late 2017 to the whole account is a gross loss of US$5.3 million and a net amount of US$4.7 million (2016 account); gross loss of US$6.5 million and a net amount of US$4.6 million (2017 account)",
+          "lobs_affected": [],
           "page": 1,
           "confidence": 0.8
         },
         {
-          "event_name": "hurricanes of late 2017",
+          "event_name": "north Atlantic hurricane season",
           "event_year": 2017,
           "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": 4.6,
-          "loss_description": "current incurred loss from the hurricanes of late 2017 to the whole account is a gross loss of US$6.5 million and a net amount of US$4.6 million.",
+          "net_loss_gbp_m": null,
+          "loss_description": "finally returned to life with a roar",
           "lobs_affected": [
             "Reinsurance - Property"
           ],
           "page": 1,
-          "confidence": 0.8
+          "confidence": 0.5
         }
       ],
-      "standardized_narrative": "The syndicate reported a prior year reserve release of GBP 13.8 million, representing 5.09% of opening gross claims outstanding. This favourable development arose from a reduction in the 2014 and prior years' liability reserves due to favourable settlements in 2017.",
+      "standardized_narrative": "The syndicate experienced a gross release of GBP 12.216 million in prior year reserves, primarily due to favourable claims development and settlements on the 2014 and prior years' liability reserves. This contributed to a profit on the closed 2015 account.",
       "raw_causal_phrases": [
         "very satisfactory development of the old years during 2017",
-        "release of GBP 13.8 million from the premium charged to close the 2014 Account",
-        "reduction in the 2014 and prior years' liability reserves as a result of favourable settlements in 2017",
-        "releases from reserves on some of the Syndicate's older business"
+        "reduction in the 2014 and prior years' liability reserves as a result of favourable settlements in 2017"
       ],
-      "lob_movements": [
-        {
-          "line_of_business": "Casualty",
-          "direction": "release",
-          "amount_gbp_m": -13.8,
-          "percentage": null,
-          "confidence": 0.8
-        }
-      ],
+      "lob_movements": [],
       "gross_premiums_written_gbp_m": 63.1,
       "gross_premium_mix": [
         {
@@ -116,7 +106,7 @@
       "gross_premium_page": 27,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The LOB specific movements on page 30 are for net claims provisions, not gross, and represent calendar year movements for prior accident years, which is a different concept from the overall GBP 13.8m gross release from the 2014 account closure. Therefore, only the overall gross release is included in lob_movements. The claims development triangle shows a net strengthening of GBP 2.966m for years 2011-2015, which contradicts the GBP 13.8m release explicitly stated in the narrative for the 2014 account closure. The narrative is prioritized as it directly addresses the closure of the prior year of account. [RAG OVERRIDE: Model said PYD=-13.8, RAG triangle computed -16.0. Using RAG value.]",
+      "data_quality_notes": "The narrative mentions a net release of GBP 13.8m for the 2014 and prior years, while the gross claims development triangle calculation yields a gross release of GBP 12.216m for years 2011-2015. The triangle figure is used for gross PYD. [RAG OVERRIDE: Model said PYD=-12.216, RAG triangle computed 2.966. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -199,20 +189,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_727_2017_llm.pdf",
-      "content_hash": "7397d4e364df97cf678bb13fbdd4f5bede598832808b86a5d128a5b1b1e0c3c2",
-      "standardized_at": "2026-03-19T07:24:08.183752+00:00",
+      "content_hash": "6905554204b71796f9232180515b5a428116665baa12efa5e11449053877993e",
+      "standardized_at": "2026-09-11T13:46:15.140912+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 13990,
-        "output_tokens": 1980,
-        "total_tokens": 22173,
-        "cost_usd": 0.009147
+        "input_tokens": 14794,
+        "output_tokens": 1815,
+        "total_tokens": 20974,
+        "cost_usd": 0.008976
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 2.966,
+        "model_value": -12.216,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 67,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -286,6 +288,15 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At the end of the",
+          "After one year",
+          "After two years",
+          "After three years",
+          "After four years",
+          "After five years",
+          "After six years"
         ],
         "source_page": 67,
         "entity": 727
@@ -386,6 +397,13 @@
           "entity": 727,
           "backend": "azure",
           "table_kind": "balance_sheet_liabilities"
+        },
+        "movement_semantics": {
+          "row_label": "Claims paid in relation to 2014 and prior",
+          "row_index": 3,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": false,
+          "column_index": 1
         },
         "gross_prior_year_claims": -16.0,
         "ri_share_prior_year": 0.2,
@@ -503,32 +521,36 @@
       "opening_reserves_gbp_m": 271.047,
       "opening_reserves_page": 43,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": -16.0,
-      "prior_year_development_pct": -5.9,
-      "direction": "release",
+      "prior_year_development_gbp_m": 2.966,
+      "prior_year_development_pct": 1.09,
+      "direction": "strengthening",
       "prior_year_movement_page": 63,
       "prior_year_movement_confidence": 0.8,
-      "exact_reserve_text": "Significant movements in the calendar year for net claims provisions created at previous year end (positive values show increases in provisions):\n2017 2016\nGBP '000 GBP '000\nAccident and health 494 (1,349)\nFire & other damage to property 936 (6,153)\nThird party liability (637) (3,533)\nProperty Reinsurance (3,484) (2,915)\nLiability Reinsurance (2,433) 2,206\nWith only two exceptions, the picture painted above for 2017 is what should be expected with a conservative reserving policy.",
+      "exact_reserve_text": "Within this profit, there was a profit arising from the reinsurance to close received from 2014 year of account of GBP 13.8m before expenses and investment return. This arose largely from a reduction in the 2014 and prior years' liability reserves as a result of favourable settlements in 2017.",
       "primary_causes": [
         "Favorable claims development",
-        "Adverse claims development",
-        "Natural catastrophe events",
-        "Large loss development"
+        "Reinsurance recoveries",
+        "Other"
       ],
       "specific_events": [],
       "specific_years_affected": [
-        2014
+        2011,
+        2012,
+        2013,
+        2014,
+        2015
       ],
       "prior_year_events": [
         {
-          "event_name": "Favourable settlements on 2014 and prior years",
-          "event_year": 2014,
-          "impact_description": "Reduction in the 2014 and prior years' liability reserves as a result of favourable settlements in 2017, producing a profit arising from the reinsurance to close of GBP 13.8m before expenses and investment return.",
+          "event_name": "Favourable settlements",
+          "event_year": 2017,
+          "impact_description": "Reduction in the 2014 and prior years' liability reserves as a result of favourable settlements in 2017, contributing to a profit on reinsurance to close",
           "lobs_affected": [
-            "Casualty"
+            "Casualty",
+            "Reinsurance - Casualty"
           ],
-          "amount_gbp_m": -13.8,
-          "confidence": 0.8
+          "amount_gbp_m": -16.108,
+          "confidence": 0.9
         }
       ],
       "named_events": [
@@ -539,18 +561,18 @@
           "net_loss_gbp_m": null,
           "loss_description": "The current incurred loss from the hurricanes of late 2017 to the whole account is a gross loss of US$6.5 million and a net amount of US$4.6 million.",
           "lobs_affected": [
-            "Property"
+            "Property",
+            "Reinsurance - Property"
           ],
           "page": 1,
-          "confidence": 0.9
+          "confidence": 0.8
         }
       ],
-      "standardized_narrative": "At 31 December 2017 the syndicate's opening gross claims outstanding (31 Dec 2016) was GBP 271.047m. Analysis of the gross claims development triangle indicates a small net adverse prior-year development of approximately GBP 3.0m (1.1% of opening reserves), driven mainly by adverse movement in the 2015 underwriting year which outweighed releases in older years (notably favourable settlements on 2014 and prior years). The report also records material 2017 catastrophe activity (hurricanes and flooding) affecting the 2017 year. Per-LOB reported movements (net of reinsurance) show a mix of increases and releases across Accident & Health, Property, Casualty and reinsurance lines.",
+      "standardized_narrative": "The syndicate's opening gross claims reserves at 1 January 2017 were GBP 271.047m. Analysis of the claims development triangle shows a modest overall adverse prior-year development of GBP 2.966m (1.09% of opening reserves), driven mainly by adverse movement in the 2015 underwriting year partially offset by releases in older years. However, management also reports a material release relating to 2014 and prior years following favourable settlements (reflected in the reinsurance-to-close result), and exchange rate movements and RITC activity have materially affected comparatives. Movements were concentrated in casualty and reinsurance lines with smaller movements in property and accident & health.",
       "raw_causal_phrases": [
         "reduction in the 2014 and prior years' liability reserves as a result of favourable settlements in 2017.",
-        "the hurricanes and flooding arrived in the third quarter",
-        "The current incurred loss from the hurricanes of late 2017 to the whole account is a gross loss of US$6.5 million and a net amount of US$4.6 million.",
-        "Significant movements in the calendar year for net claims provisions created at previous year end (positive values show increases in provisions):"
+        "Significant movements in the calendar year for net claims provisions created at previous year end and relating to prior accident years (positive values show increases in provisions):",
+        "With only two exceptions, the picture painted above for 2017 is what should be expected with a conservative reserving policy."
       ],
       "lob_movements": [
         {
@@ -558,35 +580,35 @@
           "direction": "strengthening",
           "amount_gbp_m": 0.494,
           "percentage": null,
-          "confidence": 0.5
+          "confidence": 1.0
         },
         {
           "line_of_business": "Property",
           "direction": "strengthening",
           "amount_gbp_m": 0.936,
           "percentage": null,
-          "confidence": 0.5
+          "confidence": 1.0
         },
         {
           "line_of_business": "Casualty",
           "direction": "release",
           "amount_gbp_m": -0.637,
           "percentage": null,
-          "confidence": 0.5
+          "confidence": 1.0
         },
         {
           "line_of_business": "Reinsurance - Property",
           "direction": "release",
           "amount_gbp_m": -3.484,
           "percentage": null,
-          "confidence": 0.5
+          "confidence": 1.0
         },
         {
           "line_of_business": "Reinsurance - Casualty",
           "direction": "release",
           "amount_gbp_m": -2.433,
           "percentage": null,
-          "confidence": 0.5
+          "confidence": 1.0
         }
       ],
       "gross_premiums_written_gbp_m": 63.1,
@@ -635,7 +657,7 @@
       "gross_premium_page": 61,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior-year development (PYD) gross figure was calculated from the gross claims development triangle (page 63) by excluding the two most recent underwriting years (2016,2017) per standard methodology. The detailed per-LOB movements shown in the notes are reported net of reinsurance; gross per-LOB reserve movements were not provided. The 'Significant movements' table on page 63 reports net (after reinsurance) movements; those net figures were used for LOB movement entries and flagged accordingly. [RAG OVERRIDE: Model said PYD=2.966, RAG triangle computed -16.0. Using RAG value.]",
+      "data_quality_notes": "Prior-year development was calculated from the gross claims development triangle (pages showing incurred and ultimate by underwriting year). The reconciliation in the reinsurance-to-close notes shows a substantial gross release for 2014 & prior (-GBP 16.108m) which is a narrower vintage subset; exchange rate movements and RITC entries materially affect comparatives. Hurricanes losses are quoted in USD in the report and have not been converted. Where only net figures appeared in notes, a gross triangle was used as the primary source.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -718,20 +740,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_727_2017_llm.pdf",
-      "content_hash": "7397d4e364df97cf678bb13fbdd4f5bede598832808b86a5d128a5b1b1e0c3c2",
-      "standardized_at": "2026-03-19T07:25:45.863691+00:00",
+      "content_hash": "6905554204b71796f9232180515b5a428116665baa12efa5e11449053877993e",
+      "standardized_at": "2026-09-11T13:49:10.567629+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 43132,
-        "output_tokens": 8584,
-        "total_tokens": 51716,
-        "cost_usd": 0.027951
+        "input_tokens": 43787,
+        "output_tokens": 10140,
+        "total_tokens": 53927,
+        "cost_usd": 0.031227
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 2.966,
+        "model_value": 2.966,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 67,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -805,6 +839,15 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At the end of the",
+          "After one year",
+          "After two years",
+          "After three years",
+          "After four years",
+          "After five years",
+          "After six years"
         ],
         "source_page": 67,
         "entity": 727
@@ -905,6 +948,13 @@
           "entity": 727,
           "backend": "azure",
           "table_kind": "balance_sheet_liabilities"
+        },
+        "movement_semantics": {
+          "row_label": "Claims paid in relation to 2014 and prior",
+          "row_index": 3,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": false,
+          "column_index": 1
         },
         "gross_prior_year_claims": -16.0,
         "ri_share_prior_year": 0.2,
@@ -1017,12 +1067,12 @@
       }
     }
   },
-  "total_cost_usd": 0.037098,
-  "total_tokens": 73889,
+  "total_cost_usd": 0.040203,
+  "total_tokens": 74901,
   "validation": {
     "passed": true,
-    "total_discrepancies": 27,
-    "within_tolerance": 27,
+    "total_discrepancies": 23,
+    "within_tolerance": 23,
     "hard_failures": 0,
     "hard_failure_details": []
   }

@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T09:06:13.192089+00:00",
+  "extraction_timestamp": "2026-09-13T04:03:39.770261+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -11,12 +13,12 @@
       "syndicate": 1110,
       "year": 2018,
       "opening_reserves_gbp_m": 111.035,
-      "opening_reserves_page": 37,
+      "opening_reserves_page": 4,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": -3.5,
       "prior_year_development_pct": -3.15,
       "direction": "release",
-      "prior_year_movement_page": 37,
+      "prior_year_movement_page": 11,
       "prior_year_movement_confidence": 1.0,
       "exact_reserve_text": "A surplus run-off amount of GBP 3.5m was experienced in 2018 (2017: GBP 18.1m surplus). This was made up of a surplus on the prior year claims provisions of GBP 1.7m on direct business (2017: GBP 22.5m surplus) and a GBP 1.8m surplus on reinsurance accepted business (2017: GBP 4.4m deficit).",
       "primary_causes": [
@@ -26,13 +28,27 @@
       "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "The syndicate experienced a gross prior year reserve release of GBP 3.5 million in 2018. This favorable development was explicitly described as a 'surplus run-off amount' and comprised a GBP 1.7 million surplus on prior year claims provisions for direct business and a GBP 1.8 million surplus on reinsurance accepted business. The overall direction of prior year development was a release, indicating that reserves held at the beginning of the year were more than adequate.",
+      "standardized_narrative": "The syndicate experienced a favorable prior year development in 2018, with a gross surplus run-off amount of GBP 3.5 million. This release was attributed to a GBP 1.7 million surplus on direct business and a GBP 1.8 million surplus on reinsurance accepted business.",
       "raw_causal_phrases": [
-        "A surplus run-off amount of GBP 3.5m was experienced in 2018",
-        "surplus on the prior year claims provisions of GBP 1.7m on direct business",
-        "GBP 1.8m surplus on reinsurance accepted business"
+        "surplus run-off amount",
+        "surplus on the prior year claims provisions"
       ],
-      "lob_movements": [],
+      "lob_movements": [
+        {
+          "line_of_business": "Aggregate",
+          "direction": "release",
+          "amount_gbp_m": -1.7,
+          "percentage": null,
+          "confidence": 0.8
+        },
+        {
+          "line_of_business": "Reinsurance - Casualty",
+          "direction": "release",
+          "amount_gbp_m": -1.8,
+          "percentage": null,
+          "confidence": 0.8
+        }
+      ],
       "gross_premiums_written_gbp_m": 11.5,
       "gross_premium_mix": [
         {
@@ -66,29 +82,29 @@
           "percentage_of_total": 1.7
         }
       ],
-      "gross_premium_page": 31,
+      "gross_premium_page": 9,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The prior year development figure is derived from a narrative statement that explicitly breaks down the 'surplus run-off amount' into direct and reinsurance accepted business, which are both considered gross from the syndicate's perspective. No claims development triangle was found in the report.",
+      "data_quality_notes": "The gross premium mix for 'Reinsurance acceptances' is consolidated as only 'Casualty' is listed under this category in the segmental analysis. The 'Direct business' surplus in lob_movements is not further broken down by specific direct lines of business and is therefore mapped to 'Aggregate'.",
       "_claims_triangle": {
         "type": "none",
         "currency": null,
         "units": null,
         "page": null,
-        "underwriting_years": null,
-        "development_rows": null
+        "underwriting_years": [],
+        "development_rows": []
       },
       "source_type": "syndicate",
-      "source_file": "syndicate_reports\\pdfs\\syndicate_1110_2018.pdf",
-      "content_hash": "3fcedac549872f73b64cc71ccf0c134f3bba4f219f119b37ab16c6481d15ffa7",
-      "standardized_at": "2026-03-16T05:56:12.981452+00:00",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_1110_2018_llm.pdf",
+      "content_hash": "24663f3592f69eaa81eb87c49b2142446d14038a1074b151eb2744932265fba8",
+      "standardized_at": "2026-09-11T10:14:17.896464+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 16204,
-        "output_tokens": 1006,
-        "total_tokens": 20900,
-        "cost_usd": 0.007376
+        "input_tokens": 9635,
+        "output_tokens": 1057,
+        "total_tokens": 16027,
+        "cost_usd": 0.005533
       },
       "_adobe_lob": {
         "gross_premium_mix": [
@@ -215,30 +231,26 @@
       "syndicate": 1110,
       "year": 2018,
       "opening_reserves_gbp_m": 111.035,
-      "opening_reserves_page": 35,
+      "opening_reserves_page": 14,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": -3.5,
       "prior_year_development_pct": -3.15,
       "direction": "release",
-      "prior_year_movement_page": 35,
+      "prior_year_movement_page": 11,
       "prior_year_movement_confidence": 1.0,
       "exact_reserve_text": "A surplus run-off amount of GBP 3.5m was experienced in 2018 (2017: GBP 18.1m surplus). This was made up of a surplus on the prior year claims provisions of GBP 1.7m on direct business (2017: GBP 22.5m surplus) and a GBP 1.8m surplus on reinsurance accepted business (2017: GBP 4.4m deficit).",
       "primary_causes": [
-        "Favorable claims development",
-        "Reinsurance recoveries"
+        "Favorable claims development"
       ],
       "specific_events": [],
-      "specific_years_affected": [
-        2016,
-        2017
-      ],
+      "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "At 1 January 2018 the syndicate's gross claims outstanding were GBP 111.035m. During 2018 the syndicate experienced a GBP 3.5m favourable run-off (release) in prior-year claims provisions, composed of a GBP 1.7m surplus on direct business and a GBP 1.8m surplus on reinsurance accepted business. The movement is attributed to favourable claims development and recoveries under the reinsurance arrangements.",
+      "standardized_narrative": "At 1 January 2018 gross claims outstanding were GBP 111.035m. During 2018 the syndicate experienced a net surplus run-off of GBP 3.5m (a release), comprised of a GBP 1.7m surplus on direct prior year claims provisions and a GBP 1.8m surplus on reinsurance accepted prior year provisions, contributing to closing gross claims outstanding of GBP 87.928m at 31 December 2018. The movement is described as favourable claims development.",
       "raw_causal_phrases": [
         "A surplus run-off amount of GBP 3.5m was experienced in 2018 (2017: GBP 18.1m surplus).",
         "This was made up of a surplus on the prior year claims provisions of GBP 1.7m on direct business (2017: GBP 22.5m surplus) and a GBP 1.8m surplus on reinsurance accepted business (2017: GBP 4.4m deficit).",
-        "surplus on the prior year claims provisions"
+        "The most uncertain element within these technical provisions is the amount for gross claims outstanding which covers amounts where either the claim has been notified to the syndicate or where there has not yet been a notification or although notified there has been insufficient information to date to be certain regarding its ultimate costs."
       ],
       "lob_movements": [
         {
@@ -264,6 +276,13 @@
         },
         {
           "line_of_business": "Professional Lines",
+          "direction": "release",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.5
+        },
+        {
+          "line_of_business": "Aggregate",
           "direction": "release",
           "amount_gbp_m": null,
           "percentage": null,
@@ -310,29 +329,29 @@
           "percentage_of_total": 1.7
         }
       ],
-      "gross_premium_page": 29,
+      "gross_premium_page": 10,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior year development used the explicit narrative in note 10 stating a GBP 3.5m surplus run-off (composed of GBP 1.7m direct and GBP 1.8m reinsurance accepted). No separate 'movement in prior year's provision' table with an 'Insurance liabilities' column or a gross claims development triangle was provided for direct extraction; no named catastrophe events were disclosed as drivers. LOB-level reserve movements are not quantified in the statements, so LOB breakdowns are inferred or left null where not provided.",
+      "data_quality_notes": "Prior-year development (GBP 3.5m release) taken from Note 10 narrative which explicitly splits the surplus into GBP 1.7m on direct business and GBP 1.8m on reinsurance accepted business. The note wording implies these are movements on prior year claims provisions (gross). No detailed gross per-LOB prior-year movements are provided, so LOB-level amounts are not quantified except for the reinsurance-accepted split. No claims development triangle found in the available pages. Page numbering is taken from the provided document parse (opening reserves found on liabilities page).",
       "_claims_triangle": {
         "type": "none",
         "currency": "GBP",
-        "units": "millions",
+        "units": null,
         "page": null,
         "underwriting_years": [],
         "development_rows": []
       },
       "source_type": "syndicate",
-      "source_file": "syndicate_reports\\pdfs\\syndicate_1110_2018.pdf",
-      "content_hash": "3fcedac549872f73b64cc71ccf0c134f3bba4f219f119b37ab16c6481d15ffa7",
-      "standardized_at": "2026-03-16T05:57:33.904184+00:00",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_1110_2018_llm.pdf",
+      "content_hash": "24663f3592f69eaa81eb87c49b2142446d14038a1074b151eb2744932265fba8",
+      "standardized_at": "2026-09-11T10:15:54.263373+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 25766,
-        "output_tokens": 6855,
-        "total_tokens": 32621,
-        "cost_usd": 0.020151
+        "input_tokens": 12964,
+        "output_tokens": 5343,
+        "total_tokens": 18307,
+        "cost_usd": 0.013927
       },
       "_adobe_lob": {
         "gross_premium_mix": [
@@ -456,12 +475,12 @@
       }
     }
   },
-  "total_cost_usd": 0.027527,
-  "total_tokens": 53521,
+  "total_cost_usd": 0.01946,
+  "total_tokens": 34334,
   "validation": {
     "passed": true,
-    "total_discrepancies": 15,
-    "within_tolerance": 15,
+    "total_discrepancies": 13,
+    "within_tolerance": 13,
     "hard_failures": 0,
     "hard_failure_details": []
   }

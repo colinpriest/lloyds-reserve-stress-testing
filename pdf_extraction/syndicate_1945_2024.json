@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T09:58:05.898015+00:00",
+  "extraction_timestamp": "2026-09-13T04:02:46.158674+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -11,37 +13,40 @@
       "syndicate": 1945,
       "year": 2024,
       "opening_reserves_gbp_m": 220.243,
-      "opening_reserves_page": 8,
+      "opening_reserves_page": 7,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": -64.7,
       "prior_year_development_pct": -29.38,
       "direction": "release",
       "prior_year_movement_page": 25,
       "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "Change in estimates of prior year provisions (64,719)",
+      "exact_reserve_text": "Change in estimates of prior year provisions (64,719) 35,639 (29,080)",
       "primary_causes": [
         "Favorable claims development",
-        "Reinsurance recoveries"
+        "IBNR recalibration"
       ],
       "specific_events": [],
       "specific_years_affected": [
-        2021
+        "2021 and prior",
+        "all years prior to 2024"
       ],
       "prior_year_events": [
         {
           "event_name": "Loss Portfolio Transfer (LPT)",
           "event_year": 2023,
-          "impact_description": "A reinsurance for 2021 & prior underwriting year, effective 30th June 2023, reinsuring business to a limit of 130% of ceded reserves. This transaction likely influenced reinsurance recoveries and potentially gross reserve releases.",
-          "lobs_affected": [],
+          "impact_description": "A reinsurance for 2021 & prior underwriting year, became effective at 30th June 2023, resulting in all 2021 & prior underwriting year business (excluding Space policies and a single Casualty policy) being reinsured to a limit of 130% of the ceded reserves.",
+          "lobs_affected": [
+            "Aggregate"
+          ],
           "amount_gbp_m": null,
           "confidence": 0.8
         }
       ],
       "named_events": [],
-      "standardized_narrative": "The Syndicate reported a gross prior year reserve release of GBP 64.719 million for the financial year 2024, representing a 29.38% release of its opening gross claims outstanding. This release contributed to the overall financial performance. While specific causes for the gross release are not detailed, the report mentions the Loss Portfolio Transfer (LPT) which became effective in June 2023 for the 2021 and prior underwriting years, potentially influencing reserve adequacy and reinsurance recoveries. The Syndicate also maintains a margin above actuarial best estimates, which could contribute to releases if claims develop favorably.",
+      "standardized_narrative": "Syndicate 1945 reported a gross prior year reserve release of GBP 64.719 million for the financial year 2024. This release is primarily reflected in the 'Change in estimates of prior year provisions' within the technical provisions. While specific causal details for the gross release are not explicitly stated, it generally indicates favorable claims development or IBNR recalibration for underwriting years prior to 2024. The report also mentions a Loss Portfolio Transfer (LPT) that became effective in June 2023 for 2021 and prior underwriting years, which would primarily impact net reserves and reinsurance recoveries.",
       "raw_causal_phrases": [
         "Change in estimates of prior year provisions",
-        "a margin is applied over and above the actuarial best estimate, which reduces the possibility of adverse claims development during run-off.",
+        "margin is applied over and above the actuarial best estimate",
         "The Loss Portfolio Transfer (\"LPT\"), a reinsurance for 2021 & prior underwriting year, became effective at 30th June 2023."
       ],
       "lob_movements": [],
@@ -78,10 +83,10 @@
           "percentage_of_total": 11.3
         }
       ],
-      "gross_premium_page": 21,
+      "gross_premium_page": 16,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "No specific narrative explanation for the prior year reserve movement was provided; the figure is taken directly from the technical provisions table. No LOB breakdown for prior year development is available. The claims development triangle indicates a net strengthening of approximately GBP 5.831m for prior years (<=2022), which significantly differs from the reported gross release of GBP 64.719m in the Technical Provisions note. The Technical Provisions note is considered the primary source for reported prior year development.",
+      "data_quality_notes": "The gross claims development triangle on page 23 shows zero movement for all individual underwriting years prior to 2023, which is unusual and suggests it may not fully reflect the prior year development. The 'Change in estimates of prior year provisions' from Note 17 (Technical Provisions) on page 25 is used as the primary source for prior year development due to its explicit nature. Specific causes for the gross release are not explicitly detailed in the narrative. [RAG OVERRIDE: Model said opening_reserves=122.172, balance sheet gives 220.243m. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -224,21 +229,30 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_1945_2024_llm.pdf",
-      "content_hash": "dd2079b64833e18da454a150a47e1a756912cb782ec423548cfbaa7d27e9096a",
-      "standardized_at": "2026-07-05T22:13:14.797154+00:00",
+      "content_hash": "ca64b97cc81a6996b6da24ff8b6984c06cb0bce0181cbc1ada00258d6a90cece",
+      "standardized_at": "2026-09-11T14:29:36.904441+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 12959,
-        "output_tokens": 1997,
-        "total_tokens": 20813,
-        "cost_usd": 0.00888
+        "input_tokens": 13763,
+        "output_tokens": 2038,
+        "total_tokens": 21463,
+        "cost_usd": 0.009224
+      },
+      "_pyd_route": {
+        "source": "rag_provisions",
+        "value": -64.7,
+        "model_value": -64.719,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
+          2014,
           2015,
           2016,
           2017,
@@ -252,6 +266,7 @@
         ],
         "development_rows": [
           [
+            74993.0,
             32279.0,
             52416.0,
             73660.0,
@@ -264,6 +279,7 @@
             49355.0
           ],
           [
+            132510.0,
             70999.0,
             101611.0,
             101667.0,
@@ -276,6 +292,7 @@
             null
           ],
           [
+            114555.0,
             74835.0,
             111445.0,
             108140.0,
@@ -288,6 +305,7 @@
             null
           ],
           [
+            107188.0,
             72932.0,
             108210.0,
             106144.0,
@@ -300,6 +318,7 @@
             null
           ],
           [
+            106172.0,
             73859.0,
             119393.0,
             104845.0,
@@ -312,6 +331,7 @@
             null
           ],
           [
+            106323.0,
             73384.0,
             120149.0,
             104319.0,
@@ -324,6 +344,7 @@
             null
           ],
           [
+            106115.0,
             73560.0,
             120272.0,
             103354.0,
@@ -336,6 +357,7 @@
             null
           ],
           [
+            106164.0,
             73396.0,
             120555.0,
             102962.0,
@@ -348,6 +370,7 @@
             null
           ],
           [
+            106017.0,
             73844.0,
             118901.0,
             null,
@@ -360,7 +383,21 @@
             null
           ],
           [
+            106130.0,
             73639.0,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            105705.0,
+            null,
             null,
             null,
             null,
@@ -372,6 +409,24 @@
             null
           ]
         ],
+        "row_labels": [
+          "At end of underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later",
+          "Seven years later",
+          "Eight years later",
+          "Nine years later",
+          "Ten years later"
+        ],
+        "aggregated_cohort": {
+          "anchor": 2014,
+          "label": "2014 & Prior GBP 000",
+          "column": 1
+        },
         "source_page": 54,
         "entity": 1945
       },
@@ -453,6 +508,13 @@
           "entity": 1945,
           "backend": "azure",
           "table_kind": "provisions_movement"
+        },
+        "movement_semantics": {
+          "row_label": "Change in estimates of prior year provisions",
+          "row_index": 9,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": true,
+          "column_index": 1
         },
         "gross_prior_year_claims": -64.7,
         "ri_share_prior_year": 35.6,
@@ -559,10 +621,11 @@
       "direction": "release",
       "prior_year_movement_page": 54,
       "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "Change in estimates of prior year\nprovisions (64,719) 35,639 (29,080) (12,238) (101,441) (113,679)",
+      "exact_reserve_text": "Change in estimates of prior year provisions (64,719) 35,639 (29,080)",
       "primary_causes": [
         "Favorable claims development",
-        "Reinsurance recoveries"
+        "Reinsurance recoveries",
+        "IBNR recalibration"
       ],
       "specific_events": [],
       "specific_years_affected": [
@@ -572,22 +635,23 @@
         {
           "event_name": "Loss Portfolio Transfer (LPT)",
           "event_year": 2023,
-          "impact_description": "The LPT reinsured 2021 & prior underwriting year business (effective 30 June 2023) which materially affected reinsurance recoverables and the prior year reserve run-off.",
+          "impact_description": "The LPT reinsured 2021 & prior underwriting year business (excluding Space policies and a single Casualty policy) to a limit of 130% of the ceded reserves, increasing reinsurers' share and materially affecting prior year reserves and recoverables.",
           "lobs_affected": [
-            "Treaty",
-            "Casualty"
+            "Treaty"
           ],
           "amount_gbp_m": null,
           "confidence": 0.8
         }
       ],
       "named_events": [],
-      "standardized_narrative": "The syndicate recorded a gross prior-year release of GBP 64.719m in 2024 (a reduction in gross prior year reserves), driven by favourable claims development and an increase in reinsurers' recoverables (the reinsurers' share increased by GBP 35.639m). The Loss Portfolio Transfer (LPT) effected in June 2023 (covering 2021 & prior years) materially affected reinsurance recoverables and interpretation of prior year movement. The largest movements by class were increases in reinsurance acceptances and casualty reserves, offset by releases in some direct lines such as fire and assistance.",
+      "standardized_narrative": "The Syndicate recorded a gross release in prior-year claims provisions of GBP 64.7m (gross) in 2024, driven by favourable development and reinsurance effects (notably the Loss Portfolio Transfer effective June 2023 which reinsured 2021 & prior business). The gross release reduced net prior-year reserves by GBP 29.08m after an increase in reinsurers' share of GBP 35.639m. The release primarily reflects favourable reserve movements across a number of lines, with material strengthening in certain classes offset by releases elsewhere.",
       "raw_causal_phrases": [
-        "Change in estimates of prior year\nprovisions (64,719) 35,639 (29,080) (12,238) (101,441) (113,679)",
+        "Change in estimates of prior year provisions (64,719) 35,639 (29,080)",
         "The Loss Portfolio Transfer (\"LPT\"), a reinsurance for 2021 & prior underwriting year, became effective at 30th June 2023. This resulted in all 2021 & prior underwriting year business (excluding Space policies and a single Casualty policy) being reinsured to a limit of 130% of the ceded reserves.",
-        "In arriving at the level of claims provisions a margin is applied over and above the actuarial best estimate, which reduces the possibility of adverse claims development during run-off.",
-        "Claims Inflation\nIn light of the elevated level of general inflation seen since late 2021, the Syndicate has considered whether this may lead to an increase in claims inflation. ... As at year end on a net of reinsurance (including net of LPT) basis, a loading of GBP 0.9m is being held in respect of excess claims inflation within the Syndicate loss reserves."
+        "Pallas Reinsurance Company Ltd is the largest of the Syndicate's reinsurers following the LPT transaction which was executed on 30 June 2023. At 31 December 2024 the reinsurance reserves recoverable amounted to GBP 75m.",
+        "Margin of GBP 10.6m is held within the Syndicate loss reserves",
+        "In light of the elevated level of general inflation seen since late 2021, the Syndicate has considered whether this may lead to an increase in claims inflation.",
+        "As at year end on a net of reinsurance (including net of LPT) basis, a loading of GBP 0.9m is being held in respect of excess claims inflation within the Syndicate loss reserves."
       ],
       "lob_movements": [
         {
@@ -595,35 +659,49 @@
           "direction": "release",
           "amount_gbp_m": -0.419,
           "percentage": null,
-          "confidence": 0.8
+          "confidence": 1.0
         },
         {
           "line_of_business": "Marine",
           "direction": "strengthening",
           "amount_gbp_m": 9.626,
           "percentage": null,
-          "confidence": 0.8
+          "confidence": 1.0
         },
         {
           "line_of_business": "Property",
           "direction": "release",
           "amount_gbp_m": -2.582,
           "percentage": null,
-          "confidence": 0.8
+          "confidence": 1.0
         },
         {
           "line_of_business": "Casualty",
           "direction": "strengthening",
           "amount_gbp_m": 11.737,
           "percentage": null,
+          "confidence": 1.0
+        },
+        {
+          "line_of_business": "Reinsurance - Specialty",
+          "direction": "strengthening",
+          "amount_gbp_m": 0.192,
+          "percentage": null,
           "confidence": 0.8
+        },
+        {
+          "line_of_business": "Professional Lines",
+          "direction": "release",
+          "amount_gbp_m": -1.533,
+          "percentage": null,
+          "confidence": 0.6
         },
         {
           "line_of_business": "Treaty",
           "direction": "strengthening",
           "amount_gbp_m": 18.665,
           "percentage": null,
-          "confidence": 0.8
+          "confidence": 1.0
         }
       ],
       "gross_premiums_written_gbp_m": 77.1,
@@ -662,7 +740,7 @@
       "gross_premium_page": 5,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior-year development (gross) taken from Note 17 'Change in estimates of prior year provisions' (gross column). The LPT (effective 30 June 2023) affects interpretation because it reinsured 2021 & prior business and increased reinsurers' share; net and gross movements differ materially (gross release GBP 64.719m vs net release GBP 29.080m). Some statutory classes (e.g. 'Assistance', 'Credit and suretyship') do not map cleanly to the provided standard Lloyd's LOB list; mapping for lob_movements focused on major classes only.",
+      "data_quality_notes": "Opening gross claims outstanding taken from Balance Sheet (Statement of Financial Position) 2023 comparative column. Prior year development taken from Note 17 row 'Change in estimates of prior year provisions' (gross column). The Loss Portfolio Transfer (LPT) effective 30 Jun 2023 materially affects comparability and increased reinsurers' share; net movement differs from gross. Some LOB mappings to the standard Lloyd's list are approximate (e.g. 'Credit and suretyship', 'Assistance'). Claims development triangle (gross) available and present on page 52 for cross-check; units in triangle are GBP 000. No specifically named catastrophe events were identified.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -817,21 +895,30 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_1945_2024_llm.pdf",
-      "content_hash": "dd2079b64833e18da454a150a47e1a756912cb782ec423548cfbaa7d27e9096a",
-      "standardized_at": "2026-07-05T22:14:40.716395+00:00",
+      "content_hash": "ca64b97cc81a6996b6da24ff8b6984c06cb0bce0181cbc1ada00258d6a90cece",
+      "standardized_at": "2026-09-11T14:32:22.348214+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 47961,
-        "output_tokens": 7944,
-        "total_tokens": 55905,
-        "cost_usd": 0.027878
+        "input_tokens": 48721,
+        "output_tokens": 9081,
+        "total_tokens": 57802,
+        "cost_usd": 0.030342
+      },
+      "_pyd_route": {
+        "source": "rag_provisions",
+        "value": -64.7,
+        "model_value": -64.719,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
+          2014,
           2015,
           2016,
           2017,
@@ -845,6 +932,7 @@
         ],
         "development_rows": [
           [
+            74993.0,
             32279.0,
             52416.0,
             73660.0,
@@ -857,6 +945,7 @@
             49355.0
           ],
           [
+            132510.0,
             70999.0,
             101611.0,
             101667.0,
@@ -869,6 +958,7 @@
             null
           ],
           [
+            114555.0,
             74835.0,
             111445.0,
             108140.0,
@@ -881,6 +971,7 @@
             null
           ],
           [
+            107188.0,
             72932.0,
             108210.0,
             106144.0,
@@ -893,6 +984,7 @@
             null
           ],
           [
+            106172.0,
             73859.0,
             119393.0,
             104845.0,
@@ -905,6 +997,7 @@
             null
           ],
           [
+            106323.0,
             73384.0,
             120149.0,
             104319.0,
@@ -917,6 +1010,7 @@
             null
           ],
           [
+            106115.0,
             73560.0,
             120272.0,
             103354.0,
@@ -929,6 +1023,7 @@
             null
           ],
           [
+            106164.0,
             73396.0,
             120555.0,
             102962.0,
@@ -941,6 +1036,7 @@
             null
           ],
           [
+            106017.0,
             73844.0,
             118901.0,
             null,
@@ -953,7 +1049,21 @@
             null
           ],
           [
+            106130.0,
             73639.0,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            105705.0,
+            null,
             null,
             null,
             null,
@@ -965,6 +1075,24 @@
             null
           ]
         ],
+        "row_labels": [
+          "At end of underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later",
+          "Seven years later",
+          "Eight years later",
+          "Nine years later",
+          "Ten years later"
+        ],
+        "aggregated_cohort": {
+          "anchor": 2014,
+          "label": "2014 & Prior GBP 000",
+          "column": 1
+        },
         "source_page": 54,
         "entity": 1945
       },
@@ -1046,6 +1174,13 @@
           "entity": 1945,
           "backend": "azure",
           "table_kind": "provisions_movement"
+        },
+        "movement_semantics": {
+          "row_label": "Change in estimates of prior year provisions",
+          "row_index": 9,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": true,
+          "column_index": 1
         },
         "gross_prior_year_claims": -64.7,
         "ri_share_prior_year": 35.6,
@@ -1142,12 +1277,12 @@
       }
     }
   },
-  "total_cost_usd": 0.036758,
-  "total_tokens": 76718,
+  "total_cost_usd": 0.039566,
+  "total_tokens": 79265,
   "validation": {
     "passed": true,
-    "total_discrepancies": 19,
-    "within_tolerance": 19,
+    "total_discrepancies": 26,
+    "within_tolerance": 26,
     "hard_failures": 0,
     "hard_failure_details": []
   }

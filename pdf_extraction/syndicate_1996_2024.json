@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T10:06:49.700817+00:00",
+  "extraction_timestamp": "2026-09-13T04:05:08.576487+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -18,7 +20,7 @@
       "direction": "release",
       "prior_year_movement_page": 19,
       "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "Change in estimates of prior year provisions",
+      "exact_reserve_text": "Change in estimates of prior year provisions (99)",
       "primary_causes": [
         "Favorable claims development"
       ],
@@ -28,20 +30,12 @@
       ],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "The syndicate reported a gross prior year reserve release of GBP 0.099 million, primarily driven by favorable claims development on the 2023 year of account, which performed well below expectations.",
+      "standardized_narrative": "The Syndicate reported a prior year reserve release of GBP 0.099 million, representing a 71.22% reduction in opening gross claims outstanding. This favorable development is primarily attributed to strong underwriting performance on the 2023 year of account.",
       "raw_causal_phrases": [
         "strong underwriting performance on the 2023 year of account",
-        "well below expectations"
+        "Change in estimates of prior year provisions"
       ],
-      "lob_movements": [
-        {
-          "line_of_business": "Property",
-          "direction": "release",
-          "amount_gbp_m": -0.099,
-          "percentage": -71.22,
-          "confidence": 0.8
-        }
-      ],
+      "lob_movements": [],
       "gross_premiums_written_gbp_m": 10.8,
       "gross_premium_mix": [
         {
@@ -53,7 +47,7 @@
       "gross_premium_page": 17,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "",
+      "data_quality_notes": "The claims development tables on page 18 are not a full triangle and only cover the two most recent underwriting years, hence not used for prior year development calculation. Prior year development is based on the 'Change in estimates of prior year provisions' from the Technical Provisions note.",
       "_claims_triangle": {
         "type": "none",
         "currency": null,
@@ -64,15 +58,21 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_1996_2024_llm.pdf",
-      "content_hash": "b6597e394625d49d48283ca690e4d3d34f54af111a9e62bbcd5b0cd5a8b4f048",
-      "standardized_at": "2026-07-05T23:17:00.959068+00:00",
+      "content_hash": "047143a9084770970bfad7bd38450cc05157fef470ba8f91fb11bf777bdfe9b8",
+      "standardized_at": "2026-09-11T14:24:58.563852+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 10895,
-        "output_tokens": 595,
-        "total_tokens": 17171,
-        "cost_usd": 0.004756
+        "input_tokens": 11699,
+        "output_tokens": 603,
+        "total_tokens": 17633,
+        "cost_usd": 0.005017
+      },
+      "_pyd_route": {
+        "source": "rag_provisions",
+        "value": -0.1,
+        "model_value": -0.099,
+        "note": "confirmed by the model value"
       },
       "_adobe_lob": {
         "gross_premium_mix": [
@@ -107,6 +107,13 @@
           "entity": 1996,
           "backend": "azure",
           "table_kind": "balance_sheet_liabilities"
+        },
+        "movement_semantics": {
+          "row_label": "Change in estimates of prior year provisions",
+          "row_index": 7,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": true,
+          "column_index": 1
         },
         "gross_prior_year_claims": -0.1,
         "ri_share_prior_year": 0.0,
@@ -192,12 +199,12 @@
       "syndicate": 1996,
       "year": 2024,
       "opening_reserves_gbp_m": 0.139,
-      "opening_reserves_page": 5,
+      "opening_reserves_page": 17,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": -0.1,
       "prior_year_development_pct": -71.94,
       "direction": "release",
-      "prior_year_movement_page": 19,
+      "prior_year_movement_page": 36,
       "prior_year_movement_confidence": 1.0,
       "exact_reserve_text": "Change in estimates of prior year provisions (99) 45 (54)",
       "primary_causes": [
@@ -209,17 +216,17 @@
       ],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "The syndicate opened the year with gross claims outstanding of GBP 0.139m and recorded a gross prior-year release of GBP 0.099m (a c.71% reduction relative to opening gross claims). The release is disclosed in the technical provisions movement note as \"Change in estimates of prior year provisions (99) 45 (54)\" and is explained in commentary as arising from very low claims activity and strong underwriting performance on the 2023 year of account - i.e. favourable claims development. The syndicate is a monoline property writer (Fire and other damage to property), so the movement predominantly affects the Property portfolio.",
+      "standardized_narrative": "The Syndicate's opening gross claims outstanding at 1 January 2024 was GBP 0.139m. During 2024 there was a gross release on prior year reserves of GBP 0.099m (a c.71.2% release relative to opening gross claims outstanding), reported in the technical provisions movement as \"Change in estimates of prior year provisions (99)\". The report attributes the favourable movement to very low claims activity and strong underwriting performance on the 2023 year of account.",
       "raw_causal_phrases": [
-        "Change in estimates of prior year provisions (99) 45 (54)",
-        "Claims activity has been very low during this calendar year with claims paid of GBP 0.1m contributing to net incurred losses being GBP 0.7m, well below expectations due to strong underwriting performance on the 2023 year of account."
+        "Claims activity has been very low during this calendar year with claims paid of GBP 0.1m contributing to net incurred losses being GBP 0.7m, well below expectations due to strong underwriting performance on the 2023 year of account.",
+        "Change in estimates of prior year provisions (99) 45 (54)"
       ],
       "lob_movements": [
         {
           "line_of_business": "Property",
           "direction": "release",
           "amount_gbp_m": -0.099,
-          "percentage": -71.22,
+          "percentage": -71.2,
           "confidence": 1.0
         }
       ],
@@ -231,15 +238,15 @@
           "percentage_of_total": 100.0
         }
       ],
-      "gross_premium_page": 17,
+      "gross_premium_page": 14,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Opening gross claims outstanding taken from Balance Sheet (Claims outstanding prior year comparative). Prior year movement (gross) taken from Technical Provisions note row 'Change in estimates of prior year provisions (99) 45 (54)'. All amounts in the report are presented in GBP 000; converted to millions for this output. The syndicate is monoline (property). No specific named catastrophe events or quantified prior-year event line items disclosed in the reserves note. A small claims development triangle is present but only contains 2024 and 2023 columns; the explicit gross prior-year movement in the technical provisions note was used as primary source.",
+      "data_quality_notes": "Amounts extracted from technical provisions note and balance sheet (values presented in the accounts in GBP 000). Prior year movement is taken from the 'Change in estimates of prior year provisions' line (gross). Claims development triangle was limited to 2024 and 2023 columns only, so triangle could not be used to compute PYD for earlier years. No specific named catastrophe events were identified in the report.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
-        "page": 18,
+        "page": 36,
         "underwriting_years": [
           2024,
           2023
@@ -257,15 +264,21 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_1996_2024_llm.pdf",
-      "content_hash": "b6597e394625d49d48283ca690e4d3d34f54af111a9e62bbcd5b0cd5a8b4f048",
-      "standardized_at": "2026-07-05T23:17:45.695609+00:00",
+      "content_hash": "047143a9084770970bfad7bd38450cc05157fef470ba8f91fb11bf777bdfe9b8",
+      "standardized_at": "2026-09-11T14:26:23.382116+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 34536,
-        "output_tokens": 3678,
-        "total_tokens": 38214,
-        "cost_usd": 0.01599
+        "input_tokens": 35296,
+        "output_tokens": 4213,
+        "total_tokens": 39509,
+        "cost_usd": 0.01725
+      },
+      "_pyd_route": {
+        "source": "rag_provisions",
+        "value": -0.1,
+        "model_value": -0.099,
+        "note": "confirmed by the model value"
       },
       "_adobe_lob": {
         "gross_premium_mix": [
@@ -300,6 +313,13 @@
           "entity": 1996,
           "backend": "azure",
           "table_kind": "balance_sheet_liabilities"
+        },
+        "movement_semantics": {
+          "row_label": "Change in estimates of prior year provisions",
+          "row_index": 7,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": true,
+          "column_index": 1
         },
         "gross_prior_year_claims": -0.1,
         "ri_share_prior_year": 0.0,
@@ -382,12 +402,12 @@
       }
     }
   },
-  "total_cost_usd": 0.020746,
-  "total_tokens": 55385,
+  "total_cost_usd": 0.022267,
+  "total_tokens": 57142,
   "validation": {
     "passed": true,
-    "total_discrepancies": 8,
-    "within_tolerance": 8,
+    "total_discrepancies": 11,
+    "within_tolerance": 11,
     "hard_failures": 0,
     "hard_failure_details": []
   }

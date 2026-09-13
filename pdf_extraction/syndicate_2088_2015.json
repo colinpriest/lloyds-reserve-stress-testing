@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-05T20:00:59.470984+00:00",
+  "extraction_timestamp": "2026-09-13T04:08:14.043859+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -11,12 +13,12 @@
       "syndicate": 2088,
       "year": 2015,
       "opening_reserves_gbp_m": 75.697,
-      "opening_reserves_page": 13,
+      "opening_reserves_page": 6,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": 20.144,
-      "prior_year_development_pct": 26.61,
+      "prior_year_development_gbp_m": 0.465,
+      "prior_year_development_pct": 0.61,
       "direction": "strengthening",
-      "prior_year_movement_page": 16,
+      "prior_year_movement_page": 17,
       "prior_year_movement_confidence": 1.0,
       "exact_reserve_text": "An adverse run-off deviation (prior accident year release) of GBP 0.4m (2014: run-off deviation of GBP nil) was experienced during the year, wholly in respect of reserve movements on the 2012 year of account Whole Account Quota Share contract with Syndicate 2003.",
       "primary_causes": [
@@ -26,21 +28,12 @@
       "specific_years_affected": [
         2012
       ],
-      "prior_year_events": [
-        {
-          "event_name": "2012 year of account Whole Account Quota Share contract with Syndicate 2003",
-          "event_year": 2012,
-          "impact_description": "adverse run-off deviation",
-          "lobs_affected": [],
-          "amount_gbp_m": 0.4,
-          "confidence": 1.0
-        }
-      ],
+      "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "The syndicate experienced an adverse prior year reserve development of GBP 0.4 million, primarily due to movements on the 2012 year of account Whole Account Quota Share contract with Syndicate 2003. This represents a strengthening of reserves.",
+      "standardized_narrative": "The syndicate experienced an adverse run-off deviation of GBP 0.4 million in 2015, indicating a strengthening of prior year reserves. This movement was entirely attributed to the 2012 year of account's Whole Account Quota Share contract with Syndicate 2003.",
       "raw_causal_phrases": [
-        "adverse run-off deviation",
-        "reserve movements on the 2012 year of account Whole Account Quota Share contract with Syndicate 2003"
+        "An adverse run-off deviation (prior accident year release) of GBP 0.4m",
+        "wholly in respect of reserve movements on the 2012 year of account Whole Account Quota Share contract with Syndicate 2003"
       ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 79.4,
@@ -66,15 +59,15 @@
           "percentage_of_total": 1.3
         }
       ],
-      "gross_premium_page": 15,
+      "gross_premium_page": 16,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The gross claims development triangle on page 14 does not show the GBP 0.4m prior year strengthening explicitly stated in Note 9. Note 9 is taken as the authoritative source for prior year development. [RAG OVERRIDE: Model said PYD=0.4, RAG triangle computed 20.144. Using RAG value.]",
+      "data_quality_notes": "",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
-        "page": 14,
+        "page": 15,
         "underwriting_years": [
           2012,
           2013,
@@ -105,25 +98,43 @@
             null,
             null,
             null
+          ],
+          [
+            null,
+            null,
+            null,
+            null
           ]
         ]
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_2088_2015_llm.pdf",
-      "content_hash": "d71ba7ca3f873c75320d94f2d4f96c33dcb520b72ab1bc54cb4672a7b1dcab42",
-      "standardized_at": "2026-03-18T00:07:46.283894+00:00",
+      "content_hash": "714992eed293886ca3983787abed6ab1195ae60cfe0a7f1587770dbada4567a2",
+      "standardized_at": "2026-09-11T11:41:23.185337+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 10140,
-        "output_tokens": 1077,
-        "total_tokens": 14200,
-        "cost_usd": 0.005735
+        "input_tokens": 11183,
+        "output_tokens": 982,
+        "total_tokens": 15098,
+        "cost_usd": 0.00581
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 0.465,
+        "model_value": 0.4,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 34,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2012,
           2013,
@@ -132,30 +143,45 @@
         ],
         "development_rows": [
           [
-            0.0,
-            0.0,
-            0.0,
-            0.0
-          ],
-          [
-            0.0,
-            12.0,
             18797.0,
-            null
-          ],
-          [
             15586.0,
             15738.0,
+            20004.0
+          ],
+          [
+            32023.0,
+            29622.0,
+            31094.0,
+            null
+          ],
+          [
+            31723.0,
+            29441.0,
             null,
             null
           ],
           [
-            20004.0,
+            32369.0,
             null,
             null,
             null
+          ],
+          [
+            32369.0,
+            29441.0,
+            31094.0,
+            20004.0
           ]
-        ]
+        ],
+        "row_labels": [
+          "After 12 months",
+          "After 24 months",
+          "After 36 months",
+          "After 48 months",
+          "After 60 months"
+        ],
+        "source_page": 34,
+        "entity": 2088
       },
       "_adobe_lob": {
         "gross_premium_mix": [
@@ -289,10 +315,10 @@
       "syndicate": 2088,
       "year": 2015,
       "opening_reserves_gbp_m": 75.697,
-      "opening_reserves_page": 29,
+      "opening_reserves_page": 11,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": 20.144,
-      "prior_year_development_pct": 26.61,
+      "prior_year_development_gbp_m": 0.465,
+      "prior_year_development_pct": 0.61,
       "direction": "strengthening",
       "prior_year_movement_page": 32,
       "prior_year_movement_confidence": 0.8,
@@ -307,9 +333,9 @@
       ],
       "prior_year_events": [
         {
-          "event_name": "Reserve movements on 2012 year of account Whole Account Quota Share contract with Syndicate 2003",
+          "event_name": "2012 year of account Whole Account Quota Share contract with Syndicate 2003",
           "event_year": 2012,
-          "impact_description": "Adverse run-off deviation experienced during the year related to reserve movements on the 2012 WAQS contract with Syndicate 2003",
+          "impact_description": "Reserve movements on the 2012 year of account Whole Account Quota Share contract with Syndicate 2003 resulted in a run-off deviation of GBP 0.4m during the year.",
           "lobs_affected": [
             "Treaty"
           ],
@@ -318,18 +344,17 @@
         }
       ],
       "named_events": [],
-      "standardized_narrative": "Syndicate 2088 reported opening gross claims outstanding of GBP 75.697m at 1 Jan 2015 and experienced a small adverse prior-year run-off (strengthening) of GBP 0.4m during 2015, wholly attributable to reserve movements on the 2012 year of account under a Whole Account Quota Share contract with Syndicate 2003. The movement represents approximately 0.53% of opening gross claims outstanding and appears influenced by adverse claims development related to reinsurance arrangements.",
+      "standardized_narrative": "The syndicate reported an opening gross claims outstanding of GBP 75.697m. The Movement in prior years note records a prior-accident-year run-off deviation of GBP 0.4m during the year, arising wholly from reserve movements on the 2012 year of account under a Whole Account Quota Share with Syndicate 2003. This movement represents a small adverse prior-year development (strengthening) relative to opening reserves and is consistent with the gross claims development triangle.",
       "raw_causal_phrases": [
-        "An adverse run-off deviation (prior accident year release) of GBP 0.4m (2014: run-off deviation of GBP nil) was experienced during the year, wholly in respect of reserve movements on the 2012 year of account Whole Account Quota Share contract with Syndicate 2003.",
-        "This is offset by the challenging rating environment and lower volume of reserve releases on back years in Syndicate 2003 when compared with 2014."
+        "An adverse run-off deviation (prior accident year release) of GBP 0.4m (2014: run-off deviation of GBP nil) was experienced during the year, wholly in respect of reserve movements on the 2012 year of account Whole Account Quota Share contract with Syndicate 2003."
       ],
       "lob_movements": [
         {
-          "line_of_business": "Aggregate",
+          "line_of_business": "Treaty",
           "direction": "strengthening",
           "amount_gbp_m": 0.4,
-          "percentage": 0.53,
-          "confidence": 0.8
+          "percentage": 0.528,
+          "confidence": 0.6
         }
       ],
       "gross_premiums_written_gbp_m": 79.4,
@@ -358,7 +383,7 @@
       "gross_premium_page": 31,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Opening gross claims outstanding and segmental premium amounts are taken from the technical provisions reconciliation and segmental analysis (explicit, gross, in GBP 000s). The prior year development figure (GBP 0.4m) is taken from Note 9 wording which uses the phrase 'adverse run-off deviation (prior accident year release) of GBP 0.4m' - the note states the amount explicitly but is ambiguous whether presented gross or net of reinsurance; it is therefore treated as the quantified prior year movement (strengthening) but confidence is reduced and this caveat is noted. A gross claims development triangle is present (page 30) which could be used as a cross-check. [RAG OVERRIDE: Model said PYD=0.4, RAG triangle computed 20.144. Using RAG value.]",
+      "data_quality_notes": "Prior-year movement is taken from Note 9 (Movement in prior year's provision for claims outstanding) which explicitly states a GBP 0.4m run-off deviation. The note language is internally inconsistent ('adverse' vs parenthetical 'release'); sign chosen as adverse = strengthening based on wording. This figure is consistent with the gross claims development triangle (page 30) which, when diagonalised for UW years <=2013, sums to approximately +0.465m. Amount used = 0.4m as per Note 9. Opening reserves sourced from Balance Sheet (Claims outstanding, 2014 comparative column).",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -371,12 +396,6 @@
           2015
         ],
         "development_rows": [
-          [
-            null,
-            null,
-            null,
-            null
-          ],
           [
             18797,
             15586,
@@ -400,25 +419,43 @@
             null,
             null,
             null
+          ],
+          [
+            null,
+            null,
+            null,
+            null
           ]
         ]
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_2088_2015_llm.pdf",
-      "content_hash": "d71ba7ca3f873c75320d94f2d4f96c33dcb520b72ab1bc54cb4672a7b1dcab42",
-      "standardized_at": "2026-03-18T00:09:21.450874+00:00",
+      "content_hash": "714992eed293886ca3983787abed6ab1195ae60cfe0a7f1587770dbada4567a2",
+      "standardized_at": "2026-09-11T11:43:23.814512+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 21244,
-        "output_tokens": 5159,
-        "total_tokens": 26403,
-        "cost_usd": 0.015629
+        "input_tokens": 22240,
+        "output_tokens": 5809,
+        "total_tokens": 28049,
+        "cost_usd": 0.017178
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 0.465,
+        "model_value": 0.4,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 34,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2012,
           2013,
@@ -427,30 +464,45 @@
         ],
         "development_rows": [
           [
-            0.0,
-            0.0,
-            0.0,
-            0.0
-          ],
-          [
-            0.0,
-            12.0,
             18797.0,
-            null
-          ],
-          [
             15586.0,
             15738.0,
+            20004.0
+          ],
+          [
+            32023.0,
+            29622.0,
+            31094.0,
+            null
+          ],
+          [
+            31723.0,
+            29441.0,
             null,
             null
           ],
           [
-            20004.0,
+            32369.0,
             null,
             null,
             null
+          ],
+          [
+            32369.0,
+            29441.0,
+            31094.0,
+            20004.0
           ]
-        ]
+        ],
+        "row_labels": [
+          "After 12 months",
+          "After 24 months",
+          "After 36 months",
+          "After 48 months",
+          "After 60 months"
+        ],
+        "source_page": 34,
+        "entity": 2088
       },
       "_adobe_lob": {
         "gross_premium_mix": [
@@ -581,12 +633,12 @@
       }
     }
   },
-  "total_cost_usd": 0.021364,
-  "total_tokens": 40603,
+  "total_cost_usd": 0.022988,
+  "total_tokens": 43147,
   "validation": {
     "passed": true,
-    "total_discrepancies": 13,
-    "within_tolerance": 13,
+    "total_discrepancies": 12,
+    "within_tolerance": 12,
     "hard_failures": 0,
     "hard_failure_details": []
   }

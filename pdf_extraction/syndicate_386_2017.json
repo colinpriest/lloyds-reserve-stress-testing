@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-05T20:17:15.478419+00:00",
+  "extraction_timestamp": "2026-09-13T04:00:34.230364+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -16,25 +18,24 @@
       "prior_year_development_gbp_m": 19.206,
       "prior_year_development_pct": 1.67,
       "direction": "strengthening",
-      "prior_year_movement_page": 3,
-      "prior_year_movement_confidence": 0.5,
-      "exact_reserve_text": "The net underwriting profit for 2016 of GBP 4,019k included the anticipated impact of the announcement from the Ministry of Justice, reducing the statutory discount rate applied to certain UK personal injury claims (referred to as Ogden tables) to -0.75%. The UK government's subsequent decision to revise its proposals for the Ogden discount rate to an expected range of between 0% and 1%, has been reflected in the 2017 result at an assumed rate of +0.25%. Any further advice from the Justice Committee will be monitored closely. The combined operating ratio of 92.2% is better than prior year (2016 98.5%), despite adverse large loss experience in the Professional Lines portfolio. This was partly due to the improved impact of the Ogden table changes, including claims inflation assumptions on UK Employer's Liability reserves, coupled with reduced in year reinsurance spend and improved net claims ratio.",
+      "prior_year_movement_page": 20,
+      "prior_year_movement_confidence": 1.0,
+      "exact_reserve_text": "The 2014 and prior years produced a net loss of GBP 10,679k, following worse than expected claims activity, particularly in Professional Indemnity.",
       "primary_causes": [
-        "Ogden discount rate",
-        "Favorable claims development",
         "Adverse claims development",
-        "Large loss development",
+        "Social inflation / litigation trends",
+        "Ogden discount rate",
         "Economic inflation / claims cost inflation"
       ],
       "specific_events": [],
       "specific_years_affected": [
-        2016
+        2014
       ],
       "prior_year_events": [
         {
           "event_name": "Ogden discount rate change",
-          "event_year": 2016,
-          "impact_description": "The UK government's decision to revise proposals for the Ogden discount rate to an expected range of between 0% and 1% (from -0.75%) has been reflected in the 2017 result at an assumed rate of +0.25%, leading to an improved impact on reserves.",
+          "event_year": 2017,
+          "impact_description": "improved impact of the Ogden table changes, including claims inflation assumptions on UK Employer's Liability reserves",
           "lobs_affected": [
             "Casualty"
           ],
@@ -42,9 +43,9 @@
           "confidence": 0.8
         },
         {
-          "event_name": "Large loss development",
-          "event_year": null,
-          "impact_description": "Adverse large loss experience in the Professional Lines portfolio.",
+          "event_name": "Professional Indemnity claims activity",
+          "event_year": 2017,
+          "impact_description": "worse than expected claims activity, particularly in Professional Indemnity",
           "lobs_affected": [
             "Professional Lines"
           ],
@@ -53,14 +54,28 @@
         }
       ],
       "named_events": [],
-      "standardized_narrative": "The syndicate experienced mixed prior year development in 2017. There was a favourable impact from the revised Ogden discount rate, which positively affected UK Employer's Liability reserves and claims inflation assumptions. This contributed to an improved combined operating ratio. However, this was partially offset by adverse large loss experience within the Professional Lines portfolio. No specific gross prior year development amount was quantified in the report.",
+      "standardized_narrative": "The syndicate reported a net strengthening of GBP 10.679 million for the 2014 and prior underwriting years, primarily due to worse than expected claims activity in the Professional Indemnity line of business. This adverse development occurred despite a favourable impact from the revised Ogden discount rate on UK personal injury claims, which also affected UK Employer's Liability reserves.",
       "raw_causal_phrases": [
+        "worse than expected claims activity, particularly in Professional Indemnity",
         "improved impact of the Ogden table changes",
-        "claims inflation assumptions on UK Employer's Liability reserves",
-        "improved net claims ratio",
-        "adverse large loss experience in the Professional Lines portfolio"
+        "claims inflation assumptions on UK Employer's Liability reserves"
       ],
-      "lob_movements": [],
+      "lob_movements": [
+        {
+          "line_of_business": "Professional Lines",
+          "direction": "strengthening",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.8
+        },
+        {
+          "line_of_business": "Casualty",
+          "direction": "release",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.8
+        }
+      ],
       "gross_premiums_written_gbp_m": 311.6,
       "gross_premium_mix": [
         {
@@ -72,63 +87,87 @@
       "gross_premium_page": 12,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "No explicit gross prior year development figure was provided in the annual report for 2017. The claims development table on page 18 is presented on a net cumulative claims cost basis, not gross, and therefore cannot be used to calculate gross prior year development. [NET TRIANGLE: PYD from net-of-reinsurance claims development triangle.]",
+      "data_quality_notes": "Prior year development is reported as a net figure (after reinsurance) as no gross figure was explicitly available in the report. The net claims development triangle on page 18 shows no further development for prior years in 2017, which contradicts the narrative of a net loss for 2014 and prior years. This discrepancy is likely due to the triangle's retranslation to Pound Sterling at a constant rate of exchange, as noted in the report. [RAG OVERRIDE: Model said PYD=10.679, RAG triangle computed 19.206. Using RAG value.]",
       "_claims_triangle": {
         "type": "net",
         "currency": "GBP",
         "units": "thousands",
         "page": 18,
         "underwriting_years": [
+          2010,
           2011,
           2012,
           2013,
           2014,
           2015,
-          2016
+          2016,
+          2017
         ],
         "development_rows": [
           [
+            94810,
             97716,
             84618,
             89568,
             79313,
             106556,
-            96379
+            96379,
+            null
           ],
           [
+            190409,
             196072,
             167438,
             188082,
             173383,
             182017,
+            null,
             null
           ],
           [
+            202825,
             209406,
             171610,
             211834,
             170067,
             null,
+            null,
             null
           ],
           [
+            200802,
             200439,
             189450,
             209860,
             null,
             null,
+            null,
             null
           ],
           [
+            197693,
             215851,
             193054,
             null,
             null,
             null,
+            null,
             null
           ],
           [
+            219767,
             224272,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            232238,
+            null,
+            null,
             null,
             null,
             null,
@@ -139,20 +178,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_386_2017_llm.pdf",
-      "content_hash": "ebdccf67a76facaea6fea2563553e0e95d479111cea53ef2953c4d35b4ab1e18",
-      "standardized_at": "2026-03-18T22:24:14.024282+00:00",
+      "content_hash": "15640e9dcf80ef1fa203afd12f00b2f7c2749535e7d8bc7134ab35fa74ab24a4",
+      "standardized_at": "2026-09-11T12:41:54.376790+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 15022,
-        "output_tokens": 1467,
-        "total_tokens": 22422,
-        "cost_usd": 0.008174
+        "input_tokens": 15826,
+        "output_tokens": 1547,
+        "total_tokens": 24792,
+        "cost_usd": 0.008615
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 19.206,
+        "model_value": 10.679,
+        "triangle_type": "net",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 39,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "net",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -226,6 +277,15 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later"
         ],
         "source_page": 39,
         "entity": 386
@@ -323,7 +383,11 @@
         "foreign_pages": [],
         "underwriting_year_pages": [
           44,
+          45,
+          46,
           47,
+          48,
+          49,
           50,
           51,
           52,
@@ -333,9 +397,11 @@
           56,
           57,
           58,
-          59
+          59,
+          60,
+          61
         ],
-        "underwriting_year_tables_skipped": 16,
+        "underwriting_year_tables_skipped": 20,
         "document_unit_hint": 0.001
       }
     },
@@ -348,84 +414,58 @@
       "prior_year_development_gbp_m": 19.206,
       "prior_year_development_pct": 1.67,
       "direction": "strengthening",
-      "prior_year_movement_page": 36,
-      "prior_year_movement_confidence": 0.8,
-      "exact_reserve_text": "The 2014 and prior years produced a net loss of GBP 10,679k, following worse than expected claims activity, particularly in Professional Indemnity.",
+      "prior_year_movement_page": 35,
+      "prior_year_movement_confidence": 0.5,
+      "exact_reserve_text": "",
       "primary_causes": [
-        "Adverse claims development",
-        "Man-made catastrophe / large losses",
-        "Court rulings / legal developments",
         "Ogden discount rate",
-        "Social inflation / litigation trends"
+        "Man-made catastrophe / large losses",
+        "Economic inflation / claims cost inflation"
       ],
-      "specific_events": [
-        "Ogden discount rate change (MoJ proposals re the Ogden tables reflected at +0.25% in 2017)"
-      ],
-      "specific_years_affected": [
-        2014
-      ],
+      "specific_events": [],
+      "specific_years_affected": [],
       "prior_year_events": [
         {
           "event_name": "Ogden discount rate change",
           "event_year": 2017,
-          "impact_description": "Change in assumed Ogden discount rate reflected in 2017 results (assumed rate +0.25%), affecting reserves for UK personal injury claims and employer's liability inflation assumptions.",
+          "impact_description": "The revision of the anticipated Ogden discount rate (to an assumed +0.25% for 2017) was reflected in the 2017 result and had an improved impact on UK Employers' Liability reserves.",
           "lobs_affected": [
-            "Professional Lines",
-            "Casualty"
+            "Casualty",
+            "Professional Lines"
           ],
           "amount_gbp_m": null,
           "confidence": 0.8
         },
         {
-          "event_name": "Adverse claims activity in Professional Indemnity",
+          "event_name": "Worse than expected claims activity (2014 and prior)",
           "event_year": 2014,
-          "impact_description": "Worse than expected claims activity in 2014 and prior years, particularly in Professional Indemnity, produced a net loss on those years.",
+          "impact_description": "The 2014 and prior years produced a net loss of GBP 10,679k, following worse than expected claims activity, particularly in Professional Indemnity.",
           "lobs_affected": [
             "Professional Lines"
           ],
-          "amount_gbp_m": -10.679,
+          "amount_gbp_m": 10.679,
           "confidence": 0.8
         }
       ],
-      "named_events": [
-        {
-          "event_name": "Ogden discount rate change",
-          "event_year": 2017,
-          "event_type": "liability",
-          "net_loss_gbp_m": null,
-          "loss_description": "Reflected in 2017 results at an assumed rate of +0.25%; previously anticipated at -0.75% which impacted 2016 results.",
-          "lobs_affected": [
-            "Professional Lines",
-            "Casualty"
-          ],
-          "page": 4,
-          "confidence": 1.0
-        }
-      ],
-      "standardized_narrative": "Opening gross claims outstanding at 1 January 2017 was GBP 1,148.563m. The claims development for prior years shows no material net movement on the net claims development table (net prior-year development ~GBP 0m), i.e. effectively flat. Narrative notes highlight adverse claims activity in 2014 and prior years (notably Professional Indemnity) and the impact of changes in the Ogden discount rate which were reflected in the 2017 result; Professional Lines experienced adverse large-loss activity, while Ogden/legal changes affected UK employer liability reserving assumptions.",
+      "named_events": [],
+      "standardized_narrative": "Opening gross claims outstanding at 1 January 2017 was GBP 1,148.563m. No material prior-year reserve movement is evident from the claims development table (net basis), indicating broadly flat prior-year development for years up to 2015. Management cites offsetting factors including adverse large loss experience in Professional Lines, but an improved impact from the Ogden discount rate revision and claims inflation assumption adjustments which supported the overall reserve position.",
       "raw_causal_phrases": [
-        "following worse than expected claims activity, particularly in Professional Indemnity.",
-        "adverse large loss experience in the Professional Lines portfolio.",
-        "improved impact of the Ogden table changes, including claims inflation assumptions on UK Employer's Liability reserves, coupled with reduced in year reinsurance spend and improved net claims ratio."
+        "despite adverse large loss experience in the Professional Lines portfolio",
+        "partly due to the improved impact of the Ogden table changes, including claims inflation assumptions on UK Employer's Liability reserves",
+        "The 2014 and prior years produced a net loss of GBP 10,679k, following worse than expected claims activity, particularly in Professional Indemnity.",
+        "This result includes the anticipated impact of revising the statutory discount rate applied to certain UK personal injury claims (referred to as Ogden tables) from -0.75% to +0.25%"
       ],
       "lob_movements": [
         {
           "line_of_business": "Casualty",
           "direction": "flat",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.8
-        },
-        {
-          "line_of_business": "Professional Lines",
-          "direction": "strengthening",
-          "amount_gbp_m": null,
+          "amount_gbp_m": 0.0,
           "percentage": null,
           "confidence": 0.5
         },
         {
-          "line_of_business": "Treaty",
-          "direction": "flat",
+          "line_of_business": "Professional Lines",
+          "direction": "strengthening",
           "amount_gbp_m": null,
           "percentage": null,
           "confidence": 0.5
@@ -442,12 +482,12 @@
       "gross_premium_page": 26,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "No explicit GROSS prior-year reserve movement (movement in prior year's provision) was stated in the notes. A net claims development (cumulative claims triangle) is available but only on a NET basis; using the net claims development triangle yields net prior-year development of approximately GBP 0m (flat). Therefore prior_year_development_gbp_m is reported as 0.0 based on the NET triangle fallback. Gross PYD not available in the disclosures. [RAG OVERRIDE: Model said PYD=0.0, RAG triangle computed 19.206. Using RAG value.]",
+      "data_quality_notes": "No explicit gross 'movement in prior year's provision for claims outstanding' figure was presented. A gross movement note that excludes current-year activity was not found. The claims development table is presented only on a net-of-reinsurance basis; therefore prior_year_development_gbp_m is derived as 0.0 from the net triangle (fallback). exact_reserve_text not located (no explicit narrative sentence giving a gross PY movement). Reserve movement confidence lowered because the available triangle is net rather than gross. [RAG OVERRIDE: Model said PYD=0.0, RAG triangle computed 19.206. Using RAG value.]",
       "_claims_triangle": {
         "type": "net",
         "currency": "GBP",
         "units": "thousands",
-        "page": 36,
+        "page": 35,
         "underwriting_years": [
           2011,
           2012,
@@ -525,20 +565,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_386_2017_llm.pdf",
-      "content_hash": "ebdccf67a76facaea6fea2563553e0e95d479111cea53ef2953c4d35b4ab1e18",
-      "standardized_at": "2026-03-18T22:26:42.455876+00:00",
+      "content_hash": "15640e9dcf80ef1fa203afd12f00b2f7c2749535e7d8bc7134ab35fa74ab24a4",
+      "standardized_at": "2026-09-11T12:44:20.582629+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 24593,
-        "output_tokens": 11312,
-        "total_tokens": 35905,
-        "cost_usd": 0.028772
+        "input_tokens": 25236,
+        "output_tokens": 8281,
+        "total_tokens": 33517,
+        "cost_usd": 0.022871
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 19.206,
+        "model_value": 0.0,
+        "triangle_type": "net",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 39,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "net",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -612,6 +664,15 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later"
         ],
         "source_page": 39,
         "entity": 386
@@ -709,7 +770,11 @@
         "foreign_pages": [],
         "underwriting_year_pages": [
           44,
+          45,
+          46,
           47,
+          48,
+          49,
           50,
           51,
           52,
@@ -719,19 +784,21 @@
           56,
           57,
           58,
-          59
+          59,
+          60,
+          61
         ],
-        "underwriting_year_tables_skipped": 16,
+        "underwriting_year_tables_skipped": 20,
         "document_unit_hint": 0.001
       }
     }
   },
-  "total_cost_usd": 0.036946,
-  "total_tokens": 58327,
+  "total_cost_usd": 0.031486,
+  "total_tokens": 58309,
   "validation": {
     "passed": true,
-    "total_discrepancies": 25,
-    "within_tolerance": 25,
+    "total_discrepancies": 23,
+    "within_tolerance": 23,
     "hard_failures": 0,
     "hard_failure_details": []
   }

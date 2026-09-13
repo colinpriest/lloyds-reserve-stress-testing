@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-05T19:48:57.997342+00:00",
+  "extraction_timestamp": "2026-09-13T04:05:10.994643+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -11,19 +13,19 @@
       "syndicate": 2001,
       "year": 2015,
       "opening_reserves_gbp_m": 1657.7,
-      "opening_reserves_page": 11,
+      "opening_reserves_page": 4,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": -22.8,
       "prior_year_development_pct": -1.38,
       "direction": "release",
-      "prior_year_movement_page": 30,
+      "prior_year_movement_page": 8,
       "prior_year_movement_confidence": 1.0,
       "exact_reserve_text": "Movements arising from prior year claims (53.5)",
       "primary_causes": [
         "Favorable claims development",
         "Natural catastrophe events",
-        "Large loss development",
-        "IBNR recalibration"
+        "Man-made catastrophe / large losses",
+        "Reinsurance recoveries"
       ],
       "specific_events": [],
       "specific_years_affected": [],
@@ -31,25 +33,33 @@
         {
           "event_name": "Nebraska PCS 45 and 48",
           "event_year": 2014,
-          "impact_description": "Releases predominantly driven by releases on Catastrophe North America, which includes these events.",
+          "impact_description": "part of large catastrophe losses in 2014, over-reserved leading to releases in 2015",
           "lobs_affected": [
             "Reinsurance - Property"
           ],
+          "amount_gbp_m": null,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Other small catastrophe and large risk losses",
+          "event_year": 2014,
+          "impact_description": "part of GBP 12.0 million in 2014, over-reserved leading to releases in 2015",
+          "lobs_affected": [],
           "amount_gbp_m": null,
           "confidence": 0.8
         }
       ],
       "named_events": [
         {
-          "event_name": "Winter freeze",
+          "event_name": "winter freeze",
           "event_year": 2015,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": 11.4,
-          "loss_description": "largest loss event for the year impacting the SBU",
+          "loss_description": "largest loss event for the SBU",
           "lobs_affected": [
-            "Reinsurance - Property"
+            "Reinsurance"
           ],
-          "page": 6,
+          "page": 2,
           "confidence": 1.0
         },
         {
@@ -57,35 +67,53 @@
           "event_year": 2015,
           "event_type": "man_made",
           "net_loss_gbp_m": 7.7,
-          "loss_description": "largest loss event for the year impacting the SBU",
+          "loss_description": "loss event for the SBU",
           "lobs_affected": [
-            "Reinsurance - Property"
+            "Reinsurance"
           ],
-          "page": 6,
+          "page": 2,
           "confidence": 1.0
         },
         {
-          "event_name": "UK Floods",
+          "event_name": "Other small catastrophe and large risk loss events",
           "event_year": 2015,
+          "event_type": "other",
+          "net_loss_gbp_m": 15.7,
+          "loss_description": "total for 2015",
+          "lobs_affected": [],
+          "page": 2,
+          "confidence": 1.0
+        },
+        {
+          "event_name": "Nebraska PCS 45 and 48",
+          "event_year": 2014,
           "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": 6.0,
-          "loss_description": "Property and Casualty was impacted by a number of losses including GBP 6 million on UK Floods",
+          "net_loss_gbp_m": 26.6,
+          "loss_description": "large catastrophe losses in 2014",
           "lobs_affected": [
-            "Property"
+            "Reinsurance - Property"
           ],
-          "page": 7,
+          "page": 2,
+          "confidence": 1.0
+        },
+        {
+          "event_name": "Other small catastrophe and large risk losses",
+          "event_year": 2014,
+          "event_type": "other",
+          "net_loss_gbp_m": 12.0,
+          "loss_description": "total for 2014",
+          "lobs_affected": [],
+          "page": 2,
           "confidence": 1.0
         }
       ],
-      "standardized_narrative": "The Syndicate experienced a gross prior year reserve release of GBP 53.5 million in 2015, representing a 3.23% reduction of opening gross reserves. This favorable development was primarily driven by a benign year for catastrophe activity and a lower volume of large losses, leading to increased prior period reserve releases. Specifically, releases were noted in Catastrophe North America and Special Risk classes, as well as from low claims activity on longer-tailed classes like London Marine Liability and Aviation Products, and a lower frequency of larger losses in the Commercial Motor class.",
+      "standardized_narrative": "The syndicate experienced a gross prior year reserve release of GBP 53.5 million, representing 3.23% of its opening gross reserves. This favorable development was primarily driven by a benign year for catastrophe activity and a lower volume of large losses in the current year, leading to increased prior period reserve releases, particularly on Catastrophe North America and Special Risk classes. This also reflects over-reserving for large catastrophe losses and other large risk losses from 2014.",
       "raw_causal_phrases": [
         "absence of a large catastrophe loss experience during the year",
         "increase of prior period reserve releases",
         "benign year in terms of catastrophe activity",
         "lower volume of larger losses",
-        "releases on Catastrophe North America and Special Risk classes",
-        "low claims activity on longer-tailed classes such as London Marine Liability and Aviation Products",
-        "lower frequency of larger losses on the Commercial Motor class than the previous year"
+        "releases on Catastrophe North America and Special Risk classes"
       ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 1653.9,
@@ -131,15 +159,15 @@
           "percentage_of_total": 41.11
         }
       ],
-      "gross_premium_page": 17,
+      "gross_premium_page": 7,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The SBU performance analysis explicitly excludes \"certain group related activities\", leading to a slight discrepancy between the sum of SBU gross written premiums and the total gross written premiums reported in the financial statements. The regulatory segmental analysis (page 17) is used for the gross premium mix as it sums to the total. The exact_reserve_text is taken from a table entry as no direct sentence describing the gross prior year movement was found. [RAG OVERRIDE: Model said PYD=-53.5, RAG triangle computed -22.8. Using RAG value.]",
+      "data_quality_notes": "The prior year development figure is taken from the 'Movements arising from prior year claims' row in the 'Net outstanding claims' table on page 8, which directly reconciles the gross claims provision. This figure (-53.5m) differs from the calculation derived from the gross claims development triangle on page 9 (-22.8m). The table on page 8 is considered more authoritative for the direct movement in prior year provisions. [RAG OVERRIDE: Model said PYD=-53.5, RAG triangle computed -22.8. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "millions",
-        "page": 31,
+        "page": 9,
         "underwriting_years": [
           2011,
           2012,
@@ -186,21 +214,33 @@
         ]
       },
       "source_type": "syndicate",
-      "source_file": "syndicate_reports\\pdfs\\syndicate_2001_2015.pdf",
-      "content_hash": "3f870015621b3b775d4e4417a6452a47d31776f22b2ae4e675ab641d33a82df3",
-      "standardized_at": "2026-03-17T04:47:45.413855+00:00",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_2001_2015_llm.pdf",
+      "content_hash": "91245b17b29b9f0878f8b2111270da26c98b1bbe9f053f08a5ffb826055e0517",
+      "standardized_at": "2026-09-11T11:27:50.083924+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 16462,
-        "output_tokens": 1834,
-        "total_tokens": 23371,
-        "cost_usd": 0.009524
+        "input_tokens": 10151,
+        "output_tokens": 2092,
+        "total_tokens": 15884,
+        "cost_usd": 0.008275
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -22.8,
+        "model_value": -53.5,
+        "triangle_type": "gross",
+        "triangle_units": "millions",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 31,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "millions",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -245,6 +285,13 @@
             null
           ]
         ],
+        "row_labels": [
+          "At end of underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later"
+        ],
         "source_page": 31,
         "entity": 2001
       },
@@ -252,6 +299,13 @@
         "unit_source": "header",
         "source_page": 30,
         "entity": 2001,
+        "movement_semantics": {
+          "row_label": "Movements arising from prior year claims",
+          "row_index": 5,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": true,
+          "column_index": 1
+        },
         "ri_share_prior_year": -53.5,
         "net_prior_year_claims": 15.2
       },
@@ -316,166 +370,145 @@
       "syndicate": 2001,
       "year": 2015,
       "opening_reserves_gbp_m": 1657.7,
-      "opening_reserves_page": 28,
+      "opening_reserves_page": 9,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": -22.8,
       "prior_year_development_pct": -1.38,
       "direction": "release",
       "prior_year_movement_page": 28,
       "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "The underwriting profit includes releases from reserves established in prior years of GBP 38.3 million (2014: GBP 8.2 million).\nThe claims ratio significantly improved to 33% (2014: 51%) as a result of a benign year in terms of catastrophe activity, a lower volume of larger losses and increased prior period reserve releases predominantly driven by releases on Catastrophe North America and Special Risk classes.",
+      "exact_reserve_text": "The underwriting profit includes releases from reserves established in prior years of GBP 38.3 million (2014: GBP 8.2 million).",
       "primary_causes": [
         "Favorable claims development",
         "Natural catastrophe events",
-        "Large loss development",
-        "Reinsurance recoveries"
+        "Man-made catastrophe / large losses"
       ],
-      "specific_events": [
-        "Winter freeze (January-February 2015)",
-        "Tianjin explosion (August 2015)",
-        "Nebraska PCS 45 and 48 (2014)",
-        "UK Floods (2015)"
-      ],
+      "specific_events": [],
       "specific_years_affected": [
-        2011,
-        2012,
-        2013,
         2014
       ],
       "prior_year_events": [
         {
           "event_name": "Nebraska PCS 45 and 48",
           "event_year": 2014,
-          "impact_description": "Large catastrophe losses in 2014 that contributed to higher claims in that year.",
+          "impact_description": "Large catastrophe losses in 2014 (Nebraska PCS 45 and 48) contributed to 2014 large losses.",
           "lobs_affected": [
-            "Reinsurance - Property",
-            "Reinsurance - Casualty"
+            "Property",
+            "Reinsurance - Property"
           ],
           "amount_gbp_m": 26.6,
-          "confidence": 1.0
-        },
-        {
-          "event_name": "Commutation of Special Purpose Syndicate 6106 balances / settlements",
-          "event_year": 2013,
-          "impact_description": "Commutation and settlement activity relating to prior underwriting years (2012/2013), with amounts retained/settled between Syndicate 2001 and Syndicate 6106 affecting inter-syndicate balances and runoff.",
-          "lobs_affected": [
-            "Treaty"
-          ],
-          "amount_gbp_m": null,
-          "confidence": 0.6
+          "confidence": 0.8
         }
       ],
       "named_events": [
         {
-          "event_name": "Winter freeze",
+          "event_name": "Winter freeze (January-February)",
           "event_year": 2015,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": 11.4,
-          "loss_description": "The largest loss event for the year impacting the SBU was the winter freeze in January and February 2015 amounting to GBP 11.4 million.",
+          "loss_description": "The largest loss event for the year impacting the SBU, amounting to GBP 11.4 million.",
           "lobs_affected": [
             "Reinsurance - Property",
             "Property"
           ],
-          "page": 6,
-          "confidence": 0.9
+          "page": 4,
+          "confidence": 1.0
         },
         {
           "event_name": "Tianjin explosion",
           "event_year": 2015,
           "event_type": "man_made",
           "net_loss_gbp_m": 7.7,
-          "loss_description": "The Tianjin explosion in August 2015 amounting to GBP 7.7 million.",
+          "loss_description": "Tianjin explosion in August 2015 amounting to GBP 7.7 million.",
           "lobs_affected": [
-            "Reinsurance - Property",
+            "Reinsurance - Specialty",
             "Property"
           ],
-          "page": 6,
-          "confidence": 0.9
+          "page": 4,
+          "confidence": 1.0
         },
         {
           "event_name": "Nebraska PCS 45 and 48",
           "event_year": 2014,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": 26.6,
-          "loss_description": "Large catastrophe losses of GBP 26.6 million (Nebraska PCS 45 and 48) in 2014.",
+          "loss_description": "Large catastrophe losses of GBP 26.6 million in 2014 (Nebraska PCS 45 and 48).",
           "lobs_affected": [
+            "Property",
             "Reinsurance - Property"
           ],
-          "page": 6,
-          "confidence": 0.9
-        },
-        {
-          "event_name": "UK Floods",
-          "event_year": 2015,
-          "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": 6.0,
-          "loss_description": "Property and Casualty was impacted by a number of losses including GBP 6 million on UK Floods.",
-          "lobs_affected": [
-            "Property"
-          ],
-          "page": 6,
+          "page": 4,
           "confidence": 0.8
         }
       ],
-      "standardized_narrative": "At 31 December 2015 Syndicate 2001 carried gross claims outstanding of GBP 1,657.7m. During 2015 there was a net prior year release on claims of GBP 53.5m (a c.3.2% reduction versus opening gross reserves). Management attribute the release primarily to favourable prior period claims development driven by a benign catastrophe year (fewer large catastrophes), lower frequency of large commercial motor losses, and specific reserve releases in Catastrophe North America and Special Risk classes. The release supported an improved combined ratio and contributed to the underwriting profit, with notable named losses in 2015 (winter freeze and Tianjin explosion) being modest versus reserves.",
+      "standardized_narrative": "The Syndicate recorded a gross prior-year release of GBP 53.5m (3.23% of opening gross claims outstanding) in 2015. This release was driven by favourable claims development reflecting a benign catastrophe year, a lower volume of large losses and increased prior period reserve releases (notably on North America catastrophe and special risk classes). The managing agent also reports specific 2015 losses (winter freeze and the Tianjin explosion) but overall prior-year re-estimation produced a net release.",
       "raw_causal_phrases": [
-        "releases from reserves established in prior years of GBP 38.3 million (2014: GBP 8.2 million).",
-        "increased prior period reserve releases predominantly driven by releases on Catastrophe North America and Special Risk classes.",
-        "absence of a large catastrophe loss experience during the year",
-        "a lower volume of larger losses"
+        "The underwriting profit includes releases from reserves established in prior years of GBP 38.3 million (2014: GBP 8.2 million).",
+        "a benign year in terms of catastrophe activity, a lower volume of larger losses and increased prior period reserve releases predominantly driven by releases on Catastrophe North America and Special Risk classes."
       ],
       "lob_movements": [
-        {
-          "line_of_business": "Treaty",
-          "direction": "release",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.8
-        },
         {
           "line_of_business": "Property",
           "direction": "release",
           "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.6
+          "confidence": 0.5
         },
         {
-          "line_of_business": "Casualty",
+          "line_of_business": "Reinsurance - Specialty",
           "direction": "release",
           "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.6
-        },
-        {
-          "line_of_business": "Marine",
-          "direction": "release",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.6
+          "confidence": 0.5
         }
       ],
       "gross_premiums_written_gbp_m": 1653.9,
       "gross_premium_mix": [
         {
+          "line_of_business": "Accident and health",
+          "amount_gbp_m": 23.4,
+          "percentage_of_total": 1.42
+        },
+        {
+          "line_of_business": "Motor (third party liability)",
+          "amount_gbp_m": 50.7,
+          "percentage_of_total": 3.07
+        },
+        {
+          "line_of_business": "Motor (other classes)",
+          "amount_gbp_m": 210.0,
+          "percentage_of_total": 12.7
+        },
+        {
+          "line_of_business": "Marine, aviation and transport",
+          "amount_gbp_m": 174.0,
+          "percentage_of_total": 10.52
+        },
+        {
+          "line_of_business": "Fire and other damage to property",
+          "amount_gbp_m": 278.7,
+          "percentage_of_total": 16.86
+        },
+        {
+          "line_of_business": "Third party liability",
+          "amount_gbp_m": 126.6,
+          "percentage_of_total": 7.66
+        },
+        {
+          "line_of_business": "Miscellaneous",
+          "amount_gbp_m": 110.6,
+          "percentage_of_total": 6.69
+        },
+        {
           "line_of_business": "Reinsurance",
-          "amount_gbp_m": 576.1,
-          "percentage_of_total": 34.8
-        },
-        {
-          "line_of_business": "Marine and Aviation",
-          "amount_gbp_m": 331.0,
-          "percentage_of_total": 20.0
-        },
-        {
-          "line_of_business": "Property and Casualty",
-          "amount_gbp_m": 738.0,
-          "percentage_of_total": 44.6
+          "amount_gbp_m": 679.9,
+          "percentage_of_total": 41.14
         }
       ],
-      "gross_premium_page": 6,
-      "gross_premium_confidence": 0.9,
+      "gross_premium_page": 15,
+      "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Opening gross claims outstanding and the gross prior year movement are taken directly from the Insurance liabilities column of the claims movement table (note 9(a)) and are high confidence. Narrative references (e.g. 'releases of GBP 38.3m') are net of reinsurance and thus differ from the gross movement; the gross movement (-GBP 53.5m) per the movement table was used as authoritative. Divisional gross premium totals were used for premium mix (these do not exactly sum to the total in some tables due to minor other items). Claims development triangle is present but contains an aggregate '2010 and prior' column (excluded from the UW year list). There was commutation activity (Syndicate 6106) during the period which can distort inter-syndicate balances and runoff. [RAG OVERRIDE: Model said PYD=-53.5, RAG triangle computed -22.8. Using RAG value.]",
+      "data_quality_notes": "Primary prior-year movement sourced from note 9(a) 'Movements arising from prior year claims' (Insurance liabilities column) which shows (53.5) i.e. a GBP 53.5m gross release. The Managing Agent narrative reports releases of GBP 38.3m (this is net/other presentation) - the gross movement used here is from the technical reserves reconciliation. A gross claims development triangle is present (page 29) and was cross-checked; triangle parsing is partial because the PDF table is triangular and some cells are not applicable for recent underwriting years. All monetary amounts are reported in the report's native currency (GBP). [RAG OVERRIDE: Model said PYD=-53.5, RAG triangle computed -22.8. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -518,7 +551,7 @@
             null
           ],
           [
-            null,
+            822.5,
             null,
             null,
             null,
@@ -527,21 +560,33 @@
         ]
       },
       "source_type": "syndicate",
-      "source_file": "syndicate_reports\\pdfs\\syndicate_2001_2015.pdf",
-      "content_hash": "3f870015621b3b775d4e4417a6452a47d31776f22b2ae4e675ab641d33a82df3",
-      "standardized_at": "2026-03-17T04:49:38.329559+00:00",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_2001_2015_llm.pdf",
+      "content_hash": "91245b17b29b9f0878f8b2111270da26c98b1bbe9f053f08a5ffb826055e0517",
+      "standardized_at": "2026-09-11T11:30:42.116749+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 66028,
-        "output_tokens": 8706,
-        "total_tokens": 74734,
-        "cost_usd": 0.033919
+        "input_tokens": 28735,
+        "output_tokens": 7915,
+        "total_tokens": 36650,
+        "cost_usd": 0.023014
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -22.8,
+        "model_value": -53.5,
+        "triangle_type": "gross",
+        "triangle_units": "millions",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 31,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "millions",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -586,6 +631,13 @@
             null
           ]
         ],
+        "row_labels": [
+          "At end of underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later"
+        ],
         "source_page": 31,
         "entity": 2001
       },
@@ -593,6 +645,13 @@
         "unit_source": "header",
         "source_page": 30,
         "entity": 2001,
+        "movement_semantics": {
+          "row_label": "Movements arising from prior year claims",
+          "row_index": 5,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": true,
+          "column_index": 1
+        },
         "ri_share_prior_year": -53.5,
         "net_prior_year_claims": 15.2
       },
@@ -654,26 +713,13 @@
       }
     }
   },
-  "total_cost_usd": 0.043443,
-  "total_tokens": 98105,
+  "total_cost_usd": 0.031289,
+  "total_tokens": 52534,
   "validation": {
-    "passed": false,
-    "total_discrepancies": 39,
-    "within_tolerance": 37,
-    "hard_failures": 2,
-    "hard_failure_details": [
-      {
-        "field": "gross_premium_mix[Reinsurance].amount_gbp_m",
-        "type": "value_mismatch",
-        "gemini-2.5-flash": 679.9,
-        "gpt-5-mini": 576.1
-      },
-      {
-        "field": "gross_premium_mix[Reinsurance].percentage_of_total",
-        "type": "value_mismatch",
-        "gemini-2.5-flash": 41.11,
-        "gpt-5-mini": 34.8
-      }
-    ]
+    "passed": true,
+    "total_discrepancies": 21,
+    "within_tolerance": 21,
+    "hard_failures": 0,
+    "hard_failure_details": []
   }
 }

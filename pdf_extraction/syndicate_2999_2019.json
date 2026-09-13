@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T10:55:59.256187+00:00",
+  "extraction_timestamp": "2026-09-13T03:59:40.749716+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -20,8 +22,8 @@
       "prior_year_movement_confidence": 0.8,
       "exact_reserve_text": "Included within net claims incurred is adverse prior year development relating to certain financial lines and international liability classes as well as the change in Ogden discount rate; reduced by positive developments across a number of other classes.",
       "primary_causes": [
-        "Adverse claims development",
         "Ogden discount rate",
+        "Adverse claims development",
         "Favorable claims development"
       ],
       "specific_events": [],
@@ -38,13 +40,24 @@
         {
           "event_name": "Ogden discount rate change",
           "event_year": 2019,
-          "impact_description": "impact of a change to the Ogden discount rate from +0.25% in 2018 to -0.25%, following the announcement by Ministry of Justice in July 2019. Discount of GBP 63.7m (2018 GBP 37.0m) has been applied using a rate of -0.25% (2018 +0.25%)",
+          "impact_description": "Change in Ogden discount rate from +0.25% in 2018 to -0.25% in 2019, leading to reserve strengthening for long-tail liabilities.",
           "lobs_affected": [
-            "Motor",
-            "Casualty"
+            "Casualty",
+            "Motor"
           ],
           "amount_gbp_m": null,
           "confidence": 0.8
+        },
+        {
+          "event_name": "Adverse development in Financial Lines and International Liability classes",
+          "event_year": null,
+          "impact_description": "Adverse prior year development relating to certain financial lines and international liability classes.",
+          "lobs_affected": [
+            "Professional Lines",
+            "Casualty"
+          ],
+          "amount_gbp_m": null,
+          "confidence": 0.7
         }
       ],
       "named_events": [
@@ -53,7 +66,7 @@
           "event_year": 2019,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "significant loss activity from Japanese Typhoons (Faxai & Hagibis)",
+          "loss_description": "Significant loss activity from Japanese Typhoons (Faxai & Hagibis) in the inwards reinsurance portfolio.",
           "lobs_affected": [
             "Reinsurance - Property"
           ],
@@ -65,7 +78,7 @@
           "event_year": 2019,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "Hurricane Dorian causing devastation in the Bahamas",
+          "loss_description": "Hurricane Dorian causing devastation in the Bahamas, impacting the inwards reinsurance portfolio.",
           "lobs_affected": [
             "Reinsurance - Property"
           ],
@@ -73,11 +86,11 @@
           "confidence": 0.8
         },
         {
-          "event_name": "Financial Lines large losses",
+          "event_name": "Adverse gross large losses in Financial Lines and International Liability classes",
           "event_year": 2019,
           "event_type": "liability",
           "net_loss_gbp_m": null,
-          "loss_description": "experienced adverse gross large losses in its Financial Lines and International Liability classes",
+          "loss_description": "Syndicate's insurance portfolio experienced adverse gross large losses in its Financial Lines and International Liability classes, albeit largely mitigated by the Syndicate's reinsurance programme.",
           "lobs_affected": [
             "Professional Lines",
             "Casualty"
@@ -86,11 +99,11 @@
           "confidence": 0.8
         }
       ],
-      "standardized_narrative": "The Syndicate experienced an overall strengthening of prior year reserves by GBP 211.0 million, representing 8.47% of opening gross claims outstanding. This mixed development included adverse movements in certain financial lines and international liability classes, partly offset by positive developments in other classes. A significant factor influencing the reserve movement was the change in the Ogden discount rate from +0.25% in 2018 to -0.25% in 2019, which increased the value of discounted reserves for long-tail liabilities such as motor and third-party liability.",
+      "standardized_narrative": "The syndicate experienced a gross prior year reserve strengthening of GBP 236.6 million, representing 9.5% of opening gross claims outstanding. This was primarily driven by adverse development in certain financial lines and international liability classes, as well as the impact of a change in the Ogden discount rate from +0.25% to -0.25%. These adverse movements were partially offset by positive developments across other classes.",
       "raw_causal_phrases": [
         "adverse prior year development relating to certain financial lines and international liability classes",
         "change in Ogden discount rate",
-        "reduced by positive developments across a number of other classes"
+        "positive developments across a number of other classes"
       ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 744.1,
@@ -134,7 +147,7 @@
       "gross_premium_page": 13,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior year development calculated from the gross claims development triangle as no explicit gross figure was provided in narrative or movement notes. The '2010 and prior' aggregate column was excluded from the triangle calculation as per instructions. [RAG OVERRIDE: Model said PYD=211.0, RAG triangle computed 116.5. Using RAG value.]",
+      "data_quality_notes": " [RAG OVERRIDE: Model said PYD=236.6, RAG triangle computed 116.5. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -199,6 +212,7 @@
             null,
             null,
             null,
+            null,
             null
           ],
           [
@@ -209,11 +223,13 @@
             null,
             null,
             null,
+            null,
             null
           ],
           [
             663.1,
             564.6,
+            null,
             null,
             null,
             null,
@@ -229,26 +245,39 @@
             null,
             null,
             null,
+            null,
             null
           ]
         ]
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_2999_2019_llm.pdf",
-      "content_hash": "6d776ee593b84c51e90f3cf97035a9c5799ddb183b0d29fee04c59d3919f4f5f",
-      "standardized_at": "2026-07-05T13:49:17.960799+00:00",
+      "content_hash": "04c4caa7c448259424102b946e7e59db4c3d45a0192072224e04ad847aa71430",
+      "standardized_at": "2026-09-11T12:12:20.870322+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 11153,
-        "output_tokens": 2104,
-        "total_tokens": 19805,
-        "cost_usd": 0.008606
+        "input_tokens": 11957,
+        "output_tokens": 2007,
+        "total_tokens": 22728,
+        "cost_usd": 0.008605
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 116.5,
+        "model_value": 236.6,
+        "triangle_type": "gross",
+        "triangle_units": "millions",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 41,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "millions",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -360,6 +389,17 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later",
+          "Seven years later",
+          "Eight years later"
         ],
         "source_page": 41,
         "entity": 2999
@@ -534,69 +574,70 @@
       "prior_year_development_pct": 4.68,
       "direction": "strengthening",
       "prior_year_movement_page": 38,
-      "prior_year_movement_confidence": 0.5,
+      "prior_year_movement_confidence": 0.8,
       "exact_reserve_text": "Included within net claims incurred is adverse prior year development relating to certain financial lines and international liability classes as well as the change in Ogden discount rate; reduced by positive developments across a number of other classes.",
       "primary_causes": [
         "Adverse claims development",
-        "Ogden discount rate"
+        "Ogden discount rate",
+        "Favorable claims development"
       ],
       "specific_events": [],
       "specific_years_affected": [],
-      "prior_year_events": [
+      "prior_year_events": [],
+      "named_events": [
+        {
+          "event_name": "Japanese Typhoons (Faxai & Hagibis)",
+          "event_year": 2019,
+          "impact_description": "The Syndicate's inwards reinsurance portfolio (sub-Syndicate 566) saw significant loss activity from Japanese Typhoons (Faxai & Hagibis).",
+          "lobs_affected": [
+            "Reinsurance - Property",
+            "Reinsurance - Casualty",
+            "Marine"
+          ],
+          "amount_gbp_m": null,
+          "confidence": 0.8,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "significant loss activity from Japanese Typhoons (Faxai & Hagibis), as well as Hurricane Dorian causing devastation in the Bahamas",
+          "page": 3
+        },
+        {
+          "event_name": "Hurricane Dorian",
+          "event_year": 2019,
+          "impact_description": "Hurricane Dorian caused devastation in the Bahamas and produced loss activity for the Syndicate's inwards reinsurance portfolio.",
+          "lobs_affected": [
+            "Reinsurance - Property",
+            "Reinsurance - Casualty"
+          ],
+          "amount_gbp_m": null,
+          "confidence": 0.8,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "Hurricane Dorian causing devastation in the Bahamas",
+          "page": 3
+        },
         {
           "event_name": "Ogden discount rate change",
           "event_year": 2019,
-          "impact_description": "Change in the Ogden discount rate from +0.25% (2018) to -0.25% (2019) affected discounting of long-tail liabilities (periodical payment orders) and therefore impacted outstanding claims reserves.",
+          "impact_description": "Change to the Ogden discount rate from +0.25% in 2018 to -0.25% following the announcement by the Ministry of Justice in July 2019; included in the result and impacted discounted reserves for periodical payment orders.",
           "lobs_affected": [
             "Motor",
             "Casualty"
           ],
           "amount_gbp_m": null,
-          "confidence": 0.8
+          "confidence": 0.9,
+          "event_type": "other",
+          "net_loss_gbp_m": null,
+          "loss_description": "change to the Ogden discount rate from +0.25% in 2018 to -0.25%, following the announcement by Ministry of Justice in July 2019",
+          "page": 3
         }
       ],
-      "named_events": [
-        {
-          "event_name": "Typhoon Faxai",
-          "event_year": 2019,
-          "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": null,
-          "loss_description": "Significant loss activity in the Syndicate's inwards reinsurance portfolio",
-          "lobs_affected": [
-            "Reinsurance - Property"
-          ],
-          "page": 3,
-          "confidence": 0.9
-        },
-        {
-          "event_name": "Typhoon Hagibis",
-          "event_year": 2019,
-          "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": null,
-          "loss_description": "Significant loss activity in the Syndicate's inwards reinsurance portfolio",
-          "lobs_affected": [
-            "Reinsurance - Property"
-          ],
-          "page": 3,
-          "confidence": 0.9
-        },
-        {
-          "event_name": "Hurricane Dorian",
-          "event_year": 2019,
-          "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": null,
-          "loss_description": "Hurricane Dorian causing devastation in the Bahamas; noted loss activity in reinsurance portfolio",
-          "lobs_affected": [
-            "Reinsurance - Property"
-          ],
-          "page": 3,
-          "confidence": 0.9
-        }
-      ],
-      "standardized_narrative": "The report does not state a single explicit gross prior-year reserve movement amount. The claims development disclosures and notes indicate there were adverse prior year developments in certain Financial Lines and International Liability classes, together with the impact of the Ogden discount rate change; these adverse movements were partly offset by favourable development in other classes. Overall movements are mixed by line of business.",
+      "standardized_narrative": "Gross claims outstanding at 1 January 2019 were GBP 2,491.3m. No material gross prior-year reserve movement (2017 and earlier) is evident from the gross claims development table (aggregate prior-year movement ~= GBP 0.0m). The reported net position includes adverse prior-year development principally in Financial Lines and International Liability, and the impact of the July 2019 Ogden discount rate change, partially offset by favourable developments in other classes. Named 2019 events (Japanese Typhoons Faxai & Hagibis and Hurricane Dorian) affected the inwards reinsurance portfolio but are current-year events rather than prior-year reserve movements.",
       "raw_causal_phrases": [
         "Included within net claims incurred is adverse prior year development relating to certain financial lines and international liability classes as well as the change in Ogden discount rate; reduced by positive developments across a number of other classes.",
-        "This result includes the impact of a change to the Ogden discount rate from +0.25% in 2018 to -0.25%, following the announcement by Ministry of Justice in July 2019."
+        "change to the Ogden discount rate from +0.25% in 2018 to -0.25%, following the announcement by Ministry of Justice in July 2019",
+        "The Syndicate's inwards reinsurance portfolio (sub-Syndicate 566) saw significant loss activity from Japanese Typhoons (Faxai & Hagibis), as well as Hurricane Dorian causing devastation in the Bahamas.",
+        "adverse gross large losses in its Financial Lines and International Liability classes"
       ],
       "lob_movements": [
         {
@@ -611,21 +652,7 @@
           "direction": "strengthening",
           "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.6
-        },
-        {
-          "line_of_business": "Motor",
-          "direction": "strengthening",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.6
-        },
-        {
-          "line_of_business": "Reinsurance - Property",
-          "direction": "mixed",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.6
+          "confidence": 0.5
         }
       ],
       "gross_premiums_written_gbp_m": 744.1,
@@ -669,7 +696,7 @@
       "gross_premium_page": 27,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "No explicit gross prior-year reserve movement figure is stated in the notes. A gross 'movement per technical account' is presented but this aggregates current year claims activity and reserve movement and is therefore not a pure prior-year development figure. The claims development tables are present but the PDF/text extraction was partially misaligned; therefore a reliable gross PYD could not be calculated with high confidence from the triangle within the extracted text. The report does explicitly state adverse prior year development (net) and the impact of the Ogden discount rate change, which have been captured in narrative fields.",
+      "data_quality_notes": "No explicit gross prior-year (<=2017) movement figure was provided in a 'movement in prior year's provision' note. A gross claims development triangle was used to infer prior year development; parsing of the triangle in the source extract omitted some 2019 cells, and the narrative statements quote net movements. The computed gross prior-year movement is therefore based on the triangle as printed in the report and should be treated with moderate confidence. Ogden change is explicitly referenced in both the strategic report and technical notes and impacted discounted reserves. [RAG OVERRIDE: Model said PYD=0.0, RAG triangle computed 116.5. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -776,7 +803,7 @@
             null
           ],
           [
-            733.9,
+            null,
             null,
             null,
             null,
@@ -785,25 +812,48 @@
             null,
             null,
             null
+          ],
+          [
+            645.2,
+            564.6,
+            621.3,
+            625.9,
+            744.8,
+            1126.1,
+            736.6,
+            319.3,
+            null
           ]
         ]
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_2999_2019_llm.pdf",
-      "content_hash": "6d776ee593b84c51e90f3cf97035a9c5799ddb183b0d29fee04c59d3919f4f5f",
-      "standardized_at": "2026-07-05T13:51:37.156809+00:00",
+      "content_hash": "04c4caa7c448259424102b946e7e59db4c3d45a0192072224e04ad847aa71430",
+      "standardized_at": "2026-09-11T12:15:20.596531+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 18155,
-        "output_tokens": 14507,
-        "total_tokens": 32662,
-        "cost_usd": 0.033553
+        "input_tokens": 18915,
+        "output_tokens": 11476,
+        "total_tokens": 30391,
+        "cost_usd": 0.027681
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 116.5,
+        "model_value": 0.0,
+        "triangle_type": "gross",
+        "triangle_units": "millions",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 41,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "millions",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -915,6 +965,17 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later",
+          "Seven years later",
+          "Eight years later"
         ],
         "source_page": 41,
         "entity": 2999
@@ -1080,8 +1141,8 @@
       }
     }
   },
-  "total_cost_usd": 0.042159,
-  "total_tokens": 52467,
+  "total_cost_usd": 0.036286,
+  "total_tokens": 53119,
   "validation": {
     "passed": true,
     "total_discrepancies": 21,

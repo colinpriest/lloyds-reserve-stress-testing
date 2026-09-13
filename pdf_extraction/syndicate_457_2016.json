@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-05T20:27:13.841137+00:00",
+  "extraction_timestamp": "2026-09-13T04:00:52.712271+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -13,8 +15,8 @@
       "opening_reserves_gbp_m": 612.805,
       "opening_reserves_page": 6,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": -40.3,
-      "prior_year_development_pct": -6.58,
+      "prior_year_development_gbp_m": -31.781,
+      "prior_year_development_pct": -5.19,
       "direction": "release",
       "prior_year_movement_page": 16,
       "prior_year_movement_confidence": 1.0,
@@ -23,7 +25,13 @@
         "Favorable claims development"
       ],
       "specific_events": [],
-      "specific_years_affected": [],
+      "specific_years_affected": [
+        2015,
+        2014,
+        2013,
+        2012,
+        2011
+      ],
       "prior_year_events": [],
       "named_events": [
         {
@@ -69,11 +77,11 @@
           "confidence": 0.8
         },
         {
-          "event_name": "terror attack on Brussels airport",
+          "event_name": "Brussels airport terror attack",
           "event_year": 2016,
           "event_type": "man_made",
           "net_loss_gbp_m": null,
-          "loss_description": "the Syndicate did have exposure to... the terror attack on Brussels airport",
+          "loss_description": "the Syndicate did have exposure to both the ... terror attack on Brussels airport.",
           "lobs_affected": [
             "Aviation"
           ],
@@ -81,7 +89,7 @@
           "confidence": 0.8
         }
       ],
-      "standardized_narrative": "The syndicate reported a net release of GBP 40.3 million from reserves in respect of prior accident years, contributing to the 2016 net technical result. This indicates favorable claims development on older underwriting years.",
+      "standardized_narrative": "In 2016, the syndicate reported a gross release of GBP 40.3 million from reserves in respect of prior accident years, representing 6.58% of its opening gross claims outstanding. This favorable development contributed to the overall net technical result. The report notes that several 2016 natural catastrophe events (Alberta wildfires, Hurricane Matthew, Louisiana floods) and man-made events (Jubilee field loss, Brussels terror attack) did not have a material impact on the Syndicate.",
       "raw_causal_phrases": [
         "releases from reserves in respect of prior accident years",
         "reserve releases on old years of account"
@@ -118,7 +126,7 @@
       "gross_premium_page": 14,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The gross claims development triangle on page 17, when analyzed for prior year movements (excluding the two most recent underwriting years), indicates a net release of GBP 28.234m. This differs from the explicitly stated release of GBP 40.3m in the narrative on page 16. The narrative figure has been prioritized due to its explicit nature. [RAG PYD NOT APPLIED: deterministic figure +31.781m has the opposite sign to both model values [-40.3, -40.3], which agree with each other; model values retained.] [CODE PYD NOT APPLIED: deterministic figure +31.781m has the opposite sign to both model values [-40.3, -40.3], which agree with each other; model values retained.]",
+      "data_quality_notes": "The explicit narrative statement on page 16 of a GBP 40.3m gross release for prior accident years was used for 'prior_year_development_gbp_m'. This figure contradicts a calculation from the gross claims development triangle on page 17, which suggests a strengthening of approximately GBP 31.8m. The narrative statement is prioritized due to its explicit nature. [RAG OVERRIDE: Model said PYD=-40.3, RAG triangle computed -31.781. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -134,47 +142,47 @@
         ],
         "development_rows": [
           [
-            -138625,
-            -145252,
-            -165201,
-            -158744,
-            -164960,
-            -133353
+            -138625.0,
+            -145252.0,
+            -165201.0,
+            -158744.0,
+            -164960.0,
+            -133353.0
           ],
           [
-            -262555,
-            -296137,
-            -333369,
-            -303599,
-            -308043,
+            -262555.0,
+            -296137.0,
+            -333369.0,
+            -303599.0,
+            -308043.0,
             null
           ],
           [
-            -274945,
-            -315901,
-            -332623,
-            -295608,
-            null,
-            null
-          ],
-          [
-            -269756,
-            -309128,
-            -311593,
-            null,
+            -274945.0,
+            -315901.0,
+            -332623.0,
+            -295608.0,
             null,
             null
           ],
           [
-            -287436,
-            -310595,
-            null,
+            -269756.0,
+            -309128.0,
+            -311593.0,
             null,
             null,
             null
           ],
           [
-            -283209,
+            -287436.0,
+            -310595.0,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            -283209.0,
             null,
             null,
             null,
@@ -185,20 +193,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_457_2016_llm.pdf",
-      "content_hash": "dadaf2a5f8e583bd2f0668f5d175ddcd10c869855b43b6a7f1828e4d3f56cfd8",
-      "standardized_at": "2026-03-19T03:23:26.588849+00:00",
+      "content_hash": "abba497fb312e35d2ef8b4c5c8d0c5e9ff70afb36fa8f41c235a08335b682a02",
+      "standardized_at": "2026-09-11T13:02:38.293721+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 10894,
-        "output_tokens": 1761,
-        "total_tokens": 15928,
-        "cost_usd": 0.007671
+        "input_tokens": 11698,
+        "output_tokens": 1899,
+        "total_tokens": 18698,
+        "cost_usd": 0.008257
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -31.781,
+        "model_value": -40.3,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 45,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -257,8 +277,17 @@
             null
           ]
         ],
+        "row_labels": [
+          "At end of underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later"
+        ],
         "source_page": 45,
-        "entity": 457
+        "entity": 457,
+        "presentation_sign": "outflow"
       },
       "_adobe_lob": {
         "gross_premium_mix": [
@@ -409,17 +438,30 @@
       "opening_reserves_gbp_m": 612.805,
       "opening_reserves_page": 14,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": -40.3,
-      "prior_year_development_pct": -6.58,
+      "prior_year_development_gbp_m": -31.781,
+      "prior_year_development_pct": -5.19,
       "direction": "release",
-      "prior_year_movement_page": 41,
+      "prior_year_movement_page": 42,
       "prior_year_movement_confidence": 0.8,
       "exact_reserve_text": "The 2016 net technical result of GBP 35.6m (2015: GBP 24.0m) includes GBP 40.3m (2015: GBP 29.0m) of releases from reserves in respect of prior accident years.",
       "primary_causes": [
-        "Favorable claims development"
+        "Favorable claims development",
+        "Reinsurance recoveries",
+        "Natural catastrophe events"
       ],
-      "specific_events": [],
-      "specific_years_affected": [],
+      "specific_events": [
+        "Alberta wildfires",
+        "Hurricane Matthew",
+        "Louisiana floods",
+        "Jubilee field loss (offshore Ghana)",
+        "Terror attack on Brussels airport"
+      ],
+      "specific_years_affected": [
+        2011,
+        2012,
+        2013,
+        2014
+      ],
       "prior_year_events": [],
       "named_events": [
         {
@@ -427,84 +469,76 @@
           "event_year": 2016,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "Noted as an increase in natural catastrophe events in 2016; no material impact on the Syndicate",
+          "loss_description": "None of these events have had a material impact on the Syndicate.",
           "lobs_affected": [
-            "Property",
             "Marine",
-            "Energy"
+            "Energy",
+            "Aviation"
           ],
           "page": 4,
-          "confidence": 0.7
+          "confidence": 0.9
         },
         {
           "event_name": "Hurricane Matthew",
           "event_year": 2016,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "Noted among 2016 natural catastrophe events; none had a material impact on the Syndicate",
+          "loss_description": "None of these events have had a material impact on the Syndicate.",
           "lobs_affected": [
-            "Property",
-            "Marine"
+            "Marine",
+            "Energy",
+            "Aviation"
           ],
           "page": 4,
-          "confidence": 0.7
+          "confidence": 0.9
         },
         {
           "event_name": "Louisiana floods",
           "event_year": 2016,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "Noted among 2016 natural catastrophe events; none had a material impact on the Syndicate",
+          "loss_description": "None of these events have had a material impact on the Syndicate.",
           "lobs_affected": [
-            "Property"
+            "Marine",
+            "Energy",
+            "Aviation"
           ],
           "page": 4,
-          "confidence": 0.7
+          "confidence": 0.9
         },
         {
           "event_name": "Jubilee field loss (offshore Ghana)",
           "event_year": 2016,
-          "event_type": "man_made",
+          "event_type": "other",
           "net_loss_gbp_m": null,
-          "loss_description": "Noted as a named loss in 2016; stated to have had no material impact on the Syndicate",
+          "loss_description": "Syndicate did have exposure to the Jubilee field loss offshore Ghana; none of the named natural catastrophe events had a material impact.",
           "lobs_affected": [
-            "Energy",
+            "Energy"
+          ],
+          "page": 4,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Terror attack on Brussels airport",
+          "event_year": 2016,
+          "event_type": "political",
+          "net_loss_gbp_m": null,
+          "loss_description": "Syndicate did have exposure to the terror attack on Brussels airport; none of the named natural catastrophe events had a material impact.",
+          "lobs_affected": [
+            "Aviation",
             "Marine"
           ],
           "page": 4,
-          "confidence": 0.7
-        },
-        {
-          "event_name": "Brussels airport terror attack",
-          "event_year": 2016,
-          "event_type": "man_made",
-          "net_loss_gbp_m": null,
-          "loss_description": "Referenced among 2016 events; stated to have had no material impact on the Syndicate",
-          "lobs_affected": [
-            "Aviation",
-            "Casualty"
-          ],
-          "page": 4,
-          "confidence": 0.7
+          "confidence": 0.8
         }
       ],
-      "standardized_narrative": "Opening gross claims outstanding at 1 January 2016 were GBP 612.8m. During 2016 the Syndicate recorded prior-year favourable development, with reported releases from prior accident years of GBP 40.3m (reported in the technical provisions note). This prior-year improvement reduced overall claims reserves and contributed to the 2016 net technical result. The releases were described as portfolio-wide favourable development rather than being driven by a single event; 2016 did see a number of natural catastrophe and loss events (Alberta wildfires, Hurricane Matthew, Louisiana floods, Jubilee field loss offshore Ghana and the Brussels airport attack) but the report states none had a material impact on the Syndicate's reserves.",
+      "standardized_narrative": "The syndicate opened 2016 with gross claims outstanding of GBP 612.805m. Using the gross claims development table the syndicate experienced overall favourable prior-year development of approximately GBP 31.8m (a ~5.2% release of opening gross claims), driven by favourable claims development and aided by reinsurance recoveries. The Managing Agent notes net releases from prior accident years in the income statement; separately the syndicate had exposures to a number of 2016 natural catastrophe events (Alberta wildfires, Hurricane Matthew, Louisiana floods) and other incidents (Jubilee field loss offshore Ghana and the Brussels airport terror attack) which the report states did not have a material impact on the syndicate's results.",
       "raw_causal_phrases": [
-        "includes GBP 40.3m (2015: GBP 29.0m) of releases from reserves in respect of prior accident years",
-        "increase in natural catastrophe events",
-        "None of these events have had a material impact on the Syndicate",
-        "The 2016 underwriting year, although broadly in line with the Syndicate plan, is producing little profit",
-        "This income reduction is the combination of portfolio disengagement, rate reductions, and low activity levels in the underlying insured industries"
+        "2016 experienced an increase in natural catastrophe events. Notably the Alberta wildfires, Hurricane Matthew, and the Louisiana floods.",
+        "None of these events have had a material impact on the Syndicate but the Syndicate did have exposure to both the Jubilee field loss offshore Ghana, and the terror attack on Brussels airport.",
+        "The 2016 net technical result of GBP 35.6m (2015: GBP 24.0m) includes GBP 40.3m (2015: GBP 29.0m) of releases from reserves in respect of prior accident years."
       ],
-      "lob_movements": [
-        {
-          "line_of_business": "Aggregate",
-          "direction": "release",
-          "amount_gbp_m": -40.3,
-          "percentage": -6.579,
-          "confidence": 0.5
-        }
-      ],
+      "lob_movements": [],
       "gross_premiums_written_gbp_m": 356.2,
       "gross_premium_mix": [
         {
@@ -533,10 +567,10 @@
           "percentage_of_total": 30.1
         }
       ],
-      "gross_premium_page": 33,
+      "gross_premium_page": 23,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior-year development: the report explicitly states 'GBP 40.3m ... of releases from reserves in respect of prior accident years' but does not unambiguously label this amount as gross or net. A gross prior-year movement figure (insurance liabilities column) was not explicitly found elsewhere; therefore the stated GBP 40.3m release (used above) is taken from the technical provisions narrative (treated as the prior-year movement). If a strictly gross figure is required, the gross movement note/triangle would need detailed reconciliation - fall-back used here is the explicit narrative amount (confidence <1.0). [RAG PYD NOT APPLIED: deterministic figure +31.781m has the opposite sign to both model values [-40.3, -40.3], which agree with each other; model values retained.] [CODE PYD NOT APPLIED: deterministic figure +31.781m has the opposite sign to both model values [-40.3, -40.3], which agree with each other; model values retained.]",
+      "data_quality_notes": "Prior-year development (gross) was calculated from the gross claims development triangle (page 42). The Managing Agent narrative quotes a GBP 40.3m release 'in respect of prior accident years' (page 41) but that figure appears to be a net (after reinsurance) presentation; the gross triangle gives approximately a GBP 31.8m release. Prior-year development value here uses the gross triangle (confidence 0.8). Opening gross claims outstanding was taken from the Balance Sheet technical provisions prior-year comparative column (page 14).",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -603,20 +637,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_457_2016_llm.pdf",
-      "content_hash": "dadaf2a5f8e583bd2f0668f5d175ddcd10c869855b43b6a7f1828e4d3f56cfd8",
-      "standardized_at": "2026-03-19T03:25:23.632663+00:00",
+      "content_hash": "abba497fb312e35d2ef8b4c5c8d0c5e9ff70afb36fa8f41c235a08335b682a02",
+      "standardized_at": "2026-09-11T13:05:31.773785+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 23344,
-        "output_tokens": 6888,
-        "total_tokens": 30232,
-        "cost_usd": 0.019612
+        "input_tokens": 24104,
+        "output_tokens": 8198,
+        "total_tokens": 32302,
+        "cost_usd": 0.022422
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -31.781,
+        "model_value": -31.781,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 45,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -675,8 +721,17 @@
             null
           ]
         ],
+        "row_labels": [
+          "At end of underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later"
+        ],
         "source_page": 45,
-        "entity": 457
+        "entity": 457,
+        "presentation_sign": "outflow"
       },
       "_adobe_lob": {
         "gross_premium_mix": [
@@ -822,12 +877,12 @@
       }
     }
   },
-  "total_cost_usd": 0.027283,
-  "total_tokens": 46160,
+  "total_cost_usd": 0.030679,
+  "total_tokens": 51000,
   "validation": {
     "passed": true,
-    "total_discrepancies": 15,
-    "within_tolerance": 15,
+    "total_discrepancies": 20,
+    "within_tolerance": 20,
     "hard_failures": 0,
     "hard_failure_details": []
   }

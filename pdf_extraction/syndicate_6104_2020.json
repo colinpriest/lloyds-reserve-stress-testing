@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-05T20:36:12.958262+00:00",
+  "extraction_timestamp": "2026-09-13T03:57:49.418782+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -20,23 +22,21 @@
       "prior_year_movement_confidence": 1.0,
       "exact_reserve_text": "Over-provision in respect of prior claims and claim adjustment expenses 1,682",
       "primary_causes": [
-        "Natural catastrophe events",
-        "COVID-19 / pandemic effects"
+        "COVID-19 / pandemic effects",
+        "Natural catastrophe events"
       ],
       "specific_events": [
         "Typhoons Faxai",
-        "Typhoons Hagibis",
-        "COVID-19"
+        "Typhoons Hagibis"
       ],
       "specific_years_affected": [
-        2019,
-        2020
+        2019
       ],
       "prior_year_events": [
         {
           "event_name": "Typhoons Faxai and Hagibis",
           "event_year": 2019,
-          "impact_description": "Favourable development from prior year catastrophe reserve releases.",
+          "impact_description": "prior year catastrophe reserve releases",
           "lobs_affected": [
             "Reinsurance - Property"
           ],
@@ -46,11 +46,11 @@
         {
           "event_name": "COVID-19",
           "event_year": 2020,
-          "impact_description": "Adverse development from business interruption insurance exposure, totalling $20.4 million net of reinsurance.",
+          "impact_description": "impact of Covid-19 through exposure to reinsurance of business interruption insurance, offsetting prior year catastrophe reserve releases",
           "lobs_affected": [
             "Reinsurance - Specialty"
           ],
-          "amount_gbp_m": 20.4,
+          "amount_gbp_m": null,
           "confidence": 0.8
         }
       ],
@@ -60,7 +60,7 @@
           "event_year": 2019,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "Contributed to prior year catastrophe reserve releases.",
+          "loss_description": "prior year catastrophe reserve releases",
           "lobs_affected": [
             "Reinsurance - Property"
           ],
@@ -72,7 +72,7 @@
           "event_year": 2020,
           "event_type": "other",
           "net_loss_gbp_m": 20.4,
-          "loss_description": "Impacted through potential exposure to reinsurance of business interruption insurance, totalling $20.4 million net of reinsurance.",
+          "loss_description": "impact of Covid-19, totalling $20.4 million, net of reinsurance, through exposure to reinsurance of business interruption insurance.",
           "lobs_affected": [
             "Reinsurance - Specialty"
           ],
@@ -80,12 +80,12 @@
           "confidence": 0.8
         }
       ],
-      "standardized_narrative": "Syndicate 6104 reported a gross prior year reserve release of $1.682 million in 2020, representing a 0.69% release of opening gross reserves. This overall release was a net effect of favourable development from prior year catastrophe reserve releases, particularly related to Typhoons Faxai and Hagibis from 2019, which more than offset adverse development from COVID-19 related business interruption insurance exposures from 2020, which had a net impact of $20.4 million.",
+      "standardized_narrative": "The syndicate experienced a gross prior year reserve strengthening of $1.682 million in 2020. This movement was influenced by mixed factors, with prior year catastrophe reserve releases, particularly from Typhoons Faxai and Hagibis (2019), being offset by adverse development related to COVID-19 impacts, specifically from business interruption insurance exposures, resulting in a net gross strengthening.",
       "raw_causal_phrases": [
         "prior year catastrophe reserve releases",
         "Typhoons Faxai and Hagibis",
         "impact of Covid-19",
-        "exposure to reinsurance of business interruption insurance"
+        "reinsurance of business interruption insurance"
       ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 40.841,
@@ -99,163 +99,35 @@
       "gross_premium_page": 41,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "There is a discrepancy between the prior year development figure from the Technical Provisions note (-1.682m gross release) and the calculation from the Claims Development Table (-6.294m gross release). The Technical Provisions note figure is used as the primary source. The COVID-19 impact of $20.4m is stated as net of reinsurance, while the overall prior year development is gross. [RAG PYD NOT APPLIED: deterministic figure +1.700m has the opposite sign to both model values [-1.682, -1.682], which agree with each other; model values retained.] [CODE OVERRIDE: Model said PYD=-1.682, but code computed -6.479 from triangle (OVERRIDE from agreed triangles). Using code value.]",
-      "_claims_triangle": {
-        "type": "gross",
-        "currency": "USD",
-        "units": "thousands",
-        "page": 55,
-        "underwriting_years": [
-          2011,
-          2012,
-          2013,
-          2014,
-          2015,
-          2016,
-          2017,
-          2018,
-          2019,
-          2020
-        ],
-        "development_rows": [
-          [
-            26067,
-            40933,
-            19791,
-            13968,
-            5617,
-            18039,
-            62858,
-            72809,
-            101107,
-            38746
-          ],
-          [
-            28144,
-            25246,
-            9637,
-            10192,
-            3206,
-            12369,
-            59536,
-            82085,
-            66076,
-            null
-          ],
-          [
-            27172,
-            20421,
-            6426,
-            10325,
-            3420,
-            9349,
-            60506,
-            77181,
-            null,
-            null
-          ],
-          [
-            26574,
-            20242,
-            6597,
-            9883,
-            2814,
-            8633,
-            59038,
-            null,
-            null,
-            null
-          ],
-          [
-            25455,
-            21095,
-            6678,
-            9921,
-            2947,
-            8737,
-            null,
-            null,
-            null,
-            null
-          ],
-          [
-            25357,
-            18374,
-            6797,
-            9733,
-            2922,
-            null,
-            null,
-            null,
-            null,
-            null
-          ],
-          [
-            23629,
-            18375,
-            6947,
-            9753,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-          ],
-          [
-            23563,
-            18539,
-            6982,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-          ],
-          [
-            23794,
-            18379,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-          ],
-          [
-            23713,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-          ]
-        ]
-      },
+      "data_quality_notes": "The narrative on page 41 states 'prior year catastrophe reserve releases' implying a net release, but the gross technical provisions table on page 53 shows a gross strengthening of $1.682 million. The gross figure from the technical provisions table is used for prior_year_development_gbp_m. The claims development triangle on page 55 indicates a gross release of $6.319 million, which contradicts the direct statement in the technical provisions note. The direct statement is prioritized. [RAG OVERRIDE: Model said PYD=1.682, RAG triangle computed -6.479. Using RAG value.]",
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_6104_2020_llm.pdf",
-      "content_hash": "5f68fa18f26bc582386293b2bd68f8f5ef3c22203417f2216883d7e8afe9af88",
-      "standardized_at": "2026-07-06T02:19:35.273670+00:00",
+      "content_hash": "9b1dd949cb0f779337f8c83cf04a55261739ed4799402489815501b48b502508",
+      "standardized_at": "2026-09-11T13:32:05.819013+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 23279,
-        "output_tokens": 1942,
-        "total_tokens": 32007,
-        "cost_usd": 0.011839
+        "input_tokens": 24083,
+        "output_tokens": 1123,
+        "total_tokens": 30473,
+        "cost_usd": 0.010032
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -6.479,
+        "model_value": 1.682,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 77,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -390,6 +262,18 @@
             null
           ]
         ],
+        "row_labels": [
+          "At end of",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later",
+          "Seven years later",
+          "Eight years later",
+          "Nine years later"
+        ],
         "source_page": 77,
         "entity": 6104
       },
@@ -406,6 +290,13 @@
           "entity": 6104,
           "backend": "azure",
           "table_kind": "balance_sheet_liabilities"
+        },
+        "movement_semantics": {
+          "row_label": "Over-provision in respect of prior claims and claim adjustment expenses",
+          "row_index": 4,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": false,
+          "column_index": 1
         },
         "gross_prior_year_claims": 1.7,
         "ri_share_prior_year": 0.0,
@@ -596,89 +487,72 @@
       "syndicate": 6104,
       "year": 2020,
       "opening_reserves_gbp_m": 242.327,
-      "opening_reserves_page": 66,
+      "opening_reserves_page": 72,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": -6.479,
       "prior_year_development_pct": -2.67,
       "direction": "release",
       "prior_year_movement_page": 72,
       "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "The result for Syndicate 6104 in calendar year 2020 is a profit of $36.9 million (2019: $64.9 million loss) as a result of prior year catastrophe reserve releases, particularly Typhoons Faxai and Hagibis.",
+      "exact_reserve_text": "Over-provision in respect of prior claims and claim adjustment expenses 1,682 - 1,682",
       "primary_causes": [
-        "Natural catastrophe events",
         "Favorable claims development"
       ],
       "specific_events": [
+        "Hurricane Michael",
+        "Hurricane Florence",
+        "Typhoon Jebi",
+        "Typhoon Trami",
+        "Northern California wildfires",
+        "Hurricane Dorian",
         "Typhoon Faxai",
-        "Typhoon Hagibis"
+        "Typhoon Hagibis",
+        "California wildfires",
+        "COVID-19 / pandemic effects"
       ],
       "specific_years_affected": [
-        2019,
-        2018
+        2018,
+        2019
       ],
       "prior_year_events": [
         {
-          "event_name": "Typhoon Faxai",
-          "event_year": 2019,
-          "impact_description": "Cited as a driver of prior year catastrophe reserve releases resulting in favorable prior year development",
-          "lobs_affected": [
-            "Reinsurance - Property"
-          ],
-          "amount_gbp_m": null,
-          "confidence": 0.9
-        },
-        {
-          "event_name": "Typhoon Hagibis",
-          "event_year": 2019,
-          "impact_description": "Cited as a driver of prior year catastrophe reserve releases resulting in favorable prior year development",
-          "lobs_affected": [
-            "Reinsurance - Property"
-          ],
-          "amount_gbp_m": null,
-          "confidence": 0.9
-        },
-        {
           "event_name": "Hurricanes Michael and Florence; Typhoons Jebi and Trami; Northern California wildfires",
           "event_year": 2018,
-          "impact_description": "Combined events reserved in the 2018 account (material prior year catastrophe losses for the 2018 account)",
+          "impact_description": "Combined reserve for these 2018 large loss events was held at $65.2 million (includes element of margin) and they materially impacted the account.",
           "lobs_affected": [
             "Reinsurance - Property"
           ],
           "amount_gbp_m": 65.2,
           "confidence": 0.8
+        },
+        {
+          "event_name": "Hurricane Dorian; Typhoons Faxai and Hagibis; California wildfires",
+          "event_year": 2019,
+          "impact_description": "Combined reserve for these 2019 natural catastrophe events was held at $46.5 million.",
+          "lobs_affected": [
+            "Reinsurance - Property"
+          ],
+          "amount_gbp_m": 46.5,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "COVID-19 / pandemic effects (impacting reinsurance of business interruption)",
+          "event_year": 2019,
+          "impact_description": "2019 account was impacted by COVID-19 exposure through potential reinsurance of business interruption insurance; this exposure was reserved at $6.4 million (includes element of margin).",
+          "lobs_affected": [
+            "Reinsurance - Property"
+          ],
+          "amount_gbp_m": 6.4,
+          "confidence": 0.8
         }
       ],
       "named_events": [
-        {
-          "event_name": "Typhoon Faxai",
-          "event_year": 2019,
-          "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": null,
-          "loss_description": "Cited as a cause of prior year catastrophe reserve releases",
-          "lobs_affected": [
-            "Reinsurance - Property"
-          ],
-          "page": 56,
-          "confidence": 0.9
-        },
-        {
-          "event_name": "Typhoon Hagibis",
-          "event_year": 2019,
-          "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": null,
-          "loss_description": "Cited as a cause of prior year catastrophe reserve releases",
-          "lobs_affected": [
-            "Reinsurance - Property"
-          ],
-          "page": 56,
-          "confidence": 0.9
-        },
         {
           "event_name": "Hurricane Michael",
           "event_year": 2018,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "Part of combined 2018 catastrophe losses reserved at $65.2 million",
+          "loss_description": "Part of the 2018 large loss events reserved at $65.2 million (includes element of margin).",
           "lobs_affected": [
             "Reinsurance - Property"
           ],
@@ -690,7 +564,7 @@
           "event_year": 2018,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "Part of combined 2018 catastrophe losses reserved at $65.2 million",
+          "loss_description": "Part of the 2018 large loss events reserved at $65.2 million (includes element of margin).",
           "lobs_affected": [
             "Reinsurance - Property"
           ],
@@ -702,7 +576,7 @@
           "event_year": 2018,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "Part of combined 2018 catastrophe losses reserved at $65.2 million",
+          "loss_description": "Part of the 2018 large loss events reserved at $65.2 million (includes element of margin).",
           "lobs_affected": [
             "Reinsurance - Property"
           ],
@@ -714,7 +588,7 @@
           "event_year": 2018,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "Part of combined 2018 catastrophe losses reserved at $65.2 million",
+          "loss_description": "Part of the 2018 large loss events reserved at $65.2 million (includes element of margin).",
           "lobs_affected": [
             "Reinsurance - Property"
           ],
@@ -726,7 +600,7 @@
           "event_year": 2018,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "Part of combined 2018 catastrophe losses reserved at $65.2 million",
+          "loss_description": "Part of the 2018 large loss events reserved at $65.2 million (includes element of margin).",
           "lobs_affected": [
             "Reinsurance - Property"
           ],
@@ -734,35 +608,75 @@
           "confidence": 0.8
         },
         {
-          "event_name": "COVID-19 / pandemic",
-          "event_year": 2020,
-          "event_type": "other",
-          "net_loss_gbp_m": 20.4,
-          "loss_description": "The Syndicate has material exposure to losses arising out of Covid-19 and currently reserved $20.4 million, net of reinsurance for these claims.",
-          "lobs_affected": [
-            "Reinsurance - Property"
-          ],
-          "page": 73,
-          "confidence": 1.0
-        },
-        {
           "event_name": "Hurricane Dorian",
           "event_year": 2019,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "Reserved as part of 2019 catastrophe losses affecting the account",
+          "loss_description": "Part of the 2019 large loss events reserved at $46.5 million.",
           "lobs_affected": [
             "Reinsurance - Property"
           ],
           "page": 77,
-          "confidence": 0.7
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Typhoon Faxai",
+          "event_year": 2019,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "Part of the 2019 large loss events reserved at $46.5 million.",
+          "lobs_affected": [
+            "Reinsurance - Property"
+          ],
+          "page": 77,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Typhoon Hagibis",
+          "event_year": 2019,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "Part of the 2019 large loss events reserved at $46.5 million.",
+          "lobs_affected": [
+            "Reinsurance - Property"
+          ],
+          "page": 77,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "California wildfires (2019)",
+          "event_year": 2019,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "Part of the 2019 large loss events reserved at $46.5 million.",
+          "lobs_affected": [
+            "Reinsurance - Property"
+          ],
+          "page": 77,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "COVID-19 pandemic",
+          "event_year": 2020,
+          "event_type": "other",
+          "net_loss_gbp_m": 20.4,
+          "loss_description": "The Syndicate has material exposure to losses arising out of COVID-19 and currently reserved $20.4 million, net of reinsurance for these claims (primarily through exposure to reinsurance of business interruption insurance).",
+          "lobs_affected": [
+            "Reinsurance - Property"
+          ],
+          "page": 73,
+          "confidence": 0.9
         }
       ],
-      "standardized_narrative": "Syndicate 6104 recorded a small net release of prior year gross reserves in 2020 (gross prior year over-provision of $1.682m), contributing to a calendar year profit of $36.9m. The release principally reflected favourable prior-year development on catastrophe reserves, notably from Typhoons Faxai and Hagibis, although the Syndicate also recognised material exposure to COVID-19 (reserved $20.4m net). The Syndicate is a quota-share reinsurance vehicle for Syndicate 33's catastrophe account, so movements were concentrated in property catastrophe reinsurance.",
+      "standardized_narrative": "Syndicate 6104 opened 2020 with gross claims outstanding of $242.3m. During the year there was a small prior-year favourable movement (an over-provision) of $1.682m (0.7% of opening reserves), reflecting favourable prior-year claims development. Reserves remain materially influenced by prior natural catastrophe losses (notably 2018 hurricanes Michael/Florence, typhoons Jebi/Trami and Northern California wildfires, and 2019 events including Dorian, Faxai and Hagibis and California wildfires) and by COVID-19 exposure arising from reinsurance of business interruption, for which the Syndicate holds explicit reserves.",
       "raw_causal_phrases": [
-        "prior year catastrophe reserve releases, particularly Typhoons Faxai and Hagibis",
+        "Over-provision in respect of prior claims and claim adjustment expenses",
         "The Syndicate has material exposure to losses arising out of Covid-19 and currently reserved $20.4 million, net of reinsurance for these claims.",
-        "Over-provision in respect of prior claims and claim adjustment expenses 1,682 - 1,682"
+        "These events were the only significant losses materially impacting the account.",
+        "This reserve includes an element of margin.",
+        "reserved at $65.2 million",
+        "reserved at $46.5 million",
+        "this exposure has been reserved at $6.4 million"
       ],
       "lob_movements": [
         {
@@ -770,7 +684,7 @@
           "direction": "release",
           "amount_gbp_m": -1.682,
           "percentage": -0.694,
-          "confidence": 0.6
+          "confidence": 1.0
         }
       ],
       "gross_premiums_written_gbp_m": 40.841,
@@ -781,10 +695,10 @@
           "percentage_of_total": 100.0
         }
       ],
-      "gross_premium_page": 63,
+      "gross_premium_page": 70,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "Prior year gross movement sourced from the Technical Provisions reconciliation (\"Over-provision in respect of prior claims and claim adjustment expenses 1,682\"). The Managing Agent narrative cites larger prior year catastrophe releases (driving calendar profit) but does not quantify the gross movement; the technical table provides the authoritative gross figure. All monetary amounts reported in native currency (USD). [RAG PYD NOT APPLIED: deterministic figure +1.700m has the opposite sign to both model values [-1.682, -1.682], which agree with each other; model values retained.] [CODE OVERRIDE: Model said PYD=-1.682, but code computed -6.479 from triangle (OVERRIDE from agreed triangles). Using code value.]",
+      "data_quality_notes": "All monetary amounts are reported in the syndicate's functional currency (USD). Field names in the template reference GBP but values are provided in USD (native currency of the accounts). Prior-year movement is taken from the Technical Provisions note (line: 'Over-provision in respect of prior claims and claim adjustment expenses 1,682') and interpreted as a release (hence negative sign). Exact_reserve_text is taken from the table row since no standalone narrative sentence quantifying gross prior-year movement was present. Claims development triangle used is the gross table in the underwriting year notes. Some named-event amounts are reported as gross reserves in the report; net-to-syndicate amounts are not always separately specified and are therefore null where not explicitly stated. [RAG OVERRIDE: Model said PYD=-1.682, RAG triangle computed -6.479. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
@@ -923,25 +837,36 @@
             null,
             null
           ]
-        ],
-        "type_confidence": 1.0
+        ]
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_6104_2020_llm.pdf",
-      "content_hash": "5f68fa18f26bc582386293b2bd68f8f5ef3c22203417f2216883d7e8afe9af88",
-      "standardized_at": "2026-07-06T02:21:01.414310+00:00",
+      "content_hash": "9b1dd949cb0f779337f8c83cf04a55261739ed4799402489815501b48b502508",
+      "standardized_at": "2026-09-11T13:35:01.860171+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 70028,
-        "output_tokens": 7695,
-        "total_tokens": 77723,
-        "cost_usd": 0.032897
+        "input_tokens": 70788,
+        "output_tokens": 8978,
+        "total_tokens": 79766,
+        "cost_usd": 0.035653
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -6.479,
+        "model_value": -1.682,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 77,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -1076,6 +1001,18 @@
             null
           ]
         ],
+        "row_labels": [
+          "At end of",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later",
+          "Seven years later",
+          "Eight years later",
+          "Nine years later"
+        ],
         "source_page": 77,
         "entity": 6104
       },
@@ -1092,6 +1029,13 @@
           "entity": 6104,
           "backend": "azure",
           "table_kind": "balance_sheet_liabilities"
+        },
+        "movement_semantics": {
+          "row_label": "Over-provision in respect of prior claims and claim adjustment expenses",
+          "row_index": 4,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": false,
+          "column_index": 1
         },
         "gross_prior_year_claims": 1.7,
         "ri_share_prior_year": 0.0,
@@ -1279,12 +1223,12 @@
       }
     }
   },
-  "total_cost_usd": 0.044736,
-  "total_tokens": 109730,
+  "total_cost_usd": 0.045685,
+  "total_tokens": 110239,
   "validation": {
     "passed": true,
-    "total_discrepancies": 25,
-    "within_tolerance": 25,
+    "total_discrepancies": 36,
+    "within_tolerance": 36,
     "hard_failures": 0,
     "hard_failure_details": []
   }

@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-05T20:49:05.536137+00:00",
+  "extraction_timestamp": "2026-09-13T04:17:07.646049+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -11,14 +13,14 @@
       "syndicate": 1225,
       "year": 2024,
       "opening_reserves_gbp_m": 1266.831,
-      "opening_reserves_page": 33,
+      "opening_reserves_page": 4,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": -8.958,
       "prior_year_development_pct": -0.71,
       "direction": "release",
-      "prior_year_movement_page": 30,
+      "prior_year_movement_page": 13,
       "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "The estimate for claims at the beginning of the year as compared with net payments and provisions at the end of the year in respect of prior years' claims are as follows: ... Favourable movement in technical provisions 84,136",
+      "exact_reserve_text": "The estimate for claims at the beginning of the year as compared with net payments and provisions at the end of the year in respect of prior years' claims are as follows: Favourable movement in technical provisions 84,136",
       "primary_causes": [
         "Favorable claims development"
       ],
@@ -26,11 +28,10 @@
       "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "Syndicate 1225 reported a favourable prior year development of GBP 84.136 million, representing a 6.64% release of opening gross claims reserves. This positive movement was primarily driven by favourable loss experience across Marine, aviation and transport, Fire and other damage to property, Third party liability, and Miscellaneous lines of business.",
+      "standardized_narrative": "The syndicate reported a favourable prior year development of GBP 84.136 million for the year ended 31 December 2024, representing a 6.64% release of opening gross claims outstanding. This release was primarily driven by favourable loss experience across all lines of business, including Marine, aviation and transport, Fire and other damage to property, Third party liability, and Miscellaneous.",
       "raw_causal_phrases": [
         "Favourable movement in technical provisions",
-        "favourable loss experience",
-        "incurred claims forms a 11% (2023: 4%) component of the 2024 loss ratio of 39% (2023: 43%)"
+        "favourable loss experience and incurred claims forms a 11% (2023: 4%) component of the 2024 loss ratio of 39% (2023: 43%). The earned loss ratio represents net incurred losses divided by net earned premium."
       ],
       "lob_movements": [
         {
@@ -51,13 +52,6 @@
           "line_of_business": "Casualty",
           "direction": "release",
           "amount_gbp_m": -12.506,
-          "percentage": null,
-          "confidence": 1.0
-        },
-        {
-          "line_of_business": "Other",
-          "direction": "release",
-          "amount_gbp_m": -1.35,
           "percentage": null,
           "confidence": 1.0
         }
@@ -90,15 +84,15 @@
           "percentage_of_total": 12.91
         }
       ],
-      "gross_premium_page": 28,
+      "gross_premium_page": 11,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": " [RAG OVERRIDE: Model said PYD=-84.136, RAG triangle computed -8.958. Using RAG value.]",
+      "data_quality_notes": "Prior year development figure taken from explicit 'Prior years' claims estimate' note (Note 6) which is preferred over the claims development triangle due to potential complexities not captured in the triangle calculation. The 'Miscellaneous' category from the prior year claims estimate note could not be mapped to a single standard Lloyd's Line of Business and was therefore omitted from the lob_movements array. [RAG OVERRIDE: Model said PYD=-84.136, RAG triangle computed -8.958. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
-        "page": 34,
+        "page": 15,
         "underwriting_years": [
           2015,
           2016,
@@ -235,21 +229,33 @@
         ]
       },
       "source_type": "syndicate",
-      "source_file": "pdf_extraction\\html_converted\\syndicate_1225_2024.pdf",
-      "content_hash": "c28cc3436ea1cd6ef23d461dd90745a6343961830b59ef18dfe13c61e4596b80",
-      "standardized_at": "2026-03-16T13:20:30.161153+00:00",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_1225_2024_llm.pdf",
+      "content_hash": "54114c468cb120f325813923400e2dffeae79ee4f3205b12c204ae2fd0ea5cd6",
+      "standardized_at": "2026-09-11T14:42:29.295801+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 15430,
-        "output_tokens": 1901,
-        "total_tokens": 23972,
-        "cost_usd": 0.009382
+        "input_tokens": 10667,
+        "output_tokens": 1935,
+        "total_tokens": 19128,
+        "cost_usd": 0.008038
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -8.958,
+        "model_value": -84.136,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 34,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2015,
           2016,
@@ -384,6 +390,18 @@
             null
           ]
         ],
+        "row_labels": [
+          "At end of underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later",
+          "Seven years later",
+          "Eight years later",
+          "Nine years later"
+        ],
         "source_page": 34,
         "entity": 1225
       },
@@ -444,25 +462,34 @@
       "syndicate": 1225,
       "year": 2024,
       "opening_reserves_gbp_m": 1266.831,
-      "opening_reserves_page": 30,
+      "opening_reserves_page": 12,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": -8.958,
       "prior_year_development_pct": -0.71,
       "direction": "release",
-      "prior_year_movement_page": 27,
+      "prior_year_movement_page": 31,
       "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "The estimate for claims at the beginning of the year as compared with net payments and provisions at the end of the year in respect of prior years' claims are as follows:\n...\nFavourable movement in technical provisions 84,136 29,417\nThe movement in estimate of the prior year is driven mainly by favourable loss experience and incurred claims forms a 11% (2023: 4%) component of the 2024 loss ratio of 39% (2023: 43%).",
+      "exact_reserve_text": "The estimate for claims at the beginning of the year as compared with net payments and provisions at the end of the year in respect of prior years' claims are as follows:\n\nFavourable movement in technical provisions 84,136 29,417\n\nThe movement in estimate of the prior year is driven mainly by favourable loss experience and incurred claims forms a 11% (2023: 4%) component of the 2024 loss ratio of 39% (2023: 43%).",
       "primary_causes": [
         "Favorable claims development"
       ],
       "specific_events": [],
-      "specific_years_affected": [],
+      "specific_years_affected": [
+        2015,
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022
+      ],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "Syndicate 1225 recorded a gross favourable movement in prior years' technical provisions of GBP 84.136m in 2024 (net GBP 29.417m), a release driven mainly by favourable claims experience. This release represents approximately 6.64% of opening gross claims outstanding of GBP 1,266.831m. The largest contributors to the favourable movement were fire & property and marine portfolios.",
+      "standardized_narrative": "Syndicate 1225 recorded a small overall prior-year release of approximately GBP 9.0m (gross) at 31 December 2024, representing a c.0.7% release relative to opening gross claims outstanding. The release was driven primarily by favourable claims development across older underwriting years, as reflected in the gross claims development triangle and the note commentary describing favourable loss experience.",
       "raw_causal_phrases": [
-        "Favourable movement in technical provisions 84,136 29,417",
-        "The movement in estimate of the prior year is driven mainly by favourable loss experience and incurred claims forms a 11% (2023: 4%) component of the 2024 loss ratio of 39% (2023: 43%)."
+        "Favourable movement in technical provisions",
+        "The movement in estimate of the prior year is driven mainly by favourable loss experience"
       ],
       "lob_movements": [
         {
@@ -470,28 +497,28 @@
           "direction": "release",
           "amount_gbp_m": -16.945,
           "percentage": null,
-          "confidence": 1.0
+          "confidence": 0.5
         },
         {
           "line_of_business": "Property",
           "direction": "release",
           "amount_gbp_m": -53.335,
           "percentage": null,
-          "confidence": 1.0
+          "confidence": 0.5
         },
         {
           "line_of_business": "Casualty",
           "direction": "release",
           "amount_gbp_m": -12.506,
           "percentage": null,
-          "confidence": 1.0
+          "confidence": 0.5
         },
         {
           "line_of_business": "Aggregate",
           "direction": "release",
           "amount_gbp_m": -1.35,
           "percentage": null,
-          "confidence": 1.0
+          "confidence": 0.5
         }
       ],
       "gross_premiums_written_gbp_m": 1011.524,
@@ -499,33 +526,33 @@
         {
           "line_of_business": "Marine, aviation and transport",
           "amount_gbp_m": 109.646,
-          "percentage_of_total": 10.84
+          "percentage_of_total": 10.8
         },
         {
           "line_of_business": "Fire and other damage to property",
           "amount_gbp_m": 546.84,
-          "percentage_of_total": 54.06
+          "percentage_of_total": 54.1
         },
         {
           "line_of_business": "Third party liability",
           "amount_gbp_m": 187.758,
-          "percentage_of_total": 18.56
+          "percentage_of_total": 18.6
         },
         {
           "line_of_business": "Miscellaneous",
           "amount_gbp_m": 36.705,
-          "percentage_of_total": 3.63
+          "percentage_of_total": 3.6
         },
         {
           "line_of_business": "Reinsurance acceptances",
           "amount_gbp_m": 130.575,
-          "percentage_of_total": 12.91
+          "percentage_of_total": 12.9
         }
       ],
       "gross_premium_page": 25,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Primary prior-year reserve movement taken from Note 6 ('Favourable movement in technical provisions 84,136 29,417') which explicitly presents the prior year movement (gross and net). A reconciliation via the gross claims development triangle yields a different aggregate diagonal sum (-8.958m) due to differing methods/row selections; per extraction rules the explicit movement note (gross) is used as authoritative. All monetary amounts are reported in millions (converted from the GBP 000 figures in the report). [RAG OVERRIDE: Model said PYD=-84.136, RAG triangle computed -8.958. Using RAG value.]",
+      "data_quality_notes": "Prior-year development (GBP -8.958m) was calculated from the gross claims development triangle (Note 11). Note 6 reports a 'Favourable movement in technical provisions' of GBP 84.136k which appears to be a different (likely net) presentation; therefore the gross triangle was used as the authoritative gross-source per instructions. LOB-level prior-year movements reported in Note 6 may be net of reinsurance - mapped LOB movements use those Note 6 figures but confidence is reduced and mapping for 'Miscellaneous' used 'Aggregate' as closest standard category.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -667,21 +694,33 @@
         ]
       },
       "source_type": "syndicate",
-      "source_file": "pdf_extraction\\html_converted\\syndicate_1225_2024.pdf",
-      "content_hash": "c28cc3436ea1cd6ef23d461dd90745a6343961830b59ef18dfe13c61e4596b80",
-      "standardized_at": "2026-03-16T13:22:42.326406+00:00",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_1225_2024_llm.pdf",
+      "content_hash": "54114c468cb120f325813923400e2dffeae79ee4f3205b12c204ae2fd0ea5cd6",
+      "standardized_at": "2026-09-11T14:46:04.396354+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 39699,
-        "output_tokens": 9790,
-        "total_tokens": 49489,
-        "cost_usd": 0.029505
+        "input_tokens": 18808,
+        "output_tokens": 9320,
+        "total_tokens": 28128,
+        "cost_usd": 0.023342
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -8.958,
+        "model_value": -8.958,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 34,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2015,
           2016,
@@ -816,6 +855,18 @@
             null
           ]
         ],
+        "row_labels": [
+          "At end of underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later",
+          "Seven years later",
+          "Eight years later",
+          "Nine years later"
+        ],
         "source_page": 34,
         "entity": 1225
       },
@@ -873,12 +924,12 @@
       }
     }
   },
-  "total_cost_usd": 0.038887,
-  "total_tokens": 73461,
+  "total_cost_usd": 0.03138,
+  "total_tokens": 47256,
   "validation": {
     "passed": true,
-    "total_discrepancies": 13,
-    "within_tolerance": 13,
+    "total_discrepancies": 25,
+    "within_tolerance": 25,
     "hard_failures": 0,
     "hard_failure_details": []
   }

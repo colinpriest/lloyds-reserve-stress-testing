@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T10:33:26.285804+00:00",
+  "extraction_timestamp": "2026-09-13T04:11:56.609105+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -16,13 +18,14 @@
       "prior_year_development_gbp_m": -14.204,
       "prior_year_development_pct": -3.35,
       "direction": "release",
-      "prior_year_movement_page": 3,
+      "prior_year_movement_page": 17,
       "prior_year_movement_confidence": 0.8,
-      "exact_reserve_text": "The result for the year included net prior year reserve strengthening of GBP 9.8m (2021: reserve release of GBP 2.1m) which deteriorated the combined ratio by 5.5% (2021: benefit of 1.5%).",
+      "exact_reserve_text": "The result for the year included net prior year reserve strengthening of GBP 9.8m (2021: reserve release of GBP 2.1m) which deteriorated the combined ratio by 5.5% (2021: benefit of 1.5%). This strengthening was driven by reserve increases in relation to the China flood losses in Henan and Typhoon Rai, both on our Treaty Property Reinsurance class of business, partly offset by reserve releases on our professional lines class following favourable loss experience.",
       "primary_causes": [
         "Natural catastrophe events",
-        "Adverse claims development",
-        "Favorable claims development"
+        "Large loss development",
+        "Favorable claims development",
+        "Adverse claims development"
       ],
       "specific_events": [
         "China flood losses in Henan",
@@ -33,7 +36,7 @@
         {
           "event_name": "China flood losses in Henan",
           "event_year": 2021,
-          "impact_description": "reserve increases",
+          "impact_description": "reserve increases in relation to the China flood losses in Henan",
           "lobs_affected": [
             "Treaty"
           ],
@@ -43,7 +46,7 @@
         {
           "event_name": "Typhoon Rai",
           "event_year": 2021,
-          "impact_description": "reserve increases",
+          "impact_description": "reserve increases in relation to Typhoon Rai",
           "lobs_affected": [
             "Treaty"
           ],
@@ -51,9 +54,9 @@
           "confidence": 0.8
         },
         {
-          "event_name": "Favourable loss experience on professional lines class",
-          "event_year": null,
-          "impact_description": "reserve releases",
+          "event_name": "Favourable loss experience",
+          "event_year": 2021,
+          "impact_description": "reserve releases on our professional lines class following favourable loss experience",
           "lobs_affected": [
             "Professional Lines"
           ],
@@ -67,7 +70,7 @@
           "event_year": 2021,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "reserve increases",
+          "loss_description": "reserve increases in relation to the China flood losses in Henan",
           "lobs_affected": [
             "Treaty"
           ],
@@ -79,7 +82,7 @@
           "event_year": 2021,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "reserve increases",
+          "loss_description": "reserve increases in relation to Typhoon Rai",
           "lobs_affected": [
             "Treaty"
           ],
@@ -87,12 +90,10 @@
           "confidence": 0.8
         }
       ],
-      "standardized_narrative": "The syndicate experienced a net prior year reserve strengthening of GBP 9.8m in 2022. This adverse development was primarily driven by reserve increases related to natural catastrophe events, specifically China flood losses in Henan and Typhoon Rai, impacting the Treaty Property Reinsurance class of business. This was partly offset by favourable claims development and reserve releases on the Professional Lines class.",
+      "standardized_narrative": "The syndicate experienced a gross prior year reserve release of GBP 14.204 million, primarily driven by favourable loss experience on professional lines. This was partially offset by reserve strengthenings related to natural catastrophe events, specifically China flood losses in Henan and Typhoon Rai, impacting the Treaty Property Reinsurance class of business. The overall net effect described in the narrative was a strengthening of GBP 9.8m.",
       "raw_causal_phrases": [
         "net prior year reserve strengthening of GBP 9.8m",
-        "deteriorated the combined ratio by 5.5%",
-        "driven by reserve increases in relation to the China flood losses in Henan and Typhoon Rai",
-        "both on our Treaty Property Reinsurance class of business",
+        "reserve increases in relation to the China flood losses in Henan and Typhoon Rai",
         "partly offset by reserve releases on our professional lines class following favourable loss experience"
       ],
       "lob_movements": [
@@ -147,7 +148,7 @@
       "gross_premium_page": 12,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior year development figure is net of reinsurance as no gross figure was explicitly stated. The claims development triangle was deemed unreliable for calculating prior year development due to the presence of a 'portfolio transfer' (similar to RITC) in the Technical Provisions note. [RAG OVERRIDE: Model said PYD=9.8, RAG triangle computed -14.204. Using RAG value.]",
+      "data_quality_notes": "The `exact_reserve_text` describes a net prior year reserve strengthening of GBP 9.8m, while the gross claims development triangle indicates a gross prior year reserve release of GBP 14.204m. The gross figure from the triangle is used for `prior_year_development_gbp_m` as per instructions, but the narrative text is preserved for `exact_reserve_text` to reflect the reported context.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -248,20 +249,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_2232_2022_llm.pdf",
-      "content_hash": "5d232c1083ced35b292625e6230d43c3ea8e60b17d2af57bba7d20d251419748",
-      "standardized_at": "2026-07-05T12:23:47.633546+00:00",
+      "content_hash": "5fb2dff730818e50354014d01b3af5ba39a8c9471bf3528d2c65d675e78b9c1e",
+      "standardized_at": "2026-09-11T11:49:12.829092+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 10637,
-        "output_tokens": 2120,
-        "total_tokens": 18974,
-        "cost_usd": 0.008491
+        "input_tokens": 11441,
+        "output_tokens": 2231,
+        "total_tokens": 19138,
+        "cost_usd": 0.00901
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -14.204,
+        "model_value": -14.204,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 51,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2015,
           2016,
@@ -353,6 +366,16 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "End of underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later",
+          "Seven years later"
         ],
         "source_page": 51,
         "entity": 2232
@@ -536,29 +559,27 @@
         "China flood losses in Henan",
         "Typhoon Rai"
       ],
-      "specific_years_affected": [
-        2021
-      ],
+      "specific_years_affected": [],
       "prior_year_events": [
         {
           "event_name": "China flood losses in Henan",
           "event_year": 2021,
-          "impact_description": "Reserve increases in relation to the China flood losses in Henan (adverse prior year development)",
+          "impact_description": "Reserve increases; cited as a driver of prior year reserve strengthening",
           "lobs_affected": [
-            "Treaty"
+            "Reinsurance - Property"
           ],
           "amount_gbp_m": null,
-          "confidence": 0.8
+          "confidence": 1.0
         },
         {
           "event_name": "Typhoon Rai",
           "event_year": 2021,
-          "impact_description": "Reserve increases in relation to Typhoon Rai (adverse prior year development)",
+          "impact_description": "Reserve increases; cited as a driver of prior year reserve strengthening",
           "lobs_affected": [
-            "Treaty"
+            "Reinsurance - Property"
           ],
           "amount_gbp_m": null,
-          "confidence": 0.8
+          "confidence": 1.0
         }
       ],
       "named_events": [
@@ -567,47 +588,47 @@
           "event_year": 2021,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "reserve increases in relation to the China flood losses in Henan",
+          "loss_description": "Cited as driving reserve increases on Treaty Property Reinsurance",
           "lobs_affected": [
-            "Treaty"
+            "Reinsurance - Property"
           ],
           "page": 5,
-          "confidence": 0.9
+          "confidence": 1.0
         },
         {
           "event_name": "Typhoon Rai",
           "event_year": 2021,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "reserve increases in relation to Typhoon Rai",
+          "loss_description": "Cited as driving reserve increases on Treaty Property Reinsurance",
           "lobs_affected": [
-            "Treaty"
+            "Reinsurance - Property"
           ],
           "page": 5,
-          "confidence": 0.9
+          "confidence": 1.0
         }
       ],
-      "standardized_narrative": "The syndicate's opening gross claims outstanding at 1 January 2022 was GBP 424.046m. Using the gross claims development table, aggregate prior-year development across underwriting years up to 2020 produced a net favourable movement (release) of approximately GBP 14.2m (3.35% of opening gross claims). The Managing Agent reports a net prior year reserve strengthening of GBP 9.8m on a net-of-reinsurance basis driven by reserve increases related to China (Henan) floods and Typhoon Rai in the Treaty Property Reinsurance class, partly offset by favourable development on Professional Lines. There is a material difference between the reported net figure and the gross development derived from the claims triangle, reflecting reinsurance effects and recoverables.",
+      "standardized_narrative": "Using the gross claims development triangle, gross prior-year development for years 2020 and earlier produced a net release of approximately GBP 14.2m (c. -3.35% of opening gross claims outstanding). Management, however, describes a net prior-year reserve strengthening of GBP 9.8m after reinsurance, driven by reserve increases for the China Henan floods and Typhoon Rai in the Treaty Property Reinsurance portfolio, partly offset by releases in Professional Lines.",
       "raw_causal_phrases": [
         "net prior year reserve strengthening of GBP 9.8m (2021: reserve release of GBP 2.1m)",
-        "reserve increases in relation to the China flood losses in Henan and Typhoon Rai",
+        "This strengthening was driven by reserve increases in relation to the China flood losses in Henan and Typhoon Rai",
         "partly offset by reserve releases on our professional lines class following favourable loss experience",
-        "lower levels of frequency and severity in catastrophe and large loss events"
+        "positively impacted by lower levels of frequency and severity in catastrophe and large loss events"
       ],
       "lob_movements": [
         {
-          "line_of_business": "Treaty",
+          "line_of_business": "Reinsurance - Property",
           "direction": "strengthening",
           "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.8
+          "confidence": 1.0
         },
         {
           "line_of_business": "Professional Lines",
           "direction": "release",
           "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.8
+          "confidence": 1.0
         }
       ],
       "gross_premiums_written_gbp_m": 344.3,
@@ -646,11 +667,11 @@
       "gross_premium_page": 27,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "No explicit gross prior-year movement figure was provided in the notes; the Managing Agent reports a net prior year strengthening of GBP 9.8m (net of reinsurance). A gross prior-year movement was calculated from the gross claims development triangle (page 48), yielding a net gross release of GBP 14.204m. The difference between the reported net figure and the triangle-derived gross figure reflects reinsurance recoveries and movements in reinsurers' share. Prior-year movement confidence is moderate (0.8) because the gross movement was derived from the triangle rather than an explicit gross prior-year movement note.",
+      "data_quality_notes": "Gross prior year movement was calculated from the gross claims development triangle (claims development table). Management narrative quotes a net prior year strengthening of GBP 9.8m (net of reinsurance) which differs from the gross triangle-derived net release (~GBP 14.2m); no explicit gross GROSS 'movement in prior years' line item was found. A small portfolio transfer is shown in technical notes which may affect comparability. Figures in the triangle and balance sheet are presented in GBP 000; converted to millions in this output.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
-        "units": "millions",
+        "units": "thousands",
         "page": 48,
         "underwriting_years": [
           2015,
@@ -664,69 +685,59 @@
         ],
         "development_rows": [
           [
-            82.055,
-            69.74,
-            201.0,
-            84.391,
-            84.026,
-            74.959,
-            66.831,
-            72.727
+            82055,
+            69740,
+            201000,
+            84391,
+            84026,
+            74959,
+            66831,
+            72727
           ],
           [
-            118.233,
-            147.736,
-            235.887,
-            171.358,
-            147.01,
-            140.3,
-            179.11,
+            118233,
+            147736,
+            235887,
+            171358,
+            147010,
+            140300,
+            179110,
             null
           ],
           [
-            148.365,
-            154.702,
-            246.648,
-            191.039,
-            151.244,
-            139.398,
-            null,
-            null
-          ],
-          [
-            150.601,
-            157.931,
-            253.451,
-            189.588,
-            142.431,
-            null,
+            148365,
+            154702,
+            246648,
+            191039,
+            151244,
+            139398,
             null,
             null
           ],
           [
-            159.984,
-            152.46,
-            244.661,
-            192.504,
-            null,
+            150601,
+            157931,
+            253451,
+            189588,
+            142431,
             null,
             null,
             null
           ],
           [
-            168.02,
-            149.528,
-            244.433,
-            null,
+            159984,
+            152460,
+            244661,
+            192504,
             null,
             null,
             null,
             null
           ],
           [
-            169.081,
-            143.59,
-            null,
+            168020,
+            149528,
+            244433,
             null,
             null,
             null,
@@ -734,7 +745,17 @@
             null
           ],
           [
-            167.842,
+            169081,
+            143590,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            167842,
             null,
             null,
             null,
@@ -747,20 +768,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_2232_2022_llm.pdf",
-      "content_hash": "5d232c1083ced35b292625e6230d43c3ea8e60b17d2af57bba7d20d251419748",
-      "standardized_at": "2026-07-05T12:25:08.773299+00:00",
+      "content_hash": "5fb2dff730818e50354014d01b3af5ba39a8c9471bf3528d2c65d675e78b9c1e",
+      "standardized_at": "2026-09-11T11:51:46.168108+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 20754,
-        "output_tokens": 7461,
-        "total_tokens": 28215,
-        "cost_usd": 0.02011
+        "input_tokens": 21514,
+        "output_tokens": 8867,
+        "total_tokens": 30381,
+        "cost_usd": 0.023113
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -14.204,
+        "model_value": -14.204,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 51,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2015,
           2016,
@@ -852,6 +885,16 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "End of underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later",
+          "Seven years later"
         ],
         "source_page": 51,
         "entity": 2232
@@ -1016,12 +1059,12 @@
       }
     }
   },
-  "total_cost_usd": 0.028601,
-  "total_tokens": 47189,
+  "total_cost_usd": 0.032123,
+  "total_tokens": 49519,
   "validation": {
     "passed": true,
-    "total_discrepancies": 19,
-    "within_tolerance": 19,
+    "total_discrepancies": 15,
+    "within_tolerance": 15,
     "hard_failures": 0,
     "hard_failure_details": []
   }

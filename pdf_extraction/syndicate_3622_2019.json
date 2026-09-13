@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T11:11:28.368333+00:00",
+  "extraction_timestamp": "2026-09-13T03:58:48.678868+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -13,8 +15,8 @@
       "opening_reserves_gbp_m": 12.878,
       "opening_reserves_page": 3,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": null,
-      "prior_year_development_pct": null,
+      "prior_year_development_gbp_m": 1.1,
+      "prior_year_development_pct": 8.54,
       "direction": "strengthening",
       "prior_year_movement_page": 1,
       "prior_year_movement_confidence": 0.5,
@@ -26,11 +28,32 @@
       "specific_years_affected": [
         2018
       ],
-      "prior_year_events": [],
-      "named_events": [],
-      "standardized_narrative": "The report indicates that the 2018 year of account is forecast to close with a loss on capacity of 14.0% due to an adverse underwriting event, suggesting a strengthening of reserves for that prior year. However, a specific monetary value for the overall prior year reserve development across all lines of business is not quantified in the report.",
+      "prior_year_events": [
+        {
+          "event_name": "Adverse underwriting event",
+          "event_year": 2018,
+          "impact_description": "loss on capacity of 14.0%, predominantly due to the impact of an adverse underwriting event. This event has been reserved for on a prudent basis.",
+          "lobs_affected": [],
+          "amount_gbp_m": null,
+          "confidence": 0.5
+        }
+      ],
+      "named_events": [
+        {
+          "event_name": "Adverse underwriting event",
+          "event_year": 2018,
+          "event_type": "other",
+          "net_loss_gbp_m": null,
+          "loss_description": "loss on capacity of 14.0%, predominantly due to the impact of an adverse underwriting event. This event has been reserved for on a prudent basis.",
+          "lobs_affected": [],
+          "page": 1,
+          "confidence": 0.5
+        }
+      ],
+      "standardized_narrative": "The 2019 report indicates adverse development for the 2018 year of account, which is forecast to close with a 14.0% loss on capacity. This strengthening is attributed to an unspecified adverse underwriting event, which has been reserved for on a prudent basis. No specific monetary amount for the prior year reserve movement was quantified in the report.",
       "raw_causal_phrases": [
-        "adverse underwriting event"
+        "predominantly due to the impact of an adverse underwriting event",
+        "reserved for on a prudent basis"
       ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 25.5252,
@@ -47,14 +70,337 @@
         }
       ],
       "gross_premium_page": 8,
-      "gross_premium_confidence": 1.0,
+      "gross_premium_confidence": 0.8,
       "currency": "GBP",
-      "data_quality_notes": "The report does not explicitly state a gross monetary figure for prior year reserve development. The claims development tables provided are either loss ratio percentages or only show the latest cumulative estimate, making it impossible to calculate prior year development using the diagonal method. The narrative mentions an adverse underwriting event impacting the 2018 year of account, but without a specific amount for the reserve movement.",
+      "data_quality_notes": "Gross premium mix derived from divisional summary as no regulatory segmental analysis note was provided. No specific monetary amount for prior year development was found in the report.",
       "_claims_triangle": {
-        "type": "loss_ratio",
+        "type": "none",
+        "currency": null,
+        "units": null,
+        "page": null,
+        "underwriting_years": [],
+        "development_rows": []
+      },
+      "source_type": "syndicate",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_3622_2019_llm.pdf",
+      "content_hash": "d65f355dd3c3f62aba501b5a81396d6ec250519014df993c2a14810a2b4719d1",
+      "standardized_at": "2026-09-11T12:28:25.307138+00:00",
+      "standardization_model": "gemini-2.5-flash",
+      "_extraction_meta": {
+        "model": "gemini-2.5-flash",
+        "input_tokens": 9893,
+        "output_tokens": 907,
+        "total_tokens": 17000,
+        "cost_usd": 0.005235
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 1.1,
+        "triangle_type": "gross",
+        "triangle_units": "millions",
+        "triangle_units_evidence": null,
+        "triangle_source_page": null,
+        "note": "filled a blank model value"
+      },
+      "_rag_triangle": {
+        "type": "gross",
+        "currency": "GBP",
+        "units": "millions",
+        "underwriting_years": [
+          2009,
+          2010,
+          2011,
+          2012,
+          2013,
+          2014,
+          2015,
+          2016,
+          2017,
+          2018,
+          2019
+        ],
+        "development_rows": [
+          [
+            null,
+            50.9,
+            59.3,
+            62.0,
+            63.0,
+            64.9,
+            65.1,
+            89.4,
+            61.5,
+            76.5,
+            55.5
+          ],
+          [
+            null,
+            49.9,
+            59.6,
+            62.8,
+            68.5,
+            63.8,
+            62.3,
+            87.3,
+            57.9,
+            73.4,
+            null
+          ],
+          [
+            null,
+            47.8,
+            63.5,
+            58.7,
+            64.2,
+            52.8,
+            63.8,
+            60.4,
+            54.9,
+            null,
+            null
+          ],
+          [
+            null,
+            45.8,
+            61.2,
+            54.9,
+            59.1,
+            51.4,
+            63.2,
+            65.5,
+            null,
+            null,
+            null
+          ],
+          [
+            null,
+            46.2,
+            60.1,
+            53.2,
+            56.8,
+            51.1,
+            62.3,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            null,
+            46.3,
+            60.1,
+            52.9,
+            56.8,
+            50.8,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            null,
+            46.4,
+            60.1,
+            52.9,
+            56.8,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            null,
+            46.4,
+            60.1,
+            53.2,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            null,
+            46.4,
+            60.0,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            null,
+            46.4,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ]
+        ]
+      },
+      "_adobe_provisions": {
+        "opening_provenance": {
+          "raw_value": 12877.6,
+          "unit_multiplier": 0.001,
+          "unit_source": "header",
+          "value_m": 12.878,
+          "page": 35,
+          "entity": 3622,
+          "backend": "azure",
+          "table_kind": "provisions_movement"
+        },
+        "opening_gross_claims_outstanding": 12.878
+      },
+      "_entity_binding": {
+        "requested_syndicate": 3622,
+        "entity_pages": {
+          "none": [
+            0
+          ],
+          "3622": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37
+          ]
+        },
+        "foreign_tables_skipped": 0,
+        "foreign_pages": [],
+        "underwriting_year_pages": [],
+        "underwriting_year_tables_skipped": 0,
+        "document_unit_hint": 0.001
+      },
+      "opening_reserves_provenance": {
+        "raw_value": 12877.6,
+        "unit_multiplier": 0.001,
+        "unit_source": "header",
+        "value_m": 12.878,
+        "page": 35,
+        "entity": 3622,
+        "backend": "azure",
+        "table_kind": "provisions_movement",
+        "source": "azure_table",
+        "applied_value_m": 12.878,
+        "unit_resolution": "header"
+      }
+    },
+    "gpt-5-mini": {
+      "syndicate": 3622,
+      "year": 2019,
+      "opening_reserves_gbp_m": 12.878,
+      "opening_reserves_page": 19,
+      "opening_reserves_confidence": 1.0,
+      "prior_year_development_gbp_m": 1.1,
+      "prior_year_development_pct": 8.54,
+      "direction": "strengthening",
+      "prior_year_movement_page": 35,
+      "prior_year_movement_confidence": 0.0,
+      "exact_reserve_text": "",
+      "primary_causes": [
+        "Man-made catastrophe / large losses",
+        "Adverse claims development"
+      ],
+      "specific_events": [],
+      "specific_years_affected": [
+        2018
+      ],
+      "prior_year_events": [
+        {
+          "event_name": "adverse underwriting event",
+          "event_year": 2018,
+          "impact_description": "Described as predominantly causing the 2018 year of account to forecast a closing loss; the event has been reserved for on a prudent basis.",
+          "lobs_affected": [
+            "Accident & Health"
+          ],
+          "amount_gbp_m": null,
+          "confidence": 0.3
+        }
+      ],
+      "named_events": [],
+      "standardized_narrative": "Opening gross claims outstanding at 1 January 2019 was GBP 12.878m. The syndicate's gross claims outstanding increased to GBP 16.328m at 31 December 2019. The report notes the 2018 year of account is forecasting to close with a loss (14.0%), driven predominantly by an adverse underwriting event that has been reserved for prudently. The document does not provide an explicit gross prior-year (2017 & earlier) re-estimation amount, so no single quantified prior-year movement can be extracted from the available notes.",
+      "raw_causal_phrases": [
+        "adverse underwriting event",
+        "has been reserved for on a prudent basis",
+        "The 2018 year of account currently forecasts closing with a loss on capacity of 14.0%"
+      ],
+      "lob_movements": [
+        {
+          "line_of_business": "Accident & Health",
+          "direction": "strengthening",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.3
+        }
+      ],
+      "gross_premiums_written_gbp_m": 25.5252,
+      "gross_premium_mix": [
+        {
+          "line_of_business": "Life insurance",
+          "amount_gbp_m": 21.178916,
+          "percentage_of_total": 83
+        },
+        {
+          "line_of_business": "Life reinsurance",
+          "amount_gbp_m": 4.346284,
+          "percentage_of_total": 17
+        }
+      ],
+      "gross_premium_page": 25,
+      "gross_premium_confidence": 0.9,
+      "currency": "GBP",
+      "data_quality_notes": "Opening reserves taken from Balance Sheet (claims outstanding, comparative 2018 column). No explicit gross prior-year movement (re-estimation of years <=2017) is stated in the notes. A gross claims development table (percentages) and a per-underwriting-year breakdown of current gross claims liabilities (3622 share) is present, but the report does not print the prior-diagonal absolute cumulative values needed to calculate a definitive gross prior-year movement; therefore prior_year_development_gbp_m is left null. Gross premium mix uses the managing agent's divisional summary (Life insurance / Life reinsurance) because no regulatory segmental analysis was found in the provided pages.",
+      "_claims_triangle": {
+        "type": "gross",
         "currency": "GBP",
         "units": "percentage",
-        "page": 12,
+        "page": 35,
         "underwriting_years": [
           2009,
           2010,
@@ -203,173 +549,31 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_3622_2019_llm.pdf",
-      "content_hash": "de11afd663237929bf258e334fb5d89564ed5f17b5cef07212c244ec17b63f28",
-      "standardized_at": "2026-07-05T15:40:50.557187+00:00",
-      "standardization_model": "gemini-2.5-flash",
+      "content_hash": "d65f355dd3c3f62aba501b5a81396d6ec250519014df993c2a14810a2b4719d1",
+      "standardized_at": "2026-09-11T12:30:44.869607+00:00",
+      "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
-        "model": "gemini-2.5-flash",
-        "input_tokens": 9089,
-        "output_tokens": 1443,
-        "total_tokens": 15795,
-        "cost_usd": 0.006334
+        "model": "gpt-5-mini",
+        "input_tokens": 16527,
+        "output_tokens": 7761,
+        "total_tokens": 24288,
+        "cost_usd": 0.019654
       },
-      "_adobe_provisions": {
-        "opening_provenance": {
-          "raw_value": 12877.6,
-          "unit_multiplier": 0.001,
-          "unit_source": "header",
-          "value_m": 12.878,
-          "page": 35,
-          "entity": 3622,
-          "backend": "azure",
-          "table_kind": "provisions_movement"
-        },
-        "opening_gross_claims_outstanding": 12.878
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 1.1,
+        "triangle_type": "gross",
+        "triangle_units": "millions",
+        "triangle_units_evidence": null,
+        "triangle_source_page": null,
+        "note": "filled a blank model value"
       },
-      "_entity_binding": {
-        "requested_syndicate": 3622,
-        "entity_pages": {
-          "none": [
-            0
-          ],
-          "3622": [
-            1,
-            2,
-            3,
-            4,
-            5,
-            6,
-            7,
-            8,
-            9,
-            10,
-            11,
-            12,
-            13,
-            14,
-            15,
-            16,
-            17,
-            18,
-            19,
-            20,
-            21,
-            22,
-            23,
-            24,
-            25,
-            26,
-            27,
-            28,
-            29,
-            30,
-            31,
-            32,
-            33,
-            34,
-            35,
-            36,
-            37
-          ]
-        },
-        "foreign_tables_skipped": 0,
-        "foreign_pages": [],
-        "underwriting_year_pages": [],
-        "underwriting_year_tables_skipped": 0,
-        "document_unit_hint": 0.001
-      },
-      "opening_reserves_provenance": {
-        "raw_value": 12877.6,
-        "unit_multiplier": 0.001,
-        "unit_source": "header",
-        "value_m": 12.878,
-        "page": 35,
-        "entity": 3622,
-        "backend": "azure",
-        "table_kind": "provisions_movement",
-        "source": "azure_table",
-        "applied_value_m": 12.878,
-        "unit_resolution": "header"
-      }
-    },
-    "gpt-5-mini": {
-      "syndicate": 3622,
-      "year": 2019,
-      "opening_reserves_gbp_m": 12.878,
-      "opening_reserves_page": 19,
-      "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": null,
-      "prior_year_development_pct": null,
-      "direction": "mixed",
-      "prior_year_movement_page": 4,
-      "prior_year_movement_confidence": 0.5,
-      "exact_reserve_text": "The 2018 year of account currently forecasts closing with a loss on capacity of 14.0%, which is predominantly due to the impact of an adverse underwriting event. This event has been reserved for on a prudent basis.",
-      "primary_causes": [
-        "Man-made catastrophe / large losses",
-        "Adverse claims development"
-      ],
-      "specific_events": [],
-      "specific_years_affected": [
-        2018
-      ],
-      "prior_year_events": [
-        {
-          "event_name": "Adverse underwriting event (unspecified)",
-          "event_year": 2018,
-          "impact_description": "Adverse underwriting event reserved for on a prudent basis; contributed to a forecast closing loss on the 2018 year of account.",
-          "lobs_affected": [
-            "Accident & Health"
-          ],
-          "amount_gbp_m": null,
-          "confidence": 0.3
-        }
-      ],
-      "named_events": [],
-      "standardized_narrative": "Opening gross claims outstanding at 1 Jan 2019 were GBP 12.878m. The syndicate reports that the 2018 year of account is forecasting a closing loss (14.0%), driven by an adverse underwriting event that has been reserved for prudently. The report does not disclose a single gross quantified prioryear reserve movement for 2019; a gross claims development triangle is present but the report does not provide prior-diagonal amounts to compute an explicit gross prior-year development figure.",
-      "raw_causal_phrases": [
-        "The 2018 year of account currently forecasts closing with a loss on capacity of 14.0%, which is predominantly due to the impact of an adverse underwriting event.",
-        "This event has been reserved for on a prudent basis.",
-        "adverse underwriting event"
-      ],
-      "lob_movements": [
-        {
-          "line_of_business": "Accident & Health",
-          "direction": "strengthening",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.3
-        },
-        {
-          "line_of_business": "Treaty",
-          "direction": "strengthening",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.2
-        }
-      ],
-      "gross_premiums_written_gbp_m": 25.5252,
-      "gross_premium_mix": [
-        {
-          "line_of_business": "Life insurance",
-          "amount_gbp_m": 21.185916,
-          "percentage_of_total": 83
-        },
-        {
-          "line_of_business": "Life reinsurance",
-          "amount_gbp_m": 4.339284,
-          "percentage_of_total": 17
-        }
-      ],
-      "gross_premium_page": 17,
-      "gross_premium_confidence": 0.8,
-      "currency": "GBP",
-      "data_quality_notes": "No explicit gross \"movement in prior year's provision for claims outstanding\" figure was found. The report contains narrative that the 2018 year of account is forecasting a loss driven by an adverse underwriting event, and a gross claims development table is provided, but the triangle does not include prior-diagonal absolute amounts needed to calculate a gross prior-year development per the specified method. Therefore prior_year_development_gbp_m is left null. Where LOB mapping was required, 'Life' business was mapped to nearest available standard LOB 'Accident & Health' for reporting purposes (low confidence).",
-      "_claims_triangle": {
+      "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "millions",
-        "page": 35,
         "underwriting_years": [
+          2009,
           2010,
           2011,
           2012,
@@ -381,19 +585,138 @@
           2018,
           2019
         ],
-        "development_rows": []
-      },
-      "source_type": "syndicate",
-      "source_file": "pdf_extraction\\llm_slim\\syndicate_3622_2019_llm.pdf",
-      "content_hash": "de11afd663237929bf258e334fb5d89564ed5f17b5cef07212c244ec17b63f28",
-      "standardized_at": "2026-07-05T15:41:45.216769+00:00",
-      "standardization_model": "gpt-5-mini",
-      "_extraction_meta": {
-        "model": "gpt-5-mini",
-        "input_tokens": 15767,
-        "output_tokens": 6173,
-        "total_tokens": 21940,
-        "cost_usd": 0.016288
+        "development_rows": [
+          [
+            null,
+            50.9,
+            59.3,
+            62.0,
+            63.0,
+            64.9,
+            65.1,
+            89.4,
+            61.5,
+            76.5,
+            55.5
+          ],
+          [
+            null,
+            49.9,
+            59.6,
+            62.8,
+            68.5,
+            63.8,
+            62.3,
+            87.3,
+            57.9,
+            73.4,
+            null
+          ],
+          [
+            null,
+            47.8,
+            63.5,
+            58.7,
+            64.2,
+            52.8,
+            63.8,
+            60.4,
+            54.9,
+            null,
+            null
+          ],
+          [
+            null,
+            45.8,
+            61.2,
+            54.9,
+            59.1,
+            51.4,
+            63.2,
+            65.5,
+            null,
+            null,
+            null
+          ],
+          [
+            null,
+            46.2,
+            60.1,
+            53.2,
+            56.8,
+            51.1,
+            62.3,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            null,
+            46.3,
+            60.1,
+            52.9,
+            56.8,
+            50.8,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            null,
+            46.4,
+            60.1,
+            52.9,
+            56.8,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            null,
+            46.4,
+            60.1,
+            53.2,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            null,
+            46.4,
+            60.0,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            null,
+            46.4,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ]
+        ]
       },
       "_adobe_provisions": {
         "opening_provenance": {
@@ -475,20 +798,13 @@
       }
     }
   },
-  "total_cost_usd": 0.022622,
-  "total_tokens": 37735,
+  "total_cost_usd": 0.024889,
+  "total_tokens": 41288,
   "validation": {
-    "passed": false,
-    "total_discrepancies": 11,
-    "within_tolerance": 10,
-    "hard_failures": 1,
-    "hard_failure_details": [
-      {
-        "field": "direction",
-        "type": "value_mismatch",
-        "gemini-2.5-flash": "strengthening",
-        "gpt-5-mini": "mixed"
-      }
-    ]
+    "passed": true,
+    "total_discrepancies": 18,
+    "within_tolerance": 18,
+    "hard_failures": 0,
+    "hard_failure_details": []
   }
 }

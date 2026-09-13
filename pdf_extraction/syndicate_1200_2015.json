@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T09:13:25.755984+00:00",
+  "extraction_timestamp": "2026-09-13T04:12:17.791266+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -11,25 +13,64 @@
       "syndicate": 1200,
       "year": 2015,
       "opening_reserves_gbp_m": 430.0,
-      "opening_reserves_page": 17,
+      "opening_reserves_page": 5,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": 6.6,
-      "prior_year_development_pct": 1.53,
+      "prior_year_development_gbp_m": 0.5,
+      "prior_year_development_pct": 0.12,
       "direction": "strengthening",
-      "prior_year_movement_page": 39,
+      "prior_year_movement_page": 16,
       "prior_year_movement_confidence": 0.8,
       "exact_reserve_text": "In 2015, there has been an overall improvement of GBP 16.4m (2014: improvement of GBP 18.0m).",
-      "primary_causes": [],
+      "primary_causes": [
+        "Favorable claims development",
+        "IBNR recalibration"
+      ],
       "specific_events": [],
       "specific_years_affected": [
         2011,
         2012,
         2013
       ],
-      "prior_year_events": [],
+      "prior_year_events": [
+        {
+          "event_name": "Large loss experience",
+          "event_year": 2014,
+          "impact_description": "Impacted by large loss experience, mainly attributable to the Marine & Energy division, the Property division, in particular the Direct & Facultative business, which experienced higher than anticipated large losses, leading to strengthened reserving position.",
+          "lobs_affected": [
+            "Marine",
+            "Energy",
+            "Property"
+          ],
+          "amount_gbp_m": null,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Market losses",
+          "event_year": 2014,
+          "impact_description": "Aviation book impacted by market losses during the calendar year, leading to strengthened reserving position.",
+          "lobs_affected": [
+            "Aviation"
+          ],
+          "amount_gbp_m": null,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Positive developments in North American Binders book",
+          "event_year": 2014,
+          "impact_description": "Offsetting positive developments in the North American Binders book.",
+          "lobs_affected": [
+            "Property"
+          ],
+          "amount_gbp_m": null,
+          "confidence": 0.8
+        }
+      ],
       "named_events": [],
-      "standardized_narrative": "The syndicate experienced a gross prior year reserve release of GBP 7.9 million, primarily driven by favorable development on the 2011 underwriting year. No specific causes were identified for this release. The overall claims provision showed an improvement of GBP 16.4 million in 2015.",
-      "raw_causal_phrases": [],
+      "standardized_narrative": "The syndicate experienced a gross prior year reserve release of GBP 10.8 million in 2015, primarily due to favorable claims development and IBNR recalibration for the 2011, 2012, and 2013 underwriting years. The 2014 year of account, while not included in the prior year development calculation for 2015, saw mixed developments with large losses in Marine & Energy and Property, and market losses in Aviation, partially offset by positive developments in the North American Binders book, leading to a strengthened reserving position for that year.",
+      "raw_causal_phrases": [
+        "As claims develop, and the ultimate cost of claims becomes more certain, the relative level of margin maintained should decrease.",
+        "In 2015, there has been an overall improvement of GBP 16.4m"
+      ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 168.5,
       "gross_premium_mix": [
@@ -54,15 +95,15 @@
           "percentage_of_total": 34.1
         }
       ],
-      "gross_premium_page": 23,
+      "gross_premium_page": 10,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The prior year development amount of -7.9m is calculated from the gross claims development triangle (page 39) for underwriting years 2011-2013. Narrative text on page 39 states 'an overall improvement of GBP 16.4m' in claims provisions, which is not explicitly stated as gross or net and differs from the triangle calculation. [RAG OVERRIDE: Model said PYD=-7.9, RAG triangle computed 6.6. Using RAG value.]",
+      "data_quality_notes": "The prior year development amount is calculated from the gross claims development triangle. The narrative text mentions an 'overall improvement of GBP 16.4m', which is likely a net figure and differs from the gross calculation. [RAG OVERRIDE: Model said PYD=-10.8, RAG triangle computed 0.5. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "millions",
-        "page": 39,
+        "page": 16,
         "underwriting_years": [
           2011,
           2012,
@@ -107,7 +148,7 @@
             null
           ],
           [
-            240.0,
+            null,
             null,
             null,
             null,
@@ -116,22 +157,35 @@
         ]
       },
       "source_type": "syndicate",
-      "source_file": "syndicate_reports\\pdfs\\syndicate_1200_2015.pdf",
-      "content_hash": "a05e007201d473671adabb514642a7c42b781ce2fd27fd14f512cce2c00fd4a0",
-      "standardized_at": "2026-03-16T09:57:30.314241+00:00",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_1200_2015_llm.pdf",
+      "content_hash": "54e5a31501454680636a651f7e58b14b449f651301c37903628904aa2c36b916",
+      "standardized_at": "2026-09-11T10:18:00.914880+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 24718,
-        "output_tokens": 1126,
-        "total_tokens": 34081,
-        "cost_usd": 0.01023
+        "input_tokens": 14795,
+        "output_tokens": 1557,
+        "total_tokens": 22453,
+        "cost_usd": 0.008331
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 0.5,
+        "model_value": -10.8,
+        "triangle_type": "gross",
+        "triangle_units": "millions",
+        "triangle_units_evidence": "default",
+        "triangle_source_page": 40,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "millions",
+        "units_evidence": "default",
+        "cell_binding": "header",
         "underwriting_years": [
+          2010,
           2011,
           2012,
           2013,
@@ -141,6 +195,7 @@
         "development_rows": [
           [
             83.2,
+            105.6,
             103.8,
             92.2,
             86.5,
@@ -148,6 +203,7 @@
           ],
           [
             237.9,
+            190.0,
             197.7,
             190.2,
             197.6,
@@ -155,6 +211,7 @@
           ],
           [
             257.8,
+            200.4,
             220.1,
             205.6,
             null,
@@ -162,6 +219,7 @@
           ],
           [
             253.8,
+            191.1,
             219.2,
             null,
             null,
@@ -169,6 +227,7 @@
           ],
           [
             247.9,
+            185.0,
             null,
             null,
             null,
@@ -179,9 +238,23 @@
             null,
             null,
             null,
+            null,
             null
           ]
         ],
+        "row_labels": [
+          "At end of underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later"
+        ],
+        "aggregated_cohort": {
+          "anchor": 2010,
+          "label": "Before 2011 Em",
+          "column": 1
+        },
         "source_page": 40,
         "entity": 1200
       },
@@ -240,6 +313,13 @@
         "unit_source": "header",
         "source_page": 24,
         "entity": 1200,
+        "movement_semantics": {
+          "row_label": "Claims incurred in prior underwriting years",
+          "row_index": 4,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": false,
+          "column_index": 1
+        },
         "gross_prior_year_claims": 112.0
       },
       "_entity_binding": {
@@ -359,131 +439,78 @@
       "syndicate": 1200,
       "year": 2015,
       "opening_reserves_gbp_m": 430.0,
-      "opening_reserves_page": 24,
+      "opening_reserves_page": 12,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": 6.6,
-      "prior_year_development_pct": 1.53,
+      "prior_year_development_gbp_m": 0.5,
+      "prior_year_development_pct": 0.12,
       "direction": "strengthening",
-      "prior_year_movement_page": 40,
+      "prior_year_movement_page": 35,
       "prior_year_movement_confidence": 0.8,
       "exact_reserve_text": "In 2015, there has been an overall improvement of GBP 16.4m (2014: improvement of GBP 18.0m).",
       "primary_causes": [
-        "Favorable claims development"
+        "Man-made catastrophe / large losses",
+        "Favorable claims development",
+        "Large loss development",
+        "Reinsurance recoveries"
       ],
       "specific_events": [],
       "specific_years_affected": [],
       "prior_year_events": [],
-      "named_events": [
-        {
-          "event_name": "Miami windstorm",
-          "event_year": null,
-          "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": null,
-          "loss_description": "Listed as an RDS (Realistic Disaster Scenario) used to illustrate potential catastrophe exposure",
-          "lobs_affected": [
-            "Property"
-          ],
-          "page": 38,
-          "confidence": 0.5
-        },
-        {
-          "event_name": "North East US windstorm",
-          "event_year": null,
-          "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": null,
-          "loss_description": "Listed as an RDS used to illustrate potential catastrophe exposure",
-          "lobs_affected": [
-            "Property"
-          ],
-          "page": 38,
-          "confidence": 0.5
-        },
-        {
-          "event_name": "Gulf of Mexico windstorm",
-          "event_year": null,
-          "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": null,
-          "loss_description": "Listed as an RDS used to illustrate potential catastrophe exposure",
-          "lobs_affected": [
-            "Property",
-            "Energy"
-          ],
-          "page": 38,
-          "confidence": 0.5
-        },
-        {
-          "event_name": "Los Angeles earthquake",
-          "event_year": null,
-          "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": null,
-          "loss_description": "Listed as an RDS used to illustrate potential catastrophe exposure",
-          "lobs_affected": [
-            "Property"
-          ],
-          "page": 38,
-          "confidence": 0.5
-        },
-        {
-          "event_name": "San Francisco earthquake",
-          "event_year": null,
-          "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": null,
-          "loss_description": "Listed as an RDS used to illustrate potential catastrophe exposure",
-          "lobs_affected": [
-            "Property"
-          ],
-          "page": 38,
-          "confidence": 0.5
-        },
-        {
-          "event_name": "Japanese earthquake",
-          "event_year": null,
-          "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": null,
-          "loss_description": "Listed as an RDS used to illustrate potential catastrophe exposure",
-          "lobs_affected": [
-            "Property"
-          ],
-          "page": 38,
-          "confidence": 0.5
-        }
-      ],
-      "standardized_narrative": "At 1 January 2015 gross claims outstanding were GBP 430.0m. The claims development triangle (gross) shows no material aggregate movement on prior underwriting years (gross prioryear development calculated from the triangle = GBP 0.0m). The managing agent notes an overall improvement of GBP 16.4m in 2015 (this figure is presented in narrative and is likely on a net/reinsurance basis). Key business lines called out in the report for large loss activity during the year include Aviation and Energy (adverse large losses) while other areas saw favourable developments, resulting in a net benign prior year movement on a gross triangle basis. The result is therefore broadly flat on a gross prior-year basis but shows favorable net development after reinsurance.",
+      "named_events": [],
+      "standardized_narrative": "Using the syndicate's gross claims development table, prior-year development (excluding the two most recent underwriting years) shows a small net adverse movement of approximately GBP 8.4m (c.1.95% of opening gross reserves). This reflects adverse development in the 2013 underwriting year partially offset by favourable development in 2011 and 2012. The managing agent's narrative also notes overall favourable development in 2015 on a different basis (an improvement figure quoted as GBP 16.4m, likely net of reinsurance or measured on a different aggregation). Key drivers called out in the report include large loss experience in Marine & Energy and Property (Direct & Facultative) and offsetting favourable development in North American binder business and Aviation.",
       "raw_causal_phrases": [
-        "Syndicate's results were impacted by large loss activity in Aviation and Energy lines.",
-        "Property division, in particular the Direct & Facultative business, has experienced higher than anticipated large losses",
-        "With another benign catastrophe year in 2015",
         "In 2015, there has been an overall improvement of GBP 16.4m (2014: improvement of GBP 18.0m).",
-        "continued positive developments in the North American Binders book"
+        "The 2014 year of account, whilst another benign year for catastrophe events, is impacted by large loss experience. This is mainly attributable to the Marine & Energy division, the Property division, in particular the Direct & Facultative business, has experienced higher than anticipated large losses which is partly offset by continued positive developments in the North American Binders book and the Aviation book, which was impacted by market losses during the calendar year, and subsequently we have strengthened the reserving position in this account."
       ],
       "lob_movements": [
         {
-          "line_of_business": "Aviation",
-          "direction": "strengthening",
-          "amount_gbp_m": null,
+          "line_of_business": "Accident and health",
+          "direction": "release",
+          "amount_gbp_m": -0.9,
           "percentage": null,
-          "confidence": 0.5
+          "confidence": 0.9
         },
         {
-          "line_of_business": "Energy",
-          "direction": "strengthening",
-          "amount_gbp_m": null,
+          "line_of_business": "Motor (third party liability)",
+          "direction": "release",
+          "amount_gbp_m": -0.2,
           "percentage": null,
-          "confidence": 0.5
+          "confidence": 0.9
         },
         {
-          "line_of_business": "Property",
-          "direction": "strengthening",
-          "amount_gbp_m": null,
+          "line_of_business": "Motor (other classes)",
+          "direction": "release",
+          "amount_gbp_m": -0.4,
           "percentage": null,
-          "confidence": 0.5
+          "confidence": 0.9
         },
         {
-          "line_of_business": "Accident & Health",
-          "direction": "flat",
-          "amount_gbp_m": null,
+          "line_of_business": "Fire and other damage to property",
+          "direction": "strengthening",
+          "amount_gbp_m": 5.0,
           "percentage": null,
-          "confidence": 0.3
+          "confidence": 0.9
+        },
+        {
+          "line_of_business": "Third-party liability",
+          "direction": "strengthening",
+          "amount_gbp_m": 3.0,
+          "percentage": null,
+          "confidence": 0.9
+        },
+        {
+          "line_of_business": "Miscellaneous",
+          "direction": "release",
+          "amount_gbp_m": -9.5,
+          "percentage": null,
+          "confidence": 0.9
+        },
+        {
+          "line_of_business": "Reinsurance acceptance",
+          "direction": "strengthening",
+          "amount_gbp_m": 23.6,
+          "percentage": null,
+          "confidence": 0.9
         }
       ],
       "gross_premiums_written_gbp_m": 168.5,
@@ -509,15 +536,15 @@
           "percentage_of_total": 34.1
         }
       ],
-      "gross_premium_page": 16,
+      "gross_premium_page": 18,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Gross prioryear development derived from the published gross claims development triangle (current vs previous diagonal) yields an aggregate gross PYD of GBP 0.0m (flat). The report narrative cites an overall improvement of GBP 16.4m for 2015, which appears to be a net (after reinsurance) figure. The presence of aggregated 'Before 2011' column in the triangle and RITC-related items for closed years complicate direct gross PYD interpretation. The triangle in the report is ragged (different development lengths per year); alignment was inferred from the published rows. Use caution: the narrative net improvement (16.4m) is likely net of reinsurance and therefore not directly comparable to the gross triangle movement. [RAG OVERRIDE: Model said PYD=0.0, RAG triangle computed 6.6. Using RAG value.]",
+      "data_quality_notes": "Prior-year development was calculated from the gross claims development triangle (gross) excluding the 'Before 2011' aggregate column per instructions. The managing agent narrative reports an 'overall improvement of GBP 16.4m' which appears to be a different (likely net of reinsurance or alternative) measure and therefore does not match the gross triangle-derived PYD. There is no explicit labelled 'Movement in prior year's provision' gross column; triangle is used as primary gross source. Some table rows aggregate older years ('Before 2011') and were excluded from the triangle calculation as required. [RAG OVERRIDE: Model said PYD=8.4, RAG triangle computed 0.5. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "millions",
-        "page": 40,
+        "page": 35,
         "underwriting_years": [
           2011,
           2012,
@@ -562,7 +589,7 @@
             null
           ],
           [
-            240.0,
+            null,
             null,
             null,
             null,
@@ -571,22 +598,35 @@
         ]
       },
       "source_type": "syndicate",
-      "source_file": "syndicate_reports\\pdfs\\syndicate_1200_2015.pdf",
-      "content_hash": "a05e007201d473671adabb514642a7c42b781ce2fd27fd14f512cce2c00fd4a0",
-      "standardized_at": "2026-03-16T10:00:39.780164+00:00",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_1200_2015_llm.pdf",
+      "content_hash": "54e5a31501454680636a651f7e58b14b449f651301c37903628904aa2c36b916",
+      "standardized_at": "2026-09-11T10:21:02.154330+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 95637,
-        "output_tokens": 8930,
-        "total_tokens": 104567,
-        "cost_usd": 0.041769
+        "input_tokens": 47057,
+        "output_tokens": 9081,
+        "total_tokens": 56138,
+        "cost_usd": 0.029926
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 0.5,
+        "model_value": 8.4,
+        "triangle_type": "gross",
+        "triangle_units": "millions",
+        "triangle_units_evidence": "default",
+        "triangle_source_page": 40,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "millions",
+        "units_evidence": "default",
+        "cell_binding": "header",
         "underwriting_years": [
+          2010,
           2011,
           2012,
           2013,
@@ -596,6 +636,7 @@
         "development_rows": [
           [
             83.2,
+            105.6,
             103.8,
             92.2,
             86.5,
@@ -603,6 +644,7 @@
           ],
           [
             237.9,
+            190.0,
             197.7,
             190.2,
             197.6,
@@ -610,6 +652,7 @@
           ],
           [
             257.8,
+            200.4,
             220.1,
             205.6,
             null,
@@ -617,6 +660,7 @@
           ],
           [
             253.8,
+            191.1,
             219.2,
             null,
             null,
@@ -624,6 +668,7 @@
           ],
           [
             247.9,
+            185.0,
             null,
             null,
             null,
@@ -634,9 +679,23 @@
             null,
             null,
             null,
+            null,
             null
           ]
         ],
+        "row_labels": [
+          "At end of underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later"
+        ],
+        "aggregated_cohort": {
+          "anchor": 2010,
+          "label": "Before 2011 Em",
+          "column": 1
+        },
         "source_page": 40,
         "entity": 1200
       },
@@ -695,6 +754,13 @@
         "unit_source": "header",
         "source_page": 24,
         "entity": 1200,
+        "movement_semantics": {
+          "row_label": "Claims incurred in prior underwriting years",
+          "row_index": 4,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": false,
+          "column_index": 1
+        },
         "gross_prior_year_claims": 112.0
       },
       "_entity_binding": {
@@ -811,12 +877,12 @@
       }
     }
   },
-  "total_cost_usd": 0.051999,
-  "total_tokens": 138648,
+  "total_cost_usd": 0.038257,
+  "total_tokens": 78591,
   "validation": {
     "passed": true,
-    "total_discrepancies": 15,
-    "within_tolerance": 15,
+    "total_discrepancies": 24,
+    "within_tolerance": 24,
     "hard_failures": 0,
     "hard_failure_details": []
   }

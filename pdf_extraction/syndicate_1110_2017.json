@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T09:06:08.543500+00:00",
+  "extraction_timestamp": "2026-09-13T04:03:39.299150+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -11,26 +13,27 @@
       "syndicate": 1110,
       "year": 2017,
       "opening_reserves_gbp_m": 275.5,
-      "opening_reserves_page": 36,
+      "opening_reserves_page": 4,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": -1.845,
       "prior_year_development_pct": -0.67,
       "direction": "release",
-      "prior_year_movement_page": 37,
+      "prior_year_movement_page": 15,
       "prior_year_movement_confidence": 1.0,
       "exact_reserve_text": "A surplus run-off amount of GBP 18.1m was experienced in 2017 (2016: GBP 8.6m deficit). This was made up of a surplus on the prior year claims provisions of GBP 22.5m on direct business (2016: GBP 14.1m deficit) and a GBP 4.4m deficit on reinsurance accepted business (2016: GBP 5.5m surplus).",
       "primary_causes": [
         "Favorable claims development",
-        "Adverse claims development"
+        "Reinsurance recoveries"
       ],
       "specific_events": [],
       "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "The syndicate experienced a gross prior year reserve release of GBP 22.5 million in 2017, primarily due to a surplus on direct business claims provisions. This was partially offset by a GBP 4.4 million deficit on reinsurance accepted business, resulting in a net run-off surplus of GBP 18.1 million.",
+      "standardized_narrative": "The syndicate experienced a gross prior year reserve release of GBP 18.1 million in 2017, representing a 6.6% release against opening gross claims outstanding. This favorable development was primarily driven by a GBP 22.5 million surplus on direct business, partially offset by a GBP 4.4 million deficit on reinsurance accepted business. No specific causal events or affected prior years were detailed for this movement, which is described as a general \"surplus run-off amount\".",
       "raw_causal_phrases": [
-        "surplus on the prior year claims provisions of GBP 22.5m on direct business",
-        "GBP 4.4m deficit on reinsurance accepted business"
+        "A surplus run-off amount of GBP 18.1m was experienced in 2017",
+        "made up of a surplus on the prior year claims provisions of GBP 22.5m on direct business",
+        "a GBP 4.4m deficit on reinsurance accepted business"
       ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 71.8,
@@ -81,15 +84,15 @@
           "percentage_of_total": 0.0
         }
       ],
-      "gross_premium_page": 30,
+      "gross_premium_page": 12,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The claims development triangle on page 25 does not explicitly show prior year development for the current reporting period in a way that can be directly summed for all prior years. The narrative on page 37 provides a net run-off figure and a gross direct business run-off figure, which is used for prior_year_development_gbp_m. The gross premium mix includes negative premiums for some lines of business, which is unusual but taken directly from the source. [RAG OVERRIDE: Model said PYD=-22.5, RAG triangle computed -1.845. Using RAG value.]",
+      "data_quality_notes": "LOB breakdown for reserve movements is not available at a granular level, only for \"direct business\" and \"reinsurance accepted business\". [RAG OVERRIDE: Model said PYD=-18.1, RAG triangle computed -1.845. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
-        "page": 25,
+        "page": 8,
         "underwriting_years": [
           2014,
           2015,
@@ -124,21 +127,33 @@
         ]
       },
       "source_type": "syndicate",
-      "source_file": "syndicate_reports\\pdfs\\syndicate_1110_2017.pdf",
-      "content_hash": "1fb0f900ea0bdf01375f9d1daa3cac7ac41a83707d92af15f36cc82874497b1a",
-      "standardized_at": "2026-03-16T06:23:25.224739+00:00",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_1110_2017_llm.pdf",
+      "content_hash": "0187a800fb994f4be8f38787f3cfbbe2adbf145c16948617c542db7904cb6c58",
+      "standardized_at": "2026-09-11T10:11:37.376799+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 15688,
-        "output_tokens": 1180,
-        "total_tokens": 23950,
-        "cost_usd": 0.007656
+        "input_tokens": 10667,
+        "output_tokens": 1171,
+        "total_tokens": 18025,
+        "cost_usd": 0.006128
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -1.845,
+        "model_value": -18.1,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 25,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2014,
           2015,
@@ -170,6 +185,12 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "After one year",
+          "After two years",
+          "After three years",
+          "After four years"
         ],
         "source_page": 25,
         "entity": 1110
@@ -324,40 +345,42 @@
       "syndicate": 1110,
       "year": 2017,
       "opening_reserves_gbp_m": 275.5,
-      "opening_reserves_page": 36,
+      "opening_reserves_page": 14,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": -1.845,
       "prior_year_development_pct": -0.67,
       "direction": "release",
-      "prior_year_movement_page": 36,
+      "prior_year_movement_page": 35,
       "prior_year_movement_confidence": 1.0,
       "exact_reserve_text": "A surplus run-off amount of GBP 18.1m was experienced in 2017 (2016: GBP 8.6m deficit). This was made up of a surplus on the prior year claims provisions of GBP 22.5m on direct business (2016: GBP 14.1m deficit) and a GBP 4.4m deficit on reinsurance accepted business (2016: GBP 5.5m surplus).",
       "primary_causes": [
-        "Favorable claims development"
+        "Favorable claims development",
+        "Reinsurance recoveries"
       ],
       "specific_events": [],
       "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "The syndicate experienced a net prior-year reserve release in 2017 of GBP 18.1m (approximately 6.6% of opening gross claims reserves). This net release comprised a GBP 22.5m favourable movement on prior-year direct business reserves partially offset by a GBP 4.4m adverse movement on reinsurance-accepted (treaty) business.",
+      "standardized_narrative": "The syndicate experienced a net surplus run-off in 2017 of GBP 18.1m (a release of reserves). This comprised a GBP 22.5m favourable movement on prior year direct business claims provisions partially offset by a GBP 4.4m adverse movement on reinsurance accepted business, resulting in an overall release of approximately 6.6% of the opening gross claims outstanding balance (opening gross claims outstanding GBP 275.5m).",
       "raw_causal_phrases": [
         "A surplus run-off amount of GBP 18.1m was experienced in 2017 (2016: GBP 8.6m deficit).",
-        "This was made up of a surplus on the prior year claims provisions of GBP 22.5m on direct business (2016: GBP 14.1m deficit) and a GBP 4.4m deficit on reinsurance accepted business (2016: GBP 5.5m surplus)."
+        "a surplus on the prior year claims provisions of GBP 22.5m on direct business (2016: GBP 14.1m deficit)",
+        "a GBP 4.4m deficit on reinsurance accepted business (2016: GBP 5.5m surplus)"
       ],
       "lob_movements": [
-        {
-          "line_of_business": "Aggregate",
-          "direction": "release",
-          "amount_gbp_m": -22.5,
-          "percentage": null,
-          "confidence": 1.0
-        },
         {
           "line_of_business": "Treaty",
           "direction": "strengthening",
           "amount_gbp_m": 4.4,
           "percentage": null,
           "confidence": 1.0
+        },
+        {
+          "line_of_business": "Property",
+          "direction": "release",
+          "amount_gbp_m": -22.5,
+          "percentage": null,
+          "confidence": 0.5
         }
       ],
       "gross_premiums_written_gbp_m": 71.8,
@@ -408,10 +431,10 @@
           "percentage_of_total": 0.0
         }
       ],
-      "gross_premium_page": 29,
+      "gross_premium_page": 28,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior year development figure derived from explicit narrative ('surplus run-off amount of GBP 18.1m' and its components). Gross prior-year movement computed as release of GBP 22.5m on direct business offset by GBP 4.4m adverse on reinsurance accepted business (net release GBP 18.1m). Claims development triangle in the report is present but formatted in the PDF such that only the 'As at' row could be unambiguously parsed; triangle formatting ambiguity limits triangulation verification. [RAG OVERRIDE: Model said PYD=-18.1, RAG triangle computed -1.845. Using RAG value.]",
+      "data_quality_notes": "Prior year development is taken from the explicit note stating a surplus run-off of GBP 18.1m (page 35). The gross claims development triangle exists but, when excluding the aggregate 'All prior years' column and the two most recent underwriting years, the triangle shows negligible movement compared with the stated run-off sentence. The direct business surplus (GBP 22.5m) is reported at an aggregated direct level; mapping that movement to a single standard LOB required inference (direct lines encompass Property and Casualty). Lob movements therefore include an inferred mapping for direct business with reduced confidence. [RAG OVERRIDE: Model said PYD=-18.1, RAG triangle computed -1.845. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -425,25 +448,25 @@
         ],
         "development_rows": [
           [
-            null,
-            null,
+            39707,
+            50277,
+            56508,
+            16403
+          ],
+          [
+            122383,
+            142274,
+            118827,
+            null
+          ],
+          [
+            137886,
+            151699,
             null,
             null
           ],
           [
-            null,
-            null,
-            null,
-            null
-          ],
-          [
-            null,
-            null,
-            null,
-            null
-          ],
-          [
-            null,
+            126616,
             null,
             null,
             null
@@ -457,21 +480,33 @@
         ]
       },
       "source_type": "syndicate",
-      "source_file": "syndicate_reports\\pdfs\\syndicate_1110_2017.pdf",
-      "content_hash": "1fb0f900ea0bdf01375f9d1daa3cac7ac41a83707d92af15f36cc82874497b1a",
-      "standardized_at": "2026-03-16T06:26:11.551374+00:00",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_1110_2017_llm.pdf",
+      "content_hash": "0187a800fb994f4be8f38787f3cfbbe2adbf145c16948617c542db7904cb6c58",
+      "standardized_at": "2026-09-11T10:13:43.057478+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 26036,
-        "output_tokens": 8943,
-        "total_tokens": 34979,
-        "cost_usd": 0.024395
+        "input_tokens": 15532,
+        "output_tokens": 6321,
+        "total_tokens": 21853,
+        "cost_usd": 0.016525
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -1.845,
+        "model_value": -18.1,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 25,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2014,
           2015,
@@ -503,6 +538,12 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "After one year",
+          "After two years",
+          "After three years",
+          "After four years"
         ],
         "source_page": 25,
         "entity": 1110
@@ -654,12 +695,12 @@
       }
     }
   },
-  "total_cost_usd": 0.032051,
-  "total_tokens": 58929,
+  "total_cost_usd": 0.022653,
+  "total_tokens": 39878,
   "validation": {
     "passed": true,
-    "total_discrepancies": 11,
-    "within_tolerance": 11,
+    "total_discrepancies": 13,
+    "within_tolerance": 13,
     "hard_failures": 0,
     "hard_failure_details": []
   }

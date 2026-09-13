@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T10:51:03.275218+00:00",
+  "extraction_timestamp": "2026-09-13T03:58:15.989744+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -11,21 +13,40 @@
       "syndicate": 2786,
       "year": 2023,
       "opening_reserves_gbp_m": 364.566,
-      "opening_reserves_page": 5,
+      "opening_reserves_page": 6,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": 1.381,
       "prior_year_development_pct": 0.38,
       "direction": "strengthening",
       "prior_year_movement_page": 18,
       "prior_year_movement_confidence": 0.8,
-      "exact_reserve_text": "The prior year development was calculated from the gross claims development table on page 18, showing a net release of GBP 2,798,000 across underwriting years 2016-2021.",
-      "primary_causes": [],
+      "exact_reserve_text": "Calculated from the 'Estimate of cumulative gross claims incurred' table on page 18 by comparing the current estimate for underwriting years 2016-2021 to their respective estimates from the previous development period.",
+      "primary_causes": [
+        "Adverse claims development",
+        "Economic inflation / claims cost inflation",
+        "Social inflation / litigation trends",
+        "IBNR recalibration",
+        "Reserve methodology change"
+      ],
       "specific_events": [],
-      "specific_years_affected": [],
+      "specific_years_affected": [
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021
+      ],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "The syndicate experienced a small net release of gross claims reserves of GBP 2.8 million, representing approximately 0.8% of its opening gross claims outstanding. This release was calculated from the gross claims development table by comparing the current estimates of cumulative gross claims incurred for underwriting years 2016-2021 to their estimates from the previous development period. No specific causes or events were explicitly cited for this movement in the report.",
-      "raw_causal_phrases": [],
+      "standardized_narrative": "The syndicate experienced a gross prior year strengthening of GBP 1.381 million, representing 0.38% of its opening gross claims outstanding. This movement was calculated from the gross claims development table, showing varied development across underwriting years 2016 to 2021, with some years experiencing releases and others strengthenings, resulting in a net strengthening. General factors influencing reserve estimates, such as economic and social inflation, IBNR recalibration, and changes in claims handling procedures, are noted as key assumptions in the report.",
+      "raw_causal_phrases": [
+        "The principal assumption underlying the liability estimates is that the future claims development will follow a similar pattern to past claims development experience.",
+        "This includes assumptions in respect of average claim costs, claim handling costs, claim inflation factors and claim numbers for each underwriting year.",
+        "Additional qualitative judgements are used to assess the extent to which past trends may not apply in the future, for example: once-off occurrence; changes in market factors such as public attitude to claiming; economic conditions; as well as internal factors such as portfolio mix, policy conditions and claims handling procedures.",
+        "Judgement is further used to assess the extent to which external factors such as judicial decisions and government legislation affect the estimates.",
+        "Other key circumstances affecting the reliability of assumptions include variation in interest rates, delays in settlement and changes in foreign currency rates."
+      ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 183.9,
       "gross_premium_mix": [
@@ -58,7 +79,7 @@
       "gross_premium_page": 2,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The prior year development figure was calculated from the gross claims development table on page 18. No explicit narrative or specific note detailing the prior year reserve movement was found. The 'Energy - Marine' line of business had zero gross written premiums in 2023. [RAG OVERRIDE: Model said PYD=-2.798, RAG triangle computed 1.381. Using RAG value.]",
+      "data_quality_notes": "Prior year development was calculated from the gross claims development table as no explicit prior year movement note was available. No specific named events were identified as driving the prior year development.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -132,6 +153,7 @@
             null,
             null,
             null,
+            null,
             null
           ],
           [
@@ -158,20 +180,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_2786_2023_llm.pdf",
-      "content_hash": "5b4728858e0eb257365cb8408cea88081ec26f7945de41ddbbee0f771f71efce",
-      "standardized_at": "2026-07-05T13:21:35.907580+00:00",
+      "content_hash": "94a8ca3b70ef67f0eed4eb916acd93c2bdde4bb0a7ee06ada7ace030bd402073",
+      "standardized_at": "2026-09-11T11:53:36.211657+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 11669,
-        "output_tokens": 1545,
-        "total_tokens": 19003,
-        "cost_usd": 0.007363
+        "input_tokens": 12473,
+        "output_tokens": 1763,
+        "total_tokens": 20091,
+        "cost_usd": 0.008149
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 1.381,
+        "model_value": 1.381,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 45,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2016,
           2017,
@@ -263,6 +297,16 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of first underwriting year",
+          "One Year Later",
+          "Two Years Later",
+          "Three Years Later",
+          "Four Years Later",
+          "Five Years Later",
+          "Six Years Later",
+          "Seven Years Later"
         ],
         "source_page": 45,
         "entity": 2786
@@ -406,7 +450,7 @@
       "syndicate": 2786,
       "year": 2023,
       "opening_reserves_gbp_m": 364.566,
-      "opening_reserves_page": 18,
+      "opening_reserves_page": 17,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": 1.381,
       "prior_year_development_pct": 0.38,
@@ -415,7 +459,6 @@
       "prior_year_movement_confidence": 0.8,
       "exact_reserve_text": "",
       "primary_causes": [
-        "Adverse claims development",
         "Favorable claims development",
         "IBNR recalibration"
       ],
@@ -435,7 +478,7 @@
           "event_year": null,
           "event_type": "man_made",
           "net_loss_gbp_m": 59.055,
-          "loss_description": "Estimated Net Loss (from Syndicate Business Forecast exposure table)",
+          "loss_description": "Estimated Net Loss shown in RDS table",
           "lobs_affected": [
             "Cyber"
           ],
@@ -447,7 +490,7 @@
           "event_year": null,
           "event_type": "man_made",
           "net_loss_gbp_m": 55.906,
-          "loss_description": "Estimated Net Loss (from Syndicate Business Forecast exposure table)",
+          "loss_description": "Estimated Net Loss shown in RDS table",
           "lobs_affected": [
             "Cyber"
           ],
@@ -459,7 +502,7 @@
           "event_year": null,
           "event_type": "man_made",
           "net_loss_gbp_m": 44.882,
-          "loss_description": "Estimated Net Loss (from Syndicate Business Forecast exposure table)",
+          "loss_description": "Estimated Net Loss shown in RDS table",
           "lobs_affected": [
             "Cyber"
           ],
@@ -471,7 +514,7 @@
           "event_year": null,
           "event_type": "man_made",
           "net_loss_gbp_m": 11.811,
-          "loss_description": "Estimated Net Loss (from Syndicate Business Forecast exposure table)",
+          "loss_description": "Estimated Net Loss shown in RDS table",
           "lobs_affected": [
             "Cyber"
           ],
@@ -483,7 +526,7 @@
           "event_year": null,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": 15.555,
-          "loss_description": "Estimated Net Loss (from Syndicate Business Forecast exposure table)",
+          "loss_description": "Estimated Net Loss shown in RDS table",
           "lobs_affected": [
             "Property"
           ],
@@ -491,12 +534,11 @@
           "confidence": 0.8
         }
       ],
-      "standardized_narrative": "The syndicate's gross claims reserves opened at GBP 364.566m. Analysis of the gross claims development triangle shows mixed movements across older underwriting years, producing a small net adverse prior-year development of GBP 1.381m (c.0.38% of opening reserves). The net strengthening is the result of both adverse and favourable development in different vintage years rather than a single large event.",
+      "standardized_narrative": "The syndicate recorded a modest prior-year release of approximately GBP 7.6m (c.2.1% of opening gross claims outstanding), derived from the gross claims development table. This net release was driven by favourable development particularly on older years (notably 2020) which more than offset some adverse developments in other years. No explicit single-event prior-year strengthening was disclosed; the movement was determined from the gross claims development triangle.",
       "raw_causal_phrases": [
-        "variation in interest rates, delays in settlement and changes in foreign currency rates.",
-        "average claim costs, claim handling costs, claim inflation factors and claim numbers",
-        "past claims development experience can be used as a basis to project ultimate claims costs",
-        "judgement is used to assess the extent to which past trends may not apply in the future"
+        "Adjustments to the amounts of claims provisions established in prior years are reflected in the financial statements for the period in which the adjustments are made.",
+        "The principal assumption underlying the liability estimates is that the future claims development will follow a similar pattern to past claims development experience.",
+        "Other key circumstances affecting the reliability of assumptions include variation in interest rates, delays in settlement and changes in foreign currency rates."
       ],
       "lob_movements": [
         {
@@ -514,7 +556,7 @@
           "confidence": 0.0
         },
         {
-          "line_of_business": "Property",
+          "line_of_business": "Casualty",
           "direction": "mixed",
           "amount_gbp_m": null,
           "percentage": null,
@@ -522,13 +564,6 @@
         },
         {
           "line_of_business": "Energy",
-          "direction": "mixed",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.0
-        },
-        {
-          "line_of_business": "Casualty",
           "direction": "mixed",
           "amount_gbp_m": null,
           "percentage": null,
@@ -577,10 +612,10 @@
           "percentage_of_total": 0.2
         }
       ],
-      "gross_premium_page": 2,
+      "gross_premium_page": 28,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "No explicit textual sentence specifying a gross prior-year reserve movement was found. The prior year movement (+GBP 1.381m) was calculated from the gross claims development triangle (claims incurred cumulative triangle) per the prescribed diagonal method. Figures in the triangle and technical provisions are presented in GBP '000. Named events listed are modelled/hypothetical exposures from the syndicate's RDS/SBF table (not actual losses). No per-LOB prior year reserve movements are disclosed.",
+      "data_quality_notes": "Prior-year movement was not provided as a single gross 'movement in prior year's provision' line. The prior-year development figure was calculated from the gross claims development triangle (cumulative gross claims incurred) by excluding the two most recent underwriting years (2023 and 2022) and summing diagonal changes for 2016-2021. No explicit narrative quantifying the gross prior-year movement was found. Triangle figures are presented in the report in GBP '000 and have been used directly; calculated PYD rounded to three decimals. No RITC distortion was detected in the notes provided. [RAG OVERRIDE: Model said PYD=-7.577, RAG triangle computed 1.381. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -681,20 +716,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_2786_2023_llm.pdf",
-      "content_hash": "5b4728858e0eb257365cb8408cea88081ec26f7945de41ddbbee0f771f71efce",
-      "standardized_at": "2026-07-05T13:22:48.415804+00:00",
+      "content_hash": "94a8ca3b70ef67f0eed4eb916acd93c2bdde4bb0a7ee06ada7ace030bd402073",
+      "standardized_at": "2026-09-11T11:56:15.868689+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 17433,
-        "output_tokens": 7550,
-        "total_tokens": 24983,
-        "cost_usd": 0.019458
+        "input_tokens": 18193,
+        "output_tokens": 7862,
+        "total_tokens": 26055,
+        "cost_usd": 0.020272
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 1.381,
+        "model_value": -7.577,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 45,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2016,
           2017,
@@ -786,6 +833,16 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of first underwriting year",
+          "One Year Later",
+          "Two Years Later",
+          "Three Years Later",
+          "Four Years Later",
+          "Five Years Later",
+          "Six Years Later",
+          "Seven Years Later"
         ],
         "source_page": 45,
         "entity": 2786
@@ -926,12 +983,12 @@
       }
     }
   },
-  "total_cost_usd": 0.026821,
-  "total_tokens": 43986,
+  "total_cost_usd": 0.028421,
+  "total_tokens": 46146,
   "validation": {
     "passed": true,
-    "total_discrepancies": 19,
-    "within_tolerance": 19,
+    "total_discrepancies": 16,
+    "within_tolerance": 16,
     "hard_failures": 0,
     "hard_failure_details": []
   }

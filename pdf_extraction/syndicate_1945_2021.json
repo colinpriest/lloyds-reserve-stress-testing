@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T09:57:51.756071+00:00",
+  "extraction_timestamp": "2026-09-13T04:02:42.919462+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -18,35 +20,60 @@
       "direction": "strengthening",
       "prior_year_movement_page": 21,
       "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "Change in prior year provisions",
+      "exact_reserve_text": "Change in prior year provisions 31,711 (9,147) 22,564",
       "primary_causes": [
+        "Man-made catastrophe / large losses",
+        "Natural catastrophe events",
         "IBNR recalibration",
-        "Large loss development",
-        "Other"
+        "COVID-19 / pandemic effects"
       ],
       "specific_events": [],
       "specific_years_affected": [
-        2018
+        2018,
+        2017,
+        2016,
+        2015,
+        2014,
+        2013,
+        2012,
+        2011
       ],
       "prior_year_events": [
         {
-          "event_name": "COVID-19 / pandemic effects",
-          "event_year": 2018,
-          "impact_description": "losses attaching to the 2018 and prior underwriting years of account on discontinued Contingency book",
+          "event_name": "COVID-19 global pandemic",
+          "event_year": 2020,
+          "impact_description": "reserves for these losses have remained robust and stable across the year; a significant portion of which relate to losses attaching to the 2018 and prior underwriting years of account on our discontinued Contingency book.",
           "lobs_affected": [
-            "Contingency"
+            "Contingency",
+            "Accident & Health"
           ],
           "amount_gbp_m": null,
-          "confidence": 0.8
+          "confidence": 0.9
         }
       ],
-      "named_events": [],
-      "standardized_narrative": "The syndicate reported a gross prior year strengthening of GBP 31.711 million in 2021. While the report notes that COVID-19 reserves remained robust and stable, it also mentions general factors influencing reserve movements such as developments in case reserving for large losses and catastrophes, and changes in estimates of claims incurred but not reported (IBNR). No specific line of business breakdown for this prior year movement was provided.",
+      "named_events": [
+        {
+          "event_name": "COVID-19 global pandemic",
+          "event_year": 2020,
+          "event_type": "other",
+          "net_loss_gbp_m": null,
+          "loss_description": "continues to create uncertainty across the market, reserves for these losses have remained robust and stable, significant portion of which relate to losses attaching to the 2018 and prior underwriting years of account on our discontinued Contingency book, claims relating to film and TV productions affected by Covid-19",
+          "lobs_affected": [
+            "Contingency",
+            "Accident & Health"
+          ],
+          "page": 1,
+          "confidence": 0.9
+        }
+      ],
+      "standardized_narrative": "The syndicate experienced a gross strengthening of GBP 31.711 million in its prior year reserves, representing an 18.76% increase relative to the opening gross claims outstanding. This strengthening is primarily attributed to developments in case reserving for large losses and catastrophes, changes in IBNR estimates, and the ongoing impact of the COVID-19 pandemic, particularly for losses attaching to the 2018 and prior underwriting years on the discontinued Contingency book.",
       "raw_causal_phrases": [
         "developments in case reserving for large losses and catastrophes",
         "changes in estimates of claims incurred but not reported (IBNR)",
-        "uncertainty",
-        "COVID 19 global pandemic continues to create uncertainty across the market however our reserves for these losses have remained robust and stable across the year"
+        "Covid-19 reserves account for approximately one third on the net reserves at 31 December 2021",
+        "losses attaching to the 2018 and prior underwriting years of account on our discontinued Contingency book",
+        "claims relating to film and TV productions affected by Covid-19",
+        "uncertainty around application of loss triggers on PA & Travel policies"
       ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 110.8,
@@ -80,7 +107,7 @@
       "gross_premium_page": 3,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The gross claims development triangle on page 20 indicates a prior year release of -3.152m, which contradicts the +31.711m strengthening reported in the 'Change in prior year provisions' table on page 21. The figure from the 'Change in prior year provisions' is used as it is a direct statement of prior year development. The claims triangle may be distorted by other accounting adjustments or the Part VII transfer mentioned on page 22. No line of business breakdown for the prior year development amount was provided.",
+      "data_quality_notes": "The claims development triangle shows a significant release (-3.208m) for prior years, which contradicts the explicit gross strengthening (+31.711m) reported in the Technical Provisions note. The Technical Provisions note is prioritized as the direct source for prior year development. The discrepancy might be due to the complexity of interpreting the triangle or specific adjustments not reflected in the cumulative estimates. No specific LOB movements for prior year development were quantified in the report, only sensitivity analysis.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -247,20 +274,28 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_1945_2021_llm.pdf",
-      "content_hash": "e7df18a31a2ca764f1b44fe36671f6bb7b8e2397798e724a13df73e885933360",
-      "standardized_at": "2026-07-05T09:41:35.464385+00:00",
+      "content_hash": "ffa9598db4f85cfee4aa36b0682f6854a8a06d509cd410d36d1f5115ce16e06d",
+      "standardized_at": "2026-09-11T11:11:35.254967+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 11927,
-        "output_tokens": 1778,
-        "total_tokens": 19623,
-        "cost_usd": 0.008023
+        "input_tokens": 12731,
+        "output_tokens": 2318,
+        "total_tokens": 20850,
+        "cost_usd": 0.009614
+      },
+      "_pyd_route": {
+        "source": "rag_provisions",
+        "value": 31.7,
+        "model_value": 31.711,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -419,6 +454,19 @@
             null
           ]
         ],
+        "row_labels": [
+          "At end of underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later",
+          "Seven years later",
+          "Eight years later",
+          "Nine years later",
+          "Ten years later"
+        ],
         "source_page": 49,
         "entity": 1945
       },
@@ -491,6 +539,13 @@
           "entity": 1945,
           "backend": "azure",
           "table_kind": "balance_sheet_liabilities"
+        },
+        "movement_semantics": {
+          "row_label": "Change in prior year provisions",
+          "row_index": 6,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": true,
+          "column_index": 1
         },
         "gross_prior_year_claims": 31.7,
         "ri_share_prior_year": -9.1,
@@ -592,9 +647,10 @@
       "prior_year_movement_confidence": 1.0,
       "exact_reserve_text": "Change in prior year provisions 31,711 (9,147) 22,564 (36,123) 16,187 (19,936)",
       "primary_causes": [
-        "Adverse claims development",
         "COVID-19 / pandemic effects",
-        "IBNR recalibration"
+        "Adverse claims development",
+        "IBNR recalibration",
+        "Reinsurance recoveries"
       ],
       "specific_events": [],
       "specific_years_affected": [
@@ -604,8 +660,11 @@
         {
           "event_name": "COVID-19 pandemic",
           "event_year": 2020,
-          "impact_description": "Significant portion of reserves relate to losses attaching to the 2018 and prior underwriting years of account on the discontinued Contingency book; COVID-19 reserves account for approximately one third on the net reserves at 31 December 2021.",
-          "lobs_affected": [],
+          "impact_description": "Claims and reserves relating to pandemic losses (notably on Contingency and Accident & Health) contributed to uncertainty and prior-year reserve strengthening; a significant portion of COVID-19 related losses attach to 2018 and prior underwriting years of the discontinued Contingency book.",
+          "lobs_affected": [
+            "Accident & Health",
+            "Aggregate"
+          ],
           "amount_gbp_m": null,
           "confidence": 0.8
         }
@@ -616,7 +675,7 @@
           "event_year": null,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": 0.6,
-          "loss_description": null,
+          "loss_description": "Syndicate net loss from RDS scenario",
           "lobs_affected": [
             "Property"
           ],
@@ -628,7 +687,7 @@
           "event_year": null,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": 0.6,
-          "loss_description": null,
+          "loss_description": "Syndicate net loss from RDS scenario",
           "lobs_affected": [
             "Property"
           ],
@@ -640,8 +699,10 @@
           "event_year": null,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": 0.6,
-          "loss_description": null,
+          "loss_description": "Syndicate net loss from RDS scenario",
           "lobs_affected": [
+            "Marine",
+            "Energy",
             "Property"
           ],
           "page": 31,
@@ -652,7 +713,7 @@
           "event_year": null,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": 0.6,
-          "loss_description": null,
+          "loss_description": "Syndicate net loss from RDS scenario",
           "lobs_affected": [
             "Property"
           ],
@@ -664,7 +725,7 @@
           "event_year": null,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": 0.6,
-          "loss_description": null,
+          "loss_description": "Syndicate net loss from RDS scenario",
           "lobs_affected": [
             "Property"
           ],
@@ -676,7 +737,7 @@
           "event_year": null,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": 2.7,
-          "loss_description": null,
+          "loss_description": "Syndicate net loss from RDS scenario",
           "lobs_affected": [
             "Property"
           ],
@@ -688,7 +749,7 @@
           "event_year": null,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": 2.7,
-          "loss_description": null,
+          "loss_description": "Syndicate net loss from RDS scenario",
           "lobs_affected": [
             "Property"
           ],
@@ -700,64 +761,70 @@
           "event_year": null,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": 2.1,
-          "loss_description": null,
+          "loss_description": "Syndicate net loss from RDS scenario",
           "lobs_affected": [
             "Property"
           ],
           "page": 31,
           "confidence": 1.0
+        },
+        {
+          "event_name": "COVID-19 pandemic",
+          "event_year": 2020,
+          "event_type": "other",
+          "net_loss_gbp_m": null,
+          "loss_description": "Reserves for COVID-19 exposures remained a significant and uncertain component of reserves; significant portion relate to losses attaching to the 2018 and prior underwriting years of the discontinued Contingency book",
+          "lobs_affected": [
+            "Accident & Health",
+            "Aggregate"
+          ],
+          "page": 4,
+          "confidence": 0.8
         }
       ],
-      "standardized_narrative": "At 31 December 2021 the Syndicate's gross claims outstanding opening position was GBP 168.966m. During 2021 there was a gross strengthening (increase) in prior year provisions of GBP 31.711m (18.8% of opening gross reserves). The strengthening is driven by adverse prior-year development predominantly related to pandemic-era exposures and other prior-year uncertainties (notably reserves attaching to the discontinued Contingency book and long-tail Casualty exposures), with COVID-19 noted as accounting for a material proportion of net reserves. No single quantified named prior-year large loss is identified as the driver of the movement in the technical provisions note.",
+      "standardized_narrative": "Gross claims outstanding opened at GBP 168.966m at 1 January 2021. During 2021 the Syndicate strengthened prior-year reserves by GBP 31.711m (18.8% of opening gross reserves), driven by adverse development primarily related to pandemic (COVID-19) exposures and recalibration of IBNR on longer-tail lines (notably Accident & Health and contingency exposures), with secondary impacts from casualty long-tail uncertainty and reinsurance positioning.",
       "raw_causal_phrases": [
-        "significant portion of which relate to losses attaching to the 2018 and prior underwriting years of account on our discontinued Contingency book.",
-        "COVID-19 reserves account for approximately one third on the net reserves at 31 December 2021.",
-        "Casualty has been underwritten since 2018 (International Casualty from 2020) and the reserves have become more dominant as the reserves on the run-off classes (Marine and Contingency since 2018, Property since mid-2021) continue to reduce.",
-        "The provision for claims outstanding is the key insurance risk faced by the Syndicate.",
-        "Change in prior year provisions 31,711 (9,147) 22,564 (36,123) 16,187 (19,936)"
+        "Change in prior year provisions 31,711 (9,147) 22,564 (36,123) 16,187 (19,936)",
+        "a significant portion of which relate to losses attaching to the 2018 and prior underwriting years of account on our discontinued Contingency book.",
+        "COVID-19",
+        "Casualty has a long tail and there is only limited claims experience to date.",
+        "On classes with material Covid-19 exposures, policy/contract level analysis is performed considering likelihood and severity of losses"
       ],
       "lob_movements": [
         {
           "line_of_business": "Accident & Health",
           "direction": "strengthening",
-          "amount_gbp_m": null,
+          "amount_gbp_m": 0.429,
           "percentage": null,
-          "confidence": 0.3
-        },
-        {
-          "line_of_business": "Casualty",
-          "direction": "strengthening",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.4
+          "confidence": 1.0
         },
         {
           "line_of_business": "Marine",
           "direction": "strengthening",
-          "amount_gbp_m": null,
+          "amount_gbp_m": 4.405,
           "percentage": null,
-          "confidence": 0.2
-        },
-        {
-          "line_of_business": "Energy",
-          "direction": "strengthening",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.2
+          "confidence": 1.0
         },
         {
           "line_of_business": "Property",
-          "direction": "strengthening",
-          "amount_gbp_m": null,
+          "direction": "release",
+          "amount_gbp_m": -1.907,
           "percentage": null,
-          "confidence": 0.5
+          "confidence": 1.0
+        },
+        {
+          "line_of_business": "Professional Lines",
+          "direction": "release",
+          "amount_gbp_m": -14.31,
+          "percentage": null,
+          "confidence": 0.8
         },
         {
           "line_of_business": "Treaty",
           "direction": "strengthening",
-          "amount_gbp_m": null,
+          "amount_gbp_m": 9.647,
           "percentage": null,
-          "confidence": 0.3
+          "confidence": 1.0
         }
       ],
       "gross_premiums_written_gbp_m": 110.8,
@@ -791,7 +858,7 @@
       "gross_premium_page": 6,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Primary prior-year movement sourced from Note 16 'Technical Provisions' (gross 'Change in prior year provisions' line) - explicit gross figure available. Opening reserves taken from Statement of Financial Position (Technical provisions: Claims outstanding prior-year comparative). Per-line prior-year movement amounts are not provided in the notes (only aggregate gross movement is shown), so LOB-level movements are not quantified. 'Contingency' class is present in the statutory premium mix but is not part of the provided standard Lloyd's LOB list; mapping of Contingency or Pecuniary loss to standard LOBs was not performed.",
+      "data_quality_notes": "Prior-year development (31.711m) taken from Note 16 'Change in prior year provisions' (gross column). exact_reserve_text reproduced from the numeric row in the Technical Provisions table because no separate explanatory sentence quantifying gross prior-year movement was present. 'Pecuniary loss' was mapped to 'Professional Lines' for LOB movements (no direct standard LOB mapping). 'Contingency' is retained in gross_premium_mix verbatim as per note. Claims development triangle parsed from the gross triangle (values in GBP 000); row alignment assumes left-justified values for each development age. No RITC distortion noted; Part VII transfer occurred but had no economic impact on reserves per the notes.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -958,20 +1025,28 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_1945_2021_llm.pdf",
-      "content_hash": "e7df18a31a2ca764f1b44fe36671f6bb7b8e2397798e724a13df73e885933360",
-      "standardized_at": "2026-07-05T09:43:25.781002+00:00",
+      "content_hash": "ffa9598db4f85cfee4aa36b0682f6854a8a06d509cd410d36d1f5115ce16e06d",
+      "standardized_at": "2026-09-11T11:15:06.715638+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 41068,
-        "output_tokens": 6694,
-        "total_tokens": 47762,
-        "cost_usd": 0.023655
+        "input_tokens": 41828,
+        "output_tokens": 10329,
+        "total_tokens": 52157,
+        "cost_usd": 0.031115
+      },
+      "_pyd_route": {
+        "source": "rag_provisions",
+        "value": 31.7,
+        "model_value": 31.711,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -1130,6 +1205,19 @@
             null
           ]
         ],
+        "row_labels": [
+          "At end of underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later",
+          "Seven years later",
+          "Eight years later",
+          "Nine years later",
+          "Ten years later"
+        ],
         "source_page": 49,
         "entity": 1945
       },
@@ -1202,6 +1290,13 @@
           "entity": 1945,
           "backend": "azure",
           "table_kind": "balance_sheet_liabilities"
+        },
+        "movement_semantics": {
+          "row_label": "Change in prior year provisions",
+          "row_index": 6,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": true,
+          "column_index": 1
         },
         "gross_prior_year_claims": 31.7,
         "ri_share_prior_year": -9.1,
@@ -1291,12 +1386,12 @@
       }
     }
   },
-  "total_cost_usd": 0.031678,
-  "total_tokens": 67385,
+  "total_cost_usd": 0.040729,
+  "total_tokens": 73007,
   "validation": {
     "passed": true,
-    "total_discrepancies": 21,
-    "within_tolerance": 21,
+    "total_discrepancies": 35,
+    "within_tolerance": 35,
     "hard_failures": 0,
     "hard_failure_details": []
   }

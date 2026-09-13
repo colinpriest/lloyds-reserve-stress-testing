@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T12:24:18.204515+00:00",
+  "extraction_timestamp": "2026-09-13T04:05:25.571742+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -13,15 +15,15 @@
       "opening_reserves_gbp_m": 185.764,
       "opening_reserves_page": 4,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": -3.1,
-      "prior_year_development_pct": -1.67,
-      "direction": "release",
-      "prior_year_movement_page": 8,
-      "prior_year_movement_confidence": 1.0,
+      "prior_year_development_gbp_m": 11.563,
+      "prior_year_development_pct": 6.22,
+      "direction": "strengthening",
+      "prior_year_movement_page": 13,
+      "prior_year_movement_confidence": 0.8,
       "exact_reserve_text": "An overall improvement of GBP 3.1 million on prior years' provisions was experienced during the year. This is due to improvements of GBP 4.3 million on property reinsurance and GBP 0.3 million on marine reinsurance partially offset by a deterioration of GBP 1.5 million on casualty reinsurance.",
       "primary_causes": [
-        "Favorable claims development",
-        "Adverse claims development"
+        "Adverse claims development",
+        "Favorable claims development"
       ],
       "specific_events": [],
       "specific_years_affected": [],
@@ -40,7 +42,7 @@
           "confidence": 0.8
         },
         {
-          "event_name": "Winter storm affecting 200 million people in the US",
+          "event_name": "winter storm affecting 200 million people in the US",
           "event_year": 2022,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
@@ -52,20 +54,19 @@
           "confidence": 0.5
         },
         {
-          "event_name": "War in the Ukraine",
+          "event_name": "war in the Ukraine",
           "event_year": 2022,
           "event_type": "geopolitical",
           "net_loss_gbp_m": null,
-          "loss_description": "Ultimately the impact of the war in the Ukraine will take many years to fully understand and that uncertainty will live on for a while longer. The economic turmoil and cost of living crisis caused by, inter alia, Russia's aggression was made worse by announcements emanating from the British government.",
+          "loss_description": "Ultimately the impact of the war in the Ukraine will take many years to fully understand and that uncertainty will live on for a while longer. The affects are wide-ranging within the insurance market with multiple classes of business being called upon to help restore a semblance of order where needed.",
           "lobs_affected": [
-            "Aggregate",
-            "Political Risk"
+            "Aggregate"
           ],
           "page": 1,
           "confidence": 0.8
         }
       ],
-      "standardized_narrative": "Syndicate 6134 experienced an overall improvement of GBP 3.1 million on prior years' provisions in 2022. This favorable development was driven by improvements of GBP 4.3 million on property reinsurance and GBP 0.3 million on marine reinsurance, partially offset by a deterioration of GBP 1.5 million on casualty reinsurance. The syndicate's gross and net liabilities are identical, indicating this is a gross movement.",
+      "standardized_narrative": "The syndicate experienced a gross prior year reserve strengthening of GBP 11.563 million, calculated from the claims development triangle for underwriting years 2019 and 2020. This contrasts with the narrative stating an overall net improvement of GBP 3.1 million on prior years' provisions. The net improvement was attributed to favourable development of GBP 4.3 million on property reinsurance and GBP 0.3 million on marine reinsurance, partially offset by a deterioration of GBP 1.5 million on casualty reinsurance.",
       "raw_causal_phrases": [
         "improvements of GBP 4.3 million on property reinsurance",
         "GBP 0.3 million on marine reinsurance",
@@ -73,21 +74,21 @@
       ],
       "lob_movements": [
         {
-          "line_of_business": "Property",
+          "line_of_business": "Reinsurance - Property",
           "direction": "release",
           "amount_gbp_m": -4.3,
           "percentage": null,
           "confidence": 1.0
         },
         {
-          "line_of_business": "Marine",
+          "line_of_business": "Reinsurance - Specialty",
           "direction": "release",
           "amount_gbp_m": -0.3,
           "percentage": null,
           "confidence": 1.0
         },
         {
-          "line_of_business": "Casualty",
+          "line_of_business": "Reinsurance - Casualty",
           "direction": "strengthening",
           "amount_gbp_m": 1.5,
           "percentage": null,
@@ -115,7 +116,7 @@
       "gross_premium_page": 8,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The claims development table on page 13 is distorted by the reassumption of 2018 year of account liabilities as part of the 2020 quota share agreement, making it unreliable for calculating prior year development. The narrative on page 8 is used as the primary source for prior year development. Gross and Net claims outstanding are identical for this syndicate, implying no reinsurers' share for claims outstanding, thus the 'overall improvement' figure is considered gross. [RAG PYD NOT APPLIED: deterministic figure +11.563m has the opposite sign to both model values [-3.1, -3.1], which agree with each other; model values retained.] [CODE PYD NOT APPLIED: deterministic figure +11.563m has the opposite sign to both model values [-3.1, -3.1], which agree with each other; model values retained.]",
+      "data_quality_notes": "There is a discrepancy between the gross prior year development calculated from the claims development triangle (+GBP 11.563m strengthening) and the net prior year development stated in the narrative (-GBP 3.1m improvement). The gross triangle figure has been used for `prior_year_development_gbp_m` as per instructions, and the LOB movements are explicitly net figures from the narrative.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -156,20 +157,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_6134_2022_llm.pdf",
-      "content_hash": "e2a9da36fc5be09b4309a07410e344ce19284531574a82d46581655bfead56f5",
-      "standardized_at": "2026-07-05T21:50:54.813752+00:00",
+      "content_hash": "ac1a6a535c5d4ccc43288a19a4b2d00a91deda94743421063868b2ab3607547c",
+      "standardized_at": "2026-09-11T14:04:14.678406+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 9605,
-        "output_tokens": 1611,
-        "total_tokens": 16893,
-        "cost_usd": 0.006909
+        "input_tokens": 10409,
+        "output_tokens": 1618,
+        "total_tokens": 18654,
+        "cost_usd": 0.007168
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 11.563,
+        "model_value": 11.563,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 45,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2019,
           2020,
@@ -201,6 +214,12 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of underwriting year",
+          "12 months later",
+          "24 months later",
+          "36 months later"
         ],
         "source_page": 45,
         "entity": 6134
@@ -247,6 +266,13 @@
         "unit_source": "header",
         "source_page": 37,
         "entity": 6134,
+        "movement_semantics": {
+          "row_label": "Claims incurred in prior underwriting years",
+          "row_index": 4,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": false,
+          "column_index": 1
+        },
         "gross_prior_year_claims": 39.9
       },
       "_entity_binding": {
@@ -322,27 +348,27 @@
       "opening_reserves_gbp_m": 185.764,
       "opening_reserves_page": 21,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": -3.1,
-      "prior_year_development_pct": -1.67,
-      "direction": "release",
-      "prior_year_movement_page": 31,
+      "prior_year_development_gbp_m": 11.563,
+      "prior_year_development_pct": 6.22,
+      "direction": "strengthening",
+      "prior_year_movement_page": 28,
       "prior_year_movement_confidence": 1.0,
       "exact_reserve_text": "An overall improvement of GBP 3.1 million on prior years' provisions was experienced during the year. This is due to improvements of GBP 4.3 million on property reinsurance and GBP 0.3 million on marine reinsurance partially offset by a deterioration of GBP 1.5 million on casualty reinsurance.",
       "primary_causes": [
         "Favorable claims development",
         "Adverse claims development"
       ],
-      "specific_events": [
-        "Hurricane Ian 2022"
-      ],
+      "specific_events": [],
       "specific_years_affected": [],
       "prior_year_events": [
         {
-          "event_name": "2018 year of account reassumed via 2020 quota share",
-          "event_year": 2020,
-          "impact_description": "The 2018 year of account liabilities were reassumed by Syndicate 6134 as part of the 2020 quota share agreement; the 2020 amounts include these reassumed liabilities.",
+          "event_name": "2018 year of account reassumed via quota share",
+          "event_year": 2018,
+          "impact_description": "The 2020 amounts include the 2018 year of account which was reinsured into Syndicate 2121 on closure at 31 December 2021; the 2018 year liabilities were subsequently reassumed by Syndicate 6134 as part of the 2020 quota share agreement, affecting reserve balances.",
           "lobs_affected": [
-            "Treaty"
+            "Property",
+            "Casualty",
+            "Marine"
           ],
           "amount_gbp_m": null,
           "confidence": 0.8
@@ -354,51 +380,61 @@
           "event_year": 2022,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "According to numerous estimates of the insured damage, will result in around US$50 to US$65 billion worth of claims. Syndicate 6134 was not impacted by Hurricane Ian as much as the host syndicate as the majority of losses were in classes that the syndicate does not reinsure.",
+          "loss_description": "Syndicate 6134 was not impacted by Hurricane Ian as much as the host syndicate as the majority of losses were in classes that the syndicate does not reinsure.",
           "lobs_affected": [
-            "Property",
-            "Casualty",
-            "Marine"
+            "Property"
           ],
           "page": 4,
-          "confidence": 1.0
+          "confidence": 0.8
         },
         {
-          "event_name": "Russia invasion of the Ukraine",
+          "event_name": "War in the Ukraine",
           "event_year": 2022,
-          "event_type": "geopolitical",
+          "event_type": "political",
           "net_loss_gbp_m": null,
-          "loss_description": "Russia's unprovoked invasion and continued aggression against the Ukraine caused wide-ranging effects within the insurance market and economic turmoil, with long-term effects to be realised over many years.",
+          "loss_description": "The impact of the war in the Ukraine will take many years to fully understand and that uncertainty will live on for a while longer; multiple classes of business have been called upon to help restore order where needed.",
           "lobs_affected": [
             "Casualty",
             "Property"
           ],
           "page": 4,
-          "confidence": 0.8
+          "confidence": 0.5
+        },
+        {
+          "event_name": "Once in a generation winter storm (US)",
+          "event_year": 2022,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "A \"once in a generation\" winter storm affecting 200 million people in the US closed the year.",
+          "lobs_affected": [
+            "Property"
+          ],
+          "page": 4,
+          "confidence": 0.5
         }
       ],
-      "standardized_narrative": "At 1 January 2022 the syndicate had gross claims outstanding of GBP 185.764m. During 2022 there was an overall favourable movement on prior years' reserves of GBP 3.1m (a release), driven by favourable development on property reinsurance (GBP 4.3m) and marine reinsurance (GBP 0.3m) partially offset by adverse development on casualty reinsurance (GBP 1.5m). The net effect was a modest release of reserves representing approximately a 1.7% reduction in opening gross claims outstanding.",
+      "standardized_narrative": "The syndicate opened 2022 with gross claims outstanding of GBP 185.764m. During 2022 there was an overall favourable movement on prior years' reserves of GBP 3.1m (a release), driven by favourable development of GBP 4.3m in property and GBP 0.3m in marine partially offset by GBP 1.5m of adverse development in casualty. The movement appears to be driven by claims development across those classes; the statements also note reassumption of 2018 year liabilities into the 2020 quota share which impacts comparatives.",
       "raw_causal_phrases": [
         "An overall improvement of GBP 3.1 million on prior years' provisions was experienced during the year.",
         "This is due to improvements of GBP 4.3 million on property reinsurance and GBP 0.3 million on marine reinsurance partially offset by a deterioration of GBP 1.5 million on casualty reinsurance."
       ],
       "lob_movements": [
         {
-          "line_of_business": "Reinsurance - Property",
+          "line_of_business": "Property",
           "direction": "release",
           "amount_gbp_m": -4.3,
           "percentage": null,
           "confidence": 1.0
         },
         {
-          "line_of_business": "Reinsurance - Specialty",
+          "line_of_business": "Marine",
           "direction": "release",
           "amount_gbp_m": -0.3,
           "percentage": null,
           "confidence": 1.0
         },
         {
-          "line_of_business": "Reinsurance - Casualty",
+          "line_of_business": "Casualty",
           "direction": "strengthening",
           "amount_gbp_m": 1.5,
           "percentage": null,
@@ -426,7 +462,7 @@
       "gross_premium_page": 31,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior year development figure taken from the 'Movement in prior year's provision for claims outstanding' narrative which states an overall improvement of GBP 3.1m. The note does not explicitly label the figure as gross or net in the sentence, but it is presented in the movement note and used here as gross per the report structure. Claims development triangle (gross) is present and consistent with technical provisions. Some mapping (e.g. marine -> Reinsurance - Specialty) reflects that movements were described as 'reinsurance' lines. [RAG PYD NOT APPLIED: deterministic figure +11.563m has the opposite sign to both model values [-3.1, -3.1], which agree with each other; model values retained.] [CODE PYD NOT APPLIED: deterministic figure +11.563m has the opposite sign to both model values [-3.1, -3.1], which agree with each other; model values retained.]",
+      "data_quality_notes": "Prior-year development figure (GBP 3.1m) was taken from the \"Movement in prior year's provision for claims outstanding\" note and treated as a gross movement as presented. A gross claims development triangle is available (page 43) and notes that 2020 amounts include the 2018 year of account which was reinsured into 2121 on closure and later reassumed by 6134; this reassumption can distort development patterns. No explicit gross PYD by individual underwriting year was provided beyond the class-level narrative. [RAG OVERRIDE: Model said PYD=-3.1, RAG triangle computed 11.563. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -467,20 +503,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_6134_2022_llm.pdf",
-      "content_hash": "e2a9da36fc5be09b4309a07410e344ce19284531574a82d46581655bfead56f5",
-      "standardized_at": "2026-07-05T21:52:12.583480+00:00",
+      "content_hash": "ac1a6a535c5d4ccc43288a19a4b2d00a91deda94743421063868b2ab3607547c",
+      "standardized_at": "2026-09-11T14:05:47.855988+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 14068,
-        "output_tokens": 7826,
-        "total_tokens": 21894,
-        "cost_usd": 0.019169
+        "input_tokens": 14828,
+        "output_tokens": 5904,
+        "total_tokens": 20732,
+        "cost_usd": 0.015515
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 11.563,
+        "model_value": -3.1,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 45,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2019,
           2020,
@@ -512,6 +560,12 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of underwriting year",
+          "12 months later",
+          "24 months later",
+          "36 months later"
         ],
         "source_page": 45,
         "entity": 6134
@@ -558,6 +612,13 @@
         "unit_source": "header",
         "source_page": 37,
         "entity": 6134,
+        "movement_semantics": {
+          "row_label": "Claims incurred in prior underwriting years",
+          "row_index": 4,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": false,
+          "column_index": 1
+        },
         "gross_prior_year_claims": 39.9
       },
       "_entity_binding": {
@@ -628,8 +689,8 @@
       }
     }
   },
-  "total_cost_usd": 0.026078,
-  "total_tokens": 38787,
+  "total_cost_usd": 0.022683,
+  "total_tokens": 39386,
   "validation": {
     "passed": true,
     "total_discrepancies": 19,

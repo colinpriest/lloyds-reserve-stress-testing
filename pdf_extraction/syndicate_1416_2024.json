@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-05T19:34:49.811876+00:00",
+  "extraction_timestamp": "2026-09-13T03:59:46.115668+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -18,9 +20,11 @@
       "direction": "release",
       "prior_year_movement_page": 21,
       "prior_year_movement_confidence": 0.8,
-      "exact_reserve_text": "",
+      "exact_reserve_text": "The prior year development is calculated from the 'Estimate of ultimate gross claims' development triangle on page 21, by comparing the 'Current estimate' for the 2022 underwriting year (32,716) to its estimate from 'One year later' (33,018), resulting in a release of 302 (thousands).",
       "primary_causes": [
-        "Favorable claims development"
+        "Favorable claims development",
+        "IBNR recalibration",
+        "Other"
       ],
       "specific_events": [],
       "specific_years_affected": [
@@ -28,24 +32,14 @@
       ],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "The syndicate experienced a small favorable prior year development of $0.302 million, primarily attributable to the 2022 underwriting year, as indicated by the claims development triangle. The report mentions various factors influencing claims estimates, including average claim costs, claim handling costs, inflation factors, and changes in market and economic conditions, but does not attribute the specific release to any single factor.",
+      "standardized_narrative": "The syndicate reported a prior year reserve release of $0.302 million USD, calculated from the gross claims development triangle for the 2022 underwriting year. This represents a 0.65% release relative to the opening gross claims outstanding. No specific causal factors or named events for this movement were detailed in the report, though general factors like claims cost assumptions, market factors, and economic conditions are noted as influencing estimates. The gross premiums written for the year were $78.448 million USD, with the largest contributions from US Binders (27.57%) and Alternative Risks Binders (16.59%).",
       "raw_causal_phrases": [
-        "future claims development will follow a similar pattern to past claims development experience",
-        "average claim costs",
-        "claim handling costs",
-        "claim inflation factors",
-        "claim numbers",
-        "once-off occurrence",
-        "changes in market factors such as public attitude to claiming",
-        "economic conditions",
-        "portfolio mix",
-        "policy conditions",
-        "claims handling procedures",
-        "judicial decisions",
-        "government legislation",
-        "variation in interest rates",
-        "delays in settlement",
-        "changes in foreign currency rates"
+        "The principal assumption underlying the liability estimates is that the future claims development will follow a similar pattern to past claims development experience.",
+        "This includes assumptions in respect of average claim costs, claim handling costs, claim inflation factors and claim numbers for each underwriting year.",
+        "Additional qualitative judgements are used to assess the extent to which past trends may not apply in the future, for example: once-off occurrence; changes in market factors such as public attitude to claiming: economic conditions: as well as internal factors such as portfolio mix, policy conditions and claims handling procedures.",
+        "Judgement is further used to assess the extent to which external factors such as judicial decisions and government legislation affect the estimates.",
+        "Other key circumstances affecting the reliability of assumptions include variation in interest rates, delays in settlement and changes in foreign currency rates.",
+        "The uncertainty associated with the ultimate claims experience of an underwriting year is greatest when the underwriting year is at an early stage of development and the margin for future experience potentially being more adverse than assumed is at its highest."
       ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 78.448,
@@ -53,7 +47,7 @@
         {
           "line_of_business": "Global D&F",
           "amount_gbp_m": 10.477,
-          "percentage_of_total": 13.356
+          "percentage_of_total": 13.35
         },
         {
           "line_of_business": "Specialty Treaty Reinsurance",
@@ -63,53 +57,53 @@
         {
           "line_of_business": "Cyber and Tech E&O",
           "amount_gbp_m": 0.964,
-          "percentage_of_total": 1.229
+          "percentage_of_total": 1.23
         },
         {
           "line_of_business": "Alternative Risks Binders",
           "amount_gbp_m": 13.015,
-          "percentage_of_total": 16.591
+          "percentage_of_total": 16.59
         },
         {
           "line_of_business": "E&O",
           "amount_gbp_m": 6.019,
-          "percentage_of_total": 7.673
+          "percentage_of_total": 7.67
         },
         {
           "line_of_business": "Invoice factoring insurance",
           "amount_gbp_m": 0.007,
-          "percentage_of_total": 0.009
+          "percentage_of_total": 0.01
         },
         {
           "line_of_business": "Directors & Officers",
           "amount_gbp_m": 2.9,
-          "percentage_of_total": 3.697
+          "percentage_of_total": 3.7
         },
         {
           "line_of_business": "US Binders",
           "amount_gbp_m": 21.627,
-          "percentage_of_total": 27.569
+          "percentage_of_total": 27.57
         },
         {
           "line_of_business": "Energy",
           "amount_gbp_m": 5.782,
-          "percentage_of_total": 7.371
+          "percentage_of_total": 7.37
         },
         {
           "line_of_business": "Accident and Health",
           "amount_gbp_m": 1.405,
-          "percentage_of_total": 1.791
+          "percentage_of_total": 1.79
         },
         {
           "line_of_business": "Credit",
           "amount_gbp_m": 4.807,
-          "percentage_of_total": 6.128
+          "percentage_of_total": 6.13
         }
       ],
       "gross_premium_page": 2,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "",
+      "data_quality_notes": "The gross premium mix uses the 'class of business' breakdown from the Managing Agent's report on page 2, as no 'segmental analysis' note with standard regulatory classes was found. The prior year development is calculated from the gross claims development triangle, considering only the 2022 underwriting year as 'prior' (excluding 2023 and 2024 as per instructions). No specific named events or detailed causal factors for the prior year development were explicitly stated.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
@@ -135,30 +129,37 @@
             32716,
             null,
             null
-          ],
-          [
-            null,
-            null,
-            null
           ]
         ]
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_1416_2024_llm.pdf",
-      "content_hash": "e78704c13dc1302f58b610b86a50b95628f6c513b5769d6db9c6453fbb8f5674",
-      "standardized_at": "2026-07-05T22:03:39.004510+00:00",
+      "content_hash": "c5cbea1dbe075e52026e99748e293b957077a1103020a662c3e4d45e3a084be2",
+      "standardized_at": "2026-09-11T14:19:28.350787+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 11669,
-        "output_tokens": 1309,
-        "total_tokens": 17196,
-        "cost_usd": 0.006773
+        "input_tokens": 12473,
+        "output_tokens": 1614,
+        "total_tokens": 17694,
+        "cost_usd": 0.007777
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -0.302,
+        "model_value": -0.302,
+        "triangle_type": "gross",
+        "triangle_units": "millions",
+        "triangle_units_evidence": "default",
+        "triangle_source_page": 41,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "millions",
+        "units_evidence": "default",
+        "cell_binding": "header",
         "underwriting_years": [
           2022,
           2023,
@@ -180,6 +181,11 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of first underwriting year",
+          "One year later",
+          "Two years later"
         ],
         "source_page": 41,
         "entity": 1416
@@ -277,16 +283,17 @@
       "syndicate": 1416,
       "year": 2024,
       "opening_reserves_gbp_m": 46.378,
-      "opening_reserves_page": 30,
+      "opening_reserves_page": 17,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": -0.302,
       "prior_year_development_pct": -0.65,
       "direction": "release",
-      "prior_year_movement_page": 39,
+      "prior_year_movement_page": 21,
       "prior_year_movement_confidence": 0.8,
-      "exact_reserve_text": "",
+      "exact_reserve_text": "Claims outstanding\nBalance at 1 January 46,378 (10,445) 35,933\nClaims paid during the year 24,196 (5,899) 18,297\nForeign exchange movements (622) 106 (516)\nBalance at 31 December 69,952 (16,238) 53,714",
       "primary_causes": [
-        "Favorable claims development"
+        "Favorable claims development",
+        "IBNR recalibration"
       ],
       "specific_events": [],
       "specific_years_affected": [
@@ -294,9 +301,17 @@
       ],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "The syndicate's prior year development for 2022 showed a small favourable movement. Based on the gross claims development table, the 2022 underwriting year recorded a modest release (approximately $0.30m USD) driven by favourable claims development. No explicit gross prior-year movement narrative line was provided in the notes; the movement was calculated from the gross claims development triangle.",
+      "standardized_narrative": "The syndicate's opening gross claims outstanding at 1 January 2024 was $46.378m. Analysis of the gross claims development triangle shows a net favourable development on prior years (primarily the 2022 underwriting year) totalling approximately $9.079m (a ~19.6% release of opening reserves), driven by favourable claims development / IBNR recalibration. No specific named catastrophe events are identified as driving the prior year movement in the report.",
       "raw_causal_phrases": [],
-      "lob_movements": [],
+      "lob_movements": [
+        {
+          "line_of_business": "Treaty",
+          "direction": "release",
+          "amount_gbp_m": -9.079,
+          "percentage": -19.57,
+          "confidence": 0.8
+        }
+      ],
       "gross_premiums_written_gbp_m": 78.448,
       "gross_premium_mix": [
         {
@@ -358,12 +373,12 @@
       "gross_premium_page": 2,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "Prior year development (PYD) was not stated as a single gross figure in the narrative or a dedicated \"movement in prior years\" note. The PYD value was calculated from the gross claims development triangle (gross cumulative estimates) which is presented in the report. Amounts in the financial statements are presented in thousands and have been converted to millions (native USD). There is no explicit sentence describing the gross prior year reserve movement. A Reinsured-to-Close of 2022 and prior years was completed on 1 Jan 2025 (post year-end) which crystallises those years' results but occurred after the reporting date; this may affect subsequent reporting.",
+      "data_quality_notes": "All amounts in the report are presented rounded to the nearest thousand (values in the tables are $'000). Opening reserves taken from the Statement of Financial Position (Claims outstanding prior year column). No explicit note labelled 'movement in prior year's provision for claims outstanding' in gross terms was found; prior-year development was calculated from the gross claims development triangle (gross) by excluding the two most recent underwriting years (2024 and 2023) and comparing the 2022 current estimate to the previous diagonal. The result is therefore a calculated figure (confidence 0.8). A Reinsurance-to-Close (RITC) of 2022 & prior was executed post year-end (1 Jan 2025) which crystallises results for those years and may affect comparability, but this occurred after the reporting date. [RAG OVERRIDE: Model said PYD=-9.079, RAG triangle computed -0.302. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "thousands",
-        "page": 39,
+        "page": 21,
         "underwriting_years": [
           2022,
           2023,
@@ -389,20 +404,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_1416_2024_llm.pdf",
-      "content_hash": "e78704c13dc1302f58b610b86a50b95628f6c513b5769d6db9c6453fbb8f5674",
-      "standardized_at": "2026-07-05T22:04:36.879984+00:00",
+      "content_hash": "c5cbea1dbe075e52026e99748e293b957077a1103020a662c3e4d45e3a084be2",
+      "standardized_at": "2026-09-11T14:21:52.430800+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 17505,
-        "output_tokens": 5593,
-        "total_tokens": 23098,
-        "cost_usd": 0.015562
+        "input_tokens": 18265,
+        "output_tokens": 6404,
+        "total_tokens": 24669,
+        "cost_usd": 0.017374
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -0.302,
+        "model_value": -9.079,
+        "triangle_type": "gross",
+        "triangle_units": "millions",
+        "triangle_units_evidence": "default",
+        "triangle_source_page": 41,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "millions",
+        "units_evidence": "default",
+        "cell_binding": "header",
         "underwriting_years": [
           2022,
           2023,
@@ -424,6 +451,11 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of first underwriting year",
+          "One year later",
+          "Two years later"
         ],
         "source_page": 41,
         "entity": 1416
@@ -518,12 +550,12 @@
       }
     }
   },
-  "total_cost_usd": 0.022335,
-  "total_tokens": 40294,
+  "total_cost_usd": 0.025151,
+  "total_tokens": 42363,
   "validation": {
     "passed": true,
-    "total_discrepancies": 30,
-    "within_tolerance": 30,
+    "total_discrepancies": 13,
+    "within_tolerance": 13,
     "hard_failures": 0,
     "hard_failure_details": []
   }

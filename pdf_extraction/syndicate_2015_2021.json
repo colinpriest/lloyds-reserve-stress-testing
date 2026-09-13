@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T10:27:02.081832+00:00",
+  "extraction_timestamp": "2026-09-13T04:07:45.870974+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -13,40 +15,25 @@
       "opening_reserves_gbp_m": 145.119,
       "opening_reserves_page": 5,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": 12.037,
-      "prior_year_development_pct": 8.29,
-      "direction": "strengthening",
+      "prior_year_development_gbp_m": -5.7,
+      "prior_year_development_pct": -4.79,
+      "direction": "release",
       "prior_year_movement_page": 15,
-      "prior_year_movement_confidence": 0.8,
+      "prior_year_movement_confidence": 1.0,
       "exact_reserve_text": "Overall, on an aggregate basis, a reserve release of GBP 5.7m net of reinsurance was made to prior year reserves during 2021 (2020 GBP 12.0m).",
       "primary_causes": [
         "Favorable claims development",
         "Adverse claims development",
-        "COVID-19 / pandemic effects"
+        "Reinsurance recoveries"
       ],
-      "specific_events": [
-        "COVID-19 pandemic"
-      ],
+      "specific_events": [],
       "specific_years_affected": [],
       "prior_year_events": [],
-      "named_events": [
-        {
-          "event_name": "COVID-19 pandemic",
-          "event_year": null,
-          "event_type": "other",
-          "net_loss_gbp_m": null,
-          "loss_description": "adequate provision has been made for future loss development within its reserves",
-          "lobs_affected": [],
-          "page": 7,
-          "confidence": 0.5
-        }
-      ],
-      "standardized_narrative": "The syndicate reported a net reserve release of GBP 5.7 million for prior year reserves in 2021. This was primarily driven by favourable development in Property classes, partially offset by adverse development in Legal Indemnities. The impact of COVID-19 losses was considered, with adequate provision made for future loss development within reserves.",
+      "named_events": [],
+      "standardized_narrative": "The syndicate reported a net reserve release of GBP 5.7 million for prior year reserves in 2021. This release was primarily driven by favourable development in Property classes, which was partially offset by adverse development in the Legal Indemnities class. The prior year development figure is net of reinsurance and the claims development triangle is distorted by a Reinsurance to Close (RITC) transfer in the prior year.",
       "raw_causal_phrases": [
         "favourable development across Property classes",
-        "adverse development on the Legal Indemnities class",
-        "exposure to Covid-19 losses",
-        "adequate provision has been made for future loss development within its reserves"
+        "adverse development on the Legal Indemnities class"
       ],
       "lob_movements": [
         {
@@ -54,14 +41,14 @@
           "direction": "release",
           "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.8
+          "confidence": 0.5
         },
         {
           "line_of_business": "Professional Lines",
           "direction": "strengthening",
           "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.8
+          "confidence": 0.5
         }
       ],
       "gross_premiums_written_gbp_m": 265.7,
@@ -117,10 +104,10 @@
           "percentage_of_total": 16.0
         }
       ],
-      "gross_premium_page": 1,
+      "gross_premium_page": 11,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior year development is reported as a net figure of GBP 5.7m; the gross figure is not explicitly stated. The claims development triangle is distorted by a significant RITC transfer in 2020 and therefore cannot be used to calculate prior year development. [RAG OVERRIDE: Model said PYD=-5.7, RAG triangle computed 12.037. Using RAG value.]",
+      "data_quality_notes": "Prior year development figure is net of reinsurance as no gross figure was explicitly stated and the claims development triangle is distorted by a significant Reinsurance to Close (RITC) transfer in the prior year (2020). [RAG PYD NOT APPLIED: deterministic figure +12.037m has the opposite sign to both model values [-5.7, -5.7], which agree with each other; model values retained. Sign agreement between the models is not a reconciliation: where they differ in value the cohort and accrual scope of each still has to be settled from the filing (R140).] [CODE PYD NOT APPLIED: deterministic figure +12.493m has the opposite sign to both model values [-5.7, -5.7], which agree with each other; model values retained. Sign agreement between the models is not a reconciliation: where they differ in value the cohort and accrual scope of each still has to be settled from the filing (R140).]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -161,20 +148,22 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_2015_2021_llm.pdf",
-      "content_hash": "13a42f8bea28387dc15c3a277bee08c5fdc705267ba8044d4ee10edef18fe1ef",
-      "standardized_at": "2026-07-05T12:03:49.373713+00:00",
+      "content_hash": "dfb8d782c603f436b660660b2daf9af874039730e7c517bef3da6a40ff44b5ea",
+      "standardized_at": "2026-09-11T11:28:51.920708+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 10121,
-        "output_tokens": 1274,
-        "total_tokens": 18469,
-        "cost_usd": 0.006221
+        "input_tokens": 10925,
+        "output_tokens": 1390,
+        "total_tokens": 18097,
+        "cost_usd": 0.006752
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2018,
           2019,
@@ -377,37 +366,23 @@
       "opening_reserves_gbp_m": 145.119,
       "opening_reserves_page": 19,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": 12.037,
-      "prior_year_development_pct": 8.29,
-      "direction": "strengthening",
+      "prior_year_development_gbp_m": -5.7,
+      "prior_year_development_pct": -3.93,
+      "direction": "release",
       "prior_year_movement_page": 41,
-      "prior_year_movement_confidence": 0.8,
-      "exact_reserve_text": "Overall, on an aggregate basis, a reserve release of GBP 5.7m net of reinsurance was made to prior year reserves during 2021 (2020 GBP 12.0m).",
+      "prior_year_movement_confidence": 1.0,
+      "exact_reserve_text": "Overall, on an aggregate basis, a reserve release of GBP 5.7m net of reinsurance was made to prior year reserves during 2021 (2020 GBP 12.0m).\nThe reserve release was primarily due to the favourable development across Property classes partially offset by adverse development on the Legal Indemnities class.",
       "primary_causes": [
         "Favorable claims development",
         "Adverse claims development"
       ],
       "specific_events": [],
-      "specific_years_affected": [
-        2018,
-        2019
-      ],
-      "prior_year_events": [
-        {
-          "event_name": "Reinsurance to Close (RITC) Transfer",
-          "event_year": 2020,
-          "impact_description": "Large RITC transfer reduced gross claims outstanding by GBP 168,475k in 2020 resulting in lower opening reserves at 1 Jan 2021.",
-          "lobs_affected": [
-            "Treaty"
-          ],
-          "amount_gbp_m": -168.475,
-          "confidence": 1.0
-        }
-      ],
+      "specific_years_affected": [],
+      "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "The syndicate's gross claims outstanding opened at GBP 145.119m. Analysis of the gross claims development triangle indicates a net prior-year strengthening of approximately GBP 12.0m (c.8.3% of opening reserves), driven by adverse development mainly in older underwriting years (notably 2019) partially offset by favourable development in Property classes; however the reported narrative shows a net release of GBP 5.7m after reinsurance. The 2020 year included a large RITC transfer (-GBP 168.475m gross) which materially affected comparatives and net movements.",
+      "standardized_narrative": "The syndicate recorded an aggregate prior-year reserve release of GBP 5.7m (net of reinsurance) in 2021. Management attributes the net release primarily to favourable claims development in Property classes, partially offset by adverse development in the Legal Indemnities class. No quantified gross prior-year movement was provided, so the reported figure is net of reinsurance.",
       "raw_causal_phrases": [
-        "Overall, on an aggregate basis, a reserve release of GBP 5.7m net of reinsurance was made to prior year reserves during 2021 (2020 GBP 12.0m).",
+        "a reserve release of GBP 5.7m net of reinsurance was made to prior year reserves during 2021 (2020 GBP 12.0m).",
         "The reserve release was primarily due to the favourable development across Property classes partially offset by adverse development on the Legal Indemnities class."
       ],
       "lob_movements": [
@@ -416,14 +391,14 @@
           "direction": "release",
           "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.5
+          "confidence": 0.8
         },
         {
           "line_of_business": "Professional Lines",
           "direction": "strengthening",
           "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.5
+          "confidence": 0.8
         }
       ],
       "gross_premiums_written_gbp_m": 265.7,
@@ -479,14 +454,14 @@
           "percentage_of_total": 16.0
         }
       ],
-      "gross_premium_page": 3,
+      "gross_premium_page": 26,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Gross prior-year development is not stated explicitly in a single 'movement in prior year claims' gross line. The report states a net release of GBP 5.7m (net of reinsurance). A gross prior-year movement was calculated from the published gross claims development triangle (see claims triangle) giving a gross strengthening of c.GBP 12.037m. The 2020 RITC transfer of GBP 168.475k materially distorts comparatives. Prior-year net vs gross discrepancy flagged (net release vs gross strengthening). Figures derived from triangle are in GBP '000 in the source; converted to millions here.",
+      "data_quality_notes": "No explicit GROSS prior-year movement figure was provided. The report explicitly states a net prior-year reserve release of GBP 5.7m (net of reinsurance) and a breakdown attributing the release to Property with offset from Legal Indemnities; therefore the prior_year_development_gbp_m is reported as the stated NET figure (permitted fallback). A gross claims development triangle is present but a 2020 RITC transfer and formatting ambiguity in the triangle make a reliable gross PYD calculation uncertain; hence gross PYD was not calculated. Triangle present and used for cross-checking but not for primary PYD due to RITC and formatting ambiguity. [RAG PYD NOT APPLIED: deterministic figure +12.037m has the opposite sign to both model values [-5.7, -5.7], which agree with each other; model values retained. Sign agreement between the models is not a reconciliation: where they differ in value the cohort and accrual scope of each still has to be settled from the filing (R140).] [CODE PYD NOT APPLIED: deterministic figure +12.493m has the opposite sign to both model values [-5.7, -5.7], which agree with each other; model values retained. Sign agreement between the models is not a reconciliation: where they differ in value the cohort and accrual scope of each still has to be settled from the filing (R140).]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
-        "units": "thousands",
+        "units": "millions",
         "page": 41,
         "underwriting_years": [
           2018,
@@ -496,26 +471,26 @@
         ],
         "development_rows": [
           [
-            83952,
-            41516,
-            39048,
-            59188
+            83.952,
+            41.516,
+            39.048,
+            59.188
           ],
           [
-            182198,
-            101879,
-            100967,
+            182.198,
+            101.879,
+            100.967,
             null
           ],
           [
-            178967,
-            113474,
+            178.967,
+            100.967,
             null,
             null
           ],
           [
-            179409,
-            null,
+            179.409,
+            113.474,
             null,
             null
           ]
@@ -523,20 +498,22 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_2015_2021_llm.pdf",
-      "content_hash": "13a42f8bea28387dc15c3a277bee08c5fdc705267ba8044d4ee10edef18fe1ef",
-      "standardized_at": "2026-07-05T12:04:55.054241+00:00",
+      "content_hash": "dfb8d782c603f436b660660b2daf9af874039730e7c517bef3da6a40ff44b5ea",
+      "standardized_at": "2026-09-11T11:30:48.959090+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 26134,
-        "output_tokens": 6609,
-        "total_tokens": 32743,
-        "cost_usd": 0.019752
+        "input_tokens": 26894,
+        "output_tokens": 6998,
+        "total_tokens": 33892,
+        "cost_usd": 0.02072
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2018,
           2019,
@@ -734,12 +711,12 @@
       }
     }
   },
-  "total_cost_usd": 0.025973,
-  "total_tokens": 51212,
+  "total_cost_usd": 0.027472,
+  "total_tokens": 51989,
   "validation": {
     "passed": true,
-    "total_discrepancies": 19,
-    "within_tolerance": 19,
+    "total_discrepancies": 14,
+    "within_tolerance": 14,
     "hard_failures": 0,
     "hard_failure_details": []
   }

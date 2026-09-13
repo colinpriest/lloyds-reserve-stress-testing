@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-05T19:57:59.078286+00:00",
+  "extraction_timestamp": "2026-09-13T04:05:23.898671+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -18,7 +20,7 @@
       "direction": "release",
       "prior_year_movement_page": 15,
       "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "The movement in the net provision for claims includes adverse prior year development of GBP 1.1m (2015: GBP 4.8m favourable).",
+      "exact_reserve_text": "Change in prior year provisions (256)",
       "primary_causes": [
         "Other"
       ],
@@ -31,8 +33,10 @@
           "event_year": 2016,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": 4.0,
-          "loss_description": "The gross losses of GBP 18.1m were partially mitigated by the responsiveness of the Syndicate's outwards reinsurance program, with net losses incurred for this event of GBP 4.0m.",
-          "lobs_affected": [],
+          "loss_description": "net losses incurred for this event of GBP 4.0m",
+          "lobs_affected": [
+            "Property"
+          ],
           "page": 2,
           "confidence": 1.0
         },
@@ -41,8 +45,10 @@
           "event_year": 2016,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": 2.5,
-          "loss_description": "Further catastrophe gross and net losses were incurred in relation to the following events; Hurricane Matthew (gross GBP 2.8m, net GBP 2.5m)",
-          "lobs_affected": [],
+          "loss_description": "net GBP 2.5m",
+          "lobs_affected": [
+            "Property"
+          ],
           "page": 2,
           "confidence": 1.0
         },
@@ -51,8 +57,10 @@
           "event_year": 2016,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": 2.2,
-          "loss_description": "Further catastrophe gross and net losses were incurred in relation to the following events; Texas Hail Storms and Flooding (gross GBP 2.5m, net GBP 2.2m)",
-          "lobs_affected": [],
+          "loss_description": "net GBP 2.2m",
+          "lobs_affected": [
+            "Property"
+          ],
           "page": 2,
           "confidence": 1.0
         },
@@ -61,16 +69,16 @@
           "event_year": 2016,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": 2.0,
-          "loss_description": "Further catastrophe gross and net losses were incurred in relation to the following events; and the Gatlinburg Wildfires (gross GBP 2.2m, net GBP 2.0m).",
-          "lobs_affected": [],
+          "loss_description": "net GBP 2.0m",
+          "lobs_affected": [
+            "Property"
+          ],
           "page": 2,
           "confidence": 1.0
         }
       ],
-      "standardized_narrative": "The Syndicate experienced a gross prior year reserve release of GBP 0.256 million, representing a 0.48% reduction in opening gross claims outstanding. While the narrative mentions adverse net prior year development, the gross technical provisions show a release. No specific causes were detailed for the gross movement. The report highlights several current year catastrophe events including Fort McMurray Wildfires, Hurricane Matthew, Texas Hail Storms and Flooding, and Gatlinburg Wildfires.",
-      "raw_causal_phrases": [
-        "adverse prior year development of GBP 1.1m"
-      ],
+      "standardized_narrative": "The syndicate experienced a minor gross release of GBP 0.256m in prior year reserves. No specific causes or affected lines of business were explicitly detailed for this gross movement.",
+      "raw_causal_phrases": [],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 89.5,
       "gross_premium_mix": [
@@ -90,26 +98,62 @@
           "percentage_of_total": 40.4
         }
       ],
-      "gross_premium_page": 2,
+      "gross_premium_page": 12,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The narrative on page 13 states 'adverse prior year development of GBP 1.1m' which refers to the net movement. However, the gross 'Change in prior year provisions' on page 15 is a release of GBP 0.256m. The gross figure from the technical provisions table is used as per instructions. The claims development triangle on page 14 shows a strengthening of +GBP 2.224m for the 2014 underwriting year, which conflicts with the overall gross release of -GBP 0.256m from the technical provisions reconciliation. The technical provisions reconciliation is considered the primary source for the aggregate prior year movement. [RAG OPENING NOT APPLIED: table value 18.715 (provisions_movement, page 35, unit source header) disagrees with both model values [53.254, 53.254], which agree with each other; the model value is retained and the table value recorded for audit.]",
+      "data_quality_notes": "The narrative on page 13 states 'adverse prior year development of GBP 1.1m' (net), which contradicts the net release of GBP 1.103m shown in Note 11 and the sum of net LOB movements on page 13 (net release of GBP 1.101m). The gross prior year development figure of -0.256m is taken from Note 11, 'Change in prior year provisions - Gross', which is a direct statement. This figure also contradicts the prior year development derived from the gross claims development triangle on page 14, which suggests a strengthening of +2.224m for the 2014 underwriting year. [RAG OPENING NOT APPLIED: table value 18.715 (provisions_movement, page 35, unit source header) disagrees with both model values [53.254, 53.254], which agree with each other; the model value is retained and the table value recorded for audit.]",
+      "_claims_triangle": {
+        "type": "gross",
+        "currency": "GBP",
+        "units": "thousands",
+        "page": 14,
+        "underwriting_years": [
+          2014,
+          2015,
+          2016
+        ],
+        "development_rows": [
+          [
+            31250,
+            41292,
+            68011
+          ],
+          [
+            40903,
+            76777,
+            null
+          ],
+          [
+            43127,
+            null,
+            null
+          ]
+        ]
+      },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_2014_2016_llm.pdf",
-      "content_hash": "ad42e0587d0fc66f93fa18e3e9a05a2645305387613bbe7b056ff79c8bdc6ff3",
-      "standardized_at": "2026-07-05T11:51:35.284834+00:00",
+      "content_hash": "8f0b0f3035b9a7aa1bc42358a9941155e1e36e575c818c279b71b184b3864c4b",
+      "standardized_at": "2026-09-11T11:51:22.733233+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 13217,
-        "output_tokens": 1456,
-        "total_tokens": 18032,
-        "cost_usd": 0.007605
+        "input_tokens": 14021,
+        "output_tokens": 1452,
+        "total_tokens": 20063,
+        "cost_usd": 0.007836
+      },
+      "_pyd_route": {
+        "source": "rag_provisions",
+        "value": -0.3,
+        "model_value": -0.256,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2014,
           2015,
@@ -131,6 +175,11 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At the end of the underwriting year",
+          "One year later",
+          "Two years later"
         ],
         "source_page": 32,
         "entity": 2014
@@ -180,6 +229,13 @@
           "entity": 2014,
           "backend": "azure",
           "table_kind": "provisions_movement"
+        },
+        "movement_semantics": {
+          "row_label": "Change in prior year provisions",
+          "row_index": 6,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": true,
+          "column_index": 1
         },
         "gross_prior_year_claims": -0.3,
         "opening_gross_claims_outstanding": 18.715
@@ -249,6 +305,9 @@
         "foreign_pages": [],
         "underwriting_year_pages": [
           38,
+          39,
+          40,
+          41,
           42,
           43,
           44,
@@ -259,7 +318,8 @@
           49,
           50,
           51,
-          52
+          52,
+          53
         ],
         "underwriting_year_tables_skipped": 12,
         "document_unit_hint": 0.001
@@ -289,24 +349,67 @@
       "direction": "release",
       "prior_year_movement_page": 34,
       "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "The movement in the net provision for claims includes adverse prior year development of GBP 1.1m (2015: GBP 4.8m favourable).",
+      "exact_reserve_text": "Prior year reserve development\nThe movement in the net provision for claims includes adverse prior year development of GBP 1.1m (2015: GBP 4.8m favourable).",
       "primary_causes": [
         "Adverse claims development",
         "Reinsurance recoveries"
       ],
-      "specific_events": [],
-      "specific_years_affected": [
-        2014,
-        2015
+      "specific_events": [
+        "Fort McMurray Wildfires",
+        "Hurricane Matthew",
+        "Texas Hail Storms and Flooding",
+        "Gatlinburg Wildfires"
       ],
-      "prior_year_events": [],
+      "specific_years_affected": [],
+      "prior_year_events": [
+        {
+          "event_name": "Fort McMurray Wildfires",
+          "event_year": 2016,
+          "impact_description": "Adverse catastrophe losses; gross losses partially mitigated by reinsurance; net losses GBP 4.0m",
+          "lobs_affected": [
+            "Property"
+          ],
+          "amount_gbp_m": 4.0,
+          "confidence": 1.0
+        },
+        {
+          "event_name": "Hurricane Matthew",
+          "event_year": 2016,
+          "impact_description": "Catastrophe losses with net impact after reinsurance",
+          "lobs_affected": [
+            "Property"
+          ],
+          "amount_gbp_m": 2.5,
+          "confidence": 1.0
+        },
+        {
+          "event_name": "Texas Hail Storms and Flooding",
+          "event_year": 2016,
+          "impact_description": "Catastrophe losses with net impact after reinsurance",
+          "lobs_affected": [
+            "Property"
+          ],
+          "amount_gbp_m": 2.2,
+          "confidence": 1.0
+        },
+        {
+          "event_name": "Gatlinburg Wildfires",
+          "event_year": 2016,
+          "impact_description": "Catastrophe losses with net impact after reinsurance",
+          "lobs_affected": [
+            "Property"
+          ],
+          "amount_gbp_m": 2.0,
+          "confidence": 1.0
+        }
+      ],
       "named_events": [
         {
           "event_name": "Fort McMurray Wildfires",
           "event_year": 2016,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": 4.0,
-          "loss_description": "The gross losses of GBP 18.1m were partially mitigated by the responsiveness of the Syndicate's outwards reinsurance program, with net losses incurred for this event of GBP 4.0m.",
+          "loss_description": "gross losses of GBP 18.1m were partially mitigated by the responsiveness of the Syndicate's outwards reinsurance program, with net losses incurred for this event of GBP 4.0m.",
           "lobs_affected": [
             "Property"
           ],
@@ -318,7 +421,7 @@
           "event_year": 2016,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": 2.5,
-          "loss_description": "Further catastrophe gross and net losses were incurred in relation to the following events; Hurricane Matthew (gross GBP 2.8m, net GBP 2.5m)",
+          "loss_description": "gross GBP 2.8m, net GBP 2.5m",
           "lobs_affected": [
             "Property"
           ],
@@ -330,7 +433,7 @@
           "event_year": 2016,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": 2.2,
-          "loss_description": "Further catastrophe gross and net losses were incurred in relation to the following events; Texas Hail Storms and Flooding (gross GBP 2.5m, net GBP 2.2m)",
+          "loss_description": "gross GBP 2.5m, net GBP 2.2m",
           "lobs_affected": [
             "Property"
           ],
@@ -342,7 +445,7 @@
           "event_year": 2016,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": 2.0,
-          "loss_description": "Further catastrophe gross and net losses were incurred in relation to the following events; ... the Gatlinburg Wildfires (gross GBP 2.2m, net GBP 2.0m).",
+          "loss_description": "gross GBP 2.2m, net GBP 2.0m",
           "lobs_affected": [
             "Property"
           ],
@@ -350,46 +453,48 @@
           "confidence": 1.0
         }
       ],
-      "standardized_narrative": "At 1 January 2016 gross claims outstanding were GBP 53.254m. During 2016 the technical provisions show a small gross prior-year release of approximately GBP 0.256m. The report notes prior-year activity as a minor movement overall, while the year was dominated by current-year catastrophe activity (notably Fort McMurray wildfires, Hurricane Matthew, Texas hail & flooding and Gatlinburg wildfires) which increased claims for the accident year; reinsurance recoveries materially influenced net outcomes.",
+      "standardized_narrative": "The syndicate opened 2016 with gross claims outstanding of GBP 53.254m. During 2016 there was a small gross prior-year strengthening of approximately GBP 0.256m (c.0.48% of opening reserves) though net movement was adverse (GBP 1.103m) reflecting movements in reinsurers' recoveries. The 2016 accident year experienced catastrophe activity (notably Fort McMurray wildfires, Hurricane Matthew, Texas hail/flooding and the Gatlinburg wildfires) which produced several gross catastrophe losses partially offset by reinsurance, predominantly impacting the Property book. Overall the prior year reserve movement is a modest strengthening on a gross basis but net adverse after reinsurance effects.",
       "raw_causal_phrases": [
         "The movement in the net provision for claims includes adverse prior year development of GBP 1.1m (2015: GBP 4.8m favourable).",
-        "Net claims incurred during the year have resulted in an increase in the net combined ratio to 117.0% (2015: 99.1%). The principal driver for the net loss ratio of 77.9% (2015: 58.2%) is a combination of catastrophe and risk loss activity during the current accident year."
+        "The principal driver for the net loss ratio of 77.9% (2015: 58.2%) is a combination of catastrophe and risk loss activity during the current accident year.",
+        "On 1 May 2016, the Syndicate incurred catastrophe losses from the Fort McMurray Wildfires in Alberta, Canada.",
+        "The gross losses of GBP 18.1m were partially mitigated by the responsiveness of the Syndicate's outwards reinsurance program, with net losses incurred for this event of GBP 4.0m."
       ],
       "lob_movements": [
         {
           "line_of_business": "Accident & Health",
           "direction": "strengthening",
-          "amount_gbp_m": 0.051,
+          "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.8
+          "confidence": 0.5
         },
         {
           "line_of_business": "Marine",
           "direction": "release",
-          "amount_gbp_m": -0.514,
+          "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.8
+          "confidence": 0.5
         },
         {
           "line_of_business": "Property",
           "direction": "release",
-          "amount_gbp_m": -0.85,
+          "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.8
+          "confidence": 0.5
         },
         {
           "line_of_business": "Casualty",
           "direction": "release",
-          "amount_gbp_m": -1.01,
+          "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.8
+          "confidence": 0.5
         },
         {
           "line_of_business": "Treaty",
           "direction": "strengthening",
-          "amount_gbp_m": 0.796,
+          "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.8
+          "confidence": 0.5
         }
       ],
       "gross_premiums_written_gbp_m": 89.5,
@@ -410,10 +515,10 @@
           "percentage_of_total": 40.4
         }
       ],
-      "gross_premium_page": 6,
+      "gross_premium_page": 30,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Primary gross opening reserves taken from the prior-year comparative column of the Statement of Financial Position (explicit). Prior-year development taken from the 'Change in prior year provisions' line in the Technical Provisions note (gross figure shown as (256) GBP 000 -> interpreted as a GBP 0.256m release). There is apparent inconsistency between the narrative (which refers to 'adverse prior year development of GBP 1.1m' - a net figure) and the Technical Provisions gross movement; table signs/parentheses conventions in the report are ambiguous. lob_movements are derived from the per-line prior-year development table (these appear to be net amounts by line and so confidence is reduced). The claims development triangle exists and is provided; RITC activity in other parts of the report was noted historically but does not appear to distort the 2016 gross triangle materially. [RAG OPENING NOT APPLIED: table value 18.715 (provisions_movement, page 35, unit source header) disagrees with both model values [53.254, 53.254], which agree with each other; the model value is retained and the table value recorded for audit.]",
+      "data_quality_notes": "Prior year movement: gross movement of GBP 0.256m taken from the 'Change in prior year provisions' gross column in Technical Provisions note. The narrative sentence in the report quotes net adverse development (GBP 1.1m) - gross vs net differ materially due to reinsurance movements. LOB-level prior-year movements in the notes are presented net; gross split by LOB is not available, so LOB amounts are null and directions are inferred from net-line disclosures. Claims development triangle (gross) is provided and used as supporting data; no RITC distortion affects the 2016 gross triangle. [RAG OVERRIDE: Model said PYD=0.256, RAG provisions computed -0.3. Using RAG value.] [RAG OPENING NOT APPLIED: table value 18.715 (provisions_movement, page 35, unit source header) disagrees with both model values [53.254, 53.254], which agree with each other; the model value is retained and the table value recorded for audit.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -444,20 +549,28 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_2014_2016_llm.pdf",
-      "content_hash": "ad42e0587d0fc66f93fa18e3e9a05a2645305387613bbe7b056ff79c8bdc6ff3",
-      "standardized_at": "2026-07-05T11:53:35.503715+00:00",
+      "content_hash": "8f0b0f3035b9a7aa1bc42358a9941155e1e36e575c818c279b71b184b3864c4b",
+      "standardized_at": "2026-09-11T11:54:33.314931+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 25706,
-        "output_tokens": 8822,
-        "total_tokens": 34528,
-        "cost_usd": 0.024071
+        "input_tokens": 26466,
+        "output_tokens": 8226,
+        "total_tokens": 34692,
+        "cost_usd": 0.023069
+      },
+      "_pyd_route": {
+        "source": "rag_provisions",
+        "value": -0.3,
+        "model_value": 0.256,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2014,
           2015,
@@ -479,6 +592,11 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At the end of the underwriting year",
+          "One year later",
+          "Two years later"
         ],
         "source_page": 32,
         "entity": 2014
@@ -528,6 +646,13 @@
           "entity": 2014,
           "backend": "azure",
           "table_kind": "provisions_movement"
+        },
+        "movement_semantics": {
+          "row_label": "Change in prior year provisions",
+          "row_index": 6,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": true,
+          "column_index": 1
         },
         "gross_prior_year_claims": -0.3,
         "opening_gross_claims_outstanding": 18.715
@@ -597,6 +722,9 @@
         "foreign_pages": [],
         "underwriting_year_pages": [
           38,
+          39,
+          40,
+          41,
           42,
           43,
           44,
@@ -607,7 +735,8 @@
           49,
           50,
           51,
-          52
+          52,
+          53
         ],
         "underwriting_year_tables_skipped": 12,
         "document_unit_hint": 0.001
@@ -627,8 +756,8 @@
       }
     }
   },
-  "total_cost_usd": 0.031676,
-  "total_tokens": 52560,
+  "total_cost_usd": 0.030905,
+  "total_tokens": 54755,
   "validation": {
     "passed": true,
     "total_discrepancies": 19,

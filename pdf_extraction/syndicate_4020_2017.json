@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T11:21:54.832843+00:00",
+  "extraction_timestamp": "2026-09-13T04:01:45.061109+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -13,12 +15,12 @@
       "opening_reserves_gbp_m": 512.293,
       "opening_reserves_page": 18,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": 17.285,
-      "prior_year_development_pct": 3.37,
+      "prior_year_development_gbp_m": 21.188,
+      "prior_year_development_pct": 4.14,
       "direction": "strengthening",
       "prior_year_movement_page": 19,
       "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "Movement arising from prior years",
+      "exact_reserve_text": "Movement arising from prior years 8,718",
       "primary_causes": [
         "Adverse claims development",
         "IBNR recalibration"
@@ -27,14 +29,27 @@
       "specific_years_affected": [
         2015
       ],
-      "prior_year_events": [],
+      "prior_year_events": [
+        {
+          "event_name": "Incurred and potential future claim development in Specialty Programmes and Package Programmes accounts",
+          "event_year": 2015,
+          "impact_description": "The liability reserves of the Specialty Programmes and Package Programmes accounts have been further strengthened in recognition of incurred and potential future claim development.",
+          "lobs_affected": [
+            "Specialty",
+            "Property",
+            "Casualty"
+          ],
+          "amount_gbp_m": null,
+          "confidence": 0.8
+        }
+      ],
       "named_events": [
         {
           "event_name": "Hurricane Harvey",
           "event_year": 2017,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "impacted the 2017 YOA",
+          "loss_description": "The 2017 YOA has been impacted by Hurricanes Harvey, Irma and Maria.",
           "lobs_affected": [],
           "page": 2,
           "confidence": 0.8
@@ -44,7 +59,7 @@
           "event_year": 2017,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "impacted the 2017 YOA",
+          "loss_description": "The 2017 YOA has been impacted by Hurricanes Harvey, Irma and Maria.",
           "lobs_affected": [],
           "page": 2,
           "confidence": 0.8
@@ -54,7 +69,7 @@
           "event_year": 2017,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "impacted the 2017 YOA",
+          "loss_description": "The 2017 YOA has been impacted by Hurricanes Harvey, Irma and Maria.",
           "lobs_affected": [],
           "page": 2,
           "confidence": 0.8
@@ -64,7 +79,7 @@
           "event_year": 2017,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "impacted the 2017 YOA",
+          "loss_description": "The 2017 YOA has been impacted by the Earthquakes in Mexico.",
           "lobs_affected": [],
           "page": 2,
           "confidence": 0.8
@@ -74,34 +89,19 @@
           "event_year": 2017,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "impacted the 2017 YOA",
+          "loss_description": "The 2017 YOA has been impacted by Wildfires in California.",
           "lobs_affected": [],
           "page": 2,
           "confidence": 0.8
         }
       ],
-      "standardized_narrative": "The syndicate experienced a gross prior year strengthening of GBP 8.718 million in 2017. This was primarily driven by further strengthening of liability reserves in the Specialty Programmes and Package Programmes accounts due to incurred and potential future claim development. While the majority of the remaining book experienced good claims, the net effect was an overall strengthening of prior year reserves. The 2015 YOA closed with a profit, but its liability reserves were strengthened.",
+      "standardized_narrative": "The syndicate experienced a strengthening of GBP 8.718 million in prior year reserves. This was primarily driven by adverse claims development and IBNR recalibration, specifically in the liability reserves of the Specialty Programmes and Package Programmes accounts for the 2015 Year of Account. This strengthening occurred despite good claims experience in the majority of the remaining book and previous major loss estimates proving adequate, which partially offset the adverse development.",
       "raw_causal_phrases": [
         "liability reserves of the Specialty Programmes and Package Programmes accounts have been further strengthened in recognition of incurred and potential future claim development",
         "good claims experience in the majority of the remaining book",
         "Previous major loss estimates have proven to be adequate"
       ],
-      "lob_movements": [
-        {
-          "line_of_business": "Specialty",
-          "direction": "strengthening",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.5
-        },
-        {
-          "line_of_business": "Casualty",
-          "direction": "strengthening",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.5
-        }
-      ],
+      "lob_movements": [],
       "gross_premiums_written_gbp_m": 277.833,
       "gross_premium_mix": [
         {
@@ -128,7 +128,7 @@
       "gross_premium_page": 1,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The 2015 YOA closed into the 2016 YOA of Syndicate 4020 via Reinsurance to Close (RITC), which may distort the interpretation of claims development from the gross claims triangle for affected underwriting years. [RAG OVERRIDE: Model said PYD=8.718, RAG triangle computed 17.285. Using RAG value.]",
+      "data_quality_notes": "Gross premium mix is from a divisional summary table in the Managing Agent's report, as no regulatory segmental analysis for the 2017 calendar year was available in the Notes to the Accounts. [RAG OVERRIDE: Model said PYD=8.718, RAG triangle computed 21.188. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -206,26 +206,48 @@
             null,
             null,
             null
+          ],
+          [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
           ]
         ]
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_4020_2017_llm.pdf",
-      "content_hash": "1257a17e8c430b60c4b1f302cdf174cee769dea05d696a48e0c8d2e5177a1e85",
-      "standardized_at": "2026-07-05T16:39:05.267659+00:00",
+      "content_hash": "5df28ca2f1b9f9b6e38214a146f82f1db6294747a6c9e99b83b4c6e027d1fa55",
+      "standardized_at": "2026-09-11T12:44:41.955572+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 11153,
-        "output_tokens": 1789,
-        "total_tokens": 16275,
-        "cost_usd": 0.007818
+        "input_tokens": 11957,
+        "output_tokens": 1951,
+        "total_tokens": 19203,
+        "cost_usd": 0.008465
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 21.188,
+        "model_value": 8.718,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 41,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
+          2010,
           2011,
           2012,
           2013,
@@ -236,6 +258,7 @@
         ],
         "development_rows": [
           [
+            578754.0,
             97013.0,
             109143.0,
             106131.0,
@@ -245,6 +268,7 @@
             129594.0
           ],
           [
+            703823.0,
             172061.0,
             182455.0,
             178273.0,
@@ -254,6 +278,7 @@
             null
           ],
           [
+            729280.0,
             184477.0,
             196129.0,
             184586.0,
@@ -263,6 +288,7 @@
             null
           ],
           [
+            721022.0,
             180820.0,
             192206.0,
             183681.0,
@@ -272,6 +298,7 @@
             null
           ],
           [
+            715908.0,
             179930.0,
             191305.0,
             184146.0,
@@ -281,6 +308,7 @@
             null
           ],
           [
+            709465.0,
             183642.0,
             195737.0,
             null,
@@ -290,7 +318,18 @@
             null
           ],
           [
+            707993.0,
             182435.0,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            711896.0,
+            null,
             null,
             null,
             null,
@@ -299,6 +338,21 @@
             null
           ]
         ],
+        "row_labels": [
+          "1 year",
+          "2 years",
+          "3 years",
+          "4 years",
+          "5 years",
+          "6 years",
+          "7 years",
+          "8 years"
+        ],
+        "aggregated_cohort": {
+          "anchor": 2010,
+          "label": "prior GBP '000",
+          "column": 8
+        },
         "source_page": 41,
         "entity": 4020
       },
@@ -399,14 +453,14 @@
       "syndicate": 4020,
       "year": 2017,
       "opening_reserves_gbp_m": 512.293,
-      "opening_reserves_page": 25,
+      "opening_reserves_page": 18,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": 17.285,
-      "prior_year_development_pct": 3.37,
+      "prior_year_development_gbp_m": 21.188,
+      "prior_year_development_pct": 4.14,
       "direction": "strengthening",
-      "prior_year_movement_page": 38,
+      "prior_year_movement_page": 19,
       "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "The liability section of the Specialty Programmes and Package Programmes accounts has been further strengthened in recognition of incurred and potential future claim development, although the impact of this has been offset by good claims experience in the majority of the remaining book.",
+      "exact_reserve_text": "Movement arising from prior years 8,718 - 8,718",
       "primary_causes": [
         "Adverse claims development",
         "IBNR recalibration"
@@ -420,75 +474,68 @@
           "event_year": 2017,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "Impacting the 2017 YOA (one of a number of major catastrophe losses in 2017); despite these losses, a profit is currently forecast for this YOA.",
+          "loss_description": "The 2017 YOA has been impacted by Hurricanes Harvey, Irma and Maria, the Earthquakes in Mexico and Wildfires in California. Despite these losses, a profit is currently forecast for this YOA.",
           "lobs_affected": [
-            "Property",
-            "Specialty",
-            "Casualty"
+            "Property"
           ],
           "page": 6,
-          "confidence": 0.8
+          "confidence": 1.0
         },
         {
           "event_name": "Hurricane Irma",
           "event_year": 2017,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "Impacting the 2017 YOA (one of a number of major catastrophe losses in 2017); despite these losses, a profit is currently forecast for this YOA.",
+          "loss_description": "The 2017 YOA has been impacted by Hurricanes Harvey, Irma and Maria, the Earthquakes in Mexico and Wildfires in California. Despite these losses, a profit is currently forecast for this YOA.",
           "lobs_affected": [
-            "Property",
-            "Specialty",
-            "Casualty"
+            "Property"
           ],
           "page": 6,
-          "confidence": 0.8
+          "confidence": 1.0
         },
         {
           "event_name": "Hurricane Maria",
           "event_year": 2017,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "Impacting the 2017 YOA (one of a number of major catastrophe losses in 2017); despite these losses, a profit is currently forecast for this YOA.",
-          "lobs_affected": [
-            "Property",
-            "Specialty",
-            "Casualty"
-          ],
-          "page": 6,
-          "confidence": 0.8
-        },
-        {
-          "event_name": "Earthquakes in Mexico",
-          "event_year": 2017,
-          "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": null,
-          "loss_description": "Impacting the 2017 YOA; listed among major catastrophe losses experienced in 2017.",
-          "lobs_affected": [
-            "Property",
-            "Casualty"
-          ],
-          "page": 6,
-          "confidence": 0.8
-        },
-        {
-          "event_name": "Wildfires in California",
-          "event_year": 2017,
-          "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": null,
-          "loss_description": "Impacting the 2017 YOA; listed among major catastrophe losses experienced in 2017.",
+          "loss_description": "The 2017 YOA has been impacted by Hurricanes Harvey, Irma and Maria, the Earthquakes in Mexico and Wildfires in California. Despite these losses, a profit is currently forecast for this YOA.",
           "lobs_affected": [
             "Property"
           ],
           "page": 6,
-          "confidence": 0.8
+          "confidence": 1.0
+        },
+        {
+          "event_name": "Mexico earthquakes",
+          "event_year": 2017,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "The 2017 YOA has been impacted by Hurricanes Harvey, Irma and Maria, the Earthquakes in Mexico and Wildfires in California. Despite these losses, a profit is currently forecast for this YOA.",
+          "lobs_affected": [
+            "Property"
+          ],
+          "page": 6,
+          "confidence": 1.0
+        },
+        {
+          "event_name": "California wildfires",
+          "event_year": 2017,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "The 2017 YOA has been impacted by Hurricanes Harvey, Irma and Maria, the Earthquakes in Mexico and Wildfires in California. Despite these losses, a profit is currently forecast for this YOA.",
+          "lobs_affected": [
+            "Property"
+          ],
+          "page": 6,
+          "confidence": 1.0
         }
       ],
-      "standardized_narrative": "Opening gross claims outstanding at 1 Jan 2017 were GBP 512.293m. During 2017 the syndicate recorded a gross prior-year strengthening of GBP 8.718m (1.70% of opening gross reserves), driven by adverse/expected future claim development principally in liability exposures. The report states that the liability sections of the Specialty Programmes and Package Programmes were further strengthened in recognition of incurred and potential future claim development, although this was offset by favourable experience in much of the remainder of the portfolio. The 2017 calendar year was also impacted by Hurricanes Harvey, Irma and Maria, earthquakes in Mexico and wildfires in California.",
+      "standardized_narrative": "Opening gross claims outstanding at 1 January 2017 were GBP 512.3m. During 2017 there was a gross prior-year strengthening of GBP 8.7m (1.7% of opening reserves), primarily reflecting adverse claims development and recalibration of IBNR particularly in the liability sections of the Specialty Programmes and Package Programmes. These reserve movements were small relative to the overall reserve base. The 2017 calendar year was also materially impacted by several named catastrophe events (Harvey, Irma, Maria, Mexico earthquakes and California wildfires) which are treated as current year losses.",
       "raw_causal_phrases": [
-        "further strengthened in recognition of incurred and potential future claim development",
-        "improvement on the RITC brought forward of GBP 2.2m",
+        "have been further strengthened in recognition of incurred and potential future claim development",
+        "The liability section of the Specialty Programmes and Package Programmes accounts has been further strengthened in recognition of incurred and potential future claim development",
         "Previous major loss estimates have proven to be adequate",
-        "The liability section of the Specialty Programmes and Package Programmes accounts has been further strengthened in recognition of incurred and potential future claim development although the impact of this has been offset by good claims experience in the majority of the remaining book."
+        "Movement arising from prior years"
       ],
       "lob_movements": [
         {
@@ -499,21 +546,14 @@
           "confidence": 0.8
         },
         {
-          "line_of_business": "Property",
-          "direction": "release",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.5
-        },
-        {
           "line_of_business": "Casualty",
-          "direction": "release",
+          "direction": "strengthening",
           "amount_gbp_m": null,
           "percentage": null,
           "confidence": 0.5
         },
         {
-          "line_of_business": "Marine",
+          "line_of_business": "Property",
           "direction": "release",
           "amount_gbp_m": null,
           "percentage": null,
@@ -525,33 +565,33 @@
         {
           "line_of_business": "Marine & Energy",
           "amount_gbp_m": 28.195,
-          "percentage_of_total": 10.15
+          "percentage_of_total": 10.151
         },
         {
           "line_of_business": "Property",
           "amount_gbp_m": 60.683,
-          "percentage_of_total": 21.86
+          "percentage_of_total": 21.853
         },
         {
           "line_of_business": "Casualty",
           "amount_gbp_m": 87.871,
-          "percentage_of_total": 31.64
+          "percentage_of_total": 31.649
         },
         {
           "line_of_business": "Specialty",
           "amount_gbp_m": 101.084,
-          "percentage_of_total": 36.39
+          "percentage_of_total": 36.347
         }
       ],
       "gross_premium_page": 4,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior year development (gross GBP 8.718m) taken from Note 12 'Movement arising from prior years' (Insurance liabilities gross column). Narrative describing strengthening is qualitative and not tied to a gross amount by LOB. No gross prior-year movements by LOB were provided. Claims development triangle is present but includes an '2010 & prior' aggregate column; triangle used only as corroboration. All monetary figures in statements are presented in GBP '000 in the source; monetary fields in this JSON (except the claims triangle) are converted to millions. [RAG OVERRIDE: Model said PYD=8.718, RAG triangle computed 17.285. Using RAG value.]",
+      "data_quality_notes": "Prior year development taken from Note 12 movement table row 'Movement arising from prior years' (gross = GBP 8,718k). Opening gross claims outstanding taken from insurance liabilities (gross claims liabilities 512,293 at 31 Dec 2016). No explicit prose sentence describing the prior-year movement was provided beyond the movement table row; exact_reserve_text quotes the table row. Gross premium mix taken from Managing Agent's summary table (calendar year column) because a regulatory segmental note with identical breakdown was not present for the calendar year notes. Claims development triangle is present (gross) in the reserves note; RITC and other adjustments are present elsewhere and may distort simple triangle-based PYD computations but the movement row used here is explicit. [RAG OVERRIDE: Model said PYD=8.718, RAG triangle computed 21.188. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
-        "page": 39,
+        "page": 20,
         "underwriting_years": [
           2017,
           2016,
@@ -638,21 +678,34 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_4020_2017_llm.pdf",
-      "content_hash": "1257a17e8c430b60c4b1f302cdf174cee769dea05d696a48e0c8d2e5177a1e85",
-      "standardized_at": "2026-07-05T16:40:25.145585+00:00",
+      "content_hash": "5df28ca2f1b9f9b6e38214a146f82f1db6294747a6c9e99b83b4c6e027d1fa55",
+      "standardized_at": "2026-09-11T12:47:29.916956+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 27624,
-        "output_tokens": 6573,
-        "total_tokens": 34197,
-        "cost_usd": 0.020052
+        "input_tokens": 28384,
+        "output_tokens": 7786,
+        "total_tokens": 36170,
+        "cost_usd": 0.022668
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 21.188,
+        "model_value": 8.718,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 41,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
+          2010,
           2011,
           2012,
           2013,
@@ -663,6 +716,7 @@
         ],
         "development_rows": [
           [
+            578754.0,
             97013.0,
             109143.0,
             106131.0,
@@ -672,6 +726,7 @@
             129594.0
           ],
           [
+            703823.0,
             172061.0,
             182455.0,
             178273.0,
@@ -681,6 +736,7 @@
             null
           ],
           [
+            729280.0,
             184477.0,
             196129.0,
             184586.0,
@@ -690,6 +746,7 @@
             null
           ],
           [
+            721022.0,
             180820.0,
             192206.0,
             183681.0,
@@ -699,6 +756,7 @@
             null
           ],
           [
+            715908.0,
             179930.0,
             191305.0,
             184146.0,
@@ -708,6 +766,7 @@
             null
           ],
           [
+            709465.0,
             183642.0,
             195737.0,
             null,
@@ -717,7 +776,18 @@
             null
           ],
           [
+            707993.0,
             182435.0,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            711896.0,
+            null,
             null,
             null,
             null,
@@ -726,6 +796,21 @@
             null
           ]
         ],
+        "row_labels": [
+          "1 year",
+          "2 years",
+          "3 years",
+          "4 years",
+          "5 years",
+          "6 years",
+          "7 years",
+          "8 years"
+        ],
+        "aggregated_cohort": {
+          "anchor": 2010,
+          "label": "prior GBP '000",
+          "column": 8
+        },
         "source_page": 41,
         "entity": 4020
       },
@@ -823,12 +908,12 @@
       }
     }
   },
-  "total_cost_usd": 0.02787,
-  "total_tokens": 50472,
+  "total_cost_usd": 0.031133,
+  "total_tokens": 55373,
   "validation": {
     "passed": true,
-    "total_discrepancies": 18,
-    "within_tolerance": 18,
+    "total_discrepancies": 16,
+    "within_tolerance": 16,
     "hard_failures": 0,
     "hard_failure_details": []
   }

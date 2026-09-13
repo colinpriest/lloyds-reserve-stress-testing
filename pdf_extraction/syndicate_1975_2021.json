@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T10:03:23.833293+00:00",
+  "extraction_timestamp": "2026-09-13T04:04:14.570368+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -20,8 +22,7 @@
       "prior_year_movement_confidence": 0.8,
       "exact_reserve_text": "The reserves established in 2020 have proved to be adequate and we have been able to make releases during 2021, especially on the 2018 and 2019 years of account, which are now reinsured under a Loss Portfolio Transfer arrangement.",
       "primary_causes": [
-        "Favorable claims development",
-        "COVID-19 / pandemic effects"
+        "Favorable claims development"
       ],
       "specific_events": [],
       "specific_years_affected": [
@@ -30,20 +31,14 @@
       ],
       "prior_year_events": [
         {
-          "event_name": "COVID-19 / pandemic effects",
-          "event_year": 2020,
-          "impact_description": "The reserves established in 2020 have proved to be adequate and we have been able to make releases during 2021, especially on the 2018 and 2019 years of account.",
-          "lobs_affected": [],
-          "amount_gbp_m": null,
-          "confidence": 0.8
-        },
-        {
           "event_name": "Loss Portfolio Transfer (LPT)",
           "event_year": 2021,
-          "impact_description": "An LPT has been put into place in December 2021 reinsuring the loss reserves on the 2018 and 2019 years of account... The reinsurance recovery included within the Net Technical Provisions as part of the LPT was GBP 28.0m.",
-          "lobs_affected": [],
+          "impact_description": "reinsuring the loss reserves on the 2018 and 2019 years of account to provide stability on future loss movements on prior years, enabling releases due to adequacy of reserves.",
+          "lobs_affected": [
+            "Professional Lines"
+          ],
           "amount_gbp_m": null,
-          "confidence": 1.0
+          "confidence": 0.8
         }
       ],
       "named_events": [
@@ -52,18 +47,30 @@
           "event_year": 2020,
           "event_type": "other",
           "net_loss_gbp_m": null,
-          "loss_description": "The reserves established in 2020 have proved to be adequate and we have been able to make releases during 2021, especially on the 2018 and 2019 years of account.",
-          "lobs_affected": [],
+          "loss_description": "Reserves established in 2020 proved adequate, enabling releases in 2021.",
+          "lobs_affected": [
+            "Professional Lines"
+          ],
           "page": 1,
-          "confidence": 1.0
+          "confidence": 0.8
         }
       ],
-      "standardized_narrative": "Coverys Syndicate 1975 reported a gross prior year reserve release of GBP 9.539 million for the year ended 31 December 2021. This release represents an 11.68% reduction in opening gross claims outstanding. The releases were primarily driven by reserves established in 2020 for COVID-19 proving to be adequate, particularly impacting the 2018 and 2019 years of account. A Loss Portfolio Transfer (LPT) was also put in place in December 2021, reinsuring loss reserves on the 2018 and 2019 years of account to provide stability against future loss movements. The report does not provide a breakdown of the reserve movement by specific lines of business.",
+      "standardized_narrative": "In 2021, Syndicate 1975 experienced a gross prior year reserve release of GBP 9.539 million, representing an 11.69% reduction of its opening gross claims outstanding. This favorable development was primarily driven by the adequacy of reserves established in 2020, particularly for the 2018 and 2019 underwriting years. A Loss Portfolio Transfer (LPT) arrangement, put in place in December 2021, reinsured loss reserves on the 2018 and 2019 years of account, contributing to stability and enabling these releases. The adequacy of COVID-19 provisions established in 2020 also contributed to the releases.",
       "raw_causal_phrases": [
-        "reserves established in 2020 have proved to be adequate",
-        "make releases during 2021, especially on the 2018 and 2019 years of account"
+        "The reserves established in 2020 have proved to be adequate",
+        "releases during 2021, especially on the 2018 and 2019 years of account",
+        "Loss Portfolio Transfer arrangement",
+        "COVID-19 provisions"
       ],
-      "lob_movements": [],
+      "lob_movements": [
+        {
+          "line_of_business": "Professional Lines",
+          "direction": "release",
+          "amount_gbp_m": -9.539,
+          "percentage": -11.69,
+          "confidence": 0.5
+        }
+      ],
       "gross_premiums_written_gbp_m": 51.7,
       "gross_premium_mix": [
         {
@@ -85,7 +92,7 @@
       "gross_premium_page": 15,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "",
+      "data_quality_notes": "Prior year development calculated from gross claims development triangle. Line of business for prior year movement inferred from syndicate's primary business focus.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -121,25 +128,43 @@
             null,
             null,
             null
+          ],
+          [
+            null,
+            null,
+            null,
+            null
           ]
         ]
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_1975_2021_llm.pdf",
-      "content_hash": "82eded35320caca73088bab1328cd2bcc8665937e9d8d223cec0ce4545f12c1a",
-      "standardized_at": "2026-07-05T10:28:03.432711+00:00",
+      "content_hash": "ec8bd52124cc3d4abb8517ab0f53945a093aa9d0c7256b1f96097e62161043be",
+      "standardized_at": "2026-09-11T11:16:43.278188+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 10379,
-        "output_tokens": 1355,
-        "total_tokens": 19037,
-        "cost_usd": 0.006501
+        "input_tokens": 11183,
+        "output_tokens": 1318,
+        "total_tokens": 18487,
+        "cost_usd": 0.00665
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -9.539,
+        "model_value": -9.539,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 33,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2018,
           2019,
@@ -171,6 +196,12 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "After one year",
+          "After two years",
+          "After three years",
+          "After four years"
         ],
         "source_page": 33,
         "entity": 1975
@@ -301,7 +332,7 @@
       "direction": "release",
       "prior_year_movement_page": 31,
       "prior_year_movement_confidence": 0.8,
-      "exact_reserve_text": "The reserves established in 2020 have proved to be adequate and we have been able to make releases during 2021, especially on the 2018 and 2019 years of account, which are now reinsured under a Loss Portfolio Transfer arrangement.\nAn LPT has been put into place in December 2021 reinsuring the loss reserves on the 2018 and 2019 years of account to Medical Professional Mutual Insurance Company. This will provide stability to the Syndicate on any future loss movements on the prior years. The premium cost to the Syndicate was GBP 28.0m which provided an equivalent reinsurance recovery.",
+      "exact_reserve_text": "The reserves established in 2020 have proved to be adequate and we have been able to make releases during 2021, especially on the 2018 and 2019 years of account, which are now reinsured under a Loss Portfolio Transfer arrangement.",
       "primary_causes": [
         "Favorable claims development",
         "Reinsurance recoveries",
@@ -314,38 +345,30 @@
       ],
       "prior_year_events": [
         {
-          "event_name": "Loss Portfolio Transfer (LPT)",
+          "event_name": "Loss Portfolio Transfer to Medical Professional Mutual Insurance Company",
           "event_year": 2021,
-          "impact_description": "Reinsured the loss reserves on the 2018 and 2019 years of account to Medical Professional Mutual Insurance Company; provided stability to the Syndicate on future loss movements and generated a reinsurance recovery included within net technical provisions of GBP 28.0m.",
+          "impact_description": "Reinsured the loss reserves on the 2018 and 2019 years of account providing stability to the Syndicate on any future loss movements; a reinsurance recovery of GBP 28.0m is included in the net technical provisions.",
           "lobs_affected": [
-            "Professional Lines",
-            "Reinsurance - Casualty"
+            "Professional Lines"
           ],
           "amount_gbp_m": null,
-          "confidence": 1.0
+          "confidence": 0.8
         }
       ],
       "named_events": [],
-      "standardized_narrative": "The syndicate reported favourable prior-year reserve development during 2021, driven by adequate reserves set in 2020 and subsequent releases, particularly on the 2018 and 2019 years of account. Those prior-year reserves were reinsuring via a Loss Portfolio Transfer in December 2021, producing a reinsurance recovery disclosed as GBP 28.0m. Overall this resulted in a net release of gross claims reserves.",
+      "standardized_narrative": "The syndicate recorded gross prior-year reserve releases of approximately GBP 9.54m (about 11.7% of opening gross claims outstanding), driven by favourable development on the 2018 and 2019 years of account. Those years were also reinsured in December 2021 via a Loss Portfolio Transfer to Medical Professional Mutual Insurance Company (a GBP 28.0m reinsurance recovery), which materially improved net reserves and provided stability.",
       "raw_causal_phrases": [
         "The reserves established in 2020 have proved to be adequate and we have been able to make releases during 2021, especially on the 2018 and 2019 years of account, which are now reinsured under a Loss Portfolio Transfer arrangement.",
         "An LPT has been put into place in December 2021 reinsuring the loss reserves on the 2018 and 2019 years of account to Medical Professional Mutual Insurance Company.",
-        "The premium cost to the Syndicate was GBP 28.0m which provided an equivalent reinsurance recovery."
+        "The reinsurance recovery included within the Net Technical Provisions as part of the LPT was GBP 28.0m."
       ],
       "lob_movements": [
         {
           "line_of_business": "Professional Lines",
           "direction": "release",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.5
-        },
-        {
-          "line_of_business": "Reinsurance - Casualty",
-          "direction": "release",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.5
+          "amount_gbp_m": -9.539,
+          "percentage": -11.69,
+          "confidence": 0.8
         }
       ],
       "gross_premiums_written_gbp_m": 51.7,
@@ -369,7 +392,7 @@
       "gross_premium_page": 30,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior year development (PYD) was not explicitly reported as a single gross movement figure. PYD was calculated from the gross claims development triangle (gross cumulative estimates) on page 31, summing movements for underwriting years up to 2019. The December 2021 Loss Portfolio Transfer (LPT) and associated reinsurance recovery (GBP 28.0m) may distort comparability between gross and net movements; the LPT affects reinsurance recoveries rather than gross booked claim amounts, but timing may influence triangle comparability.",
+      "data_quality_notes": "Prior-year development (PYD) was calculated from the gross claims development triangle (gross cumulative claims incurred by underwriting year) printed in the technical reserves note. The triangle only contains underwriting years 2018-2021; PYD was computed by excluding 2021 and 2020 and summing changes for 2018 and 2019. The syndicate completed a Loss Portfolio Transfer (LPT) in Dec 2021 with a GBP 28.0m reinsurance recovery which materially affects net reserves but does not directly change gross claims estimates - net movements in the accounts are therefore larger than the gross PYD computed here. Gross premium mix is taken from the underwriting analysis note (not a formal regulatory segmental table); amounts and percentages round to the total gross written premium. Confidence: PYD = 0.8 (calculated from triangle).",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -410,20 +433,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_1975_2021_llm.pdf",
-      "content_hash": "82eded35320caca73088bab1328cd2bcc8665937e9d8d223cec0ce4545f12c1a",
-      "standardized_at": "2026-07-05T10:29:35.527300+00:00",
+      "content_hash": "ec8bd52124cc3d4abb8517ab0f53945a093aa9d0c7256b1f96097e62161043be",
+      "standardized_at": "2026-09-11T11:18:08.128297+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 16127,
-        "output_tokens": 5462,
-        "total_tokens": 21589,
-        "cost_usd": 0.014956
+        "input_tokens": 16887,
+        "output_tokens": 5652,
+        "total_tokens": 22539,
+        "cost_usd": 0.015526
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -9.539,
+        "model_value": -9.539,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 33,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2018,
           2019,
@@ -455,6 +490,12 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "After one year",
+          "After two years",
+          "After three years",
+          "After four years"
         ],
         "source_page": 33,
         "entity": 1975
@@ -575,12 +616,12 @@
       }
     }
   },
-  "total_cost_usd": 0.021457,
-  "total_tokens": 40626,
+  "total_cost_usd": 0.022176,
+  "total_tokens": 41026,
   "validation": {
     "passed": true,
-    "total_discrepancies": 14,
-    "within_tolerance": 14,
+    "total_discrepancies": 17,
+    "within_tolerance": 17,
     "hard_failures": 0,
     "hard_failure_details": []
   }

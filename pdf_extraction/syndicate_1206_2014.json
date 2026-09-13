@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-05T19:23:24.156460+00:00",
+  "extraction_timestamp": "2026-09-13T04:12:34.667611+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -11,14 +13,14 @@
       "syndicate": 1206,
       "year": 2014,
       "opening_reserves_gbp_m": 278.997,
-      "opening_reserves_page": 10,
+      "opening_reserves_page": 9,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": 31.6,
       "prior_year_development_pct": 11.33,
       "direction": "strengthening",
-      "prior_year_movement_page": 20,
-      "prior_year_movement_confidence": 0.8,
-      "exact_reserve_text": "During 2014 the net loss ratio (net of acquisitions costs) on certain lines of business for the 2012 and prior years of account were increased. These increases are set out in the table below together with their effect on ultimate claims reserves.\nTreaty: 6,023\nLiability: 16,719",
+      "prior_year_movement_page": 14,
+      "prior_year_movement_confidence": 1.0,
+      "exact_reserve_text": "During 2014 the net loss ratio (net of acquisitions costs) on certain lines of business for the 2012 and prior years of account was increased. These increases are set out in the table below together with their effect on ultimate claims reserves.",
       "primary_causes": [
         "Adverse claims development",
         "Large loss development"
@@ -28,21 +30,43 @@
         2012,
         2013
       ],
-      "prior_year_events": [],
+      "prior_year_events": [
+        {
+          "event_name": "US liability claims",
+          "event_year": null,
+          "impact_description": "worse than expected claims experienced primarily in the US liability account",
+          "lobs_affected": [
+            "Casualty"
+          ],
+          "amount_gbp_m": null,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Discontinued Treaty account",
+          "event_year": null,
+          "impact_description": "further movement in the discontinued element of the Treaty account",
+          "lobs_affected": [
+            "Treaty"
+          ],
+          "amount_gbp_m": null,
+          "confidence": 0.8
+        }
+      ],
       "named_events": [],
-      "standardized_narrative": "The syndicate experienced a strengthening of prior year reserves by GBP 22.742 million in 2014, primarily driven by adverse development in the Treaty and Liability accounts from the 2012 and prior years of account. This was due to worse than expected claims experience and increased net loss ratios in these lines.",
+      "standardized_narrative": "The syndicate experienced a strengthening of prior year reserves by GBP 23.342 million in 2014, primarily affecting the 2012 and 2013 underwriting years. This adverse development was driven by worse than expected claims in the US liability account and further movement in the discontinued element of the Treaty account, leading to increased loss ratios for these lines of business.",
       "raw_causal_phrases": [
         "deterioration arises on the 2013 and prior years of account",
-        "emanates primarily from the liability account which no longer written in that form",
+        "emanates primarily from the Liability account",
         "worse than expected claims experienced primarily in the US liability account",
         "further movement in the discontinued element of the Treaty account",
-        "the net loss ratio (net of acquisitions costs) on certain lines of business for the 2012 and prior years of account were increased"
+        "net loss ratio (net of acquisitions costs) on certain lines of business for the 2012 and prior years of account was increased",
+        "losses arising on the 2013 and prior years of account"
       ],
       "lob_movements": [
         {
           "line_of_business": "Treaty",
           "direction": "strengthening",
-          "amount_gbp_m": 6.023,
+          "amount_gbp_m": 6.623,
           "percentage": null,
           "confidence": 1.0
         },
@@ -87,10 +111,10 @@
           "percentage_of_total": 3.5
         }
       ],
-      "gross_premium_page": 18,
+      "gross_premium_page": 13,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior year development figure is likely net of reinsurance, as indicated by the narrative 'net loss ratio' in the movement note. No gross figure was explicitly available. 'Liability' LOB in lob_movements mapped to 'Casualty' as per standard Lloyd's LOBs. [RAG OVERRIDE: Model said PYD=22.742, RAG triangle computed 31.6. Using RAG value.]",
+      "data_quality_notes": " [RAG OVERRIDE: Model said PYD=23.342, RAG provisions computed 31.6. Using RAG value.]",
       "_claims_triangle": {
         "type": "none",
         "currency": null,
@@ -101,15 +125,21 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_1206_2014_llm.pdf",
-      "content_hash": "27ce68a6df4b7868391bbf68c56356cbfb49947542fa945cbbf6ca4868f3d47d",
-      "standardized_at": "2026-03-18T21:46:42.111435+00:00",
+      "content_hash": "f7221ff7b7fc419de0a1d537f1da88fc73af6780f0ea70db70d87611d8ada225",
+      "standardized_at": "2026-09-11T10:27:28.168353+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 9605,
-        "output_tokens": 1219,
-        "total_tokens": 19049,
-        "cost_usd": 0.005929
+        "input_tokens": 10409,
+        "output_tokens": 1336,
+        "total_tokens": 15725,
+        "cost_usd": 0.006463
+      },
+      "_pyd_route": {
+        "source": "rag_provisions",
+        "value": 31.6,
+        "model_value": 23.342,
+        "note": "overrode the model value"
       },
       "_adobe_lob": {
         "gross_premium_mix": [
@@ -180,6 +210,13 @@
         "unit_source": "header",
         "source_page": 9,
         "entity": 1206,
+        "movement_semantics": {
+          "row_label": "Liability (2013 and prior years of account)",
+          "row_index": 9,
+          "table_is_movement_note": false,
+          "column_bound_to_report_year": true,
+          "column_index": 1
+        },
         "gross_prior_year_claims": 31.6
       },
       "_entity_binding": {
@@ -235,61 +272,60 @@
       "prior_year_development_gbp_m": 31.6,
       "prior_year_development_pct": 11.33,
       "direction": "strengthening",
-      "prior_year_movement_page": 20,
+      "prior_year_movement_page": 19,
       "prior_year_movement_confidence": 1.0,
       "exact_reserve_text": "During 2014 the net loss ratio (net of acquisitions costs) on certain lines of business for the 2012 and prior years of account was increased. These increases are set out in the table below together with their effect on ultimate claims reserves.",
       "primary_causes": [
         "Adverse claims development",
-        "Social inflation / litigation trends"
+        "IBNR recalibration"
       ],
       "specific_events": [],
       "specific_years_affected": [
-        2012,
-        2013
+        2012
       ],
       "prior_year_events": [
         {
-          "event_name": "Treaty reserve strengthening",
-          "event_year": 2014,
-          "impact_description": "Increase in claims reserves for Treaty (2012 and prior years) reported in note; adverse development increased ultimate claims by the stated amount.",
-          "lobs_affected": [
-            "Treaty"
-          ],
-          "amount_gbp_m": 6.623,
-          "confidence": 1.0
-        },
-        {
-          "event_name": "Liability reserve strengthening",
-          "event_year": 2014,
-          "impact_description": "Increase in claims reserves for Liability (2012 and prior years) reported in note; adverse development in US liability increased ultimate claims by the stated amount.",
+          "event_name": "US liability adverse development",
+          "event_year": 2012,
+          "impact_description": "Worse than expected claims experienced primarily in the US liability account leading to increased claims reserves.",
           "lobs_affected": [
             "Casualty"
           ],
           "amount_gbp_m": 16.719,
           "confidence": 1.0
+        },
+        {
+          "event_name": "Treaty account deterioration (discontinued element)",
+          "event_year": 2012,
+          "impact_description": "Further movement in the discontinued element of the Treaty account increasing ultimate claims reserves.",
+          "lobs_affected": [
+            "Treaty"
+          ],
+          "amount_gbp_m": 6.623,
+          "confidence": 1.0
         }
       ],
       "named_events": [],
-      "standardized_narrative": "At 31 December 2014 the syndicate reported a gross strengthening of prior year reserves of GBP 23.342m (around 8.37% of opening gross claims outstanding), driven primarily by adverse development on Liability (Casualty) and movement in the Treaty account relating to 2012 and prior years. The movement is explicitly shown in the notes as increases to ultimate claims reserves for Treaty (GBP 6.623m) and Liability (GBP 16.719m).",
+      "standardized_narrative": "The syndicate strengthened prior years' claims reserves by GBP 23.342m (an ~8.4% increase relative to opening gross claims outstanding of GBP 278.997m) during 2014. The increases relate primarily to adverse development in the Liability (US) account and movement in the discontinued element of the Treaty account, with increases of GBP 16.719m and GBP 6.623m respectively, affecting 2012 and prior years.",
       "raw_causal_phrases": [
         "During 2014 the net loss ratio (net of acquisitions costs) on certain lines of business for the 2012 and prior years of account was increased.",
         "These increases are set out in the table below together with their effect on ultimate claims reserves.",
-        "As mentioned above the majority of the loss for the year emanates from the liability line of business on the 2013 and prior years of account.",
-        "The result was affected by worse than expected claims experienced primarily in the US liability account and further movement in the discontinued element of the Treaty account."
+        "The result was affected by worse than expected claims experienced primarily in the US liability account and further movement in the discontinued element of the Treaty account.",
+        "the majority of the loss for the year emanates from the liability line of business on the 2013 and prior years of account."
       ],
       "lob_movements": [
-        {
-          "line_of_business": "Treaty",
-          "direction": "strengthening",
-          "amount_gbp_m": 6.623,
-          "percentage": 6,
-          "confidence": 1.0
-        },
         {
           "line_of_business": "Casualty",
           "direction": "strengthening",
           "amount_gbp_m": 16.719,
-          "percentage": 25,
+          "percentage": 25.0,
+          "confidence": 1.0
+        },
+        {
+          "line_of_business": "Treaty",
+          "direction": "strengthening",
+          "amount_gbp_m": 6.623,
+          "percentage": 6.0,
           "confidence": 1.0
         }
       ],
@@ -326,10 +362,10 @@
           "percentage_of_total": 3.5
         }
       ],
-      "gross_premium_page": 19,
+      "gross_premium_page": 13,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Opening gross claims outstanding taken from Balance Sheet (Claims outstanding, comparative column). Prior year development derived from Note 'Movement in prior year's provision for claims outstanding' which explicitly lists gross increases to ultimate claims reserves for Treaty and Liability (2012 & prior). No gross claims development triangle was found in the provided text; no specifically named catastrophe events were identified. Percentages rounded to two decimals. Amounts are in millions GBP. [RAG OVERRIDE: Model said PYD=23.342, RAG triangle computed 31.6. Using RAG value.]",
+      "data_quality_notes": "Opening gross claims outstanding taken from Balance Sheet (Technical provisions - Claims outstanding) prior year column. Prior year reserve movement taken from Note 5 'Movement in prior year's provision for claims outstanding' which lists gross increases by internal class (Treaty and Liability). No gross claims development triangle was present in the provided pages; calculations are based on explicit note figures (thousands converted to millions). Percentages for LOB movement are computed from loss ratio changes shown in the note (Dec 2014 vs Dec 2013). [RAG OVERRIDE: Model said PYD=23.342, RAG provisions computed 31.6. Using RAG value.]",
       "_claims_triangle": {
         "type": "none",
         "currency": "GBP",
@@ -340,15 +376,21 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_1206_2014_llm.pdf",
-      "content_hash": "27ce68a6df4b7868391bbf68c56356cbfb49947542fa945cbbf6ca4868f3d47d",
-      "standardized_at": "2026-03-18T21:47:40.420175+00:00",
+      "content_hash": "f7221ff7b7fc419de0a1d537f1da88fc73af6780f0ea70db70d87611d8ada225",
+      "standardized_at": "2026-09-11T10:29:21.637178+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 14206,
-        "output_tokens": 4227,
-        "total_tokens": 18433,
-        "cost_usd": 0.012005
+        "input_tokens": 14928,
+        "output_tokens": 4165,
+        "total_tokens": 19093,
+        "cost_usd": 0.012062
+      },
+      "_pyd_route": {
+        "source": "rag_provisions",
+        "value": 31.6,
+        "model_value": 23.342,
+        "note": "overrode the model value"
       },
       "_adobe_lob": {
         "gross_premium_mix": [
@@ -419,6 +461,13 @@
         "unit_source": "header",
         "source_page": 9,
         "entity": 1206,
+        "movement_semantics": {
+          "row_label": "Liability (2013 and prior years of account)",
+          "row_index": 9,
+          "table_is_movement_note": false,
+          "column_bound_to_report_year": true,
+          "column_index": 1
+        },
         "gross_prior_year_claims": 31.6
       },
       "_entity_binding": {
@@ -466,12 +515,12 @@
       }
     }
   },
-  "total_cost_usd": 0.017934,
-  "total_tokens": 37482,
+  "total_cost_usd": 0.018525,
+  "total_tokens": 34818,
   "validation": {
     "passed": true,
-    "total_discrepancies": 21,
-    "within_tolerance": 21,
+    "total_discrepancies": 20,
+    "within_tolerance": 20,
     "hard_failures": 0,
     "hard_failure_details": []
   }

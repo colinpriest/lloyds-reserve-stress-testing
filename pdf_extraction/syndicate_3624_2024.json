@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T11:16:24.659054+00:00",
+  "extraction_timestamp": "2026-09-13T04:00:26.409099+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -26,34 +28,23 @@
       ],
       "specific_events": [],
       "specific_years_affected": [],
-      "prior_year_events": [
-        {
-          "event_name": "Recovery against Hiscox Group professional indemnity policy",
-          "event_year": null,
-          "impact_description": "made a recovery against the Hiscox Group professional indemnity policy, which has offset other operating expenses",
-          "lobs_affected": [
-            "Professional Lines"
-          ],
-          "amount_gbp_m": null,
-          "confidence": 0.8
-        }
-      ],
+      "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "The syndicate experienced a favorable prior-year development of $11.536 million in 2024, representing a 1.31% release of opening gross reserves. This was driven by favorable claims development across liability, technology, media and telecoms, and run-off reinsurance accounts. Additionally, a recovery against the Hiscox Group professional indemnity policy contributed to the positive movement.",
+      "standardized_narrative": "The syndicate, Hiscox Syndicate 3624, reported a prior year reserve release of $11.536 million for the year 2024. This release was primarily driven by favourable claims development across liability, technology, media and telecoms, and run-off reinsurance accounts, and also benefited from a recovery against the Hiscox Group professional indemnity policy.",
       "raw_causal_phrases": [
         "favourable prior-year development across the liability, technology, media and telecoms, and the run-off reinsurance accounts",
-        "made a recovery against the Hiscox Group professional indemnity policy, which has offset other operating expenses"
+        "made a recovery against the Hiscox Group professional indemnity policy"
       ],
       "lob_movements": [
         {
-          "line_of_business": "Professional Lines",
+          "line_of_business": "Casualty",
           "direction": "release",
           "amount_gbp_m": null,
           "percentage": null,
           "confidence": 0.5
         },
         {
-          "line_of_business": "Cyber",
+          "line_of_business": "Professional Lines",
           "direction": "release",
           "amount_gbp_m": null,
           "percentage": null,
@@ -110,10 +101,10 @@
           "percentage_of_total": 1.4
         }
       ],
-      "gross_premium_page": 3,
+      "gross_premium_page": 19,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "Prior year development calculated from the 'Over/under-provision in respect of prior claims and claim adjustment expenses' line in the Technical Provisions note, which is a direct reconciliation. The claims development triangle shows a slightly different total prior year movement (-8.857m USD) but the explicit note figure is preferred. [RAG OVERRIDE: Model said PYD=-11.536, RAG triangle computed -2.022. Using RAG value.]",
+      "data_quality_notes": "There is a discrepancy between the prior year development figure from Note 10 (-11.536 $m) and the calculation from the gross claims development triangle (-1.922 $m). The figure from Note 10, 'Over/under-provision in respect of prior claims and claim adjustment expenses', is used as the primary source due to its explicit nature as a prior year movement line item in the technical provisions. [RAG OVERRIDE: Model said PYD=-11.536, RAG triangle computed -2.022. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
@@ -256,20 +247,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_3624_2024_llm.pdf",
-      "content_hash": "3982fd08746048de151fc7189adc7a485f5a2adf8d619f4cf68f692bc7f5c959",
-      "standardized_at": "2026-07-06T00:23:34.517765+00:00",
+      "content_hash": "737d396070946e5b7e67f42b95b05f126f9f30b0474a5b1bff5155102271e8bc",
+      "standardized_at": "2026-09-11T14:29:19.450298+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 11411,
-        "output_tokens": 1758,
-        "total_tokens": 20719,
-        "cost_usd": 0.007818
+        "input_tokens": 12215,
+        "output_tokens": 1922,
+        "total_tokens": 18947,
+        "cost_usd": 0.008469
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -2.022,
+        "model_value": -11.536,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 77,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2015,
           2016,
@@ -404,6 +407,18 @@
             null
           ]
         ],
+        "row_labels": [
+          "At end of",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later",
+          "Seven years later",
+          "Eight years later",
+          "Nine years later"
+        ],
         "source_page": 77,
         "entity": 3624
       },
@@ -503,6 +518,13 @@
           "entity": 3624,
           "backend": "azure",
           "table_kind": "balance_sheet_liabilities"
+        },
+        "movement_semantics": {
+          "row_label": "Over/under-provision in respect of prior claims and claim adjustment expenses",
+          "row_index": 5,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": false,
+          "column_index": 2
         },
         "gross_prior_year_claims": -11.5,
         "ri_share_prior_year": 2.3,
@@ -634,20 +656,21 @@
       "direction": "release",
       "prior_year_movement_page": 34,
       "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "The Syndicate has also experienced favourable prior-year development across the liability, technology, media and telecoms, and the run-off reinsurance accounts, and made a recovery against the Hiscox Group professional indemnity policy, which has offset other operating expenses.",
+      "exact_reserve_text": "The Syndicate has also experienced favourable prior-year development across the liability, technology, media and telecoms, and the run-off reinsurance accounts, and made a recovery against the Hiscox Group professional indemnity policy, which has offset other operating expenses.\nOver/under-provision in respect of prior claims and claim adjustment expenses (11,536) 2,272 (9,264)",
       "primary_causes": [
         "Favorable claims development",
-        "Reinsurance recoveries"
+        "Reinsurance recoveries",
+        "Other"
       ],
       "specific_events": [],
       "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "At 31 December 2024 the Syndicate's opening gross claims outstanding at the start of the year was $882.742m (prior year comparative). The Technical Provisions note shows a gross prior-year movement (over/under-provision) of -$11.536m (a release). The managing agent attributes this to favourable prior-year development across the liability, technology/media/telecoms and run-off reinsurance accounts and a recovery against the Hiscox Group professional indemnity policy.",
+      "standardized_narrative": "The syndicate recorded a modest favourable prior-year reserve movement in 2024 driven by releases in prior years, reflected in a gross release of 11.536 (USD millions). Management attribute the movement to favourable prior-year development across liability and technology/media/telecoms portfolios and recoveries in the run-off reinsurance and a recovery under the Hiscox Group professional indemnity policy. No material single named catastrophic event is identified as the driver; the change is reported as portfolio-level favourable development.",
       "raw_causal_phrases": [
         "favourable prior-year development across the liability, technology, media and telecoms, and the run-off reinsurance accounts",
         "made a recovery against the Hiscox Group professional indemnity policy",
-        "Prior-year development has been further explained under the 'results' section of the report of the Directors of the managing agent."
+        "Over/under-provision in respect of prior claims and claim adjustment expenses (11,536) 2,272 (9,264)"
       ],
       "lob_movements": [
         {
@@ -655,21 +678,21 @@
           "direction": "release",
           "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.8
+          "confidence": 0.5
         },
         {
           "line_of_business": "Professional Lines",
           "direction": "release",
           "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.8
+          "confidence": 0.5
         },
         {
-          "line_of_business": "Treaty",
+          "line_of_business": "Reinsurance - Specialty",
           "direction": "release",
           "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.8
+          "confidence": 0.5
         }
       ],
       "gross_premiums_written_gbp_m": 234.1,
@@ -715,10 +738,10 @@
           "percentage_of_total": 1.4
         }
       ],
-      "gross_premium_page": 3,
+      "gross_premium_page": 29,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "All monetary fields are presented in the report's native currency (USD) and in millions despite field names containing '_gbp_m'. Opening gross claims outstanding and the prior-year movement were taken from the Balance Sheet (liabilities) and Technical Provisions note (gross 'Over/under-provision in respect of prior claims') respectively. Per-LOB numeric prior-year movements are not provided in the report; only narrative attribution is given. No specific named catastrophe events affecting prior years are quantified in the notes. [RAG OVERRIDE: Model said PYD=-11.536, RAG triangle computed -2.022. Using RAG value.]",
+      "data_quality_notes": "All monetary values are reported in the syndicate's functional currency (USD). Opening reserves and prior-year movement sourced from Technical Provisions (claims outstanding reconciliation) and Balance Sheet (Liabilities). Gross premiums from the segmental analysis (Regulatory class table). The prior-year movement is the gross 'Over/under-provision in respect of prior claims' line in the technical provisions note (-11,536 in $000 = -11.536m USD). LOB-level prior year impacts are not quantified by line in the report; mappings from management narrative ('liability', 'technology, media and telecoms', 'run-off reinsurance') to standard Lloyd's LOB names are judgemental and assigned with medium confidence. [RAG OVERRIDE: Model said PYD=-11.536, RAG triangle computed -2.022. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
@@ -861,20 +884,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_3624_2024_llm.pdf",
-      "content_hash": "3982fd08746048de151fc7189adc7a485f5a2adf8d619f4cf68f692bc7f5c959",
-      "standardized_at": "2026-07-06T00:24:55.342212+00:00",
+      "content_hash": "737d396070946e5b7e67f42b95b05f126f9f30b0474a5b1bff5155102271e8bc",
+      "standardized_at": "2026-09-11T14:31:24.966883+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 41799,
-        "output_tokens": 4987,
-        "total_tokens": 46786,
-        "cost_usd": 0.020424
+        "input_tokens": 42559,
+        "output_tokens": 6552,
+        "total_tokens": 49111,
+        "cost_usd": 0.023744
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -2.022,
+        "model_value": -11.536,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 77,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2015,
           2016,
@@ -1009,6 +1044,18 @@
             null
           ]
         ],
+        "row_labels": [
+          "At end of",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later",
+          "Seven years later",
+          "Eight years later",
+          "Nine years later"
+        ],
         "source_page": 77,
         "entity": 3624
       },
@@ -1108,6 +1155,13 @@
           "entity": 3624,
           "backend": "azure",
           "table_kind": "balance_sheet_liabilities"
+        },
+        "movement_semantics": {
+          "row_label": "Over/under-provision in respect of prior claims and claim adjustment expenses",
+          "row_index": 5,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": false,
+          "column_index": 2
         },
         "gross_prior_year_claims": -11.5,
         "ri_share_prior_year": 2.3,
@@ -1229,12 +1283,12 @@
       }
     }
   },
-  "total_cost_usd": 0.028242,
-  "total_tokens": 67505,
+  "total_cost_usd": 0.032213,
+  "total_tokens": 68058,
   "validation": {
     "passed": true,
-    "total_discrepancies": 11,
-    "within_tolerance": 11,
+    "total_discrepancies": 7,
+    "within_tolerance": 7,
     "hard_failures": 0,
     "hard_failure_details": []
   }

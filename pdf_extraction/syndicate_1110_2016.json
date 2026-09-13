@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-05T19:19:58.150695+00:00",
+  "extraction_timestamp": "2026-09-13T04:03:38.688745+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -11,41 +13,44 @@
       "syndicate": 1110,
       "year": 2016,
       "opening_reserves_gbp_m": 172.629,
-      "opening_reserves_page": 38,
+      "opening_reserves_page": 4,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": 8.277,
       "prior_year_development_pct": 4.79,
       "direction": "strengthening",
-      "prior_year_movement_page": 38,
-      "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "A surplus/(deficit) run-off deviation of (GBP 8.6) million was experienced in 2016 (2015: (GBP 3 million deficit). This was made up of a deficit on the prior year claims provisions of GBP 14.1 million on direct business (2015: GBP 4.7 million surplus) and a GBP 5.5 million surplus on reinsurance accepted business (2015: GBP 7.7 million deficit).",
+      "prior_year_movement_page": 13,
+      "prior_year_movement_confidence": 0.8,
+      "exact_reserve_text": "A surplus/(deficit) run-off deviation of (GBP 8.6) million was experienced in 2016 (2015: (GBP 3 million deficit).",
       "primary_causes": [
         "Adverse claims development",
         "Favorable claims development"
       ],
       "specific_events": [],
-      "specific_years_affected": [],
+      "specific_years_affected": [
+        2013,
+        2014
+      ],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "The syndicate experienced a gross prior year strengthening of GBP 8.6 million in 2016. This was driven by a GBP 14.1 million deficit on prior year claims provisions for direct business, partially offset by a GBP 5.5 million surplus on reinsurance accepted business.",
+      "standardized_narrative": "The syndicate experienced a net strengthening of GBP 8.6 million in prior year reserves for 2016. This was driven by an adverse claims development of GBP 14.1 million on direct business, partially offset by a favourable claims development of GBP 5.5 million on reinsurance accepted business.",
       "raw_causal_phrases": [
         "deficit on the prior year claims provisions of GBP 14.1 million on direct business",
         "GBP 5.5 million surplus on reinsurance accepted business"
       ],
       "lob_movements": [
         {
-          "line_of_business": "Direct insurance",
+          "line_of_business": "Aggregate",
           "direction": "strengthening",
           "amount_gbp_m": 14.1,
           "percentage": null,
-          "confidence": 1.0
+          "confidence": 0.8
         },
         {
-          "line_of_business": "Reinsurance acceptances",
+          "line_of_business": "Treaty",
           "direction": "release",
           "amount_gbp_m": -5.5,
           "percentage": null,
-          "confidence": 1.0
+          "confidence": 0.8
         }
       ],
       "gross_premiums_written_gbp_m": 245.8,
@@ -96,15 +101,15 @@
           "percentage_of_total": 0.2
         }
       ],
-      "gross_premium_page": 31,
+      "gross_premium_page": 11,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The claims development triangle is presented on a net basis, so it was not used as the primary source for gross prior year development. The gross prior year development was derived from the breakdown provided in the narrative.",
+      "data_quality_notes": "NET of reinsurance - no gross figure available for prior year development.",
       "_claims_triangle": {
         "type": "net",
         "currency": "GBP",
         "units": "thousands",
-        "page": 44,
+        "page": 14,
         "underwriting_years": [
           2013,
           2014,
@@ -139,21 +144,33 @@
         ]
       },
       "source_type": "syndicate",
-      "source_file": "syndicate_reports\\pdfs\\syndicate_1110_2016.pdf",
-      "content_hash": "400ca10ef3556ea77912e703cfc0af525f1d043d2743005484123981e816c616",
-      "standardized_at": "2026-03-16T06:19:49.159062+00:00",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_1110_2016_llm.pdf",
+      "content_hash": "b0f132d957fb47f9fcd19a1d8ddb11557baf1976fceb87819f33c84cb18b8b22",
+      "standardized_at": "2026-09-11T10:12:00.478120+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 18526,
-        "output_tokens": 1236,
-        "total_tokens": 22582,
-        "cost_usd": 0.008648
+        "input_tokens": 10667,
+        "output_tokens": 1161,
+        "total_tokens": 15336,
+        "cost_usd": 0.006103
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 8.277,
+        "model_value": 8.6,
+        "triangle_type": "net",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 44,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
-        "type": "gross",
+        "type": "net",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2013,
           2014,
@@ -185,6 +202,12 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "After one year",
+          "After two years",
+          "After three years",
+          "After four years"
         ],
         "source_page": 44,
         "entity": 1110
@@ -350,185 +373,27 @@
       "syndicate": 1110,
       "year": 2016,
       "opening_reserves_gbp_m": 172.629,
-      "opening_reserves_page": 36,
-      "opening_reserves_confidence": 1.0,
+      "opening_reserves_page": 19,
+      "opening_reserves_confidence": 0.8,
       "prior_year_development_gbp_m": 8.277,
       "prior_year_development_pct": 4.79,
       "direction": "strengthening",
       "prior_year_movement_page": 36,
-      "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "A surplus/(deficit) run-off deviation of (GBP 8.6) million was experienced in 2016 (2015: (GBP 3 million) deficit). This was made up of a deficit on the prior year claims provisions of GBP 14.1 million on direct business (2015: GBP 4.7 million surplus) and a GBP 5.5 million surplus on reinsurance accepted business (2015: GBP 7.7 million deficit).",
+      "prior_year_movement_confidence": 0.5,
+      "exact_reserve_text": "A surplus/(deficit) run-off deviation of (GBP 8.6) million was experienced in 2016 (a GBP 3.5 million surplus in 2015).",
       "primary_causes": [
         "Adverse claims development",
-        "Reinsurance recoveries"
+        "Large loss development"
       ],
       "specific_events": [],
       "specific_years_affected": [],
-      "prior_year_events": [
-        {
-          "event_name": "Prior year run-off (direct business)",
-          "event_year": null,
-          "impact_description": "Deficit on the prior year claims provisions for direct business",
-          "lobs_affected": [
-            "Aggregate"
-          ],
-          "amount_gbp_m": 14.1,
-          "confidence": 1.0
-        },
-        {
-          "event_name": "Prior year run-off (reinsurance accepted business)",
-          "event_year": null,
-          "impact_description": "Surplus on the prior year claims provisions for reinsurance accepted business",
-          "lobs_affected": [
-            "Treaty"
-          ],
-          "amount_gbp_m": -5.5,
-          "confidence": 1.0
-        }
-      ],
-      "named_events": [
-        {
-          "event_name": "Two events - North East Windstorm",
-          "event_year": null,
-          "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": 6.7,
-          "loss_description": "Estimated net claims",
-          "lobs_affected": [
-            "Property",
-            "Other"
-          ],
-          "page": 40,
-          "confidence": 0.8
-        },
-        {
-          "event_name": "Two events - South Carolina Windstorm",
-          "event_year": null,
-          "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": 0.21,
-          "loss_description": "Estimated net claims",
-          "lobs_affected": [
-            "Property"
-          ],
-          "page": 40,
-          "confidence": 0.7
-        },
-        {
-          "event_name": "Florida Windstorm - Miami-Dade",
-          "event_year": null,
-          "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": 7.004,
-          "loss_description": "Estimated net claims",
-          "lobs_affected": [
-            "Property"
-          ],
-          "page": 40,
-          "confidence": 0.8
-        },
-        {
-          "event_name": "Florida Windstorm - Pinellas",
-          "event_year": null,
-          "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": 4.302,
-          "loss_description": "Estimated net claims",
-          "lobs_affected": [
-            "Property"
-          ],
-          "page": 40,
-          "confidence": 0.8
-        },
-        {
-          "event_name": "European Windstorm - Central Track",
-          "event_year": null,
-          "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": 1.541,
-          "loss_description": "Estimated net claims",
-          "lobs_affected": [
-            "Property"
-          ],
-          "page": 40,
-          "confidence": 0.8
-        },
-        {
-          "event_name": "Gulf of Mexico Windstorm - Onshore",
-          "event_year": null,
-          "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": 0.713,
-          "loss_description": "Estimated net claims",
-          "lobs_affected": [
-            "Property"
-          ],
-          "page": 40,
-          "confidence": 0.8
-        },
-        {
-          "event_name": "California Earthquake - Los Angeles",
-          "event_year": null,
-          "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": 2.377,
-          "loss_description": "Estimated net claims",
-          "lobs_affected": [
-            "Property"
-          ],
-          "page": 40,
-          "confidence": 0.8
-        },
-        {
-          "event_name": "California Earthquake - San Francisco",
-          "event_year": null,
-          "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": 2.378,
-          "loss_description": "Estimated net claims",
-          "lobs_affected": [
-            "Property"
-          ],
-          "page": 40,
-          "confidence": 0.8
-        },
-        {
-          "event_name": "New Madrid Earthquake",
-          "event_year": null,
-          "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": 0.303,
-          "loss_description": "Estimated net claims",
-          "lobs_affected": [
-            "Property"
-          ],
-          "page": 40,
-          "confidence": 0.7
-        },
-        {
-          "event_name": "Japanese Earthquake",
-          "event_year": null,
-          "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": 0.042,
-          "loss_description": "Estimated net claims",
-          "lobs_affected": [
-            "Property"
-          ],
-          "page": 40,
-          "confidence": 0.7
-        }
-      ],
-      "standardized_narrative": "At 1 January 2016 the syndicate's gross claims outstanding were GBP 172.629m. During 2016 the syndicate experienced a net prioryear runoff deficit of GBP 8.6m (net strengthening), comprised of a GBP 14.1m adverse development on direct business partially offset by a GBP 5.5m favourable runoff on reinsurance accepted business. The net effect was a small strengthening of reserves (~4.98% of opening gross claims).",
+      "prior_year_events": [],
+      "named_events": [],
+      "standardized_narrative": "The syndicate closed 2015 with gross claims outstanding of GBP 172.629m at 1 January 2016. During 2016 there was adverse prior-year reserve development, reported as a deficit run-off deviation of GBP 8.6m (i.e. a strengthening of reserves), representing approximately 5.0% of the opening gross claims outstanding. The report describes this as a run-off deficit, indicating adverse claims development primarily across prior years.",
       "raw_causal_phrases": [
-        "A surplus/(deficit) run-off deviation of (GBP 8.6) million was experienced in 2016 (2015: (GBP 3 million) deficit). This was made up of a deficit on the prior year claims provisions of GBP 14.1 million on direct business (2015: GBP 4.7 million surplus) and a GBP 5.5 million surplus on reinsurance accepted business (2015: GBP 7.7 million deficit)."
+        "surplus/(deficit) run-off deviation of (GBP 8.6) million was experienced in 2016 (a GBP 3.5 million surplus in 2015)."
       ],
-      "lob_movements": [
-        {
-          "line_of_business": "Aggregate",
-          "direction": "strengthening",
-          "amount_gbp_m": 14.1,
-          "percentage": null,
-          "confidence": 1.0
-        },
-        {
-          "line_of_business": "Treaty",
-          "direction": "release",
-          "amount_gbp_m": -5.5,
-          "percentage": null,
-          "confidence": 1.0
-        }
-      ],
+      "lob_movements": [],
       "gross_premiums_written_gbp_m": 245.8,
       "gross_premium_mix": [
         {
@@ -580,67 +445,43 @@
       "gross_premium_page": 29,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Opening gross claims outstanding and prior year movement figures are taken from the 'Claims outstanding' note and accompanying narrative which state amounts in GBP m. Figures in the financial statements are presented in GBP 000; values have been converted to millions. Prior year development used the explicit run-off deviation narrative (net GBP 8.6m) and the split components (GBP 14.1m direct deficit and GBP 5.5m reinsurance surplus). The claims development triangle included in the report is NET (not gross) and has been captured as a net triangle; therefore it was NOT used to compute the aggregate gross prior year movement.",
+      "data_quality_notes": "Opening gross claims outstanding taken from Technical Provisions / Liability table (Claims outstanding closing 2015). Prior-year development value taken from narrative sentence referencing a 'surplus/(deficit) run-off deviation of (GBP 8.6) million' - the report snippet is clear but the table showing a 'movement in prior year's provision' gross column was not unambiguously readable in the scan. Gross premium mix segmentation in the notes was difficult to read; a single 'Reinsurance' line was used to match the total premium. Claims development triangle not extracted from scanned images.",
       "_claims_triangle": {
-        "type": "net",
+        "type": "none",
         "currency": "GBP",
         "units": "thousands",
-        "page": 42,
-        "underwriting_years": [
-          2013,
-          2014,
-          2015,
-          2016
-        ],
-        "development_rows": [
-          [
-            null,
-            null,
-            null,
-            null
-          ],
-          [
-            29115,
-            36678,
-            46084,
-            51363
-          ],
-          [
-            72205,
-            115963,
-            132049,
-            null
-          ],
-          [
-            75569,
-            126692,
-            null,
-            null
-          ],
-          [
-            73117,
-            null,
-            null,
-            null
-          ]
-        ]
+        "page": null,
+        "underwriting_years": [],
+        "development_rows": []
       },
       "source_type": "syndicate",
-      "source_file": "syndicate_reports\\pdfs\\syndicate_1110_2016.pdf",
-      "content_hash": "400ca10ef3556ea77912e703cfc0af525f1d043d2743005484123981e816c616",
-      "standardized_at": "2026-03-16T06:22:38.466367+00:00",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_1110_2016_llm.pdf",
+      "content_hash": "b0f132d957fb47f9fcd19a1d8ddb11557baf1976fceb87819f33c84cb18b8b22",
+      "standardized_at": "2026-09-11T10:13:30.392787+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 51904,
-        "output_tokens": 7453,
-        "total_tokens": 59357,
-        "cost_usd": 0.027882
+        "input_tokens": 20374,
+        "output_tokens": 4359,
+        "total_tokens": 24733,
+        "cost_usd": 0.013812
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 8.277,
+        "model_value": 8.6,
+        "triangle_type": "net",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 44,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
-        "type": "gross",
+        "type": "net",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2013,
           2014,
@@ -672,6 +513,12 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "After one year",
+          "After two years",
+          "After three years",
+          "After four years"
         ],
         "source_page": 44,
         "entity": 1110
@@ -834,8 +681,8 @@
       }
     }
   },
-  "total_cost_usd": 0.03653,
-  "total_tokens": 81939,
+  "total_cost_usd": 0.019915,
+  "total_tokens": 40069,
   "validation": {
     "passed": true,
     "total_discrepancies": 17,

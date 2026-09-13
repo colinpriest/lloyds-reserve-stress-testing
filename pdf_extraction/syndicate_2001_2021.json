@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T10:08:44.341769+00:00",
+  "extraction_timestamp": "2026-09-13T04:07:19.443638+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -18,17 +20,18 @@
       "direction": "release",
       "prior_year_movement_page": 11,
       "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "Movements arising from prior year claims (67.7) 29.1 (38.6)",
+      "exact_reserve_text": "Movements arising from prior year claims (67.7)",
       "primary_causes": [
-        "COVID-19 / pandemic effects",
         "Favorable claims development",
+        "COVID-19 / pandemic effects",
+        "Court rulings / legal developments",
         "Adverse claims development",
         "Social inflation / litigation trends",
-        "Reserve methodology change"
+        "Large loss development",
+        "Reinsurance recoveries",
+        "Economic inflation / claims cost inflation"
       ],
-      "specific_events": [
-        "COVID-19"
-      ],
+      "specific_events": [],
       "specific_years_affected": [
         2020
       ],
@@ -36,21 +39,38 @@
         {
           "event_name": "COVID-19 / pandemic effects",
           "event_year": 2020,
-          "impact_description": "Releases of reserves related to 2020 COVID losses across Insurance, Reinsurance, and Discontinued lines.",
+          "impact_description": "Absence of 2020 COVID losses and releases in Reinsurance division contributed to favorable claims development.",
           "lobs_affected": [
-            "Property",
-            "Casualty",
-            "Reinsurance - Property",
-            "Reinsurance - Casualty",
-            "Reinsurance - Specialty"
+            "Aggregate"
           ],
-          "amount_gbp_m": -15.0,
+          "amount_gbp_m": null,
           "confidence": 0.8
         },
         {
-          "event_name": "US trucking liability",
+          "event_name": "Supreme Court ruling on Business Interruption",
+          "event_year": 2021,
+          "impact_description": "Supreme Court ruling on business interruption policy wordings brought certainty, enabling settlement of claims.",
+          "lobs_affected": [
+            "Property"
+          ],
+          "amount_gbp_m": null,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Prior year catastrophe releases",
           "event_year": null,
-          "impact_description": "Adverse reserve development in US trucking liability class.",
+          "impact_description": "Favorable performance in prior year catastrophe releases in Insurance and Reinsurance divisions.",
+          "lobs_affected": [
+            "Property",
+            "Reinsurance - Property"
+          ],
+          "amount_gbp_m": null,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "US trucking liability deterioration",
+          "event_year": null,
+          "impact_description": "Significant deterioration in US trucking liability class.",
           "lobs_affected": [
             "Casualty"
           ],
@@ -58,14 +78,55 @@
           "confidence": 1.0
         },
         {
-          "event_name": "International Casualty",
+          "event_name": "International Casualty deterioration",
           "event_year": null,
-          "impact_description": "Adverse reserve development in International Casualty class.",
+          "impact_description": "Significant deterioration in International Casualty class.",
           "lobs_affected": [
             "Casualty"
           ],
           "amount_gbp_m": 38.0,
           "confidence": 1.0
+        },
+        {
+          "event_name": "Contractors sub-class deterioration",
+          "event_year": null,
+          "impact_description": "Deterioration in Contractors sub-class of US Casualty book.",
+          "lobs_affected": [
+            "Casualty"
+          ],
+          "amount_gbp_m": null,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Aviation class deterioration",
+          "event_year": null,
+          "impact_description": "Deterioration in Aviation class.",
+          "lobs_affected": [
+            "Aviation"
+          ],
+          "amount_gbp_m": null,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Other P&C UK classes deterioration",
+          "event_year": null,
+          "impact_description": "Deterioration in other P&C UK classes.",
+          "lobs_affected": [
+            "Property",
+            "Casualty"
+          ],
+          "amount_gbp_m": null,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Pro Rata release",
+          "event_year": null,
+          "impact_description": "Release in Pro Rata class, partially offsetting other deteriorations.",
+          "lobs_affected": [
+            "Reinsurance - Property"
+          ],
+          "amount_gbp_m": null,
+          "confidence": 0.8
         }
       ],
       "named_events": [
@@ -74,9 +135,10 @@
           "event_year": 2021,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "Contributed 9% to the loss ratio in 2021. Main driver of cat losses for insurance segment.",
+          "loss_description": "Included in net loss reserves of GBP 84.0 million for 2021 natural catastrophe events; exceeded loss expectations and contributed 9% to 2021 loss ratio. Main driver of cat losses for the insurance segment.",
           "lobs_affected": [
-            "Property"
+            "Property",
+            "Insurance"
           ],
           "page": 1,
           "confidence": 0.8
@@ -86,7 +148,7 @@
           "event_year": 2021,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "Contributed 9% to the loss ratio in 2021.",
+          "loss_description": "Included in net loss reserves of GBP 84.0 million for 2021 natural catastrophe events; exceeded loss expectations and contributed 9% to 2021 loss ratio.",
           "lobs_affected": [
             "Property"
           ],
@@ -98,9 +160,10 @@
           "event_year": 2021,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "Contributed 9% to the loss ratio in 2021. Main driver of cat losses for insurance segment.",
+          "loss_description": "Included in net loss reserves of GBP 84.0 million for 2021 natural catastrophe events; exceeded loss expectations and contributed 9% to 2021 loss ratio. Main driver of cat losses for the insurance segment.",
           "lobs_affected": [
-            "Property"
+            "Property",
+            "Insurance"
           ],
           "page": 1,
           "confidence": 0.8
@@ -110,7 +173,7 @@
           "event_year": 2021,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "Contributed 9% to the loss ratio in 2021.",
+          "loss_description": "Included in net loss reserves of GBP 84.0 million for 2021 natural catastrophe events; exceeded loss expectations and contributed 9% to 2021 loss ratio.",
           "lobs_affected": [
             "Property"
           ],
@@ -121,29 +184,69 @@
           "event_name": "COVID-19",
           "event_year": 2020,
           "event_type": "other",
-          "net_loss_gbp_m": null,
-          "loss_description": "Initial COVID losses recognised in 2020, with releases in 2021.",
+          "net_loss_gbp_m": 136.0,
+          "loss_description": "Initial COVID losses recognised in 2020. Gross best estimate losses of GBP 299.6 million (2021) and GBP 229.0 million (2020). Net best estimate losses of GBP 137.2 million (2021) and GBP 136.0 million (2020). Impacted discontinued UK P&C classes for business interruption claims.",
           "lobs_affected": [
             "Property",
-            "Casualty",
-            "Reinsurance - Property",
-            "Reinsurance - Casualty",
-            "Reinsurance - Specialty"
+            "Casualty"
           ],
           "page": 1,
-          "confidence": 0.8
+          "confidence": 1.0
         }
       ],
-      "standardized_narrative": "The Syndicate reported an overall gross prior year reserve release of GBP 67.7 million in 2021. This was primarily driven by releases related to 2020 COVID-19 losses across the Insurance and Reinsurance segments, and favourable claims development in various classes including Cargo, Marine Liability, Commercial Property, War, Financial Lines, Credit, Cat NA, and Cat International. However, these favourable movements were partially offset by significant adverse development of GBP 94.0 million in Discontinued lines, particularly in US trucking liability (GBP 33.0 million) and International Casualty (GBP 38.0 million), as well as other Casualty classes, due to adverse experience, changes in development patterns, and prior loss ratios.",
+      "standardized_narrative": "The syndicate reported a gross prior year reserve release of GBP 67.7 million in 2021, representing a 2.03% reduction of opening gross claims outstanding. This overall release was driven by favorable claims development in the Insurance and Reinsurance divisions, including releases related to the absence of 2020 COVID losses and prior year catastrophe events. However, the Discontinued lines experienced significant adverse development totaling GBP 94.0 million, primarily due to strengthening in US trucking liability, International Casualty, Contractors sub-class of US Casualty, Aviation, and other UK P&C classes, partially offset by a release in Pro Rata. The syndicate also noted the impact of the Supreme Court ruling on business interruption claims and the heightened inflationary environment as factors influencing reserving.",
       "raw_causal_phrases": [
-        "The Syndicate's claims ratio improved to 59% (2020: 76%), with the main difference being the initial COVID losses recognised in 2020.",
-        "The net claims ratio has reduced by 12%, largely driven by the absence of COVID losses in 2021.",
+        "the initial COVID losses recognised in 2020",
+        "The Supreme Court ruling issued on 15 January 2021, reflecting the benchmark case on policy wordings, brought a degree of certainty to many, but not all, matters relating to coverage of this extremely unusual event and enabled the settlement of many of those claims",
+        "the impact of the heightened inflationary environment that has emerged following the pandemic",
+        "absence of COVID losses in 2021",
         "Reserve releases of GBP 23.0 million in 2021 compare favourably to 2020 which saw a strengthening of GBP 12.0 million. Reserve releases were driven by favourable performance in a host of classes, including Cargo, Marine Liability, Commercial Property (driven by prior year cat releases), War, Financial Lines, and Credit.",
-        "The claims ratio of 58% reduced by 40 percentage points compared with 2020 driven by COVID.",
-        "Reinsurance division benefitted from GBP 24.0 million of net reserve releases in 2021 (driven by favourable performance in Cat NA and Cat International) compared to a strengthening of GBP 17.0 million in 2020.",
-        "The net claims ratio has deteriorated by 145%, largely driven by reserve strengthening. Adverse reserve development totalled GBP 94.0 million in 2021 compared to releases of GBP 14.0 million in 2020. The strengthening is predominantly driven by US trucking liability (GBP 33.0 million) and International Casualty (GBP 38.0 million) classes, which saw significant deterioration in the year, driven by adverse experience, changes to the development pattern and prior loss ratios. Further deteriorations include the Contractors sub-class of the US Casualty book, Aviation, plus other P&C UK classes. These are partially offset by a release in Pro Rata."
+        "COVID losses in 2020 totalled GBP 39.0 million compared to a GBP 7.0 million release in 2021. Additionally, the Reinsurance division benefitted from GBP 24.0 million of net reserve releases in 2021 (driven by favourable performance in Cat NA and Cat International) compared to a strengthening of GBP 17.0 million in 2020.",
+        "reserve strengthening. Adverse reserve development totalled GBP 94.0 million in 2021 compared to releases of GBP 14.0 million in 2020. The strengthening is predominantly driven by US trucking liability (GBP 33.0 million) and International Casualty (GBP 38.0 million) classes, which saw significant deterioration in the year, driven by adverse experience, changes to the development pattern and prior loss ratios. Further deteriorations include the Contractors sub-class of the US Casualty book, Aviation, plus other P&C UK classes. These are partially offset by a release in Pro Rata."
       ],
       "lob_movements": [
+        {
+          "line_of_business": "Aggregate",
+          "direction": "release",
+          "amount_gbp_m": -23.0,
+          "percentage": null,
+          "confidence": 0.8
+        },
+        {
+          "line_of_business": "Reinsurance - Property",
+          "direction": "release",
+          "amount_gbp_m": -24.0,
+          "percentage": null,
+          "confidence": 0.8
+        },
+        {
+          "line_of_business": "Casualty",
+          "direction": "strengthening",
+          "amount_gbp_m": 71.0,
+          "percentage": null,
+          "confidence": 1.0
+        },
+        {
+          "line_of_business": "Aviation",
+          "direction": "strengthening",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.8
+        },
+        {
+          "line_of_business": "Property",
+          "direction": "strengthening",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.8
+        },
+        {
+          "line_of_business": "Reinsurance - Property",
+          "direction": "release",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.8
+        },
         {
           "line_of_business": "Aggregate",
           "direction": "strengthening",
@@ -198,7 +301,7 @@
       "gross_premium_page": 10,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Some prior year event impacts are quantified as net of reinsurance, not gross.",
+      "data_quality_notes": "The gross prior year development figure of -67.7m from the 'Net outstanding claims' reconciliation table on page 11 contradicts the +161.4m strengthening calculated from the gross claims development triangle on page 12. The figure from the reconciliation table is prioritized as it is an explicit line item for prior year movements. The discrepancy may be due to the impact of the Part VII transfer (RITC) in 2020 and subsequent reporting changes, which could affect the interpretation of the claims development triangle. Additionally, the sum of specific LOB movements mentioned in the narrative (net releases of GBP 23.0m in Insurance, net releases of GBP 24.0m in Reinsurance, and gross adverse development of GBP 94.0m in Discontinued lines) does not reconcile to the overall gross prior year development of -67.7m, likely due to the LOB figures being net of reinsurance or not fully comprehensive.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -341,20 +444,28 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_2001_2021_llm.pdf",
-      "content_hash": "ce920e101ded7c841893199c078ad95f89021ca308bcf5200da9dc30dfebdd43",
-      "standardized_at": "2026-07-05T23:18:59.447369+00:00",
+      "content_hash": "a61f483f587acddb2c056a72c39dca6027745c75bf58c65930ec02dbe1dd343c",
+      "standardized_at": "2026-09-11T11:27:15.914400+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 9605,
-        "output_tokens": 3189,
-        "total_tokens": 21592,
-        "cost_usd": 0.010854
+        "input_tokens": 10409,
+        "output_tokens": 4426,
+        "total_tokens": 25859,
+        "cost_usd": 0.014188
+      },
+      "_pyd_route": {
+        "source": "rag_provisions",
+        "value": -67.7,
+        "model_value": -67.7,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "millions",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2012,
           2013,
@@ -489,6 +600,18 @@
             null
           ]
         ],
+        "row_labels": [
+          "At end of first year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later",
+          "Seven years later",
+          "Eight years later",
+          "Nine years later"
+        ],
         "source_page": 41,
         "entity": 2001
       },
@@ -579,6 +702,13 @@
         "unit_source": "header",
         "source_page": 40,
         "entity": 2001,
+        "movement_semantics": {
+          "row_label": "Movements arising from prior year claims",
+          "row_index": 5,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": true,
+          "column_index": 1
+        },
         "gross_prior_year_claims": -67.7,
         "ri_share_prior_year": 29.1,
         "net_prior_year_claims": -38.6
@@ -664,170 +794,148 @@
       "primary_causes": [
         "Favorable claims development",
         "Adverse claims development",
-        "COVID-19 / pandemic effects",
         "Natural catastrophe events",
-        "Economic inflation / claims cost inflation",
-        "Reinsurance recoveries"
+        "COVID-19 / pandemic effects"
       ],
       "specific_events": [
+        "Uri Texas freeze",
         "Hurricane Ida",
-        "Winter storm Uri (Texas freeze)",
         "European Floods",
         "US Tornadoes",
-        "UK business interruption (Supreme Court ruling 15 January 2021)"
+        "COVID-19 / business interruption"
       ],
-      "specific_years_affected": [
-        2019,
-        2020
-      ],
+      "specific_years_affected": [],
       "prior_year_events": [
         {
           "event_name": "COVID-19 pandemic",
           "event_year": 2020,
-          "impact_description": "Initial COVID losses recognised in 2020 impacted reserves and resulted in higher claims in 2020; subsequent settlements and Supreme Court judgment influenced reserve movements.",
+          "impact_description": "Initial COVID losses were recognised in 2020 (including UK business interruption claims) which materially impacted reserves and led to strengthened reserves in 2020; many claims were subsequently settled in line with the Supreme Court judgement.",
           "lobs_affected": [
-            "Property",
-            "Casualty",
-            "Motor"
+            "Property"
           ],
           "amount_gbp_m": null,
-          "confidence": 0.9
+          "confidence": 0.8
         },
         {
           "event_name": "Part VII transfer to Lloyd's Brussels",
           "event_year": 2020,
-          "impact_description": "Transfer of relevant EEA policies and related liabilities (1993 to April 2020) to Lloyd's Brussels with corresponding quota share reinsurance back; cash exchanged but combined effect had no economic impact on the Syndicate.",
-          "lobs_affected": [
-            "Treaty"
-          ],
+          "impact_description": "Transfer of EEA policies and related liabilities to Lloyd's Brussels with cash exchanged; the combined effect had no economic impact on the Syndicate's income statement or balance sheet.",
+          "lobs_affected": [],
           "amount_gbp_m": null,
           "confidence": 1.0
         }
       ],
       "named_events": [
         {
+          "event_name": "Uri Texas freeze",
+          "event_year": 2021,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "Included in 2021 net loss reserves; part of a set of natural catastrophe events that exceeded expectations and contributed to the 2021 loss ratio.",
+          "lobs_affected": [
+            "Property"
+          ],
+          "page": 5,
+          "confidence": 0.8
+        },
+        {
           "event_name": "Hurricane Ida",
           "event_year": 2021,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "Included within the Syndicate's 2021 net loss reserves for catastrophes",
+          "loss_description": "Included in 2021 net loss reserves; part of natural catastrophe events which exceeded loss expectations for this type of event.",
           "lobs_affected": [
-            "Property",
-            "Reinsurance - Property"
+            "Property"
           ],
           "page": 5,
-          "confidence": 0.9
-        },
-        {
-          "event_name": "Winter storm Uri (Texas freeze)",
-          "event_year": 2021,
-          "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": null,
-          "loss_description": "Included within the Syndicate's 2021 net loss reserves for catastrophes",
-          "lobs_affected": [
-            "Property",
-            "Reinsurance - Property"
-          ],
-          "page": 5,
-          "confidence": 0.9
+          "confidence": 0.8
         },
         {
           "event_name": "European Floods",
           "event_year": 2021,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "Included within the Syndicate's 2021 net loss reserves for catastrophes",
+          "loss_description": "Included in 2021 net loss reserves; part of natural catastrophe events which exceeded expectations.",
           "lobs_affected": [
-            "Property",
-            "Reinsurance - Property"
+            "Property"
           ],
           "page": 5,
-          "confidence": 0.9
+          "confidence": 0.8
         },
         {
           "event_name": "US Tornadoes",
           "event_year": 2021,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "Included within the Syndicate's 2021 net loss reserves for catastrophes",
+          "loss_description": "Included in 2021 net loss reserves; part of the catalogue of 2021 catastrophe events.",
           "lobs_affected": [
-            "Property",
-            "Reinsurance - Property"
+            "Property"
           ],
           "page": 5,
-          "confidence": 0.9
+          "confidence": 0.8
         },
         {
-          "event_name": "UK business interruption (Supreme Court benchmark ruling)",
-          "event_year": 2021,
+          "event_name": "COVID-19 / business interruption",
+          "event_year": 2020,
           "event_type": "other",
-          "net_loss_gbp_m": null,
-          "loss_description": "Supreme Court ruling of 15 January 2021 brought certainty to many COVID business interruption claims and enabled settlement of many of those claims.",
+          "net_loss_gbp_m": 137.2,
+          "loss_description": "Syndicate recorded gross best estimate COVID losses of GBP 299.6m and net GBP 137.2m at 31 December 2021; many UK business interruption claims were settled following the Supreme Court judgement.",
           "lobs_affected": [
             "Property"
           ],
           "page": 5,
           "confidence": 0.9
-        },
-        {
-          "event_name": "Aggregation of multiple natural catastrophe events",
-          "event_year": 2021,
-          "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": 84.0,
-          "loss_description": "The Syndicate has recorded net loss reserves (net of reinstatement premiums) of GBP 84.0 million in 2021 encompassing Uri, European Floods, Hurricane Ida and US Tornadoes.",
-          "lobs_affected": [
-            "Property",
-            "Reinsurance - Property"
-          ],
-          "page": 5,
-          "confidence": 0.9
         }
       ],
-      "standardized_narrative": "At 1 January 2021 the Syndicate's gross claims outstanding were GBP 3,340.2m. During 2021 there was a net prior-year release of GBP 67.7m (gross), driven by favourable reserve development in the Insurance and Reinsurance divisions (including releases in Cargo, Marine Liability, Commercial Property and Financial Lines) which were partially offset by significant adverse development in discontinued lines (notably US trucking liability and International Casualty). COVID-19, a series of 2021 natural catastrophe events (including Hurricane Ida and the Texas freeze Uri), and inflationary concerns were highlighted as material influences on reserves and future uncertainty.",
+      "standardized_narrative": "At 1 January 2021 the Syndicate carried gross claims outstanding of GBP 3,340.2m. During 2021 there was a net prior-year reserve movement (gross) of a release of GBP 67.7m driven by a mix of favourable reserve developments in several classes (notably Cargo, Marine Liability, Commercial Property and certain Reinsurance classes) partially offset by adverse developments in discontinued portfolios (notably US trucking liability and International Casualty). Natural catastrophe activity in 2021 (including Uri/Texas freeze, European floods, Hurricane Ida and US tornadoes) materially affected current-year claims but prior-year reserve movements were a net release.",
       "raw_causal_phrases": [
-        "Reserve releases of GBP 23.0 million in 2021 compare favourably to 2020 which saw a strengthening of GBP 12.0 million.",
-        "The claims ratio has reduced by 12%, largely driven by the absence of COVID losses in 2021.",
-        "Adverse reserve development totalled GBP 94.0 million in 2021 compared to releases of GBP 14.0 million in 2020.",
-        "The strengthening is predominantly driven by US trucking liability (GBP 33.0 million) and International Casualty (GBP 38.0 million) classes, which saw significant deterioration in the year, driven by adverse experience, changes to the development pattern and prior loss ratios.",
-        "The Syndicate has recorded net loss reserves (net of reinstatement premiums) of GBP 84.0 million in 2021.",
-        "In terms of COVID losses, the Syndicate has recorded gross best estimate losses of GBP 299.6.0 million (2020: GBP 229.0 million) and GBP 137.2.0 million net (2020: GBP 136.0 million) at 31 December 2021.",
-        "There remains considerable uncertainty as to the extent and duration of this environment, as well as its potential impact on future claims settlements."
+        "Reserve releases of GBP 23.0 million in 2021 compare favourably to 2020 which saw a strengthening of GBP 12.0 million. Reserve releases were driven by favourable performance in a host of classes, including Cargo, Marine Liability, Commercial Property (driven by prior year cat releases), War, Financial Lines, and Credit.",
+        "Adverse reserve development totalled GBP 94.0 million in 2021 compared to releases of GBP 14.0 million in 2020. The strengthening is predominantly driven by US trucking liability (GBP 33.0 million) and International Casualty (GBP 38.0 million) classes, which saw significant deterioration in the year, driven by adverse experience, changes to the development pattern and prior loss ratios.",
+        "Movements arising from prior year claims (67.7) 29.1 (38.6)",
+        "The Syndicate has recorded net loss reserves (net of reinstatement premiums) of GBP 84.0 million in 2021. This includes exposure to the Uri Texas freeze, European Floods, Hurricane Ida and US Tornadoes."
       ],
       "lob_movements": [
-        {
-          "line_of_business": "Casualty",
-          "direction": "strengthening",
-          "amount_gbp_m": 71.0,
-          "percentage": null,
-          "confidence": 0.9
-        },
-        {
-          "line_of_business": "Treaty",
-          "direction": "release",
-          "amount_gbp_m": -24.0,
-          "percentage": null,
-          "confidence": 0.9
-        },
         {
           "line_of_business": "Property",
           "direction": "release",
           "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.5
+          "confidence": 0.8
+        },
+        {
+          "line_of_business": "Casualty",
+          "direction": "strengthening",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.8
         },
         {
           "line_of_business": "Marine",
           "direction": "release",
           "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.5
+          "confidence": 0.7
         },
         {
-          "line_of_business": "Professional Lines",
+          "line_of_business": "Motor",
+          "direction": "strengthening",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.6
+        },
+        {
+          "line_of_business": "Aviation",
+          "direction": "strengthening",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.6
+        },
+        {
+          "line_of_business": "Treaty",
           "direction": "release",
           "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.5
+          "confidence": 0.8
         }
       ],
       "gross_premiums_written_gbp_m": 1339.7,
@@ -876,7 +984,7 @@
       "gross_premium_page": 21,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Primary prior-year movement (gross -67.7m) taken from note 11(a) 'Movements arising from prior year claims' (Insurance liabilities column). Some divisional and line-level movements quoted in the narrative are reported net or by division; where gross per-LOB movements were not provided, allocations were inferred and amounts left null. RITC and Part VII transfers are present in the report and may distort development analyses; the claims development triangle excludes the aggregated '2011 & prior' column as required.",
+      "data_quality_notes": "Opening gross claims outstanding taken from Statement of Financial Position (Claims outstanding 2020 comparative). Prior-year development (gross) taken from Note 11(a) 'Movements arising from prior year claims' (-67.7). Some class-level movements in the narrative are reported net or 'driven by' and do not provide gross quantified splits (e.g. discontinued lines adverse development of GBP 94.0m is presented in the Discontinued lines note but gross/net attribution by LOB is not fully quantified). Claims development triangle (gross) present and used as supplementary source; RITC and Part VII transfer activity noted in the report but effected at/after year-end and not distorting the 2021 opening/closing comparatives. Where gross figures per LOB were not explicitly stated, amounts are left null and confidence reduced accordingly.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -1019,20 +1127,28 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_2001_2021_llm.pdf",
-      "content_hash": "ce920e101ded7c841893199c078ad95f89021ca308bcf5200da9dc30dfebdd43",
-      "standardized_at": "2026-07-05T23:20:57.761338+00:00",
+      "content_hash": "a61f483f587acddb2c056a72c39dca6027745c75bf58c65930ec02dbe1dd343c",
+      "standardized_at": "2026-09-11T11:33:54.230314+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 25385,
-        "output_tokens": 9827,
-        "total_tokens": 35212,
-        "cost_usd": 0.026
+        "input_tokens": 26145,
+        "output_tokens": 9710,
+        "total_tokens": 35855,
+        "cost_usd": 0.025956
+      },
+      "_pyd_route": {
+        "source": "rag_provisions",
+        "value": -67.7,
+        "model_value": -67.7,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "millions",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2012,
           2013,
@@ -1167,6 +1283,18 @@
             null
           ]
         ],
+        "row_labels": [
+          "At end of first year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later",
+          "Seven years later",
+          "Eight years later",
+          "Nine years later"
+        ],
         "source_page": 41,
         "entity": 2001
       },
@@ -1257,6 +1385,13 @@
         "unit_source": "header",
         "source_page": 40,
         "entity": 2001,
+        "movement_semantics": {
+          "row_label": "Movements arising from prior year claims",
+          "row_index": 5,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": true,
+          "column_index": 1
+        },
         "gross_prior_year_claims": -67.7,
         "ri_share_prior_year": 29.1,
         "net_prior_year_claims": -38.6
@@ -1328,12 +1463,12 @@
       }
     }
   },
-  "total_cost_usd": 0.036854,
-  "total_tokens": 56804,
+  "total_cost_usd": 0.040144,
+  "total_tokens": 61714,
   "validation": {
     "passed": true,
-    "total_discrepancies": 35,
-    "within_tolerance": 35,
+    "total_discrepancies": 34,
+    "within_tolerance": 34,
     "hard_failures": 0,
     "hard_failure_details": []
   }

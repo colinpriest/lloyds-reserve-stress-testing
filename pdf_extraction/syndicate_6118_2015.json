@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T12:14:11.858237+00:00",
+  "extraction_timestamp": "2026-09-13T04:01:36.406270+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -13,14 +15,15 @@
       "opening_reserves_gbp_m": 48.622,
       "opening_reserves_page": 6,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": 2.287,
-      "prior_year_development_pct": 4.7,
+      "prior_year_development_gbp_m": 3.61,
+      "prior_year_development_pct": 7.42,
       "direction": "strengthening",
-      "prior_year_movement_page": 15,
-      "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "Claims incurred in prior accident years 20,366 (6,547) 13,819",
+      "prior_year_movement_page": 3,
+      "prior_year_movement_confidence": 0.5,
+      "exact_reserve_text": "The prior accident year experience has been less benign. Deterioration on the earned and booked position on some accounts has had a negative impact on the host Syndicate's result for the year. In particular, deterioration on certain Marine Insurance segments has dragged back the performance of this class. Corrective action has now been applied to this account to re-structure its composition and return it to the profitable performance it has historically produced. The legacy Solicitor's Professional Indemnity portfolio, from which the host Syndicate has now exited, also exhibited some deterioration in the first half of the calendar year based on claims development on prior year exposures. Recent development has been more stable, but reserves have nonetheless been strengthened.",
       "primary_causes": [
-        "Adverse claims development"
+        "Adverse claims development",
+        "Large loss development"
       ],
       "specific_events": [],
       "specific_years_affected": [],
@@ -31,7 +34,7 @@
           "event_year": 2015,
           "event_type": "man_made",
           "net_loss_gbp_m": null,
-          "loss_description": "large losses in certain classes",
+          "loss_description": "large losses",
           "lobs_affected": [],
           "page": 3,
           "confidence": 0.8
@@ -41,19 +44,19 @@
           "event_year": 2015,
           "event_type": "man_made",
           "net_loss_gbp_m": null,
-          "loss_description": "large losses in certain classes",
+          "loss_description": "large losses",
           "lobs_affected": [],
           "page": 3,
           "confidence": 0.8
         }
       ],
-      "standardized_narrative": "The syndicate experienced a significant strengthening of prior year reserves by GBP 20.366 million in 2015. This adverse development was primarily driven by deterioration in certain Marine Insurance segments and the legacy Solicitor's Professional Indemnity portfolio. The prior accident year experience was less benign, leading to a negative impact on the syndicate's result.",
+      "standardized_narrative": "The syndicate experienced adverse prior accident year development in 2015, particularly impacting certain Marine Insurance segments and the legacy Solicitor's Professional Indemnity portfolio. While the narrative explicitly states deterioration and strengthening of reserves, a specific monetary amount for this movement is not quantified in the financial notes or tables. The claims development triangle shows no movement for prior underwriting years, which contradicts the narrative.",
       "raw_causal_phrases": [
         "The prior accident year experience has been less benign.",
-        "Deterioration on the earned and booked position on some accounts has had a negative impact on the host Syndicate's result for the year.",
-        "In particular, deterioration on certain Marine Insurance segments has dragged back the performance of this class.",
-        "The legacy Solicitor's Professional Indemnity portfolio... also exhibited some deterioration in the first half of the calendar year based on claims development on prior year exposures.",
-        "reserves have nonetheless been strengthened."
+        "Deterioration on the earned and booked position on some accounts has had a negative impact",
+        "deterioration on certain Marine Insurance segments has dragged back the performance of this class.",
+        "reserves have nonetheless been strengthened.",
+        "Solicitor's Professional Indemnity portfolio... also exhibited some deterioration in the first half of the calendar year based on claims development on prior year exposures."
       ],
       "lob_movements": [
         {
@@ -82,7 +85,7 @@
       "gross_premium_page": 13,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": " [RAG OVERRIDE: Model said PYD=20.366, RAG triangle computed 2.287. Using RAG value.]",
+      "data_quality_notes": "The claims development triangle on page 17 shows zero movement for all prior underwriting years, which directly contradicts the narrative on page 3 stating 'deterioration on prior accident year experience' and 'reserves have nonetheless been strengthened'. No specific monetary figure for prior year development is provided in the notes or narrative, only the direction is inferred from the text.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -129,21 +132,33 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_6118_2015_llm.pdf",
-      "content_hash": "ed33162fc3522b770371982882773fe07a97a8ba544c36081e9f67a99c0b0ca9",
-      "standardized_at": "2026-07-05T20:29:00.315200+00:00",
+      "content_hash": "c5f549101e7eba0d67d2f042971758c8d6b9964c96d349ff03895a94c141905b",
+      "standardized_at": "2026-09-11T14:08:11.172469+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 11411,
-        "output_tokens": 1145,
-        "total_tokens": 16090,
-        "cost_usd": 0.006286
+        "input_tokens": 12215,
+        "output_tokens": 1310,
+        "total_tokens": 20928,
+        "cost_usd": 0.006939
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 3.61,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 37,
+        "note": "filled a blank model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
+          2011,
           2012,
           2013,
           2014,
@@ -151,30 +166,53 @@
         ],
         "development_rows": [
           [
+            50716.0,
             16747.0,
             16981.0,
             17573.0,
             38507.0
           ],
           [
+            51582.0,
             18061.0,
             16230.0,
             18182.0,
             null
           ],
           [
+            54456.0,
             19082.0,
             18071.0,
             null,
             null
           ],
           [
+            54613.0,
             19528.0,
+            null,
+            null,
+            null
+          ],
+          [
+            55936.0,
+            null,
             null,
             null,
             null
           ]
         ],
+        "row_labels": [
+          "At end of underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later"
+        ],
+        "aggregated_cohort": {
+          "anchor": 2011,
+          "label": "2011 & Prior GBP 000 50,716",
+          "column": 1
+        },
         "source_page": 37,
         "entity": 6118
       },
@@ -269,16 +307,16 @@
       "opening_reserves_gbp_m": 48.622,
       "opening_reserves_page": 14,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": 2.287,
-      "prior_year_development_pct": 4.7,
+      "prior_year_development_gbp_m": 3.61,
+      "prior_year_development_pct": 7.42,
       "direction": "strengthening",
       "prior_year_movement_page": 35,
       "prior_year_movement_confidence": 0.8,
       "exact_reserve_text": "The prior accident year experience has been less benign. Deterioration on the earned and booked position on some accounts has had a negative impact on the host Syndicate's result for the year. In particular, deterioration on certain Marine Insurance segments has dragged back the performance of this class. Corrective action has now been applied to this account to restructure its composition and return it to the profitable performance it has historically produced.\nThe legacy Solicitor's Professional Indemnity portfolio, from which the host Syndicate has now exited, also exhibited some deterioration in the first half of the calendar year based on claims development on prior year exposures. Recent development has been more stable, but reserves have nonetheless been strengthened.",
       "primary_causes": [
+        "Man-made catastrophe / large losses",
         "Adverse claims development",
-        "Large loss development",
-        "Other"
+        "Large loss development"
       ],
       "specific_events": [
         "Pemex",
@@ -294,34 +332,14 @@
       ],
       "prior_year_events": [
         {
-          "event_name": "Back year adjustment (cession of 2008-2013 years)",
+          "event_name": "Back year cession (retrospective cession of 2008-2013)",
           "event_year": 2014,
-          "impact_description": "Back year adjustment made in 2014 in respect of the 2008 to 2013 underwriting years where cessions were made retrospectively to the Syndicate.",
+          "impact_description": "Back year adjustment in 2014 in respect of the 2008 to 2013 underwriting years where Barbican Syndicate 1955 ceded 11.5% of its book on those years retrospectively to the Syndicate.",
           "lobs_affected": [
             "Treaty"
           ],
           "amount_gbp_m": 23.125,
-          "confidence": 0.8
-        },
-        {
-          "event_name": "Legacy Solicitor's Professional Indemnity portfolio deterioration",
-          "event_year": null,
-          "impact_description": "Deterioration based on claims development on prior year exposures; reserves were strengthened.",
-          "lobs_affected": [
-            "Professional Lines"
-          ],
-          "amount_gbp_m": null,
-          "confidence": 0.5
-        },
-        {
-          "event_name": "Deterioration on Marine Insurance segments",
-          "event_year": null,
-          "impact_description": "Deterioration on certain Marine Insurance segments dragged back the performance of this class; corrective action applied.",
-          "lobs_affected": [
-            "Marine"
-          ],
-          "amount_gbp_m": null,
-          "confidence": 0.5
+          "confidence": 1.0
         }
       ],
       "named_events": [
@@ -330,84 +348,76 @@
           "event_year": 2015,
           "event_type": "man_made",
           "net_loss_gbp_m": null,
-          "loss_description": "One of the large losses in the year; impact limited by outwards reinsurance and kept within planned net claims expectations.",
+          "loss_description": "Notable large loss in a class in which the host Syndicate operates (mentioned alongside Tianjin).",
           "lobs_affected": [
             "Energy"
           ],
           "page": 5,
-          "confidence": 0.8
+          "confidence": 0.5
         },
         {
           "event_name": "Tianjin",
           "event_year": 2015,
           "event_type": "man_made",
           "net_loss_gbp_m": null,
-          "loss_description": "Notable large loss during the year; impact limited by outwards reinsurance and kept within planned net claims expectations.",
+          "loss_description": "Notable large loss in a class in which the host Syndicate operates (mentioned alongside Pemex).",
           "lobs_affected": [
             "Property"
           ],
           "page": 5,
-          "confidence": 0.8
+          "confidence": 0.5
         }
       ],
-      "standardized_narrative": "The syndicate shows mixed prior year movements: while there was deterioration and reserve strengthening on specific prior portfolios (notably legacy Solicitor's PI and certain Marine segments), the gross claims development triangle indicates effectively no net prior year movement at 31 December 2015. A material back-year adjustment was recorded in 2014 in respect of 2008-2013 cessions. Current-year large losses (notably Pemex and Tianjin) affected results but were largely managed via outwards reinsurance and did not create a material net prior-year reserve movement.",
+      "standardized_narrative": "Opening gross claims outstanding were GBP 48.622m at 1 January 2015. The syndicate's gross claims development triangle shows no material net prior-year reserve movement for underwriting years up to and including 2013 (net prior-year development ~ GBP 0.0m). The managing agent's narrative describes deterioration on certain prior accident year accounts (notably Marine Insurance segments) and some strengthening of reserves on a legacy Solicitor's PI portfolio; large man-made losses in the period (Pemex and Tianjin) are highlighted as drivers of volatility but outwards reinsurance limited their net impact. A prior-year back-book cession (2014) of 2008-2013 underwriting years to SPS was a material adjustment in the prior year.",
       "raw_causal_phrases": [
         "The prior accident year experience has been less benign.",
         "Deterioration on the earned and booked position on some accounts has had a negative impact on the host Syndicate's result for the year.",
         "In particular, deterioration on certain Marine Insurance segments has dragged back the performance of this class.",
-        "The legacy Solicitor's Professional Indemnity portfolio, from which the host Syndicate has now exited, also exhibited some deterioration in the first half of the calendar year based on claims development on prior year exposures.",
-        "Recent development has been more stable, but reserves have nonetheless been strengthened.",
+        "reserves have nonetheless been strengthened.",
         "The back year adjustment made during 2014 is in respect of the 2008 to 2013 underwriting years, where Barbican Syndicate 1955 ceded 11.5% of its book on those years retrospectively to the Syndicate."
       ],
       "lob_movements": [
         {
           "line_of_business": "Energy",
-          "direction": "strengthening",
-          "amount_gbp_m": 2.683,
+          "direction": "flat",
+          "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.8
-        },
-        {
-          "line_of_business": "Energy",
-          "direction": "release",
-          "amount_gbp_m": -0.984,
-          "percentage": null,
-          "confidence": 0.8
+          "confidence": 0.5
         },
         {
           "line_of_business": "Marine",
           "direction": "strengthening",
-          "amount_gbp_m": 3.807,
+          "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.8
+          "confidence": 0.5
         },
         {
           "line_of_business": "Property",
-          "direction": "release",
-          "amount_gbp_m": -0.703,
+          "direction": "flat",
+          "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.8
+          "confidence": 0.5
         },
         {
           "line_of_business": "Casualty",
-          "direction": "strengthening",
-          "amount_gbp_m": 7.376,
+          "direction": "flat",
+          "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.8
+          "confidence": 0.5
         },
         {
           "line_of_business": "Accident & Health",
-          "direction": "strengthening",
-          "amount_gbp_m": 0.275,
+          "direction": "flat",
+          "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.8
+          "confidence": 0.5
         },
         {
-          "line_of_business": "Aggregate",
+          "line_of_business": "Professional Lines",
           "direction": "strengthening",
-          "amount_gbp_m": 0.295,
+          "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.8
+          "confidence": 0.5
         }
       ],
       "gross_premiums_written_gbp_m": 47.5,
@@ -418,10 +428,10 @@
           "percentage_of_total": 100.0
         }
       ],
-      "gross_premium_page": 4,
+      "gross_premium_page": 26,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior year development (PYD) gross amount is not explicitly stated in the report. PYD was calculated from the gross claims development triangle (note: aggregated '2011 & Prior' column excluded as per rules) which yields a net zero movement for pre-2014 underwriting years. Narrative describes mixed adverse development and some strengthening but no quantified gross PYD. A gross back-year adjustment in 2014 (23.125m) is explicitly recorded. Some figures in the notes are presented in GBP 000; amounts here have been converted to millions where requested. [RAG OVERRIDE: Model said PYD=0.0, RAG triangle computed 2.287. Using RAG value.]",
+      "data_quality_notes": "Opening gross claims outstanding taken from Statement of Financial Position (liabilities: claims outstanding). No explicit single-line 'movement in prior year's provision for claims outstanding' gross figure was found; gross claims development triangle (note 13) was used to assess prior year development and shows effectively zero net movement for underwriting years <=2013. Narrative describes some prior-year deterioration and selective reserve strengthening (legacy Solicitor's PI) which appears to be granular rather than changing the aggregate gross prior-year position. Some table parsing ambiguity exists in the printed triangle layout; triangle values were interpreted conservatively. LOB movement amounts were not quantified in the report and have been inferred qualitatively where commentary existed. [RAG OVERRIDE: Model said PYD=0.0, RAG triangle computed 3.61. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -449,11 +459,17 @@
           [
             19082,
             18071,
-            null,
+            18071,
             null
           ],
           [
             19528,
+            19528,
+            null,
+            null
+          ],
+          [
+            null,
             null,
             null,
             null
@@ -462,21 +478,34 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_6118_2015_llm.pdf",
-      "content_hash": "ed33162fc3522b770371982882773fe07a97a8ba544c36081e9f67a99c0b0ca9",
-      "standardized_at": "2026-07-05T20:30:38.945621+00:00",
+      "content_hash": "c5f549101e7eba0d67d2f042971758c8d6b9964c96d349ff03895a94c141905b",
+      "standardized_at": "2026-09-11T14:10:16.014451+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 19511,
-        "output_tokens": 8839,
-        "total_tokens": 28350,
-        "cost_usd": 0.022556
+        "input_tokens": 20271,
+        "output_tokens": 7815,
+        "total_tokens": 28086,
+        "cost_usd": 0.020698
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 3.61,
+        "model_value": 0.0,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 37,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
+          2011,
           2012,
           2013,
           2014,
@@ -484,30 +513,53 @@
         ],
         "development_rows": [
           [
+            50716.0,
             16747.0,
             16981.0,
             17573.0,
             38507.0
           ],
           [
+            51582.0,
             18061.0,
             16230.0,
             18182.0,
             null
           ],
           [
+            54456.0,
             19082.0,
             18071.0,
             null,
             null
           ],
           [
+            54613.0,
             19528.0,
+            null,
+            null,
+            null
+          ],
+          [
+            55936.0,
+            null,
             null,
             null,
             null
           ]
         ],
+        "row_labels": [
+          "At end of underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later"
+        ],
+        "aggregated_cohort": {
+          "anchor": 2011,
+          "label": "2011 & Prior GBP 000 50,716",
+          "column": 1
+        },
         "source_page": 37,
         "entity": 6118
       },
@@ -597,12 +649,12 @@
       }
     }
   },
-  "total_cost_usd": 0.028842,
-  "total_tokens": 44440,
+  "total_cost_usd": 0.027637,
+  "total_tokens": 49014,
   "validation": {
     "passed": true,
-    "total_discrepancies": 31,
-    "within_tolerance": 31,
+    "total_discrepancies": 24,
+    "within_tolerance": 24,
     "hard_failures": 0,
     "hard_failure_details": []
   }

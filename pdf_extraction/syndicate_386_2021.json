@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-05T20:17:23.804681+00:00",
+  "extraction_timestamp": "2026-09-13T04:00:36.795638+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -17,11 +19,11 @@
       "prior_year_development_pct": -0.14,
       "direction": "release",
       "prior_year_movement_page": 22,
-      "prior_year_movement_confidence": 0.5,
-      "exact_reserve_text": "Included within net claims incurred is adverse prior year development relating to certain financial lines classes; reduced by positive developments across a number of other classes.",
+      "prior_year_movement_confidence": 0.8,
+      "exact_reserve_text": "The Syndicate has applied a consistent approach to prior years in establishing the technical provisions for claims outstanding and reinsurers share thereof. Included within net claims incurred is adverse prior year development relating to certain financial lines classes; reduced by positive developments across a number of other classes.",
       "primary_causes": [
-        "Adverse claims development",
-        "Favorable claims development"
+        "Favorable claims development",
+        "Adverse claims development"
       ],
       "specific_events": [],
       "specific_years_affected": [],
@@ -29,29 +31,51 @@
       "named_events": [
         {
           "event_name": "COVID-19 pandemic",
-          "event_year": 2021,
+          "event_year": 2020,
           "event_type": "other",
-          "net_loss_gbp_m": 0.0,
-          "loss_description": "The Syndicate continues to have no incurred claims from COVID-19 and has suffered no major disruption to its operations and people",
+          "net_loss_gbp_m": null,
+          "loss_description": "The Syndicate continues to have no incurred claims from COVID-19",
           "lobs_affected": [],
           "page": 3,
           "confidence": 1.0
         },
         {
-          "event_name": "Russia and Ukraine conflict",
+          "event_name": "FCA Property Business Interruption Test Case",
           "event_year": 2021,
-          "event_type": "geopolitical",
+          "event_type": "regulatory",
           "net_loss_gbp_m": null,
-          "loss_description": "limited or no underwriting exposure within the Syndicate to Ukraine and the neighbouring countries. The impact of the conflict on the valuation of financial assets will be kept under close review, but at this stage is not expected to be material.",
+          "loss_description": "The UK Supreme Court judgment of 15 January 2021 regarding the FCA Property Business Interruption Test Case that was found largely in favour of policyholders has been implemented by QBE, and required notifications to policyholders and regulators have been made. Uncertainty remained, for example, in relation to the ultimate impact on claims liabilities",
+          "lobs_affected": [
+            "Property"
+          ],
+          "page": 3,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Stonegate litigation",
+          "event_year": 2021,
+          "event_type": "liability",
+          "net_loss_gbp_m": null,
+          "loss_description": "Uncertainty remained, for example, in relation to the ultimate impact on claims liabilities in respect of a challenge to the deductibility of furlough payments which has been raised in the Stonegate litigation",
           "lobs_affected": [],
           "page": 3,
           "confidence": 0.8
+        },
+        {
+          "event_name": "Conflict between Russia and Ukraine",
+          "event_year": 2021,
+          "event_type": "geopolitical",
+          "net_loss_gbp_m": null,
+          "loss_description": "The initial assessment is that there is limited or no underwriting exposure within the Syndicate to Ukraine and the neighbouring countries.",
+          "lobs_affected": [],
+          "page": 3,
+          "confidence": 1.0
         }
       ],
-      "standardized_narrative": "The syndicate reported a mixed prior year development, with adverse development in certain financial lines classes partially offset by positive developments across a number of other classes. The gross prior year development amount was not explicitly quantified. The syndicate noted no incurred claims from the COVID-19 pandemic and limited exposure to the Russia-Ukraine conflict.",
+      "standardized_narrative": "The syndicate experienced an overall release of GBP 52.9 million in prior year reserves, calculated from the gross claims development triangle. This was driven by positive developments across various classes, partially offset by adverse development in certain financial lines classes.",
       "raw_causal_phrases": [
         "adverse prior year development relating to certain financial lines classes",
-        "positive developments across a number of other classes"
+        "reduced by positive developments across a number of other classes"
       ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 412.3,
@@ -59,18 +83,18 @@
         {
           "line_of_business": "Third party liability",
           "amount_gbp_m": 300.1,
-          "percentage_of_total": 72.79
+          "percentage_of_total": 72.78
         },
         {
           "line_of_business": "Reinsurance acceptances",
           "amount_gbp_m": 112.2,
-          "percentage_of_total": 27.21
+          "percentage_of_total": 27.22
         }
       ],
       "gross_premium_page": 17,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Gross prior year development amount not explicitly quantified. Narrative describes mixed development (adverse in some classes, positive in others) on a net basis. Claims development triangle (gross) shows no movement for individual underwriting years prior to 2020, and the aggregate '2011 and prior' column was excluded per instructions. [LOB NOT APPLIED: deterministic mix has 1 class(es) with premium 300.1 against model totals [412.3, 412.3]; model mix retained.]",
+      "data_quality_notes": "Prior year development figure calculated from the gross claims development triangle as no explicit gross prior year movement note was found. [RAG OVERRIDE: Model said PYD=-52.9, RAG triangle computed -1.7. Using RAG value.] [LOB NOT APPLIED: deterministic mix has 1 class(es) with premium 300.1 against model totals [412.3, 412.3]; model mix retained.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -98,8 +122,7 @@
             106.7,
             111.0,
             94.1,
-            116.2,
-            489.1
+            116.2
           ],
           [
             208.8,
@@ -110,7 +133,7 @@
             223.4,
             198.7,
             208.9,
-            116.2,
+            null,
             null
           ],
           [
@@ -196,25 +219,49 @@
             null,
             null,
             null
+          ],
+          [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
           ]
         ]
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_386_2021_llm.pdf",
-      "content_hash": "5b6db5e4e5979f8d85173fd5f9976bd534a8e29f067fce3f0e993f3a01346867",
-      "standardized_at": "2026-03-18T23:15:49.376010+00:00",
+      "content_hash": "0cb70ba6a400e13b5e0ea9cff8d7044b2d930be91bc4a2417c43cd3d92ebf565",
+      "standardized_at": "2026-09-11T12:54:23.775538+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 17344,
-        "output_tokens": 1604,
-        "total_tokens": 29024,
-        "cost_usd": 0.009213
+        "input_tokens": 18148,
+        "output_tokens": 1872,
+        "total_tokens": 26596,
+        "cost_usd": 0.010124
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -1.7,
+        "model_value": -52.9,
+        "triangle_type": "gross",
+        "triangle_units": "millions",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 44,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "millions",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2012,
           2013,
@@ -349,6 +396,18 @@
             null
           ]
         ],
+        "row_labels": [
+          "At end of year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later",
+          "Seven years later",
+          "Eight years later",
+          "Nine years later"
+        ],
         "source_page": 44,
         "entity": 386
       },
@@ -454,6 +513,12 @@
         "foreign_pages": [],
         "underwriting_year_pages": [
           52,
+          53,
+          54,
+          55,
+          56,
+          57,
+          58,
           59,
           60,
           61,
@@ -463,9 +528,11 @@
           65,
           66,
           67,
-          68
+          68,
+          69,
+          70
         ],
-        "underwriting_year_tables_skipped": 15,
+        "underwriting_year_tables_skipped": 19,
         "document_unit_hint": 1.0
       }
     },
@@ -478,8 +545,8 @@
       "prior_year_development_gbp_m": -1.7,
       "prior_year_development_pct": -0.14,
       "direction": "release",
-      "prior_year_movement_page": 41,
-      "prior_year_movement_confidence": 0.5,
+      "prior_year_movement_page": 42,
+      "prior_year_movement_confidence": 0.8,
       "exact_reserve_text": "Included within net claims incurred is adverse prior year development relating to certain financial lines classes; reduced by positive developments across a number of other classes.",
       "primary_causes": [
         "Adverse claims development",
@@ -488,76 +555,23 @@
       "specific_events": [],
       "specific_years_affected": [],
       "prior_year_events": [],
-      "named_events": [
-        {
-          "event_name": "COVID-19 pandemic",
-          "event_year": 2020,
-          "event_type": "other",
-          "net_loss_gbp_m": null,
-          "loss_description": "The Syndicate continues to have no incurred claims from COVID-19 and has suffered no major disruption to its operations.",
-          "lobs_affected": [
-            "Casualty",
-            "Professional Lines"
-          ],
-          "page": 4,
-          "confidence": 0.8
-        },
-        {
-          "event_name": "FCA Property Business Interruption Test Case",
-          "event_year": 2021,
-          "event_type": "liability",
-          "net_loss_gbp_m": null,
-          "loss_description": "UK Supreme Court judgment of 15 January 2021 regarding the FCA Property Business Interruption Test Case was found largely in favour of policyholders and has been implemented by QBE.",
-          "lobs_affected": [
-            "Casualty",
-            "Professional Lines"
-          ],
-          "page": 4,
-          "confidence": 0.8
-        },
-        {
-          "event_name": "Stonegate litigation (challenge regarding furlough deductibility)",
-          "event_year": 2021,
-          "event_type": "liability",
-          "net_loss_gbp_m": null,
-          "loss_description": "Uncertainty remained in relation to the ultimate impact on claims liabilities in respect of a challenge to the deductibility of furlough payments which has been raised in the Stonegate litigation.",
-          "lobs_affected": [
-            "Casualty",
-            "Professional Lines"
-          ],
-          "page": 4,
-          "confidence": 0.5
-        },
-        {
-          "event_name": "Russia-Ukraine conflict (potential impact review)",
-          "event_year": 2022,
-          "event_type": "political",
-          "net_loss_gbp_m": null,
-          "loss_description": "An initial assessment concluded limited or no underwriting exposure within the Syndicate to Ukraine and neighbouring countries; impact on financial assets not expected to be material at this stage.",
-          "lobs_affected": [
-            "Casualty",
-            "Treaty"
-          ],
-          "page": 4,
-          "confidence": 0.5
-        }
-      ],
-      "standardized_narrative": "At 31 December 2021 the Syndicate reported gross claims outstanding of GBP 1,269.6m (opening gross claims outstanding at 1 January 2021: GBP 1,251.8m). The report does not quantify a single gross prior-year development amount; it states that net claims incurred included adverse prior year development in certain financial lines offset by favourable development in other classes, resulting in a mixed prior year picture. No explicit gross prior-year movement figure is presented in the notes; the claims development tables and narrative indicate both adverse and favourable developments across cohorts.",
+      "named_events": [],
+      "standardized_narrative": "Opening gross claims outstanding at 1 January 2021 were GBP 1,251.8m. The syndicate's gross claims development triangle indicates no net prior-year movement in aggregate (no material gross strengthening or release). The narrative states there was adverse prior-year development in certain financial lines (professional/financial lines) which was offset by positive development across other classes, resulting in a net flat outcome. No quantified gross prior-year strengthening or release is reported.",
       "raw_causal_phrases": [
         "Included within net claims incurred is adverse prior year development relating to certain financial lines classes; reduced by positive developments across a number of other classes.",
-        "The Syndicate continues to have no incurred claims from COVID-19 and has suffered no major disruption to its operations."
+        "This has also had an impact on associated claims reserves."
       ],
       "lob_movements": [
         {
-          "line_of_business": "Casualty",
-          "direction": "mixed",
+          "line_of_business": "Professional Lines",
+          "direction": "strengthening",
           "amount_gbp_m": null,
           "percentage": null,
           "confidence": 0.5
         },
         {
-          "line_of_business": "Treaty",
-          "direction": "mixed",
+          "line_of_business": "Casualty",
+          "direction": "release",
           "amount_gbp_m": null,
           "percentage": null,
           "confidence": 0.5
@@ -576,15 +590,15 @@
           "percentage_of_total": 27.2
         }
       ],
-      "gross_premium_page": 17,
-      "gross_premium_confidence": 1.0,
+      "gross_premium_page": 31,
+      "gross_premium_confidence": 0.9,
       "currency": "GBP",
-      "data_quality_notes": "No explicit GROSS prior-year development amount was presented in the notes. The narrative references adverse prior year development in some financial lines offset by favourable development elsewhere, but only net descriptions are given. A gross movement figure could not be identified unambiguously; the claims development table exists but the parsed rows are ambiguous for directly computing a consolidated gross prior-year movement. prior_year_development_gbp_m is therefore returned as null. [LOB NOT APPLIED: deterministic mix has 1 class(es) with premium 300.1 against model totals [412.3, 412.3]; model mix retained.]",
+      "data_quality_notes": "Prior year development was calculated from the gross claims development triangle (notes). The triangle as printed omits the '2011 and prior' aggregate column from the underwriting_years list per instructions; the narrative also references adverse development in financial lines offset by positive development elsewhere. There was a prior-year restatement noted which 'had an impact on associated claims reserves' which may affect comparatives. Some minor parsing ambiguity existed in the printed triangle rows alignment; the PYD result (zero) is consistent with the triangle diagonal comparison but reported narrative describes offsetting movements across classes. [RAG OVERRIDE: Model said PYD=0.0, RAG triangle computed -1.7. Using RAG value.] [LOB NOT APPLIED: deterministic mix has 1 class(es) with premium 300.1 against model totals [412.3, 412.3]; model mix retained.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "millions",
-        "page": 41,
+        "page": 42,
         "underwriting_years": [
           2012,
           2013,
@@ -707,7 +721,7 @@
             null
           ],
           [
-            281.8,
+            null,
             null,
             null,
             null,
@@ -718,24 +732,37 @@
             null,
             null
           ]
-        ]
+        ],
+        "confidence": 0.8
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_386_2021_llm.pdf",
-      "content_hash": "5b6db5e4e5979f8d85173fd5f9976bd534a8e29f067fce3f0e993f3a01346867",
-      "standardized_at": "2026-03-18T23:19:34.240665+00:00",
+      "content_hash": "0cb70ba6a400e13b5e0ea9cff8d7044b2d930be91bc4a2417c43cd3d92ebf565",
+      "standardized_at": "2026-09-11T12:57:58.866671+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 32616,
-        "output_tokens": 11541,
-        "total_tokens": 44157,
-        "cost_usd": 0.031236
+        "input_tokens": 33231,
+        "output_tokens": 12415,
+        "total_tokens": 45646,
+        "cost_usd": 0.033138
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -1.7,
+        "model_value": 0.0,
+        "triangle_type": "gross",
+        "triangle_units": "millions",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 44,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "millions",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2012,
           2013,
@@ -870,6 +897,18 @@
             null
           ]
         ],
+        "row_labels": [
+          "At end of year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later",
+          "Seven years later",
+          "Eight years later",
+          "Nine years later"
+        ],
         "source_page": 44,
         "entity": 386
       },
@@ -975,6 +1014,12 @@
         "foreign_pages": [],
         "underwriting_year_pages": [
           52,
+          53,
+          54,
+          55,
+          56,
+          57,
+          58,
           59,
           60,
           61,
@@ -984,19 +1029,21 @@
           65,
           66,
           67,
-          68
+          68,
+          69,
+          70
         ],
-        "underwriting_year_tables_skipped": 15,
+        "underwriting_year_tables_skipped": 19,
         "document_unit_hint": 1.0
       }
     }
   },
-  "total_cost_usd": 0.040449,
-  "total_tokens": 73181,
+  "total_cost_usd": 0.043262,
+  "total_tokens": 72242,
   "validation": {
     "passed": true,
-    "total_discrepancies": 11,
-    "within_tolerance": 11,
+    "total_discrepancies": 14,
+    "within_tolerance": 14,
     "hard_failures": 0,
     "hard_failure_details": []
   }

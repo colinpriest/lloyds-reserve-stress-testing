@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T11:21:17.111008+00:00",
+  "extraction_timestamp": "2026-09-13T04:01:42.249232+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -23,15 +25,22 @@
         "Favourable claims development"
       ],
       "specific_events": [],
-      "specific_years_affected": [],
+      "specific_years_affected": [
+        2015,
+        2016,
+        2017,
+        2018,
+        2019,
+        2020
+      ],
       "prior_year_events": [
         {
-          "event_name": "Legacy Syndicate 3334 underwriting years",
-          "event_year": 2019,
+          "event_name": "Legacy Syndicate 3334 run-off",
+          "event_year": 2015,
           "impact_description": "underwriting losses on the legacy Syndicate 3334 underwriting years",
           "lobs_affected": [],
           "amount_gbp_m": 9.3,
-          "confidence": 0.8
+          "confidence": 1.0
         }
       ],
       "named_events": [
@@ -40,7 +49,7 @@
           "event_year": 2022,
           "event_type": "geopolitical",
           "net_loss_gbp_m": 15.0,
-          "loss_description": "net underwriting losses",
+          "loss_description": "net underwriting losses in respect of the Ukraine conflict (total of net claims and associated net reinstatement premiums)",
           "lobs_affected": [],
           "page": 3,
           "confidence": 1.0
@@ -50,16 +59,29 @@
           "event_year": 2022,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": 21.0,
-          "loss_description": "Net CAT losses",
+          "loss_description": "market-wide catastrophe ('CAT') losses above the ten-year average",
+          "lobs_affected": [],
+          "page": 4,
+          "confidence": 1.0
+        },
+        {
+          "event_name": "Market-wide catastrophe losses",
+          "event_year": 2021,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": 38.7,
+          "loss_description": "market-wide catastrophe ('CAT') losses above the ten-year average",
           "lobs_affected": [],
           "page": 4,
           "confidence": 1.0
         }
       ],
-      "standardized_narrative": "The Syndicate reported a net favourable prior year development of GBP 15.0m, primarily due to favourable claims development across several lines of business. This release was observed despite underwriting losses of GBP 9.3m on legacy Syndicate 3334 underwriting years. The gross claims development triangle was distorted by the reinsurance to close (RITC) of Syndicate 3334 into Syndicate 4000's 2020 underwriting year of account, making it unreliable for calculating gross prior year development.",
+      "standardized_narrative": "The Syndicate reported a net favourable prior year development of GBP 15.0 million in 2022. This release was achieved despite underwriting losses of GBP 9.3 million on the legacy Syndicate 3334 underwriting years (2015-2019), which were transferred into Syndicate 4000's 2020 year of account. The overall favourable development was driven by various line of business movements, with Accident & Health, Marine, Property, Third Party Liability, and Miscellaneous showing releases, while Fire and other damage to property and Reinsurance showed strengthenings.",
       "raw_causal_phrases": [
-        "favourable prior year development",
-        "underwriting losses on the legacy Syndicate 3334 underwriting years"
+        "favourable prior year development of GBP 15.0m",
+        "underwriting losses on the legacy Syndicate 3334 underwriting years",
+        "current inflationary environment impacted the Syndicate's results and is reflected in the reserving results",
+        "market-wide catastrophe ('CAT') losses above the ten-year average",
+        "net underwriting losses in respect of the Ukraine conflict"
       ],
       "lob_movements": [
         {
@@ -98,7 +120,7 @@
           "confidence": 1.0
         },
         {
-          "line_of_business": "Reinsurance - Specialty",
+          "line_of_business": "Reinsurance",
           "direction": "strengthening",
           "amount_gbp_m": 0.575,
           "percentage": null,
@@ -138,10 +160,10 @@
           "percentage_of_total": 23.3
         }
       ],
-      "gross_premium_page": 1,
+      "gross_premium_page": 17,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The prior year development figure is reported as a net amount of GBP 15.0m. The gross claims development triangle was deemed unreliable for calculating gross prior year development due to the significant distortion caused by the reinsurance to close (RITC) of Syndicate 3334 into Syndicate 4000's 2020 underwriting year of account, effective 1 January 2022. [RAG PYD NOT APPLIED: deterministic figure +29.530m has the opposite sign to both model values [-15.0, -15.026], which agree with each other; model values retained.] [CODE PYD NOT APPLIED: deterministic figure +29.530m has the opposite sign to both model values [-15.0, -15.026], which agree with each other; model values retained.]",
+      "data_quality_notes": "Prior year development figure is net of reinsurance as no gross figure was explicitly stated and the gross claims development triangle was distorted by a Reinsurance to Close (RITC) transaction from Syndicate 3334 into Syndicate 4000's 2020 underwriting year of account. 'Miscellaneous' LOB in lob_movements is mapped to 'Other' as it is not a standard Lloyd's LOB. [RAG PYD NOT APPLIED: deterministic figure +29.530m has the opposite sign to both model values [-15.0, -15.026], which agree with each other; model values retained. Sign agreement between the models is not a reconciliation: where they differ in value the cohort and accrual scope of each still has to be settled from the filing (R140).] [CODE PYD NOT APPLIED: deterministic figure +29.530m has the opposite sign to both model values [-15.0, -15.026], which agree with each other; model values retained. Sign agreement between the models is not a reconciliation: where they differ in value the cohort and accrual scope of each still has to be settled from the filing (R140).]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -242,20 +264,22 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_4000_2022_llm.pdf",
-      "content_hash": "36f08156e55773c73339c8a26fcd91f79dbd2c5d231e8578017ec1abbfa5cc2d",
-      "standardized_at": "2026-07-05T16:26:14.058743+00:00",
+      "content_hash": "e408a9d3b27a2ba04b35369d58c8d7578d6ad7d6dacfa7cd48979fc1f76e0f5c",
+      "standardized_at": "2026-09-11T12:50:15.116376+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 11669,
-        "output_tokens": 2080,
-        "total_tokens": 19200,
-        "cost_usd": 0.008701
+        "input_tokens": 12473,
+        "output_tokens": 2402,
+        "total_tokens": 22692,
+        "cost_usd": 0.009747
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2015,
           2016,
@@ -347,6 +371,16 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At the end of the underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later",
+          "Seven years later"
         ],
         "source_page": 32,
         "entity": 4000
@@ -520,21 +554,27 @@
           "event_year": 2022,
           "event_type": "political",
           "net_loss_gbp_m": 15.0,
-          "loss_description": "GBP 15.0m of net underwriting losses in respect of the Ukraine conflict (total of net claims and associated net reinstatement premiums).",
-          "lobs_affected": [
-            "Property",
-            "Casualty",
-            "Treaty"
-          ],
+          "loss_description": "net underwriting losses in respect of the Ukraine conflict (total of net claims and associated net reinstatement premiums)",
+          "lobs_affected": [],
+          "page": 6,
+          "confidence": 1.0
+        },
+        {
+          "event_name": "Legacy Syndicate 3334 underwriting years (losses)",
+          "event_year": null,
+          "event_type": "other",
+          "net_loss_gbp_m": 9.3,
+          "loss_description": "underwriting losses on the legacy Syndicate 3334 underwriting years",
+          "lobs_affected": [],
           "page": 6,
           "confidence": 1.0
         }
       ],
-      "standardized_narrative": "The syndicate opened 2022 with gross claims outstanding of GBP 374.4m. During 2022 there was overall favourable prior-year development, with net releases of GBP 15.0m (circa 4.0% of opening gross reserves). The reported prior-year improvement is described as favourable claims development across lines (greatest net releases in Marine and Third Party Liability), although the result is presented net of reinsurance and the 2022 reinsurance-to-close (RITC) of Syndicate 3334 materially distorts gross movements.",
+      "standardized_narrative": "Opening gross claims outstanding were GBP 374.4m. The Syndicate reports favourable prior year development of GBP 15.0m (net of reinsurance), i.e. a release versus opening reserves (4.0% of opening gross reserves). No gross prior-year movement figure is explicitly presented; a gross claims development table is printed but is materially distorted by the reinsurance-to-close (RITC) of Syndicate 3334, so the Syndicate's reported net prior-year release has been used as the authoritative quantified movement.",
       "raw_causal_phrases": [
-        "Claims incurred, net of reinsurance, include favourable prior year development of GBP 15.0m (2021: GBP 2.3m).",
-        "This includes GBP 15.0m of net underwriting losses in respect of the Ukraine conflict (total of net claims and associated net reinstatement premiums).",
-        "RITC of Syndicate 3334 181,247"
+        "favourable prior year development of GBP 15.0m (2021: GBP 2.3m).",
+        "Prior year claims development is analysed by line of business in the table below.",
+        "This includes GBP 15.0m of net underwriting losses in respect of the Ukraine conflict (total of net claims and associated net reinstatement premiums)"
       ],
       "lob_movements": [
         {
@@ -542,42 +582,42 @@
           "direction": "release",
           "amount_gbp_m": -2.101,
           "percentage": null,
-          "confidence": 0.8
+          "confidence": 1.0
         },
         {
           "line_of_business": "Marine",
           "direction": "release",
           "amount_gbp_m": -9.448,
           "percentage": null,
-          "confidence": 0.8
+          "confidence": 1.0
         },
         {
           "line_of_business": "Property",
           "direction": "strengthening",
           "amount_gbp_m": 1.245,
           "percentage": null,
-          "confidence": 0.8
+          "confidence": 1.0
         },
         {
           "line_of_business": "Casualty",
           "direction": "release",
           "amount_gbp_m": -3.906,
           "percentage": null,
-          "confidence": 0.8
+          "confidence": 1.0
         },
         {
           "line_of_business": "Aggregate",
           "direction": "release",
           "amount_gbp_m": -1.391,
           "percentage": null,
-          "confidence": 0.8
+          "confidence": 1.0
         },
         {
           "line_of_business": "Treaty",
           "direction": "strengthening",
           "amount_gbp_m": 0.575,
           "percentage": null,
-          "confidence": 0.8
+          "confidence": 1.0
         }
       ],
       "gross_premiums_written_gbp_m": 454.2,
@@ -613,10 +653,10 @@
           "percentage_of_total": 23.3
         }
       ],
-      "gross_premium_page": 4,
+      "gross_premium_page": 31,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Opening gross claims outstanding taken from the prior-year column of the statutory Statement of Financial Position (clear). No explicit GROSS prior-year reserve movement is presented in the notes; only a NET prior-year favourable development of GBP 15.0k (listed as GBP 15,026k) is given and has been used as a fallback (NET of reinsurance). A large RITC (Syndicate 3334) of GBP 181,247k was recorded in 2022 and materially distorts gross development tables; therefore gross-triangle-based PYD calculations are unreliable. LOB movements use the net per-line prior-year development table (GBP 000) and have been converted to millions. Confidence lowered for LOB and PYD interpretations because gross figures by LOB were not provided and RITC distortion exists. [RAG PYD NOT APPLIED: deterministic figure +29.530m has the opposite sign to both model values [-15.0, -15.026], which agree with each other; model values retained.] [CODE PYD NOT APPLIED: deterministic figure +29.530m has the opposite sign to both model values [-15.0, -15.026], which agree with each other; model values retained.]",
+      "data_quality_notes": "No explicit GROSS prior-year development figure is presented. A net favourable prior-year development of GBP 15.0m is stated and has been used as a fallback. A gross claims development table exists but is distorted by a material RITC (Syndicate 3334) disclosed in Technical Provisions, making triangle-based gross PYD unreliable. Lob mapping: 'Miscellaneous' mapped to 'Aggregate'; 'Reinsurance' mapped to 'Treaty'. [RAG PYD NOT APPLIED: deterministic figure +29.530m has the opposite sign to both model values [-15.0, -15.026], which agree with each other; model values retained. Sign agreement between the models is not a reconciliation: where they differ in value the cohort and accrual scope of each still has to be settled from the filing (R140).] [CODE PYD NOT APPLIED: deterministic figure +29.530m has the opposite sign to both model values [-15.0, -15.026], which agree with each other; model values retained. Sign agreement between the models is not a reconciliation: where they differ in value the cohort and accrual scope of each still has to be settled from the filing (R140).]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -717,20 +757,22 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_4000_2022_llm.pdf",
-      "content_hash": "36f08156e55773c73339c8a26fcd91f79dbd2c5d231e8578017ec1abbfa5cc2d",
-      "standardized_at": "2026-07-05T16:27:41.138252+00:00",
+      "content_hash": "e408a9d3b27a2ba04b35369d58c8d7578d6ad7d6dacfa7cd48979fc1f76e0f5c",
+      "standardized_at": "2026-09-11T12:53:06.048135+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 31968,
-        "output_tokens": 8797,
-        "total_tokens": 40765,
-        "cost_usd": 0.025586
+        "input_tokens": 32728,
+        "output_tokens": 9545,
+        "total_tokens": 42273,
+        "cost_usd": 0.027272
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2015,
           2016,
@@ -822,6 +864,16 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At the end of the underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later",
+          "Seven years later"
         ],
         "source_page": 32,
         "entity": 4000
@@ -972,12 +1024,12 @@
       }
     }
   },
-  "total_cost_usd": 0.034287,
-  "total_tokens": 59965,
+  "total_cost_usd": 0.037019,
+  "total_tokens": 64965,
   "validation": {
     "passed": true,
-    "total_discrepancies": 24,
-    "within_tolerance": 24,
+    "total_discrepancies": 29,
+    "within_tolerance": 29,
     "hard_failures": 0,
     "hard_failure_details": []
   }

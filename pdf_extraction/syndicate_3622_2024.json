@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-05T20:16:12.420391+00:00",
+  "extraction_timestamp": "2026-09-13T03:58:50.571176+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -19,43 +21,31 @@
       "prior_year_movement_page": 13,
       "prior_year_movement_confidence": 1.0,
       "exact_reserve_text": "Change in estimates of prior year (9,976)",
-      "primary_causes": [
-        "Favorable claims development"
-      ],
+      "primary_causes": [],
       "specific_events": [],
-      "specific_years_affected": [
-        2015,
-        2016,
-        2017,
-        2018,
-        2019,
-        2020,
-        2021,
-        2022,
-        2023
-      ],
+      "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "The syndicate reported a significant release of prior year claims reserves, amounting to GBP 9.976 million gross. This favorable development is reflected in the \"Change in estimates of prior year\" within the technical provisions. While specific causal factors are not detailed, the release suggests a more positive claims experience than initially anticipated for prior underwriting years.",
+      "standardized_narrative": "The syndicate experienced a significant release of GBP 9.976 million in gross claims reserves relating to prior underwriting years. This represents a 50.46% release compared to the opening gross claims outstanding of GBP 19.768 million. No specific causes or events for this movement were detailed in the report.",
       "raw_causal_phrases": [],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 31.379,
       "gross_premium_mix": [
         {
-          "line_of_business": "Life",
+          "line_of_business": "Direct Insurance - Life",
           "amount_gbp_m": 25.602,
-          "percentage_of_total": 81.59
+          "percentage_of_total": 81.6
         },
         {
           "line_of_business": "Reinsurance acceptances",
           "amount_gbp_m": 5.777,
-          "percentage_of_total": 18.41
+          "percentage_of_total": 18.4
         }
       ],
       "gross_premium_page": 12,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "No specific causal phrases were found for the prior year reserve release; 'Favorable claims development' was inferred. [RAG OVERRIDE: Model said PYD=-9.976, RAG triangle computed -6.871. Using RAG value.]",
+      "data_quality_notes": "The prior year development figure is taken from the 'Change in estimates of prior year' line in Note 15 Technical Provisions, which is a direct statement of the movement. The claims development triangle on page 14 shows a different total prior year development of -6.871m when calculated by comparing the current estimate to the previous diagonal for underwriting years 2022 and prior. The explicit note figure is preferred. [RAG OVERRIDE: Model said PYD=-9.976, RAG triangle computed -6.871. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -198,20 +188,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_3622_2024_llm.pdf",
-      "content_hash": "08c7b39a9b67e1ab2855dd24419d14de5fc5316c3ff23bc789f04161dc7ac0a9",
-      "standardized_at": "2026-07-06T00:17:54.223876+00:00",
+      "content_hash": "264eae2c3e5909b66200b0800fce092c544ea55c06b96046a00879fb6c6d5c93",
+      "standardized_at": "2026-09-11T14:23:29.894056+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 9863,
-        "output_tokens": 1390,
-        "total_tokens": 14105,
-        "cost_usd": 0.006434
+        "input_tokens": 10667,
+        "output_tokens": 1380,
+        "total_tokens": 16846,
+        "cost_usd": 0.00665
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -6.871,
+        "model_value": -9.976,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 39,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2015,
           2016,
@@ -346,6 +348,18 @@
             null
           ]
         ],
+        "row_labels": [
+          "12 months",
+          "24 months",
+          "36 months",
+          "48 months",
+          "60 months",
+          "72 months",
+          "84 months",
+          "96 months",
+          "108 months",
+          "120 months"
+        ],
         "source_page": 39,
         "entity": 3622
       },
@@ -362,6 +376,13 @@
           "entity": 3622,
           "backend": "azure",
           "table_kind": "provisions_movement"
+        },
+        "movement_semantics": {
+          "row_label": "Change in estimates of prior year",
+          "row_index": 6,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": true,
+          "column_index": 1
         },
         "gross_prior_year_claims": -10.0,
         "ri_share_prior_year": 2.1,
@@ -452,39 +473,55 @@
       "exact_reserve_text": "Change in estimates of prior year (9,976) 2,102 (7,874)",
       "primary_causes": [
         "Favorable claims development",
+        "Reinsurance recoveries",
         "IBNR recalibration"
       ],
       "specific_events": [],
       "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "The syndicate recorded a gross release in prior year claims estimates of GBP 9.976m, reducing gross claims outstanding from GBP 19.768m at the start of the year to GBP 14.620m at year-end. After reinsurance the net prior-year release was GBP 7.874m. The movement reflects favourable prior-year claims development and a reduction in IBNR estimates.",
+      "standardized_narrative": "The syndicate recorded a gross release in prior year claims estimates of GBP 9.976m (net movement after reinsurers' share GBP 7.874m favourable) at 31 December 2024, driven by favourable claims development and lower IBNR together with reinsurance recoveries. This represents a c.50% reduction versus the opening gross claims outstanding at the start of the year.",
       "raw_causal_phrases": [
-        "Change in estimates of prior year",
+        "Change in estimates of prior year (9,976) 2,102 (7,874)",
         "The total estimate of gross IBNR as at 31 December 2024 included within claims outstanding is GBP 12,598k (2023: GBP 17,787k)."
       ],
-      "lob_movements": [],
+      "lob_movements": [
+        {
+          "line_of_business": "Accident & Health",
+          "direction": "release",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.2
+        },
+        {
+          "line_of_business": "Treaty",
+          "direction": "release",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.2
+        }
+      ],
       "gross_premiums_written_gbp_m": 31.379,
       "gross_premium_mix": [
         {
           "line_of_business": "Life",
           "amount_gbp_m": 25.602,
-          "percentage_of_total": 81.6
+          "percentage_of_total": 81.58
         },
         {
           "line_of_business": "Reinsurance acceptances",
           "amount_gbp_m": 5.777,
-          "percentage_of_total": 18.4
+          "percentage_of_total": 18.42
         }
       ],
-      "gross_premium_page": 32,
+      "gross_premium_page": 15,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior year movement (gross) taken from the Technical Provisions claims reconciliation table row 'Change in estimates of prior year'. No explicit narrative explanation of the drivers is provided beyond the table; IBNR declined (gross IBNR 12,598k v 17,787k) which supports the favourable development. No breakdown of the prior-year movement by line of business is provided. The syndicate writes 'Life' (not in the standard Lloyd's LOB list provided), so lob_movements by standard LOBs are not reported. [RAG OVERRIDE: Model said PYD=-9.976, RAG triangle computed -6.871. Using RAG value.]",
+      "data_quality_notes": "Prior year development taken from Technical Provisions reconciliation line \"Change in estimates of prior year\" (gross). No explicit narrative attributing the movement to specific underwriting years or named events was provided. The syndicate is a life-focused book; mapping to standard Lloyd's LOBs is approximate (Life mapped to Accident & Health for the LOB_movements entry only). Claims development triangle is present and used as a cross-check. All monetary values converted from GBP '000 to millions where required. [RAG OVERRIDE: Model said PYD=-9.976, RAG triangle computed -6.871. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
-        "units": "thousands",
+        "units": "millions",
         "page": 39,
         "underwriting_years": [
           2015,
@@ -500,83 +537,71 @@
         ],
         "development_rows": [
           [
-            10129,
-            16174,
-            11438,
-            17283,
-            13361,
-            15083,
-            16464,
-            20656,
-            22626,
-            20505
+            10.129,
+            16.174,
+            11.438,
+            17.283,
+            13.361,
+            15.083,
+            16.464,
+            20.656,
+            22.626,
+            20.505
           ],
           [
-            9548,
-            15227,
-            11494,
-            17553,
-            14222,
-            16432,
-            16850,
-            23401,
-            14449,
+            9.548,
+            15.227,
+            11.494,
+            17.553,
+            14.222,
+            16.432,
+            16.85,
+            23.401,
+            14.449,
             null
           ],
           [
-            9724,
-            8701,
-            11614,
-            16005,
-            12028,
-            15309,
-            15352,
-            19305,
-            null,
-            null
-          ],
-          [
-            9306,
-            9232,
-            10920,
-            13777,
-            10238,
-            13602,
-            13285,
-            null,
+            9.724,
+            8.701,
+            11.614,
+            16.005,
+            12.028,
+            15.309,
+            15.352,
+            19.305,
             null,
             null
           ],
           [
-            9221,
-            9252,
-            10870,
-            13946,
-            9745,
-            13113,
-            null,
+            9.306,
+            9.232,
+            10.92,
+            13.777,
+            10.238,
+            13.602,
+            13.285,
             null,
             null,
             null
           ],
           [
-            9116,
-            9112,
-            10858,
-            12698,
-            9571,
-            null,
+            9.221,
+            9.252,
+            10.87,
+            13.946,
+            9.745,
+            13.113,
             null,
             null,
             null,
             null
           ],
           [
-            9117,
-            9119,
-            10858,
-            12653,
-            null,
+            9.116,
+            9.112,
+            10.858,
+            12.698,
+            9.571,
             null,
             null,
             null,
@@ -584,10 +609,10 @@
             null
           ],
           [
-            9080,
-            9163,
-            10861,
-            null,
+            9.117,
+            9.119,
+            10.858,
+            12.653,
             null,
             null,
             null,
@@ -596,9 +621,9 @@
             null
           ],
           [
-            9080,
-            9163,
-            null,
+            9.08,
+            9.163,
+            10.861,
             null,
             null,
             null,
@@ -608,7 +633,19 @@
             null
           ],
           [
-            9077,
+            9.08,
+            9.163,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            9.077,
             null,
             null,
             null,
@@ -619,25 +656,36 @@
             null,
             null
           ]
-        ],
-        "confidence": 1.0
+        ]
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_3622_2024_llm.pdf",
-      "content_hash": "08c7b39a9b67e1ab2855dd24419d14de5fc5316c3ff23bc789f04161dc7ac0a9",
-      "standardized_at": "2026-07-06T00:18:51.588103+00:00",
+      "content_hash": "264eae2c3e5909b66200b0800fce092c544ea55c06b96046a00879fb6c6d5c93",
+      "standardized_at": "2026-09-11T14:25:11.754085+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 19374,
-        "output_tokens": 5613,
-        "total_tokens": 24987,
-        "cost_usd": 0.01607
+        "input_tokens": 20134,
+        "output_tokens": 6353,
+        "total_tokens": 26487,
+        "cost_usd": 0.017739
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -6.871,
+        "model_value": -9.976,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 39,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2015,
           2016,
@@ -772,6 +820,18 @@
             null
           ]
         ],
+        "row_labels": [
+          "12 months",
+          "24 months",
+          "36 months",
+          "48 months",
+          "60 months",
+          "72 months",
+          "84 months",
+          "96 months",
+          "108 months",
+          "120 months"
+        ],
         "source_page": 39,
         "entity": 3622
       },
@@ -788,6 +848,13 @@
           "entity": 3622,
           "backend": "azure",
           "table_kind": "provisions_movement"
+        },
+        "movement_semantics": {
+          "row_label": "Change in estimates of prior year",
+          "row_index": 6,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": true,
+          "column_index": 1
         },
         "gross_prior_year_claims": -10.0,
         "ri_share_prior_year": 2.1,
@@ -865,12 +932,12 @@
       }
     }
   },
-  "total_cost_usd": 0.022504,
-  "total_tokens": 39092,
+  "total_cost_usd": 0.024389,
+  "total_tokens": 43333,
   "validation": {
     "passed": true,
-    "total_discrepancies": 20,
-    "within_tolerance": 20,
+    "total_discrepancies": 14,
+    "within_tolerance": 14,
     "hard_failures": 0,
     "hard_failure_details": []
   }

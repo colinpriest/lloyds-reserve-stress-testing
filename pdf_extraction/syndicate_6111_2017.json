@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T12:09:09.832960+00:00",
+  "extraction_timestamp": "2026-09-13T03:58:21.814141+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -19,7 +21,10 @@
       "prior_year_movement_page": 17,
       "prior_year_movement_confidence": 1.0,
       "exact_reserve_text": "An unfavourable run-off deviation (prior accident years' increase) of GBP 4.7m (2016: favorable run-off deviation of GBP 2.5m) was experienced during the year, wholly in respect of reserve movements on the 2015 year of account and prior Whole Account Quota Share contract with Syndicate 2003.",
-      "primary_causes": [],
+      "primary_causes": [
+        "Adverse claims development",
+        "Other"
+      ],
       "specific_events": [],
       "specific_years_affected": [
         2015
@@ -27,11 +32,31 @@
       "prior_year_events": [],
       "named_events": [
         {
-          "event_name": "Hurricanes Harvey, Irma and Maria",
+          "event_name": "Hurricanes Harvey",
           "event_year": 2017,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "added to the adverse performance",
+          "loss_description": "high incidence and magnitude of claims from natural catastrophes in the second half of 2017 such as Hurricanes Harvey, Irma and Maria and California Wildfires added to the adverse performance.",
+          "lobs_affected": [],
+          "page": 2,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Hurricanes Irma",
+          "event_year": 2017,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "high incidence and magnitude of claims from natural catastrophes in the second half of 2017 such as Hurricanes Harvey, Irma and Maria and California Wildfires added to the adverse performance.",
+          "lobs_affected": [],
+          "page": 2,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Hurricanes Maria",
+          "event_year": 2017,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "high incidence and magnitude of claims from natural catastrophes in the second half of 2017 such as Hurricanes Harvey, Irma and Maria and California Wildfires added to the adverse performance.",
           "lobs_affected": [],
           "page": 2,
           "confidence": 0.8
@@ -41,14 +66,17 @@
           "event_year": 2017,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "added to the adverse performance",
+          "loss_description": "high incidence and magnitude of claims from natural catastrophes in the second half of 2017 such as Hurricanes Harvey, Irma and Maria and California Wildfires added to the adverse performance.",
           "lobs_affected": [],
           "page": 2,
           "confidence": 0.8
         }
       ],
-      "standardized_narrative": "Syndicate 6111 experienced a GBP 4.7 million strengthening in prior year reserves, representing an unfavourable run-off deviation of 2.23% against opening gross claims outstanding. This movement was primarily attributed to reserve adjustments on the 2015 year of account and prior Whole Account Quota Share contract with Syndicate 2003. No specific lines of business were identified as being disproportionately affected by this development.",
-      "raw_causal_phrases": [],
+      "standardized_narrative": "The syndicate experienced an unfavourable run-off deviation of GBP 4.7 million in 2017, representing a strengthening of prior year reserves. This was primarily due to reserve movements on the 2015 year of account and the Whole Account Quota Share contract with Syndicate 2003.",
+      "raw_causal_phrases": [
+        "unfavourable run-off deviation (prior accident years' increase)",
+        "reserve movements on the 2015 year of account and prior Whole Account Quota Share contract with Syndicate 2003"
+      ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 53.7,
       "gross_premium_mix": [
@@ -76,23 +104,99 @@
       "gross_premium_page": 16,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The claims development triangle on page 19 shows no movement in the 'Estimated total losses' for underwriting years 2015 and prior, which appears to contradict the GBP 4.7m unfavourable run-off deviation stated in Note 5. Note 5 is taken as the primary source for prior year development. [RAG OVERRIDE: Model said PYD=4.7, RAG triangle computed 19.038. Using RAG value.]",
+      "data_quality_notes": "The explicit prior year development figure of GBP 4.7m from the 'Movement in prior year's provision for claims outstanding' note on page 17 is used as the primary source. This figure is significantly lower than the GBP 19.038m calculated from the gross claims development triangle on page 19 for underwriting years 2015 and prior. The explicit note is considered more direct for the reported PYD. The named events (Hurricanes Harvey, Irma, Maria, California Wildfires) are mentioned in the Strategic Report as impacting 2017 performance, not explicitly linked to the GBP 4.7m prior year development. [RAG OVERRIDE: Model said PYD=4.7, RAG triangle computed 19.038. Using RAG value.]",
+      "_claims_triangle": {
+        "type": "gross",
+        "currency": "GBP",
+        "units": "thousands",
+        "page": 19,
+        "underwriting_years": [
+          2012,
+          2013,
+          2014,
+          2015,
+          2016,
+          2017
+        ],
+        "development_rows": [
+          [
+            24857,
+            30209,
+            37067,
+            35770,
+            45982,
+            17021
+          ],
+          [
+            44273,
+            56889,
+            74174,
+            75838,
+            103153,
+            null
+          ],
+          [
+            44306,
+            56486,
+            77498,
+            80490,
+            null,
+            null
+          ],
+          [
+            45240,
+            55766,
+            84865,
+            null,
+            null,
+            null
+          ],
+          [
+            44243,
+            60326,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            46702,
+            null,
+            null,
+            null,
+            null,
+            null
+          ]
+        ]
+      },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_6111_2017_llm.pdf",
-      "content_hash": "9a5a7850397516b95004b5e5d3016ae9bf656e613921741b1cc56d11422403fc",
-      "standardized_at": "2026-07-05T20:03:46.032508+00:00",
+      "content_hash": "989287d41c73ac36d0224dbed81bc5c0d7a60d836ffdc1a862ac6e78f0862771",
+      "standardized_at": "2026-09-11T13:42:01.600217+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 14249,
-        "output_tokens": 977,
-        "total_tokens": 18036,
-        "cost_usd": 0.006717
+        "input_tokens": 15053,
+        "output_tokens": 1702,
+        "total_tokens": 21742,
+        "cost_usd": 0.008771
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 19.038,
+        "model_value": 4.7,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 34,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2012,
           2013,
@@ -150,6 +254,14 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "12 months",
+          "24 months",
+          "36 months",
+          "48 months",
+          "60 months",
+          "72 months"
         ],
         "source_page": 34,
         "entity": 6111
@@ -286,27 +398,21 @@
       "prior_year_development_pct": 9.03,
       "direction": "strengthening",
       "prior_year_movement_page": 29,
-      "prior_year_movement_confidence": 0.8,
+      "prior_year_movement_confidence": 1.0,
       "exact_reserve_text": "An unfavourable run-off deviation (prior accident years' increase) of GBP 4.7m (2016: favorable run-off deviation of GBP 2.5m) was experienced during the year, wholly in respect of reserve movements on the 2015 year of account and prior Whole Account Quota Share contract with Syndicate 2003.",
       "primary_causes": [
         "Adverse claims development",
-        "Natural catastrophe events",
-        "Reinsurance recoveries"
+        "Large loss development"
       ],
-      "specific_events": [
-        "Hurricane Harvey",
-        "Hurricane Irma",
-        "Hurricane Maria",
-        "California Wildfires"
-      ],
+      "specific_events": [],
       "specific_years_affected": [
         2015
       ],
       "prior_year_events": [
         {
-          "event_name": "Reserve movements on the 2015 year of account",
+          "event_name": "Reserve movements on the 2015 year of account and prior Whole Account Quota Share contract with Syndicate 2003",
           "event_year": 2015,
-          "impact_description": "Unfavourable run-off deviation on prior accident years resulting in a gross strengthening of reserves of GBP 4.7m, wholly in respect of reserve movements on the 2015 year of account and prior Whole Account Quota Share contract with Syndicate 2003.",
+          "impact_description": "Unfavourable run-off deviation of GBP 4.7m relating to reserve movements on the 2015 year of account and prior whole account quota share",
           "lobs_affected": [
             "Property",
             "Accident & Health",
@@ -314,15 +420,7 @@
             "Motor"
           ],
           "amount_gbp_m": 4.7,
-          "confidence": 0.8
-        },
-        {
-          "event_name": "2014 year of account settlement",
-          "event_year": 2014,
-          "impact_description": "Settlement of the 2014 year of account was included within the gross and ceded change in provision for claims in 2017 (noted amounts in the Technical Account reconciliation).",
-          "lobs_affected": [],
-          "amount_gbp_m": null,
-          "confidence": 0.7
+          "confidence": 0.9
         }
       ],
       "named_events": [
@@ -331,7 +429,7 @@
           "event_year": 2017,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "High incidence and magnitude of claims from natural catastrophes in the second half of 2017 added to adverse performance.",
+          "loss_description": "Added to the adverse performance in the second half of 2017",
           "lobs_affected": [
             "Property"
           ],
@@ -343,7 +441,7 @@
           "event_year": 2017,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "High incidence and magnitude of claims from natural catastrophes in the second half of 2017 added to adverse performance.",
+          "loss_description": "Added to the adverse performance in the second half of 2017",
           "lobs_affected": [
             "Property"
           ],
@@ -355,7 +453,7 @@
           "event_year": 2017,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "High incidence and magnitude of claims from natural catastrophes in the second half of 2017 added to adverse performance.",
+          "loss_description": "Added to the adverse performance in the second half of 2017",
           "lobs_affected": [
             "Property"
           ],
@@ -367,19 +465,28 @@
           "event_year": 2017,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "High incidence and magnitude of claims from natural catastrophes in the second half of 2017 added to adverse performance.",
+          "loss_description": "Added to the adverse performance in the second half of 2017",
           "lobs_affected": [
             "Property"
           ],
           "page": 3,
           "confidence": 0.9
+        },
+        {
+          "event_name": "Settlement of 2014 year of account",
+          "event_year": 2014,
+          "event_type": "other",
+          "net_loss_gbp_m": null,
+          "loss_description": "Included within the gross and ceded change in provision for claims in the calendar year 2017 are GBP 76.9m and GBP 8.8m, respectively, relating to the settlement of the 2014 year of account.",
+          "lobs_affected": [],
+          "page": 10,
+          "confidence": 0.9
         }
       ],
-      "standardized_narrative": "Syndicate 6111 opened 2017 with gross claims outstanding of GBP 210.913m. During 2017 there was an unfavourable run-off deviation (prior accident years' increase) of GBP 4.7m, wholly in respect of reserve movements on the 2015 year of account and prior Whole Account Quota Share contract with Syndicate 2003, representing a gross strengthening of reserves (~2.23% of opening gross claims outstanding). The syndicate also noted adverse current-year pressure from a series of 2017 natural catastrophe events (Hurricanes Harvey, Irma, Maria and California Wildfires) which contributed to overall adverse underwriting performance, and the 2014 year of account settlement was reflected in the movements in provisions.",
+      "standardized_narrative": "The Syndicate reported an unfavourable prior-year run-off deviation of GBP 4.7m (a strengthening of reserves), wholly relating to reserve movements on the 2015 year of account and prior whole account quota share business with Syndicate 2003. The 2017 underwriting performance was further adversely affected by a softening market and a number of major 2017 catastrophe events (Hurricanes Harvey, Irma and Maria and California wildfires). The prior-year strengthening is relatively small versus opening gross claims outstanding and relates to older underwriting years.",
       "raw_causal_phrases": [
         "An unfavourable run-off deviation (prior accident years' increase) of GBP 4.7m (2016: favorable run-off deviation of GBP 2.5m) was experienced during the year, wholly in respect of reserve movements on the 2015 year of account and prior Whole Account Quota Share contract with Syndicate 2003.",
-        "The underwriting performance in 2017 was driven by the continuous softening of the rates across the portfolio in the market. The high incidence and magnitude of claims from natural catastrophes in the second half of 2017 such as Hurricanes Harvey, Irma and Maria and California Wildfires added to the adverse performance.",
-        "Included within the gross and ceded change in provision for claims in the calendar year 2017 are GBP 76.9m and GBP 8.8m, respectively, relating to the settlement of the 2014 year of account."
+        "The underwriting performance in 2017 was driven by the continuous softening of the rates across the portfolio in the market. The high incidence and magnitude of claims from natural catastrophes in the second half of 2017 such as Hurricanes Harvey, Irma and Maria and California Wildfires added to the adverse performance."
       ],
       "lob_movements": [
         {
@@ -437,7 +544,7 @@
       "gross_premium_page": 28,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior year development sourced from Note 5 narrative which explicitly states a gross unfavourable run-off deviation of GBP 4.7m. The report also shows a gross claims development triangle (page 31) and a 2014 year of account settlement noted in the technical provisions which may affect comparability. No explicit gross PYD breakdown by line of business was provided; LOB-level movements are inferred and therefore amounts per LOB are null. Triangle exists and is provided; 2014 year settlement entries are present and may distort development comparisons. [RAG OVERRIDE: Model said PYD=4.7, RAG triangle computed 19.038. Using RAG value.]",
+      "data_quality_notes": "Opening reserves taken from Balance Sheet (Claims outstanding) 2016 comparative column. Prior-year movement sourced from Note 5 narrative which reports an unfavourable run-off deviation of GBP 4.7m (assumed to be a gross amount as described in the 'Movement in prior year's provision' note). No gross per-LOB prior-year movement breakdown provided; LOB-level directions inferred. A gross claims development triangle is present and has been captured in _claims_triangle for cross-checks. Settlement of the 2014 year of account is noted in the P&L footnote (gross GBP 76.9k, ceded GBP 8.8k) and may distort calendar-year movements. [RAG OVERRIDE: Model said PYD=4.7, RAG triangle computed 19.038. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -504,20 +611,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_6111_2017_llm.pdf",
-      "content_hash": "9a5a7850397516b95004b5e5d3016ae9bf656e613921741b1cc56d11422403fc",
-      "standardized_at": "2026-07-05T20:04:54.770897+00:00",
+      "content_hash": "989287d41c73ac36d0224dbed81bc5c0d7a60d836ffdc1a862ac6e78f0862771",
+      "standardized_at": "2026-09-11T13:43:57.818808+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 23902,
-        "output_tokens": 6361,
-        "total_tokens": 30263,
-        "cost_usd": 0.018697
+        "input_tokens": 24662,
+        "output_tokens": 5930,
+        "total_tokens": 30592,
+        "cost_usd": 0.018025
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 19.038,
+        "model_value": 4.7,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 34,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2012,
           2013,
@@ -575,6 +694,14 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "12 months",
+          "24 months",
+          "36 months",
+          "48 months",
+          "60 months",
+          "72 months"
         ],
         "source_page": 34,
         "entity": 6111
@@ -702,12 +829,12 @@
       }
     }
   },
-  "total_cost_usd": 0.025414,
-  "total_tokens": 48299,
+  "total_cost_usd": 0.026796,
+  "total_tokens": 52334,
   "validation": {
     "passed": true,
-    "total_discrepancies": 18,
-    "within_tolerance": 18,
+    "total_discrepancies": 13,
+    "within_tolerance": 13,
     "hard_failures": 0,
     "hard_failure_details": []
   }

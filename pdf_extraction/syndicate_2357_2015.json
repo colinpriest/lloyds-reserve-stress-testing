@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T10:36:27.188139+00:00",
+  "extraction_timestamp": "2026-09-13T04:12:43.770716+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -30,25 +32,15 @@
       "gross_premiums_written_gbp_m": 73.098,
       "gross_premium_mix": [
         {
-          "line_of_business": "Property Catastrophe Reinsurance",
-          "amount_gbp_m": 26.627,
-          "percentage_of_total": 36.428
-        },
-        {
           "line_of_business": "Reinsurance",
-          "amount_gbp_m": 46.146,
-          "percentage_of_total": 63.12
-        },
-        {
-          "line_of_business": "Weather",
-          "amount_gbp_m": 0.325,
-          "percentage_of_total": 0.445
+          "amount_gbp_m": 73.098,
+          "percentage_of_total": 100.0
         }
       ],
-      "gross_premium_page": 2,
+      "gross_premium_page": 12,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "Opening gross claims outstanding for 2015 (i.e., 2014 year-end) was zero, as explicitly stated in the Statement of Financial Position and Technical Provisions note. Consequently, no prior year development could be reported or calculated. The claims development table is extremely sparse, only showing a single entry for the current year (2015).",
+      "data_quality_notes": "No quantifiable prior year development figure found. Claims development table is very sparse and only shows current year data.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
@@ -69,42 +61,15 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_2357_2015_llm.pdf",
-      "content_hash": "94691792ade8c16644e14d330fffe20b0f2691c86be5c71f33ba61e582ce496e",
-      "standardized_at": "2026-03-18T04:46:15.455717+00:00",
+      "content_hash": "2fb192c53c84fd46259fc4ec3acb475b55d06d2f8d991a02aae35c5a406be764",
+      "standardized_at": "2026-09-11T11:47:23.429557+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 10895,
-        "output_tokens": 662,
-        "total_tokens": 15346,
-        "cost_usd": 0.004923
-      },
-      "_rag_triangle": {
-        "type": "net",
-        "currency": "USD",
-        "units": "thousands",
-        "underwriting_years": [
-          2013,
-          2014,
-          2015
-        ],
-        "development_rows": [
-          [
-            0.0,
-            13230.0,
-            106575.0
-          ],
-          [
-            106575.0,
-            0.0,
-            null
-          ],
-          [
-            3773.0,
-            null,
-            null
-          ]
-        ]
+        "input_tokens": 11699,
+        "output_tokens": 501,
+        "total_tokens": 15734,
+        "cost_usd": 0.004762
       },
       "_entity_binding": {
         "requested_syndicate": 2357,
@@ -205,39 +170,29 @@
       "prior_year_development_gbp_m": 0.0,
       "prior_year_development_pct": 0.0,
       "direction": "flat",
-      "prior_year_movement_page": 22,
-      "prior_year_movement_confidence": 0.8,
-      "exact_reserve_text": "Claims outstanding\nBalance at 1 January -\nChange in claims outstanding 17\nBalance at 31 December 17",
+      "prior_year_movement_page": null,
+      "prior_year_movement_confidence": 0.0,
+      "exact_reserve_text": "",
       "primary_causes": [],
       "specific_events": [],
       "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "The Syndicate shows a small gross increase in claims outstanding during 2015: gross claims outstanding rose from nil at 1 January 2015 to 17 (thousand) at 31 December 2015 (i.e. a $0.017m gross strengthening). No specific prior-year adverse development, named catastrophe events or causal explanation for the movement is provided in the notes.",
+      "standardized_narrative": "At 31 December 2014 the syndicate had no gross claims outstanding (opening reserves at 1 January 2015 were nil). During 2015 a small gross claims outstanding balance of $17,000 was recorded at year end. The report does not quantify any gross prioryear reserve movement for years before 2015.",
       "raw_causal_phrases": [],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 73.098,
       "gross_premium_mix": [
         {
-          "line_of_business": "Property Catastrophe Reinsurance",
-          "amount_gbp_m": 26.627,
-          "percentage_of_total": 36.43
-        },
-        {
           "line_of_business": "Reinsurance",
-          "amount_gbp_m": 46.146,
-          "percentage_of_total": 63.14
-        },
-        {
-          "line_of_business": "Weather",
-          "amount_gbp_m": 0.325,
-          "percentage_of_total": 0.44
+          "amount_gbp_m": 73.098,
+          "percentage_of_total": 100.0
         }
       ],
-      "gross_premium_page": 2,
+      "gross_premium_page": 21,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "All amounts are reported in the native currency (USD). Financial statement figures in the report are shown in $'000; values here are converted to millions (e.g. 17 $'000 = 0.017). Opening gross claims outstanding at 31 Dec 2014 is presented as '-' (treated as zero). The prior year movement is taken from the Technical Provisions table (change in claims outstanding = 17 $'000). No explicit narrative describing prior-year reserve development or causes is provided; the technical provisions table and small claims development table are the only sources. Because the movement line is used (which can include current-year items) confidence is reduced below 1.0.",
+      "data_quality_notes": "Balance sheet shows gross 'Claims outstanding' prior year as a dash (zero) and 2015 year-end gross claims outstanding of $17,000. No explicit note quantifying a gross prioryear (pre2015) reserve movement was found. A minimal gross claims development table exists (page 30) but only contains a $17k entry for 2015; it provides no multiyear prioryear movement to compute PYD. All monetary figures taken from report are in US dollars (stated as $'000).",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
@@ -258,42 +213,15 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_2357_2015_llm.pdf",
-      "content_hash": "94691792ade8c16644e14d330fffe20b0f2691c86be5c71f33ba61e582ce496e",
-      "standardized_at": "2026-03-18T04:47:15.729589+00:00",
+      "content_hash": "2fb192c53c84fd46259fc4ec3acb475b55d06d2f8d991a02aae35c5a406be764",
+      "standardized_at": "2026-09-11T11:48:24.305769+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 23346,
-        "output_tokens": 3881,
-        "total_tokens": 27227,
-        "cost_usd": 0.013598
-      },
-      "_rag_triangle": {
-        "type": "net",
-        "currency": "USD",
-        "units": "thousands",
-        "underwriting_years": [
-          2013,
-          2014,
-          2015
-        ],
-        "development_rows": [
-          [
-            0.0,
-            13230.0,
-            106575.0
-          ],
-          [
-            106575.0,
-            0.0,
-            null
-          ],
-          [
-            3773.0,
-            null,
-            null
-          ]
-        ]
+        "input_tokens": 24106,
+        "output_tokens": 2954,
+        "total_tokens": 27060,
+        "cost_usd": 0.011935
       },
       "_entity_binding": {
         "requested_syndicate": 2357,
@@ -386,12 +314,12 @@
       }
     }
   },
-  "total_cost_usd": 0.018521,
-  "total_tokens": 42573,
+  "total_cost_usd": 0.016697,
+  "total_tokens": 42794,
   "validation": {
     "passed": true,
-    "total_discrepancies": 9,
-    "within_tolerance": 9,
+    "total_discrepancies": 5,
+    "within_tolerance": 5,
     "hard_failures": 0,
     "hard_failure_details": []
   }

@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T10:16:41.414133+00:00",
+  "extraction_timestamp": "2026-09-11T11:29:51.149137+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -16,17 +18,68 @@
       "prior_year_development_gbp_m": 383.9,
       "prior_year_development_pct": 29.6,
       "direction": "strengthening",
-      "prior_year_movement_page": 20,
-      "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "Change in prior year provisions 383,949 (Gross), (2,041) (Reinsurance), 381,908 (Net)",
-      "primary_causes": [],
+      "prior_year_movement_page": 18,
+      "prior_year_movement_confidence": 0.8,
+      "exact_reserve_text": "Change in prior year provisions (374,859)",
+      "primary_causes": [
+        "Reinsurance recoveries",
+        "Favorable claims development",
+        "Adverse claims development",
+        "Other"
+      ],
       "specific_events": [],
       "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "For the 2021 financial year, Syndicate 2008 experienced a gross strengthening of prior year reserves amounting to GBP 383.949 million, representing 29.6% of its opening gross claims outstanding. The specific causes for this strengthening are not detailed in the provided text.",
-      "raw_causal_phrases": [],
-      "lob_movements": [],
+      "standardized_narrative": "The syndicate reported a net prior year release of GBP 374.9 million, representing 28.9% of its opening gross claims outstanding. This significant release was primarily driven by favourable development on reinsurance provisions, partially offset by adverse development in direct lines of business. The syndicate's principal activity is to provide finality solutions for Lloyd's run-off business, which often involves the acquisition and subsequent run-off of liabilities.",
+      "raw_causal_phrases": [
+        "Change in prior year provisions",
+        "Reinsurance (383,455)"
+      ],
+      "lob_movements": [
+        {
+          "line_of_business": "Accident & Health",
+          "direction": "strengthening",
+          "amount_gbp_m": 0.818,
+          "percentage": null,
+          "confidence": 0.8
+        },
+        {
+          "line_of_business": "Marine",
+          "direction": "strengthening",
+          "amount_gbp_m": 0.132,
+          "percentage": null,
+          "confidence": 0.8
+        },
+        {
+          "line_of_business": "Property",
+          "direction": "strengthening",
+          "amount_gbp_m": 1.781,
+          "percentage": null,
+          "confidence": 0.8
+        },
+        {
+          "line_of_business": "Casualty",
+          "direction": "strengthening",
+          "amount_gbp_m": 1.476,
+          "percentage": null,
+          "confidence": 0.8
+        },
+        {
+          "line_of_business": "Other",
+          "direction": "strengthening",
+          "amount_gbp_m": 4.389,
+          "percentage": null,
+          "confidence": 0.8
+        },
+        {
+          "line_of_business": "Reinsurance - Specialty",
+          "direction": "release",
+          "amount_gbp_m": -383.455,
+          "percentage": null,
+          "confidence": 0.8
+        }
+      ],
       "gross_premiums_written_gbp_m": 418.4,
       "gross_premium_mix": [
         {
@@ -63,119 +116,43 @@
       "gross_premium_page": 17,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "There is a discrepancy in the net prior year development figure between Note 6 (Claims) and Note 17 (Technical provisions). Note 6 states a net release of (GBP 374,859) while Note 17 states a net strengthening of 381,908. The gross figure from Note 17 (383,949) is used as per instructions to prioritize gross figures from the Technical Provisions note.",
+      "data_quality_notes": "The prior year development figure is reported net of reinsurance, as a gross figure was not explicitly available. The syndicate's financial statements present conflicting figures for 'Change in prior year provisions' across different notes; the figure used is from the 'Claims incurred, net of reinsurance' breakdown (page 18) which explicitly separates prior year and current year movements. The syndicate's business model involves significant reinsurance to close and loss portfolio transfers, which may influence reserve movements. LOB-specific prior year movements are also reported net of reinsurance. The claims development triangle is not in a standard format, making it unsuitable for calculating prior year development using the diagonal method. [RAG OVERRIDE: Model said PYD=-374.859, RAG triangle computed 383.9. Using RAG value.]",
       "_claims_triangle": {
-        "type": "gross",
-        "currency": "GBP",
-        "units": "thousands",
-        "page": 19,
-        "underwriting_years": [
-          2012,
-          2013,
-          2014,
-          2015,
-          2016,
-          2021
-        ],
-        "development_rows": [
-          [
-            null,
-            null,
-            null,
-            null,
-            null,
-            1539763
-          ],
-          [
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-          ],
-          [
-            64979,
-            null,
-            null,
-            null,
-            null,
-            null
-          ],
-          [
-            64066,
-            null,
-            null,
-            808963,
-            529388,
-            null
-          ],
-          [
-            66784,
-            null,
-            717029,
-            1008713,
-            565384,
-            null
-          ],
-          [
-            69124,
-            558849,
-            947534,
-            1042536,
-            575831,
-            null
-          ],
-          [
-            654835,
-            794585,
-            972552,
-            1030604,
-            null,
-            null
-          ],
-          [
-            878634,
-            793090,
-            944592,
-            null,
-            null,
-            null
-          ],
-          [
-            924242,
-            771595,
-            null,
-            null,
-            null,
-            null
-          ],
-          [
-            908029,
-            null,
-            null,
-            null,
-            null,
-            null
-          ]
-        ]
+        "type": "none",
+        "currency": null,
+        "units": null,
+        "page": null,
+        "underwriting_years": [],
+        "development_rows": []
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_2008_2021_llm.pdf",
-      "content_hash": "eca23cdc73513788c14ff4e278a7fe15862e48b0c38703618839d1d4c02519ca",
-      "standardized_at": "2026-07-05T23:29:41.588925+00:00",
+      "content_hash": "3a7a2dda9fd7471a17fcc379a51ce5a740b9b5a5d0131c117553da769872fef8",
+      "standardized_at": "2026-09-11T11:27:02.152084+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 11153,
-        "output_tokens": 1225,
-        "total_tokens": 75288,
-        "cost_usd": 0.006408
+        "input_tokens": 11957,
+        "output_tokens": 1352,
+        "total_tokens": 23799,
+        "cost_usd": 0.006967
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 383.9,
+        "model_value": -374.859,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 53,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2012,
           2013,
@@ -258,6 +235,17 @@
             null
           ]
         ],
+        "row_labels": [
+          "At end of underwriting year",
+          "One year later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later",
+          "Seven years later",
+          "Eight years later",
+          "Nine years later"
+        ],
         "source_page": 53,
         "entity": 2008
       },
@@ -339,6 +327,13 @@
           "entity": 2008,
           "backend": "azure",
           "table_kind": "provisions_movement"
+        },
+        "movement_semantics": {
+          "row_label": "Change in prior year provisions",
+          "row_index": 7,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": true,
+          "column_index": 1
         },
         "gross_prior_year_claims": 383.9,
         "ri_share_prior_year": -2.0,
@@ -444,7 +439,6 @@
       "exact_reserve_text": "Change in prior year provisions 383,949 (2,041) 381,908 (279) (13,485) (13,764)",
       "primary_causes": [
         "Adverse claims development",
-        "Large loss development",
         "Reinsurance recoveries"
       ],
       "specific_events": [],
@@ -459,66 +453,65 @@
         {
           "event_name": "Lloyd's Part VII Transfer to Lloyd's Brussels",
           "event_year": 2020,
-          "impact_description": "Transfer of EEA policies and related liabilities to Lloyd's Brussels with funds transferred and new quota share reinsurance arrangements; reported deposits with ceding undertakings recorded to settle EEA claims.",
+          "impact_description": "Transfer of relevant policies to Lloyd's Insurance Company S.A. (Lloyd's Brussels) with a 100% quota share reinsurance back to the Syndicate; transferred funds reported as deposits with ceding undertakings and affected the treatment and presentation of EEA risks and related reserves.",
           "lobs_affected": [
+            "Treaty",
             "Reinsurance - Specialty"
           ],
           "amount_gbp_m": null,
-          "confidence": 0.5
-        },
-        {
-          "event_name": "Loss portfolio transfer with Hiscox",
-          "event_year": 2021,
-          "impact_description": "Large reinsurance premium received on LPT with Hiscox which materially affected reinsurance premium and claims flows in the year.",
-          "lobs_affected": [
-            "Treaty"
-          ],
-          "amount_gbp_m": null,
-          "confidence": 0.8
+          "confidence": 0.6
         }
       ],
       "named_events": [],
-      "standardized_narrative": "Opening gross claims outstanding at 1 January 2021 were GBP 1,297.112m. During 2021 the Syndicate recorded a gross strengthening of prior year provisions of GBP 383.949m (29.6% of opening reserves) as disclosed in the Technical Provisions note. The movement reflects adverse development on prior underwriting years, influenced by large loss / reinsurance portfolio items (including a material LPT with Hiscox and the Part VII transfer of EEA business), with the effect concentrated in reinsurance-related portfolios and long-tail third-party liability exposures.",
+      "standardized_narrative": "Gross claims outstanding increased by GBP 383.949m during 2021 (a 29.6% increase on the opening gross reserve of GBP 1,297.112m). The movement represents an adverse prior-year development (strengthening) primarily associated with adverse claims development across the reinsurance portfolio and changes in reinsurance recoveries; the Part VII transfer of EEA policies to Lloyd's Brussels and related reinsurance arrangements are noted in the report and have affected presentation and flows of reinsurance and deposits.",
       "raw_causal_phrases": [
-        "Change in prior year provisions 383,949 (2,041) 381,908",
-        "Reinsurance (383,455)",
-        "Change in prior year provisions (374,859) 13,764"
+        "Change in prior year provisions",
+        "On 30 December 2020, the Members and former Members of the Syndicate, as comprised for each of the relevant years of account between 1993 and April 2019 (or October 2020 in the case of German reinsurance), transferred all relevant policies (and related liabilities) underwritten by them for those years of account to Lloyd's Insurance Company S.A. ('Lloyd's Brussels'), in accordance with Part VII of the Financial Services and Markets Act 2000.",
+        "Following the Part VII Transfer, the Syndicate transferred funds to Lloyd's Insurance Company S.A. (\"Lloyd's Brussels\") and these funds are to be utilised to settle all EEA claims.",
+        "Negative movements on claims incurred net of reinsurance arose in respect of the following classes of business:"
       ],
       "lob_movements": [
         {
-          "line_of_business": "Casualty",
+          "line_of_business": "Reinsurance - Specialty",
           "direction": "strengthening",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.5
+          "amount_gbp_m": 383.949,
+          "percentage": 29.62,
+          "confidence": 0.8
         },
         {
-          "line_of_business": "Property",
-          "direction": "strengthening",
-          "amount_gbp_m": null,
+          "line_of_business": "Accident & Health",
+          "direction": "release",
+          "amount_gbp_m": -0.818,
           "percentage": null,
           "confidence": 0.5
         },
         {
           "line_of_business": "Marine",
-          "direction": "strengthening",
-          "amount_gbp_m": null,
+          "direction": "release",
+          "amount_gbp_m": -0.132,
           "percentage": null,
-          "confidence": 0.4
+          "confidence": 0.5
         },
         {
-          "line_of_business": "Accident & Health",
-          "direction": "strengthening",
-          "amount_gbp_m": null,
+          "line_of_business": "Property",
+          "direction": "release",
+          "amount_gbp_m": -1.781,
           "percentage": null,
-          "confidence": 0.4
+          "confidence": 0.5
         },
         {
-          "line_of_business": "Treaty",
-          "direction": "strengthening",
-          "amount_gbp_m": null,
+          "line_of_business": "Casualty",
+          "direction": "release",
+          "amount_gbp_m": -1.476,
           "percentage": null,
-          "confidence": 0.7
+          "confidence": 0.5
+        },
+        {
+          "line_of_business": "Aggregate",
+          "direction": "release",
+          "amount_gbp_m": -4.389,
+          "percentage": null,
+          "confidence": 0.5
         }
       ],
       "gross_premiums_written_gbp_m": 418.4,
@@ -554,14 +547,14 @@
           "percentage_of_total": 99.6
         }
       ],
-      "gross_premium_page": 17,
+      "gross_premium_page": 42,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior year development gross figure taken from Technical Provisions note 'Change in prior year provisions' (gross column) - high confidence. Some P&L lines in the report show net (after reinsurance) movements which were intentionally not used. The claims development triangle exists and includes individual UW years but the syndicate executed significant reinsurance/portfolio transactions (LPT; Part VII transfer) which may distort development patterns for some years; lob-level gross PYD amounts are not explicitly broken out in the notes so LOB-specific amounts are null.",
+      "data_quality_notes": "Prior year development used is the GROSS 'Change in prior year provisions' line from Note 17 (gross GBP 383,949k). Some other notes (e.g. Note 6 and P&L lines) report related net movements and claims-incurred figures - these were avoided per instructions. The Part VII RITC / Lloyd's Brussels transfers are present in the report and may distort comparatives and triangles. Several class movements available in the notes are presented net of reinsurance; lob_movements entries other than the gross reinsurance strengthening are therefore lower-confidence net figures.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
-        "units": "thousands",
+        "units": "millions",
         "page": 51,
         "underwriting_years": [
           2012,
@@ -578,7 +571,7 @@
             null,
             null,
             null,
-            1539763
+            1539.763
           ],
           [
             null,
@@ -589,7 +582,7 @@
             null
           ],
           [
-            64979,
+            64.979,
             null,
             null,
             null,
@@ -597,55 +590,55 @@
             null
           ],
           [
-            64066,
+            64.066,
             null,
             null,
-            808963,
-            529388,
+            808.963,
+            529.388,
             null
           ],
           [
-            66784,
+            66.784,
             null,
-            717029,
-            1008713,
-            565384,
+            717.029,
+            1008.713,
+            565.384,
             null
           ],
           [
-            69124,
-            558849,
-            947534,
-            1042536,
-            575831,
+            69.124,
+            558.849,
+            947.534,
+            1042.536,
+            575.831,
             null
           ],
           [
-            654835,
-            794585,
-            972552,
-            1030604,
-            null,
-            null
-          ],
-          [
-            878634,
-            793090,
-            944592,
-            null,
+            654.835,
+            794.585,
+            972.552,
+            1030.604,
             null,
             null
           ],
           [
-            924242,
-            771595,
-            null,
+            878.634,
+            793.09,
+            944.592,
             null,
             null,
             null
           ],
           [
-            908029,
+            924.242,
+            771.595,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            908.029,
             null,
             null,
             null,
@@ -656,20 +649,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_2008_2021_llm.pdf",
-      "content_hash": "eca23cdc73513788c14ff4e278a7fe15862e48b0c38703618839d1d4c02519ca",
-      "standardized_at": "2026-07-05T23:30:52.031316+00:00",
+      "content_hash": "3a7a2dda9fd7471a17fcc379a51ce5a740b9b5a5d0131c117553da769872fef8",
+      "standardized_at": "2026-09-11T11:29:51.142137+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 30747,
-        "output_tokens": 7452,
-        "total_tokens": 38199,
-        "cost_usd": 0.022591
+        "input_tokens": 31507,
+        "output_tokens": 7810,
+        "total_tokens": 39317,
+        "cost_usd": 0.023497
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 383.9,
+        "model_value": 383.949,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 53,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2012,
           2013,
@@ -752,6 +757,17 @@
             null
           ]
         ],
+        "row_labels": [
+          "At end of underwriting year",
+          "One year later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later",
+          "Seven years later",
+          "Eight years later",
+          "Nine years later"
+        ],
         "source_page": 53,
         "entity": 2008
       },
@@ -833,6 +849,13 @@
           "entity": 2008,
           "backend": "azure",
           "table_kind": "provisions_movement"
+        },
+        "movement_semantics": {
+          "row_label": "Change in prior year provisions",
+          "row_index": 7,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": true,
+          "column_index": 1
         },
         "gross_prior_year_claims": 383.9,
         "ri_share_prior_year": -2.0,
@@ -925,12 +948,12 @@
       }
     }
   },
-  "total_cost_usd": 0.028999,
-  "total_tokens": 113487,
+  "total_cost_usd": 0.030464,
+  "total_tokens": 63116,
   "validation": {
     "passed": true,
-    "total_discrepancies": 17,
-    "within_tolerance": 17,
+    "total_discrepancies": 36,
+    "within_tolerance": 36,
     "hard_failures": 0,
     "hard_failure_details": []
   }

@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T09:43:23.491950+00:00",
+  "extraction_timestamp": "2026-09-13T04:10:07.818788+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -10,35 +12,57 @@
     "gemini-2.5-flash": {
       "syndicate": 1856,
       "year": 2021,
-      "opening_reserves_gbp_m": 144.225,
-      "opening_reserves_page": 55,
+      "opening_reserves_gbp_m": 142.225,
+      "opening_reserves_page": 7,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": -16.186,
-      "prior_year_development_pct": -11.22,
+      "prior_year_development_pct": -11.38,
       "direction": "release",
-      "prior_year_movement_page": 40,
+      "prior_year_movement_page": 14,
       "prior_year_movement_confidence": 0.8,
-      "exact_reserve_text": "The 2021 result was materially impacted by losses from the 2020 underwriting year. The key drivers of these losses in the year, included winter storm Uri (GBP 12.9 million), hurricane Ida (GBP 1.8 million), Measat (GBP 0.4 million) and adverse development on 2020 losses, including covid losses (GBP 8.2 million) and the Iowa derecho (GBP 2.3 million).\nFurther, there was an increase in prior year reserves including a GBP 8.2 million increase on the COVID loss reserves, which are now at GBP 19.1 million (2020: GBP 10.9 million) gross of reinsurance and GBP 19.1 million (2020: GBP 9.8 million) net of reinsurance.",
+      "exact_reserve_text": "Analysis of claims development- gross of reinsurance\" table on page 14 shows the \"Estimate of ultimate gross claims costs*\" for underwriting years 2016-2019. The current estimate for 2016 is 44,256 (GBP 000) compared to 45,400 (GBP 000) at four years later. The current estimate for 2019 is 84,745 (GBP 000) compared to 82,463 (GBP 000) at one year later.",
       "primary_causes": [
-        "Favorable claims development",
-        "Adverse claims development",
-        "COVID-19 / pandemic effects",
         "Natural catastrophe events",
-        "Man-made catastrophe / large losses"
+        "COVID-19 / pandemic effects",
+        "Adverse claims development",
+        "Large loss development"
       ],
-      "specific_events": [],
+      "specific_events": [
+        "Winter storm Uri",
+        "Hurricane Ida",
+        "Measat",
+        "Iowa derecho",
+        "COVID losses"
+      ],
       "specific_years_affected": [
-        2016,
-        2017,
-        2018,
-        2019,
-        2020
+        2020,
+        2019
       ],
       "prior_year_events": [
         {
-          "event_name": "COVID-19",
+          "event_name": "Winter storm Uri",
+          "event_year": 2021,
+          "impact_description": "materially impacted by losses from the 2020 underwriting year, included winter storm Uri (GBP 12.9 million)",
+          "lobs_affected": [
+            "Property"
+          ],
+          "amount_gbp_m": 13.2,
+          "confidence": 1.0
+        },
+        {
+          "event_name": "Hurricane Ida",
+          "event_year": 2021,
+          "impact_description": "materially impacted by losses from the 2020 underwriting year, included hurricane Ida (GBP 1.8 million)",
+          "lobs_affected": [
+            "Property"
+          ],
+          "amount_gbp_m": 7.5,
+          "confidence": 1.0
+        },
+        {
+          "event_name": "COVID losses",
           "event_year": 2020,
-          "impact_description": "increase in prior year reserves including a GBP 8.2 million increase on the COVID loss reserves, which are now at GBP 19.1 million (2020: GBP 10.9 million) gross of reinsurance",
+          "impact_description": "adverse development on 2020 losses, including covid losses (GBP 8.2 million); increase in prior year reserves including a GBP 8.2 million increase on the COVID loss reserves, which are now at GBP 19.1 million (2020: GBP 10.9 million) gross of reinsurance and GBP 19.1 million (2020: GBP 9.8 million) net of reinsurance.",
           "lobs_affected": [
             "Reinsurance - Property"
           ],
@@ -46,46 +70,24 @@
           "confidence": 1.0
         },
         {
-          "event_name": "Winter Storm Uri",
-          "event_year": 2020,
-          "impact_description": "losses from the 2020 underwriting year, included winter storm Uri (GBP 12.9 million) gross impact on 2020 & prior YOAs",
-          "lobs_affected": [
-            "Property",
-            "Reinsurance - Property"
-          ],
-          "amount_gbp_m": 13.2,
-          "confidence": 0.8
-        },
-        {
-          "event_name": "Hurricane Ida",
-          "event_year": 2020,
-          "impact_description": "losses from the 2020 underwriting year, included hurricane Ida (GBP 1.8 million) gross impact on 2020 & prior YOAs",
-          "lobs_affected": [
-            "Property",
-            "Reinsurance - Property"
-          ],
-          "amount_gbp_m": 7.5,
-          "confidence": 0.8
-        },
-        {
-          "event_name": "Measat",
-          "event_year": 2020,
-          "impact_description": "losses from the 2020 underwriting year, included Measat (GBP 0.4 million)",
-          "lobs_affected": [
-            "Aviation"
-          ],
-          "amount_gbp_m": 0.4,
-          "confidence": 0.8
-        },
-        {
           "event_name": "Iowa derecho",
           "event_year": 2020,
-          "impact_description": "losses from the 2020 underwriting year, included Iowa derecho (GBP 2.3 million)",
+          "impact_description": "adverse development on 2020 losses, including ... the Iowa derecho (GBP 2.3 million).",
           "lobs_affected": [
             "Property"
           ],
           "amount_gbp_m": 2.3,
-          "confidence": 0.8
+          "confidence": 1.0
+        },
+        {
+          "event_name": "Measat",
+          "event_year": 2020,
+          "impact_description": "materially impacted by losses from the 2020 underwriting year, included ... Measat (GBP 0.4 million)",
+          "lobs_affected": [
+            "Space"
+          ],
+          "amount_gbp_m": 0.4,
+          "confidence": 1.0
         }
       ],
       "named_events": [
@@ -94,12 +96,11 @@
           "event_year": 2021,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": 8.2,
-          "loss_description": "Total gross 35.0m (2021 YOA only 27.5m, 2020 & prior YOAs 7.5m). Total net 8.2m (2021 YOA only 6.4m, 2020 & prior YOAs 1.8m).",
+          "loss_description": "Notable catastrophe losses during 2021. Affected by losses arising from winter storm Uri, hurricane Ida, European floods, Kentucky tornadoes and several other smaller property catastrophe events.",
           "lobs_affected": [
-            "Property",
-            "Reinsurance - Property"
+            "Property"
           ],
-          "page": 7,
+          "page": 3,
           "confidence": 1.0
         },
         {
@@ -107,24 +108,23 @@
           "event_year": 2021,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": 17.6,
-          "loss_description": "Total gross 18.0m (2021 YOA only 4.8m, 2020 & prior YOAs 13.2m). Total net 17.6m (2021 YOA only 4.7m, 2020 & prior YOAs 12.9m).",
+          "loss_description": "Notable catastrophe losses during 2021. Affected by losses arising from winter storm Uri, hurricane Ida, European floods, Kentucky tornadoes and several other smaller property catastrophe events.",
           "lobs_affected": [
-            "Property",
-            "Reinsurance - Property"
+            "Property"
           ],
-          "page": 7,
+          "page": 3,
           "confidence": 1.0
         },
         {
           "event_name": "Covid",
-          "event_year": 2020,
+          "event_year": 2021,
           "event_type": "other",
           "net_loss_gbp_m": 19.1,
-          "loss_description": "Total gross 19.1m (2020 & prior YOAs 19.1m). Total net 19.1m (2020 & prior YOAs 19.1m).",
+          "loss_description": "Notable catastrophe losses during 2021. Increase in prior year reserves including a GBP 8.2 million increase on the COVID loss reserves.",
           "lobs_affected": [
             "Reinsurance - Property"
           ],
-          "page": 7,
+          "page": 3,
           "confidence": 1.0
         },
         {
@@ -132,12 +132,11 @@
           "event_year": 2021,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": 1.9,
-          "loss_description": "Total gross 1.9m (2021 YOA only 1.9m). Total net 1.9m (2021 YOA only 1.9m).",
+          "loss_description": "Notable catastrophe losses during 2021. Affected by losses arising from winter storm Uri, hurricane Ida, European floods, Kentucky tornadoes and several other smaller property catastrophe events.",
           "lobs_affected": [
-            "Property",
-            "Reinsurance - Property"
+            "Property"
           ],
-          "page": 7,
+          "page": 3,
           "confidence": 1.0
         },
         {
@@ -145,12 +144,11 @@
           "event_year": 2021,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": 1.5,
-          "loss_description": "Total gross 1.5m (2021 YOA only 1.5m). Total net 1.5m (2021 YOA only 1.5m).",
+          "loss_description": "Notable catastrophe losses during 2021. Affected by losses arising from winter storm Uri, hurricane Ida, European floods, Kentucky tornadoes and several other smaller property catastrophe events.",
           "lobs_affected": [
-            "Property",
-            "Reinsurance - Property"
+            "Property"
           ],
-          "page": 7,
+          "page": 3,
           "confidence": 1.0
         },
         {
@@ -158,51 +156,34 @@
           "event_year": 2020,
           "event_type": "man_made",
           "net_loss_gbp_m": 0.4,
-          "loss_description": "losses from the 2020 underwriting year, included Measat (GBP 0.4 million)",
+          "loss_description": "key drivers of these losses in the year, included ... Measat (GBP 0.4 million)",
           "lobs_affected": [
-            "Aviation"
+            "Space"
           ],
-          "page": 5,
-          "confidence": 0.8
+          "page": 1,
+          "confidence": 1.0
         },
         {
           "event_name": "Iowa derecho",
           "event_year": 2020,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": 2.3,
-          "loss_description": "losses from the 2020 underwriting year, included Iowa derecho (GBP 2.3 million)",
+          "loss_description": "key drivers of these losses in the year, included ... the Iowa derecho (GBP 2.3 million).",
           "lobs_affected": [
             "Property"
           ],
-          "page": 5,
-          "confidence": 0.8
-        },
-        {
-          "event_name": "Ukrainian war",
-          "event_year": 2022,
-          "event_type": "geopolitical",
-          "net_loss_gbp_m": null,
-          "loss_description": "The Syndicate provides insurance cover to clients in respect of claims arising out of war events and consequently has insurance exposures relating to the events in the Ukraine and its impacts in the region.",
-          "lobs_affected": [
-            "Property",
-            "Marine",
-            "Aviation",
-            "Reinsurance - Specialty"
-          ],
-          "page": 13,
-          "confidence": 0.8
+          "page": 1,
+          "confidence": 1.0
         }
       ],
-      "standardized_narrative": "The syndicate experienced a mixed prior year development in 2021. While the overall gross prior year development, as calculated from the claims development triangle, was a release of GBP 16.186 million, the syndicate also reported specific strengthenings. Notably, there was an increase in prior year reserves of at least GBP 8.2 million gross related to COVID-19 losses. Additionally, the 2021 result was impacted by losses from the 2020 underwriting year, including adverse development on 2020 losses from events such as winter storm Uri, hurricane Ida, Measat, and the Iowa derecho.",
+      "standardized_narrative": "The Syndicate experienced a gross prior year reserve strengthening of GBP 1.138 million in 2021, primarily driven by adverse development on the 2019 and 2020 underwriting years. Key contributors to this strengthening included significant losses from the 2020 underwriting year, notably winter storm Uri (GBP 13.2 million gross impact on prior years), Hurricane Ida (GBP 7.5 million gross impact on prior years), and an GBP 8.2 million gross increase in COVID-19 loss reserves affecting the 2019 and 2020 underwriting years. Other adverse developments on 2020 losses included Measat (GBP 0.4 million) and the Iowa derecho (GBP 2.3 million).",
       "raw_causal_phrases": [
-        "losses from the 2020 underwriting year",
-        "adverse development on 2020 losses",
+        "materially impacted by losses from the 2020 underwriting year",
+        "key drivers of these losses in the year, included winter storm Uri (GBP 12.9 million), hurricane Ida (GBP 1.8 million), Measat (GBP 0.4 million) and adverse development on 2020 losses, including covid losses (GBP 8.2 million) and the Iowa derecho (GBP 2.3 million).",
+        "The 2021 result for the 2020 and prior underwriting years was materially impacted by several large and catastrophe losses in the year",
         "increase in prior year reserves including a GBP 8.2 million increase on the COVID loss reserves",
-        "materially impacted by several large and catastrophe losses in the year",
-        "winter storm Uri",
-        "hurricane Ida",
-        "Measat",
-        "Iowa derecho"
+        "losses arising from winter storm Uri and hurricane Ida",
+        "The Syndicate has exposure on the 2019 and 2020 underwriting years to losses arising out of COVID"
       ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 190.0,
@@ -253,26 +234,38 @@
           "percentage_of_total": 42.8
         }
       ],
-      "gross_premium_page": 49,
+      "gross_premium_page": 17,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "There is a contradiction between the overall gross prior year development calculated from the claims development triangle (a release of GBP 16.186m) and narrative statements explicitly mentioning 'adverse development on 2020 losses' and an 'increase in prior year reserves including a GBP 8.2 million increase on the COVID loss reserves'. The overall direction is therefore classified as 'mixed' to reflect both components.",
+      "data_quality_notes": "The opening reserves figure from the Balance Sheet (GBP 142.225m) differs slightly from the \"At 1 January 2021\" figure in Note 14 (GBP 144.225m). The Balance Sheet figure was used as the primary source. Prior year development was calculated from the gross claims development triangle, as no explicit gross prior year movement note was found. The narrative mentions specific events contributing to prior year losses, but not a total gross figure. [RAG OVERRIDE: Model said PYD=1.138, RAG triangle computed -16.186. Using RAG value.]",
       "source_type": "syndicate",
-      "source_file": "syndicate_reports\\pdfs\\syndicate_1856_2021.pdf",
-      "content_hash": "08616ea65b8b332449f1a55d13ecb97f6b4daddeb95014242997a985c776ea48",
-      "standardized_at": "2026-03-16T18:56:01.983879+00:00",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_1856_2021_llm.pdf",
+      "content_hash": "cb78552805dae22a7120c5c0a7ee8c13c201c2c31b007f0224a6eaa429217273",
+      "standardized_at": "2026-09-11T10:47:57.493240+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 20848,
-        "output_tokens": 3147,
-        "total_tokens": 34809,
-        "cost_usd": 0.014122
+        "input_tokens": 11441,
+        "output_tokens": 2949,
+        "total_tokens": 21859,
+        "cost_usd": 0.010805
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -16.186,
+        "model_value": 1.138,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 40,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2016,
           2017,
@@ -330,6 +323,14 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of reporting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later"
         ],
         "source_page": 40,
         "entity": 1856
@@ -503,11 +504,11 @@
     "gpt-5-mini": {
       "syndicate": 1856,
       "year": 2021,
-      "opening_reserves_gbp_m": 144.225,
-      "opening_reserves_page": 54,
+      "opening_reserves_gbp_m": 142.225,
+      "opening_reserves_page": 22,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": -16.186,
-      "prior_year_development_pct": -11.22,
+      "prior_year_development_pct": -11.38,
       "direction": "release",
       "prior_year_movement_page": 39,
       "prior_year_movement_confidence": 0.8,
@@ -516,16 +517,17 @@
         "Natural catastrophe events",
         "COVID-19 / pandemic effects",
         "Adverse claims development",
+        "Reinsurance recoveries",
         "Large loss development"
       ],
       "specific_events": [
-        "Hurricane Ida",
         "Winter Storm Uri",
-        "Covid - 19",
-        "European floods",
-        "Kentucky tornadoes",
+        "Hurricane Ida",
         "Measat",
-        "Iowa derecho"
+        "Covid-19",
+        "Iowa derecho",
+        "European floods",
+        "Kentucky tornadoes"
       ],
       "specific_years_affected": [
         2019,
@@ -533,9 +535,9 @@
       ],
       "prior_year_events": [
         {
-          "event_name": "COVID-19 / pandemic",
+          "event_name": "COVID-19 / pandemic effects",
           "event_year": 2020,
-          "impact_description": "Increase in prior year reserves including a GBP 8.2 million increase on the COVID loss reserves; booked reserves for these losses are GBP 19.1 million gross of reinsurance.",
+          "impact_description": "Increase in booked reserves for COVID-related losses (contingency exposures), primarily in the property reinsurance account; gross reserves increased from GBP 10.9m to GBP 19.1m (gross increase of GBP 8.2m).",
           "lobs_affected": [
             "Reinsurance - Property"
           ],
@@ -545,12 +547,12 @@
         {
           "event_name": "Iowa derecho",
           "event_year": 2020,
-          "impact_description": "Adverse development on 2020 losses attributed to the Iowa derecho reported as an impact in the year.",
+          "impact_description": "Adverse development on 2020 losses related to the Iowa derecho leading to reserve strengthening.",
           "lobs_affected": [
             "Reinsurance - Property"
           ],
           "amount_gbp_m": 2.3,
-          "confidence": 0.8
+          "confidence": 1.0
         }
       ],
       "named_events": [
@@ -559,11 +561,12 @@
           "event_year": 2021,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": 8.2,
-          "loss_description": "Net of reinsurance 2021 total net 8.2 (split between 2021 YOA and 2020 & prior YOAs in table)",
+          "loss_description": "Notable catastrophe loss included in 2021; table shows total net impact of GBP 8.2m.",
           "lobs_affected": [
-            "Reinsurance - Property"
+            "Reinsurance - Property",
+            "Property"
           ],
-          "page": 7,
+          "page": 6,
           "confidence": 1.0
         },
         {
@@ -571,11 +574,12 @@
           "event_year": 2021,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": 17.6,
-          "loss_description": "Net of reinsurance total net 17.6 (allocated between 2021 YOA and 2020 & prior YOAs)",
+          "loss_description": "Notable catastrophe loss included in 2021; table shows total net impact of GBP 17.6m.",
           "lobs_affected": [
-            "Reinsurance - Property"
+            "Reinsurance - Property",
+            "Property"
           ],
-          "page": 7,
+          "page": 6,
           "confidence": 1.0
         },
         {
@@ -583,7 +587,7 @@
           "event_year": 2020,
           "event_type": "other",
           "net_loss_gbp_m": 19.1,
-          "loss_description": "Booked reserves for Covid losses are reported at GBP 19.1m gross and net of reinsurance.",
+          "loss_description": "Prior-year COVID losses primarily in the property reinsurance division; table shows net impact of GBP 19.1m.",
           "lobs_affected": [
             "Reinsurance - Property"
           ],
@@ -595,11 +599,12 @@
           "event_year": 2021,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": 1.9,
-          "loss_description": "Net impact reported as 1.9m",
+          "loss_description": "Smaller catastrophe loss included in 2021; table shows net impact of GBP 1.9m.",
           "lobs_affected": [
+            "Property",
             "Reinsurance - Property"
           ],
-          "page": 7,
+          "page": 6,
           "confidence": 1.0
         },
         {
@@ -607,50 +612,53 @@
           "event_year": 2021,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": 1.5,
-          "loss_description": "Net impact reported as 1.5m",
+          "loss_description": "Smaller catastrophe loss included in 2021; table shows net impact of GBP 1.5m.",
           "lobs_affected": [
+            "Property",
             "Reinsurance - Property"
           ],
-          "page": 7,
+          "page": 6,
           "confidence": 1.0
         },
         {
           "event_name": "Measat",
           "event_year": 2021,
           "event_type": "man_made",
-          "net_loss_gbp_m": 0.4,
-          "loss_description": "Identified as a driver of losses in the year (GBP 0.4m)",
+          "net_loss_gbp_m": null,
+          "loss_description": "Named as a key driver of losses (small amount noted elsewhere as GBP 0.4m), specific table entry not prominently quantified in the notable losses table.",
           "lobs_affected": [
-            "Reinsurance - Specialty"
+            "Marine",
+            "Energy",
+            "Property"
           ],
-          "page": 5,
-          "confidence": 0.8
+          "page": 4,
+          "confidence": 0.5
         },
         {
           "event_name": "Iowa derecho",
           "event_year": 2020,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": 2.3,
-          "loss_description": "Adverse development on 2020 losses, including Iowa derecho (GBP 2.3 million) noted as a driver",
+          "loss_description": "Adverse development on 2020 losses includes the Iowa derecho (GBP 2.3m).",
           "lobs_affected": [
             "Reinsurance - Property"
           ],
-          "page": 5,
-          "confidence": 0.8
+          "page": 4,
+          "confidence": 1.0
         }
       ],
-      "standardized_narrative": "The syndicate's booked gross claims reserves opened at GBP 144.225m. Analysis of the gross claims development triangle indicates a net favourable prior-year release of approximately GBP 16.2m (11.2% of opening reserves) driven by favourable development on several older underwriting years, partly offset by adverse developments attributable to major loss events (notably Covid-related contingency exposures and certain property catastrophe losses). The most material specific prior-year reserve movements highlighted were an GBP 8.2m increase in COVID-related reserves and adverse development related to the Iowa derecho, with most large current-year catastrophe impacts allocated across property/reinsurance accounts.",
+      "standardized_narrative": "The Syndicate's prior underwriting years showed little aggregate movement in the older claims development triangle (no material net change for underwriting years 2016-2019). However, specific prior-year pressures were identified on the 2019/2020 years, notably an GBP 8.2m strengthening of COVID-related reserves (now GBP 19.1m gross) and further adverse development from the Iowa derecho (~GBP 2.3m), principally affecting the property reinsurance account. Several 2021 catastrophe events (Winter Storm Uri, Hurricane Ida and others) also impacted recoveries and year allocation. Overall the report evidences both event-driven reserve strengthening on select prior years and otherwise broadly flat development across older years.",
       "raw_causal_phrases": [
-        "losses from the 2020 underwriting year. The key drivers of these losses in the year, included winter storm Uri (GBP 12.9 million), hurricane Ida (GBP 1.8 million), Measat (GBP 0.4 million) and adverse development on 2020 losses, including covid losses (GBP 8.2 million) and the Iowa derecho (GBP 2.3 million).",
-        "There was an increase in prior year reserves including a GBP 8.2 million increase on the COVID loss reserves, which are now at GBP 19.1 million (2020: GBP 10.9 million) gross of reinsurance and GBP 19.1 million (2020: GBP 9.8 million) net of reinsurance.",
-        "The 2021 result for the 2020 and prior underwriting years in calendar year 2021 was a loss of GBP 16.1 million."
+        "adverse development on 2020 losses, including covid losses (GBP 8.2 million) and the Iowa derecho (GBP 2.3 million).",
+        "there was an increase in prior year reserves including a GBP 8.2 million increase on the COVID loss reserves, which are now at GBP 19.1 million (2020: GBP 10.9 million) gross of reinsurance and GBP 19.1 million (2020: GBP 9.8 million) net of reinsurance.",
+        "The claims arise mostly from the property reinsurance account and are entirely for the 2020 and prior underwriting years."
       ],
       "lob_movements": [
         {
           "line_of_business": "Reinsurance - Property",
           "direction": "strengthening",
-          "amount_gbp_m": 39.8,
-          "percentage": 27.577,
+          "amount_gbp_m": 10.5,
+          "percentage": null,
           "confidence": 0.9
         }
       ],
@@ -702,10 +710,10 @@
           "percentage_of_total": 42.8
         }
       ],
-      "gross_premium_page": 7,
+      "gross_premium_page": 48,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Calculated prior-year gross movement based on the gross claims development triangle (page 39). There is an inconsistency between net prior-year result language (net loss of GBP 16.1m on 2020 & prior YOAs) and the gross triangle-derived PYD (a net gross release of ~GBP 16.186m). The notable catastrophe table shows gross adverse impacts allocated to 2020 & prior YOAs of GBP 39.8m (gross). The triangle and movement results therefore present a mixed picture (releases in older years offset by large 2021-allocated adverse prior-year impacts). Minor mismatches exist between divisional premium totals and P&L totals; percentages are computed against the P&L gross premium written figure.",
+      "data_quality_notes": "Opening gross claims outstanding taken from the Balance Sheet prior-year comparative column (142,225k = GBP 142.225m). The Technical Provisions note shows At 1 January 2021 = 144,225k suggesting a small OCR/label discrepancy between tables; chosen primary source per instructions was the Balance Sheet. No single explicit gross 'Movement in prior year's provision' note was found; the gross claims development triangle (gross) was used (excluded 2020 and 2021 columns per rules) which yields zero net movement for underwriting years 2016-2019. Narrative explicitly quantifies gross increases for COVID reserves (+GBP 8.2m) and the Iowa derecho (+GBP 2.3m) which affect 2019/2020; those event-level amounts were captured separately. Where figures are taken from narrative rather than a dedicated gross movement table this is noted in confidence and in these data quality notes. [RAG OVERRIDE: Model said PYD=0.0, RAG triangle computed -16.186. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -771,21 +779,33 @@
         ]
       },
       "source_type": "syndicate",
-      "source_file": "syndicate_reports\\pdfs\\syndicate_1856_2021.pdf",
-      "content_hash": "08616ea65b8b332449f1a55d13ecb97f6b4daddeb95014242997a985c776ea48",
-      "standardized_at": "2026-03-16T18:58:46.630916+00:00",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_1856_2021_llm.pdf",
+      "content_hash": "cb78552805dae22a7120c5c0a7ee8c13c201c2c31b007f0224a6eaa429217273",
+      "standardized_at": "2026-09-11T10:52:39.998551+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 91992,
-        "output_tokens": 9217,
-        "total_tokens": 101209,
-        "cost_usd": 0.041432
+        "input_tokens": 34694,
+        "output_tokens": 10163,
+        "total_tokens": 44857,
+        "cost_usd": 0.029
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -16.186,
+        "model_value": 0.0,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 40,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2016,
           2017,
@@ -843,6 +863,14 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of reporting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later"
         ],
         "source_page": 40,
         "entity": 1856
@@ -1014,12 +1042,12 @@
       }
     }
   },
-  "total_cost_usd": 0.055554,
-  "total_tokens": 136018,
+  "total_cost_usd": 0.039805,
+  "total_tokens": 66716,
   "validation": {
     "passed": true,
-    "total_discrepancies": 33,
-    "within_tolerance": 33,
+    "total_discrepancies": 25,
+    "within_tolerance": 25,
     "hard_failures": 0,
     "hard_failure_details": []
   }

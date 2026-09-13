@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T09:44:20.361248+00:00",
+  "extraction_timestamp": "2026-09-13T04:10:15.334904+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -11,40 +13,49 @@
       "syndicate": 1861,
       "year": 2021,
       "opening_reserves_gbp_m": 770.971,
-      "opening_reserves_page": 18,
+      "opening_reserves_page": 7,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": 34.519,
       "prior_year_development_pct": 4.48,
       "direction": "strengthening",
-      "prior_year_movement_page": 27,
+      "prior_year_movement_page": 20,
       "prior_year_movement_confidence": 0.8,
-      "exact_reserve_text": "The development of insurance liabilities provides a measure of the Syndicate's ability to estimate the ultimate value of claims. Historic development includes a mix of prior year releases and deteriorations, and in 2021 gross and net deteriorations occurred.",
+      "exact_reserve_text": "Included within net claims incurred of GBP 120.9m (2020: GBP 473.6m) is a deterioration of GBP 0.8m pre LPT (2020: deterioration of GBP 7.9m) to claims reserves established at the prior year end.",
       "primary_causes": [
         "Adverse claims development",
-        "Favorable claims development",
         "COVID-19 / pandemic effects"
       ],
       "specific_events": [
-        "Covid-19 pandemic"
+        "COVID-19 pandemic"
       ],
-      "specific_years_affected": [
-        2019
-      ],
+      "specific_years_affected": [],
       "prior_year_events": [
         {
-          "event_name": "COVID-19 / pandemic effects",
+          "event_name": "COVID-19 pandemic",
           "event_year": 2020,
-          "impact_description": "favourable movement in Covid-19 losses",
+          "impact_description": "favourable movement in Covid-19 losses of GBP 1.3m",
           "lobs_affected": [],
           "amount_gbp_m": -1.3,
-          "confidence": 1.0
+          "confidence": 0.8
         }
       ],
-      "named_events": [],
-      "standardized_narrative": "The syndicate experienced a gross prior year strengthening of GBP 34.519 million, primarily driven by adverse claims development for the 2019 underwriting year as calculated from the gross claims development table. The report notes that 2021 saw a mix of prior year releases and deteriorations, including a favourable movement in Covid-19 losses of GBP 1.3 million.",
+      "named_events": [
+        {
+          "event_name": "COVID-19 pandemic",
+          "event_year": 2020,
+          "event_type": "other",
+          "net_loss_gbp_m": -1.3,
+          "loss_description": "favourable movement in Covid-19 losses of GBP 1.3m",
+          "lobs_affected": [],
+          "page": 2,
+          "confidence": 0.8
+        }
+      ],
+      "standardized_narrative": "The syndicate experienced a net strengthening of prior year reserves by GBP 0.8 million in 2021, representing 0.10% of its opening gross claims outstanding. This net deterioration is explicitly stated as affecting claims reserves established at the prior year end. Despite an overall net strengthening, the syndicate reported a favourable net movement of GBP 1.3 million related to COVID-19 losses from the 2020 year, indicating a mixed development across prior years. The gross claims development triangle is considered unreliable for calculating prior year development due to significant RITC adjustments during the year.",
       "raw_causal_phrases": [
         "favourable movement in Covid-19 losses of GBP 1.3m",
-        "gross and net deteriorations occurred"
+        "Historic development includes a mix of prior year releases and deteriorations, and in 2021 gross and net deteriorations occurred.",
+        "deterioration of GBP 0.8m pre LPT (2020: deterioration of GBP 7.9m) to claims reserves established at the prior year end."
       ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 91.9,
@@ -90,15 +101,15 @@
           "percentage_of_total": 12.4
         }
       ],
-      "gross_premium_page": 38,
+      "gross_premium_page": 19,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior year development calculated from the gross claims development table for the 2019 underwriting year, excluding the two most recent underwriting years (2020 and 2021) as per instructions. The report mentions a specific favourable movement in Covid-19 losses of GBP 1.3m, which is a release, while the overall calculated PYD is a strengthening, leading to a 'mixed' direction.",
+      "data_quality_notes": "Prior year development is reported net of reinsurance due to RITC distortion making the gross claims development triangle unreliable. The reported figure is a net deterioration. [RAG OVERRIDE: Model said PYD=0.8, RAG triangle computed 34.519. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
-        "page": 27,
+        "page": 15,
         "underwriting_years": [
           2019,
           2020
@@ -119,21 +130,33 @@
         ]
       },
       "source_type": "syndicate",
-      "source_file": "syndicate_reports\\pdfs\\syndicate_1861_2021.pdf",
-      "content_hash": "7abd72d59e143bd6dec8dbb8ff90f045d625b9dd85ba6b93a8981ff85f631266",
-      "standardized_at": "2026-03-17T00:42:43.583787+00:00",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_1861_2021_llm.pdf",
+      "content_hash": "b81ac3e9b51d45f80f5b276dd2c50304b275c7765b46fdec58dcbe8636ca9f7b",
+      "standardized_at": "2026-09-11T10:51:19.425300+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 17752,
-        "output_tokens": 1269,
-        "total_tokens": 29608,
-        "cost_usd": 0.008498
+        "input_tokens": 12731,
+        "output_tokens": 1425,
+        "total_tokens": 22826,
+        "cost_usd": 0.007382
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 34.519,
+        "model_value": 0.8,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 27,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2019,
           2020,
@@ -155,6 +178,11 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of underwriting year",
+          "One year later",
+          "Two years later"
         ],
         "source_page": 27,
         "entity": 1861
@@ -308,49 +336,134 @@
       "syndicate": 1861,
       "year": 2021,
       "opening_reserves_gbp_m": 770.971,
-      "opening_reserves_page": 44,
+      "opening_reserves_page": 16,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": 34.519,
       "prior_year_development_pct": 4.48,
       "direction": "strengthening",
-      "prior_year_movement_page": 26,
+      "prior_year_movement_page": 25,
       "prior_year_movement_confidence": 0.8,
       "exact_reserve_text": "Included within net claims incurred of GBP 120.9m (2020: GBP 473.6m) is a deterioration of GBP 0.8m pre LPT (2020: deterioration of GBP 7.9m) to claims reserves established at the prior year end.",
       "primary_causes": [
-        "Adverse claims development",
-        "Large loss development",
         "Natural catastrophe events",
-        "COVID-19 / pandemic effects",
-        "Reinsurance recoveries"
+        "Large loss development",
+        "Reinsurance recoveries",
+        "COVID-19 / pandemic effects"
       ],
-      "specific_events": [],
+      "specific_events": [
+        "COVID-19 pandemic",
+        "Part VII transfer to Lloyd's Brussels (30 December 2020)",
+        "Loss Portfolio Transfer (LPT) with RiverStone (Dec 2021)",
+        "RITC adjustments (2018 & prior years)"
+      ],
       "specific_years_affected": [
         2019,
-        2020,
         2018
       ],
       "prior_year_events": [
         {
           "event_name": "COVID-19 pandemic",
           "event_year": 2020,
-          "impact_description": "Pandemic contributed to elevated claims activity and reserve volatility in 2020 and affected subsequent reserve development; the report notes a high frequency of natural catastrophe events and Covid-19 impacts on results.",
+          "impact_description": "Favourable movement in Covid-19 losses of GBP 1.3m in 2021; Covid-19 was a material influence on 2020 results and subsequent reserve development.",
+          "lobs_affected": [
+            "Property",
+            "Casualty",
+            "Accident & Health"
+          ],
+          "amount_gbp_m": -1.3,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "High frequency of natural catastrophe events",
+          "event_year": 2020,
+          "impact_description": "2020 was heavily impacted by a high frequency of natural catastrophe events which materially worsened claims and reserves for that year.",
+          "lobs_affected": [
+            "Property",
+            "Casualty",
+            "Marine"
+          ],
+          "amount_gbp_m": null,
+          "confidence": 0.6
+        },
+        {
+          "event_name": "Reinsurance to Close (RITC) - 2018 & prior years",
+          "event_year": 2018,
+          "impact_description": "The 2018 year of account closed externally into the 2021 year of account of another managing agent following a reinsurance to close agreement; adjusted opening technical provisions and affected comparatives.",
+          "lobs_affected": [
+            "Treaty"
+          ],
+          "amount_gbp_m": null,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Part VII transfer to Lloyd's Brussels",
+          "event_year": 2020,
+          "impact_description": "Part VII transfer of EEA policies to Lloyd's Brussels on 30 December 2020 and immediate 100% quota share reinsurance back to the syndicate changed presentation of those premiums and related cash flows; transaction had no economic impact but affected reporting and balances.",
+          "lobs_affected": [
+            "Treaty"
+          ],
+          "amount_gbp_m": null,
+          "confidence": 0.9
+        },
+        {
+          "event_name": "Loss Portfolio Transfer (LPT) with RiverStone",
+          "event_year": 2021,
+          "impact_description": "In December 2021 the syndicate entered into an LPT with RiverStone covering majority of classes no longer written; premium ceded GBP 14m (of which GBP 4m will earn in future years) and the reinsurers' share of change in provisions includes recoveries due on business reinsured; net impact quoted as a 0.3% improvement on combined ratio.",
+          "lobs_affected": [
+            "Treaty"
+          ],
+          "amount_gbp_m": null,
+          "confidence": 0.8
+        }
+      ],
+      "named_events": [
+        {
+          "event_name": "COVID-19 pandemic",
+          "event_year": 2020,
+          "event_type": "other",
+          "net_loss_gbp_m": null,
+          "loss_description": "Syndicate experienced Covid-19 related losses; 2021 saw a favourable movement in Covid-19 losses of GBP 1.3m.",
           "lobs_affected": [
             "Accident & Health",
             "Property",
             "Casualty"
           ],
-          "amount_gbp_m": null,
-          "confidence": 0.5
+          "page": 4,
+          "confidence": 0.9
+        },
+        {
+          "event_name": "Part VII transfer to Lloyd's Brussels",
+          "event_year": 2020,
+          "event_type": "other",
+          "net_loss_gbp_m": null,
+          "loss_description": "Policies and related liabilities underwritten in the EEA were transferred to Lloyd's Brussels on 30 December 2020 and reinsured back to the syndicate; no economic impact for the syndicate but impacted presentation and cash flows.",
+          "lobs_affected": [
+            "Treaty"
+          ],
+          "page": 45,
+          "confidence": 0.9
+        },
+        {
+          "event_name": "Loss Portfolio Transfer with RiverStone",
+          "event_year": 2021,
+          "event_type": "other",
+          "net_loss_gbp_m": null,
+          "loss_description": "Premium ceded GBP 14m under the LPT, of which GBP 4m will earn in future calendar years; net impact to the syndicate was a 0.3% improvement on the combined ratio.",
+          "lobs_affected": [
+            "Treaty"
+          ],
+          "page": 3,
+          "confidence": 0.8
         }
       ],
-      "named_events": [],
-      "standardized_narrative": "At 31 December 2021 Syndicate 1861 reported opening gross claims outstanding of GBP 770.971m. Using the published gross claims development table, prior-year development for pre-2021 underwriting years shows an adverse (strengthening) movement of approximately GBP 34.52m (c. 4.5% of opening gross claims reserves), primarily driven by adverse claims development on the 2019 underwriting year. The report cites a mix of factors including large loss development, natural catastrophe activity and Covid-19 related effects; reinsurance arrangements (including an LPT in December 2021 and earlier RITC adjustments) also influenced reported reinsurance recoveries and reserve presentation.",
+      "standardized_narrative": "At 31 December 2021 Syndicate 1861's opening gross claims outstanding (prior year comparative) was GBP 770.971m. Analysis of the gross claims development shows an adverse re-estimate on the 2019 underwriting year of approximately GBP 34.5m (gross), representing a ~4.48% strengthening versus opening gross claims outstanding. Management attributes movements to a mix of factors including natural catastrophe-driven large loss development, some COVID-19 related movements (a favourable GBP 1.3m reported), reinsurance transactions (RITC adjustments and an LPT in December 2021) and recoveries; overall the prior-year movement is an adverse strengthening on the older years.",
       "raw_causal_phrases": [
-        "Included within net claims incurred of GBP 120.9m (2020: GBP 473.6m) is a deterioration of GBP 0.8m pre LPT (2020: deterioration of GBP 7.9m) to claims reserves established at the prior year end.",
-        "unprecedented Covid-19 pandemic and a high frequency of natural catastrophe events",
+        "In 2021, Syndicate 1861 recorded a post LPT profit of GBP 2.6m (2020: GBP 175.8m loss) with a combined ratio of 98.6% and 98.9% pre LPT (2020: 134.5%).",
+        "The net loss ratio improved by 35.4% to 56.1% in 2021, with 2020 being heavily impacted by the unprecedented Covid-19 pandemic and a high frequency of natural catastrophe events.",
         "Despite further Covid-19 enforced restrictions in 2021, the Syndicate has had favourable movement in Covid-19 losses of GBP 1.3m.",
-        "In December 2021 CMA entered into a Loss Portfolio Transfer Reinsurance (LPT) agreement with RiverStone Managing Agency Limited (\"RiverStone\") covering the majority of classes of business no longer written by Syndicates 4444 (2020 & prior years of account) and 1861 (2020 year of account only).",
-        "At 31 December 2020 the 2018 & Prior years of account closed by way of an external reinsurance to close agreement."
+        "Included within net claims incurred of GBP 120.9m (2020: GBP 473.6m) is a deterioration of GBP 0.8m pre LPT (2020: deterioration of GBP 7.9m) to claims reserves established at the prior year end.",
+        "At 31 December 2020 the 2018 & Prior years of account closed by way of an external reinsurance to close agreement.",
+        "In December 2021 CMA entered into a Loss Portfolio Transfer Reinsurance (LPT) agreement with RiverStone Managing Agency Limited covering the majority of classes of business no longer written by Syndicates 4444 (2020 & prior years of account) and 1861 (2020 year of account only)."
       ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 91.9,
@@ -399,12 +512,12 @@
       "gross_premium_page": 36,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior year development derived from the gross claims development table (gross triangle) by comparing the current estimate to the prior diagonal for underwriting years 2019. The report contains RITC adjustments (2018 & prior) and an LPT (Dec 2021) which affect presentation and comparability of technical provisions; some narrative figures refer to net movements (post-reinsurance) and are therefore not directly comparable to gross movements. The explicit narrative line re prior-year movement (GBP 0.8m deterioration) refers to a net/included-in-net amount; the gross PYD here is calculated from the gross triangle. RITC/LPT transactions may distort year-on-year movements.",
+      "data_quality_notes": "Opening gross claims outstanding taken directly from the 2020 comparative column of the Balance Sheet (explicit). Prior-year development derived from the gross claims development table (claims triangle) by comparing the 2019 column current estimate to its previous diagonal (one-year prior) and excluding 2020 and 2021 per instructions. The report contains RITC and LPT transactions which required adjusted opening positions and may distort development comparatives; narrative also provides net prior-year movements (e.g. net deterioration GBP 0.8m) but a gross triangle was available and used. Some causal figures quoted in the report are net of reinsurance; where only net numbers exist they have not been used as primary sources. Lob-level prior-year movements are not explicitly provided, so lob_movements is left empty.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
-        "page": 26,
+        "page": 25,
         "underwriting_years": [
           2019,
           2020
@@ -425,21 +538,33 @@
         ]
       },
       "source_type": "syndicate",
-      "source_file": "syndicate_reports\\pdfs\\syndicate_1861_2021.pdf",
-      "content_hash": "7abd72d59e143bd6dec8dbb8ff90f045d625b9dd85ba6b93a8981ff85f631266",
-      "standardized_at": "2026-03-17T00:45:14.664085+00:00",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_1861_2021_llm.pdf",
+      "content_hash": "b81ac3e9b51d45f80f5b276dd2c50304b275c7765b46fdec58dcbe8636ca9f7b",
+      "standardized_at": "2026-09-11T10:53:26.231514+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 35699,
-        "output_tokens": 6722,
-        "total_tokens": 42421,
-        "cost_usd": 0.022369
+        "input_tokens": 23288,
+        "output_tokens": 8045,
+        "total_tokens": 31333,
+        "cost_usd": 0.021912
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 34.519,
+        "model_value": 34.519,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 27,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2019,
           2020,
@@ -461,6 +586,11 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of underwriting year",
+          "One year later",
+          "Two years later"
         ],
         "source_page": 27,
         "entity": 1861
@@ -611,12 +741,12 @@
       }
     }
   },
-  "total_cost_usd": 0.030867,
-  "total_tokens": 72029,
+  "total_cost_usd": 0.029294,
+  "total_tokens": 54159,
   "validation": {
     "passed": true,
-    "total_discrepancies": 21,
-    "within_tolerance": 21,
+    "total_discrepancies": 25,
+    "within_tolerance": 25,
     "hard_failures": 0,
     "hard_failure_details": []
   }

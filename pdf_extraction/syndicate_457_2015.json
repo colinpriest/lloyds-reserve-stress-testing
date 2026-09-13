@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-05T20:26:27.882428+00:00",
+  "extraction_timestamp": "2026-09-13T03:59:57.189945+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -13,15 +15,13 @@
       "opening_reserves_gbp_m": 571.241,
       "opening_reserves_page": 5,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": -8.592,
-      "prior_year_development_pct": -1.5,
-      "direction": "release",
+      "prior_year_development_gbp_m": 8.592,
+      "prior_year_development_pct": 1.5,
+      "direction": "strengthening",
       "prior_year_movement_page": 15,
       "prior_year_movement_confidence": 0.8,
       "exact_reserve_text": "The 2015 net technical result of GBP 24.0m (2014: GBP 48.6m) includes GBP 29.0m (2014: GBP 27.7m) of releases from reserves in respect of prior accident years.",
-      "primary_causes": [
-        "Favorable claims development"
-      ],
+      "primary_causes": [],
       "specific_events": [],
       "specific_years_affected": [
         2011,
@@ -30,11 +30,8 @@
       ],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "The syndicate experienced a gross release of GBP 8.592 million from reserves relating to prior accident years, representing a 1.504% reduction in opening gross claims outstanding. This favorable development is calculated from the gross claims development triangle. The report also notes a net release of GBP 29.0 million from prior accident years, contributing to the overall net technical result. The managing agent's report indicates that no adverse run-off deviation is envisaged, supporting the favorable claims development.",
-      "raw_causal_phrases": [
-        "releases from reserves in respect of prior accident years",
-        "no adverse run-off deviation is envisaged"
-      ],
+      "standardized_narrative": "The syndicate experienced a gross prior year strengthening of GBP 8.592 million, calculated from the claims development triangle. This contrasts with a net release of GBP 29.0 million mentioned in the technical result narrative. The strengthening primarily arose from the 2011 underwriting year, partially offset by releases from the 2012 and 2013 underwriting years. No specific causes or events were detailed for these movements. The syndicate's gross written premiums for 2015 totaled GBP 436.114 million, with the largest proportions in Marine, Energy, Aviation and Transport, and Reinsurance.",
+      "raw_causal_phrases": [],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 436.1,
       "gross_premium_mix": [
@@ -67,7 +64,7 @@
       "gross_premium_page": 12,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The narrative text on page 14 states 'GBP 29.0m of releases from reserves in respect of prior accident years' (net of reinsurance). The gross prior year development calculated from the claims development triangle on page 15 is a release of GBP 8.592m. The gross figure from the triangle is used as per instructions.",
+      "data_quality_notes": "Syndicate number 457 is assumed based on common knowledge for Munich Re Syndicate Limited, as it is not explicitly stated in the document. The gross prior year development calculated from the claims development triangle (+8.592m strengthening) contradicts the narrative statement of a net release of GBP 29.0m. The gross triangle figure is used as per instructions.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -120,20 +117,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_457_2015_llm.pdf",
-      "content_hash": "bb4cfc28a0b0b412b8568b76d0eb8909480958a99f39b8f4eca5f2354a59b8c9",
-      "standardized_at": "2026-03-19T03:19:11.885465+00:00",
+      "content_hash": "e79194718b1bd087e5df8073a87b65f9098502876a50a61ddb25a7f108069bc4",
+      "standardized_at": "2026-09-11T13:08:43.969563+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 10120,
-        "output_tokens": 1211,
-        "total_tokens": 18008,
-        "cost_usd": 0.006063
+        "input_tokens": 10924,
+        "output_tokens": 1192,
+        "total_tokens": 17095,
+        "cost_usd": 0.006257
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 8.592,
+        "model_value": 8.592,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 45,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -178,8 +187,16 @@
             null
           ]
         ],
+        "row_labels": [
+          "At end of underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later"
+        ],
         "source_page": 45,
-        "entity": 457
+        "entity": 457,
+        "presentation_sign": "outflow"
       },
       "_adobe_lob": {
         "gross_premium_mix": [
@@ -333,25 +350,31 @@
       "syndicate": 457,
       "year": 2015,
       "opening_reserves_gbp_m": 571.241,
-      "opening_reserves_page": 42,
+      "opening_reserves_page": 15,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": -8.592,
-      "prior_year_development_pct": -1.5,
-      "direction": "release",
-      "prior_year_movement_page": 42,
-      "prior_year_movement_confidence": 1.0,
+      "prior_year_development_gbp_m": 8.592,
+      "prior_year_development_pct": 1.5,
+      "direction": "strengthening",
+      "prior_year_movement_page": 43,
+      "prior_year_movement_confidence": 0.8,
       "exact_reserve_text": "The 2015 net technical result of GBP 24.0m (2014: GBP 48.6m) includes GBP 29.0m (2014: GBP 27.7m) of releases from reserves in respect of prior accident years.",
       "primary_causes": [
-        "Favorable claims development",
-        "Reinsurance recoveries"
+        "Adverse claims development",
+        "Reinsurance recoveries",
+        "Favorable claims development"
       ],
       "specific_events": [],
-      "specific_years_affected": [],
+      "specific_years_affected": [
+        2011,
+        2012,
+        2013
+      ],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "The syndicate had opening gross claims outstanding of GBP 571.241m at 1 January 2015. The report states a net release from prior accident years of GBP 29.0m (net of reinsurance), representing approximately a 5.1% release relative to opening gross claims reserves. The movement is described as releases from reserves in respect of prior accident years and is attributed to favourable claims development and reinsurance recoveries.",
+      "standardized_narrative": "Gross claims development on prior years produced a net adverse movement of approximately GBP 8.6m (gross), driven by increases in older accident years (notably 2011) partly offset by favourable development on other prior years. The report however states a net release of GBP 29.0m after reinsurance recoveries. Exchange rate movements and significant reinsurance recoveries appear to have materially affected the net outcome.",
       "raw_causal_phrases": [
-        "releases from reserves in respect of prior accident years"
+        "includes GBP 29.0m (2014: GBP 27.7m) of releases from reserves in respect of prior accident years",
+        "Effect of movements in exchange rates"
       ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 436.1,
@@ -385,11 +408,11 @@
       "gross_premium_page": 34,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The report explicitly states a net release of GBP 29.0m for prior accident years (page 42). A gross prior-year movement (gross of reinsurance) was not clearly tabulated as a single 'movement in prior year provision' figure; a gross claims development table (gross triangle) is present but was not unambiguously convertible to a single gross prior-year movement within the time available. Therefore the reported prior_year_development_gbp_m uses the explicitly stated NET amount (flagged here). If a gross PYD is required, it should be calculated from the gross claims development table on page 43. [RAG OVERRIDE: Model said PYD=-29.0, RAG triangle computed -8.592. Using RAG value.]",
+      "data_quality_notes": "Gross prior-year development was calculated from the gross claims development table (triangle) on page 43 (figures are presented in GBP 000). The report text quotes a net release of GBP 29.0m (after reinsurance) - the gross triangle indicates a net adverse movement of +GBP 8.592m. No separate explicit gross 'movement in prior year's provision' figure was printed; net and gross differ materially (likely due to reinsurance recoveries and FX movements).",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
-        "units": "millions",
+        "units": "thousands",
         "page": 43,
         "underwriting_years": [
           2011,
@@ -400,35 +423,35 @@
         ],
         "development_rows": [
           [
-            121.068,
-            126.367,
-            142.527,
-            136.89,
-            142.475
+            -121068,
+            -126367,
+            -142527,
+            -136890,
+            -142475
           ],
           [
-            229.609,
-            258.417,
-            289.001,
-            262.375,
+            -229609,
+            -258417,
+            -289001,
+            -262375,
             null
           ],
           [
-            240.072,
-            275.772,
-            288.925,
+            -240072,
+            -275772,
+            -288925,
             null,
             null
           ],
           [
-            235.561,
-            269.706,
+            -235561,
+            -269706,
             null,
             null,
             null
           ],
           [
-            250.295,
+            -250295,
             null,
             null,
             null,
@@ -438,20 +461,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_457_2015_llm.pdf",
-      "content_hash": "bb4cfc28a0b0b412b8568b76d0eb8909480958a99f39b8f4eca5f2354a59b8c9",
-      "standardized_at": "2026-03-19T03:20:29.173199+00:00",
+      "content_hash": "e79194718b1bd087e5df8073a87b65f9098502876a50a61ddb25a7f108069bc4",
+      "standardized_at": "2026-09-11T13:10:55.582663+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 20545,
-        "output_tokens": 5538,
-        "total_tokens": 26083,
-        "cost_usd": 0.016212
+        "input_tokens": 21305,
+        "output_tokens": 6410,
+        "total_tokens": 27715,
+        "cost_usd": 0.018146
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 8.592,
+        "model_value": 8.592,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 45,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -496,8 +531,16 @@
             null
           ]
         ],
+        "row_labels": [
+          "At end of underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later"
+        ],
         "source_page": 45,
-        "entity": 457
+        "entity": 457,
+        "presentation_sign": "outflow"
       },
       "_adobe_lob": {
         "gross_premium_mix": [
@@ -648,12 +691,12 @@
       }
     }
   },
-  "total_cost_usd": 0.022275,
-  "total_tokens": 44091,
+  "total_cost_usd": 0.024403,
+  "total_tokens": 44810,
   "validation": {
     "passed": true,
-    "total_discrepancies": 11,
-    "within_tolerance": 11,
+    "total_discrepancies": 10,
+    "within_tolerance": 10,
     "hard_failures": 0,
     "hard_failure_details": []
   }

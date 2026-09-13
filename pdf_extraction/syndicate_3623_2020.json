@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-05T20:51:45.516535+00:00",
+  "extraction_timestamp": "2026-09-13T03:59:26.095604+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -20,47 +22,26 @@
       "prior_year_movement_confidence": 0.8,
       "exact_reserve_text": "The syndicate has prior year reserves releases of $8.8m in 2020 (2019: strengthen of $6.8m), primarily driven by claims releases on the older years of account in the specialty lines division.",
       "primary_causes": [
-        "Favorable claims development"
+        "Favorable claims development",
+        "Other"
       ],
       "specific_events": [],
       "specific_years_affected": [],
-      "prior_year_events": [
-        {
-          "event_name": "Prior year strengthening (2019)",
-          "event_year": 2019,
-          "impact_description": "strengthening of reserves in 2019",
-          "lobs_affected": [],
-          "amount_gbp_m": 6.8,
-          "confidence": 1.0
-        }
-      ],
-      "named_events": [
-        {
-          "event_name": "COVID-19 global pandemic",
-          "event_year": 2020,
-          "event_type": "other",
-          "net_loss_gbp_m": null,
-          "loss_description": "adverse claims activity in personal accident and market facilities books; adverse COVID-19 related claims experience",
-          "lobs_affected": [
-            "Accident & Health",
-            "Other"
-          ],
-          "page": 1,
-          "confidence": 0.8
-        }
-      ],
-      "standardized_narrative": "The syndicate reported a prior year reserve release of $8.8 million in 2020, primarily due to favorable claims development on older years of account in the specialty lines division. This release represents a 3.13% reduction of the opening gross claims outstanding. The report also noted adverse claims activity related to the COVID-19 global pandemic, which impacted the overall claims ratio and the 2019 year of account forecast.",
+      "prior_year_events": [],
+      "named_events": [],
+      "standardized_narrative": "Syndicate 3623 reported prior year reserve releases of $8.8 million in 2020, representing a 3.1% release against opening gross claims outstanding. This favorable development was primarily driven by claims releases on older years of account within the specialty lines division. The report also noted adverse COVID-19 related claims experience impacting the overall claims ratio.",
       "raw_causal_phrases": [
         "claims releases on the older years of account in the specialty lines division",
-        "adverse COVID-19 related claims experience"
+        "adverse COVID-19 related claims experience",
+        "COVID-19 global pandemic"
       ],
       "lob_movements": [
         {
           "line_of_business": "Reinsurance - Specialty",
           "direction": "release",
-          "amount_gbp_m": -8.8,
+          "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.7
+          "confidence": 0.5
         }
       ],
       "gross_premiums_written_gbp_m": 228.6,
@@ -84,18 +65,26 @@
       "gross_premium_page": 11,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "The prior year development figure of $8.8m is stated as a \"release\" in the narrative. While the text does not explicitly state \"gross\" or \"net\", the surrounding context discussing \"net insurance claims\" suggests it is likely a net figure. No explicit gross prior year development figure was found in the report. The claims development table on page 14 does not conform to the standard structure for extracting development rows.",
+      "data_quality_notes": "Prior year development figure is from narrative text and assumed to be net of reinsurance as no gross figure was explicitly stated or calculable from available tables. The claims development table on page 14 provides percentages for development periods, not absolute monetary values, so it could not be used for the claims triangle.",
+      "_claims_triangle": {
+        "type": "none",
+        "currency": null,
+        "units": null,
+        "page": null,
+        "underwriting_years": [],
+        "development_rows": []
+      },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_3623_2020_llm.pdf",
-      "content_hash": "070d1a4d67ce46e7e28c1d0d0d4b17a5732025601ee401289f5dbc14ca91cc77",
-      "standardized_at": "2026-07-05T15:53:36.810901+00:00",
+      "content_hash": "906beb4feb04802fd972631fcb9b4297e679d17cc8d4fe47afe5a5db01acecf6",
+      "standardized_at": "2026-09-11T12:43:30.967300+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 9863,
-        "output_tokens": 1026,
-        "total_tokens": 16221,
-        "cost_usd": 0.005524
+        "input_tokens": 10667,
+        "output_tokens": 832,
+        "total_tokens": 17020,
+        "cost_usd": 0.00528
       },
       "_adobe_lob": {
         "gross_premium_mix": [
@@ -216,12 +205,12 @@
       "syndicate": 3623,
       "year": 2020,
       "opening_reserves_gbp_m": 281.4,
-      "opening_reserves_page": 20,
+      "opening_reserves_page": 3,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": -8.8,
       "prior_year_development_pct": -3.13,
       "direction": "release",
-      "prior_year_movement_page": 3,
+      "prior_year_movement_page": 1,
       "prior_year_movement_confidence": 1.0,
       "exact_reserve_text": "The syndicate has prior year reserves releases of $8.8m in 2020 (2019: strengthen of $6.8m), primarily driven by claims releases on the older years of account in the specialty lines division.",
       "primary_causes": [
@@ -230,34 +219,12 @@
       "specific_events": [],
       "specific_years_affected": [],
       "prior_year_events": [],
-      "named_events": [
-        {
-          "event_name": "COVID-19 / pandemic",
-          "event_year": 2020,
-          "event_type": "other",
-          "net_loss_gbp_m": null,
-          "loss_description": "predominantly driven by adverse COVID-19 related claims experience",
-          "lobs_affected": [
-            "Accident & Health",
-            "Reinsurance - Specialty"
-          ],
-          "page": 3,
-          "confidence": 1.0
-        }
-      ],
-      "standardized_narrative": "The syndicate reported an opening gross claims outstanding of 281.4 (USD millions). In 2020 the syndicate recorded prior year reserve releases of $8.8m (a release equal to approximately 3.13% of opening gross claims outstanding), driven primarily by favourable claims development on older years of account within the specialty lines division. The release figure cited in the report is presented as a $8.8m release (narrative) and no gross-only prior year movement breakdown was provided, so the reported $8.8m is used here (the report also notes adverse COVID-19 related claims driving current year deterioration in other areas).",
+      "named_events": [],
+      "standardized_narrative": "Syndicate 3623 reported an opening gross claims outstanding of $281.4m at 1 January 2020 and recorded prior year reserve releases of $8.8m in 2020, driven primarily by favourable claims development on older years of account within the specialty lines division. No specific named loss events or explicit gross prioryear movement note was provided; the $8.8m figure is stated in the managing agent commentary.",
       "raw_causal_phrases": [
-        "The syndicate has prior year reserves releases of $8.8m in 2020 (2019: strengthen of $6.8m), primarily driven by claims releases on the older years of account in the specialty lines division.",
-        "predominantly driven by adverse COVID-19 related claims experience"
+        "prior year reserves releases of $8.8m in 2020 (2019: strengthen of $6.8m), primarily driven by claims releases on the older years of account in the specialty lines division."
       ],
       "lob_movements": [
-        {
-          "line_of_business": "Accident & Health",
-          "direction": "release",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.5
-        },
         {
           "line_of_business": "Reinsurance - Specialty",
           "direction": "release",
@@ -284,15 +251,15 @@
           "percentage_of_total": 58.4
         }
       ],
-      "gross_premium_page": 38,
+      "gross_premium_page": 11,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "Prior year development amount ($8.8m) is taken from narrative text and appears to be a net figure (report does not provide a clear gross-only prior year movement). No explicit gross 'movement in prior year's provision for claims outstanding' line was located; a gross claims development triangle is present and was captured, but the report did not present a clear gross prior-year movement total. Opening reserves sourced from Balance Sheet (gross claims outstanding as at 1 Jan 2020). All monetary amounts are in the report's native currency (USD millions).",
+      "data_quality_notes": "Prior year development figure ($8.8m) is stated in the managing agent strategic report but the report does not present a separate labelled 'Movement in prior year's provision for claims outstanding' gross figure. The $8.8m appears in narrative and is likely a net (after reinsurance) release; no explicit gross prior-year movement was found. A gross claims development table (percentages and per-year outstanding amounts) is present and has been captured in the claims triangle field - that table could be used to compute a gross PYD but was not explicitly reconciled in the notes. LOB attribution of the PYD is described as 'primarily driven' by specialty lines but not quantified; lob_movements amount is therefore left null.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "percentage",
-        "page": 45,
+        "page": 14,
         "underwriting_years": [
           2011,
           2012,
@@ -426,20 +393,19 @@
             null,
             null
           ]
-        ],
-        "confidence": 0.9
+        ]
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_3623_2020_llm.pdf",
-      "content_hash": "070d1a4d67ce46e7e28c1d0d0d4b17a5732025601ee401289f5dbc14ca91cc77",
-      "standardized_at": "2026-07-05T15:54:41.234583+00:00",
+      "content_hash": "906beb4feb04802fd972631fcb9b4297e679d17cc8d4fe47afe5a5db01acecf6",
+      "standardized_at": "2026-09-11T12:46:03.083529+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 17353,
-        "output_tokens": 7360,
-        "total_tokens": 24713,
-        "cost_usd": 0.019058
+        "input_tokens": 18113,
+        "output_tokens": 7435,
+        "total_tokens": 25548,
+        "cost_usd": 0.019398
       },
       "_adobe_lob": {
         "gross_premium_mix": [
@@ -557,12 +523,12 @@
       }
     }
   },
-  "total_cost_usd": 0.024582,
-  "total_tokens": 40934,
+  "total_cost_usd": 0.024678,
+  "total_tokens": 42568,
   "validation": {
     "passed": true,
-    "total_discrepancies": 14,
-    "within_tolerance": 14,
+    "total_discrepancies": 8,
+    "within_tolerance": 8,
     "hard_failures": 0,
     "hard_failure_details": []
   }

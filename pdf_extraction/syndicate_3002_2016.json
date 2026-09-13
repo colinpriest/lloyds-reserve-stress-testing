@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-05T20:10:50.770557+00:00",
+  "extraction_timestamp": "2026-09-13T04:00:17.235862+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -26,28 +28,31 @@
       "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "The syndicate experienced a favourable run-off deviation of GBP 1.5 million in 2016, indicating a release of prior year reserves. This represents a 10.48% release relative to the opening gross claims outstanding.",
+      "standardized_narrative": "The syndicate experienced a favourable prior year development of GBP 1.5m, representing a release of reserves. This release was attributed to a favourable run-off deviation from prior accident years. The syndicate operates in a single business segment of long-term insurance, specifically term life insurance, which falls under the Accident & Health line of business.",
       "raw_causal_phrases": [
-        "favourable run off deviation"
+        "A favourable run off deviation (prior accident year release)"
       ],
-      "lob_movements": [],
+      "lob_movements": [
+        {
+          "line_of_business": "Accident & Health",
+          "direction": "release",
+          "amount_gbp_m": -1.5,
+          "percentage": -10.485,
+          "confidence": 0.8
+        }
+      ],
       "gross_premiums_written_gbp_m": 19.381,
       "gross_premium_mix": [
         {
-          "line_of_business": "Individual premiums",
-          "amount_gbp_m": 0.649,
-          "percentage_of_total": 3.35
-        },
-        {
-          "line_of_business": "Premiums under group contracts",
-          "amount_gbp_m": 18.732,
-          "percentage_of_total": 96.65
+          "line_of_business": "Long term business",
+          "amount_gbp_m": 19.381,
+          "percentage_of_total": 100.0
         }
       ],
       "gross_premium_page": 14,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": " [RAG OVERRIDE: Model said PYD=-1.5, RAG triangle computed -0.802. Using RAG value.]",
+      "data_quality_notes": "Prior year development figure taken from explicit statement in 'Movement in prior year's provision for claims outstanding' note, which differs from calculation based on claims development triangle. The gross premium mix is based on the single business segment of 'long-term insurance business' as stated in the segmental analysis note. [RAG OVERRIDE: Model said PYD=-1.5, RAG triangle computed -0.802. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -114,20 +119,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_3002_2016_llm.pdf",
-      "content_hash": "a76955b4b8ca77ff3b33651ca11e1a697930762d520374904c872408f8f6f8e6",
-      "standardized_at": "2026-07-05T14:26:54.841632+00:00",
+      "content_hash": "6f7e7b9f00aab24e87d372a3e14db7b09d417c5968974b8b0f384f94d1e473ac",
+      "standardized_at": "2026-09-11T12:25:35.867617+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 10637,
-        "output_tokens": 879,
-        "total_tokens": 14945,
-        "cost_usd": 0.005389
+        "input_tokens": 11441,
+        "output_tokens": 980,
+        "total_tokens": 15538,
+        "cost_usd": 0.005882
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -0.802,
+        "model_value": -1.5,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 35,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -185,6 +202,14 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "12 months",
+          "24 months",
+          "36 months",
+          "48 months",
+          "60 months",
+          "72 months"
         ],
         "source_page": 35,
         "entity": 3002
@@ -287,24 +312,159 @@
       "specific_events": [],
       "specific_years_affected": [],
       "prior_year_events": [],
-      "named_events": [],
-      "standardized_narrative": "At 1 January 2016 the syndicate had gross claims outstanding of GBP 14.306m. During 2016 the syndicate experienced a favourable prior-accident-year run-off (a release) of GBP 1.5m (approximately 10.5% of opening gross claims outstanding), driven by favourable claims development. No specific prior-year named catastrophe events or LOB-specific reserve movements are described in the prior-year movement note.",
+      "named_events": [
+        {
+          "event_name": "Two consecutive Atlantic seaboard windstorms",
+          "event_year": null,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "Listed as a monitored scenario by the syndicate",
+          "lobs_affected": [
+            "Property"
+          ],
+          "page": 20,
+          "confidence": 0.5
+        },
+        {
+          "event_name": "Florida windstorm",
+          "event_year": null,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "Listed as a monitored scenario by the syndicate",
+          "lobs_affected": [
+            "Property"
+          ],
+          "page": 20,
+          "confidence": 0.5
+        },
+        {
+          "event_name": "Gulf of Mexico windstorm",
+          "event_year": null,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "Listed as a monitored scenario by the syndicate",
+          "lobs_affected": [
+            "Property"
+          ],
+          "page": 20,
+          "confidence": 0.5
+        },
+        {
+          "event_name": "European windstorm",
+          "event_year": null,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "Listed as a monitored scenario by the syndicate",
+          "lobs_affected": [
+            "Property"
+          ],
+          "page": 20,
+          "confidence": 0.5
+        },
+        {
+          "event_name": "Japanese windstorm",
+          "event_year": null,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "Listed as a monitored scenario by the syndicate",
+          "lobs_affected": [
+            "Property"
+          ],
+          "page": 20,
+          "confidence": 0.5
+        },
+        {
+          "event_name": "California earthquake",
+          "event_year": null,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "Listed as a monitored scenario by the syndicate",
+          "lobs_affected": [
+            "Property"
+          ],
+          "page": 20,
+          "confidence": 0.5
+        },
+        {
+          "event_name": "New Madrid earthquake",
+          "event_year": null,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "Listed as a monitored scenario by the syndicate",
+          "lobs_affected": [
+            "Property"
+          ],
+          "page": 20,
+          "confidence": 0.5
+        },
+        {
+          "event_name": "Japanese earthquake",
+          "event_year": null,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "Listed as a monitored scenario by the syndicate",
+          "lobs_affected": [
+            "Property"
+          ],
+          "page": 20,
+          "confidence": 0.5
+        },
+        {
+          "event_name": "UK flood",
+          "event_year": null,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "Listed as a monitored scenario by the syndicate",
+          "lobs_affected": [
+            "Property"
+          ],
+          "page": 20,
+          "confidence": 0.5
+        },
+        {
+          "event_name": "Terrorism",
+          "event_year": null,
+          "event_type": "man_made",
+          "net_loss_gbp_m": null,
+          "loss_description": "Listed as a monitored scenario by the syndicate",
+          "lobs_affected": [
+            "Casualty",
+            "Property"
+          ],
+          "page": 20,
+          "confidence": 0.5
+        }
+      ],
+      "standardized_narrative": "The syndicate reported a prior-accident-year release of GBP 1.5m in 2016 (a favourable run-off deviation). Opening gross claims outstanding at 1 January 2016 were GBP 14.306m, so the release equates to roughly a 10.5% reduction in prior-year reserves. The movement is described as a favourable run-off (release) and no specific prior-year event or large loss is singled out as driving the movement.",
       "raw_causal_phrases": [
         "A favourable run off deviation (prior accident year release) of GBP 1.5m (2015: GBP 2.4m favourable deviation) was experienced during the year."
       ],
-      "lob_movements": [],
+      "lob_movements": [
+        {
+          "line_of_business": "Accident & Health",
+          "direction": "release",
+          "amount_gbp_m": -1.5,
+          "percentage": null,
+          "confidence": 0.5
+        }
+      ],
       "gross_premiums_written_gbp_m": 19.381,
       "gross_premium_mix": [
         {
-          "line_of_business": "long-term insurance business",
-          "amount_gbp_m": 19.381,
-          "percentage_of_total": 100.0
+          "line_of_business": "Individual premiums",
+          "amount_gbp_m": 0.649,
+          "percentage_of_total": 3.35
+        },
+        {
+          "line_of_business": "Premiums under group contracts",
+          "amount_gbp_m": 18.732,
+          "percentage_of_total": 96.65
         }
       ],
       "gross_premium_page": 28,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Opening gross claims outstanding taken from Note 9 (Insurance liabilities) 'Claims outstanding' at 1 January 2016. Prior year movement taken from Note 5 narrative which explicitly states a GBP 1.5m prior-accident-year release; the note is presented as the movement in prior year's provision and is treated as a gross figure. No LOB-specific prior-year gross movements were provided. Segmental analysis shows the syndicate operates in a single 'long-term insurance business' segment, so premium mix is reported accordingly. [RAG OVERRIDE: Model said PYD=-1.5, RAG triangle computed -0.802. Using RAG value.]",
+      "data_quality_notes": "Opening gross claims outstanding taken from Note 9 'Gross Technical Provisions' (As at 1 January 2016: Claims outstanding GBP 14,306k). Prior-year development sourced from Note 5 which states a 'favourable run off deviation (prior accident year release) of GBP 1.5m' (assumed to be a gross figure as presented in the 'Movement in prior year's provision for claims outstanding' note). The claims development triangle exists (gross, in GBP 000s) on page 32 and was reviewed; an RITC into the 2015 year (RITC premium GBP 527k) is disclosed elsewhere and may distort development patterns. All amounts converted from GBP '000 to millions for this output. [RAG OVERRIDE: Model said PYD=-1.5, RAG triangle computed -0.802. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -328,39 +488,39 @@
             9168
           ],
           [
+            4614,
             4132,
             5729,
             5461,
             14159,
-            null,
             null
           ],
           [
+            4249,
             4487,
             4978,
             4876,
             null,
-            null,
             null
           ],
           [
+            3934,
             4144,
             4769,
             null,
             null,
-            null,
             null
           ],
           [
+            3927,
             4136,
             null,
             null,
             null,
-            null,
             null
           ],
           [
-            null,
+            3927,
             null,
             null,
             null,
@@ -371,20 +531,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_3002_2016_llm.pdf",
-      "content_hash": "a76955b4b8ca77ff3b33651ca11e1a697930762d520374904c872408f8f6f8e6",
-      "standardized_at": "2026-07-05T14:27:50.696683+00:00",
+      "content_hash": "6f7e7b9f00aab24e87d372a3e14db7b09d417c5968974b8b0f384f94d1e473ac",
+      "standardized_at": "2026-09-11T12:26:57.157033+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 22413,
-        "output_tokens": 5132,
-        "total_tokens": 27545,
-        "cost_usd": 0.015867
+        "input_tokens": 23173,
+        "output_tokens": 5427,
+        "total_tokens": 28600,
+        "cost_usd": 0.016647
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -0.802,
+        "model_value": -1.5,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 35,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -442,6 +614,14 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "12 months",
+          "24 months",
+          "36 months",
+          "48 months",
+          "60 months",
+          "72 months"
         ],
         "source_page": 35,
         "entity": 3002
@@ -527,12 +707,12 @@
       }
     }
   },
-  "total_cost_usd": 0.021256,
-  "total_tokens": 42490,
+  "total_cost_usd": 0.022529,
+  "total_tokens": 44138,
   "validation": {
     "passed": true,
-    "total_discrepancies": 10,
-    "within_tolerance": 10,
+    "total_discrepancies": 13,
+    "within_tolerance": 13,
     "hard_failures": 0,
     "hard_failure_details": []
   }

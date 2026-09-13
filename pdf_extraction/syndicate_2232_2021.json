@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T10:33:19.632900+00:00",
+  "extraction_timestamp": "2026-09-13T04:11:54.878135+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -16,10 +18,11 @@
       "prior_year_development_gbp_m": 7.572,
       "prior_year_development_pct": 1.88,
       "direction": "strengthening",
-      "prior_year_movement_page": 16,
+      "prior_year_movement_page": 3,
       "prior_year_movement_confidence": 0.8,
-      "exact_reserve_text": "The result for the year included net prior year reserve releases of GBP 2.1m (2020: reserve release of GBP 4.8m) and benefited the combined ratio by 1.5% (2020: benefit of 3.9%).",
+      "exact_reserve_text": "The result for the year included net prior year reserve releases of GBP 2.1m (2020: reserve release of GBP 4.8m) and benefited the combined ratio by 1.5% (2020: benefit of 3.9%). The treaty reinsurance classes of business contributed most of the prior year reserve releases.",
       "primary_causes": [
+        "Adverse claims development",
         "Other"
       ],
       "specific_events": [],
@@ -33,19 +36,12 @@
       ],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "The syndicate experienced a gross prior year reserve strengthening of GBP 7.572 million, calculated from the claims development triangle, representing 1.88% of opening gross reserves. This contrasts with a reported net prior year reserve release of GBP 2.1 million, primarily driven by treaty reinsurance classes of business. The gross movement reflects mixed development across underwriting years 2014-2019.",
+      "standardized_narrative": "The syndicate experienced a gross prior year reserve strengthening of GBP 7.572m, representing 1.88% of opening gross reserves. This gross strengthening is derived from the claims development triangle. The report's narrative, however, states net prior year reserve releases of GBP 2.1m, primarily attributed to treaty reinsurance classes, indicating a discrepancy between gross and net movements.",
       "raw_causal_phrases": [
+        "net prior year reserve releases of GBP 2.1m",
         "The treaty reinsurance classes of business contributed most of the prior year reserve releases."
       ],
-      "lob_movements": [
-        {
-          "line_of_business": "Treaty",
-          "direction": "release",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.5
-        }
-      ],
+      "lob_movements": [],
       "gross_premiums_written_gbp_m": 252.3,
       "gross_premium_mix": [
         {
@@ -82,7 +78,7 @@
       "gross_premium_page": 11,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The gross prior year development was calculated from the claims development triangle. The narrative explicitly states a net prior year reserve release of GBP 2.1m, which differs from the gross strengthening calculated.",
+      "data_quality_notes": "The gross prior year development of +GBP 7.572m (strengthening) was calculated from the 'Analysis of claims development - Gross' triangle on page 16. This contrasts with the narrative on page 3 which states 'net prior year reserve releases of GBP 2.1m'. The gross triangle calculation is used as per instructions to prioritize gross figures from detailed tables over net narrative summaries when a discrepancy exists. The exact_reserve_text reflects the net narrative as it is the only explicit sentence describing the movement.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -183,20 +179,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_2232_2021_llm.pdf",
-      "content_hash": "074ea54df6ff66c1c8c317fe0fca5f41f795776ac696f2b5e2f2ed815035f93d",
-      "standardized_at": "2026-07-05T12:21:40.684846+00:00",
+      "content_hash": "3e02dc1951ad6f14e086d364dc90026e7284c7f88c8b1923bee21c68aa24423e",
+      "standardized_at": "2026-09-11T11:48:06.832798+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 10379,
-        "output_tokens": 1527,
-        "total_tokens": 17011,
-        "cost_usd": 0.006931
+        "input_tokens": 11183,
+        "output_tokens": 1569,
+        "total_tokens": 19495,
+        "cost_usd": 0.007277
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 7.572,
+        "model_value": 7.572,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 51,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2014,
           2015,
@@ -288,6 +296,16 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "End of underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later",
+          "Seven years later"
         ],
         "source_page": 51,
         "entity": 2232
@@ -464,31 +482,38 @@
       "prior_year_movement_confidence": 0.8,
       "exact_reserve_text": "The result for the year included net prior year reserve releases of GBP 2.1m (2020: reserve release of GBP 4.8m) and benefited the combined ratio by 1.5% (2020: benefit of 3.9%). The treaty reinsurance classes of business contributed most of the prior year reserve releases.",
       "primary_causes": [
-        "Favorable claims development",
-        "Reinsurance recoveries",
         "Natural catastrophe events",
-        "Man-made catastrophe / large losses"
+        "Man-made catastrophe / large losses",
+        "Reinsurance recoveries",
+        "Favorable claims development"
       ],
       "specific_events": [],
-      "specific_years_affected": [
-        2014,
-        2015,
-        2016,
-        2017,
-        2018,
-        2019
-      ],
+      "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "The gross claims development triangle indicates a net adverse movement (strengthening) of approximately GBP 7.6m across prior underwriting years (2014-2019). However, the syndicate reports a net prior year release of GBP 2.1m after reinsurance, with treaty reinsurance recoveries contributing most of the net release. The movements reflect mixed development by vintage: adverse movements in some older years were offset by favourable development and reinsurance recoveries, and the Managing Agent cites lower frequency/severity of catastrophe and large loss events contributing favourably on a net basis.",
+      "standardized_narrative": "Using the syndicate's gross claims development table, prior-year re-estimation produced a net strengthening (adverse movement) of approximately GBP 7.57m (1.88% of opening gross claims outstanding). The Managing Agent reports a net prior year release of GBP 2.1m after reinsurance, with treaty reinsurance classes contributing most to the net release; however on a gross basis the development in older underwriting years is a small deterioration. Causes cited include lower frequency and severity of catastrophe and large loss events (supporting favourable development in some years) and the effect of reinsurance recoveries.",
       "raw_causal_phrases": [
-        "net prior year reserve releases of GBP 2.1m (2020: reserve release of GBP 4.8m) and benefited the combined ratio by 1.5% (2020: benefit of 3.9%).",
-        "lower levels of frequency and severity in catastrophe and large loss events.",
+        "The current year results have been positively impacted by lower levels of frequency and severity in catastrophe and large loss events.",
+        "The result for the year included net prior year reserve releases of GBP 2.1m (2020: reserve release of GBP 4.8m) and benefited the combined ratio by 1.5% (2020: benefit of 3.9%).",
         "The treaty reinsurance classes of business contributed most of the prior year reserve releases."
       ],
       "lob_movements": [
         {
           "line_of_business": "Treaty",
+          "direction": "release",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 1.0
+        },
+        {
+          "line_of_business": "Property",
+          "direction": "release",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.5
+        },
+        {
+          "line_of_business": "Casualty",
           "direction": "release",
           "amount_gbp_m": null,
           "percentage": null,
@@ -531,7 +556,7 @@
       "gross_premium_page": 25,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior year movement (7.572m) is calculated from the gross claims development triangle (gross cumulative estimates comparison by vintage) and therefore is gross of reinsurance (confidence 0.8). The Managing Agent narrative reports a net prior year release of GBP 2.1m (after reinsurance). The discrepancy is due to reinsurance recoveries which produced a net release. The triangle excludes the aggregated '2013 and prior' bucket per instructions. All triangle figures are presented in the notes in GBP 000 (thousands).",
+      "data_quality_notes": "Opening gross claims outstanding taken from Balance Sheet (Liabilities) claims outstanding prior-year column (2020). No explicit gross 'prior year reserve movement' figure presented; gross prior-year development computed from the gross claims development triangle (gross triangle used as primary gross source). The managing agent narrative reports a NET prior year release of GBP 2.1m (after reinsurance) which differs from the gross triangle-derived movement. All source triangle numbers were presented in GBP 000 and converted to millions. LOB-specific reserve movements are not quantified in the report; lob_movements amounts are null and based on narrative inference.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -632,20 +657,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_2232_2021_llm.pdf",
-      "content_hash": "074ea54df6ff66c1c8c317fe0fca5f41f795776ac696f2b5e2f2ed815035f93d",
-      "standardized_at": "2026-07-05T12:22:52.888392+00:00",
+      "content_hash": "3e02dc1951ad6f14e086d364dc90026e7284c7f88c8b1923bee21c68aa24423e",
+      "standardized_at": "2026-09-11T11:50:24.245767+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 19367,
-        "output_tokens": 6669,
-        "total_tokens": 26036,
-        "cost_usd": 0.01818
+        "input_tokens": 20127,
+        "output_tokens": 6870,
+        "total_tokens": 26997,
+        "cost_usd": 0.018772
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 7.572,
+        "model_value": 7.572,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 51,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2014,
           2015,
@@ -737,6 +774,16 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "End of underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later",
+          "Seven years later"
         ],
         "source_page": 51,
         "entity": 2232
@@ -901,12 +948,12 @@
       }
     }
   },
-  "total_cost_usd": 0.025111,
-  "total_tokens": 43047,
+  "total_cost_usd": 0.026049,
+  "total_tokens": 46492,
   "validation": {
     "passed": true,
-    "total_discrepancies": 13,
-    "within_tolerance": 13,
+    "total_discrepancies": 20,
+    "within_tolerance": 20,
     "hard_failures": 0,
     "hard_failure_details": []
   }

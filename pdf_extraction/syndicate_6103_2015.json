@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T12:04:46.333204+00:00",
+  "extraction_timestamp": "2026-09-13T03:57:40.382537+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -17,36 +19,56 @@
       "prior_year_development_pct": -0.7,
       "direction": "release",
       "prior_year_movement_page": 28,
-      "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "In 2015, there has been an overall surplus in ultimate claims of GBP 0.6m (2014:GBP 3.8m) due primarily to a reduction in claims estimates as uncertainty around catastrophe exposure unwinds.",
+      "prior_year_movement_confidence": 0.8,
+      "exact_reserve_text": "In 2015, there has been an overall surplus in ultimate claims of GBP 0.6m (2014:GBP 3.8m) due primarily to a reduction in claims estimates as uncertainty around catastrophe exposure unwinds. 2014 included a reduction in respect of reserves required for Superstorm Sandy.",
       "primary_causes": [
         "Favorable claims development",
-        "IBNR recalibration"
+        "Natural catastrophe events"
       ],
-      "specific_events": [],
-      "specific_years_affected": [],
+      "specific_events": [
+        "Superstorm Sandy"
+      ],
+      "specific_years_affected": [
+        2012,
+        2013,
+        2014
+      ],
       "prior_year_events": [
         {
           "event_name": "Superstorm Sandy",
           "event_year": 2012,
-          "impact_description": "reduction in respect of reserves required for Superstorm Sandy, leading to a release of reserves in 2014.",
+          "impact_description": "reduction in respect of reserves required for Superstorm Sandy",
           "lobs_affected": [
-            "Property"
+            "Reinsurance - Property"
           ],
-          "amount_gbp_m": -3.8,
-          "confidence": 1.0
+          "amount_gbp_m": null,
+          "confidence": 0.8
         }
       ],
-      "named_events": [],
-      "standardized_narrative": "For the 2015 financial year, Syndicate 6103 reported an overall surplus in ultimate claims of GBP 0.6 million, indicating a release of prior year reserves. This favorable development was primarily attributed to a reduction in claims estimates as uncertainty around catastrophe exposure unwound. No specific named events were cited as causes for the 2015 reserve movement, though Superstorm Sandy (2012) had led to a significant release in 2014.",
+      "named_events": [
+        {
+          "event_name": "Superstorm Sandy",
+          "event_year": 2012,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "reduction in respect of reserves required for Superstorm Sandy",
+          "lobs_affected": [
+            "Reinsurance - Property"
+          ],
+          "page": 28,
+          "confidence": 0.8
+        }
+      ],
+      "standardized_narrative": "The syndicate experienced a gross prior year reserve release of GBP 0.644 million, representing a 12.58% release of its opening gross reserves. This was primarily driven by favorable claims development, including a reduction in claims estimates as uncertainty around catastrophe exposure unwound. Specifically, there was a reduction in reserves for Superstorm Sandy from 2012. The syndicate's business is predominantly US property catastrophe reinsurance.",
       "raw_causal_phrases": [
-        "reduction in claims estimates as uncertainty around catastrophe exposure unwinds"
+        "reduction in claims estimates as uncertainty around catastrophe exposure unwinds",
+        "reduction in respect of reserves required for Superstorm Sandy"
       ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 4.723,
       "gross_premium_mix": [
         {
-          "line_of_business": "Reinsurance accepted",
+          "line_of_business": "Reinsurance - Property",
           "amount_gbp_m": 4.723,
           "percentage_of_total": 100.0
         }
@@ -54,23 +76,63 @@
       "gross_premium_page": 19,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The claims development triangle on page 28 is very limited, showing only three underwriting years (2013-2015). The explicit gross prior year development figure from the narrative on page 28 was used as the primary source. The report mentions 'RITC 2012 YOA commuted into Syn 2791' on page 26, which could distort claims development tables, but an explicit gross PYD figure was available. [RAG OVERRIDE: Model said PYD=-0.6, RAG triangle computed -0.036. Using RAG value.]",
+      "data_quality_notes": "The `exact_reserve_text` and `raw_causal_phrases` refer to a *net* surplus of GBP 0.6m, while the `prior_year_development_gbp_m` is derived from the gross claims development triangle, showing a gross release of GBP 0.644m. The gross figure is prioritized. Gross premium mix is inferred from the general business description as no specific segmental analysis table for the 2015 annual accounts was found. [RAG OVERRIDE: Model said PYD=-0.644, RAG triangle computed -0.036. Using RAG value.]",
+      "_claims_triangle": {
+        "type": "gross",
+        "currency": "GBP",
+        "units": "thousands",
+        "page": 28,
+        "underwriting_years": [
+          2013,
+          2014,
+          2015
+        ],
+        "development_rows": [
+          [
+            4105,
+            2318,
+            1105
+          ],
+          [
+            1594,
+            1710,
+            null
+          ],
+          [
+            1558,
+            null,
+            null
+          ]
+        ]
+      },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_6103_2015_llm.pdf",
-      "content_hash": "eb8079cf7a6f94562609a4c450fd8ab72c776176825455e7912de169901a41b9",
-      "standardized_at": "2026-07-05T19:12:06.202444+00:00",
+      "content_hash": "4088c4a11c5485d7153b2038757475b79a30212c728ffce81cea93502c58b197",
+      "standardized_at": "2026-09-11T13:28:34.737188+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 13475,
-        "output_tokens": 759,
-        "total_tokens": 18583,
-        "cost_usd": 0.00594
+        "input_tokens": 14279,
+        "output_tokens": 1081,
+        "total_tokens": 20460,
+        "cost_usd": 0.006986
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -0.036,
+        "model_value": -0.644,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 46,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2013,
           2014,
@@ -92,6 +154,11 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "12 months",
+          "24 months",
+          "36 months"
         ],
         "source_page": 46,
         "entity": 6103
@@ -220,15 +287,17 @@
       "direction": "release",
       "prior_year_movement_page": 43,
       "prior_year_movement_confidence": 0.8,
-      "exact_reserve_text": "In 2015, there has been an overall surplus in ultimate claims of GBP 0.6m (2014:GBP 3.8m) due primarily to a reduction in claims estimates as uncertainty around catastrophe exposure unwinds. 2014 included a reduction in respect of reserves required for Superstorm Sandy.",
+      "exact_reserve_text": "In 2015, there has been an overall surplus in ultimate claims of GBP 0.6m (2014:GBP 3.8m) due primarily to a reduction in claims estimates as uncertainty around catastrophe exposure unwinds. 2014 included a reduction in respect of reserves required for Superstorm Sandy. The movement in the net provisions for claims includes a release of GBP 0.3m (2014: GBP 1.7m). The large release last year was as a consequence of favourable development in Superstorm Sandy claims. RITC 2012 YOA commuted into Syn 2791 (4,250).",
       "primary_causes": [
         "Favorable claims development",
-        "Natural catastrophe events"
+        "Natural catastrophe events",
+        "Reinsurance recoveries"
       ],
       "specific_events": [
         "Superstorm Sandy"
       ],
       "specific_years_affected": [
+        2013,
         2014,
         2012
       ],
@@ -236,7 +305,7 @@
         {
           "event_name": "Superstorm Sandy",
           "event_year": 2012,
-          "impact_description": "Reduction in reserves required related to Superstorm Sandy, contributing to favourable development in prior years.",
+          "impact_description": "Favourable development reduced reserves (noted as contributing to releases in 2014/2015).",
           "lobs_affected": [
             "Reinsurance - Property"
           ],
@@ -244,11 +313,11 @@
           "confidence": 0.8
         },
         {
-          "event_name": "RITC 2012 YOA commutation into Syndicate 2791",
+          "event_name": "Commutation of 2012 year of account into Syndicate 2791",
           "event_year": 2015,
-          "impact_description": "Large reduction in gross claims outstanding due to the commutation of the 2012 year of account into Syndicate 2791.",
+          "impact_description": "Commutation removed the 2012 year liabilities from the syndicate, reducing gross claims outstanding by GBP 4.25m.",
           "lobs_affected": [
-            "Reinsurance - Property"
+            "Treaty"
           ],
           "amount_gbp_m": -4.25,
           "confidence": 1.0
@@ -260,7 +329,7 @@
           "event_year": 2012,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "Reduction in respect of reserves required for Superstorm Sandy (not separately quantified).",
+          "loss_description": "Referenced as having led to favourable development and a reduction in reserves required.",
           "lobs_affected": [
             "Reinsurance - Property"
           ],
@@ -268,26 +337,34 @@
           "confidence": 0.8
         }
       ],
-      "standardized_narrative": "At 1 January 2015 gross claims outstanding were GBP 5.119m. During 2015 the syndicate recorded an overall favourable development (a release) in prior years' ultimate claims of GBP 0.6m, driven primarily by reductions in claims estimates as uncertainty around catastrophe exposure unwound, including a reduction relating to Superstorm Sandy. The 2012 year was also materially affected by a commutation (RITC) into Syndicate 2791 which reduced gross claims outstanding by c.GBP 4.25m.",
+      "standardized_narrative": "Opening gross claims outstanding at 1 January 2015 were GBP 5.119m. During 2015 gross claims outstanding fell to GBP 0.953m largely as a result of the commutation of the 2012 year of account into Syndicate 2791 (a GBP 4.25m gross reduction) and some favourable development on prior years. Using the gross claims development triangle (excluding the two most recent underwriting years) there is a small gross prior-year release of approximately GBP 0.036m (c.-0.7% of opening gross claims). The report attributes releases to favourable claims development as uncertainty around catastrophe exposure unwinds, notably referencing Superstorm Sandy, and notes the material impact of the 2012 YOA commutation.",
       "raw_causal_phrases": [
-        "overall surplus in ultimate claims of GBP 0.6m (2014:GBP 3.8m)",
-        "due primarily to a reduction in claims estimates as uncertainty around catastrophe exposure unwinds",
-        "2014 included a reduction in respect of reserves required for Superstorm Sandy",
-        "The movement in the net provisions for claims includes a release of GBP 0.3m (2014: GBP 1.7m)."
+        "In 2015, there has been an overall surplus in ultimate claims of GBP 0.6m (2014:GBP 3.8m) due primarily to a reduction in claims estimates as uncertainty around catastrophe exposure unwinds.",
+        "2014 included a reduction in respect of reserves required for Superstorm Sandy.",
+        "The movement in the net provisions for claims includes a release of GBP 0.3m (2014: GBP 1.7m).",
+        "The large release last year was as a consequence of favourable development in Superstorm Sandy claims.",
+        "RITC 2012 YOA commuted into Syn 2791 (4,250)"
       ],
       "lob_movements": [
         {
           "line_of_business": "Reinsurance - Property",
           "direction": "release",
-          "amount_gbp_m": -0.6,
+          "amount_gbp_m": -4.25,
           "percentage": null,
+          "confidence": 1.0
+        },
+        {
+          "line_of_business": "Reinsurance - Property",
+          "direction": "release",
+          "amount_gbp_m": -0.036,
+          "percentage": -0.703,
           "confidence": 0.8
         }
       ],
       "gross_premiums_written_gbp_m": 4.723,
       "gross_premium_mix": [
         {
-          "line_of_business": "Property reinsurance",
+          "line_of_business": "Reinsurance accepted",
           "amount_gbp_m": 4.723,
           "percentage_of_total": 100.0
         }
@@ -295,7 +372,7 @@
       "gross_premium_page": 30,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior year development figure derived from narrative statement and claims development commentary (explicit 'overall surplus in ultimate claims of GBP 0.6m') rather than a labelled 'movement in prior year provision' gross column. Large RITC commutation (2012 YOA) materially reduced gross claims outstanding (explicit GBP 4.25k in note) which distorts simple reserve movement interpretation. Gross premium mix is sparse - only 'Property reinsurance' is explicitly reported as the syndicate's class; therefore a single-class mix is provided. [RAG OVERRIDE: Model said PYD=-0.6, RAG triangle computed -0.036. Using RAG value.]",
+      "data_quality_notes": "Prior year development (PYD) was calculated from the gross claims development triangle. The triangle is affected by a large RITC commutation (2012 YOA) which materially reduces gross outstanding claims; this commutation is a structural transaction rather than reserve re-estimation. Some narrative figures in the report are quoted net of reinsurance; where possible gross figures were used. The PYD figure (-GBP 0.036m) is small and derived from the 2013 column only after excluding the two most recent underwriting years per the instructions.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -326,20 +403,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_6103_2015_llm.pdf",
-      "content_hash": "eb8079cf7a6f94562609a4c450fd8ab72c776176825455e7912de169901a41b9",
-      "standardized_at": "2026-07-05T19:12:54.021129+00:00",
+      "content_hash": "4088c4a11c5485d7153b2038757475b79a30212c728ffce81cea93502c58b197",
+      "standardized_at": "2026-09-11T13:30:58.696997+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 27946,
-        "output_tokens": 5181,
-        "total_tokens": 33127,
-        "cost_usd": 0.017348
+        "input_tokens": 28706,
+        "output_tokens": 7661,
+        "total_tokens": 36367,
+        "cost_usd": 0.022499
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -0.036,
+        "model_value": -0.036,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 46,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2013,
           2014,
@@ -361,6 +450,11 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "12 months",
+          "24 months",
+          "36 months"
         ],
         "source_page": 46,
         "entity": 6103
@@ -479,12 +573,12 @@
       }
     }
   },
-  "total_cost_usd": 0.023288,
-  "total_tokens": 51710,
+  "total_cost_usd": 0.029485,
+  "total_tokens": 56827,
   "validation": {
     "passed": true,
-    "total_discrepancies": 22,
-    "within_tolerance": 22,
+    "total_discrepancies": 19,
+    "within_tolerance": 19,
     "hard_failures": 0,
     "hard_failure_details": []
   }

@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-05T19:23:52.443430+00:00",
+  "extraction_timestamp": "2026-09-13T04:13:00.037109+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -10,14 +12,14 @@
     "gemini-2.5-flash": {
       "syndicate": 1218,
       "year": 2015,
-      "opening_reserves_gbp_m": 125.249,
-      "opening_reserves_page": 14,
+      "opening_reserves_gbp_m": 474.944,
+      "opening_reserves_page": 4,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": -0.46,
-      "prior_year_development_pct": -0.37,
+      "prior_year_development_pct": -0.1,
       "direction": "release",
-      "prior_year_movement_page": 23,
-      "prior_year_movement_confidence": 0.8,
+      "prior_year_movement_page": 8,
+      "prior_year_movement_confidence": 1.0,
       "exact_reserve_text": "The movement in prior year's provision for claims outstanding, net of reinsurance recoveries is a favourable development of GBP 16.6m (2014: favourable development of GBP 10.9m); this comprises releases of GBP 16.0m in respect of direct Third Party Liability business, releases of GBP 0.3m in respect of direct Aviation business, GBP 0.2m in respect of total Reinsurance business and Other direct business releases of GBP 0.1m.",
       "primary_causes": [
         "Favorable claims development"
@@ -26,22 +28,43 @@
       "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "The syndicate experienced a net favourable prior year development of GBP 16.6m in 2015, which was described as a release. This favourable development was primarily driven by releases in direct Third Party Liability business (GBP 16.0m), direct Aviation business (GBP 0.3m), total Reinsurance business (GBP 0.2m), and Other direct business (GBP 0.1m). The report notes that the combined ratio reflects prior year releases across a number of Casualty classes.",
+      "standardized_narrative": "The syndicate experienced a favorable prior year reserve development of GBP 16.6 million in 2015, which was net of reinsurance recoveries. This release was primarily driven by favorable development in direct Third Party Liability, Aviation, Reinsurance, and Other direct business.",
       "raw_causal_phrases": [
         "favourable development of GBP 16.6m",
-        "prior year releases across a number of Casualty classes",
-        "releases of GBP 16.0m in respect of direct Third Party Liability business",
+        "comprises releases of GBP 16.0m in respect of direct Third Party Liability business",
         "releases of GBP 0.3m in respect of direct Aviation business",
-        "releases of GBP 0.2m in respect of total Reinsurance business",
+        "GBP 0.2m in respect of total Reinsurance business",
         "Other direct business releases of GBP 0.1m"
       ],
-      "lob_movements": [],
+      "lob_movements": [
+        {
+          "line_of_business": "Casualty",
+          "direction": "release",
+          "amount_gbp_m": -16.0,
+          "percentage": null,
+          "confidence": 1.0
+        },
+        {
+          "line_of_business": "Aviation",
+          "direction": "release",
+          "amount_gbp_m": -0.3,
+          "percentage": null,
+          "confidence": 1.0
+        },
+        {
+          "line_of_business": "Treaty",
+          "direction": "release",
+          "amount_gbp_m": -0.2,
+          "percentage": null,
+          "confidence": 1.0
+        }
+      ],
       "gross_premiums_written_gbp_m": 95.784,
       "gross_premium_mix": [
         {
           "line_of_business": "Third party liability",
           "amount_gbp_m": 85.129,
-          "percentage_of_total": 88.88
+          "percentage_of_total": 88.87
         },
         {
           "line_of_business": "Aviation",
@@ -64,15 +87,15 @@
           "percentage_of_total": 7.58
         }
       ],
-      "gross_premium_page": 22,
+      "gross_premium_page": 7,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior year development is only explicitly stated as a net figure of GBP 16.6m. Gross prior year development and gross LOB movements could not be extracted as they were not provided in the report.",
+      "data_quality_notes": "Prior year development figure is net of reinsurance recoveries as explicitly stated in the report, as no gross figure was available. LOB movements are also assumed to be net. 'Other direct business' release of GBP 0.1m could not be mapped to a specific standard Lloyd's LOB and is therefore omitted from lob_movements. [RAG OVERRIDE: Model said PYD=-16.6, RAG triangle computed -0.46. Using RAG value.]",
       "_claims_triangle": {
         "type": "net",
         "currency": "GBP",
         "units": "thousands",
-        "page": 35,
+        "page": 16,
         "underwriting_years": [
           2011,
           2012,
@@ -119,21 +142,33 @@
         ]
       },
       "source_type": "syndicate",
-      "source_file": "syndicate_reports\\pdfs\\syndicate_1218_2015.pdf",
-      "content_hash": "15ba23433fb8aeca128540d368997ecb6d4f9186973abe32b3399392a04ed44c",
-      "standardized_at": "2026-03-16T11:16:36.608740+00:00",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_1218_2015_llm.pdf",
+      "content_hash": "d3e7fd2303fa66866725e740d86de2867c08c1d01edc5c3db769d45b38d8151e",
+      "standardized_at": "2026-09-11T10:30:12.502245+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 15688,
-        "output_tokens": 1203,
-        "total_tokens": 19326,
-        "cost_usd": 0.007714
+        "input_tokens": 10925,
+        "output_tokens": 1356,
+        "total_tokens": 16862,
+        "cost_usd": 0.006667
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -0.46,
+        "model_value": -16.6,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 35,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -177,6 +212,13 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of underwriting year",
+          "1 year later",
+          "2 years later",
+          "3 years later",
+          "4 years later"
         ],
         "source_page": 35,
         "entity": 1218
@@ -244,8 +286,8 @@
       "prior_year_development_gbp_m": -0.46,
       "prior_year_development_pct": -0.1,
       "direction": "release",
-      "prior_year_movement_page": 22,
-      "prior_year_movement_confidence": 1.0,
+      "prior_year_movement_page": 21,
+      "prior_year_movement_confidence": 0.5,
       "exact_reserve_text": "The movement in prior year's provision for claims outstanding, net of reinsurance recoveries is a favourable development of GBP 16.6m (2014: favourable development of GBP 10.9m); this comprises releases of GBP 16.0m in respect of direct Third Party Liability business, releases of GBP 0.3m in respect of direct Aviation business, GBP 0.2m in respect of total Reinsurance business and Other direct business releases of GBP 0.1m.",
       "primary_causes": [
         "Favorable claims development"
@@ -254,14 +296,14 @@
       "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "The syndicate reports a favourable prior year development (net of reinsurance) of GBP 16.6m in respect of claims outstanding for prior years, driven principally by releases in Third Party Liability and smaller releases in Aviation, Reinsurance acceptances and other direct business. The report provides only net (after reinsurance) prior year movement numbers; a gross prior year movement is not stated in the notes and the gross claims development triangle is not provided, so a gross PYD figure cannot be reliably determined from the disclosure.",
+      "standardized_narrative": "The syndicate reports a net favourable prior-year development of GBP 16.6m (net of reinsurance), driven predominantly by releases in Third Party Liability (GBP 16.0m), with minor releases in Aviation (GBP 0.3m), Reinsurance acceptances (GBP 0.2m) and Other direct business (GBP 0.1m). No gross prior-year movement figure is provided in the movement note, so the reported GBP 16.6m is net of reinsurance recoveries.",
       "raw_causal_phrases": [
-        "favourable development of GBP 16.6m (2014: favourable development of GBP 10.9m)",
-        "releases of GBP 16.0m in respect of direct Third Party Liability business",
+        "net of reinsurance recoveries is a favourable development of GBP 16.6m (2014: favourable development of GBP 10.9m)",
+        "this comprises releases of GBP 16.0m in respect of direct Third Party Liability business",
         "releases of GBP 0.3m in respect of direct Aviation business",
         "GBP 0.2m in respect of total Reinsurance business",
         "Other direct business releases of GBP 0.1m",
-        "net of reinsurance recoveries"
+        "prior year releases across a number of Casualty classes"
       ],
       "lob_movements": [
         {
@@ -286,11 +328,11 @@
           "confidence": 1.0
         },
         {
-          "line_of_business": "Professional Lines",
+          "line_of_business": "Aggregate",
           "direction": "release",
           "amount_gbp_m": -0.1,
           "percentage": null,
-          "confidence": 0.5
+          "confidence": 0.6
         }
       ],
       "gross_premiums_written_gbp_m": 95.784,
@@ -298,33 +340,33 @@
         {
           "line_of_business": "Third party liability",
           "amount_gbp_m": 85.129,
-          "percentage_of_total": 88.88999999999999
+          "percentage_of_total": 88.9
         },
         {
           "line_of_business": "Aviation",
           "amount_gbp_m": 0.91,
-          "percentage_of_total": 0.9499999999999998
+          "percentage_of_total": 0.9
         },
         {
           "line_of_business": "Energy-non marine",
           "amount_gbp_m": 0.118,
-          "percentage_of_total": 0.12318763679407228
+          "percentage_of_total": 0.1
         },
         {
           "line_of_business": "Other direct",
           "amount_gbp_m": 2.369,
-          "percentage_of_total": 2.4718508220216826
+          "percentage_of_total": 2.5
         },
         {
           "line_of_business": "Reinsurance acceptances",
           "amount_gbp_m": 7.258,
-          "percentage_of_total": 7.565
+          "percentage_of_total": 7.6
         }
       ],
       "gross_premium_page": 20,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The report provides the prior year movement only on a net (after reinsurance) basis (GBP 16.6m favourable). A gross prior year development figure is not stated. The claims development triangle included in the report is explicitly labelled 'net' (net undiscounted ultimates). Therefore a reliable GROSS prior year development amount cannot be computed from the available disclosures; prior_year_development_gbp_m is returned as null.",
+      "data_quality_notes": "No gross prior-year movement (gross 'Insurance liabilities' column) is provided in the 'Movement in prior year's provision for claims outstanding' note; the note reports only a net (after reinsurance) favourable development of GBP 16.6m, which has been used as a fallback. A gross claims development triangle is not available (the development table provided is explicitly 'net undiscounted ultimate claims'), so a gross PYD figure could not be determined. Prior-year development amounts in lob_movements are the line-level releases reported in the note and are net amounts. [RAG OVERRIDE: Model said PYD=-16.6, RAG triangle computed -0.46. Using RAG value.]",
       "_claims_triangle": {
         "type": "net",
         "currency": "GBP",
@@ -376,21 +418,33 @@
         ]
       },
       "source_type": "syndicate",
-      "source_file": "syndicate_reports\\pdfs\\syndicate_1218_2015.pdf",
-      "content_hash": "15ba23433fb8aeca128540d368997ecb6d4f9186973abe32b3399392a04ed44c",
-      "standardized_at": "2026-03-16T11:18:41.885047+00:00",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_1218_2015_llm.pdf",
+      "content_hash": "d3e7fd2303fa66866725e740d86de2867c08c1d01edc5c3db769d45b38d8151e",
+      "standardized_at": "2026-09-11T10:32:44.119584+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 52132,
-        "output_tokens": 4551,
-        "total_tokens": 56683,
-        "cost_usd": 0.022135
+        "input_tokens": 27774,
+        "output_tokens": 4526,
+        "total_tokens": 32300,
+        "cost_usd": 0.015995
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -0.46,
+        "model_value": -16.6,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 35,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -434,6 +488,13 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of underwriting year",
+          "1 year later",
+          "2 years later",
+          "3 years later",
+          "4 years later"
         ],
         "source_page": 35,
         "entity": 1218
@@ -493,26 +554,13 @@
       }
     }
   },
-  "total_cost_usd": 0.029849,
-  "total_tokens": 76009,
+  "total_cost_usd": 0.022662,
+  "total_tokens": 49162,
   "validation": {
-    "passed": false,
-    "total_discrepancies": 23,
-    "within_tolerance": 21,
-    "hard_failures": 2,
-    "hard_failure_details": [
-      {
-        "field": "opening_reserves_gbp_m",
-        "type": "value_mismatch",
-        "gemini-2.5-flash": 125.249,
-        "gpt-5-mini": 474.944
-      },
-      {
-        "field": "prior_year_development_pct",
-        "type": "value_mismatch",
-        "gemini-2.5-flash": -0.37,
-        "gpt-5-mini": -0.1
-      }
-    ]
+    "passed": true,
+    "total_discrepancies": 17,
+    "within_tolerance": 17,
+    "hard_failures": 0,
+    "hard_failure_details": []
   }
 }

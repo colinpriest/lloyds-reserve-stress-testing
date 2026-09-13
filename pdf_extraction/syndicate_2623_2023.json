@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T10:47:32.301398+00:00",
+  "extraction_timestamp": "2026-09-13T04:19:56.978372+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -16,24 +18,60 @@
       "prior_year_development_gbp_m": -472.2,
       "prior_year_development_pct": -8.03,
       "direction": "release",
-      "prior_year_movement_page": 5,
+      "prior_year_movement_page": 1,
       "prior_year_movement_confidence": 0.8,
-      "exact_reserve_text": "As a result of these changes, $64.7m of reserves were released in the period (on a net of reinsurance basis).",
+      "exact_reserve_text": "During 2023 the syndicate released prior year reserves of $267.9m (2022: $42.6m). The syndicate experienced a large net release on the MAP Risks, Property Risks, Specialty Risks and Digital divisions, offset by a strengthening on the Cyber Risks division. Net releases are shown by division in the table below:",
       "primary_causes": [
-        "Reserve methodology change",
-        "IBNR recalibration"
+        "Favorable claims development",
+        "Adverse claims development"
       ],
       "specific_events": [],
       "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "The syndicate reported a net release of $64.7 million in reserves for prior periods in 2023. This favorable development was primarily driven by a refinement in the managing agent's methodology for estimating claims reserves, which included revisions to the actuarial methodology for determining the risk margin and updates to the calculation of future claims handling expenses. The 2022 underwriting year, despite experiencing more natural catastrophes, is projected to close with a positive return on capacity, indicating favorable development for that prior year.",
+      "standardized_narrative": "In 2023, Syndicate 2623 reported a net release of $267.9m from prior year reserves, which represents a 4.56% reduction relative to the opening gross claims outstanding. This favorable development was primarily driven by releases across MAP Risks, Property Risks, Specialty Risks, and Digital divisions. However, these releases were partially offset by a strengthening in the Cyber Risks division. The report also notes that the 2023 underwriting year has experienced relatively few natural catastrophes.",
       "raw_causal_phrases": [
-        "refined its methodology for estimating claims reserves",
-        "revising the actuarial methodology behind determining the risk margin",
-        "updating the calculation methodology behind the provision for future claims handling expenses"
+        "large net release on the MAP Risks, Property Risks, Specialty Risks and Digital divisions",
+        "offset by a strengthening on the Cyber Risks division",
+        "relatively few natural catastrophes"
       ],
-      "lob_movements": [],
+      "lob_movements": [
+        {
+          "line_of_business": "Cyber",
+          "direction": "strengthening",
+          "amount_gbp_m": 25.9,
+          "percentage": null,
+          "confidence": 1.0
+        },
+        {
+          "line_of_business": "Other",
+          "direction": "release",
+          "amount_gbp_m": -36.6,
+          "percentage": null,
+          "confidence": 0.8
+        },
+        {
+          "line_of_business": "Aggregate",
+          "direction": "release",
+          "amount_gbp_m": -103.1,
+          "percentage": null,
+          "confidence": 0.8
+        },
+        {
+          "line_of_business": "Property",
+          "direction": "release",
+          "amount_gbp_m": -37.0,
+          "percentage": null,
+          "confidence": 1.0
+        },
+        {
+          "line_of_business": "Other",
+          "direction": "release",
+          "amount_gbp_m": -117.1,
+          "percentage": null,
+          "confidence": 0.8
+        }
+      ],
       "gross_premiums_written_gbp_m": 4497.5,
       "gross_premium_mix": [
         {
@@ -75,32 +113,14 @@
       "gross_premium_page": 10,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "Prior year development is reported as a net release of $64.7m due to a change in estimate. A gross figure for prior year development was not explicitly quantified in the report. [RAG OVERRIDE: Model said PYD=-64.7, RAG triangle computed -472.2. Using RAG value.]",
+      "data_quality_notes": "Prior year development figure is NET of reinsurance as no gross figure was explicitly available. LOB movements for 'Digital', 'MAP Risks', and 'Specialty Risks' are mapped to 'Other' or 'Aggregate' as they are internal divisions not directly matching standard Lloyd's LOBs. [RAG OVERRIDE: Model said PYD=-267.9, RAG triangle computed -472.2. Using RAG value.]",
       "_claims_triangle": {
-        "type": "none",
-        "currency": null,
-        "units": null,
-        "page": null,
-        "underwriting_years": [],
-        "development_rows": []
-      },
-      "source_type": "syndicate",
-      "source_file": "pdf_extraction\\llm_slim\\syndicate_2623_2023_llm.pdf",
-      "content_hash": "51a8ebdd46ca2f43b9e6e17382b74a5156db63548e2f8989392d75a5dfdc44a5",
-      "standardized_at": "2026-03-18T05:31:41.808080+00:00",
-      "standardization_model": "gemini-2.5-flash",
-      "_extraction_meta": {
-        "model": "gemini-2.5-flash",
-        "input_tokens": 8831,
-        "output_tokens": 825,
-        "total_tokens": 12954,
-        "cost_usd": 0.004712
-      },
-      "_rag_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "millions",
+        "page": 12,
         "underwriting_years": [
+          2013,
           2014,
           2015,
           2016,
@@ -123,7 +143,8 @@
             1816.0,
             2093.1,
             2477.3,
-            2581.8
+            2581.8,
+            null
           ],
           [
             890.1,
@@ -135,6 +156,7 @@
             2018.1,
             2288.1,
             2145.0,
+            null,
             null
           ],
           [
@@ -147,6 +169,7 @@
             2096.0,
             2004.8,
             null,
+            null,
             null
           ],
           [
@@ -157,6 +180,7 @@
             1604.9,
             1667.3,
             1917.2,
+            null,
             null,
             null,
             null
@@ -171,6 +195,7 @@
             null,
             null,
             null,
+            null,
             null
           ],
           [
@@ -179,6 +204,7 @@
             1003.9,
             1518.4,
             1669.7,
+            null,
             null,
             null,
             null,
@@ -195,12 +221,14 @@
             null,
             null,
             null,
+            null,
             null
           ],
           [
             820.4,
             967.5,
             1043.4,
+            null,
             null,
             null,
             null,
@@ -219,9 +247,183 @@
             null,
             null,
             null,
+            null,
             null
           ],
           [
+            816.4,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ]
+        ]
+      },
+      "source_type": "syndicate",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_2623_2023_llm.pdf",
+      "content_hash": "7b73546c1cdba141e16bc938649b6f951d685f0be2e021723edb81b0ea5a7ddf",
+      "standardized_at": "2026-09-11T11:59:27.879007+00:00",
+      "standardization_model": "gemini-2.5-flash",
+      "_extraction_meta": {
+        "model": "gemini-2.5-flash",
+        "input_tokens": 10151,
+        "output_tokens": 2066,
+        "total_tokens": 17045,
+        "cost_usd": 0.00821
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -472.2,
+        "model_value": -267.9,
+        "triangle_type": "gross",
+        "triangle_units": "millions",
+        "triangle_units_evidence": null,
+        "triangle_source_page": null,
+        "note": "overrode the model value"
+      },
+      "_rag_triangle": {
+        "type": "gross",
+        "currency": "USD",
+        "units": "millions",
+        "underwriting_years": [
+          2013,
+          2014,
+          2015,
+          2016,
+          2017,
+          2018,
+          2019,
+          2020,
+          2021,
+          2022,
+          2023
+        ],
+        "development_rows": [
+          [
+            null,
+            1008.2,
+            1044.1,
+            1125.1,
+            1442.9,
+            1433.1,
+            1487.9,
+            1816.0,
+            2093.1,
+            2477.3,
+            2581.8
+          ],
+          [
+            null,
+            890.1,
+            990.1,
+            1117.6,
+            1468.5,
+            1528.5,
+            1757.1,
+            2018.1,
+            2288.1,
+            2145.0,
+            null
+          ],
+          [
+            null,
+            828.3,
+            925.3,
+            1064.4,
+            1504.4,
+            1618.2,
+            1657.7,
+            2096.0,
+            2004.8,
+            null,
+            null
+          ],
+          [
+            null,
+            803.9,
+            888.5,
+            1030.5,
+            1469.8,
+            1604.9,
+            1667.3,
+            1917.2,
+            null,
+            null,
+            null
+          ],
+          [
+            null,
+            831.1,
+            883.4,
+            1010.3,
+            1481.3,
+            1640.8,
+            1635.7,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            null,
+            811.7,
+            934.1,
+            1003.9,
+            1518.4,
+            1669.7,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            null,
+            802.5,
+            953.3,
+            1009.1,
+            1504.9,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            null,
+            820.4,
+            967.5,
+            1043.4,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            null,
+            822.7,
+            945.6,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            null,
             816.4,
             null,
             null,
@@ -408,28 +610,59 @@
       "prior_year_development_gbp_m": -472.2,
       "prior_year_development_pct": -8.03,
       "direction": "release",
-      "prior_year_movement_page": 21,
-      "prior_year_movement_confidence": 0.5,
-      "exact_reserve_text": "As a result of these changes, $64.7m of reserves were released in the period (on a net of reinsurance basis).",
+      "prior_year_movement_page": 5,
+      "prior_year_movement_confidence": 1.0,
+      "exact_reserve_text": "Prior year releases\nDuring 2023 the syndicate released prior year reserves of $267.9m (2022: $42.6m). The syndicate experienced a large net release on the MAP Risks, Property Risks, Specialty Risks and Digital divisions, offset by a strengthening on the Cyber Risks division. Net releases are shown by division in the table below:",
       "primary_causes": [
+        "Favorable claims development",
         "Reserve methodology change"
       ],
       "specific_events": [],
       "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "The syndicate opened the year with gross claims outstanding of 5,878.4 (USD millions). During 2023 the managing agent refined its reserving methodology (including the actuarial approach to the risk margin and future claims handling expense provisioning), which was accounted for prospectively and resulted in a net release of reserves of $64.7m (USD), equivalent to a ~1.10% release of opening gross claims outstanding. No gross prior-year movement was explicitly disclosed; the reported figure is a net release attributable to the change of estimate.",
+      "standardized_narrative": "The syndicate reported a net release of prior year reserves of $267.9m in 2023, driven by significant releases in MAP Risks, Specialty Risks, Property and Digital divisions, partially offset by a strengthening on Cyber. Separately, a refinement to reserving methodology (including risk margin and claims handling expense provisioning) produced an additional net release of $64.7m. The amounts reported in the managing agent narrative are net of reinsurance; no single gross prior-year movement figure was provided in the narrative.",
       "raw_causal_phrases": [
-        "the managing agent refined its methodology for estimating claims reserves, including revising the actuarial methodology behind determining the risk margin to determine the appropriate level of margin in reserves and updating the calculation methodology behind the provision for future claims handling expenses.",
+        "During 2023 the syndicate released prior year reserves of $267.9m (2022: $42.6m).",
+        "The syndicate experienced a large net release on the MAP Risks, Property Risks, Specialty Risks and Digital divisions, offset by a strengthening on the Cyber Risks division.",
+        "Net releases are shown by division in the table below:",
         "As a result of these changes, $64.7m of reserves were released in the period (on a net of reinsurance basis)."
       ],
       "lob_movements": [
         {
-          "line_of_business": "Aggregate",
+          "line_of_business": "Cyber",
+          "direction": "strengthening",
+          "amount_gbp_m": 25.9,
+          "percentage": null,
+          "confidence": 1.0
+        },
+        {
+          "line_of_business": "Professional Lines",
           "direction": "release",
-          "amount_gbp_m": -64.7,
-          "percentage": -1.1,
+          "amount_gbp_m": -36.6,
+          "percentage": null,
           "confidence": 0.5
+        },
+        {
+          "line_of_business": "Marine",
+          "direction": "release",
+          "amount_gbp_m": -103.1,
+          "percentage": null,
+          "confidence": 0.6
+        },
+        {
+          "line_of_business": "Property",
+          "direction": "release",
+          "amount_gbp_m": -37.0,
+          "percentage": null,
+          "confidence": 1.0
+        },
+        {
+          "line_of_business": "Reinsurance - Specialty",
+          "direction": "release",
+          "amount_gbp_m": -117.1,
+          "percentage": null,
+          "confidence": 0.7
         }
       ],
       "gross_premiums_written_gbp_m": 4497.5,
@@ -473,31 +706,12 @@
       "gross_premium_page": 37,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "No explicit GROSS prior-year reserve movement was presented in the provided notes. The report explicitly states a $64.7m release \"on a net of reinsurance basis\" due to a change of estimate/methodology; therefore the prior_year_development_gbp_m uses the NET figure as a fallback. Opening reserves come from the balance sheet (gross claims outstanding comparative column). All monetary amounts are reported in the syndicate's functional currency (USD millions). Confidence for the prior year movement is reduced because a gross figure was not available and the net figure was used. [RAG OVERRIDE: Model said PYD=-64.7, RAG triangle computed -472.2. Using RAG value.]",
+      "data_quality_notes": "No explicit GROSS prior-year reserve movement (insurance liabilities column) was presented in a single 'movement in prior years' note. The managing agent's statement 'released prior year reserves of $267.9m' and the division table are explicit but described as net releases; therefore the prior_year_development_gbp_m above uses the reported NET figure (USD) and is flagged accordingly. A gross claims development triangle is present (gross amounts) and was extracted; a gross PYD could be calculated from that triangle as an alternative cross-check, but parsing the triangle to derive a single gross PYD was not used as the report narrative explicitly stated net releases. Line-of-business mapping from the managing agent's division names to the standard Lloyd's LOBs required judgement (e.g. 'Digital' -> 'Professional Lines', 'MAP Risks' -> 'Marine', 'Specialty Risks' -> 'Reinsurance - Specialty') and these mappings have lower confidence. [RAG OVERRIDE: Model said PYD=-267.9, RAG triangle computed -472.2. Using RAG value.]",
       "_claims_triangle": {
-        "type": "none",
-        "currency": "USD",
-        "units": "millions",
-        "page": null,
-        "underwriting_years": [],
-        "development_rows": []
-      },
-      "source_type": "syndicate",
-      "source_file": "pdf_extraction\\llm_slim\\syndicate_2623_2023_llm.pdf",
-      "content_hash": "51a8ebdd46ca2f43b9e6e17382b74a5156db63548e2f8989392d75a5dfdc44a5",
-      "standardized_at": "2026-03-18T05:32:36.083418+00:00",
-      "standardization_model": "gpt-5-mini",
-      "_extraction_meta": {
-        "model": "gpt-5-mini",
-        "input_tokens": 14177,
-        "output_tokens": 4479,
-        "total_tokens": 18656,
-        "cost_usd": 0.012502
-      },
-      "_rag_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "millions",
+        "page": 46,
         "underwriting_years": [
           2014,
           2015,
@@ -512,6 +726,169 @@
         ],
         "development_rows": [
           [
+            1044.1,
+            1125.1,
+            1442.9,
+            1433.1,
+            1487.9,
+            1816.0,
+            2093.1,
+            2477.3,
+            2581.8,
+            null
+          ],
+          [
+            990.1,
+            1117.6,
+            1468.5,
+            1528.5,
+            1757.1,
+            2018.1,
+            2288.1,
+            2145.0,
+            null,
+            null
+          ],
+          [
+            925.3,
+            1064.4,
+            1504.4,
+            1618.2,
+            1657.7,
+            2096.0,
+            2004.8,
+            null,
+            null,
+            null
+          ],
+          [
+            888.5,
+            1030.5,
+            1469.8,
+            1604.9,
+            1667.3,
+            1917.2,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            883.4,
+            1010.3,
+            1481.3,
+            1640.8,
+            1635.7,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            934.1,
+            1003.9,
+            1518.4,
+            1669.7,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            953.3,
+            1009.1,
+            1504.9,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            967.5,
+            1043.4,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            945.6,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            816.4,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ]
+        ]
+      },
+      "source_type": "syndicate",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_2623_2023_llm.pdf",
+      "content_hash": "7b73546c1cdba141e16bc938649b6f951d685f0be2e021723edb81b0ea5a7ddf",
+      "standardized_at": "2026-09-11T12:02:58.413069+00:00",
+      "standardization_model": "gpt-5-mini",
+      "_extraction_meta": {
+        "model": "gpt-5-mini",
+        "input_tokens": 16445,
+        "output_tokens": 11665,
+        "total_tokens": 28110,
+        "cost_usd": 0.027441
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -472.2,
+        "model_value": -267.9,
+        "triangle_type": "gross",
+        "triangle_units": "millions",
+        "triangle_units_evidence": null,
+        "triangle_source_page": null,
+        "note": "overrode the model value"
+      },
+      "_rag_triangle": {
+        "type": "gross",
+        "currency": "USD",
+        "units": "millions",
+        "underwriting_years": [
+          2013,
+          2014,
+          2015,
+          2016,
+          2017,
+          2018,
+          2019,
+          2020,
+          2021,
+          2022,
+          2023
+        ],
+        "development_rows": [
+          [
+            null,
             1008.2,
             1044.1,
             1125.1,
@@ -524,6 +901,7 @@
             2581.8
           ],
           [
+            null,
             890.1,
             990.1,
             1117.6,
@@ -536,6 +914,7 @@
             null
           ],
           [
+            null,
             828.3,
             925.3,
             1064.4,
@@ -548,6 +927,7 @@
             null
           ],
           [
+            null,
             803.9,
             888.5,
             1030.5,
@@ -560,6 +940,7 @@
             null
           ],
           [
+            null,
             831.1,
             883.4,
             1010.3,
@@ -572,6 +953,7 @@
             null
           ],
           [
+            null,
             811.7,
             934.1,
             1003.9,
@@ -584,6 +966,7 @@
             null
           ],
           [
+            null,
             802.5,
             953.3,
             1009.1,
@@ -596,6 +979,7 @@
             null
           ],
           [
+            null,
             820.4,
             967.5,
             1043.4,
@@ -608,6 +992,7 @@
             null
           ],
           [
+            null,
             822.7,
             945.6,
             null,
@@ -620,6 +1005,7 @@
             null
           ],
           [
+            null,
             816.4,
             null,
             null,
@@ -798,12 +1184,12 @@
       }
     }
   },
-  "total_cost_usd": 0.017214,
-  "total_tokens": 31610,
+  "total_cost_usd": 0.035651,
+  "total_tokens": 45155,
   "validation": {
     "passed": true,
-    "total_discrepancies": 13,
-    "within_tolerance": 13,
+    "total_discrepancies": 21,
+    "within_tolerance": 21,
     "hard_failures": 0,
     "hard_failure_details": []
   }

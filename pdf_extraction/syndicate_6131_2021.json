@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T12:22:54.861213+00:00",
+  "extraction_timestamp": "2026-09-13T04:05:18.072725+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -18,11 +20,10 @@
       "direction": "strengthening",
       "prior_year_movement_page": 14,
       "prior_year_movement_confidence": 0.8,
-      "exact_reserve_text": "",
+      "exact_reserve_text": "The tables below show the SPA's cumulative incurred claims development, including both claims notified and IBNR for each underwriting year, together with the cumulative payments to date on a gross and net of reinsurance basis at the balance sheet date.",
       "primary_causes": [
         "Natural catastrophe events",
-        "COVID-19 / pandemic effects",
-        "Adverse claims development"
+        "COVID-19 / pandemic effects"
       ],
       "specific_events": [
         "Hurricane Ida",
@@ -41,38 +42,23 @@
             "Property"
           ],
           "page": 2,
-          "confidence": 0.5
+          "confidence": 0.8
         },
         {
-          "event_name": "COVID-19",
+          "event_name": "Covid-19 exposure",
           "event_year": 2020,
           "event_type": "other",
           "net_loss_gbp_m": null,
           "loss_description": "increase of losses arising from their Covid-19 exposure",
           "lobs_affected": [],
           "page": 2,
-          "confidence": 0.5
+          "confidence": 0.8
         }
       ],
-      "standardized_narrative": "The syndicate experienced a significant strengthening of its gross claims reserves for prior underwriting years, amounting to GBP 5.617 million, representing an 83.89% increase relative to its opening gross reserves. This adverse development was primarily driven by an increase in losses from Hurricane Ida and COVID-19 exposure, which also contributed to the overall loss for the financial year. The claims development table indicates strengthening across older underwriting years, particularly 2019 and 2018.",
+      "standardized_narrative": "The syndicate experienced a gross reserve strengthening of GBP 5.617 million for underwriting years 2019 and prior, as calculated from the claims development triangle. The overall financial year loss was attributed to losses from Hurricane Ida and increased Covid-19 exposure, though these were not explicitly linked to the prior year reserve movements.",
       "raw_causal_phrases": [
         "losses arising from Hurricane Ida within the contingency book of business",
-        "increase of losses arising from their Covid-19 exposure",
-        "actual claims and benefit payments or the timing thereof, differ from expectations",
-        "frequency of claims",
-        "severity of claims",
-        "actual benefits paid",
-        "subsequent development of long-term claims",
-        "future claims development will follow a similar pattern to past claims development experience",
-        "average claim costs",
-        "claim handling costs",
-        "claim inflation factors",
-        "claim numbers for each underwriting year",
-        "once-off occurrence",
-        "changes in market factors such as public attitude to claiming, economic conditions",
-        "internal factors such as portfolio mix, policy conditions and claims handling procedures",
-        "judicial decisions and government legislation affect the estimates",
-        "uncertainty associated with the ultimate claims experience of an underwriting year is greatest when the underwriting year is at an early stage of development and the margin for future experience potentially being more adverse than assumed is at its highest"
+        "increase of losses arising from their Covid-19 exposure"
       ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 9637.0,
@@ -91,23 +77,73 @@
       "gross_premium_page": 10,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The prior year development figure was calculated from the gross claims development triangle as no explicit 'Movement in prior year's provision' note or narrative gross figure was available. The LOBs affected by Hurricane Ida and COVID-19 are inferred from the general description of the business and not explicitly stated for the reserve movements.",
+      "data_quality_notes": "Prior year development calculated from gross claims development triangle for underwriting years 2019 and prior, as no explicit prior year movement note was found. The narrative links specific events to the overall financial year loss, not explicitly to the prior year reserve movements.",
+      "_claims_triangle": {
+        "type": "gross",
+        "currency": "GBP",
+        "units": "thousands",
+        "page": 14,
+        "underwriting_years": [
+          2018,
+          2019,
+          2020,
+          2021
+        ],
+        "development_rows": [
+          [
+            941,
+            1617,
+            3064,
+            4569
+          ],
+          [
+            3220,
+            7939,
+            3942,
+            null
+          ],
+          [
+            4500,
+            13360,
+            null,
+            null
+          ],
+          [
+            4696,
+            null,
+            null,
+            null
+          ]
+        ]
+      },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_6131_2021_llm.pdf",
-      "content_hash": "e88fba18bba88c79d8432a66ffed53c9a1e3e4991073938369e79a751902a6b3",
-      "standardized_at": "2026-07-05T21:29:57.578898+00:00",
+      "content_hash": "06293955c18189cf2da358063acd2d90d762aa63e6023a7d267ba02c028bbe00",
+      "standardized_at": "2026-09-11T13:44:37.649265+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 10379,
-        "output_tokens": 1128,
-        "total_tokens": 15870,
-        "cost_usd": 0.005934
+        "input_tokens": 11183,
+        "output_tokens": 1133,
+        "total_tokens": 16249,
+        "cost_usd": 0.006187
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 5.617,
+        "model_value": 5.617,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 32,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2018,
           2019,
@@ -139,6 +175,12 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later"
         ],
         "source_page": 32,
         "entity": 6131
@@ -263,8 +305,7 @@
       "primary_causes": [
         "Natural catastrophe events",
         "COVID-19 / pandemic effects",
-        "Adverse claims development",
-        "Large loss development"
+        "Adverse claims development"
       ],
       "specific_events": [
         "Hurricane Ida"
@@ -277,9 +318,11 @@
         {
           "event_name": "COVID-19 pandemic",
           "event_year": 2020,
-          "impact_description": "Increase of losses arising from Covid-19 exposure noted by the Managing Agent, contributing to loss experience.",
+          "impact_description": "Increase of losses arising from their Covid-19 exposure",
           "lobs_affected": [
-            "Casualty"
+            "Casualty",
+            "Property",
+            "Aviation"
           ],
           "amount_gbp_m": null,
           "confidence": 0.5
@@ -291,19 +334,33 @@
           "event_year": 2021,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "The loss for the financial year is mainly attributable to the SPA's exposure to losses arising from Hurricane Ida within the contingency book of business as well as an increase of losses arising from their Covid-19 exposure.",
+          "loss_description": "The loss for the financial year is mainly attributable to the SPA's exposure to losses arising from Hurricane Ida within the contingency book of business",
           "lobs_affected": [
-            "Property"
+            "Property",
+            "Casualty",
+            "Aviation"
           ],
           "page": 2,
           "confidence": 0.8
+        },
+        {
+          "event_name": "COVID-19 pandemic",
+          "event_year": 2020,
+          "event_type": "other",
+          "net_loss_gbp_m": null,
+          "loss_description": "an increase of losses arising from their Covid-19 exposure",
+          "lobs_affected": [
+            "Casualty",
+            "Property",
+            "Aviation"
+          ],
+          "page": 2,
+          "confidence": 0.6
         }
       ],
-      "standardized_narrative": "At 1 January 2021 gross claims outstanding were GBP 6.695m. Using the gross claims development table, older underwriting years (2018 and 2019) show adverse development totalling approximately GBP 5.617m (gross), indicating a material strengthening of reserves. The report attributes the year's loss to exposures including Hurricane Ida and increased COVID-19 related losses; the adverse prior-year development is consistent with large-loss and adverse claims development drivers concentrated in the specialty lines assumed (notably property exposures).",
+      "standardized_narrative": "At 1 January 2021 the syndicate's gross claims outstanding were GBP 6.695m. Using the gross claims development table, older underwriting years (2018 and 2019) have experienced adverse development totalling approximately GBP 5.617m (gross), representing an ~83.9% increase relative to opening gross reserves. The managing agent attributes the year's loss drivers to catastrophe exposure (notably Hurricane Ida) and increased Covid-19 related losses, producing an overall strengthening in reserves for prior years.",
       "raw_causal_phrases": [
-        "The loss for the financial year is mainly attributable to the SPA's exposure to losses arising from Hurricane Ida within the contingency book of business as well as an increase of losses arising from their Covid-19 exposure.",
-        "their expense ratio is particularly high.",
-        "The principal assumption underlying the liability estimates is that the future claims development will follow a similar pattern to past claims development experience."
+        "The loss for the financial year is mainly attributable to the SPA's exposure to losses arising from Hurricane Ida within the contingency book of business as well as an increase of losses arising from their Covid-19 exposure"
       ],
       "lob_movements": [
         {
@@ -311,21 +368,21 @@
           "direction": "strengthening",
           "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.4
+          "confidence": 0.2
         },
         {
           "line_of_business": "Casualty",
-          "direction": "release",
+          "direction": "strengthening",
           "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.4
+          "confidence": 0.2
         },
         {
           "line_of_business": "Aviation",
-          "direction": "release",
+          "direction": "strengthening",
           "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.4
+          "confidence": 0.2
         }
       ],
       "gross_premiums_written_gbp_m": 9637.0,
@@ -344,7 +401,7 @@
       "gross_premium_page": 22,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior year development (PYD) was not stated as a single gross figure in narrative or a 'movement in prior years' gross line. The PYD above (5.617m) was calculated from the gross claims development triangle (cumulative gross claims by underwriting year) on page 29 by comparing the current estimate to the previous diagonal for underwriting years <= 2019. No explicit verbatim sentence quantifying gross prior-year movement was found in the narrative; exact_reserve_text left blank. Lob-level PYD amounts are not disclosed; lob directions are inferred from underwriting-result table and have low confidence.",
+      "data_quality_notes": "Prior-year development was calculated from the gross claims development triangle (gross cumulative incurred claims by underwriting year). No explicit narrative sentence quantifying a gross prior-year movement was found; the technical provisions 'Change in claims outstanding' row exists but includes current year movement and was not used. No RITC disclosure found that would distort the triangle. Exact textual sentence describing gross prior year reserve movement was not present in the report; exact_reserve_text left empty.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -385,20 +442,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_6131_2021_llm.pdf",
-      "content_hash": "e88fba18bba88c79d8432a66ffed53c9a1e3e4991073938369e79a751902a6b3",
-      "standardized_at": "2026-07-05T21:31:00.733432+00:00",
+      "content_hash": "06293955c18189cf2da358063acd2d90d762aa63e6023a7d267ba02c028bbe00",
+      "standardized_at": "2026-09-11T13:46:10.385543+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 14763,
-        "output_tokens": 6131,
-        "total_tokens": 20894,
-        "cost_usd": 0.015953
+        "input_tokens": 15523,
+        "output_tokens": 5190,
+        "total_tokens": 20713,
+        "cost_usd": 0.014261
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 5.617,
+        "model_value": 5.617,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 32,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2018,
           2019,
@@ -430,6 +499,12 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later"
         ],
         "source_page": 32,
         "entity": 6131
@@ -540,12 +615,12 @@
       }
     }
   },
-  "total_cost_usd": 0.021887,
-  "total_tokens": 36764,
+  "total_cost_usd": 0.020448,
+  "total_tokens": 36962,
   "validation": {
     "passed": true,
-    "total_discrepancies": 31,
-    "within_tolerance": 31,
+    "total_discrepancies": 15,
+    "within_tolerance": 15,
     "hard_failures": 0,
     "hard_failure_details": []
   }

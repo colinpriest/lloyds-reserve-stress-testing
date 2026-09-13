@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T12:00:21.206654+00:00",
+  "extraction_timestamp": "2026-09-13T04:12:33.000983+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -13,31 +15,47 @@
       "opening_reserves_gbp_m": 96.644,
       "opening_reserves_page": 5,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": 0.0,
-      "prior_year_development_pct": 0.0,
-      "direction": "flat",
-      "prior_year_movement_page": 11,
-      "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "Claims incurred in prior underwriting year 5,269 (976) 4,293",
+      "prior_year_development_gbp_m": 5.3,
+      "prior_year_development_pct": 5.48,
+      "direction": "strengthening",
+      "prior_year_movement_page": 1,
+      "prior_year_movement_confidence": 0.8,
+      "exact_reserve_text": "The Agency has seen continued favourable development on the RITC contracts written by the Syndicate. This is borne out by the reviews performed by the Actuarial Function as at 30th June 2015, 30th September 2015 and 31st December 2015. The result, as detailed above, is driven by a general trend of reductions in incurred claims due to favourable settlement of claims, including releases chiefly from Construction Defect contracts. Financial investments reduced to GBP 65.0m from GBP 86.7m, driven primarily by the settlement of legacy claims and the distribution of 2012 year of account profit.",
       "primary_causes": [
         "Favorable claims development",
-        "Reinsurance recoveries",
         "Other"
       ],
       "specific_events": [],
       "specific_years_affected": [
-        2014,
-        2013,
-        2012,
-        2011
+        2012
       ],
-      "prior_year_events": [],
+      "prior_year_events": [
+        {
+          "event_name": "2012 year of account closure",
+          "event_year": 2012,
+          "impact_description": "distribution of 2012 year of account profit, indicating favourable development and reserve release",
+          "lobs_affected": [],
+          "amount_gbp_m": null,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Construction Defect contracts",
+          "event_year": null,
+          "impact_description": "releases chiefly from Construction Defect contracts, indicating favourable development",
+          "lobs_affected": [
+            "Casualty"
+          ],
+          "amount_gbp_m": null,
+          "confidence": 0.8
+        }
+      ],
       "named_events": [],
-      "standardized_narrative": "The syndicate experienced a gross prior year strengthening of GBP 5.269 million in 2015, representing 5.45% of its opening gross reserves. While the Managing Agent's Report noted favourable development and releases from RITC and Construction Defect contracts, the overall gross prior year development was an increase in reserves. No specific causes for this overall strengthening were detailed.",
+      "standardized_narrative": "The syndicate experienced favourable prior year development in 2015, leading to releases of reserves. This was primarily driven by reductions in incurred claims due to favourable settlement of claims, particularly from Construction Defect contracts. Additionally, the distribution of profit from the 2012 year of account contributed to this positive development.",
       "raw_causal_phrases": [
-        "favourable development on the RITC contracts",
+        "continued favourable development on the RITC contracts",
         "reductions in incurred claims due to favourable settlement of claims",
-        "releases chiefly from Construction Defect contracts"
+        "releases chiefly from Construction Defect contracts",
+        "distribution of 2012 year of account profit"
       ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 17.4,
@@ -106,7 +124,7 @@
       "gross_premium_page": 10,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The narrative on page 1 describes favourable development and releases from RITC and Construction Defect contracts, which contradicts the overall gross prior year strengthening of GBP 5.269m reported in Note 3. It is possible that releases in specific areas were outweighed by strengthenings in other, unspecified areas. Gross premiums written for 'Marine' show a negative value (-GBP 0.008m) in the segmental analysis, which has been included as reported. The claims development triangle on page 15 is very sparse and only shows limited development for 2014 and 2015, making it unsuitable for a comprehensive prior year development calculation. [RAG OVERRIDE: Model said PYD=5.269, RAG triangle computed 0.0. Using RAG value.]",
+      "data_quality_notes": "Prior year development amount not explicitly quantified; direction inferred from narrative. The claims development triangle is too sparse for older underwriting years to calculate prior year development.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -124,10 +142,12 @@
             null,
             null,
             null,
+            null,
             859,
             5368
           ],
           [
+            null,
             null,
             null,
             null,
@@ -139,16 +159,19 @@
             null,
             null,
             null,
-            null
-          ],
-          [
-            null,
-            null,
-            null,
             null,
             null
           ],
           [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            null,
             null,
             null,
             null,
@@ -159,43 +182,20 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_5678_2015_llm.pdf",
-      "content_hash": "3505519a345bb155198d54cea1963d8348687c7859ed0e329ece967ac7f93778",
-      "standardized_at": "2026-03-19T05:07:52.046004+00:00",
+      "content_hash": "327b1804176b4cca4df2364c222be2629de9ca7fa03d1a9c9e828ac13ce2ff8b",
+      "standardized_at": "2026-09-11T13:32:42.872628+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 10637,
-        "output_tokens": 1244,
-        "total_tokens": 15778,
-        "cost_usd": 0.006301
+        "input_tokens": 11441,
+        "output_tokens": 1663,
+        "total_tokens": 19521,
+        "cost_usd": 0.00759
       },
-      "_rag_triangle": {
-        "type": "gross",
-        "currency": "GBP",
-        "units": "thousands",
-        "underwriting_years": [
-          2011,
-          2012,
-          2013,
-          2014,
-          2015
-        ],
-        "development_rows": [
-          [
-            null,
-            null,
-            null,
-            859,
-            5368
-          ],
-          [
-            null,
-            null,
-            null,
-            2051,
-            null
-          ]
-        ]
+      "_pyd_route": {
+        "source": "rag_provisions",
+        "value": 5.3,
+        "note": "filled a blank model value"
       },
       "_adobe_lob": {
         "gross_premium_mix": [
@@ -329,6 +329,13 @@
           "entity": 5678,
           "backend": "azure",
           "table_kind": "balance_sheet_liabilities"
+        },
+        "movement_semantics": {
+          "row_label": "Claims incurred in prior underwriting year",
+          "row_index": 5,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": false,
+          "column_index": 1
         },
         "gross_prior_year_claims": 5.3,
         "ri_share_prior_year": -1.0,
@@ -417,101 +424,41 @@
       "opening_reserves_gbp_m": 96.644,
       "opening_reserves_page": 14,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": 0.0,
-      "prior_year_development_pct": 0.0,
-      "direction": "flat",
-      "prior_year_movement_page": 25,
-      "prior_year_movement_confidence": 0.8,
-      "exact_reserve_text": "The result, as detailed above, is driven by a general trend of reductions in incurred claims due to favourable settlement of claims, including releases chiefly from Construction Defect contracts.",
+      "prior_year_development_gbp_m": 5.3,
+      "prior_year_development_pct": 5.48,
+      "direction": "strengthening",
+      "prior_year_movement_page": 4,
+      "prior_year_movement_confidence": 0.5,
+      "exact_reserve_text": "The Agency has seen continued favourable development on the RITC contracts written by the Syndicate. This is borne out by the reviews performed by the Actuarial Function as at 30th June 2015, 30th September 2015 and 31st December 2015. The result, as detailed above, is driven by a general trend of reductions in incurred claims due to favourable settlement of claims, including releases chiefly from Construction Defect contracts. Gross technical provisions have reduced to GBP 87.8m from GBP 96.6m, driven by reductions on the legacy business which is partly offset by the increased IBNR on the live business.",
       "primary_causes": [
-        "Favorable claims development"
+        "Favorable claims development",
+        "IBNR recalibration"
       ],
       "specific_events": [],
       "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "Opening gross claims outstanding were GBP 96.644m at 1 Jan 2015. The claims outstanding reconciliation shows a gross adverse movement on prior underwriting years of GBP 5.269m (i.e. a strengthening of reserves). Management commentary highlights favourable settlements and releases (notably from construction defect contracts), indicating mixed experience by class. Overall the balance sheet gross outstanding claims reduced to GBP 87.761m at year end driven by payments and exchange movements, but prior-year estimate movements on a gross basis recorded a net strengthening of c.GBP 5.3m.",
+      "standardized_narrative": "Opening gross claims reserves were GBP 96.644m at 1 January 2015. Management reports continued favourable development on legacy/RITC contracts, driven by favourable settlements and releases chiefly from construction defect contracts, resulting in a reduction in gross technical provisions to GBP 87.761m at year end. The report does not provide an explicit aggregate GROSS prioryear movement figure for PYD; the claims development table is limited and contains an aggregate \"Before 2011\" column that prevents a full diagonal PYD calculation, so a quantified gross prior year movement cannot be determined from the disclosures.",
       "raw_causal_phrases": [
+        "continued favourable development on the RITC contracts written by the Syndicate",
         "reductions in incurred claims due to favourable settlement of claims, including releases chiefly from Construction Defect contracts",
-        "This favourable experience reflects the efficiency of the Syndicate's long established claims management capabilities"
+        "driven by reductions on the legacy business which is partly offset by the increased IBNR on the live business",
+        "settlement of legacy claims"
       ],
       "lob_movements": [
         {
-          "line_of_business": "Accident & Health",
-          "direction": "strengthening",
-          "amount_gbp_m": 0.209,
-          "percentage": null,
-          "confidence": 0.8
-        },
-        {
-          "line_of_business": "Aviation",
-          "direction": "strengthening",
-          "amount_gbp_m": 0.002,
-          "percentage": null,
-          "confidence": 0.8
-        },
-        {
-          "line_of_business": "Energy",
-          "direction": "release",
-          "amount_gbp_m": -0.003,
-          "percentage": null,
-          "confidence": 0.8
-        },
-        {
-          "line_of_business": "Property",
-          "direction": "release",
-          "amount_gbp_m": -0.434,
-          "percentage": null,
-          "confidence": 0.8
-        },
-        {
-          "line_of_business": "Marine",
-          "direction": "release",
-          "amount_gbp_m": -0.013,
-          "percentage": null,
-          "confidence": 0.8
-        },
-        {
-          "line_of_business": "Motor",
-          "direction": "release",
-          "amount_gbp_m": -0.013,
-          "percentage": null,
-          "confidence": 0.8
-        },
-        {
-          "line_of_business": "Motor",
-          "direction": "strengthening",
-          "amount_gbp_m": 0.019,
-          "percentage": null,
-          "confidence": 0.8
-        },
-        {
-          "line_of_business": "Professional Lines",
-          "direction": "release",
-          "amount_gbp_m": -0.281,
-          "percentage": null,
-          "confidence": 0.8
-        },
-        {
           "line_of_business": "Casualty",
           "direction": "release",
-          "amount_gbp_m": -6.958,
+          "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.8
+          "confidence": 0.6
         },
         {
           "line_of_business": "Treaty",
           "direction": "release",
-          "amount_gbp_m": -1.456,
+          "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.8
-        },
-        {
-          "line_of_business": "Aggregate",
-          "direction": "strengthening",
-          "amount_gbp_m": 0.046,
-          "percentage": null,
-          "confidence": 0.8
+          "confidence": 0.4
         }
       ],
       "gross_premiums_written_gbp_m": 17.4,
@@ -580,73 +527,12 @@
       "gross_premium_page": 24,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior-year development was taken from the claims outstanding reconciliation line 'Claims incurred in prior underwriting year' (gross GBP 5,269k). Management narrative refers to favourable releases (construction defect) which suggests mixed movements by LOB; triangle and development tables are sparse and an aggregate 'Before 2011' column exists which limits triangle-based PYD calculation. The claims development triangle is incomplete/aggregated; the chosen PYD is the gross figure from the claims reconciliation. Where per-LOB movements are reported, they are calculated as simple 2015 vs 2014 gross outstanding comparisons (both in GBP 000) and converted to millions. [RAG OVERRIDE: Model said PYD=5.269, RAG triangle computed 0.0. Using RAG value.]",
+      "data_quality_notes": "A clear GROSS prioryear development (GBP ) is not explicitly disclosed. The Income Statement line 'Claims incurred in prior underwriting year' is a P&L amount and is NOT the prioryear reserve movement per instructions, so it was not used. The claims development triangle is provided but contains an aggregate 'Before 2011' column (excluded by rules) and limited development diagonals, preventing reliable calculation of total gross PYD. Therefore prior_year_development_gbp_m is left null. Opening gross claims outstanding was taken from the Statement of Financial Position (96,644 GBP 000) - high confidence. Premium mix taken from Segmental Analysis (note 2).",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
         "page": 39,
-        "underwriting_years": [
-          2011,
-          2012,
-          2013,
-          2014,
-          2015
-        ],
-        "development_rows": [
-          [
-            null,
-            null,
-            null,
-            null,
-            null
-          ],
-          [
-            null,
-            null,
-            null,
-            null,
-            null
-          ],
-          [
-            null,
-            null,
-            null,
-            null,
-            null
-          ],
-          [
-            null,
-            null,
-            null,
-            null,
-            null
-          ],
-          [
-            null,
-            null,
-            null,
-            null,
-            null
-          ]
-        ]
-      },
-      "source_type": "syndicate",
-      "source_file": "pdf_extraction\\llm_slim\\syndicate_5678_2015_llm.pdf",
-      "content_hash": "3505519a345bb155198d54cea1963d8348687c7859ed0e329ece967ac7f93778",
-      "standardized_at": "2026-03-19T05:09:17.367044+00:00",
-      "standardization_model": "gpt-5-mini",
-      "_extraction_meta": {
-        "model": "gpt-5-mini",
-        "input_tokens": 18317,
-        "output_tokens": 7639,
-        "total_tokens": 25956,
-        "cost_usd": 0.019857
-      },
-      "_rag_triangle": {
-        "type": "gross",
-        "currency": "GBP",
-        "units": "thousands",
         "underwriting_years": [
           2011,
           2012,
@@ -670,6 +556,23 @@
             null
           ]
         ]
+      },
+      "source_type": "syndicate",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_5678_2015_llm.pdf",
+      "content_hash": "327b1804176b4cca4df2364c222be2629de9ca7fa03d1a9c9e828ac13ce2ff8b",
+      "standardized_at": "2026-09-11T13:34:37.476155+00:00",
+      "standardization_model": "gpt-5-mini",
+      "_extraction_meta": {
+        "model": "gpt-5-mini",
+        "input_tokens": 19056,
+        "output_tokens": 7500,
+        "total_tokens": 26556,
+        "cost_usd": 0.019764
+      },
+      "_pyd_route": {
+        "source": "rag_provisions",
+        "value": 5.3,
+        "note": "filled a blank model value"
       },
       "_adobe_lob": {
         "gross_premium_mix": [
@@ -804,6 +707,13 @@
           "backend": "azure",
           "table_kind": "balance_sheet_liabilities"
         },
+        "movement_semantics": {
+          "row_label": "Claims incurred in prior underwriting year",
+          "row_index": 5,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": false,
+          "column_index": 1
+        },
         "gross_prior_year_claims": 5.3,
         "ri_share_prior_year": -1.0,
         "net_prior_year_claims": 4.3,
@@ -886,12 +796,12 @@
       }
     }
   },
-  "total_cost_usd": 0.026158,
-  "total_tokens": 41734,
+  "total_cost_usd": 0.027354,
+  "total_tokens": 46077,
   "validation": {
     "passed": true,
-    "total_discrepancies": 26,
-    "within_tolerance": 26,
+    "total_discrepancies": 19,
+    "within_tolerance": 19,
     "hard_failures": 0,
     "hard_failure_details": []
   }

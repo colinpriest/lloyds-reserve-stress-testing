@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T09:15:23.447553+00:00",
+  "extraction_timestamp": "2026-09-13T04:12:59.257603+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -11,13 +13,13 @@
       "syndicate": 1209,
       "year": 2017,
       "opening_reserves_gbp_m": 571.429,
-      "opening_reserves_page": 36,
+      "opening_reserves_page": 5,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": 21.389,
       "prior_year_development_pct": 3.74,
       "direction": "strengthening",
-      "prior_year_movement_page": 34,
-      "prior_year_movement_confidence": 0.8,
+      "prior_year_movement_page": 16,
+      "prior_year_movement_confidence": 0.5,
       "exact_reserve_text": "For Syndicate 1209, favourable run-off deviation (prior accident year release) of $8.5m was experienced driven predominantly from favourable experience and IBNR reductions on Energy, Aerospace and Marine lines which were partially offset by unfavourable experience observed on Casualty and Professional lines of business.",
       "primary_causes": [
         "Favorable claims development",
@@ -28,14 +30,49 @@
       "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "The syndicate experienced a gross strengthening of reserves for prior underwriting years, calculated from the claims development triangle. This was primarily driven by adverse development on the 2012, 2014, and 2015 underwriting years, partially offset by releases on 2011 and 2018. The report also notes a net favourable run-off deviation of $8.5m from favourable experience and IBNR reductions on Energy, Aerospace and Marine lines, partially offset by unfavourable experience observed on Casualty and Professional lines of business.",
+      "standardized_narrative": "The syndicate reported a favourable run-off deviation of $8.5 million (net of reinsurance) for prior accident years. This release was primarily driven by favourable experience and IBNR reductions in Energy, Aerospace, and Marine lines, partially offset by unfavourable experience in Casualty and Professional Lines of business. Due to the figure being net and in USD, and no exchange rate provided, the GBP equivalent cannot be calculated.",
       "raw_causal_phrases": [
         "favourable run-off deviation (prior accident year release)",
-        "favourable experience",
-        "IBNR reductions on Energy, Aerospace and Marine lines",
+        "favourable experience and IBNR reductions on Energy, Aerospace and Marine lines",
         "unfavourable experience observed on Casualty and Professional lines of business"
       ],
-      "lob_movements": [],
+      "lob_movements": [
+        {
+          "line_of_business": "Energy",
+          "direction": "release",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.5
+        },
+        {
+          "line_of_business": "Aviation",
+          "direction": "release",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.5
+        },
+        {
+          "line_of_business": "Marine",
+          "direction": "release",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.5
+        },
+        {
+          "line_of_business": "Casualty",
+          "direction": "strengthening",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.5
+        },
+        {
+          "line_of_business": "Professional Lines",
+          "direction": "strengthening",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.5
+        }
+      ],
       "gross_premiums_written_gbp_m": 2.444,
       "gross_premium_mix": [
         {
@@ -45,8 +82,8 @@
         },
         {
           "line_of_business": "Motor (other classes)",
-          "amount_gbp_m": 0.0,
-          "percentage_of_total": 0.0
+          "amount_gbp_m": null,
+          "percentage_of_total": null
         },
         {
           "line_of_business": "Marine aviation and transport",
@@ -74,15 +111,15 @@
           "percentage_of_total": -24.18
         }
       ],
-      "gross_premium_page": 33,
+      "gross_premium_page": 15,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The narrative description of prior year development on page 34 refers to a net favourable run-off deviation of $8.5m (USD), while the calculated gross prior year development from the claims development triangle is a strengthening of GBP 25.387m (GBP). The gross figure from the triangle is used as per instructions to prioritize gross amounts over net narrative descriptions. [RAG OVERRIDE: Model said PYD=25.387, RAG triangle computed 21.389. Using RAG value.]",
+      "data_quality_notes": "Prior year development figure is net of reinsurance and in USD, and cannot be reliably converted to GBP due to lack of an explicit exchange rate for the year. The gross claims development triangle format does not allow for calculation of prior year development by comparing the bottom row to the previous diagonal, as the 'Estimated total losses' row appears to be the last reported development period for each year.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
-        "page": 37,
+        "page": 18,
         "underwriting_years": [
           2011,
           2012,
@@ -143,21 +180,32 @@
         ]
       },
       "source_type": "syndicate",
-      "source_file": "syndicate_reports\\pdfs\\syndicate_1209_2017.pdf",
-      "content_hash": "9f8c32c98dbdeb7abca932209156ecd1ba6762dc68a7726b706c870389e9514e",
-      "standardized_at": "2026-03-16T10:58:09.308202+00:00",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_1209_2017_llm.pdf",
+      "content_hash": "80758923c81551076b7a26c017b231cc4f5ca729298073bd3e90f399b9e4af13",
+      "standardized_at": "2026-09-11T10:24:27.832441+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 15946,
-        "output_tokens": 1386,
-        "total_tokens": 22619,
-        "cost_usd": 0.008249
+        "input_tokens": 11441,
+        "output_tokens": 1612,
+        "total_tokens": 17388,
+        "cost_usd": 0.007462
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 21.389,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 37,
+        "note": "filled a blank model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -215,6 +263,15 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "12 months",
+          "24 months",
+          "36 months",
+          "48 months",
+          "60 months",
+          "72 months",
+          "84 months"
         ],
         "source_page": 37,
         "entity": 1209
@@ -278,7 +335,7 @@
       "syndicate": 1209,
       "year": 2017,
       "opening_reserves_gbp_m": 571.429,
-      "opening_reserves_page": 33,
+      "opening_reserves_page": 11,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": 21.389,
       "prior_year_development_pct": 3.74,
@@ -295,10 +352,10 @@
       "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "The Syndicate reported a prior-accident-year release: a favourable run-off deviation of $8.5m, driven mainly by favourable experience and IBNR reductions on Energy, Aerospace and Marine lines, partly offset by adverse development on Casualty and Professional Lines.",
+      "standardized_narrative": "The Syndicate reported a prior-accident-year favourable run-off (a release) described as $8.5m, driven mainly by favourable experience and reductions in IBNR on Energy, Aerospace and Marine lines, partially offset by adverse development on Casualty and Professional Lines. The report does not provide a clearly stated gross GBP prioryear movement figure; the only quantified prioryear statement is the $8.5m release in the movement note.",
       "raw_causal_phrases": [
         "favourable run-off deviation (prior accident year release) of $8.5m",
-        "favourable experience and IBNR reductions on Energy, Aerospace and Marine lines",
+        "driven predominantly from favourable experience and IBNR reductions on Energy, Aerospace and Marine lines",
         "partially offset by unfavourable experience observed on Casualty and Professional lines of business"
       ],
       "lob_movements": [
@@ -343,7 +400,7 @@
         {
           "line_of_business": "Accident and health",
           "amount_gbp_m": -0.014,
-          "percentage_of_total": -0.572
+          "percentage_of_total": -0.5718
         },
         {
           "line_of_business": "Motor (other classes)",
@@ -353,33 +410,33 @@
         {
           "line_of_business": "Marine aviation and transport",
           "amount_gbp_m": -1.521,
-          "percentage_of_total": -62.238
+          "percentage_of_total": -62.2665
         },
         {
           "line_of_business": "Fire and other damage to property",
           "amount_gbp_m": 1.1,
-          "percentage_of_total": 45.009
+          "percentage_of_total": 45.0106
         },
         {
           "line_of_business": "Third party liability",
           "amount_gbp_m": 2.821,
-          "percentage_of_total": 115.478
+          "percentage_of_total": 115.483
         },
         {
           "line_of_business": "Other",
           "amount_gbp_m": 0.649,
-          "percentage_of_total": 26.562
+          "percentage_of_total": 26.5596
         },
         {
           "line_of_business": "Reinsurance acceptances",
           "amount_gbp_m": -0.591,
-          "percentage_of_total": -24.218
+          "percentage_of_total": -24.3
         }
       ],
       "gross_premium_page": 30,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior-year development is taken from the Managing Agent narrative (Note 6) which states a $8.5m favourable run-off deviation. The note uses a dollar sign and does not explicitly state gross vs net; therefore the extracted prior-year movement has been recorded as -8.5 (release) in millions GBP with medium confidence. The claims development tables are present but table formatting in the PDF extract is ambiguous; gross triangle values were available but mapping of development rows to underwriting years in the extracted text was partially unclear. No explicit quantified gross prior-year movement in GBP was provided in the 'Movement in prior year's provision' note, so the narrative figure was used. This introduces uncertainty. [RAG OVERRIDE: Model said PYD=-8.5, RAG triangle computed 21.389. Using RAG value.]",
+      "data_quality_notes": "The prior-year movement is explicitly described in note 6 as a '$8.5m' favourable run-off deviation (release) but the note uses a dollar sign and does not state whether this is gross or net of reinsurance and does not quote a GBP gross figure. No explicit GROSS prior-year movement in GBP is presented in the 'Movement in prior year's provision' numeric reconciliation; therefore no authoritative gross GBP prior-year movement could be placed into prior_year_development_gbp_m. A gross claims development triangle is present (used for cross-checking) but extracting a single aggregate PYD from the triangle would require diagonal calculations and exclusion of RITC effects; this was not used to produce a numeric PYD due to ambiguity in table alignment. LOB movements are described qualitatively in note 6; amounts by LOB are not quantified.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -394,49 +451,49 @@
         ],
         "development_rows": [
           [
+            218662,
             101377,
             86478,
             96572,
-            85452,
-            null
+            85452
           ],
           [
+            248789,
             198781,
             193360,
             196875,
-            190194,
-            null
+            190194
           ],
           [
+            243919,
             200125,
             189176,
             200873,
-            208080,
-            null
+            208080
           ],
           [
+            230944,
             193289,
             187942,
             204496,
-            null,
             null
           ],
           [
+            242429,
             202448,
             188055,
             null,
-            null,
             null
           ],
           [
+            241632,
             206264,
             null,
             null,
-            null,
             null
           ],
           [
-            null,
+            237583,
             null,
             null,
             null,
@@ -445,21 +502,32 @@
         ]
       },
       "source_type": "syndicate",
-      "source_file": "syndicate_reports\\pdfs\\syndicate_1209_2017.pdf",
-      "content_hash": "9f8c32c98dbdeb7abca932209156ecd1ba6762dc68a7726b706c870389e9514e",
-      "standardized_at": "2026-03-16T11:01:43.591111+00:00",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_1209_2017_llm.pdf",
+      "content_hash": "80758923c81551076b7a26c017b231cc4f5ca729298073bd3e90f399b9e4af13",
+      "standardized_at": "2026-09-11T10:26:32.245698+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 28519,
-        "output_tokens": 13246,
-        "total_tokens": 41765,
-        "cost_usd": 0.033622
+        "input_tokens": 17778,
+        "output_tokens": 7251,
+        "total_tokens": 25029,
+        "cost_usd": 0.018946
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 21.389,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 37,
+        "note": "filled a blank model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -517,6 +585,15 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "12 months",
+          "24 months",
+          "36 months",
+          "48 months",
+          "60 months",
+          "72 months",
+          "84 months"
         ],
         "source_page": 37,
         "entity": 1209
@@ -577,8 +654,8 @@
       }
     }
   },
-  "total_cost_usd": 0.041871,
-  "total_tokens": 64384,
+  "total_cost_usd": 0.026408,
+  "total_tokens": 42417,
   "validation": {
     "passed": true,
     "total_discrepancies": 19,

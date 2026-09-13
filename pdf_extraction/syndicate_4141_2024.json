@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T11:29:36.377379+00:00",
+  "extraction_timestamp": "2026-09-13T04:07:09.256960+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -18,46 +20,28 @@
       "direction": "release",
       "prior_year_movement_page": 22,
       "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "Change in estimates of prior year provisions (127,892) GBP 000",
+      "exact_reserve_text": "Change in estimates of prior year provisions (127,892)",
       "primary_causes": [
         "Favorable claims development"
       ],
       "specific_events": [],
-      "specific_years_affected": [],
-      "prior_year_events": [],
-      "named_events": [
+      "specific_years_affected": [
+        2021
+      ],
+      "prior_year_events": [
         {
-          "event_name": "Russia-Ukraine conflict",
-          "event_year": 2022,
-          "event_type": "geopolitical",
-          "net_loss_gbp_m": null,
-          "loss_description": "impact on the Syndicate continues to be limited with only a few classes of business having direct exposure. The main indirect exposure has been market volatility driven by the continuing economic impacts arising from these situations.",
-          "lobs_affected": [],
-          "page": 13,
+          "event_name": "2021 closed year of account profit",
+          "event_year": 2021,
+          "impact_description": "Payment of profits of GBP 47.0m on the 2021 closed year of account, indicating favorable development.",
+          "lobs_affected": [
+            "Aggregate"
+          ],
+          "amount_gbp_m": -47.0,
           "confidence": 0.8
-        },
-        {
-          "event_name": "Israel-Hamas conflict",
-          "event_year": 2023,
-          "event_type": "geopolitical",
-          "net_loss_gbp_m": null,
-          "loss_description": "impact on the Syndicate continues to be limited with only a few classes of business having direct exposure. The main indirect exposure has been market volatility driven by the continuing economic impacts arising from these situations.",
-          "lobs_affected": [],
-          "page": 13,
-          "confidence": 0.8
-        },
-        {
-          "event_name": "China-Taiwan tensions",
-          "event_year": null,
-          "event_type": "geopolitical",
-          "net_loss_gbp_m": null,
-          "loss_description": "potential geopolitical tensions around the world including Russia-Ukraine, Israel-Hamas and China-Taiwan",
-          "lobs_affected": [],
-          "page": 13,
-          "confidence": 0.5
         }
       ],
-      "standardized_narrative": "The Syndicate experienced a significant release of prior year reserves amounting to GBP 127.892 million. This favorable development was primarily driven by lower loss experience in London Market and Specialty lines, contributing to positive prior year reserve releases.",
+      "named_events": [],
+      "standardized_narrative": "The Syndicate reported a significant gross prior year reserve release of GBP 127.892 million for the 2024 financial year, as indicated in the Technical Provisions note. This favorable development contributed to a lower net loss ratio and was driven by positive prior year reserve releases, particularly from lower London Market and Specialty loss experience. The 2021 year of account also closed with a profit distribution to the member, further indicating favorable development on older years.",
       "raw_causal_phrases": [
         "positive prior year reserve releases",
         "lower London Market and Specialty loss experience"
@@ -94,7 +78,7 @@
       "gross_premium_page": 19,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The exact_reserve_text is a line item from a table, not a full sentence, but it directly quantifies the gross prior year development. The narrative on page 2 describes the net impact. [RAG OVERRIDE: Model said PYD=-127.892, RAG triangle computed -9.184. Using RAG value.]",
+      "data_quality_notes": "The prior year development figure is taken from the 'Change in estimates of prior year provisions' in the Technical Provisions note, which is the most direct source. The gross claims development triangle, if used as a fallback, would have yielded a much smaller release (-8.192 GBP m), indicating that the Technical Provisions note figure is more comprehensive or includes other adjustments not reflected in the triangle's diagonal comparison. [RAG OVERRIDE: Model said PYD=-127.892, RAG triangle computed -9.184. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -237,20 +221,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_4141_2024_llm.pdf",
-      "content_hash": "5d6a65e4a7f48fdc4e93d5f2d5f3ff7b4d6f6999ed07f5b1d4fac5f07e29a058",
-      "standardized_at": "2026-07-06T00:35:58.832655+00:00",
+      "content_hash": "f62808be2d3544e4b424fae70e44ff590f59f84c2c9085029ac0567b9cc95641",
+      "standardized_at": "2026-09-11T14:50:32.334135+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 11669,
-        "output_tokens": 1812,
-        "total_tokens": 21691,
-        "cost_usd": 0.008031
+        "input_tokens": 12473,
+        "output_tokens": 1825,
+        "total_tokens": 23959,
+        "cost_usd": 0.008304
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -9.184,
+        "model_value": -127.892,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 99,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2015,
           2016,
@@ -385,6 +381,18 @@
             null
           ]
         ],
+        "row_labels": [
+          "Estimate of gross claims at end of underwriting",
+          "one year later (*)",
+          "two years later",
+          "three years later",
+          "four years later",
+          "five years later",
+          "six years later",
+          "seven years later",
+          "eight years later",
+          "nine years later"
+        ],
         "source_page": 99,
         "entity": 4141
       },
@@ -457,6 +465,13 @@
           "entity": 4141,
           "backend": "azure",
           "table_kind": "balance_sheet_liabilities"
+        },
+        "movement_semantics": {
+          "row_label": "Change in estimates of prior year provisions",
+          "row_index": 6,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": true,
+          "column_index": 1
         },
         "gross_prior_year_claims": -127.9,
         "ri_share_prior_year": 46.6,
@@ -612,7 +627,7 @@
       "direction": "release",
       "prior_year_movement_page": 50,
       "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "with 2024 benefitting from lower London Market and Specialty loss experience and a net loss ratio of 29.6%, 8.0% lower than 2023 driven by positive prior year reserve releases.",
+      "exact_reserve_text": "with 2024 benefitting from lower London Market and Specialty loss experience and a net loss ratio of 29.6%, 8.0% lower than 2023 driven by positive prior year reserve releases.\nChange in estimates of prior year provisions (127,892) 46,560 (81,332)",
       "primary_causes": [
         "Favorable claims development"
       ],
@@ -620,12 +635,26 @@
       "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "The syndicate recorded a significant gross prioryear reserve release of GBP 127.892m (a c.58.1% reduction versus opening gross claims outstanding of GBP 220.17m). Management attribute the improvement to favourable claims experience in the London Market and Specialty lines which resulted in positive prior year reserve releases reflected in the technical provisions movement.",
+      "standardized_narrative": "The Syndicate recorded a gross prior-year release of GBP 127.892m (a reduction of ~58.1% of the opening gross claims outstanding of GBP 220.170m), driven by favourable claims development, notably lower loss experience in London Market and Specialty exposures. The movement is reported gross in the Technical Provisions note as a negative change in prior year provisions and is reflected in improved underwriting outcomes for 2024.",
       "raw_causal_phrases": [
-        "positive prior year reserve releases",
-        "benefitting from lower London Market and Specialty loss experience"
+        "driven by positive prior year reserve releases",
+        "Change in estimates of prior year provisions (127,892) 46,560 (81,332)"
       ],
       "lob_movements": [
+        {
+          "line_of_business": "Accident & Health",
+          "direction": "release",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.5
+        },
+        {
+          "line_of_business": "Marine",
+          "direction": "release",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.5
+        },
         {
           "line_of_business": "Property",
           "direction": "release",
@@ -641,21 +670,14 @@
           "confidence": 0.5
         },
         {
-          "line_of_business": "Marine",
+          "line_of_business": "Aggregate",
           "direction": "release",
           "amount_gbp_m": null,
           "percentage": null,
           "confidence": 0.5
         },
         {
-          "line_of_business": "Professional Lines",
-          "direction": "release",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.5
-        },
-        {
-          "line_of_business": "Accident & Health",
+          "line_of_business": "Treaty",
           "direction": "release",
           "amount_gbp_m": null,
           "percentage": null,
@@ -693,7 +715,7 @@
       "gross_premium_page": 42,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Opening gross claims outstanding and the gross prior-year movement were taken directly from the Balance Sheet (claims outstanding) and Note 20 Technical Provisions (\"Change in estimates of prior year provisions\" gross column). The exact reserve explanatory sentence was taken from the Results and Performance narrative. No LOBspecific gross PYD splits are provided in the notes, so perLOB movements are inferred (direction only) with medium confidence. All monetary figures converted to millions and rounded to three decimal places where applicable. [RAG OVERRIDE: Model said PYD=-127.892, RAG triangle computed -9.184. Using RAG value.]",
+      "data_quality_notes": "Opening gross claims outstanding taken from Balance Sheet (Technical provisions, 'Claims outstanding' comparative 2023 column). Prior year development (gross) taken from Technical Provisions note 'Change in estimates of prior year provisions' row (GBP 000). exact_reserve_text includes both a narrative sentence (which references net releases) and the technical provisions table row. LOB-specific prior-year movements are not quantified in the report, so LOB amounts are null and directions are inferred from the overall gross release. Claims development triangle is available (gross) and used as supporting source. [RAG OVERRIDE: Model said PYD=-127.892, RAG triangle computed -9.184. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -836,20 +858,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_4141_2024_llm.pdf",
-      "content_hash": "5d6a65e4a7f48fdc4e93d5f2d5f3ff7b4d6f6999ed07f5b1d4fac5f07e29a058",
-      "standardized_at": "2026-07-06T00:37:05.602982+00:00",
+      "content_hash": "f62808be2d3544e4b424fae70e44ff590f59f84c2c9085029ac0567b9cc95641",
+      "standardized_at": "2026-09-11T14:52:17.125491+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 41005,
-        "output_tokens": 5677,
-        "total_tokens": 46682,
-        "cost_usd": 0.021605
+        "input_tokens": 41765,
+        "output_tokens": 5564,
+        "total_tokens": 47329,
+        "cost_usd": 0.021569
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -9.184,
+        "model_value": -127.892,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 99,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2015,
           2016,
@@ -984,6 +1018,18 @@
             null
           ]
         ],
+        "row_labels": [
+          "Estimate of gross claims at end of underwriting",
+          "one year later (*)",
+          "two years later",
+          "three years later",
+          "four years later",
+          "five years later",
+          "six years later",
+          "seven years later",
+          "eight years later",
+          "nine years later"
+        ],
         "source_page": 99,
         "entity": 4141
       },
@@ -1056,6 +1102,13 @@
           "entity": 4141,
           "backend": "azure",
           "table_kind": "balance_sheet_liabilities"
+        },
+        "movement_semantics": {
+          "row_label": "Change in estimates of prior year provisions",
+          "row_index": 6,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": true,
+          "column_index": 1
         },
         "gross_prior_year_claims": -127.9,
         "ri_share_prior_year": 46.6,
@@ -1201,12 +1254,12 @@
       }
     }
   },
-  "total_cost_usd": 0.029636,
-  "total_tokens": 68373,
+  "total_cost_usd": 0.029873,
+  "total_tokens": 71288,
   "validation": {
     "passed": true,
-    "total_discrepancies": 9,
-    "within_tolerance": 9,
+    "total_discrepancies": 12,
+    "within_tolerance": 12,
     "hard_failures": 0,
     "hard_failure_details": []
   }

@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T11:14:02.818333+00:00",
+  "extraction_timestamp": "2026-09-13T03:59:29.951198+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -16,20 +18,29 @@
       "prior_year_development_gbp_m": 84.299,
       "prior_year_development_pct": 10.39,
       "direction": "strengthening",
-      "prior_year_movement_page": 16,
+      "prior_year_movement_page": 17,
       "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "Over/under-provision in respect of prior claims and claim adjustment expenses",
+      "exact_reserve_text": "Over/under-provision in respect of prior claims and claim adjustment expenses 46,910",
       "primary_causes": [
-        "Adverse claims development",
-        "Other"
+        "Adverse claims development"
       ],
       "specific_events": [],
-      "specific_years_affected": [],
+      "specific_years_affected": [
+        2018,
+        2017,
+        2016,
+        2015,
+        2014,
+        2013,
+        2012,
+        2011
+      ],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "The syndicate experienced a strengthening of prior year reserves by $46.91 million in 2019, as indicated by an over-provision in respect of prior claims and claim adjustment expenses. No specific events or detailed causes for this adverse development were provided.",
+      "standardized_narrative": "Hiscox Syndicate 3624 reported a gross prior year reserve strengthening of $46.91 million for the year ended 31 December 2019. This represents a 5.78% increase relative to the opening gross claims outstanding of $811.023 million. The strengthening is attributed to an over-provision in respect of prior claims and claim adjustment expenses. The claims development tables suggest that cumulative claims may increase in the second year for some business, indicating a general trend of adverse claims development for prior underwriting years.",
       "raw_causal_phrases": [
-        "Over/under-provision in respect of prior claims and claim adjustment expenses"
+        "Over/under-provision in respect of prior claims and claim adjustment expenses",
+        "Some business is not off risk after the first 12 months, therefore we would anticipate cumulative claims to increase in the second year as this business is earned."
       ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 10.1,
@@ -60,15 +71,15 @@
           "percentage_of_total": 42.6
         }
       ],
-      "gross_premium_page": 15,
+      "gross_premium_page": 16,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "Some gross premiums written for specific lines of business are reported as negative values in the segmental analysis, which is unusual for gross written premiums. [RAG OVERRIDE: Model said PYD=46.91, RAG triangle computed 84.299. Using RAG value.]",
+      "data_quality_notes": "The prior year development figure of $46.91 million is from the \"Over/under-provision in respect of prior claims and claim adjustment expenses\" line item in the Technical Provisions note. A calculation from the gross claims development triangle (Page 19) for years 2017 and prior suggests a larger strengthening of approximately $84.3 million. The discrepancy may be due to the explicit line item including \"claim adjustment expenses\" or other factors not directly captured by the claims triangle. The explicit line item is used as the primary source. [RAG OVERRIDE: Model said PYD=46.91, RAG triangle computed 84.299. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "thousands",
-        "page": 18,
+        "page": 19,
         "underwriting_years": [
           2011,
           2012,
@@ -184,20 +195,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_3624_2019_llm.pdf",
-      "content_hash": "d3f49c57bbe8fbfd403525c2b7a7b38e7f2d2163aad58661f0276f88e3ad1940",
-      "standardized_at": "2026-03-18T12:11:55.953231+00:00",
+      "content_hash": "0174c68db7825a2979fdb3e77b0bc68dc578fa20f78d9562a0749aa629a3506d",
+      "standardized_at": "2026-09-11T12:30:22.568445+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 10637,
-        "output_tokens": 1602,
-        "total_tokens": 17614,
-        "cost_usd": 0.007196
+        "input_tokens": 11699,
+        "output_tokens": 1846,
+        "total_tokens": 18629,
+        "cost_usd": 0.008125
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 84.299,
+        "model_value": 46.91,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 33,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -310,6 +333,17 @@
             null
           ]
         ],
+        "row_labels": [
+          "At end of underwriting year one",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later",
+          "Seven years later",
+          "Eight years later"
+        ],
         "source_page": 33,
         "entity": 3624
       },
@@ -380,6 +414,13 @@
           "entity": 3624,
           "backend": "azure",
           "table_kind": "balance_sheet_liabilities"
+        },
+        "movement_semantics": {
+          "row_label": "Over/under-provision in respect of prior claims and claim adjustment expenses",
+          "row_index": 4,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": false,
+          "column_index": 1
         },
         "gross_prior_year_claims": 46.9,
         "ri_share_prior_year": -16.5,
@@ -464,18 +505,35 @@
       "prior_year_movement_confidence": 1.0,
       "exact_reserve_text": "Over/under-provision in respect of prior claims and claim adjustment expenses 46,910 (16,465) 30,445",
       "primary_causes": [
-        "Adverse claims development"
+        "Adverse claims development",
+        "Large loss development"
       ],
       "specific_events": [],
-      "specific_years_affected": [],
+      "specific_years_affected": [
+        2011,
+        2012,
+        2013,
+        2014,
+        2015,
+        2016,
+        2017
+      ],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "Gross claims outstanding at 1 January 2019 were $811.023m. During 2019 there was an adverse prior-year development (gross) of $46.91m, equivalent to c.5.8% of opening gross reserves, recorded in the technical provisions as an \"Over/under-provision in respect of prior claims and claim adjustment expenses\". The report gives no detailed narrative attribution; the movement is recorded at gross level in the technical provisions.",
+      "standardized_narrative": "The syndicate recorded a gross prioryear reserve strengthening of $46.91m (5.8% of opening gross claims outstanding of $811.02m) in 2019. The technical provisions note shows an \"Over/underprovision in respect of prior claims and claim adjustment expenses\" (gross $46.91m). The claims development triangle indicates adverse development concentrated in older years (notably the 2015-2016 cohorts). The movement appears to reflect adverse claims development / large loss development, with the syndicate's casualty/thirdparty liability portfolio being the principal exposure given its predominance in written premium.",
       "raw_causal_phrases": [
         "Over/under-provision in respect of prior claims and claim adjustment expenses",
-        "Provision in respect of prior years"
+        "Adjustments to the amounts of claims provisions established in prior years are reflected in the annual accounts for the period in which the adjustments are made."
       ],
-      "lob_movements": [],
+      "lob_movements": [
+        {
+          "line_of_business": "Casualty",
+          "direction": "strengthening",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.5
+        }
+      ],
       "gross_premiums_written_gbp_m": 10.1,
       "gross_premium_mix": [
         {
@@ -504,14 +562,14 @@
           "percentage_of_total": 42.6
         }
       ],
-      "gross_premium_page": 2,
+      "gross_premium_page": 25,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "Report is presented in US Dollars. Prior-year development (gross) taken from Technical Provisions note row 'Over/under-provision in respect of prior claims and claim adjustment expenses' (gross column). No textual narrative quantifying causes or named prior-year events was provided. Gross premium mix uses the divisional breakdown from the Managing Agent's Report (values in millions) rather than the statutory segmental table. [RAG OVERRIDE: Model said PYD=46.91, RAG triangle computed 84.299. Using RAG value.]",
+      "data_quality_notes": "Primary source for prior-year development used: technical provisions movement row 'Over/underprovision in respect of prior claims...' (gross $46,910k). A gross claims development triangle is also present and, when used to compute PYD by excluding the two most recent underwriting years, yields a larger adverse movement (~$84.299m). No RITC was identified in the notes but the triangle suggests adverse development concentrated in 2015-2016; this discrepancy is noted. All monetary figures are reported in the report's native currency (USD) and converted from $000 to millions. Confidence levels reflect explicit table values vs. inferred LOB allocations. [RAG OVERRIDE: Model said PYD=46.91, RAG triangle computed 84.299. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
-        "units": "millions",
+        "units": "thousands",
         "page": 30,
         "underwriting_years": [
           2011,
@@ -526,76 +584,65 @@
         ],
         "development_rows": [
           [
-            84.267,
-            130.271,
-            100.234,
-            144.173,
-            159.348,
-            207.264,
-            188.624,
-            166.233,
-            130.454
+            84267,
+            130271,
+            100234,
+            144173,
+            159348,
+            207264,
+            188624,
+            166233,
+            130454
           ],
           [
-            198.958,
-            238.355,
-            230.987,
-            277.463,
-            357.161,
-            494.02,
-            347.382,
-            308.762,
+            198958,
+            238355,
+            230987,
+            277463,
+            357161,
+            494020,
+            347382,
+            308762,
             null
           ],
           [
-            202.039,
-            255.367,
-            232.161,
-            288.786,
-            346.969,
-            462.562,
-            352.113,
-            null,
-            null
-          ],
-          [
-            188.28,
-            251.129,
-            244.544,
-            303.258,
-            382.91,
-            513.342,
-            null,
+            202039,
+            255367,
+            232161,
+            288786,
+            346969,
+            462562,
+            352113,
             null,
             null
           ],
           [
-            184.263,
-            242.655,
-            250.857,
-            311.968,
-            413.059,
-            null,
+            188280,
+            251129,
+            244544,
+            303258,
+            382910,
+            513342,
             null,
             null,
             null
           ],
           [
-            175.956,
-            231.49,
-            258.454,
-            313.956,
-            null,
+            184263,
+            242655,
+            250857,
+            311968,
+            413059,
             null,
             null,
             null,
             null
           ],
           [
-            184.348,
-            228.276,
-            256.975,
-            null,
+            175956,
+            231490,
+            258454,
+            313956,
             null,
             null,
             null,
@@ -603,9 +650,9 @@
             null
           ],
           [
-            190.971,
-            224.056,
-            null,
+            184348,
+            228276,
+            256975,
             null,
             null,
             null,
@@ -614,7 +661,18 @@
             null
           ],
           [
-            193.321,
+            190971,
+            224056,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            193321,
             null,
             null,
             null,
@@ -628,20 +686,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_3624_2019_llm.pdf",
-      "content_hash": "d3f49c57bbe8fbfd403525c2b7a7b38e7f2d2163aad58661f0276f88e3ad1940",
-      "standardized_at": "2026-03-18T12:13:09.397739+00:00",
+      "content_hash": "0174c68db7825a2979fdb3e77b0bc68dc578fa20f78d9562a0749aa629a3506d",
+      "standardized_at": "2026-09-11T12:33:31.701995+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 25994,
-        "output_tokens": 6634,
-        "total_tokens": 32628,
-        "cost_usd": 0.019766
+        "input_tokens": 27802,
+        "output_tokens": 8908,
+        "total_tokens": 36710,
+        "cost_usd": 0.024766
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 84.299,
+        "model_value": 46.91,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 33,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -754,6 +824,17 @@
             null
           ]
         ],
+        "row_labels": [
+          "At end of underwriting year one",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later",
+          "Seven years later",
+          "Eight years later"
+        ],
         "source_page": 33,
         "entity": 3624
       },
@@ -824,6 +905,13 @@
           "entity": 3624,
           "backend": "azure",
           "table_kind": "balance_sheet_liabilities"
+        },
+        "movement_semantics": {
+          "row_label": "Over/under-provision in respect of prior claims and claim adjustment expenses",
+          "row_index": 4,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": false,
+          "column_index": 1
         },
         "gross_prior_year_claims": 46.9,
         "ri_share_prior_year": -16.5,
@@ -896,12 +984,12 @@
       }
     }
   },
-  "total_cost_usd": 0.026962,
-  "total_tokens": 50242,
+  "total_cost_usd": 0.032891,
+  "total_tokens": 55339,
   "validation": {
     "passed": true,
-    "total_discrepancies": 8,
-    "within_tolerance": 8,
+    "total_discrepancies": 10,
+    "within_tolerance": 10,
     "hard_failures": 0,
     "hard_failure_details": []
   }

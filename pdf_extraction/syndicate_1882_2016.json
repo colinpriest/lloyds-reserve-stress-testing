@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-05T19:42:41.680200+00:00",
+  "extraction_timestamp": "2026-09-13T04:11:15.547270+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -10,38 +12,23 @@
     "gemini-2.5-flash": {
       "syndicate": 1882,
       "year": 2016,
-      "opening_reserves_gbp_m": 146.427,
-      "opening_reserves_page": 41,
+      "opening_reserves_gbp_m": 146.426,
+      "opening_reserves_page": 6,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": 9.798,
       "prior_year_development_pct": 6.69,
       "direction": "strengthening",
-      "prior_year_movement_page": 7,
+      "prior_year_movement_page": 3,
       "prior_year_movement_confidence": 1.0,
       "exact_reserve_text": "Prior period reserve deterioration was GBP 7.5m (2015: deterioration of GBP 0.2 million) due to adverse experience across property, marine and third party liability.",
       "primary_causes": [
-        "Adverse claims development",
-        "Social inflation / litigation trends",
-        "Economic inflation / claims cost inflation"
+        "Adverse claims development"
       ],
       "specific_events": [],
       "specific_years_affected": [],
-      "prior_year_events": [
-        {
-          "event_name": "Prior period reserve deterioration",
-          "event_year": 2015,
-          "impact_description": "adverse experience across property, marine and third party liability",
-          "lobs_affected": [
-            "Property",
-            "Marine",
-            "Casualty"
-          ],
-          "amount_gbp_m": 7.5,
-          "confidence": 1.0
-        }
-      ],
+      "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "Syndicate 1882 experienced a prior period reserve strengthening of GBP 7.5 million in 2016. This deterioration was attributed to adverse experience across property, marine, and third-party liability lines of business.",
+      "standardized_narrative": "Syndicate 1882 experienced a prior period reserve strengthening of GBP 7.5 million in 2016, primarily due to adverse claims development across property, marine, and third party liability lines of business.",
       "raw_causal_phrases": [
         "adverse experience across property, marine and third party liability"
       ],
@@ -96,15 +83,15 @@
           "percentage_of_total": 49.7
         }
       ],
-      "gross_premium_page": 32,
+      "gross_premium_page": 14,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": " [RAG OVERRIDE: Model said PYD=7.5, RAG triangle computed 9.798. Using RAG value.]",
+      "data_quality_notes": "Prior year development figure is taken from narrative text explicitly stating gross deterioration. A calculation from the gross claims development triangle yielded a different, lower strengthening amount of GBP 4.601m. The narrative figure is considered more direct. Individual gross LOB movements for prior year development are not quantified in the report. [RAG OVERRIDE: Model said PYD=7.5, RAG triangle computed 9.798. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
-        "page": 39,
+        "page": 16,
         "underwriting_years": [
           2011,
           2012,
@@ -165,21 +152,33 @@
         ]
       },
       "source_type": "syndicate",
-      "source_file": "syndicate_reports\\pdfs\\syndicate_1882_2016.pdf",
-      "content_hash": "8b209980dfcde7462d2ba9ff6c5cf560cc684eae26c8ea435d60dafb3f27b7b1",
-      "standardized_at": "2026-03-17T01:17:37.851614+00:00",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_1882_2016_llm.pdf",
+      "content_hash": "0654347f88bf9ce5fb3ce8e4e15b6bf639e9d510f6bff28e874af180784a6e82",
+      "standardized_at": "2026-09-11T10:54:30.098255+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 16204,
-        "output_tokens": 1367,
-        "total_tokens": 20115,
-        "cost_usd": 0.008279
+        "input_tokens": 11183,
+        "output_tokens": 1231,
+        "total_tokens": 17410,
+        "cost_usd": 0.006432
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 9.798,
+        "model_value": 7.5,
+        "triangle_type": "net",
+        "triangle_units": "millions",
+        "triangle_units_evidence": "default",
+        "triangle_source_page": 40,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
-        "type": "gross",
+        "type": "net",
         "currency": "USD",
         "units": "millions",
+        "units_evidence": "default",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -237,6 +236,14 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "End of underwriting year",
+          "One Year Later",
+          "Two Years Later",
+          "Three Years Later",
+          "Four Years Later",
+          "Five Years Later"
         ],
         "source_page": 40,
         "entity": 1882
@@ -362,9 +369,9 @@
       "prior_year_development_gbp_m": 9.798,
       "prior_year_development_pct": 6.69,
       "direction": "strengthening",
-      "prior_year_movement_page": 32,
+      "prior_year_movement_page": 31,
       "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "Prior period reserve deterioration was GBP 7.5m (2015: deterioration of GBP 0.2 million) due to adverse experience across property, marine and third party liability. The prior year's net provision for claims outstanding generated a deficit for 2016 (2015: deficit) as detailed below:",
+      "exact_reserve_text": "The prior year's net provision for claims outstanding generated a deficit for 2016 (2015: deficit) as detailed below: Prior period reserve deterioration was GBP 7.5m (2015: deterioration of GBP 0.2 million) due to adverse experience across property, marine and third party liability.",
       "primary_causes": [
         "Adverse claims development"
       ],
@@ -372,10 +379,10 @@
       "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "Syndicate 1882 reported a gross prior-period reserve deterioration of GBP 7.5m in 2016 (approximately 5.13% of opening gross claims outstanding of GBP 146.4m). The movement was driven by adverse claims development, principally across Property, Marine and Third Party Liability, as disclosed in the Movement in prior year's provision for claims outstanding note.",
+      "standardized_narrative": "The syndicate recorded a prior year reserve deterioration of GBP 7.508m (gross), representing a 5.13% strengthening relative to the opening gross claims outstanding of GBP 146.426m. The movement was driven by adverse experience in property, marine and third party liability classes. The gross movement is disclosed in the Movement in prior year's provision for claims outstanding note and reconciles to the balance sheet claims outstanding.",
       "raw_causal_phrases": [
-        "Prior period reserve deterioration was GBP 7.5m (2015: deterioration of GBP 0.2 million) due to adverse experience across property, marine and third party liability",
-        "The prior year's net provision for claims outstanding generated a deficit for 2016 (2015: deficit) as detailed below:"
+        "The prior year's net provision for claims outstanding generated a deficit for 2016 (2015: deficit) as detailed below:",
+        "Prior period reserve deterioration was GBP 7.5m (2015: deterioration of GBP 0.2 million) due to adverse experience across property, marine and third party liability"
       ],
       "lob_movements": [
         {
@@ -445,7 +452,7 @@
       "gross_premium_page": 31,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Opening reserves taken as 31-Dec-2015 closing gross claims outstanding (146,426 GBP 000). Prior year development taken from the 'Movement in prior year's provision for claims outstanding' note (total gross deficit (7,508) GBP 000 = adverse strengthening +7.508m). Parentheses in notes indicate deficit/adverse movements (interpreted as strengthenings). Accident and health shows a small negative gross premium (51 GBP 000) in the segmental table. Claims development triangle present (gross amounts in GBP 000) and consistent with noted movements. No RITC identified that would distort the triangle. [RAG OVERRIDE: Model said PYD=7.508, RAG triangle computed 9.798. Using RAG value.]",
+      "data_quality_notes": "Opening gross claims outstanding taken from Statement of Financial Position (liabilities - Claims outstanding) prior-year comparative column. Prior year movement taken from Note 'Movement in prior year's provision for claims outstanding' (gross amounts). Claims development triangle (gross) is present on page 38 and was used to verify totals. Negative premium shown for 'Accident and health' in segmental analysis is reported as printed. All amounts converted from thousands to millions where applicable. [RAG OVERRIDE: Model said PYD=7.508, RAG triangle computed 9.798. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -511,21 +518,33 @@
         ]
       },
       "source_type": "syndicate",
-      "source_file": "syndicate_reports\\pdfs\\syndicate_1882_2016.pdf",
-      "content_hash": "8b209980dfcde7462d2ba9ff6c5cf560cc684eae26c8ea435d60dafb3f27b7b1",
-      "standardized_at": "2026-03-17T01:19:49.885098+00:00",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_1882_2016_llm.pdf",
+      "content_hash": "0654347f88bf9ce5fb3ce8e4e15b6bf639e9d510f6bff28e874af180784a6e82",
+      "standardized_at": "2026-09-11T10:56:10.087672+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 43507,
-        "output_tokens": 7352,
-        "total_tokens": 50859,
-        "cost_usd": 0.025581
+        "input_tokens": 22240,
+        "output_tokens": 5520,
+        "total_tokens": 27760,
+        "cost_usd": 0.0166
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 9.798,
+        "model_value": 7.508,
+        "triangle_type": "net",
+        "triangle_units": "millions",
+        "triangle_units_evidence": "default",
+        "triangle_source_page": 40,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
-        "type": "gross",
+        "type": "net",
         "currency": "USD",
         "units": "millions",
+        "units_evidence": "default",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -583,6 +602,14 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "End of underwriting year",
+          "One Year Later",
+          "Two Years Later",
+          "Three Years Later",
+          "Four Years Later",
+          "Five Years Later"
         ],
         "source_page": 40,
         "entity": 1882
@@ -700,12 +727,12 @@
       }
     }
   },
-  "total_cost_usd": 0.03386,
-  "total_tokens": 70974,
+  "total_cost_usd": 0.023032,
+  "total_tokens": 45170,
   "validation": {
     "passed": true,
-    "total_discrepancies": 21,
-    "within_tolerance": 21,
+    "total_discrepancies": 17,
+    "within_tolerance": 17,
     "hard_failures": 0,
     "hard_failure_details": []
   }

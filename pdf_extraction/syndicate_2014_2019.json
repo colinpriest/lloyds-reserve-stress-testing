@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-05T19:58:12.461707+00:00",
+  "extraction_timestamp": "2026-09-13T04:05:26.920661+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -13,24 +15,34 @@
       "opening_reserves_gbp_m": 269.921,
       "opening_reserves_page": 4,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": -0.021,
-      "prior_year_development_pct": -0.01,
-      "direction": "release",
+      "prior_year_development_gbp_m": 35.337,
+      "prior_year_development_pct": 13.09,
+      "direction": "strengthening",
       "prior_year_movement_page": 15,
       "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "Change in prior year provisions (21)",
+      "exact_reserve_text": "Change in prior year provisions: 22 GBP 000",
       "primary_causes": [
-        "Favorable claims development"
+        "Favorable claims development",
+        "Adverse claims development",
+        "Natural catastrophe events",
+        "Large loss development",
+        "IBNR recalibration"
       ],
-      "specific_events": [],
-      "specific_years_affected": [],
+      "specific_events": [
+        "Californian Wildfires",
+        "Hurricane Michael"
+      ],
+      "specific_years_affected": [
+        2018
+      ],
       "prior_year_events": [
         {
           "event_name": "Californian Wildfires",
           "event_year": 2018,
-          "impact_description": "impacted 2018 net claims ratio (adverse development)",
+          "impact_description": "impacted 2018 net claims ratio",
           "lobs_affected": [
-            "Property"
+            "Property",
+            "Reinsurance - Property"
           ],
           "amount_gbp_m": null,
           "confidence": 0.5
@@ -38,9 +50,22 @@
         {
           "event_name": "Hurricane Michael",
           "event_year": 2018,
-          "impact_description": "impacted 2018 net claims ratio (adverse development)",
+          "impact_description": "impacted 2018 net claims ratio",
           "lobs_affected": [
-            "Property"
+            "Property",
+            "Reinsurance - Property"
+          ],
+          "amount_gbp_m": null,
+          "confidence": 0.5
+        },
+        {
+          "event_name": "Reserve deterioration on certain products (predominantly longer tail classes)",
+          "event_year": 2018,
+          "impact_description": "reserve deterioration on certain products (predominantly longer tail classes)",
+          "lobs_affected": [
+            "Professional Lines",
+            "Casualty",
+            "Reinsurance - Casualty"
           ],
           "amount_gbp_m": null,
           "confidence": 0.5
@@ -48,45 +73,24 @@
       ],
       "named_events": [
         {
-          "event_name": "Californian Wildfires",
-          "event_year": 2018,
-          "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": null,
-          "loss_description": "impacted by Californian Wildfires",
-          "lobs_affected": [
-            "Property"
-          ],
-          "page": 2,
-          "confidence": 0.8
-        },
-        {
-          "event_name": "Hurricane Michael",
-          "event_year": 2018,
-          "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": null,
-          "loss_description": "impacted by Hurricane Michael",
-          "lobs_affected": [
-            "Property"
-          ],
-          "page": 2,
-          "confidence": 0.8
-        },
-        {
           "event_name": "California Earthquake - Los Angeles",
           "event_year": 2018,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": 103.5,
-          "loss_description": "highest gross event loss for year ended 31 December 2018 was California Earthquake - Los Angeles at GBP 103.5m",
+          "loss_description": "highest gross event loss for year ended 31 December 2018",
           "lobs_affected": [
-            "Property"
+            "Property",
+            "Reinsurance - Property"
           ],
           "page": 9,
           "confidence": 0.8
         }
       ],
-      "standardized_narrative": "The syndicate reported a gross prior year reserve release of GBP 0.021 million for 2019. This was primarily driven by favourable claims development, as indicated by the 'Change in prior year provisions' in the technical notes. While the overall gross movement was a release, the net prior year development showed a small strengthening, and the Managing Agent's Report mentioned both low catastrophe activity contributing to a reduction in net claims ratio and an increase in reserves on Casualty Treaty accounts in 2019.",
+      "standardized_narrative": "The Syndicate reported a very small gross strengthening of GBP 0.022 million in prior year reserves for 2019. This follows a net favourable development of GBP 0.022 million, which was influenced by low catastrophe activity in 2019. However, there was an increase in reserves on Casualty Treaty accounts. The 2018 net claims ratio was impacted by adverse development from Californian Wildfires and Hurricane Michael, as well as reserve deterioration on longer tail classes.",
       "raw_causal_phrases": [
-        "favourable prior year development of less than GBP 0.1m"
+        "low catastrophe activity in 2019",
+        "increase in reserves on the Casualty Treaty accounts",
+        "2018 net claims ratio which was impacted by Californian Wildfires and Hurricane Michael and reserve deterioration on certain products (predominantly longer tail classes)"
       ],
       "lob_movements": [
         {
@@ -118,14 +122,14 @@
           "confidence": 0.8
         },
         {
-          "line_of_business": "Other",
+          "line_of_business": "Professional Lines",
           "direction": "strengthening",
           "amount_gbp_m": 1.727,
           "percentage": null,
           "confidence": 0.8
         },
         {
-          "line_of_business": "Reinsurance - Specialty",
+          "line_of_business": "Reinsurance",
           "direction": "strengthening",
           "amount_gbp_m": 1.677,
           "percentage": null,
@@ -168,7 +172,7 @@
       "gross_premium_page": 13,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The LOB movements for prior year development are presented net of reinsurance in the document. The gross claims development triangle is present, but its reliability for calculating prior year development is impacted by the mention of a Reinsurance to Close (RITC) for the 2017 year of account into the 2018 year of account, which occurred at 31 December 2019. [RAG PYD NOT APPLIED: deterministic figure +35.337m has the opposite sign to both model values [-0.021, -0.021], which agree with each other; model values retained.] [CODE PYD NOT APPLIED: deterministic figure +35.337m has the opposite sign to both model values [-0.021, -0.021], which agree with each other; model values retained.]",
+      "data_quality_notes": "LOB movements for prior year development are reported net of reinsurance as gross breakdown is not available for the explicit prior year development figure. [RAG OVERRIDE: Model said PYD=0.022, RAG triangle computed 35.337. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -235,20 +239,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_2014_2019_llm.pdf",
-      "content_hash": "8f068ad3ab8c6747dc766e1f9e8371e521ff904b950a14d910accea0d905cd60",
-      "standardized_at": "2026-07-05T11:59:49.928957+00:00",
+      "content_hash": "8f07bc962c55e78516f0c6de0973e3456cae55731304b36356f2258a3592beaa",
+      "standardized_at": "2026-09-11T11:41:03.315651+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 13733,
-        "output_tokens": 2151,
-        "total_tokens": 24202,
-        "cost_usd": 0.009497
+        "input_tokens": 14537,
+        "output_tokens": 2088,
+        "total_tokens": 25736,
+        "cost_usd": 0.009581
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 35.337,
+        "model_value": 0.022,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 28,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2014,
           2015,
@@ -306,6 +322,14 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At the end of the underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later"
         ],
         "source_page": 28,
         "entity": 2014
@@ -389,6 +413,13 @@
           "backend": "azure",
           "table_kind": "provisions_movement"
         },
+        "movement_semantics": {
+          "row_label": "Change in prior year provisions",
+          "row_index": 6,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": true,
+          "column_index": 1
+        },
         "gross_prior_year_claims": -0.0,
         "net_prior_year_claims": 0.0,
         "opening_gross_claims_outstanding": 269.921
@@ -454,6 +485,10 @@
         "foreign_pages": [],
         "underwriting_year_pages": [
           34,
+          35,
+          36,
+          37,
+          38,
           39,
           40,
           41,
@@ -463,7 +498,8 @@
           45,
           46,
           47,
-          48
+          48,
+          49
         ],
         "underwriting_year_tables_skipped": 14,
         "document_unit_hint": 0.001
@@ -488,15 +524,16 @@
       "opening_reserves_gbp_m": 269.921,
       "opening_reserves_page": 13,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": -0.021,
-      "prior_year_development_pct": -0.01,
-      "direction": "release",
+      "prior_year_development_gbp_m": 35.337,
+      "prior_year_development_pct": 13.09,
+      "direction": "strengthening",
       "prior_year_movement_page": 31,
       "prior_year_movement_confidence": 1.0,
       "exact_reserve_text": "Claims incurred, net of reinsurance, include favourable prior year development of less than GBP 0.1m (2018: favourable development of GBP 3.9m). Prior year claims development is analysed by line of business in the table below.",
       "primary_causes": [
-        "Favorable claims development",
-        "Natural catastrophe events"
+        "Natural catastrophe events",
+        "Adverse claims development",
+        "Favorable claims development"
       ],
       "specific_events": [
         "Californian Wildfires",
@@ -509,36 +546,55 @@
         {
           "event_name": "Californian Wildfires",
           "event_year": 2018,
-          "impact_description": "2018 net claims ratio was impacted by Californian Wildfires (contributed to adverse development in 2018)",
+          "impact_description": "Mentioned as having impacted the 2018 net claims ratio (contributed to adverse development in 2018).",
           "lobs_affected": [
-            "Property",
-            "Casualty"
+            "Property"
           ],
           "amount_gbp_m": null,
-          "confidence": 0.6
+          "confidence": 0.8
         },
         {
           "event_name": "Hurricane Michael",
           "event_year": 2018,
-          "impact_description": "2018 net claims ratio was impacted by Hurricane Michael (contributed to adverse development in 2018)",
+          "impact_description": "Mentioned as having impacted the 2018 net claims ratio (contributed to adverse development in 2018).",
           "lobs_affected": [
-            "Property",
+            "Property"
+          ],
+          "amount_gbp_m": null,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Reserve deterioration on longer tail classes",
+          "event_year": 2018,
+          "impact_description": "Reserve deterioration on certain products (predominantly longer tail classes) contributed to adverse reserve movements in 2018.",
+          "lobs_affected": [
             "Casualty"
           ],
           "amount_gbp_m": null,
-          "confidence": 0.6
+          "confidence": 0.5
         }
       ],
       "named_events": [
+        {
+          "event_name": "California Earthquake - Los Angeles",
+          "event_year": 2018,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "Highest gross event loss for year ended 31 December 2018 was California Earthquake - Los Angeles at GBP 103.5m.",
+          "lobs_affected": [
+            "Property"
+          ],
+          "page": 23,
+          "confidence": 0.8
+        },
         {
           "event_name": "Californian Wildfires",
           "event_year": 2018,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "impacted the 2018 net claims ratio",
+          "loss_description": "Referenced as impacting the 2018 net claims ratio.",
           "lobs_affected": [
-            "Property",
-            "Casualty"
+            "Property"
           ],
           "page": 5,
           "confidence": 0.8
@@ -548,20 +604,20 @@
           "event_year": 2018,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "impacted the 2018 net claims ratio",
+          "loss_description": "Referenced as impacting the 2018 net claims ratio.",
           "lobs_affected": [
-            "Property",
-            "Casualty"
+            "Property"
           ],
           "page": 5,
           "confidence": 0.8
         }
       ],
-      "standardized_narrative": "The syndicate's opening gross claims outstanding at 1 January 2019 were GBP 269.921m. During 2019 there was a very small favourable prior year development on gross claims of approximately GBP 0.021m (a release), reflected as \"favourable prior year development of less than GBP 0.1m\" in the accounts. The small release was driven by favourable claims development and the low catastrophe activity in 2019, although 2018 had been impacted by Californian wildfires and Hurricane Michael which had previously increased claims pressure in certain lines.",
+      "standardized_narrative": "Opening gross claims outstanding at 1 January 2019 were GBP 269.922m. Movement in prior year provisions for claims outstanding produced a small favourable prior-year development of GBP 0.021m (a release), driven by low catastrophe activity in 2019 which was partly offset by reserve increases on casualty treaty / longer-tail accounts. The overall picture across lines is mixed but the aggregate prior-year movement is immaterial relative to the opening reserves.",
       "raw_causal_phrases": [
+        "The principal driver of the reduction was due to the low catastrophe activity in 2019.",
+        "This has been offset by an increase in reserves on the Casualty Treaty accounts.",
         "Claims incurred, net of reinsurance, include favourable prior year development of less than GBP 0.1m (2018: favourable development of GBP 3.9m).",
-        "This compares to the 2018 net claims ratio which was impacted by Californian Wildfires and Hurricane Michael and reserve deterioration on certain products (predominantly longer tail classes).",
-        "The principal driver of the reduction was due to the low catastrophe activity in 2019. This has been offset by an increase in reserves on the Casualty Treaty accounts."
+        "reserve deterioration on certain products (predominantly longer tail classes)"
       ],
       "lob_movements": [
         {
@@ -593,7 +649,7 @@
           "confidence": 0.5
         },
         {
-          "line_of_business": "Professional Lines",
+          "line_of_business": "Aggregate",
           "direction": "strengthening",
           "amount_gbp_m": 1.727,
           "percentage": null,
@@ -643,7 +699,7 @@
       "gross_premium_page": 26,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Opening gross claims outstanding taken from Statement of Financial Position (gross claims outstanding). Prior year development gross figure taken from Technical Provisions note ('Change in prior year provisions' = (21) thousand = release). Line-by-line prior year movements are presented in the document only on a net (after reinsurance) basis; those net amounts were used for lob_movements with reduced confidence. Named event impacts are referenced in narrative but not quantified for gross reserve impact. Claims development triangle is present and was not distorted by an RITC in the 2019 reconciliation. [RAG PYD NOT APPLIED: deterministic figure +35.337m has the opposite sign to both model values [-0.021, -0.021], which agree with each other; model values retained.] [CODE PYD NOT APPLIED: deterministic figure +35.337m has the opposite sign to both model values [-0.021, -0.021], which agree with each other; model values retained.]",
+      "data_quality_notes": "Opening gross claims outstanding taken from Statement of Financial Position (Claims outstanding GBP 269,921k). Prior year movement (gross) taken from the 'Change in prior year provisions' row in the Technical Provisions note showing gross (21)k (i.e. a GBP 21k release). Line-of-business prior-year movements are only published net of reinsurance in the Claims Incurred note; gross movements by LOB are not provided, so LOB amounts above are based on the reported net prior year development by statutory class (used as a last-resort proxy) and therefore have lower confidence. A gross claims development triangle (gross) is present and was used as cross-check. All monetary conversions: report numbers are presented in millions (original report in GBP 000). [RAG OVERRIDE: Model said PYD=-0.021, RAG triangle computed 35.337. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -710,20 +766,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_2014_2019_llm.pdf",
-      "content_hash": "8f068ad3ab8c6747dc766e1f9e8371e521ff904b950a14d910accea0d905cd60",
-      "standardized_at": "2026-07-05T12:00:56.541405+00:00",
+      "content_hash": "8f07bc962c55e78516f0c6de0973e3456cae55731304b36356f2258a3592beaa",
+      "standardized_at": "2026-09-11T11:43:35.440958+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 35010,
-        "output_tokens": 6040,
-        "total_tokens": 41050,
-        "cost_usd": 0.020833
+        "input_tokens": 35770,
+        "output_tokens": 8457,
+        "total_tokens": 44227,
+        "cost_usd": 0.025856
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 35.337,
+        "model_value": -0.021,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 28,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2014,
           2015,
@@ -781,6 +849,14 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At the end of the underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later"
         ],
         "source_page": 28,
         "entity": 2014
@@ -864,6 +940,13 @@
           "backend": "azure",
           "table_kind": "provisions_movement"
         },
+        "movement_semantics": {
+          "row_label": "Change in prior year provisions",
+          "row_index": 6,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": true,
+          "column_index": 1
+        },
         "gross_prior_year_claims": -0.0,
         "net_prior_year_claims": 0.0,
         "opening_gross_claims_outstanding": 269.921
@@ -929,6 +1012,10 @@
         "foreign_pages": [],
         "underwriting_year_pages": [
           34,
+          35,
+          36,
+          37,
+          38,
           39,
           40,
           41,
@@ -938,7 +1025,8 @@
           45,
           46,
           47,
-          48
+          48,
+          49
         ],
         "underwriting_year_tables_skipped": 14,
         "document_unit_hint": 0.001
@@ -958,12 +1046,12 @@
       }
     }
   },
-  "total_cost_usd": 0.03033,
-  "total_tokens": 65252,
+  "total_cost_usd": 0.035437,
+  "total_tokens": 69963,
   "validation": {
     "passed": true,
-    "total_discrepancies": 24,
-    "within_tolerance": 24,
+    "total_discrepancies": 25,
+    "within_tolerance": 25,
     "hard_failures": 0,
     "hard_failure_details": []
   }

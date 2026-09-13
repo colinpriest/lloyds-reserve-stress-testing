@@ -1,14 +1,464 @@
 {
-  "extraction_timestamp": "2026-03-17T13:24:55.857283+00:00",
+  "extraction_timestamp": "2026-09-13T04:02:46.978097+00:00",
   "spec": {
-    "prompt_version": "2.6",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
   "source_file": "syndicate_reports\\pdfs\\syndicate_1947_2019.pdf",
-  "first_year_syndicate": true,
-  "reason": "Syndicate 1947 began underwriting in 2018; report year 2019 is within the first two underwriting years - insufficient development history for prior year development analysis",
-  "syndicate": 1947,
-  "year": 2019,
-  "inception_year": 2018
+  "models": {
+    "gemini-2.5-flash": {
+      "syndicate": 1947,
+      "year": 2019,
+      "opening_reserves_gbp_m": 20.974,
+      "opening_reserves_page": 4,
+      "opening_reserves_confidence": 1.0,
+      "prior_year_development_gbp_m": 1.8,
+      "prior_year_development_pct": 8.58,
+      "direction": "strengthening",
+      "prior_year_movement_page": 14,
+      "prior_year_movement_confidence": 0.8,
+      "exact_reserve_text": "Claims incurred, net of reinsurance, include unfavourable prior year development of GBP 1.8m.",
+      "primary_causes": [
+        "Adverse claims development"
+      ],
+      "specific_events": [],
+      "specific_years_affected": [],
+      "prior_year_events": [],
+      "named_events": [
+        {
+          "event_name": "Typhoon Faxai",
+          "event_year": 2019,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "The net loss ratio of 78% (2018: 170%) reflects the Syndicate's exposure to two catastrophe events, Typhoon Faxai and Hagibis. Losses incurred on these events are significantly less than the catastrophe events experienced in 2018.",
+          "lobs_affected": [
+            "Property"
+          ],
+          "page": 2,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Typhoon Hagibis",
+          "event_year": 2019,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "The net loss ratio of 78% (2018: 170%) reflects the Syndicate's exposure to two catastrophe events, Typhoon Faxai and Hagibis. Losses incurred on these events are significantly less than the catastrophe events experienced in 2018.",
+          "lobs_affected": [
+            "Property"
+          ],
+          "page": 2,
+          "confidence": 0.8
+        }
+      ],
+      "standardized_narrative": "The syndicate reported a net unfavourable prior year development of GBP 1.8m in 2019, primarily due to adverse claims development. No specific events or prior accident years were identified as the cause of this movement. The report also noted exposure to 2019 catastrophe events, Typhoon Faxai and Hagibis, which contributed to the net loss ratio but were not quantified individually.",
+      "raw_causal_phrases": [
+        "unfavourable prior year development"
+      ],
+      "lob_movements": [
+        {
+          "line_of_business": "Marine",
+          "direction": "strengthening",
+          "amount_gbp_m": 0.037,
+          "percentage": null,
+          "confidence": 0.8
+        },
+        {
+          "line_of_business": "Property",
+          "direction": "strengthening",
+          "amount_gbp_m": 0.245,
+          "percentage": null,
+          "confidence": 0.8
+        },
+        {
+          "line_of_business": "Specialty",
+          "direction": "release",
+          "amount_gbp_m": -0.007,
+          "percentage": null,
+          "confidence": 0.8
+        },
+        {
+          "line_of_business": "Treaty",
+          "direction": "strengthening",
+          "amount_gbp_m": 1.537,
+          "percentage": null,
+          "confidence": 0.8
+        }
+      ],
+      "gross_premiums_written_gbp_m": 58.107,
+      "gross_premium_mix": [
+        {
+          "line_of_business": "Marine aviation and transport",
+          "amount_gbp_m": 0.278,
+          "percentage_of_total": 0.48
+        },
+        {
+          "line_of_business": "Fire and other damage to property",
+          "amount_gbp_m": 8.439,
+          "percentage_of_total": 14.52
+        },
+        {
+          "line_of_business": "Miscellaneous",
+          "amount_gbp_m": 0.101,
+          "percentage_of_total": 0.17
+        },
+        {
+          "line_of_business": "Reinsurance",
+          "amount_gbp_m": 49.289,
+          "percentage_of_total": 84.82
+        }
+      ],
+      "gross_premium_page": 13,
+      "gross_premium_confidence": 1.0,
+      "currency": "GBP",
+      "data_quality_notes": "Prior year development and its LOB breakdown are reported as net of reinsurance, as no gross figure was explicitly available. The claims development triangle is very sparse, only showing two underwriting years with limited development periods.",
+      "_claims_triangle": {
+        "type": "gross",
+        "currency": "GBP",
+        "units": "thousands",
+        "page": 14,
+        "underwriting_years": [
+          2018,
+          2019
+        ],
+        "development_rows": [
+          [
+            20251,
+            26330
+          ],
+          [
+            20046,
+            null
+          ]
+        ]
+      },
+      "source_type": "syndicate",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_1947_2019_llm.pdf",
+      "content_hash": "8e8952ca02452ead3a2a4f1f323762f2c5563eef3ef6e59732e48d38d598e495",
+      "standardized_at": "2026-09-11T11:07:33.325994+00:00",
+      "standardization_model": "gemini-2.5-flash",
+      "_extraction_meta": {
+        "model": "gemini-2.5-flash",
+        "input_tokens": 11183,
+        "output_tokens": 1376,
+        "total_tokens": 17825,
+        "cost_usd": 0.006795
+      },
+      "_pyd_route": {
+        "source": "rag_provisions_text",
+        "value": 1.8,
+        "model_value": 1.812,
+        "note": "confirmed by the model value"
+      },
+      "_rag_triangle": {
+        "type": "gross",
+        "currency": "GBP",
+        "units": "thousands",
+        "underwriting_years": [
+          2018,
+          2019
+        ],
+        "development_rows": [
+          [
+            20251,
+            26330
+          ],
+          [
+            20046,
+            null
+          ]
+        ]
+      },
+      "_entity_binding": {
+        "requested_syndicate": 1947,
+        "entity_pages": {
+          "none": [
+            0
+          ],
+          "1947": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34
+          ]
+        },
+        "foreign_tables_skipped": 0,
+        "foreign_pages": [],
+        "underwriting_year_pages": [],
+        "underwriting_year_tables_skipped": 0,
+        "document_unit_hint": 0.001
+      }
+    },
+    "gpt-5-mini": {
+      "syndicate": 1947,
+      "year": 2019,
+      "opening_reserves_gbp_m": 20.974,
+      "opening_reserves_page": 13,
+      "opening_reserves_confidence": 1.0,
+      "prior_year_development_gbp_m": 1.8,
+      "prior_year_development_pct": 8.58,
+      "direction": "strengthening",
+      "prior_year_movement_page": 28,
+      "prior_year_movement_confidence": 0.5,
+      "exact_reserve_text": "Claims incurred, net of reinsurance, include unfavourable prior year development of GBP 1.8m. Prior year claims development is analysed by line of business in the table below.",
+      "primary_causes": [
+        "Adverse claims development"
+      ],
+      "specific_events": [
+        "Typhoon Faxai",
+        "Typhoon Hagibis"
+      ],
+      "specific_years_affected": [
+        2018
+      ],
+      "prior_year_events": [
+        {
+          "event_name": "2018 catastrophe events",
+          "event_year": 2018,
+          "impact_description": "2018 experienced larger catastrophe events compared with 2019; prior year reserve development was unfavourable overall.",
+          "lobs_affected": [
+            "Reinsurance - Property"
+          ],
+          "amount_gbp_m": null,
+          "confidence": 0.3
+        }
+      ],
+      "named_events": [
+        {
+          "event_name": "Typhoon Faxai",
+          "event_year": 2019,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "Losses incurred on these events are significantly less than the catastrophe events experienced in 2018.",
+          "lobs_affected": [
+            "Reinsurance - Property"
+          ],
+          "page": 6,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Typhoon Hagibis",
+          "event_year": 2019,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "Losses incurred on these events are significantly less than the catastrophe events experienced in 2018.",
+          "lobs_affected": [
+            "Reinsurance - Property"
+          ],
+          "page": 6,
+          "confidence": 0.8
+        }
+      ],
+      "standardized_narrative": "Opening gross claims outstanding at 1 January 2019 was GBP 20.974m. The syndicate reports an adverse prior-year reserve movement of GBP 1.812m (reported net of reinsurance in the accounts and used here as the best available quantified measure), indicating a strengthening of reserves of approximately 8.6% of opening gross reserves. The managing agent attributes overall claims activity in 2019 to catastrophe exposure (notably Typhoon Faxai and Typhoon Hagibis) though the prior-year movement is disclosed without a detailed gross movement reconciliation. The syndicate is predominantly reinsurance business, with the largest premium exposure in reinsurance treaties.",
+      "raw_causal_phrases": [
+        "Claims incurred, net of reinsurance, include unfavourable prior year development of GBP 1.8m.",
+        "Prior year claims development is analysed by line of business in the table below.",
+        "Adverse development (1,812)"
+      ],
+      "lob_movements": [
+        {
+          "line_of_business": "Marine",
+          "direction": "strengthening",
+          "amount_gbp_m": 0.037,
+          "percentage": null,
+          "confidence": 0.5
+        },
+        {
+          "line_of_business": "Property",
+          "direction": "strengthening",
+          "amount_gbp_m": 0.245,
+          "percentage": null,
+          "confidence": 0.5
+        },
+        {
+          "line_of_business": "Treaty",
+          "direction": "strengthening",
+          "amount_gbp_m": 1.537,
+          "percentage": null,
+          "confidence": 0.5
+        },
+        {
+          "line_of_business": "Treaty - Miscellaneous",
+          "direction": "strengthening",
+          "amount_gbp_m": 0.007,
+          "percentage": null,
+          "confidence": 0.4
+        }
+      ],
+      "gross_premiums_written_gbp_m": 58.107,
+      "gross_premium_mix": [
+        {
+          "line_of_business": "Marine aviation and transport",
+          "amount_gbp_m": 0.278,
+          "percentage_of_total": 0.478
+        },
+        {
+          "line_of_business": "Fire and other damage to property",
+          "amount_gbp_m": 8.439,
+          "percentage_of_total": 14.521
+        },
+        {
+          "line_of_business": "Miscellaneous",
+          "amount_gbp_m": 0.101,
+          "percentage_of_total": 0.174
+        },
+        {
+          "line_of_business": "Reinsurance",
+          "amount_gbp_m": 49.289,
+          "percentage_of_total": 84.827
+        }
+      ],
+      "gross_premium_page": 27,
+      "gross_premium_confidence": 1.0,
+      "currency": "GBP",
+      "data_quality_notes": "The report explicitly states an unfavourable prior year development of GBP 1.8m but this figure is presented in the text as 'net of reinsurance'. No explicit GROSS prior-year movement figure is provided. A gross claims development triangle is present but only has columns for 2018 and 2019, so cannot be used to isolate 'prior' years older than 2018. As a result the net figure (GBP 1.812m) has been used as a fallback for prior_year_development_gbp_m and flagged accordingly. There is minor inconsistency/ambiguity in sign/parentheses in the LOB breakdown table; LOB movement amounts above are derived from the table printed under the prior-year development note and presented as absolute (positive) strengthening amounts in millions. All monetary amounts in the accounts are printed in GBP 000; amounts here converted to millions.",
+      "_claims_triangle": {
+        "type": "gross",
+        "currency": "GBP",
+        "units": "thousands",
+        "page": 28,
+        "underwriting_years": [
+          2018,
+          2019
+        ],
+        "development_rows": [
+          [
+            20251,
+            26330
+          ],
+          [
+            20046,
+            null
+          ]
+        ]
+      },
+      "source_type": "syndicate",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_1947_2019_llm.pdf",
+      "content_hash": "8e8952ca02452ead3a2a4f1f323762f2c5563eef3ef6e59732e48d38d598e495",
+      "standardized_at": "2026-09-11T11:10:10.418374+00:00",
+      "standardization_model": "gpt-5-mini",
+      "_extraction_meta": {
+        "model": "gpt-5-mini",
+        "input_tokens": 22828,
+        "output_tokens": 6492,
+        "total_tokens": 29320,
+        "cost_usd": 0.018691
+      },
+      "_pyd_route": {
+        "source": "rag_provisions_text",
+        "value": 1.8,
+        "model_value": 1.812,
+        "note": "confirmed by the model value"
+      },
+      "_rag_triangle": {
+        "type": "gross",
+        "currency": "GBP",
+        "units": "thousands",
+        "underwriting_years": [
+          2018,
+          2019
+        ],
+        "development_rows": [
+          [
+            20251,
+            26330
+          ],
+          [
+            20046,
+            null
+          ]
+        ]
+      },
+      "_entity_binding": {
+        "requested_syndicate": 1947,
+        "entity_pages": {
+          "none": [
+            0
+          ],
+          "1947": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34
+          ]
+        },
+        "foreign_tables_skipped": 0,
+        "foreign_pages": [],
+        "underwriting_year_pages": [],
+        "underwriting_year_tables_skipped": 0,
+        "document_unit_hint": 0.001
+      }
+    }
+  },
+  "total_cost_usd": 0.025486,
+  "total_tokens": 47145,
+  "validation": {
+    "passed": true,
+    "total_discrepancies": 23,
+    "within_tolerance": 23,
+    "hard_failures": 0,
+    "hard_failure_details": []
+  }
 }

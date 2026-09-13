@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-05T20:36:00.250354+00:00",
+  "extraction_timestamp": "2026-09-13T03:57:46.586899+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -13,21 +15,17 @@
       "opening_reserves_gbp_m": 13.54,
       "opening_reserves_page": 32,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": -2.7,
-      "prior_year_development_pct": -19.94,
+      "prior_year_development_gbp_m": -2.694,
+      "prior_year_development_pct": -19.9,
       "direction": "release",
       "prior_year_movement_page": 35,
       "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "Over-provision in respect of prior claims and claim adjustment expenses",
+      "exact_reserve_text": "Over-provision in respect of prior claims and claim adjustment expenses (2,694)",
       "primary_causes": [
-        "Favorable claims development",
-        "Natural catastrophe events"
+        "Favorable claims development"
       ],
-      "specific_events_affected": [],
-      "specific_years_affected": [
-        2014,
-        2015
-      ],
+      "specific_events": [],
+      "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [
         {
@@ -35,8 +33,10 @@
           "event_year": 2016,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "modest increase in catastrophe losses in the year with the Alberta wildfires... the impact on the Syndicate was modest.",
-          "lobs_affected": [],
+          "loss_description": "modest increase in catastrophe losses",
+          "lobs_affected": [
+            "Reinsurance"
+          ],
           "page": 39,
           "confidence": 0.8
         },
@@ -45,17 +45,18 @@
           "event_year": 2016,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "modest increase in catastrophe losses in the year with the... Hurricane Matthew the impact on the Syndicate was modest.",
-          "lobs_affected": [],
+          "loss_description": "modest increase in catastrophe losses",
+          "lobs_affected": [
+            "Reinsurance"
+          ],
           "page": 39,
           "confidence": 0.8
         }
       ],
-      "standardized_narrative": "The syndicate reported a gross prior year reserve release of GBP 2.694 million, representing a 19.9% release of its opening gross claims outstanding. This favorable development is primarily attributed to benign claims experience and an absence of significant catastrophe activity in 2014 and 2015, which contributed to a good result for the 2014 year of account closure.",
+      "standardized_narrative": "Syndicate 6104 reported a gross release of GBP 2.694 million in respect of prior year claims. This favorable development is reflected as an over-provision in the technical accounts. The report notes an absence of catastrophe activity in 2014 and 2015, which likely contributed to the favorable claims development.",
       "raw_causal_phrases": [
         "Over-provision in respect of prior claims and claim adjustment expenses",
-        "absence of catastrophe activity in 2014 and 2015",
-        "very good result"
+        "absence of catastrophe activity in 2014 and 2015"
       ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 30.4,
@@ -69,7 +70,7 @@
       "gross_premium_page": 28,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The claims development table is distorted by Reinsurance to Close (RITC) activity, so the explicit 'Over-provision' figure was used for prior year development.",
+      "data_quality_notes": "Line of business mix is inferred from narrative stating all business is reinsurance. [RAG PYD NOT APPLIED: deterministic figure +1.030m has the opposite sign to both model values [-2.694, -2.694], which agree with each other; model values retained. Sign agreement between the models is not a reconciliation: where they differ in value the cohort and accrual scope of each still has to be settled from the filing (R140).] [CODE PYD NOT APPLIED: deterministic figure +1.030m has the opposite sign to both model values [-2.694, -2.694], which agree with each other; model values retained. Sign agreement between the models is not a reconciliation: where they differ in value the cohort and accrual scope of each still has to be settled from the filing (R140).]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -136,20 +137,22 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_6104_2016_llm.pdf",
-      "content_hash": "987b95a3085e1d33c455a77946a3f77e7d799414ee82548f1fc240ab1ed0c32b",
-      "standardized_at": "2026-07-05T19:26:58.964095+00:00",
+      "content_hash": "da225fed2c0d9e7f95d50080b2f17ac2410cc59a8197521d45cbd5b610ad3b20",
+      "standardized_at": "2026-09-11T13:34:04.199275+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 17861,
-        "output_tokens": 1168,
-        "total_tokens": 23305,
-        "cost_usd": 0.008278
+        "input_tokens": 18665,
+        "output_tokens": 1100,
+        "total_tokens": 23202,
+        "cost_usd": 0.008349
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -208,6 +211,14 @@
             null
           ]
         ],
+        "row_labels": [
+          "At end of underwriting year one",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later"
+        ],
         "source_page": 63,
         "entity": 6104
       },
@@ -224,6 +235,13 @@
           "entity": 6104,
           "backend": "azure",
           "table_kind": "balance_sheet_liabilities"
+        },
+        "movement_semantics": {
+          "row_label": "Over-provision in respect of prior claims and claim adjustment expenses",
+          "row_index": 3,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": false,
+          "column_index": 1
         },
         "gross_prior_year_claims": -2.7,
         "ri_share_prior_year": 0.0,
@@ -339,15 +357,28 @@
         ],
         "underwriting_year_pages": [
           36,
+          39,
           40,
           41,
+          42,
           43,
+          44,
+          45,
+          46,
+          47,
           65,
+          68,
           69,
           70,
-          72
+          71,
+          72,
+          73,
+          74,
+          75,
+          76,
+          77
         ],
-        "underwriting_year_tables_skipped": 3,
+        "underwriting_year_tables_skipped": 4,
         "document_unit_hint": 0.001
       },
       "opening_reserves_provenance": {
@@ -370,8 +401,8 @@
       "opening_reserves_gbp_m": 13.54,
       "opening_reserves_page": 54,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": -2.7,
-      "prior_year_development_pct": -19.94,
+      "prior_year_development_gbp_m": -2.694,
+      "prior_year_development_pct": -19.9,
       "direction": "release",
       "prior_year_movement_page": 59,
       "prior_year_movement_confidence": 1.0,
@@ -388,9 +419,9 @@
           "event_year": 2016,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "the impact on the Syndicate was modest",
+          "loss_description": "modest impact on the Syndicate",
           "lobs_affected": [
-            "Treaty"
+            "Reinsurance - Property"
           ],
           "page": 63,
           "confidence": 0.8
@@ -400,23 +431,35 @@
           "event_year": 2016,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "the impact on the Syndicate was modest",
+          "loss_description": "modest impact on the Syndicate",
           "lobs_affected": [
-            "Treaty"
+            "Reinsurance - Property"
           ],
           "page": 63,
           "confidence": 0.8
+        },
+        {
+          "event_name": "Ogden discount rate change",
+          "event_year": 2017,
+          "event_type": "liability",
+          "net_loss_gbp_m": null,
+          "loss_description": "The impact to the Syndicate has been assessed as not material.",
+          "lobs_affected": [
+            "Reinsurance - Casualty"
+          ],
+          "page": 61,
+          "confidence": 1.0
         }
       ],
-      "standardized_narrative": "At 1 January 2016 gross claims outstanding were GBP 13.54m. During 2016 the Syndicate recorded an over-provision (a release) in respect of prior claims of GBP 2.694m (gross), driven by favourable claims development, resulting in a net reduction in prior year reserves of approximately 19.9% of opening gross claims. The syndicate principally writes reinsurance (treaty) business and catastrophe events in 2016 (e.g. Alberta wildfires, Hurricane Matthew) had only a modest impact on the portfolio.",
+      "standardized_narrative": "Syndicate 6104 opened 2016 with gross claims outstanding of GBP 13.54m. During 2016 the Syndicate recorded a gross over-provision (release) on prior years of GBP 2.694m (a c.19.9% release of opening reserves) shown in the technical provisions as an 'Over-provision in respect of prior claims and claim adjustment expenses'. Management notes only modest catastrophe activity in the year (Alberta wildfires and Hurricane Matthew) and assesses broader legal/discount rate changes (Ogden) as not material; no quantified per-line-of-business reserve movements are disclosed.",
       "raw_causal_phrases": [
         "Over-provision in respect of prior claims and claim adjustment expenses (2,694) - (2,694)",
-        "the impact on the Syndicate was modest",
-        "The account has closed with a profit of 36.3% after all personal expenses (except members' agent's fees)."
+        "Whilst there was a modest increase in catastrophe losses in the year with the Alberta wildfires and Hurricane Matthew the impact on the Syndicate was modest.",
+        "On 27 February 2017 the Lord Chancellor announced a change to the discount rate in relation to compensation claims as a result of personal injury from +2.5% to -0.75%. The impact to the Syndicate has been assessed as not material."
       ],
       "lob_movements": [
         {
-          "line_of_business": "Treaty",
+          "line_of_business": "Reinsurance - Property",
           "direction": "release",
           "amount_gbp_m": -2.694,
           "percentage": -19.9,
@@ -428,13 +471,13 @@
         {
           "line_of_business": "Reinsurance",
           "amount_gbp_m": 30.414,
-          "percentage_of_total": 100.0
+          "percentage_of_total": 100
         }
       ],
       "gross_premium_page": 51,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "All source amounts in the accounts are stated in GBP 000. Opening reserves and the prior year movement were taken from the Technical Provisions note (gross column) and converted to millions. The claims development table (gross) is present in the notes (pages 60-61) and was not used as the Technical Provisions line explicitly shows the prior-year over-provision. No RITC distortion affecting the gross prior year movement was identified for Syndicate 6104.",
+      "data_quality_notes": "Prior-year movement derived from the technical provisions reconciliation row 'Over-provision in respect of prior claims and claim adjustment expenses' (gross). No per-line split of prior year movement available. Named catastrophe events are mentioned but not quantified for Syndicate 6104. Gross premium mix is a single 'Reinsurance' line as the statutory segmental analysis shows the syndicate writes only reinsurance. [RAG PYD NOT APPLIED: deterministic figure +1.030m has the opposite sign to both model values [-2.694, -2.694], which agree with each other; model values retained. Sign agreement between the models is not a reconciliation: where they differ in value the cohort and accrual scope of each still has to be settled from the filing (R140).] [CODE PYD NOT APPLIED: deterministic figure +1.030m has the opposite sign to both model values [-2.694, -2.694], which agree with each other; model values retained. Sign agreement between the models is not a reconciliation: where they differ in value the cohort and accrual scope of each still has to be settled from the filing (R140).]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -501,20 +544,22 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_6104_2016_llm.pdf",
-      "content_hash": "987b95a3085e1d33c455a77946a3f77e7d799414ee82548f1fc240ab1ed0c32b",
-      "standardized_at": "2026-07-05T19:27:57.948905+00:00",
+      "content_hash": "da225fed2c0d9e7f95d50080b2f17ac2410cc59a8197521d45cbd5b610ad3b20",
+      "standardized_at": "2026-09-11T13:36:30.365527+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 45888,
-        "output_tokens": 4937,
-        "total_tokens": 50825,
-        "cost_usd": 0.021346
+        "input_tokens": 46648,
+        "output_tokens": 6293,
+        "total_tokens": 52941,
+        "cost_usd": 0.024248
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -573,6 +618,14 @@
             null
           ]
         ],
+        "row_labels": [
+          "At end of underwriting year one",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later"
+        ],
         "source_page": 63,
         "entity": 6104
       },
@@ -589,6 +642,13 @@
           "entity": 6104,
           "backend": "azure",
           "table_kind": "balance_sheet_liabilities"
+        },
+        "movement_semantics": {
+          "row_label": "Over-provision in respect of prior claims and claim adjustment expenses",
+          "row_index": 3,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": false,
+          "column_index": 1
         },
         "gross_prior_year_claims": -2.7,
         "ri_share_prior_year": 0.0,
@@ -704,15 +764,28 @@
         ],
         "underwriting_year_pages": [
           36,
+          39,
           40,
           41,
+          42,
           43,
+          44,
+          45,
+          46,
+          47,
           65,
+          68,
           69,
           70,
-          72
+          71,
+          72,
+          73,
+          74,
+          75,
+          76,
+          77
         ],
-        "underwriting_year_tables_skipped": 3,
+        "underwriting_year_tables_skipped": 4,
         "document_unit_hint": 0.001
       },
       "opening_reserves_provenance": {
@@ -730,12 +803,12 @@
       }
     }
   },
-  "total_cost_usd": 0.029624,
-  "total_tokens": 74130,
+  "total_cost_usd": 0.032597,
+  "total_tokens": 76143,
   "validation": {
     "passed": true,
-    "total_discrepancies": 20,
-    "within_tolerance": 20,
+    "total_discrepancies": 15,
+    "within_tolerance": 15,
     "hard_failures": 0,
     "hard_failure_details": []
   }

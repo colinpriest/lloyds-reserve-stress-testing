@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T09:58:33.387561+00:00",
+  "extraction_timestamp": "2026-09-13T04:02:50.414367+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -17,13 +19,19 @@
       "prior_year_development_pct": 2.58,
       "direction": "strengthening",
       "prior_year_movement_page": 13,
-      "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "Claims incurred, net of reinsurance, include adverse prior year development of GBP 9.5m (2022: GBP 12.3m). Prior year claims development is analysed by line of business in the table below.",
+      "prior_year_movement_confidence": 0.8,
+      "exact_reserve_text": "Claims incurred, net of reinsurance, include adverse prior year development of GBP 9.5m (2022: GBP 12.3m).",
       "primary_causes": [
-        "Adverse claims development"
+        "Adverse claims development",
+        "Other"
       ],
       "specific_events": [],
-      "specific_years_affected": [],
+      "specific_years_affected": [
+        2018,
+        2019,
+        2020,
+        2021
+      ],
       "prior_year_events": [],
       "named_events": [
         {
@@ -31,7 +39,7 @@
           "event_year": 2023,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "main 2023 event",
+          "loss_description": "main 2023 events",
           "lobs_affected": [],
           "page": 1,
           "confidence": 0.8
@@ -41,7 +49,7 @@
           "event_year": 2023,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "main 2023 event",
+          "loss_description": "main 2023 events",
           "lobs_affected": [],
           "page": 1,
           "confidence": 0.8
@@ -51,7 +59,7 @@
           "event_year": 2023,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "main 2023 event",
+          "loss_description": "main 2023 events",
           "lobs_affected": [],
           "page": 1,
           "confidence": 0.8
@@ -61,7 +69,7 @@
           "event_year": 2023,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "main 2023 event",
+          "loss_description": "main 2023 events",
           "lobs_affected": [],
           "page": 1,
           "confidence": 0.8
@@ -71,7 +79,7 @@
           "event_year": 2023,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "main 2023 event",
+          "loss_description": "main 2023 events",
           "lobs_affected": [],
           "page": 1,
           "confidence": 0.8
@@ -107,48 +115,13 @@
           "confidence": 0.8
         }
       ],
-      "standardized_narrative": "The Syndicate reported a prior year reserve strengthening of GBP 9.462 million in 2023, representing 5.21% of its opening gross claims outstanding. This adverse development was identified in the 'Prior Year Reserve Development' section, with contributions from Property, Marine, Reinsurance, and Miscellaneous lines. The report also detailed significant catastrophe events impacting current and prior year results. In 2023, these included the Turkish Earthquakes, Hurricane Idalia, Fort Lauderdale flooding, UK winter storms, and Storm Ciaran. Prior year (2022) net CAT losses were higher due to Hurricane Ian, French hailstorms, and the Ukraine conflict.",
+      "standardized_narrative": "The syndicate experienced a gross prior year reserve strengthening of GBP 4.675 million in 2023, representing 2.58% of its opening gross claims outstanding. This adverse development was calculated from the gross claims development triangle for underwriting years 2018 to 2021. The report notes overall adverse prior year development (net of reinsurance) of GBP 9.5 million. While specific causes for the gross prior year reserve movement are not detailed, the report highlights significant net catastrophe losses in the prior year (2022) from events such as Hurricane Ian, French hailstorms, and the Ukraine conflict, which likely contributed to the adverse development.",
       "raw_causal_phrases": [
-        "adverse prior year development",
-        "Turkish Earthquakes",
-        "Hurricane Idalia",
-        "Fort Lauderdale flooding",
-        "UK winter storms",
-        "Storm Ciaran",
-        "Hurricane Ian",
-        "French hailstorms",
-        "Ukraine conflict"
+        "adverse prior year development of GBP 9.5m",
+        "uncertainty inherent in the estimation process",
+        "the actual overall claim provision may not always be in surplus"
       ],
-      "lob_movements": [
-        {
-          "line_of_business": "Property",
-          "direction": "strengthening",
-          "amount_gbp_m": 6.628,
-          "percentage": null,
-          "confidence": 1.0
-        },
-        {
-          "line_of_business": "Marine",
-          "direction": "strengthening",
-          "amount_gbp_m": 0.076,
-          "percentage": null,
-          "confidence": 1.0
-        },
-        {
-          "line_of_business": "Treaty",
-          "direction": "strengthening",
-          "amount_gbp_m": 2.098,
-          "percentage": null,
-          "confidence": 1.0
-        },
-        {
-          "line_of_business": "Specialty",
-          "direction": "strengthening",
-          "amount_gbp_m": 0.66,
-          "percentage": null,
-          "confidence": 1.0
-        }
-      ],
+      "lob_movements": [],
       "gross_premiums_written_gbp_m": 117.0,
       "gross_premium_mix": [
         {
@@ -180,7 +153,7 @@
       "gross_premium_page": 12,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The narrative text for prior year development states a net figure of GBP 9.5m, while the detailed table provides a gross figure of GBP 9.462m. The gross figure from the table has been used for the 'prior_year_development_gbp_m' field. [RAG OVERRIDE: Model said PYD=9.462, RAG triangle computed 4.675. Using RAG value.]",
+      "data_quality_notes": "Prior year development figure is gross, calculated from the claims development triangle. The narrative text and specific LOB breakdown for prior year development on page 13 are presented as net figures. Specific causes for the gross prior year strengthening are not explicitly detailed, but significant prior year catastrophe events are noted as contributing to overall claims incurred in the prior year.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -247,20 +220,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_1947_2023_llm.pdf",
-      "content_hash": "9718b887c388a6ced5f2f0ff1476463f6794c5bd40cc293e836845f2163de582",
-      "standardized_at": "2026-07-05T09:56:26.445160+00:00",
+      "content_hash": "41821ff99f3440b3b58e69b2fa71e75ee82042e1b0d4af0f22369d0f6521142d",
+      "standardized_at": "2026-09-11T11:09:47.710399+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 10121,
-        "output_tokens": 2328,
-        "total_tokens": 17052,
-        "cost_usd": 0.008856
+        "input_tokens": 10925,
+        "output_tokens": 2091,
+        "total_tokens": 19074,
+        "cost_usd": 0.008505
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 4.675,
+        "model_value": 4.675,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 31,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2018,
           2019,
@@ -318,6 +303,14 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At the end of the underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later"
         ],
         "source_page": 31,
         "entity": 1947
@@ -481,24 +474,23 @@
         2018,
         2019,
         2020,
-        2021,
-        2022
+        2021
       ],
       "prior_year_events": [
         {
           "event_name": "Hurricane Ian",
           "event_year": 2022,
-          "impact_description": "Significantly higher net CAT losses in the prior year; Hurricane Ian made up 68% of the total CAT losses in 2022.",
+          "impact_description": "Major 2022 catastrophe; made up the majority of 2022 net CAT losses and contributed to elevated prior-year losses",
           "lobs_affected": [
             "Property"
           ],
-          "amount_gbp_m": 17.952,
-          "confidence": 0.8
+          "amount_gbp_m": null,
+          "confidence": 0.6
         },
         {
           "event_name": "French hailstorms",
           "event_year": 2022,
-          "impact_description": "Contributed to elevated CAT losses in 2022.",
+          "impact_description": "Contributed to higher net CAT losses in 2022",
           "lobs_affected": [
             "Property"
           ],
@@ -508,13 +500,22 @@
         {
           "event_name": "Ukraine conflict",
           "event_year": 2022,
-          "impact_description": "Contributed to elevated CAT and large loss impact in 2022.",
+          "impact_description": "Contributed to prior year elevated losses in 2022",
           "lobs_affected": [
-            "Casualty",
-            "Property"
+            "Treaty"
           ],
           "amount_gbp_m": null,
-          "confidence": 0.5
+          "confidence": 0.4
+        },
+        {
+          "event_name": "Commutation of cessions attaching to 2018-2020 underwriting years",
+          "event_year": 2022,
+          "impact_description": "Cession business attaching to the 2018 to 2020 underwriting years of account was commuted effective 30 November 2022; the liability of the Syndicate for future claims therefore ceased (final premiums and claims on these years were GBP 68.1m and GBP 56.9m respectively).",
+          "lobs_affected": [
+            "Treaty"
+          ],
+          "amount_gbp_m": null,
+          "confidence": 0.8
         }
       ],
       "named_events": [
@@ -523,131 +524,124 @@
           "event_year": 2023,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "Listed among main 2023 CAT events.",
+          "loss_description": "Listed among the main 2023 CAT events recorded during the year",
           "lobs_affected": [
             "Property"
           ],
           "page": 5,
-          "confidence": 0.8
+          "confidence": 0.9
         },
         {
           "event_name": "Hurricane Idalia",
           "event_year": 2023,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "Listed among main 2023 CAT events.",
+          "loss_description": "Listed among the main 2023 CAT events recorded during the year",
           "lobs_affected": [
             "Property"
           ],
           "page": 5,
-          "confidence": 0.8
+          "confidence": 0.9
         },
         {
           "event_name": "Fort Lauderdale flooding",
           "event_year": 2023,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "Listed among main 2023 CAT events.",
+          "loss_description": "Listed among the main 2023 CAT events recorded during the year",
           "lobs_affected": [
             "Property"
           ],
           "page": 5,
-          "confidence": 0.8
+          "confidence": 0.9
         },
         {
           "event_name": "UK winter storms",
           "event_year": 2023,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "Listed among main 2023 CAT events.",
+          "loss_description": "Listed among the main 2023 CAT events recorded during the year",
           "lobs_affected": [
             "Property"
           ],
           "page": 5,
-          "confidence": 0.8
+          "confidence": 0.9
         },
         {
           "event_name": "Storm Ciaran",
           "event_year": 2023,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "Listed among main 2023 CAT events.",
+          "loss_description": "Listed among the main 2023 CAT events recorded during the year",
           "lobs_affected": [
             "Property"
           ],
           "page": 5,
-          "confidence": 0.8
+          "confidence": 0.9
         },
         {
           "event_name": "Hurricane Ian",
           "event_year": 2022,
           "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": 17.952,
-          "loss_description": "Made up 68% of the total CAT losses in 2022 (prior year).",
+          "net_loss_gbp_m": null,
+          "loss_description": "Made up 68% of the total CAT losses in 2022",
           "lobs_affected": [
             "Property"
           ],
           "page": 5,
-          "confidence": 0.8
+          "confidence": 0.9
         },
         {
           "event_name": "French hailstorms",
           "event_year": 2022,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "Contributed to 2022 CAT losses.",
+          "loss_description": "Contributed to elevated 2022 CAT losses",
           "lobs_affected": [
             "Property"
           ],
           "page": 5,
-          "confidence": 0.5
+          "confidence": 0.7
         },
         {
           "event_name": "Ukraine conflict",
           "event_year": 2022,
           "event_type": "political",
           "net_loss_gbp_m": null,
-          "loss_description": "Contributed to 2022 CAT / large loss impact.",
+          "loss_description": "Included as a contributor to higher 2022 CAT losses",
           "lobs_affected": [
-            "Casualty",
-            "Property"
+            "Treaty"
           ],
           "page": 5,
-          "confidence": 0.5
+          "confidence": 0.6
         }
       ],
-      "standardized_narrative": "Opening gross claims outstanding at 1 January 2023 were GBP 181.515m. Analysis of the gross claims development triangle shows a net adverse prior-year reserve movement of approximately GBP 4.675m (around 2.6% of opening reserves), i.e. a strengthening of reserves. The syndicate reports higher prior-year deterioration driven by large loss development on older underwriting years; named catastrophe activity in the prior year included Hurricane Ian (which accounted for the majority of 2022 CAT losses), French hailstorms and impacts related to the Ukraine conflict. Net prior-year development figures reported in the income statement are larger (adverse GBP 9.462m) reflecting reinsurance interactions; LOB-level splits disclosed in the notes are presented net of reinsurance.",
+      "standardized_narrative": "The syndicate recorded a gross prior year reserve strengthening of approximately GBP 4.7m (c.2.6% of opening gross claims outstanding), driven by adverse movements on the 2020 and 2021 underwriting years partially offset by small releases on earlier years. The report also states a net (after reinsurance) adverse prior year development of GBP 9.5m. Named catastrophe activity in 2022 (notably Hurricane Ian, French hailstorms and the Ukraine conflict) materially contributed to prior-year losses, and a November 2022 commutation of cessions for 2018-2020 removed the syndicate's future liabilities for those cessions.",
       "raw_causal_phrases": [
-        "Claims incurred, net of reinsurance, include adverse prior year development of GBP 9.5m (2022: GBP 12.3m).",
-        "Prior year claims development is analysed by line of business in the table below.",
-        "In the prior year the net CAT losses were significantly higher due to the more severe impact of Hurricane Ian which made up 68% of the total CAT losses, plus the impact of French hailstorms and the Ukraine conflict."
+        "adverse prior year development of GBP 9.5m (2022: GBP 12.3m).",
+        "The main 2023 events were Turkish Earthquakes, Hurricane Idalia, Fort Lauderdale flooding, UK winter storms and Storm Ciaran.",
+        "In the prior year the net CAT losses were significantly higher due to the more severe impact of Hurricane Ian which made up 68% of the total CAT losses, plus the impact of French hailstorms and the Ukraine conflict.",
+        "During the prior year the cession business attaching to the 2018 to 2020 underwriting years of account was commuted effective 30 November 2022. The liability of the Syndicate for future claims therefore ceased."
       ],
       "lob_movements": [
         {
-          "line_of_business": "Fire and other damage to property",
+          "line_of_business": "Property",
           "direction": "strengthening",
           "amount_gbp_m": 6.628,
           "percentage": null,
           "confidence": 0.5
         },
         {
-          "line_of_business": "Marine aviation and transport",
+          "line_of_business": "Marine",
           "direction": "strengthening",
           "amount_gbp_m": 0.076,
           "percentage": null,
           "confidence": 0.5
         },
         {
-          "line_of_business": "Reinsurance",
+          "line_of_business": "Treaty",
           "direction": "strengthening",
           "amount_gbp_m": 2.098,
-          "percentage": null,
-          "confidence": 0.5
-        },
-        {
-          "line_of_business": "Miscellaneous",
-          "direction": "strengthening",
-          "amount_gbp_m": 0.66,
           "percentage": null,
           "confidence": 0.5
         }
@@ -683,7 +677,7 @@
       "gross_premium_page": 29,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Opening reserves taken from Statement of Financial Position (Claims outstanding, prior year comparative). Prior-year development (gross) was calculated from the gross claims development triangle (page 30) because the notes and narrative primarily report net prior-year movements. The income statement and a prior-year LOB table report net adverse prior-year development of GBP 9.462m; LOB splits provided in the notes are net of reinsurance. LOB-level gross prior-year movements are not disclosed; LOB amounts included are the net figures as presented in the notes (confidence lower). No RITC item was identified that would distort the triangle.",
+      "data_quality_notes": "Prior year development gross figure was derived from the gross claims development triangle (calculated diagonal method). The report quotes a net prior-year adverse development (GBP 9.5m) in the text; gross per-LOB prior-year movements are not explicitly stated (the note with LOB breakdown is presented 'Claims incurred, net of reinsurance'), so LOB entries use net figures where only net figures were shown and are therefore lower confidence. The triangle was reconstructed from 'current estimates' using the provided 'cumulative payments' and 'gross outstanding' rows; minor alignment of row labels was inferred from the printed table. Commutation of 2018-2020 cessions in Nov 2022 may distort comparisons; this is noted above.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -750,20 +744,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_1947_2023_llm.pdf",
-      "content_hash": "9718b887c388a6ced5f2f0ff1476463f6794c5bd40cc293e836845f2163de582",
-      "standardized_at": "2026-07-05T09:57:39.799032+00:00",
+      "content_hash": "41821ff99f3440b3b58e69b2fa71e75ee82042e1b0d4af0f22369d0f6521142d",
+      "standardized_at": "2026-09-11T11:13:16.085556+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 20716,
-        "output_tokens": 7941,
-        "total_tokens": 28657,
-        "cost_usd": 0.021061
+        "input_tokens": 21476,
+        "output_tokens": 10231,
+        "total_tokens": 31707,
+        "cost_usd": 0.025831
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 4.675,
+        "model_value": 4.675,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 31,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2018,
           2019,
@@ -821,6 +827,14 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At the end of the underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later"
         ],
         "source_page": 31,
         "entity": 1947
@@ -960,12 +974,12 @@
       }
     }
   },
-  "total_cost_usd": 0.029917,
-  "total_tokens": 45709,
+  "total_cost_usd": 0.034336,
+  "total_tokens": 50781,
   "validation": {
     "passed": true,
-    "total_discrepancies": 37,
-    "within_tolerance": 37,
+    "total_discrepancies": 23,
+    "within_tolerance": 23,
     "hard_failures": 0,
     "hard_failure_details": []
   }

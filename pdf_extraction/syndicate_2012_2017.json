@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T10:21:10.449559+00:00",
+  "extraction_timestamp": "2026-09-13T04:01:55.552960+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -18,50 +20,52 @@
       "direction": "strengthening",
       "prior_year_movement_page": 14,
       "prior_year_movement_confidence": 0.8,
-      "exact_reserve_text": "Derived from Gross claims development triangles on page 14.",
+      "exact_reserve_text": "",
       "primary_causes": [
-        "Favorable claims development"
+        "Other"
       ],
       "specific_events": [],
-      "specific_years_affected": [
-        2013,
-        2014,
-        2015
-      ],
+      "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [
         {
-          "event_name": "Hurricane Harvey",
+          "event_name": "Harvey",
           "event_year": 2017,
           "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": null,
-          "loss_description": "large CAT losses in the period, primarily driven by the three hurricanes, Harvey, Irma and Maria. These three CAT losses equated to GBP 13.1m net loss.",
-          "lobs_affected": [],
+          "net_loss_gbp_m": 13.1,
+          "loss_description": "These three CAT losses equated to GBP 13.1m net loss.",
+          "lobs_affected": [
+            "Property"
+          ],
           "page": 2,
-          "confidence": 0.8
+          "confidence": 1.0
         },
         {
-          "event_name": "Hurricane Irma",
+          "event_name": "Irma",
           "event_year": 2017,
           "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": null,
-          "loss_description": "large CAT losses in the period, primarily driven by the three hurricanes, Harvey, Irma and Maria. These three CAT losses equated to GBP 13.1m net loss.",
-          "lobs_affected": [],
+          "net_loss_gbp_m": 13.1,
+          "loss_description": "These three CAT losses equated to GBP 13.1m net loss.",
+          "lobs_affected": [
+            "Property"
+          ],
           "page": 2,
-          "confidence": 0.8
+          "confidence": 1.0
         },
         {
-          "event_name": "Hurricane Maria",
+          "event_name": "Maria",
           "event_year": 2017,
           "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": null,
-          "loss_description": "large CAT losses in the period, primarily driven by the three hurricanes, Harvey, Irma and Maria. These three CAT losses equated to GBP 13.1m net loss.",
-          "lobs_affected": [],
+          "net_loss_gbp_m": 13.1,
+          "loss_description": "These three CAT losses equated to GBP 13.1m net loss.",
+          "lobs_affected": [
+            "Property"
+          ],
           "page": 2,
-          "confidence": 0.8
+          "confidence": 1.0
         }
       ],
-      "standardized_narrative": "The syndicate experienced a significant prior year reserve release of GBP 116.221 million, representing 43.48% of its opening gross claims outstanding. This favorable development was derived from the gross claims development triangles, indicating that prior period reserves were more than sufficient. No specific causes for the prior year release were explicitly stated in the narrative. The report did mention large CAT losses from Hurricanes Harvey, Irma, and Maria in the current year (2017), which led to an increase in the current year's loss ratio.",
+      "standardized_narrative": "The syndicate experienced a net strengthening of prior year reserves by GBP 7.274 million, calculated from the gross claims development triangle. No specific causes for this prior year movement were explicitly stated in the report.",
       "raw_causal_phrases": [],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 199.9,
@@ -100,7 +104,7 @@
       "gross_premium_page": 13,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior year development is calculated from the gross claims development triangle as no explicit prior year movement note or narrative was found. The calculation excludes the two most recent underwriting years (2016 and 2017) as per standard methodology. [RAG OVERRIDE: Model said PYD=-116.221, RAG triangle computed 7.274. Using RAG value.]",
+      "data_quality_notes": "Prior year development was calculated from the gross claims development triangle as no explicit narrative or movement note for prior year development was found. The 'exact_reserve_text' field is left blank as the figure was derived from a table, not a verbatim sentence.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -153,20 +157,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_2012_2017_llm.pdf",
-      "content_hash": "22d4a337ec2ebad5fab01230d5aa4f8d7a9af1f55188e1b9f2c36182842b9765",
-      "standardized_at": "2026-07-05T11:38:07.842479+00:00",
+      "content_hash": "0b98cb27024c293f75d457de22be4d162da55ad9eeac3bc903d1a6513458fdd6",
+      "standardized_at": "2026-09-11T11:32:25.148523+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 10379,
-        "output_tokens": 1420,
-        "total_tokens": 15897,
-        "cost_usd": 0.006664
+        "input_tokens": 10925,
+        "output_tokens": 1337,
+        "total_tokens": 16746,
+        "cost_usd": 0.00662
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 7.274,
+        "model_value": 7.274,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 47,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2013,
           2014,
@@ -353,21 +369,17 @@
     "gpt-5-mini": {
       "syndicate": 2012,
       "year": 2017,
-      "opening_reserves_gbp_m": 267.287,
-      "opening_reserves_page": 44,
-      "opening_reserves_confidence": 0.8,
+      "opening_reserves_gbp_m": null,
+      "opening_reserves_page": null,
+      "opening_reserves_confidence": 0.0,
       "prior_year_development_gbp_m": 7.274,
-      "prior_year_development_pct": 2.72,
+      "prior_year_development_pct": null,
       "direction": "strengthening",
       "prior_year_movement_page": null,
       "prior_year_movement_confidence": 0.0,
       "exact_reserve_text": "",
       "primary_causes": [],
-      "specific_events": [
-        "Hurricane Harvey",
-        "Hurricane Irma",
-        "Hurricane Maria"
-      ],
+      "specific_events": [],
       "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [
@@ -375,8 +387,8 @@
           "event_name": "Hurricane Harvey",
           "event_year": 2017,
           "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": 111.1,
-          "loss_description": "Three CAT losses (Harvey, Irma and Maria) equated to c.GBP 111.1m of losses",
+          "net_loss_gbp_m": null,
+          "loss_description": "Mentioned as one of three CAT I losses (Harvey, Irma and Maria) referenced in the report as contributing to losses in the year",
           "lobs_affected": [
             "Property"
           ],
@@ -387,8 +399,8 @@
           "event_name": "Hurricane Irma",
           "event_year": 2017,
           "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": 111.1,
-          "loss_description": "Three CAT losses (Harvey, Irma and Maria) equated to c.GBP 111.1m of losses",
+          "net_loss_gbp_m": null,
+          "loss_description": "Mentioned as one of three CAT I losses (Harvey, Irma and Maria) referenced in the report as contributing to losses in the year",
           "lobs_affected": [
             "Property"
           ],
@@ -399,8 +411,8 @@
           "event_name": "Hurricane Maria",
           "event_year": 2017,
           "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": 111.1,
-          "loss_description": "Three CAT losses (Harvey, Irma and Maria) equated to c.GBP 111.1m of losses",
+          "net_loss_gbp_m": null,
+          "loss_description": "Mentioned as one of three CAT I losses (Harvey, Irma and Maria) referenced in the report as contributing to losses in the year",
           "lobs_affected": [
             "Property"
           ],
@@ -408,10 +420,10 @@
           "confidence": 0.5
         }
       ],
-      "standardized_narrative": "Opening gross claims outstanding at 1 January 2017 per the technical provisions movements table was approximately GBP 267.3m. The report does not present a clearly labelled GROSS prioryear movement figure in the movement note that could be unambiguously extracted; therefore a gross prior year development amount could not be determined from the available pages. The 2017 results were materially impacted by 2017 natural catastrophe activity (Hurricanes Harvey, Irma and Maria, cited together at ~GBP 111.1m of losses) which contributed to the underwriting loss for the year.",
+      "standardized_narrative": "No explicit gross prior-year reserve movement figure (movement in prior year's provision for claims outstanding) could be located in the available pages of the PDF. The report highlights materially higher losses and loss adjustment expenses in 2017 and references three notable 2017 catastrophe events (Harvey, Irma, Maria) which contributed to the year's claims. Gross written premium for 2017 is reported in the accounts, but a clear, labelled gross prior-year reserves movement (or a usable gross claims development triangle) was not identifiable in the extracted pages.",
       "raw_causal_phrases": [
-        "These three CAT losses equated to GBP 111.1m",
-        "Loss and loss adjustment expenses are GBP 12.3m higher than in 2016"
+        "Losses and loss adjustment expenses are GBP 123.1m higher than in 2016 resulting in an increase in the loss ratio of 9.1% to 70.4%.",
+        "These three CAT I losses equated to GBP 13.1m of losses by the three hurricanes Harvey, Irma and Maria."
       ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 199.9,
@@ -447,42 +459,45 @@
           "percentage_of_total": 0.3
         }
       ],
-      "gross_premium_page": 2,
+      "gross_premium_page": 6,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Opening gross claims outstanding obtained from the 'Claims provisions / movements' table (At 1 January 2017 gross = 267,287; page 44). The report does not contain a clearly labelled GROSS 'movement in prior year's provision for claims outstanding' figure that could be unambiguously extracted from the available images; the movement note / reconciliation and the claims development table are present but not legible enough to compute the gross prior year development per the instruction rules. A net/summary figure could not be safely identified; therefore prior_year_development_gbp_m is returned as null. Named 2017 catastrophe events (Harvey/Irma/Maria) are explicitly mentioned; the c.GBP 111.1m figure appears in the narrative but the document does not make clear if that number is gross or net-I have treated it as cited loss amount with moderate confidence. Premium mix tables were not legible enough to extract exact regulatory class labels and amounts.",
+      "data_quality_notes": "The scanned pages provided are low-resolution and partly rotated. I could not reliably locate a labelled 'Claims outstanding' (gross) figure on the Balance Sheet prior-year comparative column nor a clear 'Movement in prior year's provision for claims outstanding' note with gross (insurance liabilities) column. A claims provisions movement table is present in the document but the scanned image made numeric extraction unreliable. The reported gross premium figure (199,896) was taken from the Technical Account / Profit and Loss page (values shown as GBP '000 in the statements) and converted to millions (199.896). Named 2017 catastrophe events (Harvey, Irma, Maria) were found in the strategic/management text. Because no definitive gross prior-year movement (insurance liabilities) could be located, prior_year_development fields are null. If you can provide a higher-resolution or correctly-orientated PDF (or the specific pages 20/44/45 in better quality), I can extract the required gross reserve and prior-year development figures and populate the triangle and LOB movement data.",
       "_claims_triangle": {
-        "type": "gross",
+        "type": "none",
         "currency": "GBP",
-        "units": "thousands",
-        "page": 44,
-        "underwriting_years": [
-          2012,
-          2013,
-          2014,
-          2015,
-          2016,
-          2017
-        ],
-        "development_rows": [],
-        "confidence": 0.2
+        "units": "millions",
+        "page": null,
+        "underwriting_years": [],
+        "development_rows": []
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_2012_2017_llm.pdf",
-      "content_hash": "22d4a337ec2ebad5fab01230d5aa4f8d7a9af1f55188e1b9f2c36182842b9765",
-      "standardized_at": "2026-07-05T11:39:02.372229+00:00",
+      "content_hash": "0b98cb27024c293f75d457de22be4d162da55ad9eeac3bc903d1a6513458fdd6",
+      "standardized_at": "2026-09-11T11:34:25.525336+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 21480,
-        "output_tokens": 5386,
-        "total_tokens": 26866,
-        "cost_usd": 0.016142
+        "input_tokens": 21307,
+        "output_tokens": 4187,
+        "total_tokens": 25494,
+        "cost_usd": 0.013701
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 7.274,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 47,
+        "note": "filled a blank model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2013,
           2014,
@@ -667,13 +682,26 @@
       }
     }
   },
-  "total_cost_usd": 0.022806,
-  "total_tokens": 42763,
+  "total_cost_usd": 0.020321,
+  "total_tokens": 42240,
   "validation": {
-    "passed": true,
-    "total_discrepancies": 18,
-    "within_tolerance": 18,
-    "hard_failures": 0,
-    "hard_failure_details": []
+    "passed": false,
+    "total_discrepancies": 13,
+    "within_tolerance": 11,
+    "hard_failures": 2,
+    "hard_failure_details": [
+      {
+        "field": "opening_reserves_gbp_m",
+        "type": "value_mismatch",
+        "gemini-2.5-flash": 267.287,
+        "gpt-5-mini": null
+      },
+      {
+        "field": "prior_year_development_pct",
+        "type": "value_mismatch",
+        "gemini-2.5-flash": 2.72,
+        "gpt-5-mini": null
+      }
+    ]
   }
 }

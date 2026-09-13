@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T10:59:17.483518+00:00",
+  "extraction_timestamp": "2026-09-13T04:00:21.038344+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -18,18 +20,17 @@
       "direction": "strengthening",
       "prior_year_movement_page": 23,
       "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "Change in estimates of prior year provisions 7,945",
+      "exact_reserve_text": "Change in estimates of prior year provisions",
       "primary_causes": [
-        "IBNR recalibration",
-        "Adverse claims development"
+        "IBNR recalibration"
       ],
       "specific_events": [],
       "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "The syndicate reported a prior year reserve strengthening of GBP 7.945 million in 2024, representing a 30.91% increase relative to the opening gross long-term business provision of GBP 25.699 million. This movement is attributed to changes in estimates of prior year provisions, likely involving IBNR recalibration and adverse claims development, although specific causes are not detailed. The syndicate primarily underwrites Life direct insurance and Reinsurance acceptances.",
+      "standardized_narrative": "The syndicate reported a gross strengthening of GBP 7.945 million in prior year provisions, representing a 30.92% increase relative to the opening gross long-term business provision. The report does not provide specific causal factors for this strengthening, but it is attributed to changes in estimates of prior year provisions.",
       "raw_causal_phrases": [
-        "estimates for losses Incurred But Not Reported (\"IBNR\")"
+        "Change in estimates of prior year provisions"
       ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 12.5,
@@ -93,7 +94,7 @@
       "gross_premium_page": 19,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The claims development triangle (Note 17) shows a net release for prior years when calculated by comparing the current estimate to the previous diagonal. However, the Technical Provisions note (Note 18) explicitly states a gross strengthening for \"Change in estimates of prior year provisions\". Given the syndicate's long-term life business, the Technical Provisions note is considered the more direct and reliable source for overall prior year development. Specific causes for the prior year strengthening are not detailed in the report.",
+      "data_quality_notes": "Opening reserves are based on 'Long term business provision' as 'Claims outstanding' is explicitly blank on the balance sheet for this long-term business syndicate. The prior year development figure is taken from the 'Change in estimates of prior year provisions' line in Note 18, which is the most direct source. A calculation from the gross claims development triangle (Note 17) yields a different prior year development figure of +0.333m, but the explicit note is preferred.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -236,20 +237,28 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_3002_2024_llm.pdf",
-      "content_hash": "ef9642f32795362480a80f987d12523839da5586ac277e8f6a99c083a936b33b",
-      "standardized_at": "2026-07-06T00:13:44.158843+00:00",
+      "content_hash": "517441a2f226f99445d2faa2b8c3ede2f50f0ad31f96f232ce5afba0b6eae212",
+      "standardized_at": "2026-09-11T14:44:31.540862+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 11927,
-        "output_tokens": 1478,
-        "total_tokens": 18167,
-        "cost_usd": 0.007273
+        "input_tokens": 12731,
+        "output_tokens": 1425,
+        "total_tokens": 18473,
+        "cost_usd": 0.007382
+      },
+      "_pyd_route": {
+        "source": "rag_provisions",
+        "value": 7.9,
+        "model_value": 7.945,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2015,
           2016,
@@ -384,6 +393,18 @@
             null
           ]
         ],
+        "row_labels": [
+          "at end of underwriting year",
+          "one year later",
+          "two years later",
+          "three years later",
+          "four years later",
+          "five years later",
+          "six years later",
+          "seven years later",
+          "eight years later",
+          "nine years later"
+        ],
         "source_page": 62,
         "entity": 3002
       },
@@ -501,6 +522,13 @@
         "unit_source": "header",
         "source_page": 63,
         "entity": 3002,
+        "movement_semantics": {
+          "row_label": "Change in estimates of prior year provisions",
+          "row_index": 5,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": true,
+          "column_index": 1
+        },
         "gross_prior_year_claims": 7.9,
         "ri_share_prior_year": 0.2,
         "net_prior_year_claims": 8.1
@@ -589,29 +617,41 @@
     "gpt-5-mini": {
       "syndicate": 3002,
       "year": 2024,
-      "opening_reserves_gbp_m": null,
-      "opening_reserves_page": 18,
-      "opening_reserves_confidence": 0.0,
+      "opening_reserves_gbp_m": 25.699,
+      "opening_reserves_page": 55,
+      "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": 7.9,
-      "prior_year_development_pct": null,
+      "prior_year_development_pct": 30.74,
       "direction": "strengthening",
       "prior_year_movement_page": 55,
       "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "Change in estimates of prior year provisions 7,945 185 8,130 6,141 (746) 5,395",
-      "primary_causes": [],
+      "exact_reserve_text": "Change in estimates of prior year provisions 7,945 185 8,130",
+      "primary_causes": [
+        "Adverse claims development",
+        "IBNR recalibration"
+      ],
       "specific_events": [],
-      "specific_years_affected": [],
+      "specific_years_affected": [
+        2015,
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021,
+        2022
+      ],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "The Syndicate recorded an adverse prior-year movement (strengthening) in gross claims reserves of GBP 7.945m in 2024, as shown in the technical provisions reconciliation (\"Change in estimates of prior year provisions\" = 7,945). The Balance Sheet 'Claims outstanding' line is blank in both current and prior year columns, so an opening gross claims outstanding per the Balance Sheet was not available. A gross claims development triangle is provided in the notes. No specific named catastrophe events or causal narrative for the prior year movement is given in the report.",
+      "standardized_narrative": "The Syndicate's gross claims provisions at 1 January 2024 were GBP 25.699m. During 2024 there was an adverse prior-year development (gross strengthening) of GBP 7.945m (approximately 30.9% of opening gross claims reserves), recorded as \"Change in estimates of prior year provisions\" in the technical provisions note. The movement relates to prior underwriting years across the long-term business/accepted reinsurance portfolio and is recorded gross of reinsurance.",
       "raw_causal_phrases": [],
       "lob_movements": [
         {
-          "line_of_business": "Accident & Health",
+          "line_of_business": "Treaty",
           "direction": "strengthening",
-          "amount_gbp_m": 7.945,
+          "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.8
+          "confidence": 0.5
         }
       ],
       "gross_premiums_written_gbp_m": 12.5,
@@ -675,7 +715,7 @@
       "gross_premium_page": 45,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Opening gross 'Claims outstanding' on the Balance Sheet is blank/absent (both years), so opening_reserves is null. The prior year movement (gross) was taken from the Technical Provisions reconciliation row 'Change in estimates of prior year provisions' (explicit gross figure = GBP 7,945k). Line-of-business mapping (Accident & Health) is inferred from the syndicate's stated term-life/long-term business focus and the 'Life' premium class; confidence in the LOB mapping is moderate. A gross claims development triangle is present in the notes and was used to structure the triangle output.",
+      "data_quality_notes": "Opening reserves and prior-year movement taken from Technical Provisions note (Note 18). 'Change in estimates of prior year provisions' used as gross PYD (explicit gross column). Claims development triangle present and was used to identify underwriting years (2015-2024); triangle and note consistent with a gross strengthening. No narrative sentence explicitly describing causes found; no named catastrophe events mentioned in the document. LOB mapping limited because the statutory segment shows 'Life' and 'Reinsurance acceptances' (Reinsurance accepted reported as a single category); lob-specific PYD amounts not separately disclosed.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -818,20 +858,28 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_3002_2024_llm.pdf",
-      "content_hash": "ef9642f32795362480a80f987d12523839da5586ac277e8f6a99c083a936b33b",
-      "standardized_at": "2026-07-06T00:14:24.902123+00:00",
+      "content_hash": "517441a2f226f99445d2faa2b8c3ede2f50f0ad31f96f232ce5afba0b6eae212",
+      "standardized_at": "2026-09-11T14:46:06.120962+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 23915,
-        "output_tokens": 4935,
-        "total_tokens": 28850,
-        "cost_usd": 0.015849
+        "input_tokens": 24675,
+        "output_tokens": 5890,
+        "total_tokens": 30565,
+        "cost_usd": 0.017949
+      },
+      "_pyd_route": {
+        "source": "rag_provisions",
+        "value": 7.9,
+        "model_value": 7.945,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2015,
           2016,
@@ -966,6 +1014,18 @@
             null
           ]
         ],
+        "row_labels": [
+          "at end of underwriting year",
+          "one year later",
+          "two years later",
+          "three years later",
+          "four years later",
+          "five years later",
+          "six years later",
+          "seven years later",
+          "eight years later",
+          "nine years later"
+        ],
         "source_page": 62,
         "entity": 3002
       },
@@ -1083,6 +1143,13 @@
         "unit_source": "header",
         "source_page": 63,
         "entity": 3002,
+        "movement_semantics": {
+          "row_label": "Change in estimates of prior year provisions",
+          "row_index": 5,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": true,
+          "column_index": 1
+        },
         "gross_prior_year_claims": 7.9,
         "ri_share_prior_year": 0.2,
         "net_prior_year_claims": 8.1
@@ -1169,26 +1236,13 @@
       }
     }
   },
-  "total_cost_usd": 0.023122,
-  "total_tokens": 47017,
+  "total_cost_usd": 0.025331,
+  "total_tokens": 49038,
   "validation": {
-    "passed": false,
-    "total_discrepancies": 13,
-    "within_tolerance": 11,
-    "hard_failures": 2,
-    "hard_failure_details": [
-      {
-        "field": "opening_reserves_gbp_m",
-        "type": "value_mismatch",
-        "gemini-2.5-flash": 25.699,
-        "gpt-5-mini": null
-      },
-      {
-        "field": "prior_year_development_pct",
-        "type": "value_mismatch",
-        "gemini-2.5-flash": 30.74,
-        "gpt-5-mini": null
-      }
-    ]
+    "passed": true,
+    "total_discrepancies": 16,
+    "within_tolerance": 16,
+    "hard_failures": 0,
+    "hard_failure_details": []
   }
 }

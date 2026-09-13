@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T10:00:59.729716+00:00",
+  "extraction_timestamp": "2026-09-13T04:03:41.425065+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -11,28 +13,26 @@
       "syndicate": 1967,
       "year": 2015,
       "opening_reserves_gbp_m": 121.265,
-      "opening_reserves_page": 21,
+      "opening_reserves_page": 7,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": 7.95,
       "prior_year_development_pct": 6.56,
       "direction": "strengthening",
-      "prior_year_movement_page": 49,
-      "prior_year_movement_confidence": 0.8,
-      "exact_reserve_text": "In the calendar year there was a prior accident year favourable development of claims incurred of $1.1m. (2014: $6.6m).",
+      "prior_year_movement_page": 16,
+      "prior_year_movement_confidence": 1.0,
+      "exact_reserve_text": "Claims incurred - development of prior accident years (1,164)",
       "primary_causes": [
-        "Other"
+        "Favorable claims development",
+        "IBNR recalibration"
       ],
       "specific_events": [],
-      "specific_years_affected": [
-        2011,
-        2012,
-        2013
-      ],
+      "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "The syndicate experienced a gross prior year reserve strengthening of $7.950 million in 2015, primarily affecting the 2011, 2012, and 2013 underwriting years, as calculated from the gross claims development triangle. This contrasts with a narrative statement in the report indicating a prior accident year favourable development (release) of $1.1 million, which is likely a net figure.",
+      "standardized_narrative": "The syndicate reported a favorable prior year development of $1.164 million for 2015, representing a release of 0.96% of opening gross claims outstanding. This development is attributed to the ongoing positive and negative movements in open balances and recalibration of IBNR estimates for prior accident years. No specific events were named as causes for this development.",
       "raw_causal_phrases": [
-        "In the calendar year there was a prior accident year favourable development of claims incurred of $1.1m."
+        "favourable development of claims incurred",
+        "losses continue to develop both positively and negatively on these open balances"
       ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 213.2,
@@ -88,15 +88,15 @@
           "percentage_of_total": 31.2
         }
       ],
-      "gross_premium_page": 9,
+      "gross_premium_page": 15,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "The gross prior year development of $7.95 million (strengthening) was calculated from the gross claims development triangle on page 49. This contradicts a narrative statement on the same page which mentions a 'prior accident year favourable development of claims incurred of $1.1m', which is likely a net figure.",
+      "data_quality_notes": "The prior year development figure is explicitly stated in the 'Claims' note, which aligns closely with the calculation derived from the gross claims development triangle. [RAG OVERRIDE: Model said PYD=-1.164, RAG triangle computed 7.95. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "thousands",
-        "page": 49,
+        "page": 18,
         "underwriting_years": [
           2011,
           2012,
@@ -143,21 +143,33 @@
         ]
       },
       "source_type": "syndicate",
-      "source_file": "syndicate_reports\\pdfs\\syndicate_1967_2015.pdf",
-      "content_hash": "79595696c0554c5fe56d2fcc9ca79c1d25c6029430b40a037abf9fc0c377eea6",
-      "standardized_at": "2026-03-17T04:25:32.486489+00:00",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_1967_2015_llm.pdf",
+      "content_hash": "a892563309f7d02051ebef777e1db1294357b594d4903da5fd690a4060c5eab7",
+      "standardized_at": "2026-09-11T11:10:44.561667+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 19042,
-        "output_tokens": 1224,
-        "total_tokens": 27567,
-        "cost_usd": 0.008773
+        "input_tokens": 11441,
+        "output_tokens": 1294,
+        "total_tokens": 15453,
+        "cost_usd": 0.006667
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 7.95,
+        "model_value": -1.164,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 49,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -201,6 +213,13 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later"
         ],
         "source_page": 49,
         "entity": 1967
@@ -377,7 +396,7 @@
       "syndicate": 1967,
       "year": 2015,
       "opening_reserves_gbp_m": 121.265,
-      "opening_reserves_page": 47,
+      "opening_reserves_page": 21,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": 7.95,
       "prior_year_development_pct": 6.56,
@@ -386,7 +405,9 @@
       "prior_year_movement_confidence": 0.8,
       "exact_reserve_text": "In the calendar year there was a prior accident year favourable development of claims incurred of $1.1m. (2014: $6.6m).",
       "primary_causes": [
-        "Favorable claims development"
+        "Adverse claims development",
+        "Favorable claims development",
+        "Large loss development"
       ],
       "specific_events": [],
       "specific_years_affected": [
@@ -396,10 +417,11 @@
       ],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "The syndicate opened 2015 with gross claims outstanding of $121.265m. Analysis of the gross claims development triangle indicates a net prior-year adverse development (strengthening) of approximately $7.95m, driven by an adverse movement on the 2013 underwriting year largely offset by releases on older years (2011 and 2012). The report also notes a small prior-accident-year favourable development in claims incurred of $1.1m (a P&L measure), but the gross-triangle based calculation yields a net strengthening of reserves.",
+      "standardized_narrative": "Opening gross claims outstanding at 1 January 2015 were $121.265m. Analysis of the gross claims development triangle shows net prior-year strengthening of approximately $7.95m (6.6% of opening claims), driven by adverse development in the 2013 underwriting year that outweighed favourable run-off in older years (2011-2012). The report separately notes a small prior-accident-year favourable development of $1.1m on a claims-incurred basis (net presentation). No specific named catastrophe events are cited in the reserve movement commentary.",
       "raw_causal_phrases": [
-        "prior accident year favourable development of claims incurred of $1.1m.",
-        "prior accident year favourable development"
+        "In the calendar year there was a prior accident year favourable development of claims incurred of $1.1m. (2014: $6.6m).",
+        "the claims ratio benefited from relatively low catastrophe losses during the year (as did the previous year), offset by an increase in attritional claims in the year.",
+        "Losses continue to develop both positively and negatively on these open balances."
       ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 213.2,
@@ -455,10 +477,10 @@
           "percentage_of_total": 31.2
         }
       ],
-      "gross_premium_page": 8,
+      "gross_premium_page": 41,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "Opening gross claims outstanding taken from Technical Provisions note (Gross claims outstanding at 1 January). Prior year development computed from the GROSS claims development triangle (note 18) by comparing current estimates to the previous diagonal for underwriting years up to 2013 (excluding 2014 and 2015 as per instructions). The report also contains a narrative statement of prior accident year favourable development of claims incurred ($1.1m) which is a P&L measure and not used for the gross reserve movement figure. No Reinsurance-To-Close (RITC) distortion was identified in the technical provisions note. All amounts reported in native currency (USD) and expressed in millions.",
+      "data_quality_notes": "Prior-year development figure derived from the gross claims development triangle (Note 18) by comparing the latest estimate to the previous diagonal for underwriting years 2011-2013 (excluding the two most recent UW years 2014-2015) and summing the changes. The report also contains a narrative net (claims-incurred) prior-year favourable development of $1.1m; that net figure differs from the triangle-derived gross movement. All source numbers in the accounts are presented in $'000; values here are converted to millions of the native currency (USD) by dividing by 1,000. No explicit gross \"movement in prior year's provision\" line was provided; triangle method was used as primary gross source.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
@@ -510,21 +532,33 @@
         ]
       },
       "source_type": "syndicate",
-      "source_file": "syndicate_reports\\pdfs\\syndicate_1967_2015.pdf",
-      "content_hash": "79595696c0554c5fe56d2fcc9ca79c1d25c6029430b40a037abf9fc0c377eea6",
-      "standardized_at": "2026-03-17T04:26:13.125877+00:00",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_1967_2015_llm.pdf",
+      "content_hash": "a892563309f7d02051ebef777e1db1294357b594d4903da5fd690a4060c5eab7",
+      "standardized_at": "2026-09-11T11:13:02.194760+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 76302,
-        "output_tokens": 4697,
-        "total_tokens": 80999,
-        "cost_usd": 0.028469
+        "input_tokens": 33175,
+        "output_tokens": 6123,
+        "total_tokens": 39298,
+        "cost_usd": 0.02054
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 7.95,
+        "model_value": 7.95,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 49,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -568,6 +602,13 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later"
         ],
         "source_page": 49,
         "entity": 1967
@@ -741,12 +782,12 @@
       }
     }
   },
-  "total_cost_usd": 0.037242,
-  "total_tokens": 108566,
+  "total_cost_usd": 0.027207,
+  "total_tokens": 54751,
   "validation": {
     "passed": true,
-    "total_discrepancies": 10,
-    "within_tolerance": 10,
+    "total_discrepancies": 18,
+    "within_tolerance": 18,
     "hard_failures": 0,
     "hard_failure_details": []
   }

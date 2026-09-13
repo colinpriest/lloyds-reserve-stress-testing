@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T10:27:13.601661+00:00",
+  "extraction_timestamp": "2026-09-13T04:07:47.226425+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -13,10 +15,10 @@
       "opening_reserves_gbp_m": 243.555,
       "opening_reserves_page": 5,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": -5.6,
-      "prior_year_development_pct": -2.3,
-      "direction": "release",
-      "prior_year_movement_page": 14,
+      "prior_year_development_gbp_m": 20.593,
+      "prior_year_development_pct": 8.46,
+      "direction": "strengthening",
+      "prior_year_movement_page": 13,
       "prior_year_movement_confidence": 0.8,
       "exact_reserve_text": "Overall, on an aggregate basis, a reserve release of GBP 5.6m net of reinsurance was made to prior year reserves during 2023 (2022 GBP 8.8m).",
       "primary_causes": [
@@ -24,36 +26,18 @@
         "Adverse claims development"
       ],
       "specific_events": [],
-      "specific_years_affected": [],
-      "prior_year_events": [],
-      "named_events": [
-        {
-          "event_name": "War in Ukraine",
-          "event_year": 2022,
-          "event_type": "geopolitical",
-          "net_loss_gbp_m": null,
-          "loss_description": "heightened risk of further deepening in polarisation between countries which could lead to violence and terrorist activity increasing in the region and beyond. This could expose the Syndicate to higher-than-expected claims and further financial market volatility as well as potentially reducing demand for insurance amidst reduced economic growth and inflation.",
-          "lobs_affected": [],
-          "page": 7,
-          "confidence": 0.5
-        },
-        {
-          "event_name": "Middle East conflict",
-          "event_year": 2023,
-          "event_type": "geopolitical",
-          "net_loss_gbp_m": null,
-          "loss_description": "heightened risk of further deepening in polarisation between countries which could lead to violence and terrorist activity increasing in the region and beyond. This could expose the Syndicate to higher-than-expected claims and further financial market volatility as well as potentially reducing demand for insurance amidst reduced economic growth and inflation.",
-          "lobs_affected": [],
-          "page": 7,
-          "confidence": 0.5
-        }
+      "specific_years_affected": [
+        2018,
+        2019,
+        2020,
+        2021
       ],
-      "standardized_narrative": "The syndicate reported a net reserve release of GBP 5.6 million for prior year reserves in 2023. This favorable development was primarily driven by the Property classes, although it was partially offset by adverse development in the Legal Indemnities class. Geopolitical events such as the ongoing war in Ukraine and recent conflict in the Middle East are noted as potential risks for higher-than-expected claims and financial market volatility.",
+      "prior_year_events": [],
+      "named_events": [],
+      "standardized_narrative": "The syndicate experienced a gross prior year reserve strengthening of GBP 40.78 million in 2023, calculated from the claims development triangle. This represents a 16.74% increase relative to the opening gross claims outstanding. The report's narrative, however, states a net reserve release of GBP 5.6 million for prior year reserves, primarily attributed to favourable development in Property classes, partially offset by adverse development in Legal Indemnities. This indicates a discrepancy between the gross and net movements, likely due to reinsurance effects.",
       "raw_causal_phrases": [
         "favourable development across Property classes",
-        "adverse development on the Legal Indemnities class",
-        "ongoing war in Ukraine",
-        "recent escalation of conflict in the Middle East"
+        "adverse development on the Legal Indemnities class"
       ],
       "lob_movements": [
         {
@@ -64,7 +48,7 @@
           "confidence": 0.5
         },
         {
-          "line_of_business": "Casualty",
+          "line_of_business": "Professional Lines",
           "direction": "strengthening",
           "amount_gbp_m": null,
           "percentage": null,
@@ -119,10 +103,10 @@
           "percentage_of_total": 21.6
         }
       ],
-      "gross_premium_page": 1,
+      "gross_premium_page": 11,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior year development is reported as a net figure of reinsurance, as no gross figure was explicitly stated and the gross claims development triangle was deemed unreliable due to an RITC transfer in the prior year (2022). [RAG PYD NOT APPLIED: deterministic figure +20.593m has the opposite sign to both model values [-5.6, -5.6], which agree with each other; model values retained.] [CODE PYD NOT APPLIED: deterministic figure +40.780m has the opposite sign to both model values [-5.6, -5.6], which agree with each other; model values retained.]",
+      "data_quality_notes": "There is a discrepancy between the gross prior year development calculated from the claims development triangle (+GBP 40.78m strengthening) and the net prior year development stated in the narrative (-GBP 5.6m release). The gross figure from the triangle is used as per instructions. The stated causes and LOB movements in the narrative refer to the net release, not the gross strengthening. Legal Indemnities is mapped to Professional Lines. [RAG OVERRIDE: Model said PYD=40.78, RAG triangle computed 20.593. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -189,20 +173,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_2015_2023_llm.pdf",
-      "content_hash": "9c7c434f33a2d60862ecf8e221e2c36bdb4136483490725a5c8b490db326f572",
-      "standardized_at": "2026-07-05T23:34:04.145442+00:00",
+      "content_hash": "7b4b68ead917b60103e407cc674fec167df39e45130194835aa22b29fac11eb7",
+      "standardized_at": "2026-09-11T11:37:59.143661+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 9863,
-        "output_tokens": 1604,
-        "total_tokens": 16882,
-        "cost_usd": 0.006969
+        "input_tokens": 10667,
+        "output_tokens": 1601,
+        "total_tokens": 17333,
+        "cost_usd": 0.007203
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 20.593,
+        "model_value": 40.78,
+        "triangle_type": "net",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 44,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
-        "type": "gross",
+        "type": "net",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2018,
           2019,
@@ -450,9 +446,9 @@
       "opening_reserves_gbp_m": 243.555,
       "opening_reserves_page": 20,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": -5.6,
-      "prior_year_development_pct": -2.3,
-      "direction": "release",
+      "prior_year_development_gbp_m": 20.593,
+      "prior_year_development_pct": 8.46,
+      "direction": "strengthening",
       "prior_year_movement_page": 44,
       "prior_year_movement_confidence": 1.0,
       "exact_reserve_text": "Overall, on an aggregate basis, a reserve release of GBP 5.6m net of reinsurance was made to prior year reserves during 2023 (2022 GBP 8.8m).\nThe reserve release was primarily due to the favourable development across Property classes partially offset by adverse development on the Legal Indemnities class.",
@@ -464,11 +460,10 @@
       "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "The syndicate recorded a net prior-year reserve release of GBP 5.6m during 2023. This release was primarily driven by favourable development in Property classes, partially offset by adverse development in Legal Indemnities. No gross prior-year movement was disclosed; the reported figure is net of reinsurance.",
+      "standardized_narrative": "The syndicate recorded a net prior-year reserve release of GBP 5.6m in 2023, driven mainly by favourable development in Property classes partially offset by adverse development in Legal Indemnities. A gross prior-year movement was not explicitly reported; the report quantifies the movement net of reinsurance.",
       "raw_causal_phrases": [
         "Overall, on an aggregate basis, a reserve release of GBP 5.6m net of reinsurance was made to prior year reserves during 2023 (2022 GBP 8.8m).",
-        "The reserve release was primarily due to the favourable development across Property classes partially offset by adverse development on the Legal Indemnities class.",
-        "An explicit impact for claims inflation has been included within the best estimate reserves, in line with SCOR Group scenarios and Lloyd's guidelines. The overall impact across all lines of business for all underwriting years is GBP 4.2m/GBP 3.8m (gross/net) on an ultimate basis and GBP 3.6m/GBP 3.2m (gross/net) on an earned basis."
+        "The reserve release was primarily due to the favourable development across Property classes partially offset by adverse development on the Legal Indemnities class."
       ],
       "lob_movements": [
         {
@@ -534,12 +529,12 @@
           "percentage_of_total": 21.6
         }
       ],
-      "gross_premium_page": 4,
+      "gross_premium_page": 28,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "No explicit GROSS prior-year reserve movement amount was provided in the notes. The report explicitly states a net prior-year reserve release of GBP 5.6m (net of reinsurance); this net figure has been used for prior_year_development_gbp_m because no gross PYD figure was found. A gross claims development triangle appears in the notes but the PDF extraction is partially ambiguous; a best-effort triangle extraction is included below but should be treated with low confidence. [RAG PYD NOT APPLIED: deterministic figure +20.593m has the opposite sign to both model values [-5.6, -5.6], which agree with each other; model values retained.] [CODE PYD NOT APPLIED: deterministic figure +40.780m has the opposite sign to both model values [-5.6, -5.6], which agree with each other; model values retained.]",
+      "data_quality_notes": "No explicit GROSS prior-year movement amount was provided in the notes. The report explicitly states a net prior-year reserve release of GBP 5.6m (net of reinsurance) and comments that this was driven by favourable Property development offset by adverse Legal Indemnities development. A gross PYD figure could not be unambiguously extracted from the gross claims development triangle in the document within the data extraction here; therefore the net figure was used as a fallback and is reported above. A claims development triangle (net and gross) is present (see page 43), but the report gives the explicit quantified prior-year movement only net of reinsurance. [RAG OVERRIDE: Model said PYD=-5.6, RAG triangle computed 20.593. Using RAG value.]",
       "_claims_triangle": {
-        "type": "gross",
+        "type": "net",
         "currency": "GBP",
         "units": "thousands",
         "page": 43,
@@ -553,50 +548,50 @@
         ],
         "development_rows": [
           [
-            87854,
-            43391,
-            40910,
-            62064,
-            67971,
-            46638
+            62479,
+            39290,
+            36385,
+            38027,
+            48491,
+            40170
           ],
           [
-            190840,
-            106377,
-            105515,
-            138288,
-            143777,
-            118075
-          ],
-          [
-            186965,
-            105515,
-            110396,
-            151632,
-            117039,
-            122362
-          ],
-          [
-            187546,
-            138288,
-            151632,
-            117039,
-            122362,
-            120597
-          ],
-          [
-            186837,
-            143777,
-            117039,
-            122362,
-            120597,
+            151910,
+            97047,
+            84840,
+            93024,
+            112127,
             null
           ],
           [
-            198749,
-            118075,
-            122362,
-            120597,
+            151862,
+            101129,
+            86067,
+            99411,
+            null,
+            null
+          ],
+          [
+            153292,
+            97938,
+            89680,
+            null,
+            null,
+            null
+          ],
+          [
+            153715,
+            101657,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            160589,
+            null,
+            null,
+            null,
             null,
             null
           ]
@@ -604,20 +599,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_2015_2023_llm.pdf",
-      "content_hash": "9c7c434f33a2d60862ecf8e221e2c36bdb4136483490725a5c8b490db326f572",
-      "standardized_at": "2026-07-05T23:35:20.015964+00:00",
+      "content_hash": "7b4b68ead917b60103e407cc674fec167df39e45130194835aa22b29fac11eb7",
+      "standardized_at": "2026-09-11T11:39:32.651639+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 24650,
-        "output_tokens": 7858,
-        "total_tokens": 32508,
-        "cost_usd": 0.021879
+        "input_tokens": 25410,
+        "output_tokens": 6104,
+        "total_tokens": 31514,
+        "cost_usd": 0.018561
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 20.593,
+        "model_value": -5.6,
+        "triangle_type": "net",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 44,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
-        "type": "gross",
+        "type": "net",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2018,
           2019,
@@ -860,12 +867,12 @@
       }
     }
   },
-  "total_cost_usd": 0.028848,
-  "total_tokens": 49390,
+  "total_cost_usd": 0.025764,
+  "total_tokens": 48847,
   "validation": {
     "passed": true,
-    "total_discrepancies": 16,
-    "within_tolerance": 16,
+    "total_discrepancies": 17,
+    "within_tolerance": 17,
     "hard_failures": 0,
     "hard_failure_details": []
   }

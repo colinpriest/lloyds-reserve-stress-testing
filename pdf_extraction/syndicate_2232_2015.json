@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-05T20:01:53.798815+00:00",
+  "extraction_timestamp": "2026-09-13T04:09:23.543032+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -18,10 +20,14 @@
       "direction": "release",
       "prior_year_movement_page": 11,
       "prior_year_movement_confidence": 0.8,
-      "exact_reserve_text": "The following tables show the development of claims over a period of time on both a gross and net of reinsurance basis. The top half of the table shows how the estimates of total claims for each underwriting year develop over time. The lower half of the table reconciles the cumulative claims to the amount appearing in the balance sheet.",
-      "primary_causes": [],
+      "exact_reserve_text": "",
+      "primary_causes": [
+        "Favorable claims development"
+      ],
       "specific_events": [],
-      "specific_years_affected": [],
+      "specific_years_affected": [
+        2011
+      ],
       "prior_year_events": [],
       "named_events": [
         {
@@ -29,13 +35,13 @@
           "event_year": 2015,
           "event_type": "man_made",
           "net_loss_gbp_m": null,
-          "loss_description": "most significant loss from a relatively low frequency of insured catastrophe or major losses",
+          "loss_description": "most significant",
           "lobs_affected": [],
           "page": 1,
-          "confidence": 0.8
+          "confidence": 1.0
         }
       ],
-      "standardized_narrative": "The syndicate's gross claims development triangle indicates no material prior year reserve development for underwriting years 2013 and prior. No specific narrative or note detailing prior year reserve movements was found in the report. The most significant named event for the current year was the Tianjin explosion in August 2015.",
+      "standardized_narrative": "The syndicate experienced a small gross reserve release of GBP 0.734 million for prior underwriting years, primarily from the 2011 underwriting year. No specific causes were detailed for this movement.",
       "raw_causal_phrases": [],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 144.2,
@@ -74,7 +80,7 @@
       "gross_premium_page": 8,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior year development is calculated from the gross claims development triangle on page 11, which shows zero movement for underwriting years 2013 and prior. No explicit prior year development figure was found in narrative or specific notes. [RAG OVERRIDE: Model said PYD=0.0, RAG triangle computed -5.961. Using RAG value.]",
+      "data_quality_notes": "Prior year development calculated from gross claims development triangle as no explicit prior year movement note was found. The movement is very small. [RAG OVERRIDE: Model said PYD=-0.734, RAG triangle computed -5.961. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -127,20 +133,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_2232_2015_llm.pdf",
-      "content_hash": "d014b873201bf7049de106698e0be4ec656690acf71a5211b966fb5e4cfaf765",
-      "standardized_at": "2026-03-18T00:56:17.532736+00:00",
+      "content_hash": "f897c7175c86b25e33347f8747311e259f177834803e879542fe42ab10a1f16e",
+      "standardized_at": "2026-09-11T11:44:11.457706+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 8850,
-        "output_tokens": 1193,
-        "total_tokens": 14130,
-        "cost_usd": 0.005638
+        "input_tokens": 9635,
+        "output_tokens": 1097,
+        "total_tokens": 13298,
+        "cost_usd": 0.005633
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -5.961,
+        "model_value": -0.734,
+        "triangle_type": "net",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 41,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "net",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -184,6 +202,13 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "End of underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later"
         ],
         "source_page": 41,
         "entity": 2232
@@ -350,14 +375,13 @@
       "prior_year_movement_confidence": 0.8,
       "exact_reserve_text": "",
       "primary_causes": [
-        "Favorable claims development"
+        "Favorable claims development",
+        "IBNR recalibration"
       ],
-      "specific_events": [],
-      "specific_years_affected": [
-        2011,
-        2012,
-        2013
+      "specific_events": [
+        "explosion at Tianjin in August 2015"
       ],
+      "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [
         {
@@ -365,28 +389,20 @@
           "event_year": 2015,
           "event_type": "man_made",
           "net_loss_gbp_m": null,
-          "loss_description": "loss from the explosion at Tianjin in August 2015 was most significant",
+          "loss_description": "the loss from the explosion at Tianjin in August 2015 was most significant",
           "lobs_affected": [
-            "Property"
+            "Property",
+            "Treaty"
           ],
           "page": 3,
-          "confidence": 1.0
-        }
-      ],
-      "standardized_narrative": "Opening gross claims outstanding at 1 January 2015 were GBP 114.483m. Analysis of the gross claims development triangle indicates overall favourable prior year development of approximately GBP 7.7m (a release, ~6.8% of opening reserves), driven by favourable claims development on older underwriting years (2011-2013). There is no explicit separate 'movement in prior year's provision' gross figure in the narrative; the prior year release is calculated from the gross claims development table. The report does note a significant man-made loss in 2015 (the Tianjin explosion) which affected current year results.",
-      "raw_causal_phrases": [
-        "relatively low frequency of insured catastrophe or major losses",
-        "loss from the explosion at Tianjin in August 2015 was most significant"
-      ],
-      "lob_movements": [
-        {
-          "line_of_business": "Aggregate",
-          "direction": "release",
-          "amount_gbp_m": -7.745,
-          "percentage": -6.77,
           "confidence": 0.8
         }
       ],
+      "standardized_narrative": "Gross claims outstanding at 1 January 2015 were GBP 114.483m. Analysis of the gross claims development triangle shows aggregate favourable prior-year development of approximately GBP 7.745m (a release), primarily driven by favourable claims development and IBNR recalibration across older underwriting years (2011-2013). The report notes a relatively low frequency of catastrophes in 2015, although the Tianjin explosion in August 2015 was a significant current-year event.",
+      "raw_causal_phrases": [
+        "the Syndicate experienced a relatively low frequency of insured catastrophe or major losses, but of these the loss from the explosion at Tianjin in August 2015 was most significant"
+      ],
+      "lob_movements": [],
       "gross_premiums_written_gbp_m": 144.2,
       "gross_premium_mix": [
         {
@@ -423,7 +439,7 @@
       "gross_premium_page": 19,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "No explicit gross 'movement in prior year's provision for claims outstanding' sentence was found. Prior year development (gross) was calculated from the gross claims development triangle (page 37). Values in the triangle were presented in GBP 000 and have been converted to millions for this output. exact_reserve_text is empty because the report contains no verbatim sentence explicitly quantifying the gross prior year movement. [RAG OVERRIDE: Model said PYD=-7.745, RAG triangle computed -5.961. Using RAG value.]",
+      "data_quality_notes": "Prior-year development was not provided as an explicit gross movement note; figure calculated from the published gross claims development triangle (gross 'Estimates of ultimate gross claims' rows) by excluding the two most recent underwriting years (2015 and 2014) and summing changes for 2011-2013. No explicit textual sentence stating the gross prior-year movement was found. Triangle values are presented in GBP 000 in the report. [RAG OVERRIDE: Model said PYD=-7.745, RAG triangle computed -5.961. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -476,20 +492,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_2232_2015_llm.pdf",
-      "content_hash": "d014b873201bf7049de106698e0be4ec656690acf71a5211b966fb5e4cfaf765",
-      "standardized_at": "2026-03-18T00:57:30.580350+00:00",
+      "content_hash": "f897c7175c86b25e33347f8747311e259f177834803e879542fe42ab10a1f16e",
+      "standardized_at": "2026-09-11T11:45:58.839012+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 16446,
-        "output_tokens": 4934,
-        "total_tokens": 21380,
-        "cost_usd": 0.013979
+        "input_tokens": 16789,
+        "output_tokens": 5099,
+        "total_tokens": 21888,
+        "cost_usd": 0.014395
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -5.961,
+        "model_value": -7.745,
+        "triangle_type": "net",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 41,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "net",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -533,6 +561,13 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "End of underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later"
         ],
         "source_page": 41,
         "entity": 2232
@@ -687,12 +722,12 @@
       }
     }
   },
-  "total_cost_usd": 0.019617,
-  "total_tokens": 35510,
+  "total_cost_usd": 0.020028,
+  "total_tokens": 35186,
   "validation": {
     "passed": true,
-    "total_discrepancies": 14,
-    "within_tolerance": 14,
+    "total_discrepancies": 10,
+    "within_tolerance": 10,
     "hard_failures": 0,
     "hard_failure_details": []
   }

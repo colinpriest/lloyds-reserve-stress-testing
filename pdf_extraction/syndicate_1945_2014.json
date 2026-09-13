@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T09:55:46.542433+00:00",
+  "extraction_timestamp": "2026-09-13T04:00:06.687699+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -26,9 +28,9 @@
       "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "The syndicate experienced a favorable prior year development in 2014, resulting in a release of GBP 4.7 million of gross prior year reserves due to favorable claims experience.",
+      "standardized_narrative": "The syndicate experienced a release of GBP 4.7 million in prior year reserves during 2014, attributed to favourable claims development. This represents an 18.47% release compared to the opening gross claims outstanding of GBP 25.444 million.",
       "raw_causal_phrases": [
-        "favourable experience"
+        "favourable experience during 2014"
       ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 66.6,
@@ -62,7 +64,7 @@
       "gross_premium_page": 9,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "",
+      "data_quality_notes": "No claims development triangle found in the report.",
       "_claims_triangle": {
         "type": "none",
         "currency": null,
@@ -73,15 +75,21 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_1945_2014_llm.pdf",
-      "content_hash": "59e38a652303d67f96aa0541ed1f7bae95e6133386208b014de3db7b818a66a5",
-      "standardized_at": "2026-03-18T11:09:53.106124+00:00",
+      "content_hash": "3e4e170418bfd27c5f0267701f72e4b7402cf7e6c53f92e965798f68312a8c43",
+      "standardized_at": "2026-09-11T11:00:25.294677+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 8573,
-        "output_tokens": 722,
-        "total_tokens": 11591,
-        "cost_usd": 0.004377
+        "input_tokens": 9377,
+        "output_tokens": 757,
+        "total_tokens": 13964,
+        "cost_usd": 0.004706
+      },
+      "_pyd_route": {
+        "source": "rag_general_narrative",
+        "value": -4.7,
+        "model_value": -4.7,
+        "note": "confirmed by the model value"
       },
       "_adobe_lob": {
         "gross_premium_mix": [
@@ -195,7 +203,7 @@
       "direction": "release",
       "prior_year_movement_page": 21,
       "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "As a result of favourable experience during 2014, there has been a release of GBP 4.7m of prior year reserves.",
+      "exact_reserve_text": "The syndicate has loss reserves for various events and for losses that are incurred but not reported (IBNR). Whilst the syndicate has a reasonable degree of confidence as to the ultimate adequacy of its reserves for all events, volatility exists around the final settlement value, particularly in context of losses where cedant statements are material. As a result of favourable experience during 2014, there has been a release of GBP 4.7m of prior year reserves.",
       "primary_causes": [
         "Favorable claims development"
       ],
@@ -203,11 +211,42 @@
       "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "Opening gross claims outstanding at 1 January 2014 were GBP 25.444m. During 2014 the syndicate recorded a release of prior year claims reserves of GBP 4.7m due to favourable claims experience. No specific named catastrophe events or line-of-business specific reserve movements are disclosed.",
+      "standardized_narrative": "The syndicate reported a release of prior year reserves of GBP 4.7m in 2014 driven by favourable claims experience during the year. The release reduced gross claims outstanding (opening gross claims outstanding at 1 Jan 2014 was GBP 25.444m). The movement is described at a syndicate level and is not broken down by line of business in the report.",
       "raw_causal_phrases": [
-        "As a result of favourable experience during 2014, there has been a release of GBP 4.7m of prior year reserves."
+        "favourable experience during 2014",
+        "release of GBP 4.7m of prior year reserves",
+        "volatility exists around the final settlement value"
       ],
-      "lob_movements": [],
+      "lob_movements": [
+        {
+          "line_of_business": "Accident & Health",
+          "direction": "release",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.5
+        },
+        {
+          "line_of_business": "Property",
+          "direction": "release",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.5
+        },
+        {
+          "line_of_business": "Marine",
+          "direction": "release",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.5
+        },
+        {
+          "line_of_business": "Casualty",
+          "direction": "release",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.5
+        }
+      ],
       "gross_premiums_written_gbp_m": 66.6,
       "gross_premium_mix": [
         {
@@ -239,26 +278,32 @@
       "gross_premium_page": 20,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior year movement (GBP 4.7m release) is stated in the Claims Outstanding note as a narrative sentence; no tabulated 'movement in prior year provision' with gross column was provided. No claims development triangle or LOB-specific PYD amounts are present. All monetary values in the report are presented in GBP '000.",
+      "data_quality_notes": "Prior year development (GBP 4.7m release) is taken from narrative in the 'Claims Outstanding' note; no detailed gross movement table or triangle was provided to disaggregate by line of business. The report does not explicitly state whether the GBP 4.7m is gross or net but the narrative does not use the word 'net' so it has been treated as a gross release. 'Pecuniary loss' in the segmental analysis was mapped to 'Casualty' for LOB movement entries; this mapping is approximate. No claims development triangle found in the report.",
       "_claims_triangle": {
         "type": "none",
         "currency": "GBP",
-        "units": "thousands",
+        "units": null,
         "page": null,
         "underwriting_years": [],
         "development_rows": []
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_1945_2014_llm.pdf",
-      "content_hash": "59e38a652303d67f96aa0541ed1f7bae95e6133386208b014de3db7b818a66a5",
-      "standardized_at": "2026-03-18T11:10:33.514211+00:00",
+      "content_hash": "3e4e170418bfd27c5f0267701f72e4b7402cf7e6c53f92e965798f68312a8c43",
+      "standardized_at": "2026-09-11T11:01:50.875089+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 16541,
-        "output_tokens": 2532,
-        "total_tokens": 19073,
-        "cost_usd": 0.009199
+        "input_tokens": 17300,
+        "output_tokens": 3799,
+        "total_tokens": 21099,
+        "cost_usd": 0.011923
+      },
+      "_pyd_route": {
+        "source": "rag_general_narrative",
+        "value": -4.7,
+        "model_value": -4.7,
+        "note": "confirmed by the model value"
       },
       "_adobe_lob": {
         "gross_premium_mix": [
@@ -362,12 +407,12 @@
       }
     }
   },
-  "total_cost_usd": 0.013576,
-  "total_tokens": 30664,
+  "total_cost_usd": 0.016629,
+  "total_tokens": 35063,
   "validation": {
     "passed": true,
-    "total_discrepancies": 7,
-    "within_tolerance": 7,
+    "total_discrepancies": 8,
+    "within_tolerance": 8,
     "hard_failures": 0,
     "hard_failure_details": []
   }

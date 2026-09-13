@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T09:54:10.222404+00:00",
+  "extraction_timestamp": "2026-09-13T04:00:05.757593+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -26,57 +28,16 @@
       "specific_events": [],
       "specific_years_affected": [
         2021,
-        2020,
-        2019,
-        2018,
-        2017,
-        2016,
-        2015,
-        2014,
-        2013
+        2020
       ],
-      "prior_year_events": [
-        {
-          "event_name": "Loss Portfolio Transfer Reinsurance (LPT)",
-          "event_year": 2022,
-          "impact_description": "The Syndicate entered into a Loss Portfolio Transfer Reinsurance (LPT) agreement in December 2022, ceding the 2020 and prior years of account on certain classes and discontinued lines of business. The LPT resulted in premium ceded of $215.2m and reinsurers' share of change in provisions for claims includes recoveries due. Favourable gross experience in Casualty was net nil due to the LPT.",
-          "lobs_affected": [
-            "Casualty"
-          ],
-          "amount_gbp_m": null,
-          "confidence": 0.8
-        }
-      ],
+      "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "Syndicate 1919 reported a gross prior year reserve release of $38.4 million for 2023, representing a 3.83% reduction of opening gross reserves. This favourable development was primarily driven by favourable claims experience in the Technical risks and Casualty divisions. A Loss Portfolio Transfer Reinsurance agreement, entered into in December 2022, also impacted prior year results, particularly in Casualty, where gross favourable experience was offset to be net nil due to the LPT.",
+      "standardized_narrative": "Syndicate 1919 experienced a gross release of $38.4 million in prior year reserves during 2023. This favorable development was primarily driven by positive claims experience in the Tech and Casualty divisions, further influenced by a loss portfolio transfer agreement covering the 2020 and prior years of account.",
       "raw_causal_phrases": [
         "favourable experience in Syndicate 1919's Tech and Casualty divisions",
-        "loss portfolio transfer on the 2020 & prior years of account",
-        "Tech classes with favourable experience have been those with significant reinsurance"
+        "loss portfolio transfer on the 2020 & prior years of account"
       ],
-      "lob_movements": [
-        {
-          "line_of_business": "Property",
-          "direction": "release",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.5
-        },
-        {
-          "line_of_business": "Energy",
-          "direction": "release",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.5
-        },
-        {
-          "line_of_business": "Casualty",
-          "direction": "release",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.5
-        }
-      ],
+      "lob_movements": [],
       "gross_premiums_written_gbp_m": 527.9,
       "gross_premium_mix": [
         {
@@ -113,7 +74,7 @@
       "gross_premium_page": 8,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "The prior year development figure from the narrative (-$38.4m) differs from the sum derived from the gross claims development triangle (-$33.96m). The narrative figure is used as it is explicitly stated as the gross movement for prior underwriting years. [RAG OVERRIDE: Model said PYD=-38.4, RAG triangle computed -33.959. Using RAG value.]",
+      "data_quality_notes": "LOB specific prior year development not quantified in the report. The claims development triangle, when calculated for 2021 and prior years, shows a strengthening of $165.107m, which contradicts the narrative statement of a $38.4m release. The narrative figure is used as it is a direct statement of prior year development. [RAG OVERRIDE: Model said PYD=-38.4, RAG triangle computed -33.959. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
@@ -256,20 +217,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_1919_2023_llm.pdf",
-      "content_hash": "3c890fa47f8bd1ede5ad9acd2e2faf7b4f263cadfad362e01ae233d5a5ca50ed",
-      "standardized_at": "2026-07-05T09:36:14.529544+00:00",
+      "content_hash": "13effe54196243456574a6e69fa81eda2b716d8f283f0f85a30db4a5938b730e",
+      "standardized_at": "2026-09-11T11:05:17.591594+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 10121,
-        "output_tokens": 2192,
-        "total_tokens": 16315,
-        "cost_usd": 0.008516
+        "input_tokens": 10925,
+        "output_tokens": 1769,
+        "total_tokens": 17717,
+        "cost_usd": 0.0077
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -33.959,
+        "model_value": -38.4,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 45,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2014,
           2015,
@@ -561,38 +534,100 @@
       ],
       "specific_events": [],
       "specific_years_affected": [
-        2021
+        2021,
+        2020
       ],
       "prior_year_events": [
         {
-          "event_name": "Loss Portfolio Transfer to Starr Insurance and Reinsurance Limited (SIRL)",
+          "event_name": "Loss Portfolio Transfer to Starr Insurance and Reinsurance Limited",
           "event_year": 2022,
-          "impact_description": "In December 2022 the syndicate ceded the 2020 and prior years of account under an LPT to SIRL; the results for prior year include the premium ceded of $215.2m and the reinsurers' share of the change in provisions for claims includes the recoveries due on the business reinsured under the agreement.",
+          "impact_description": "LPT ceded the 2020 and prior years of account on certain classes; the contract included a premium ceded of $215.2m and recoveries due on the business reinsured were included in recoverables, affecting net development for those years.",
           "lobs_affected": [
-            "Treaty"
+            "Casualty",
+            "Energy"
           ],
           "amount_gbp_m": null,
-          "confidence": 1.0
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Favourable claims experience in Tech and Casualty divisions",
+          "event_year": 2023,
+          "impact_description": "Observed favourable development in prior underwriting years (2021 and prior) resulted in a $38.4m reduction in gross ultimate claims.",
+          "lobs_affected": [
+            "Casualty",
+            "Energy"
+          ],
+          "amount_gbp_m": -38.4,
+          "confidence": 0.8
         }
       ],
       "named_events": [
         {
-          "event_name": "Russia and Ukraine conflict",
-          "event_year": 2022,
-          "event_type": "geopolitical",
-          "net_loss_gbp_m": null,
-          "loss_description": "Uncertainty in the insurance market arising from the Russia and Ukraine conflict identified as area of potential exposure; claims team reviewed potential exposures and no direct provision deemed necessary for Syndicate 1919.",
-          "lobs_affected": [],
-          "page": 45,
-          "confidence": 0.5
+          "event_name": "Cyber - Power Plant explosion",
+          "event_year": null,
+          "event_type": "man_made",
+          "net_loss_gbp_m": 27.0,
+          "loss_description": "Realistic disaster scenario; estimated net claims provided in RDS table.",
+          "lobs_affected": [
+            "Cyber"
+          ],
+          "page": 42,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Aviation terror event",
+          "event_year": null,
+          "event_type": "man_made",
+          "net_loss_gbp_m": 40.0,
+          "loss_description": "Realistic disaster scenario; estimated net claims provided in RDS table.",
+          "lobs_affected": [
+            "Aviation"
+          ],
+          "page": 42,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Third party liability event",
+          "event_year": null,
+          "event_type": "liability",
+          "net_loss_gbp_m": 27.0,
+          "loss_description": "Realistic disaster scenario; estimated net claims provided in RDS table.",
+          "lobs_affected": [
+            "Casualty"
+          ],
+          "page": 42,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Director and Officers liability event",
+          "event_year": null,
+          "event_type": "liability",
+          "net_loss_gbp_m": 27.0,
+          "loss_description": "Realistic disaster scenario; estimated net claims provided in RDS table.",
+          "lobs_affected": [
+            "Professional Lines"
+          ],
+          "page": 42,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Political Risk - Oil Price Collapse",
+          "event_year": null,
+          "event_type": "political",
+          "net_loss_gbp_m": 6.0,
+          "loss_description": "Realistic disaster scenario; estimated net claims provided in RDS table.",
+          "lobs_affected": [
+            "Political"
+          ],
+          "page": 42,
+          "confidence": 0.8
         }
       ],
-      "standardized_narrative": "At 31 December 2023 the syndicate's opening gross claims outstanding were $1,002.0m. During 2023 gross ultimate claims in respect of prior underwriting years (2021 and prior) reduced by $38.4m, driven by favourable claims experience in the Syndicate's Technical (energy/technical risks) and Casualty divisions. On a net basis there was a small increase of $0.6m driven by reinsurance placement (a loss portfolio transfer of 2020 and prior years) which impacts recoveries. The movement is therefore a gross release overall, with reinsurance arrangements affecting the net position.",
+      "standardized_narrative": "During 2023 Syndicate 1919 recorded a net release on prior underwriting years: gross ultimate claims for 2021 and prior reduced by $38.4m, driven by favourable claims experience in the Syndicate's Technical (energy/technical risks) and Casualty divisions. The net position was slightly adverse (+$0.6m) due to the impact of a prior Loss Portfolio Transfer (LPT) ceded in December 2022 which affected recoveries on 2020 and earlier years. Overall the movement is a gross release, with reinsurance arrangements materially influencing the net outcome.",
       "raw_causal_phrases": [
         "gross ultimate claims in respect of prior underwriting years (2021 and prior) decreased by $38.4m due to favourable experience in Syndicate 1919's Tech and Casualty divisions.",
         "On a net basis ultimate claims have increased by $0.6m, this is predominantly because the favourable gross experience in Casualty is net nil, due to the loss portfolio transfer on the 2020 & prior years of account.",
-        "The LPT provides capital efficiencies to the Syndicate and the Starr Companies Group (\"Group\"). Under the terms of this reinsurance, the Syndicate ceded the 2020 and prior years of account on certain classes and certain discontinued lines of business.",
-        "The results for prior year include the premium ceded to SIRL of $215.2m under the contract, while the reinsurers' share of the change in provisions for claims includes the recoveries due on the business reinsured under the agreement."
+        "Favourable claims experience has been observed across the majority of classes and is the material driver for the underwriting profit generated during the year."
       ],
       "lob_movements": [
         {
@@ -600,21 +635,14 @@
           "direction": "release",
           "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 1.0
+          "confidence": 0.5
         },
         {
           "line_of_business": "Energy",
           "direction": "release",
           "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 1.0
-        },
-        {
-          "line_of_business": "Treaty",
-          "direction": "strengthening",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 1.0
+          "confidence": 0.5
         }
       ],
       "gross_premiums_written_gbp_m": 527.9,
@@ -653,7 +681,7 @@
       "gross_premium_page": 32,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "All amounts are reported in the native report currency (USD). Opening gross claims outstanding taken from the balance sheet (claims outstanding gross, prior year comparative column). Prior year development (gross) is explicitly stated as a $38.4m decrease in the notes and used directly. Net movements are also mentioned (+$0.6m) due to the 2022 LPT; where LOB-level splits of the $38.4m are not provided, LOB impacts are inferred from narrative but not quantified. The claims development triangle is available and reported in $000; no RITC distortion was identified in the provided extracts. Field names use 'gbp_m' per schema but values are in USD millions. [RAG OVERRIDE: Model said PYD=-38.4, RAG triangle computed -33.959. Using RAG value.]",
+      "data_quality_notes": "All monetary figures in the report are presented in $000; amounts above converted to millions (divide by 1,000). Opening reserves taken from Balance Sheet (Claims outstanding gross) 2022 column. Prior year development taken from explicit sentence on page 45 (gross decrease $38.4m). Claims development triangle parsed from gross triangle on page 44 (table printed by underwriting year with development ages across columns; converted/transposed to the requested rows-by-development format). 'Technical risks' division mapped to standard LOB 'Energy' for LOB-level mapping by inference. RDS entries are hypothetical realistic disaster scenarios from the report, not actual realised events. [RAG OVERRIDE: Model said PYD=-38.4, RAG triangle computed -33.959. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
@@ -796,20 +824,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_1919_2023_llm.pdf",
-      "content_hash": "3c890fa47f8bd1ede5ad9acd2e2faf7b4f263cadfad362e01ae233d5a5ca50ed",
-      "standardized_at": "2026-07-05T09:37:34.961537+00:00",
+      "content_hash": "13effe54196243456574a6e69fa81eda2b716d8f283f0f85a30db4a5938b730e",
+      "standardized_at": "2026-09-11T11:07:42.861351+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 16734,
-        "output_tokens": 6423,
-        "total_tokens": 23157,
-        "cost_usd": 0.017029
+        "input_tokens": 17494,
+        "output_tokens": 9012,
+        "total_tokens": 26506,
+        "cost_usd": 0.022397
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -33.959,
+        "model_value": -38.4,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 45,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2014,
           2015,
@@ -1084,12 +1124,12 @@
       }
     }
   },
-  "total_cost_usd": 0.025545,
-  "total_tokens": 39472,
+  "total_cost_usd": 0.030097,
+  "total_tokens": 44223,
   "validation": {
     "passed": true,
-    "total_discrepancies": 25,
-    "within_tolerance": 25,
+    "total_discrepancies": 13,
+    "within_tolerance": 13,
     "hard_failures": 0,
     "hard_failure_details": []
   }

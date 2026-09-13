@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-05T19:42:52.915736+00:00",
+  "extraction_timestamp": "2026-09-13T04:12:43.358563+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -11,35 +13,24 @@
       "syndicate": 1897,
       "year": 2018,
       "opening_reserves_gbp_m": 152.455,
-      "opening_reserves_page": 17,
+      "opening_reserves_page": 6,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": 15.449,
       "prior_year_development_pct": 10.13,
       "direction": "strengthening",
-      "prior_year_movement_page": 37,
-      "prior_year_movement_confidence": 0.8,
-      "exact_reserve_text": "In 2018, there has been an overall deficit of GBP 5.0m on prior year reserves (2017 deficit of GBP 4.9m). The deficit is primarily driven by premium reductions and reserve increases on the marine and energy classes of business.",
+      "prior_year_movement_page": 17,
+      "prior_year_movement_confidence": 1.0,
+      "exact_reserve_text": "In 2018, there has been an overall deficit of GBP 5.0m on prior year reserves (2017 deficit of GBP 4.9m).",
       "primary_causes": [
-        "Other",
-        "Adverse claims development"
+        "Adverse claims development",
+        "Economic inflation / claims cost inflation",
+        "Other"
       ],
       "specific_events": [],
       "specific_years_affected": [],
-      "prior_year_events": [
-        {
-          "event_name": "Adverse development on Marine and Energy classes",
-          "event_year": null,
-          "impact_description": "reserve increases on the marine and energy classes of business",
-          "lobs_affected": [
-            "Marine",
-            "Energy"
-          ],
-          "amount_gbp_m": null,
-          "confidence": 0.5
-        }
-      ],
+      "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "The syndicate experienced an overall gross strengthening of GBP 15.449 million on prior year reserves, representing a 10.13% increase relative to opening gross reserves. This strengthening was primarily driven by reserve increases on the Marine and Energy classes of business, as well as premium reductions.",
+      "standardized_narrative": "In 2018, the syndicate experienced an overall strengthening of GBP 5.0 million on prior year reserves. This adverse development was primarily driven by reserve increases on the Marine and Energy classes of business, alongside premium reductions.",
       "raw_causal_phrases": [
         "overall deficit of GBP 5.0m on prior year reserves",
         "primarily driven by premium reductions and reserve increases on the marine and energy classes of business"
@@ -83,15 +74,15 @@
           "percentage_of_total": 1.0
         }
       ],
-      "gross_premium_page": 5,
+      "gross_premium_page": 11,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The prior year development figure is calculated from the gross claims development triangle, as the narrative statement of 'overall deficit of GBP 5.0m' on page 38 appears to be a net figure, not gross.",
+      "data_quality_notes": "The explicit prior year development figure of GBP 5.0m from the narrative on page 17 was used, overriding the higher figure calculated from the claims development triangle on page 16. The narrative figure is considered the final, adjusted PYD. [RAG OVERRIDE: Model said PYD=5.0, RAG triangle computed 15.449. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
-        "page": 37,
+        "page": 16,
         "underwriting_years": [
           2011,
           2012,
@@ -186,21 +177,33 @@
         ]
       },
       "source_type": "syndicate",
-      "source_file": "syndicate_reports\\pdfs\\syndicate_1897_2018.pdf",
-      "content_hash": "8bb62da0896b7505b2108026451918d44ccbe9fe02f7faf6a2a46551e3acbcb1",
-      "standardized_at": "2026-03-17T02:18:40.443310+00:00",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_1897_2018_llm.pdf",
+      "content_hash": "35c12e26f19e3c6a05e5f73e21e53ec62709eaefd6c74d5b31b77ffd225226ba",
+      "standardized_at": "2026-09-11T11:03:47.438712+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 16720,
-        "output_tokens": 2286,
-        "total_tokens": 24831,
-        "cost_usd": 0.010731
+        "input_tokens": 11441,
+        "output_tokens": 1510,
+        "total_tokens": 22119,
+        "cost_usd": 0.007207
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 15.449,
+        "model_value": 5.0,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 37,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -292,6 +295,16 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later",
+          "Seven years later"
         ],
         "source_page": 37,
         "entity": 1897
@@ -429,7 +442,7 @@
       "syndicate": 1897,
       "year": 2018,
       "opening_reserves_gbp_m": 152.455,
-      "opening_reserves_page": 23,
+      "opening_reserves_page": 14,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": 15.449,
       "prior_year_development_pct": 10.13,
@@ -445,7 +458,7 @@
       "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "At 1 January 2018 the Syndicate's gross claims outstanding were GBP 152.455m. Using the gross claims development triangle, older underwriting years (<=2016) show a net adverse prior-year development of approximately GBP 15.449m (c. 10.1% of opening gross reserves), i.e. a strengthening of reserves. After reinsurance the Syndicate reports an overall prior-year net deficit of GBP 5.0m; the report attributes the deficit primarily to premium reductions and reserve increases in the Marine and Energy classes.",
+      "standardized_narrative": "The syndicate opened 2018 with gross claims outstanding of GBP 152.455m. Using the published gross claims development triangle, underwriting years 2011-2016 show a net adverse re-estimation (strengthening) of approximately GBP 15.45m (about 10.1% of opening reserves). The managing agent describes a net (after reinsurance) prior year deficit of GBP 5.0m and attributes the adverse movement primarily to premium reductions and reserve increases in the Marine and Energy portfolios.",
       "raw_causal_phrases": [
         "In 2018, there has been an overall deficit of GBP 5.0m on prior year reserves (2017 deficit of GBP 4.9m).",
         "The deficit is primarily driven by premium reductions and reserve increases on the marine and energy classes of business."
@@ -492,7 +505,7 @@
       "gross_premium_page": 22,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Opening gross claims outstanding taken from Technical Provisions note (gross). Prior-year development gross figure computed from the gross claims development triangle (cumulative current estimates vs prior diagonal) as the primary reliable gross source; report also states a net prior-year deficit of GBP 5.0m (after reinsurance). Triangle values presented in the report are in GBP '000 (thousands). No specific named catastrophe events were identified in the reserves discussion. Confidence scores: opening reserves explicit (1.0); prior-year movement derived from triangle (0.8).",
+      "data_quality_notes": "Gross prior-year development was derived from the published GROSS claims development triangle (page 34). The managing agent narrative cites a NET prior year 'deficit' of GBP 5.0m; that net figure (after reinsurance) differs from the gross PYD computed from the triangle (GBP 15.449m). No explicit gross 'movement in prior year's provision' line was present; triangle used as primary gross source. Amounts in triangle and other tables are reported in GBP '000 (thousands).",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -592,21 +605,33 @@
         ]
       },
       "source_type": "syndicate",
-      "source_file": "syndicate_reports\\pdfs\\syndicate_1897_2018.pdf",
-      "content_hash": "8bb62da0896b7505b2108026451918d44ccbe9fe02f7faf6a2a46551e3acbcb1",
-      "standardized_at": "2026-03-17T02:19:43.101671+00:00",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_1897_2018_llm.pdf",
+      "content_hash": "35c12e26f19e3c6a05e5f73e21e53ec62709eaefd6c74d5b31b77ffd225226ba",
+      "standardized_at": "2026-09-11T11:05:46.816836+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 29497,
-        "output_tokens": 4559,
-        "total_tokens": 34056,
-        "cost_usd": 0.016492
+        "input_tokens": 19252,
+        "output_tokens": 5827,
+        "total_tokens": 25079,
+        "cost_usd": 0.016467
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 15.449,
+        "model_value": 15.449,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 37,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -698,6 +723,16 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later",
+          "Seven years later"
         ],
         "source_page": 37,
         "entity": 1897
@@ -832,12 +867,12 @@
       }
     }
   },
-  "total_cost_usd": 0.027223,
-  "total_tokens": 58887,
+  "total_cost_usd": 0.023674,
+  "total_tokens": 47198,
   "validation": {
     "passed": true,
-    "total_discrepancies": 10,
-    "within_tolerance": 10,
+    "total_discrepancies": 12,
+    "within_tolerance": 12,
     "hard_failures": 0,
     "hard_failure_details": []
   }

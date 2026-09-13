@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T11:59:44.747898+00:00",
+  "extraction_timestamp": "2026-09-13T04:12:11.628770+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -16,26 +18,56 @@
       "prior_year_development_gbp_m": -29.1,
       "prior_year_development_pct": -12.88,
       "direction": "release",
-      "prior_year_movement_page": 7,
+      "prior_year_movement_page": 14,
       "prior_year_movement_confidence": 0.8,
-      "exact_reserve_text": "As a result of these changes, $7.4m of reserves were released in the period (on a net of reinsurance basis).",
+      "exact_reserve_text": "During the period, the managing agent refined its methodology for estimating claims reserves, including revising the actuarial methodology behind determining the risk margin to determine the appropriate level of margin in reserves. These changes have been accounted for prospectively as a change in estimate. As a result of these changes, $7.4m of reserves were released in the period (on a net of reinsurance basis).",
       "primary_causes": [
         "Reserve methodology change",
-        "Reinsurance recoveries"
+        "Favorable claims development"
       ],
-      "specific_events": [],
+      "specific_events": [
+        "Hurricane Ian",
+        "Storm Elliot"
+      ],
       "specific_years_affected": [
-        2020
+        2018,
+        2019,
+        2020,
+        2021,
+        2022
       ],
-      "prior_year_events": [],
+      "prior_year_events": [
+        {
+          "event_name": "Hurricane Ian",
+          "event_year": 2022,
+          "impact_description": "Impacted the 2022 underwriting year, but the year is still expected to produce a positive return on capacity.",
+          "lobs_affected": [
+            "Property"
+          ],
+          "amount_gbp_m": null,
+          "confidence": 0.5
+        },
+        {
+          "event_name": "Storm Elliot",
+          "event_year": 2022,
+          "impact_description": "Impacted the 2022 underwriting year, but the year is still expected to produce a positive return on capacity.",
+          "lobs_affected": [
+            "Property"
+          ],
+          "amount_gbp_m": null,
+          "confidence": 0.5
+        }
+      ],
       "named_events": [
         {
           "event_name": "Hurricane Ian",
           "event_year": 2022,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "The 2022 underwriting year has been impacted by a number of climate related natural catastrophes such as Hurricane Ian and Storm Elliot but is still expected to produce a positive return on capacity.",
-          "lobs_affected": [],
+          "loss_description": "Impacted the 2022 underwriting year, but the year is still expected to produce a positive return on capacity.",
+          "lobs_affected": [
+            "Property"
+          ],
           "page": 4,
           "confidence": 0.5
         },
@@ -44,16 +76,18 @@
           "event_year": 2022,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "The 2022 underwriting year has been impacted by a number of climate related natural catastrophes such as Hurricane Ian and Storm Elliot but is still expected to produce a positive return on capacity.",
-          "lobs_affected": [],
+          "loss_description": "Impacted the 2022 underwriting year, but the year is still expected to produce a positive return on capacity.",
+          "lobs_affected": [
+            "Property"
+          ],
           "page": 4,
           "confidence": 0.5
         }
       ],
-      "standardized_narrative": "The syndicate experienced a net release of $11.9m in prior year reserves. This includes a $7.4m release due to a refinement in the methodology for estimating claims reserves, and a $4.5m profit from the reinsurance to close of the 2020 year of account. The overall direction of prior year development is a release.",
+      "standardized_narrative": "The syndicate experienced a gross reserve release of $29.1 million for prior underwriting years up to 2021. This favorable development was partly driven by a refinement in the managing agent's methodology for estimating claims reserves, including a revision of the actuarial risk margin. Despite impacts from 2022 climate-related natural catastrophes such as Hurricane Ian and Storm Elliot, the 2022 underwriting year is also expected to produce a positive return on capacity, indicating overall favorable development for that prior year.",
       "raw_causal_phrases": [
-        "refined its methodology for estimating claims reserves, including revising the actuarial methodology behind determining the risk margin to determine the appropriate level of margin in reserves",
-        "reinsurance to close profit from the 2020 YOA"
+        "managing agent refined its methodology for estimating claims reserves, including revising the actuarial methodology behind determining the risk margin to determine the appropriate level of margin in reserves.",
+        "The 2022 underwriting year has been impacted by a number of climate related natural catastrophes such as Hurricane Ian and Storm Elliot but is still expected to produce a positive return on capacity."
       ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 390.1,
@@ -97,31 +131,12 @@
       "gross_premium_page": 12,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "The prior year development figure of -$11.9m is a net figure (after reinsurance) as no gross figure was explicitly stated or derivable from a standard claims development triangle. It comprises a -$7.4m net release from a change in reserve methodology and a -$4.5m net profit from the 2020 YOA reinsurance to close. [RAG OVERRIDE: Model said PYD=-11.9, RAG triangle computed -29.1. Using RAG value.]",
+      "data_quality_notes": "Prior year development calculated from gross claims development triangle. Narrative text on page 7 mentions a net release of $7.4m due to methodology changes, which is significantly lower than the gross release calculated from the triangle, indicating substantial reinsurance recoveries or different scope.",
       "_claims_triangle": {
-        "type": "none",
-        "currency": null,
-        "units": null,
-        "page": null,
-        "underwriting_years": [],
-        "development_rows": []
-      },
-      "source_type": "syndicate",
-      "source_file": "pdf_extraction\\llm_slim\\syndicate_5623_2023_llm.pdf",
-      "content_hash": "5b2784216e2a581941dfe8438c1e1013fd62df0af4634fb094d400f5d648506e",
-      "standardized_at": "2026-07-06T01:42:21.068251+00:00",
-      "standardization_model": "gemini-2.5-flash",
-      "_extraction_meta": {
-        "model": "gemini-2.5-flash",
-        "input_tokens": 12185,
-        "output_tokens": 1145,
-        "total_tokens": 18437,
-        "cost_usd": 0.006518
-      },
-      "_rag_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "millions",
+        "page": 14,
         "underwriting_years": [
           2018,
           2019,
@@ -179,6 +194,101 @@
             null,
             null
           ]
+        ]
+      },
+      "source_type": "syndicate",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_5623_2023_llm.pdf",
+      "content_hash": "874981722813441a71219d7f061d99a041a7d945a1986ffa363d7b934c169d77",
+      "standardized_at": "2026-09-11T13:47:25.967190+00:00",
+      "standardization_model": "gemini-2.5-flash",
+      "_extraction_meta": {
+        "model": "gemini-2.5-flash",
+        "input_tokens": 12989,
+        "output_tokens": 1691,
+        "total_tokens": 19469,
+        "cost_usd": 0.008124
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -29.1,
+        "model_value": -29.1,
+        "triangle_type": "gross",
+        "triangle_units": "millions",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 36,
+        "note": "confirmed by the model value"
+      },
+      "_rag_triangle": {
+        "type": "gross",
+        "currency": "USD",
+        "units": "millions",
+        "units_evidence": "header",
+        "cell_binding": "header",
+        "underwriting_years": [
+          2018,
+          2019,
+          2020,
+          2021,
+          2022,
+          2023
+        ],
+        "development_rows": [
+          [
+            10.2,
+            26.8,
+            64.0,
+            123.6,
+            207.0,
+            264.3
+          ],
+          [
+            8.0,
+            31.5,
+            64.5,
+            108.5,
+            175.2,
+            null
+          ],
+          [
+            7.5,
+            32.2,
+            55.6,
+            89.6,
+            null,
+            null
+          ],
+          [
+            7.2,
+            31.0,
+            49.6,
+            null,
+            null,
+            null
+          ],
+          [
+            7.8,
+            27.1,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            7.5,
+            null,
+            null,
+            null,
+            null,
+            null
+          ]
+        ],
+        "row_labels": [
+          "12 months",
+          "24 months",
+          "36 months",
+          "48 months",
+          "60 months",
+          "72 months"
         ],
         "source_page": 36,
         "entity": 5623
@@ -362,13 +472,16 @@
         "Storm Elliot"
       ],
       "specific_years_affected": [
-        2022
+        2018,
+        2019,
+        2020,
+        2021
       ],
       "prior_year_events": [
         {
           "event_name": "Hurricane Ian",
           "event_year": 2022,
-          "impact_description": "Impacted the 2022 underwriting year (climate related natural catastrophe noted as affecting prior year results).",
+          "impact_description": "Reported as one of a number of climate related natural catastrophes which impacted the 2022 underwriting year",
           "lobs_affected": [
             "Property"
           ],
@@ -378,7 +491,7 @@
         {
           "event_name": "Storm Elliot",
           "event_year": 2022,
-          "impact_description": "Impacted the 2022 underwriting year (climate related natural catastrophe noted as affecting prior year results).",
+          "impact_description": "Reported as one of a number of climate related natural catastrophes which impacted the 2022 underwriting year",
           "lobs_affected": [
             "Property"
           ],
@@ -392,61 +505,62 @@
           "event_year": 2022,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "The 2022 underwriting year has been impacted by a number of climate related natural catastrophes such as Hurricane Ian.",
+          "loss_description": "Impacted the 2022 underwriting year (mentioned as a climate related natural catastrophe)",
           "lobs_affected": [
             "Property"
           ],
-          "page": 4,
-          "confidence": 0.8
+          "page": 3,
+          "confidence": 0.5
         },
         {
           "event_name": "Storm Elliot",
           "event_year": 2022,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "The 2022 underwriting year has been impacted by a number of climate related natural catastrophes such as ... Storm Elliot.",
+          "loss_description": "Impacted the 2022 underwriting year (mentioned as a climate related natural catastrophe)",
           "lobs_affected": [
             "Property"
           ],
-          "page": 4,
-          "confidence": 0.8
+          "page": 3,
+          "confidence": 0.5
         }
       ],
-      "standardized_narrative": "The syndicate reported a material release of prior year reserves at gross level (approx. 29.1 million) driven primarily by favourable claims development and a prospective change in actuarial methodology (risk margin refinement). The managing agent explicitly states a net release of $7.4m due to the change in estimate. The release is reflected across older underwriting years (2018-2021) as evidenced in the gross claims development triangle.",
+      "standardized_narrative": "The syndicate's gross claims outstanding opened at 225.9 (USD millions). Analysis of the gross claims development triangle indicates net favourable prior-year development of approximately 29.1m (USD) across underwriting years 2018-2021 (a release). The managing agent also reports a prospective change of estimate driven by a refinement of actuarial methodology and risk margin, which produced a net release of $7.4m (net of reinsurance). The movement is therefore primarily driven by reserve methodology changes and favourable claims development, with climate-related events (e.g. Hurricane Ian and Storm Elliot) noted as impacting 2022 but the overall prior-year movement being a release.",
       "raw_causal_phrases": [
-        "During the period, the managing agent refined its methodology for estimating claims reserves, including revising the actuarial methodology behind determining the risk margin to determine the appropriate level of margin in reserves.",
-        "These changes have been accounted for prospectively as a change in estimate.",
+        "refined its methodology for estimating claims reserves",
+        "revising the actuarial methodology behind determining the risk margin",
+        "accounted for prospectively as a change in estimate",
         "As a result of these changes, $7.4m of reserves were released in the period (on a net of reinsurance basis).",
         "The 2022 underwriting year has been impacted by a number of climate related natural catastrophes such as Hurricane Ian and Storm Elliot"
       ],
       "lob_movements": [
         {
           "line_of_business": "Property",
-          "direction": "mixed",
+          "direction": "release",
           "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.0
+          "confidence": 0.5
         },
         {
           "line_of_business": "Casualty",
-          "direction": "mixed",
+          "direction": "release",
           "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.0
+          "confidence": 0.5
         },
         {
           "line_of_business": "Marine",
-          "direction": "mixed",
+          "direction": "release",
           "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.0
+          "confidence": 0.5
         },
         {
           "line_of_business": "Treaty",
-          "direction": "mixed",
+          "direction": "release",
           "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.0
+          "confidence": 0.5
         }
       ],
       "gross_premiums_written_gbp_m": 390.1,
@@ -490,7 +604,7 @@
       "gross_premium_page": 28,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "Prior year gross reserve movement was calculated from the gross claims development triangle (note 14) as the report does not present an explicit single-line gross movement figure for prior years. The managing agent explicitly reports a net release of $7.4m (net of reinsurance) due to a change in actuarial methodology; gross/net figures therefore differ. Amounts are reported in the syndicate's functional currency (USD). Where per-LOB prior year movements were not disclosed, LOB movement amounts are left null.",
+      "data_quality_notes": "Prior-year development (-29.1) was calculated from the gross claims development triangle in Note 14 (columns 2018-2021) and represents an aggregate release. The report does not explicitly state a gross prior-year movement; it does state a net $7.4m release due to a methodology change (net of reinsurance). Amounts and pages are from the published notes; named-event page references are to the Strategic/Outlook section. All monetary amounts are in the report's functional currency (USD).",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
@@ -552,25 +666,45 @@
             null,
             null,
             null
+          ],
+          [
+            7.5,
+            27.1,
+            49.6,
+            89.6,
+            175.2,
+            264.3
           ]
         ]
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_5623_2023_llm.pdf",
-      "content_hash": "5b2784216e2a581941dfe8438c1e1013fd62df0af4634fb094d400f5d648506e",
-      "standardized_at": "2026-07-06T01:44:24.700376+00:00",
+      "content_hash": "874981722813441a71219d7f061d99a041a7d945a1986ffa363d7b934c169d77",
+      "standardized_at": "2026-09-11T13:50:37.840412+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 21741,
-        "output_tokens": 8653,
-        "total_tokens": 30394,
-        "cost_usd": 0.022741
+        "input_tokens": 22501,
+        "output_tokens": 8494,
+        "total_tokens": 30995,
+        "cost_usd": 0.022613
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -29.1,
+        "model_value": -29.1,
+        "triangle_type": "gross",
+        "triangle_units": "millions",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 36,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "millions",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2018,
           2019,
@@ -628,6 +762,14 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "12 months",
+          "24 months",
+          "36 months",
+          "48 months",
+          "60 months",
+          "72 months"
         ],
         "source_page": 36,
         "entity": 5623
@@ -791,12 +933,12 @@
       }
     }
   },
-  "total_cost_usd": 0.029259,
-  "total_tokens": 48831,
+  "total_cost_usd": 0.030737,
+  "total_tokens": 50464,
   "validation": {
     "passed": true,
-    "total_discrepancies": 20,
-    "within_tolerance": 20,
+    "total_discrepancies": 15,
+    "within_tolerance": 15,
     "hard_failures": 0,
     "hard_failure_details": []
   }

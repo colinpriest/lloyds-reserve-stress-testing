@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T11:16:49.895151+00:00",
+  "extraction_timestamp": "2026-09-13T04:00:28.151155+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -11,29 +13,54 @@
       "syndicate": 382,
       "year": 2017,
       "opening_reserves_gbp_m": 343.077,
-      "opening_reserves_page": 6,
+      "opening_reserves_page": 5,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": 49.14,
       "prior_year_development_pct": 14.32,
       "direction": "strengthening",
-      "prior_year_movement_page": 2,
+      "prior_year_movement_page": 20,
       "prior_year_movement_confidence": 0.8,
-      "exact_reserve_text": "The Syndicate also recorded unfavourable prior year loss development of GBP 7.7 million compared to favourable development of GBP 8.9 million in the 2016 calendar year. The unfavourable development in 2017 emanated primarily from the Specialty lines of business. (Under)/over provisions for claims at the beginning of the year as compared with net payments and provisions at the end of the year in respect of prior years' claims are as follows: Commercial 11,901, Specialty (19,564), Total (7,663)",
+      "exact_reserve_text": "The Syndicate also recorded unfavourable prior year loss development of GBP 7.7 million compared to favourable development of GBP 8.9 million in the 2016 calendar year.",
       "primary_causes": [
-        "Adverse claims development",
-        "Large loss development"
+        "Adverse claims development"
       ],
       "specific_events": [],
       "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [
         {
-          "event_name": "storms Harvey, Irma and Maria",
+          "event_name": "storms Harvey",
           "event_year": 2017,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
           "loss_description": "significant natural catastrophe events",
-          "lobs_affected": [],
+          "lobs_affected": [
+            "Property"
+          ],
+          "page": 2,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Irma",
+          "event_year": 2017,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "significant natural catastrophe events",
+          "lobs_affected": [
+            "Property"
+          ],
+          "page": 2,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Maria",
+          "event_year": 2017,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "significant natural catastrophe events",
+          "lobs_affected": [
+            "Property"
+          ],
           "page": 2,
           "confidence": 0.8
         },
@@ -43,33 +70,19 @@
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
           "loss_description": "significant natural catastrophe events",
-          "lobs_affected": [],
+          "lobs_affected": [
+            "Property"
+          ],
           "page": 2,
           "confidence": 0.8
         }
       ],
-      "standardized_narrative": "The Syndicate recorded a net strengthening of GBP 7.7 million in prior year loss development for 2017, primarily emanating from the Specialty lines of business. This was described as unfavourable development. The report also notes significant natural catastrophe events in 2017, including storms Harvey, Irma and Maria and the California wildfires, which contributed to an increase in the current year loss ratio.",
+      "standardized_narrative": "The Syndicate recorded a gross strengthening of GBP 59.8 million in prior year reserves for 2017. This adverse development was primarily attributed to Specialty lines of business. The report also notes significant natural catastrophe events in the second half of 2017, including storms Harvey, Irma, Maria, and the California wildfires, which contributed to an overall increase in the loss ratio.",
       "raw_causal_phrases": [
-        "unfavourable prior year loss development of GBP 7.7 million",
-        "emanated primarily from the Specialty lines of business",
-        "significant natural catastrophe events (storms Harvey, Irma and Maria and the California wildfires) in the second half of 2017"
+        "unfavourable prior year loss development",
+        "emanated primarily from the Specialty lines of business"
       ],
-      "lob_movements": [
-        {
-          "line_of_business": "Commercial",
-          "direction": "release",
-          "amount_gbp_m": -11.901,
-          "percentage": null,
-          "confidence": 0.8
-        },
-        {
-          "line_of_business": "Specialty",
-          "direction": "strengthening",
-          "amount_gbp_m": 19.564,
-          "percentage": null,
-          "confidence": 0.8
-        }
-      ],
+      "lob_movements": [],
       "gross_premiums_written_gbp_m": 285.7,
       "gross_premium_mix": [
         {
@@ -106,7 +119,7 @@
       "gross_premium_page": 16,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior year development figure is net of reinsurance as no gross figure was explicitly stated or reliably calculable from the claims development triangle. [RAG OVERRIDE: Model said PYD=7.663, RAG triangle computed 49.14. Using RAG value.] [RAG OPENING NOT APPLIED: table value 249.68 (provisions_movement, page 46, unit source header) disagrees with both model values [343.077, 343.077], which agree with each other; the model value is retained and the table value recorded for audit.]",
+      "data_quality_notes": "Prior year development amount is calculated from the gross claims development triangle. The narrative on page 2 refers to an 'unfavourable prior year loss development of GBP 7.7 million', which is likely a net figure and differs significantly from the gross calculation. Line of business movements for prior years are only available on a net basis and are not included. [RAG OVERRIDE: Model said PYD=59.798, RAG triangle computed 49.14. Using RAG value.] [RAG OPENING NOT APPLIED: table value 249.68 (provisions_movement, page 46, unit source header) disagrees with both model values [343.077, 343.077], which agree with each other; the model value is retained and the table value recorded for audit.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -273,20 +286,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_382_2017_llm.pdf",
-      "content_hash": "6ad8a39d8d41468b4f12bba4ef325570c7f1ddbdd1e4409fd272634d6f99bb5b",
-      "standardized_at": "2026-03-18T21:31:59.035570+00:00",
+      "content_hash": "4a50a3eaf3c97823d1a46804af487b599d8adab024e56575783aac8166a01e01",
+      "standardized_at": "2026-09-11T12:50:05.796319+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 11410,
-        "output_tokens": 1962,
-        "total_tokens": 21601,
-        "cost_usd": 0.008328
+        "input_tokens": 12214,
+        "output_tokens": 2217,
+        "total_tokens": 22187,
+        "cost_usd": 0.009207
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 49.14,
+        "model_value": 59.798,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "conflict",
+        "triangle_source_page": 48,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "conflict",
+        "cell_binding": "header",
         "underwriting_years": [
           2007,
           2008,
@@ -444,6 +469,19 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of first year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later",
+          "Seven years later",
+          "Eight years later",
+          "Nine years later",
+          "Ten years later"
         ],
         "source_page": 48,
         "entity": 382
@@ -614,16 +652,17 @@
       "prior_year_development_pct": 14.32,
       "direction": "strengthening",
       "prior_year_movement_page": 3,
-      "prior_year_movement_confidence": 0.5,
-      "exact_reserve_text": "The Syndicate also recorded unfavourable prior year loss development of GBP 7.7 million compared to favourable development of GBP 8.9 million in the 2016 calendar year. The unfavourable development in 2017 emanated primarily from the Specialty lines of business.",
+      "prior_year_movement_confidence": 0.8,
+      "exact_reserve_text": "The Syndicate also recorded unfavourable prior year loss development of GBP 7.7 million compared to favourable development of GBP 8.9 million in the 2016 calendar year.",
       "primary_causes": [
+        "Natural catastrophe events",
         "Adverse claims development",
         "Large loss development"
       ],
       "specific_events": [
-        "Storms Harvey",
-        "Storm Irma",
-        "Storm Maria",
+        "Hurricane Harvey",
+        "Hurricane Irma",
+        "Hurricane Maria",
         "California wildfires"
       ],
       "specific_years_affected": [],
@@ -634,10 +673,9 @@
           "event_year": 2017,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "Significant natural catastrophe event in the second half of 2017 referenced as contributing to higher loss ratio.",
+          "loss_description": "Mentioned as one of the significant natural catastrophe events in the second half of 2017 driving loss ratio increase",
           "lobs_affected": [
-            "Property",
-            "Casualty"
+            "Property"
           ],
           "page": 3,
           "confidence": 0.8
@@ -647,10 +685,9 @@
           "event_year": 2017,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "Significant natural catastrophe event in the second half of 2017 referenced as contributing to higher loss ratio.",
+          "loss_description": "Mentioned as one of the significant natural catastrophe events in the second half of 2017 driving loss ratio increase",
           "lobs_affected": [
-            "Property",
-            "Casualty"
+            "Property"
           ],
           "page": 3,
           "confidence": 0.8
@@ -660,10 +697,9 @@
           "event_year": 2017,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "Significant natural catastrophe event in the second half of 2017 referenced as contributing to higher loss ratio.",
+          "loss_description": "Mentioned as one of the significant natural catastrophe events in the second half of 2017 driving loss ratio increase",
           "lobs_affected": [
-            "Property",
-            "Casualty"
+            "Property"
           ],
           "page": 3,
           "confidence": 0.8
@@ -673,20 +709,19 @@
           "event_year": 2017,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "Significant natural catastrophe event in the second half of 2017 referenced as contributing to higher loss ratio.",
+          "loss_description": "Mentioned as one of the significant natural catastrophe events in the second half of 2017 driving loss ratio increase",
           "lobs_affected": [
-            "Property",
-            "Casualty"
+            "Property"
           ],
           "page": 3,
           "confidence": 0.8
         }
       ],
-      "standardized_narrative": "At 31 December 2017 the syndicate carried gross claims outstanding of GBP 343.077m at the opening of the year. The syndicate recorded adverse prior-year development of approximately GBP 7.7m (strengthening of reserves), which the managing agent attributes primarily to the Specialty lines of business. The current year loss ratio was also affected by significant natural catastrophe events (storms Harvey, Irma and Maria and the California wildfires) in the second half of 2017. The prior year movement figure is taken from the managing agent's narrative (explicit amount stated) and has been treated as an adverse prior year development.",
+      "standardized_narrative": "The Syndicate opened 2017 with gross claims outstanding of GBP 343.077m. During 2017 the Syndicate recorded adverse prior-year reserve development of GBP 7.7m (approximately 2.23% of opening gross claims), driven primarily by adverse development in Specialty lines and by significant natural catastrophe events in H2 2017 (storms Harvey, Irma and Maria and the California wildfires).",
       "raw_causal_phrases": [
-        "The Syndicate also recorded unfavourable prior year loss development of GBP 7.7 million compared to favourable development of GBP 8.9 million in the 2016 calendar year.",
-        "The unfavourable development in 2017 emanated primarily from the Specialty lines of business.",
-        "the significant natural catastrophe events (storms Harvey, Irma and Maria and the California wildfires) in the second half of 2017."
+        "the significant natural catastrophe events (storms Harvey, Irma and Maria and the California wildfires) in the second half of 2017",
+        "The Syndicate also recorded unfavourable prior year loss development of GBP 7.7 million compared to favourable development of GBP 8.9 million in the 2016 calendar year",
+        "The unfavourable development in 2017 emanated primarily from the Specialty lines of business"
       ],
       "lob_movements": [
         {
@@ -733,7 +768,7 @@
       "gross_premium_page": 38,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior year development figure (7.7m) is taken from the managing agent's narrative which explicitly states the amount but does not specify whether this is gross or net of reinsurance; the gross opening reserves were taken from the balance sheet (high confidence). There is some inconsistency between the narrative and the 'Claims incurred' prior-years table (which shows a total of -7,663k) - the narrative describes 'unfavourable' GBP 7.7m while the claims-incurred table appears to show a net release of GBP 7.663m. No explicit gross prior-year movement line was clearly labelled in the technical provisions notes; therefore the narrative amount was used and flagged as lower confidence. Extraction of the gross claims development triangle was possible but some cells and alignments in the printed triangle were ambiguous; the triangle data is included but should be treated with caution. [RAG OVERRIDE: Model said PYD=7.7, RAG triangle computed 49.14. Using RAG value.] [RAG OPENING NOT APPLIED: table value 249.68 (provisions_movement, page 46, unit source header) disagrees with both model values [343.077, 343.077], which agree with each other; the model value is retained and the table value recorded for audit.]",
+      "data_quality_notes": "Prior year development GBP 7.7m taken from the Strategic report narrative and matches the numeric (7,663) shown in note 5. The report does not explicitly label that GBP 7.7m as GROSS or NET in the narrative; the movement in note 5 appears to be presented as an 'Under/(over) provisions' figure and may be net of reinsurance. A gross claims development triangle is present (gross triangle used as cross-check) but the table is printed with incremental rows and required careful parsing. I have interpreted parenthesised figures as deficits/adverse (therefore reported as positive strengthening). Where LOB-level prior-year amounts are not explicit, amounts are left null and confidence reduced. [RAG OVERRIDE: Model said PYD=7.663, RAG triangle computed 49.14. Using RAG value.] [RAG OPENING NOT APPLIED: table value 249.68 (provisions_movement, page 46, unit source header) disagrees with both model values [343.077, 343.077], which agree with each other; the model value is retained and the table value recorded for audit.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -885,7 +920,7 @@
           ],
           [
             528,
-            528,
+            null,
             null,
             null,
             null,
@@ -900,20 +935,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_382_2017_llm.pdf",
-      "content_hash": "6ad8a39d8d41468b4f12bba4ef325570c7f1ddbdd1e4409fd272634d6f99bb5b",
-      "standardized_at": "2026-03-18T21:33:53.067338+00:00",
+      "content_hash": "4a50a3eaf3c97823d1a46804af487b599d8adab024e56575783aac8166a01e01",
+      "standardized_at": "2026-09-11T12:53:28.560715+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 35319,
-        "output_tokens": 9014,
-        "total_tokens": 44333,
-        "cost_usd": 0.026858
+        "input_tokens": 36076,
+        "output_tokens": 10135,
+        "total_tokens": 46211,
+        "cost_usd": 0.029289
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 49.14,
+        "model_value": 7.663,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "conflict",
+        "triangle_source_page": 48,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "conflict",
+        "cell_binding": "header",
         "underwriting_years": [
           2007,
           2008,
@@ -1071,6 +1118,19 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of first year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later",
+          "Seven years later",
+          "Eight years later",
+          "Nine years later",
+          "Ten years later"
         ],
         "source_page": 48,
         "entity": 382
@@ -1232,12 +1292,12 @@
       }
     }
   },
-  "total_cost_usd": 0.035186,
-  "total_tokens": 65934,
+  "total_cost_usd": 0.038496,
+  "total_tokens": 68398,
   "validation": {
     "passed": true,
-    "total_discrepancies": 20,
-    "within_tolerance": 20,
+    "total_discrepancies": 17,
+    "within_tolerance": 17,
     "hard_failures": 0,
     "hard_failure_details": []
   }

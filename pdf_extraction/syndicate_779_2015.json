@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T12:31:52.893470+00:00",
+  "extraction_timestamp": "2026-09-13T04:07:49.130845+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -13,8 +15,8 @@
       "opening_reserves_gbp_m": 14.697,
       "opening_reserves_page": 6,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": 9.4,
-      "prior_year_development_pct": 63.96,
+      "prior_year_development_gbp_m": 2.5,
+      "prior_year_development_pct": 17.01,
       "direction": "strengthening",
       "prior_year_movement_page": 16,
       "prior_year_movement_confidence": 1.0,
@@ -25,27 +27,46 @@
       "specific_events": [],
       "specific_years_affected": [
         2013,
-        2014
+        2012
       ],
       "prior_year_events": [
         {
           "event_name": "Legacy European creditor and Group business development",
           "event_year": null,
-          "impact_description": "Worse than expected development primarily on legacy European creditor and Group business, leading to a GBP 2.2m deterioration on 2013 & prior years and a GBP 0.3m deterioration on other years of account (2014).",
-          "lobs_affected": [],
-          "amount_gbp_m": 2.5,
-          "confidence": 1.0
+          "impact_description": "worse than expected development primarily on legacy European creditor and Group business.",
+          "lobs_affected": [
+            "Accident & Health"
+          ],
+          "amount_gbp_m": null,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "European Creditor business development",
+          "event_year": 2012,
+          "impact_description": "development of the 2012 & Prior years of account principally in relation to the European Creditor business.",
+          "lobs_affected": [
+            "Accident & Health"
+          ],
+          "amount_gbp_m": null,
+          "confidence": 0.8
         }
       ],
       "named_events": [],
-      "standardized_narrative": "The syndicate experienced a GBP 2.5m strengthening of gross reserves for prior underwriting years, primarily driven by adverse claims development on legacy European creditor and Group business. This deterioration affected the 2013 and prior years of account by GBP 2.2m and other years of account (2014) by GBP 0.3m.",
+      "standardized_narrative": "The syndicate experienced a gross strengthening of GBP 2.5 million in prior year reserves, representing 17.01% of its opening gross claims outstanding. This adverse development was primarily driven by worse than expected claims development on legacy European creditor and Group business from 2013 and prior years of account.",
       "raw_causal_phrases": [
-        "worse than expected development primarily on legacy European creditor and Group business",
-        "deterioration of GBP 2.2m on 2013 & prior years",
-        "marginal movement on the other years of account (2014: GBP 0.3m deterioration)",
-        "adverse developments of legacy European creditor reserves"
+        "worse than expected development primarily on legacy European creditor and Group business.",
+        "development of the 2012 & Prior years of account principally in relation to the European Creditor business.",
+        "adverse developments of legacy European creditor reserves."
       ],
-      "lob_movements": [],
+      "lob_movements": [
+        {
+          "line_of_business": "Accident & Health",
+          "direction": "strengthening",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.5
+        }
+      ],
       "gross_premiums_written_gbp_m": 14.1,
       "gross_premium_mix": [
         {
@@ -67,7 +88,7 @@
       "gross_premium_page": 15,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The claims development triangle on page 17 shows a net release for prior years, which contradicts the explicit narrative statement of deterioration on page 16. The narrative statement is used as the primary source for prior year development due to its explicit quantification and causal explanation. [RAG OVERRIDE: Model said PYD=2.5, RAG triangle computed 9.4. Using RAG value.]",
+      "data_quality_notes": "Claims development triangle likely distorted by Reinsurance to Close (RITC) transactions. Prior year development derived from narrative text describing deterioration included in claims incurred. [RAG PYD NOT APPLIED: deterministic figure -0.466m has the opposite sign to both model values [2.5, 2.2], which agree with each other; model values retained. Sign agreement between the models is not a reconciliation: where they differ in value the cohort and accrual scope of each still has to be settled from the filing (R140).] [CODE PYD NOT APPLIED: deterministic figure -0.466m has the opposite sign to both model values [2.5, 2.2], which agree with each other; model values retained. Sign agreement between the models is not a reconciliation: where they differ in value the cohort and accrual scope of each still has to be settled from the filing (R140).]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -120,20 +141,22 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_779_2015_llm.pdf",
-      "content_hash": "ae0bc513d84bbdfd1b6d95949f631cd15f8ff1700e7ce83c9547645b4b6840fd",
-      "standardized_at": "2026-07-05T21:54:34.745101+00:00",
+      "content_hash": "c2c5b82e116c05afa7003a9559c49323e774964711c098066da744045c71280b",
+      "standardized_at": "2026-09-11T13:59:30.857389+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 12442,
-        "output_tokens": 1189,
-        "total_tokens": 16232,
-        "cost_usd": 0.006705
+        "input_tokens": 13246,
+        "output_tokens": 1277,
+        "total_tokens": 41109,
+        "cost_usd": 0.007166
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -178,6 +201,13 @@
             null
           ]
         ],
+        "row_labels": [
+          "At end of underwriting year",
+          "one year later",
+          "two years later",
+          "three years later",
+          "four years later"
+        ],
         "source_page": 24,
         "entity": 779
       },
@@ -194,6 +224,13 @@
           "entity": 779,
           "backend": "azure",
           "table_kind": "provisions_movement"
+        },
+        "movement_semantics": {
+          "row_label": "premiums earned to date for 2010 and prior years",
+          "row_index": 11,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": false,
+          "column_index": 1
         },
         "gross_prior_year_claims": 9.4,
         "ri_share_prior_year": 0.0,
@@ -282,26 +319,27 @@
       "opening_reserves_gbp_m": 14.697,
       "opening_reserves_page": 17,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": 9.4,
-      "prior_year_development_pct": 63.96,
+      "prior_year_development_gbp_m": 2.2,
+      "prior_year_development_pct": 14.97,
       "direction": "strengthening",
-      "prior_year_movement_page": 42,
+      "prior_year_movement_page": 36,
       "prior_year_movement_confidence": 0.8,
-      "exact_reserve_text": "The claims incurred, as stated within the financial statements of GBP 7.2m (2014: GBP 5.5m) includes a deterioration of GBP 2.2m on 2013 & Prior years and a marginal movement on the other years of account (2014: GBP 0.3m deterioration) in relation to claims incurred at the prior year end principally due to the adverse developments of legacy European creditor business.",
+      "exact_reserve_text": "The claims incurred, as stated within the financial statements of GBP 7.2m (2014: GBP 5.5m) includes a deterioration of GBP 2.2m on 2013 & Prior years and a marginal movement on the other years of account (2014: GBP 0.3m deterioration) in relation to claims incurred at the prior year end principally due to the adverse developments of legacy European creditor reserves.",
       "primary_causes": [
         "Adverse claims development",
         "IBNR recalibration",
-        "Other"
+        "Large loss development"
       ],
       "specific_events": [],
       "specific_years_affected": [
-        2013
+        2013,
+        2012
       ],
       "prior_year_events": [
         {
-          "event_name": "Legacy European creditor business adverse development",
+          "event_name": "Adverse development on legacy European creditor business",
           "event_year": null,
-          "impact_description": "Adverse development on legacy European creditor business led to reserve strengthening (deterioration), driven by lengthening of reporting timing and case reserve uncertainty.",
+          "impact_description": "Adverse development primarily on legacy European creditor and Group business contributing to a deterioration on 2013 & prior years",
           "lobs_affected": [
             "Accident & Health"
           ],
@@ -310,12 +348,11 @@
         }
       ],
       "named_events": [],
-      "standardized_narrative": "At 1 January 2015 the Syndicate's gross claims outstanding were GBP 14.697m. Analysis of the gross claims development triangle shows a small net prior-year release of approximately GBP 0.47m, but management highlighted adverse development primarily on legacy European creditor (long-tailed accident & sickness) business - described as a deterioration of c. GBP 2.2m on 2013 & prior years - driven by lengthening of reporting timing and consequent reserve strengthening. Movements were therefore mixed: adverse development on legacy creditor and group business partially offset by favourable development elsewhere.",
+      "standardized_narrative": "Opening gross claims outstanding at 1 January 2015 were GBP 14.697m. The syndicate recorded prior-year adverse development of approximately GBP 2.2m (strengthening of reserves) primarily driven by adverse developments on the legacy European creditor and Group business and by lengthening reporting patterns which required increased IBNR. This represents roughly a 15% strengthening versus opening gross claims outstanding.",
       "raw_causal_phrases": [
         "deterioration of GBP 2.2m on 2013 & Prior years",
-        "adverse developments of legacy European creditor business",
+        "adverse developments of legacy European creditor reserves",
         "lengthening of reporting timing by claimants",
-        "significant reserve strengthening on the legacy European creditor business",
         "worse than expected development primarily on legacy European creditor and Group business"
       ],
       "lob_movements": [
@@ -324,7 +361,7 @@
           "direction": "strengthening",
           "amount_gbp_m": 2.2,
           "percentage": null,
-          "confidence": 0.5
+          "confidence": 0.7
         }
       ],
       "gross_premiums_written_gbp_m": 14.1,
@@ -332,23 +369,23 @@
         {
           "line_of_business": "Scheme",
           "amount_gbp_m": 6.324,
-          "percentage_of_total": 44.86
+          "percentage_of_total": 44.8
         },
         {
           "line_of_business": "Individual",
           "amount_gbp_m": 1.857,
-          "percentage_of_total": 13.17
+          "percentage_of_total": 13.2
         },
         {
           "line_of_business": "Group",
           "amount_gbp_m": 5.919,
-          "percentage_of_total": 41.96
+          "percentage_of_total": 42.0
         }
       ],
-      "gross_premium_page": 36,
+      "gross_premium_page": 35,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior-year development was calculated from the gross claims development triangle (note 18). The managing agent's narrative refers to a deterioration of GBP 2.2m on 2013 & prior years (described in the context of 'claims incurred') which appears to pertain primarily to legacy European creditor business; however that narrative line sits within a discussion of claims incurred (P&L) and is not a clear tabled gross PY movement. The movement computed from the triangle is a small net release (~GBP 0.47m) while the narrative highlights a material adverse item on legacy creditor reserves - this indicates mixed movements across portfolios. The reconciliation between the triangle, the 'movement in provision' reconciliation rows and narrative statements is ambiguous; the triangle was used as the primary quantitative source per extraction rules. [RAG OVERRIDE: Model said PYD=-0.466, RAG triangle computed 9.4. Using RAG value.]",
+      "data_quality_notes": "Prior-year development: narrative states a GBP 2.2m deterioration on 2013 & prior years (used as gross PYD). The gross claims development triangle shows current estimates for older years that imply minimal movement; there is a discrepancy between the triangle and narrative. The narrative figure was used because it explicitly attributes the deterioration to legacy European creditor business. Triangle may be affected by RITC and FX movements; numbers in triangle are presented in GBP '000. Confidence downgraded accordingly. [RAG PYD NOT APPLIED: deterministic figure -0.466m has the opposite sign to both model values [2.5, 2.2], which agree with each other; model values retained. Sign agreement between the models is not a reconciliation: where they differ in value the cohort and accrual scope of each still has to be settled from the filing (R140).] [CODE PYD NOT APPLIED: deterministic figure -0.466m has the opposite sign to both model values [2.5, 2.2], which agree with each other; model values retained. Sign agreement between the models is not a reconciliation: where they differ in value the cohort and accrual scope of each still has to be settled from the filing (R140).]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -401,20 +438,22 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_779_2015_llm.pdf",
-      "content_hash": "ae0bc513d84bbdfd1b6d95949f631cd15f8ff1700e7ce83c9547645b4b6840fd",
-      "standardized_at": "2026-07-05T21:56:27.055467+00:00",
+      "content_hash": "c2c5b82e116c05afa7003a9559c49323e774964711c098066da744045c71280b",
+      "standardized_at": "2026-09-11T14:01:03.568272+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 40591,
-        "output_tokens": 8608,
-        "total_tokens": 49199,
-        "cost_usd": 0.027364
+        "input_tokens": 41351,
+        "output_tokens": 6352,
+        "total_tokens": 47703,
+        "cost_usd": 0.023042
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -459,6 +498,13 @@
             null
           ]
         ],
+        "row_labels": [
+          "At end of underwriting year",
+          "one year later",
+          "two years later",
+          "three years later",
+          "four years later"
+        ],
         "source_page": 24,
         "entity": 779
       },
@@ -475,6 +521,13 @@
           "entity": 779,
           "backend": "azure",
           "table_kind": "provisions_movement"
+        },
+        "movement_semantics": {
+          "row_label": "premiums earned to date for 2010 and prior years",
+          "row_index": 11,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": false,
+          "column_index": 1
         },
         "gross_prior_year_claims": 9.4,
         "ri_share_prior_year": 0.0,
@@ -558,13 +611,26 @@
       }
     }
   },
-  "total_cost_usd": 0.034069,
-  "total_tokens": 65431,
+  "total_cost_usd": 0.030208,
+  "total_tokens": 88812,
   "validation": {
-    "passed": true,
-    "total_discrepancies": 21,
-    "within_tolerance": 21,
-    "hard_failures": 0,
-    "hard_failure_details": []
+    "passed": false,
+    "total_discrepancies": 24,
+    "within_tolerance": 22,
+    "hard_failures": 2,
+    "hard_failure_details": [
+      {
+        "field": "prior_year_development_gbp_m",
+        "type": "value_mismatch",
+        "gemini-2.5-flash": 2.5,
+        "gpt-5-mini": 2.2
+      },
+      {
+        "field": "prior_year_development_pct",
+        "type": "value_mismatch",
+        "gemini-2.5-flash": 17.01,
+        "gpt-5-mini": 14.97
+      }
+    ]
   }
 }

@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T10:48:21.639858+00:00",
+  "extraction_timestamp": "2026-09-13T03:57:40.461166+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -11,7 +13,7 @@
       "syndicate": 2689,
       "year": 2023,
       "opening_reserves_gbp_m": 108.937,
-      "opening_reserves_page": 7,
+      "opening_reserves_page": 6,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": 42.378,
       "prior_year_development_pct": 38.9,
@@ -21,20 +23,32 @@
       "exact_reserve_text": "In 2023, there has been an overall deterioration of $2.9m on closed year reserves (2022: nil).",
       "primary_causes": [
         "Adverse claims development",
-        "Large loss development"
+        "Man-made catastrophe / large losses"
       ],
-      "specific_events": [],
+      "specific_events": [
+        "recent satellite losses"
+      ],
       "specific_years_affected": [
-        2021,
-        2020
+        2021
       ],
-      "prior_year_events": [],
+      "prior_year_events": [
+        {
+          "event_name": "Recent satellite losses",
+          "event_year": 2021,
+          "impact_description": "loss deterioration on existing claims as well as recent satellite losses impacting the legacy specialty book.",
+          "lobs_affected": [
+            "Reinsurance - Specialty"
+          ],
+          "amount_gbp_m": null,
+          "confidence": 0.8
+        }
+      ],
       "named_events": [],
-      "standardized_narrative": "The syndicate reported an overall deterioration of $2.9 million on closed year reserves in 2023. This strengthening was primarily driven by adverse claims development on existing claims and recent satellite losses impacting the legacy specialty book, particularly affecting the 2021 and prior years of account. The gross claims outstanding at the beginning of the year was $108.937 million.",
+      "standardized_narrative": "The syndicate experienced an overall strengthening of $2.9 million in its closed year reserves during 2023. This adverse development was partly attributed to loss deterioration on existing claims and recent satellite losses impacting the legacy specialty book, particularly affecting the 2021 and prior Years of Account.",
       "raw_causal_phrases": [
+        "overall deterioration of $2.9m on closed year reserves",
         "loss deterioration on existing claims",
-        "recent satellite losses impacting the legacy specialty book",
-        "overall deterioration of $2.9m on closed year reserves"
+        "recent satellite losses impacting the legacy specialty book"
       ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 80.4,
@@ -68,7 +82,7 @@
       "gross_premium_page": 13,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "The claims development table on page 16 does not explicitly show the $2.9m deterioration, but the narrative on page 17 provides a direct statement for the overall prior year development. [RAG OVERRIDE: Model said PYD=2.9, RAG triangle computed 42.378. Using RAG value.]",
+      "data_quality_notes": "The claims development table on page 16 is distorted by a significant External RITC of (101,597) $'000 in 2022 (page 14), making it unreliable for calculating prior year development. Therefore, the explicit narrative statement of $2.9m deterioration on page 17 was used as the primary source for prior year development. Negative gross premiums written are reported as stated in the segmental analysis. [RAG OVERRIDE: Model said PYD=2.9, RAG triangle computed 42.378. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
@@ -109,20 +123,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_2689_2023_llm.pdf",
-      "content_hash": "9b6131f2bbacacb773bd0bf45e6e51012ee8711a6a14b6b2d18bb3b5ba3a4d82",
-      "standardized_at": "2026-07-05T13:12:46.609838+00:00",
+      "content_hash": "f7b6164cbc077279032ecd4ab4ed7b83af5db756161dba13d4b29a5425abb8d7",
+      "standardized_at": "2026-09-11T12:11:22.331048+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 10895,
-        "output_tokens": 1031,
-        "total_tokens": 15580,
-        "cost_usd": 0.005846
+        "input_tokens": 11699,
+        "output_tokens": 1172,
+        "total_tokens": 17744,
+        "cost_usd": 0.00644
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 42.378,
+        "model_value": 2.9,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 46,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2020,
           2021,
@@ -154,6 +180,12 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of first underwriting year",
+          "One Year Later",
+          "Two Years Later",
+          "Three Years Later"
         ],
         "source_page": 46,
         "entity": 2689
@@ -289,41 +321,25 @@
       "prior_year_development_pct": 38.9,
       "direction": "strengthening",
       "prior_year_movement_page": 44,
-      "prior_year_movement_confidence": 0.8,
+      "prior_year_movement_confidence": 1.0,
       "exact_reserve_text": "In 2023, there has been an overall deterioration of $2.9m on closed year reserves (2022: nil).",
       "primary_causes": [
-        "Man-made catastrophe / large losses",
         "Adverse claims development",
-        "Economic inflation / claims cost inflation"
+        "Man-made catastrophe / large losses"
       ],
-      "specific_events": [
-        "Rockefeller Center (terrorism scenario)",
-        "One World Trade Center (terrorism scenario)",
-        "Alternative RDS A",
-        "Alternative RDS B",
-        "Loss of Major Complex",
-        "Aviation Collision",
-        "AEP Loss 30 Year Return Period - US WS (Incl GM WS)",
-        "AEP Loss 30 Year Return Period - UC EQ",
-        "Cyber - Major Data Security Breach",
-        "AEP Loss 30 Year Return Period - Whole World",
-        "Marine Collision in US Waters",
-        "Major Cruise Vessel Incident",
-        "Cyber - Blackout II",
-        "Cyber - Ransomware Contagion",
-        "Cyber - Cloud Cascade"
-      ],
+      "specific_events": [],
       "specific_years_affected": [
-        2020,
-        2021
+        2021,
+        2020
       ],
       "prior_year_events": [
         {
-          "event_name": "Satellite losses impacting the legacy specialty book",
-          "event_year": 2021,
-          "impact_description": "Identified as impacting the legacy specialty book and contributing to loss deterioration on existing claims",
+          "event_name": "Satellite losses (legacy specialty book)",
+          "event_year": null,
+          "impact_description": "Recent satellite losses impacted the legacy specialty book and contributed to loss deterioration on existing claims.",
           "lobs_affected": [
-            "Treaty"
+            "Reinsurance - Specialty",
+            "Casualty"
           ],
           "amount_gbp_m": null,
           "confidence": 0.5
@@ -334,148 +350,100 @@
           "event_name": "Terrorism - Rockefeller Center",
           "event_year": null,
           "event_type": "man_made",
-          "net_loss_gbp_m": null,
-          "loss_description": "Scenario listed under estimated losses",
+          "net_loss_gbp_m": 18.55,
+          "loss_description": null,
           "lobs_affected": [
             "Property"
           ],
           "page": 42,
-          "confidence": 0.6
-        },
-        {
-          "event_name": "Terrorism - One World Trade Center",
-          "event_year": null,
-          "event_type": "man_made",
-          "net_loss_gbp_m": null,
-          "loss_description": "Scenario listed under estimated losses",
-          "lobs_affected": [
-            "Property"
-          ],
-          "page": 42,
-          "confidence": 0.6
+          "confidence": 0.8
         },
         {
           "event_name": "Alternative RDS A",
           "event_year": null,
           "event_type": "other",
-          "net_loss_gbp_m": null,
-          "loss_description": "Scenario listed under estimated losses",
+          "net_loss_gbp_m": 6.522,
+          "loss_description": null,
           "lobs_affected": [
-            "Treaty"
+            "Property"
           ],
           "page": 42,
-          "confidence": 0.5
+          "confidence": 0.8
         },
         {
           "event_name": "Alternative RDS B",
           "event_year": null,
           "event_type": "other",
-          "net_loss_gbp_m": null,
-          "loss_description": "Scenario listed under estimated losses",
+          "net_loss_gbp_m": 2.696,
+          "loss_description": null,
           "lobs_affected": [
-            "Treaty"
+            "Property"
           ],
           "page": 42,
-          "confidence": 0.5
+          "confidence": 0.8
         },
         {
           "event_name": "Loss of Major Complex",
           "event_year": null,
           "event_type": "man_made",
-          "net_loss_gbp_m": null,
-          "loss_description": "Scenario listed under estimated losses",
+          "net_loss_gbp_m": 32.585,
+          "loss_description": null,
           "lobs_affected": [
             "Property"
           ],
           "page": 42,
-          "confidence": 0.6
+          "confidence": 0.8
         },
         {
           "event_name": "Aviation Collision",
           "event_year": null,
           "event_type": "man_made",
-          "net_loss_gbp_m": null,
-          "loss_description": "Scenario listed under estimated losses",
+          "net_loss_gbp_m": 22.852,
+          "loss_description": null,
           "lobs_affected": [
             "Aviation"
           ],
           "page": 42,
-          "confidence": 0.6
+          "confidence": 0.8
         },
         {
           "event_name": "Cyber - Major Data Security Breach",
           "event_year": null,
           "event_type": "other",
-          "net_loss_gbp_m": null,
-          "loss_description": "Scenario listed under estimated losses",
+          "net_loss_gbp_m": 14.719,
+          "loss_description": null,
           "lobs_affected": [
             "Cyber"
           ],
           "page": 42,
-          "confidence": 0.6
+          "confidence": 0.8
         },
         {
-          "event_name": "Marine Collision in US Waters",
+          "event_name": "Marine - Marine Collision in US Waters",
           "event_year": null,
           "event_type": "man_made",
-          "net_loss_gbp_m": null,
-          "loss_description": "Scenario listed under estimated losses",
+          "net_loss_gbp_m": 4.655,
+          "loss_description": null,
           "lobs_affected": [
             "Marine"
           ],
           "page": 42,
-          "confidence": 0.6
+          "confidence": 0.8
         },
         {
-          "event_name": "Major Cruise Vessel Incident",
+          "event_name": "Marine - Major Cruise Vessel Incident",
           "event_year": null,
           "event_type": "man_made",
-          "net_loss_gbp_m": null,
-          "loss_description": "Scenario listed under estimated losses",
+          "net_loss_gbp_m": 4.655,
+          "loss_description": null,
           "lobs_affected": [
             "Marine"
           ],
           "page": 42,
-          "confidence": 0.6
-        },
-        {
-          "event_name": "Cyber - Blackout II",
-          "event_year": null,
-          "event_type": "other",
-          "net_loss_gbp_m": null,
-          "loss_description": "Scenario listed under estimated losses",
-          "lobs_affected": [
-            "Cyber"
-          ],
-          "page": 42,
-          "confidence": 0.5
-        },
-        {
-          "event_name": "Cyber - Ransomware Contagion",
-          "event_year": null,
-          "event_type": "other",
-          "net_loss_gbp_m": null,
-          "loss_description": "Scenario listed under estimated losses",
-          "lobs_affected": [
-            "Cyber"
-          ],
-          "page": 42,
-          "confidence": 0.5
-        },
-        {
-          "event_name": "Cyber - Cloud Cascade",
-          "event_year": null,
-          "event_type": "other",
-          "net_loss_gbp_m": null,
-          "loss_description": "Scenario listed under estimated losses",
-          "lobs_affected": [
-            "Cyber"
-          ],
-          "page": 42,
-          "confidence": 0.5
+          "confidence": 0.8
         }
       ],
-      "standardized_narrative": "At 1 January 2023 gross claims outstanding were $108.937m. Based on the syndicate's gross claims development triangle, there was a net adverse prior-year development of approximately $42.378m (c.39% of opening reserves), driven by deterioration on older years (notably 2020 and 2021) and by large/man-made satellite losses in the legacy specialty portfolio together with inflationary pressures. The syndicate's business is predominantly reinsurance-accepted (treaty), which is the principal area affected. The report also records a separate narrative statement of a $2.9m deterioration on closed year reserves (which appears to be a net figure); a 2022 External RITC is disclosed and may distort development patterns, so the gross triangle-derived figure should be treated with caution.",
+      "standardized_narrative": "The Syndicate recorded an overall adverse prior-year development in 2023, with an explicitly stated deterioration on closed year reserves of $2.9m. Management attributes the deterioration to adverse development on existing claims and recent satellite losses affecting the legacy specialty book. The movement predominantly impacts prior years (2021 and earlier) and is reflected in the technical reserves and claims development analysis.",
       "raw_causal_phrases": [
         "loss deterioration on existing claims",
         "recent satellite losses impacting the legacy specialty book",
@@ -484,11 +452,39 @@
       ],
       "lob_movements": [
         {
+          "line_of_business": "Marine",
+          "direction": "strengthening",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.0
+        },
+        {
+          "line_of_business": "Aviation",
+          "direction": "strengthening",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.0
+        },
+        {
+          "line_of_business": "Property",
+          "direction": "strengthening",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.0
+        },
+        {
+          "line_of_business": "Casualty",
+          "direction": "strengthening",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.0
+        },
+        {
           "line_of_business": "Treaty",
           "direction": "strengthening",
-          "amount_gbp_m": 42.378,
+          "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.6
+          "confidence": 0.0
         }
       ],
       "gross_premiums_written_gbp_m": 80.4,
@@ -522,7 +518,7 @@
       "gross_premium_page": 31,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "Prior-year development was calculated from the gross claims development triangle (gross figures) on page 44. The report also contains a narrative statement of a $2.9m deterioration on closed year reserves (page 44) which appears to be a net (after reinsurance) figure and conflicts with the triangle-derived gross movement. An External RITC of $101.597k is disclosed in 2022 (page 32) and may distort development patterns; this reduces confidence in triangle-derived PYD. No explicit 'movement in prior year's provision for claims outstanding' gross figure was available.",
+      "data_quality_notes": "Primary prior-year movement taken from explicit narrative: 'overall deterioration of $2.9m on closed year reserves'. A gross claims development triangle is present but is distorted by an External RITC disclosed in 2022 (External RITC (101,597) shown in the 2022 technical provisions), so the triangle was not used as the primary PYD source. Some LOB-level reserve movements are not disclosed; LOB allocations for the PYD are therefore not quantified. [RAG OVERRIDE: Model said PYD=2.9, RAG triangle computed 42.378. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
@@ -564,20 +560,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_2689_2023_llm.pdf",
-      "content_hash": "9b6131f2bbacacb773bd0bf45e6e51012ee8711a6a14b6b2d18bb3b5ba3a4d82",
-      "standardized_at": "2026-07-05T13:14:03.640688+00:00",
+      "content_hash": "f7b6164cbc077279032ecd4ab4ed7b83af5db756161dba13d4b29a5425abb8d7",
+      "standardized_at": "2026-09-11T12:14:35.321934+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 14927,
-        "output_tokens": 7120,
-        "total_tokens": 22047,
-        "cost_usd": 0.017972
+        "input_tokens": 15687,
+        "output_tokens": 8020,
+        "total_tokens": 23707,
+        "cost_usd": 0.019962
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 42.378,
+        "model_value": 2.9,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 46,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2020,
           2021,
@@ -609,6 +617,12 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of first underwriting year",
+          "One Year Later",
+          "Two Years Later",
+          "Three Years Later"
         ],
         "source_page": 46,
         "entity": 2689
@@ -735,12 +749,12 @@
       }
     }
   },
-  "total_cost_usd": 0.023818,
-  "total_tokens": 37627,
+  "total_cost_usd": 0.026402,
+  "total_tokens": 41451,
   "validation": {
     "passed": true,
-    "total_discrepancies": 30,
-    "within_tolerance": 30,
+    "total_discrepancies": 12,
+    "within_tolerance": 12,
     "hard_failures": 0,
     "hard_failure_details": []
   }

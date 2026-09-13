@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T11:40:53.625493+00:00",
+  "extraction_timestamp": "2026-09-13T03:58:33.488591+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -16,42 +18,49 @@
       "prior_year_development_gbp_m": -0.321,
       "prior_year_development_pct": -35.43,
       "direction": "release",
-      "prior_year_movement_page": 1,
+      "prior_year_movement_page": 14,
       "prior_year_movement_confidence": 0.8,
-      "exact_reserve_text": "Partially offsetting the favourable premium variance in the period was an increase in incurred claims particularly on the 2015 year of account, primarily due to an increase in the average claim amount. The combined ratio is marginally favourable to 2016 at 98.3% being the combination of favourable acquisition and expense ratios and unfavourable movements in the claims ratio. The result at 36 months follows the increase in incurred claims primarily due to an increase in the average claim amount.",
+      "exact_reserve_text": "No single sentence explicitly states the total gross prior year development. The figure is calculated from the gross claims development triangle.",
       "primary_causes": [
-        "Adverse claims development",
-        "Large loss development"
+        "Favorable claims development",
+        "Adverse claims development"
       ],
       "specific_events": [],
       "specific_years_affected": [
+        2011,
+        2012,
+        2013,
+        2014,
         2015
       ],
       "prior_year_events": [
         {
-          "event_name": "Increase in average claim amount",
+          "event_name": "2015 Year of Account Closure",
           "event_year": 2015,
-          "impact_description": "increase in incurred claims primarily due to an increase in the average claim amount for the 2015 year of account",
-          "lobs_affected": [],
-          "amount_gbp_m": null,
-          "confidence": 0.8
+          "impact_description": "The 2015 Year of Account closed at a net loss of GBP 64k, following an increase in incurred claims primarily due to an increase in the average claim amount.",
+          "lobs_affected": [
+            "Accident & Health"
+          ],
+          "amount_gbp_m": 0.064,
+          "confidence": 0.9
         }
       ],
       "named_events": [],
-      "standardized_narrative": "The syndicate experienced a strengthening in prior year reserves, primarily driven by an increase in incurred claims for the 2015 year of account due to an increase in the average claim amount. This contributed to an unfavourable movement in the overall claims ratio, despite favourable acquisition and expense ratios.",
+      "standardized_narrative": "The syndicate experienced an overall release of gross prior year reserves of GBP 0.344 million, primarily driven by favorable development across the 2011, 2013, 2014, and 2015 underwriting years. However, the 2015 year of account, which closed in 2017, recorded a net loss of GBP 0.064 million due to an increase in incurred claims, primarily from a rise in the average claim amount.",
       "raw_causal_phrases": [
-        "increase in incurred claims particularly on the 2015 year of account",
-        "increase in the average claim amount",
-        "unfavourable movements in the claims ratio"
+        "increase in incurred claims primarily due to an increase in the average claim amount"
       ],
-      "lob_movements": [],
+      "lob_movements": [
+        {
+          "line_of_business": "Accident & Health",
+          "direction": "release",
+          "amount_gbp_m": -0.344,
+          "percentage": -37.97,
+          "confidence": 0.8
+        }
+      ],
       "gross_premiums_written_gbp_m": 17.728,
       "gross_premium_mix": [
-        {
-          "line_of_business": "Binder business written",
-          "amount_gbp_m": 13.009,
-          "percentage_of_total": 73.61
-        },
         {
           "line_of_business": "Scheme business written",
           "amount_gbp_m": 2.326,
@@ -71,23 +80,115 @@
       "gross_premium_page": 13,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The claims development triangle on page 14 indicates a gross release of GBP 0.321m for prior years (2011-2015). However, the narrative on page 1 explicitly states 'increase in incurred claims particularly on the 2015 year of account' and 'unfavourable movements in the claims ratio', and that the 2015 year of account closed at a net loss of GBP 64k. Prioritizing the narrative as per instructions, the direction is inferred as strengthening, but no gross amount for this strengthening is quantified in the narrative. The triangle data is included in the _claims_triangle field for reference.",
+      "data_quality_notes": "Prior year development calculated from gross claims development triangle as no explicit gross prior year movement figure was found. The narrative mentions a net loss for the 2015 year of account closure, but the overall gross movement from the triangle is a release.",
+      "_claims_triangle": {
+        "type": "gross",
+        "currency": "GBP",
+        "units": "thousands",
+        "page": 14,
+        "underwriting_years": [
+          2011,
+          2012,
+          2013,
+          2014,
+          2015,
+          2016,
+          2017
+        ],
+        "development_rows": [
+          [
+            2317,
+            2291,
+            3274,
+            3553,
+            4475,
+            4179,
+            7668
+          ],
+          [
+            3197,
+            3247,
+            5138,
+            6877,
+            8523,
+            7274,
+            null
+          ],
+          [
+            2198,
+            3321,
+            4324,
+            5857,
+            8335,
+            null,
+            null
+          ],
+          [
+            2065,
+            2914,
+            4207,
+            5724,
+            null,
+            null,
+            null
+          ],
+          [
+            2060,
+            3013,
+            4207,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            2060,
+            3013,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            2060,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ]
+        ]
+      },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_44_2017_llm.pdf",
-      "content_hash": "7c791f9643a3b64c278975933c6b4a3e43a63cb963e99e4fdb92f660133fc6c0",
-      "standardized_at": "2026-07-06T00:50:34.025750+00:00",
+      "content_hash": "da40d51a6ac4abeb926854252576d0b1ff9388415336df7bc4a9395f0e3476cd",
+      "standardized_at": "2026-09-11T13:03:41.247091+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 9861,
-        "output_tokens": 982,
-        "total_tokens": 17556,
-        "cost_usd": 0.005413
+        "input_tokens": 10665,
+        "output_tokens": 1409,
+        "total_tokens": 16764,
+        "cost_usd": 0.006722
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -0.321,
+        "model_value": -0.344,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 32,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -162,6 +263,15 @@
             null
           ]
         ],
+        "row_labels": [
+          "At the end of underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later"
+        ],
         "source_page": 32,
         "entity": 44
       },
@@ -224,7 +334,7 @@
       "direction": "release",
       "prior_year_movement_page": 29,
       "prior_year_movement_confidence": 0.8,
-      "exact_reserve_text": "Partially offsetting the favourable premium variance in the period was an increase in incurred claims particularly on the 2015 year of account, primarily due to an increase in the average claim amount.\nThe year closed at a loss of GBP 64k following a calendar year profit of GBP 864k and a brought-forward retained loss after 24 months of GBP 928k. The result at 36 months follows the increase in incurred claims primarily due to an increase in the average claim amount.",
+      "exact_reserve_text": "Partially offsetting the favourable premium variance in the period was an increase in incurred claims particularly on the 2015 year of account, primarily due to an increase in the average claim amount.\n\nThe directors approved the closure of the 2015 Year of Account by reinsurance to close into the 2016 year of account of the Syndicate. The year closed at a loss of GBP 64k following a calendar year profit of GBP 864k and a brought-forward retained loss after 24 months of GBP 928k. The result at 36 months follows the increase in incurred claims primarily due to an increase in the average claim amount. The closing result will be called in April 2018.",
       "primary_causes": [
         "Adverse claims development"
       ],
@@ -234,30 +344,30 @@
       ],
       "prior_year_events": [
         {
-          "event_name": "2015 Year of Account development",
+          "event_name": "Closure of 2015 Year of Account by reinsurance to close",
           "event_year": 2015,
-          "impact_description": "Increase in incurred claims on the 2015 year of account primarily due to an increase in the average claim amount; the year closed at a loss of GBP 64k following earlier calendar year profit and carried-forward loss movements.",
+          "impact_description": "2015 year closed at a loss of GBP 64k following a calendar year profit of GBP 864k and a brought-forward retained loss after 24 months of GBP 928k; result at 36 months follows an increase in incurred claims primarily due to an increase in the average claim amount.",
           "lobs_affected": [
             "Accident & Health"
           ],
-          "amount_gbp_m": null,
-          "confidence": 1.0
+          "amount_gbp_m": 0.064,
+          "confidence": 0.8
         }
       ],
       "named_events": [],
-      "standardized_narrative": "At 31 December 2017 the Syndicate's opening gross claims outstanding (closing 2016) was GBP 0.906m. Analysis of the gross claims development triangle indicates a small net gross release across underwriting years up to 2015 of approximately GBP 0.321m (about 35% of opening gross claims outstanding). Management notes an increase in incurred claims particularly on the 2015 year of account driven by a higher average claim amount, and the 2015 year ultimately closed at a small loss on the 36month view.",
+      "standardized_narrative": "On a gross basis the syndicate recorded a small overall prior-year release of approximately GBP 0.32m. This modest favourable movement is calculated from the syndicate's gross claims development table and reflects releases in older underwriting years that were partly offset by adverse development on the 2015 year driven by an increase in average claim size; the 2015 year was closed by reinsurance to close into 2016 and closed with a small loss at 36 months.",
       "raw_causal_phrases": [
-        "Partially offsetting the favourable premium variance in the period was an increase in incurred claims particularly on the 2015 year of account, primarily due to an increase in the average claim amount.",
-        "The year closed at a loss of GBP 64k following a calendar year profit of GBP 864k and a brought-forward retained loss after 24 months of GBP 928k.",
-        "The result at 36 months follows the increase in incurred claims primarily due to an increase in the average claim amount."
+        "increase in incurred claims particularly on the 2015 year of account, primarily due to an increase in the average claim amount.",
+        "The result at 36 months follows the increase in incurred claims primarily due to an increase in the average claim amount.",
+        "closure of the 2015 Year of Account by reinsurance to close into the 2016 year of account"
       ],
       "lob_movements": [
         {
           "line_of_business": "Accident & Health",
-          "direction": "strengthening",
-          "amount_gbp_m": null,
+          "direction": "release",
+          "amount_gbp_m": -0.321,
           "percentage": null,
-          "confidence": 0.5
+          "confidence": 0.8
         }
       ],
       "gross_premiums_written_gbp_m": 17.728,
@@ -265,7 +375,7 @@
         {
           "line_of_business": "Binder business written",
           "amount_gbp_m": 13.009,
-          "percentage_of_total": 73.38
+          "percentage_of_total": 73.43
         },
         {
           "line_of_business": "Scheme business written",
@@ -286,7 +396,7 @@
       "gross_premium_page": 25,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior year development (gross) was not provided as a single explicit 'movement in prior year's provision' gross figure. The prior year development was calculated from the gross claims development triangle (pages 29) comparing current estimates to the previous diagonal for underwriting years up to 2015 (excluded 2016 and 2017). Management commentary references increased incurred claims on the 2015 year of account (increase in average claim amount) which appears adverse for that year; however the triangle-derived aggregate across older years shows a small net gross release of c. GBP 0.321m. Life/long-term business mapping to the standard Lloyd's list uses 'Accident & Health' as the closest category; this mapping is approximate.",
+      "data_quality_notes": "Prior-year development was calculated from the gross claims development triangle (page 29) as no explicit gross 'movement in prior year's provision' line was present. The managing agent narrative refers to increased incurred claims on the 2015 year (net context) and the closure of the 2015 year by reinsurance to close into 2016; this RITC and net/gross distinction may explain differences between narrative (which references net movements and year-of-account closure) and the small gross release derived from the triangle. Opening reserves taken from Balance Sheet liabilities 'Claims outstanding' comparative column (2016) on page 12.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -365,24 +475,37 @@
             null,
             null
           ]
-        ]
+        ],
+        "confidence": 0.9
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_44_2017_llm.pdf",
-      "content_hash": "7c791f9643a3b64c278975933c6b4a3e43a63cb963e99e4fdb92f660133fc6c0",
-      "standardized_at": "2026-07-06T00:51:46.772647+00:00",
+      "content_hash": "da40d51a6ac4abeb926854252576d0b1ff9388415336df7bc4a9395f0e3476cd",
+      "standardized_at": "2026-09-11T13:05:12.993587+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 15848,
-        "output_tokens": 6145,
-        "total_tokens": 21993,
-        "cost_usd": 0.016252
+        "input_tokens": 16608,
+        "output_tokens": 5609,
+        "total_tokens": 22217,
+        "cost_usd": 0.01537
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -0.321,
+        "model_value": -0.321,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 32,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -457,6 +580,15 @@
             null
           ]
         ],
+        "row_labels": [
+          "At the end of underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later"
+        ],
         "source_page": 32,
         "entity": 44
       },
@@ -509,12 +641,12 @@
       }
     }
   },
-  "total_cost_usd": 0.021665,
-  "total_tokens": 39549,
+  "total_cost_usd": 0.022092,
+  "total_tokens": 38981,
   "validation": {
     "passed": true,
-    "total_discrepancies": 15,
-    "within_tolerance": 15,
+    "total_discrepancies": 19,
+    "within_tolerance": 19,
     "hard_failures": 0,
     "hard_failure_details": []
   }

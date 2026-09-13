@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T09:47:47.801428+00:00",
+  "extraction_timestamp": "2026-09-13T04:11:24.397355+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -18,24 +20,30 @@
       "direction": "release",
       "prior_year_movement_page": 15,
       "prior_year_movement_confidence": 0.8,
-      "exact_reserve_text": "",
+      "exact_reserve_text": "The claims development table on page 15 shows a decrease in the estimated cumulative gross claims incurred for the 2019 underwriting year from 5,551 (GBP '000) at 31 December 2020 to 3,557 (GBP '000) at 31 December 2021.",
       "primary_causes": [
-        "Favorable claims development",
-        "IBNR recalibration"
+        "Favorable claims development"
       ],
       "specific_events": [],
       "specific_years_affected": [
-        2019,
-        2020
+        2019
       ],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "The syndicate experienced a gross reserve release of GBP 5.213 million for prior underwriting years 2019 and 2020, representing a 33.8% reduction in opening gross reserves. This favorable development is derived from the claims development table, indicating that the ultimate claims estimates for these prior years have reduced compared to previous projections.",
+      "standardized_narrative": "The syndicate experienced a favorable prior year development of GBP 1.994 million, representing a release of 12.93% of its opening gross claims outstanding. This release was calculated from the gross claims development table, specifically for the 2019 underwriting year. No specific events or detailed causal factors were provided for this favorable development, beyond general claims development patterns.",
       "raw_causal_phrases": [
-        "Reserve adequacy is monitored through quarterly review by the Asta Actuarial team and the Reserving Committee.",
-        "The principal assumption underlying the liability estimates is that the future claims development will follow a similar pattern to past claims development experience."
+        "The principal assumption underlying the liability estimates is that the future claims development will follow a similar pattern to past claims development experience.",
+        "Other key circumstances affecting the reliability of assumptions include variation in interest rates, delays in settlement and changes in foreign currency rates."
       ],
-      "lob_movements": [],
+      "lob_movements": [
+        {
+          "line_of_business": "Medical Malpractice",
+          "direction": "release",
+          "amount_gbp_m": -1.994,
+          "percentage": null,
+          "confidence": 0.8
+        }
+      ],
       "gross_premiums_written_gbp_m": 14.822,
       "gross_premium_mix": [
         {
@@ -47,7 +55,7 @@
       "gross_premium_page": 10,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior year development calculated from the gross claims development table on page 15 as no explicit prior year movement figure was stated in narrative or a dedicated note. The 'Change in claims outstanding' figure in the Income Statement and Technical Provisions note includes both current and prior year movements and was therefore not used. [RAG OVERRIDE: Model said PYD=-5.213, RAG triangle computed -1.994. Using RAG value.]",
+      "data_quality_notes": "Prior year development was calculated from the gross claims development table by comparing the current estimate for the 2019 underwriting year to its estimate from the previous diagonal, excluding the two most recent underwriting years (2021 and 2020). No specific causes for the releases were identified beyond general claims development. No specific named events were mentioned in the document.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -78,20 +86,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_1892_2021_llm.pdf",
-      "content_hash": "9462e599b99c088b120da249872e2e20e570f12bacaf4da56bd43a0fcf615819",
-      "standardized_at": "2026-07-05T09:25:14.590406+00:00",
+      "content_hash": "2af946f7fd4c756a7493646592421efcdb3b40b9a97e222f1e1799e7cc29023e",
+      "standardized_at": "2026-09-11T10:56:44.517322+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 10379,
-        "output_tokens": 751,
-        "total_tokens": 14227,
-        "cost_usd": 0.004991
+        "input_tokens": 11183,
+        "output_tokens": 898,
+        "total_tokens": 15653,
+        "cost_usd": 0.0056
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -1.994,
+        "model_value": -1.994,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 34,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2019,
           2020,
@@ -113,6 +133,11 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of first underwriting year",
+          "One year later",
+          "Two year later"
         ],
         "source_page": 34,
         "entity": 1892
@@ -175,7 +200,7 @@
       "syndicate": 1892,
       "year": 2021,
       "opening_reserves_gbp_m": 15.424,
-      "opening_reserves_page": 15,
+      "opening_reserves_page": 16,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": -1.994,
       "prior_year_development_pct": -12.93,
@@ -192,20 +217,18 @@
       ],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "The syndicate opened 2021 with gross claims outstanding of GBP 15.424m. Analysis of the gross claims development triangle shows favourable development in prior underwriting years (primarily the 2019 underwriting year), producing an aggregate prior-year release of approximately GBP 2.0m. No explicit narrative quantifying a gross prior-year movement was provided; the amount is derived from the gross claims development table.",
+      "standardized_narrative": "Opening gross claims outstanding at 1 January 2021 were GBP 15.424m. Analysis of the gross claims development triangle shows favourable development on prior years (primarily the 2019 underwriting year) of approximately GBP 1.99m (a release), with no specific named catastrophic events or regulatory changes cited as drivers. The syndicate's business is written as Medical Malpractice.",
       "raw_causal_phrases": [
-        "past claims development experience",
-        "case by case review and judgement",
-        "claims incurred but not reported (IBNR)",
-        "Change in claims outstanding"
+        "The principal assumption underlying the liability estimates is that the future claims development will follow a similar pattern to past claims development experience.",
+        "Judgement is used to assess the extent to which past trends may not apply in the future."
       ],
       "lob_movements": [
         {
           "line_of_business": "Professional Lines",
           "direction": "release",
           "amount_gbp_m": -1.994,
-          "percentage": -12.93,
-          "confidence": 0.6
+          "percentage": -12.92,
+          "confidence": 0.8
         }
       ],
       "gross_premiums_written_gbp_m": 14.822,
@@ -219,7 +242,7 @@
       "gross_premium_page": 23,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "No explicit sentence stating a GROSS prior-year reserve movement was found. Prior-year movement computed from the gross claims development table (triangle) on page 31 by excluding the two most recent underwriting years (2021 and 2020) and comparing the 2019 current estimate to its prior diagonal. The triangle and notes are presented in GBP '000; values converted to millions. The Statement of Financial Position and Note 4 contain overall changes in claims outstanding but these include current year movements; therefore the triangle was used to isolate prior-year development. Confidence is moderate due to limited historical columns (only 2019 as prior-year) and lack of an explicit gross prior-year movement narrative.",
+      "data_quality_notes": "Prior-year development was not stated explicitly as a gross movement in narrative or a dedicated 'movement in prior years' note. The prior year movement was calculated from the gross claims development table (triangle) by excluding the two most recent underwriting years (2021 and 2020) and comparing the 2019 column's Current estimate to its previous diagonal. All source amounts in the report are presented in GBP '000. exact_reserve_text is blank because no single sentence describing the gross prior-year movement was found. 'Medical Malpractice' was mapped to the standard Lloyd's 'Professional Lines' for LOB movement reporting.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -246,25 +269,36 @@
             null,
             null
           ]
-        ],
-        "confidence": 0.8
+        ]
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_1892_2021_llm.pdf",
-      "content_hash": "9462e599b99c088b120da249872e2e20e570f12bacaf4da56bd43a0fcf615819",
-      "standardized_at": "2026-07-05T09:26:00.985209+00:00",
+      "content_hash": "2af946f7fd4c756a7493646592421efcdb3b40b9a97e222f1e1799e7cc29023e",
+      "standardized_at": "2026-09-11T10:58:13.000632+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 13680,
-        "output_tokens": 3840,
-        "total_tokens": 17520,
-        "cost_usd": 0.0111
+        "input_tokens": 14440,
+        "output_tokens": 4325,
+        "total_tokens": 18765,
+        "cost_usd": 0.01226
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -1.994,
+        "model_value": -1.994,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 34,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2019,
           2020,
@@ -286,6 +320,11 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of first underwriting year",
+          "One year later",
+          "Two year later"
         ],
         "source_page": 34,
         "entity": 1892
@@ -345,12 +384,12 @@
       }
     }
   },
-  "total_cost_usd": 0.016091,
-  "total_tokens": 31747,
+  "total_cost_usd": 0.01786,
+  "total_tokens": 34418,
   "validation": {
     "passed": true,
-    "total_discrepancies": 14,
-    "within_tolerance": 14,
+    "total_discrepancies": 10,
+    "within_tolerance": 10,
     "hard_failures": 0,
     "hard_failure_details": []
   }

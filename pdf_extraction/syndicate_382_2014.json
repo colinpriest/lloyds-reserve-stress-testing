@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T11:16:30.597412+00:00",
+  "extraction_timestamp": "2026-09-13T04:00:26.734429+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -11,60 +13,69 @@
       "syndicate": 382,
       "year": 2014,
       "opening_reserves_gbp_m": 250.224,
-      "opening_reserves_page": 4,
+      "opening_reserves_page": 7,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": 0.172,
-      "prior_year_development_pct": 0.07,
-      "direction": "strengthening",
-      "prior_year_movement_page": 17,
+      "prior_year_development_gbp_m": -0.172,
+      "prior_year_development_pct": -0.07,
+      "direction": "release",
+      "prior_year_movement_page": 19,
       "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "Material over provisions for claims at the beginning of the year as compared with net payments and provisions at the end of the year in respect of prior accident years' claims are as follows: ... Release/(strengthening) 172",
+      "exact_reserve_text": "Material over provisions for claims at the beginning of the year as compared with net payments and provisions at the end of the year in respect of prior accident years' claims are as follows:",
       "primary_causes": [
-        "Regulatory changes",
-        "Economic inflation / claims cost inflation",
-        "Man-made catastrophe / large losses",
-        "Natural catastrophe events",
+        "Favorable claims development",
+        "Adverse claims development",
         "Other"
       ],
       "specific_events": [],
       "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "For the 2014 financial year, Hardy Syndicate 382 reported a gross prior year reserve strengthening of GBP 0.172 million, representing 0.07% of its opening gross claims outstanding. This overall strengthening was a result of mixed movements across lines of business, with strengthenings in Marine and aviation and Property treaty, partially offset by releases in Non-marine property and Speciality lines. General factors influencing reserve estimation include changes in Syndicate processes, the legal environment, inflation, business mix, large losses, and industry benchmarks.",
+      "standardized_narrative": "The syndicate reported a gross prior year reserve release of GBP 0.172 million for 2014. This movement was a result of mixed development across lines of business, with releases in Marine and Aviation (GBP 3.467m) and Property Treaty (GBP 1.767m), partially offset by strengthenings in Non-marine Property (GBP 0.612m) and Speciality Lines (GBP 4.450m). The report does not provide specific causal factors for these prior year movements.",
       "raw_causal_phrases": [
-        "changes in Syndicate processes which might accelerate or slow down the development and/or recording of paid or incurred claims compared with the statistics from previous periods",
-        "changes in the legal environment",
-        "the effects of inflation",
-        "changes in the mix of business",
-        "the impact of large losses, including catastrophes",
+        "Marine and aviation",
+        "Non-marine property",
+        "Property treaty",
+        "Speciality lines",
+        "changes in Syndicate processes",
+        "legal environment",
+        "effects of inflation",
+        "mix of business",
+        "impact of large losses",
         "movements in industry benchmarks"
       ],
       "lob_movements": [
         {
           "line_of_business": "Marine",
-          "direction": "strengthening",
-          "amount_gbp_m": 3.467,
+          "direction": "release",
+          "amount_gbp_m": -1.7335,
           "percentage": null,
-          "confidence": 1.0
+          "confidence": 0.8
+        },
+        {
+          "line_of_business": "Aviation",
+          "direction": "release",
+          "amount_gbp_m": -1.7335,
+          "percentage": null,
+          "confidence": 0.8
         },
         {
           "line_of_business": "Property",
-          "direction": "release",
-          "amount_gbp_m": -0.612,
+          "direction": "strengthening",
+          "amount_gbp_m": 0.612,
           "percentage": null,
           "confidence": 1.0
         },
         {
           "line_of_business": "Treaty",
-          "direction": "strengthening",
-          "amount_gbp_m": 1.767,
+          "direction": "release",
+          "amount_gbp_m": -1.767,
           "percentage": null,
           "confidence": 1.0
         },
         {
-          "line_of_business": "Specialty",
-          "direction": "release",
-          "amount_gbp_m": -4.45,
+          "line_of_business": "Other",
+          "direction": "strengthening",
+          "amount_gbp_m": 4.45,
           "percentage": null,
           "confidence": 1.0
         }
@@ -107,29 +118,21 @@
           "percentage_of_total": 46.0
         }
       ],
-      "gross_premium_page": 16,
+      "gross_premium_page": 18,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "",
-      "_claims_triangle": {
-        "type": "none",
-        "currency": null,
-        "units": null,
-        "page": null,
-        "underwriting_years": null,
-        "development_rows": null
-      },
+      "data_quality_notes": "The prior year development is a net release, but it's a result of mixed movements across different lines of business. The specific causes for these LOB-specific movements are not detailed. 'Speciality lines' is mapped to 'Other' as it's not a standard Lloyd's LOB. The 'Marine and aviation' movement was split equally between 'Marine' and 'Aviation' LOBs for lob_movements as the source combines them into a single figure.",
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_382_2014_llm.pdf",
-      "content_hash": "8ed3f9c3083becb1402adce4a53f2f3c56f8e1915c843dde230c6713262c92d0",
-      "standardized_at": "2026-03-18T12:13:46.116432+00:00",
+      "content_hash": "060987560a81aeabce41f2a73b53590566106e0aefac72a6c03314d65f3685be",
+      "standardized_at": "2026-09-11T12:50:51.148634+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 10636,
-        "output_tokens": 1233,
-        "total_tokens": 14767,
-        "cost_usd": 0.006273
+        "input_tokens": 11956,
+        "output_tokens": 1292,
+        "total_tokens": 19463,
+        "cost_usd": 0.006817
       },
       "_adobe_lob": {
         "gross_premium_mix": [
@@ -299,19 +302,23 @@
       "prior_year_development_pct": -0.07,
       "direction": "release",
       "prior_year_movement_page": 36,
-      "prior_year_movement_confidence": 0.8,
-      "exact_reserve_text": "Material over provisions for claims at the beginning of the year as compared with net payments and provisions at the end of the year in respect of prior accident years' claims are as follows:",
+      "prior_year_movement_confidence": 0.5,
+      "exact_reserve_text": "Material over provisions for claims at the beginning of the year as compared with net payments and provisions at the end of the year in respect of prior accident years' claims are as follows:\n\nMarine and aviation 3,467 (1,415)\nNon-marine property (612) (7,821)\nProperty treaty 1,767 4,293\nSpeciality lines (4,450) 4,533\nRelease/(strengthening) 172 (410)",
       "primary_causes": [
-        "Favorable claims development"
+        "Favorable claims development",
+        "Large loss development",
+        "Adverse claims development"
       ],
       "specific_events": [],
       "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "The syndicate records a small favourable prioryear development (net release) of GBP 0.172m in 2014, arising from development on prior accident years across classes (notably releases in Marine & Aviation and Property treaty offset by adverse movement in Speciality lines and nonmarine property). No gross prioryear movement figure is disclosed; the available prioryear amounts are presented net.",
+      "standardized_narrative": "The syndicate reports a small net favourable prior-year development on claims of GBP 0.172m (gross release). Movements were mixed across classes with releases in Marine & Aviation and Property Treaty partially offset by adverse development in Speciality Lines (resulting in an overall small release). The amount is taken from the note showing material over/under provisions for prior accident years; the note's phrasing suggests it may be presented relative to payments/provisions and there is some ambiguity whether the line is gross or net of reinsurance.",
       "raw_causal_phrases": [
         "Material over provisions for claims at the beginning of the year as compared with net payments and provisions at the end of the year in respect of prior accident years' claims are as follows:",
-        "Release/(strengthening)"
+        "This increase was driven primarily by higher attritional and large loss experience. In particular, there were several significant claims emanating from the Marine and Aviation books of business.",
+        "no significant losses arising from catastrophes during 2014",
+        "Release/(strengthening) 172 (410)"
       ],
       "lob_movements": [
         {
@@ -319,24 +326,24 @@
           "direction": "release",
           "amount_gbp_m": -3.467,
           "percentage": null,
-          "confidence": 0.5
+          "confidence": 0.8
         },
         {
           "line_of_business": "Property",
           "direction": "strengthening",
           "amount_gbp_m": 0.612,
           "percentage": null,
-          "confidence": 0.5
+          "confidence": 0.8
         },
         {
           "line_of_business": "Treaty",
           "direction": "release",
           "amount_gbp_m": -1.767,
           "percentage": null,
-          "confidence": 0.5
+          "confidence": 0.8
         },
         {
-          "line_of_business": "Reinsurance - Specialty",
+          "line_of_business": "Casualty",
           "direction": "strengthening",
           "amount_gbp_m": 4.45,
           "percentage": null,
@@ -384,27 +391,26 @@
       "gross_premium_page": 34,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "No gross prioryear movement figure is disclosed in the notes. The only quantified prioryear movements are presented as net (after reinsurance) in the 'Claims outstanding' note (labelled 'Material over provisions...' and the 'Release/(strengthening)' table). Prior-year movement therefore uses the net figure (-GBP 0.172m) and is flagged accordingly. Line-of-business mappings for the small class-level movements are approximate and derived from the net table; amounts shown by class are net and not gross.",
+      "data_quality_notes": "Prior-year development amount derived from Note 4 ('Material over provisions...') which presents per-line figures; the note's wording references 'net payments and provisions' leading to ambiguity whether the table figures are gross (insurance liabilities) or net of reinsurance. The extraction treats the table as gross for the purposes of the prior_year_development_gbp_m field but confidence is reduced. No claims development triangle was found in the provided pages. Line-of-business mapping for 'Speciality lines' to standard Lloyd's LOBs is approximate.",
       "_claims_triangle": {
         "type": "none",
         "currency": "GBP",
-        "units": "millions",
+        "units": "thousands",
         "page": null,
         "underwriting_years": [],
-        "development_rows": [],
-        "page_found": null
+        "development_rows": []
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_382_2014_llm.pdf",
-      "content_hash": "8ed3f9c3083becb1402adce4a53f2f3c56f8e1915c843dde230c6713262c92d0",
-      "standardized_at": "2026-03-18T12:14:53.654454+00:00",
+      "content_hash": "060987560a81aeabce41f2a73b53590566106e0aefac72a6c03314d65f3685be",
+      "standardized_at": "2026-09-11T12:52:43.108388+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 15196,
-        "output_tokens": 5588,
-        "total_tokens": 20784,
-        "cost_usd": 0.014975
+        "input_tokens": 17742,
+        "output_tokens": 5531,
+        "total_tokens": 23273,
+        "cost_usd": 0.015498
       },
       "_adobe_lob": {
         "gross_premium_mix": [
@@ -565,32 +571,13 @@
       }
     }
   },
-  "total_cost_usd": 0.021248,
-  "total_tokens": 35551,
+  "total_cost_usd": 0.022315,
+  "total_tokens": 42736,
   "validation": {
-    "passed": false,
-    "total_discrepancies": 35,
-    "within_tolerance": 32,
-    "hard_failures": 3,
-    "hard_failure_details": [
-      {
-        "field": "direction",
-        "type": "value_mismatch",
-        "gemini-2.5-flash": "strengthening",
-        "gpt-5-mini": "release"
-      },
-      {
-        "field": "prior_year_development_gbp_m",
-        "type": "value_mismatch",
-        "gemini-2.5-flash": 0.172,
-        "gpt-5-mini": -0.172
-      },
-      {
-        "field": "prior_year_development_pct",
-        "type": "value_mismatch",
-        "gemini-2.5-flash": 0.07,
-        "gpt-5-mini": -0.07
-      }
-    ]
+    "passed": true,
+    "total_discrepancies": 29,
+    "within_tolerance": 29,
+    "hard_failures": 0,
+    "hard_failure_details": []
   }
 }

@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T12:05:32.224043+00:00",
+  "extraction_timestamp": "2026-09-13T03:57:43.858589+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -17,43 +19,22 @@
       "prior_year_development_pct": 11.43,
       "direction": "strengthening",
       "prior_year_movement_page": 26,
-      "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "In 2022, there has been an overall deficit in ultimate claims of GBP 1.7m (2021: deficit of GBP 15.8m) due primarily to an increase in claims estimates.",
+      "prior_year_movement_confidence": 0.8,
+      "exact_reserve_text": "The movement in the net provisions for claims includes a deterioration of GBP 3.4m in respect of reserves set in prior years (2021: deterioration of GBP 8.2m).",
       "primary_causes": [
-        "IBNR recalibration",
-        "Adverse claims development"
+        "Adverse claims development",
+        "IBNR recalibration"
       ],
-      "specific_events": [],
+      "specific_events": [
+        "Hurricane Ida 2021",
+        "Uri policies 2021"
+      ],
       "specific_years_affected": [
         2020,
         2021
       ],
       "prior_year_events": [],
       "named_events": [
-        {
-          "event_name": "Hurricane Ida",
-          "event_year": 2021,
-          "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": null,
-          "loss_description": "ultimate gross losses of $37.3m, (last year $39.2m) of which $33.7m had been incurred at year end (last year $29.4m); significant impacts right the way up to the north-eastern States.",
-          "lobs_affected": [
-            "Reinsurance - Property"
-          ],
-          "page": 3,
-          "confidence": 1.0
-        },
-        {
-          "event_name": "Uri policies",
-          "event_year": 2021,
-          "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": null,
-          "loss_description": "projecting $4.5m (last year $4.2m), of which $4.1m had been incurred at year end (last year $3.65m).",
-          "lobs_affected": [
-            "Reinsurance - Property"
-          ],
-          "page": 3,
-          "confidence": 1.0
-        },
         {
           "event_name": "Hurricane Ian",
           "event_year": 2022,
@@ -65,18 +46,42 @@
           ],
           "page": 25,
           "confidence": 1.0
+        },
+        {
+          "event_name": "Hurricane Ida",
+          "event_year": 2021,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "Hurricane Ida which struck Louisiana in August 2021, causing $35bn-$40bn of insured loss. For Ida, we are projecting ultimate gross losses of $37.3m, (last year $39.2m) of which $33.7m had been incurred at year end (last year $29.4m).",
+          "lobs_affected": [
+            "Reinsurance - Property"
+          ],
+          "page": 3,
+          "confidence": 1.0
+        },
+        {
+          "event_name": "Uri policies",
+          "event_year": 2021,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "for those Uri policies that fall to the 2021 year, we are projecting $4.5m (last year $4.2m), of which $4.1m had been incurred at year end (last year $3.65m).",
+          "lobs_affected": [
+            "Reinsurance - Property"
+          ],
+          "page": 3,
+          "confidence": 1.0
         }
       ],
-      "standardized_narrative": "The syndicate experienced a gross strengthening of GBP 1.7 million in prior year reserves, primarily due to an overall deficit in ultimate claims estimates for the 2020 and 2021 underwriting years. This adverse development is attributed to an increase in claims estimates.",
+      "standardized_narrative": "The syndicate experienced a gross strengthening of GBP 3.313m for the 2020 underwriting year, derived from the claims development triangle. The report also noted a net deterioration of GBP 3.4m in respect of reserves set in prior years. This adverse development is primarily attributed to an increase in claims estimates. Specific prior year events mentioned as affecting the 2021 year of account include Hurricane Ida and Uri policies.",
       "raw_causal_phrases": [
-        "an overall deficit in ultimate claims of GBP 1.7m",
-        "due primarily to an increase in claims estimates"
+        "increase in claims estimates",
+        "deterioration of GBP 3.4m in respect of reserves set in prior years"
       ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 56.581,
       "gross_premium_mix": [
         {
-          "line_of_business": "reinsurance accepted",
+          "line_of_business": "Reinsurance accepted",
           "amount_gbp_m": 56.581,
           "percentage_of_total": 100.0
         }
@@ -84,7 +89,7 @@
       "gross_premium_page": 17,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": " [RAG OVERRIDE: Model said PYD=1.7, RAG triangle computed 3.313. Using RAG value.]",
+      "data_quality_notes": "The prior year development figure is calculated from the gross claims development triangle for the 2020 underwriting year, as no explicit gross prior year movement figure was stated in narrative or notes. The report does state a net deterioration of GBP 3.4m for prior years. Gross premium mix is based on the segmental analysis which states all business is 'reinsurance accepted' and primarily US property catastrophe risks.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -115,20 +120,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_6103_2022_llm.pdf",
-      "content_hash": "72ca88452e04b5d4787cffaa6ec0f3520706f3acd4277551725ad773caada9e6",
-      "standardized_at": "2026-07-06T02:11:53.767296+00:00",
+      "content_hash": "982d5b88cf42e1ce224fad89ccd8498fd6fc30affa7f2045b6c0762ca07e67e9",
+      "standardized_at": "2026-09-11T13:18:15.185031+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 12959,
-        "output_tokens": 1128,
-        "total_tokens": 19252,
-        "cost_usd": 0.006708
+        "input_tokens": 13763,
+        "output_tokens": 1302,
+        "total_tokens": 19547,
+        "cost_usd": 0.007384
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 3.313,
+        "model_value": 3.313,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 58,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2020,
           2021,
@@ -150,6 +167,11 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "12 months",
+          "24 months",
+          "36 months"
         ],
         "source_page": 58,
         "entity": 6103
@@ -299,120 +321,84 @@
       "prior_year_development_pct": 11.43,
       "direction": "strengthening",
       "prior_year_movement_page": 49,
-      "prior_year_movement_confidence": 0.5,
-      "exact_reserve_text": "The movement in the net provisions for claims includes a deterioration of GBP 3.4m in respect of reserves set in prior years (2021: deterioration of GBP 8.2m).",
+      "prior_year_movement_confidence": 0.8,
+      "exact_reserve_text": "The movement in the net provisions for claims includes a deterioration of GBP 3.4m in respect of reserves set in prior years (2021: deterioration of GBP 8.2m). In 2022, there has been an overall deficit in ultimate claims of GBP 1.7m (2021: deficit of GBP 15.8m) due primarily to an increase in claims estimates.",
       "primary_causes": [
-        "Adverse claims development",
-        "Natural catastrophe events"
+        "Adverse claims development"
       ],
       "specific_events": [
-        "Hurricane Ida",
-        "Hurricane Ian",
-        "Winter Storm Uri"
+        "Hurricane Ian 2022",
+        "Hurricane Ida 2021",
+        "Uri 2021"
       ],
       "specific_years_affected": [
-        2019,
-        2020,
-        2021
+        2020
       ],
-      "prior_year_events": [
-        {
-          "event_name": "Hurricane Ida",
-          "event_year": 2021,
-          "impact_description": "Significant US hurricane in 2021 with projected ultimate losses noted in the 2021 year forecasts; contributed to elevated claims on the 2021 year.",
-          "lobs_affected": [
-            "Reinsurance - Property"
-          ],
-          "amount_gbp_m": null,
-          "confidence": 0.8
-        },
-        {
-          "event_name": "Winter Storm Uri",
-          "event_year": 2021,
-          "impact_description": "Portions of Uri policies fall to the 2021 year and were projected to cause additional losses.",
-          "lobs_affected": [
-            "Reinsurance - Property"
-          ],
-          "amount_gbp_m": null,
-          "confidence": 0.7
-        },
-        {
-          "event_name": "RITC 2019 year of account commutation",
-          "event_year": 2019,
-          "impact_description": "RITC 2019 year of account commuted into Syndicate 2791 reducing the gross claims movement by GBP 2.072m (shown as a negative movement in the claims reconciliation).",
-          "lobs_affected": [
-            "Reinsurance - Property"
-          ],
-          "amount_gbp_m": -2.072,
-          "confidence": 0.9
-        }
-      ],
+      "prior_year_events": [],
       "named_events": [
         {
           "event_name": "Hurricane Ian",
           "event_year": 2022,
           "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": 40.417,
-          "loss_description": "The syndicate has material exposure to Hurricane Ian. The current ultimate estimated losses for Hurricane Ian are gross and net $48.5m. This loss is protected by both surplus reinsurance and excess of loss covers.",
+          "net_loss_gbp_m": null,
+          "loss_description": "The syndicate has material exposure to Hurricane Ian. The current ultimate estimated losses for Hurricane Ian are gross and net $48.5m.",
           "lobs_affected": [
-            "Reinsurance - Property"
+            "Treaty"
           ],
           "page": 54,
-          "confidence": 0.8
+          "confidence": 1.0
         },
         {
           "event_name": "Hurricane Ida",
           "event_year": 2021,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "Projected ultimate gross losses for Ida were given in the 2021 commentary (USD amounts cited).",
+          "loss_description": "For Ida, we are projecting ultimate gross losses of $37.3m, of which $33.7m had been incurred at year end.",
           "lobs_affected": [
-            "Reinsurance - Property"
+            "Treaty"
           ],
           "page": 6,
-          "confidence": 0.7
+          "confidence": 0.8
         },
         {
-          "event_name": "Winter Storm Uri",
+          "event_name": "Uri",
           "event_year": 2021,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "Projected amounts for Uri policies falling to 2021 were discussed in the 2021 year commentary.",
+          "loss_description": "For those Uri policies that fall to the 2021 year, we are projecting $4.5m, of which $4.1m had been incurred at year end.",
           "lobs_affected": [
-            "Reinsurance - Property"
+            "Treaty"
           ],
           "page": 6,
-          "confidence": 0.6
+          "confidence": 0.8
         }
       ],
-      "standardized_narrative": "At the 2022 year end the syndicate opened with gross claims outstanding of GBP 28.976m (1 Jan 2022). There was adverse prioryear development totalling approximately GBP 3.4m (deterioration), driven primarily by adverse claims development associated with US catastrophe activity and increases in claims estimates. Notable events referenced that have influenced development include Hurricane Ida and Winter Storm Uri (2021) and Hurricane Ian (2022). The prioryear deterioration reported is a NET figure; no explicit GROSS prioryear movement was disclosed in the notes.",
+      "standardized_narrative": "At 1 January 2022 gross claims outstanding were GBP 28.976m. During 2022 there was an adverse prior-year development (strengthening) of approximately GBP 3.3m (c.11.4% of opening gross reserves), driven by adverse claims development and increased claims estimates on prior underwriting years (principally reflected in the 2020 underwriting year). The syndicate cites a deterioration on prior years of GBP 3.4m (net) and an overall increase in ultimate claims estimates; named catastrophe activity in 2022 (notably Hurricane Ian) is reported separately and affected current-year outcomes.",
       "raw_causal_phrases": [
         "The movement in the net provisions for claims includes a deterioration of GBP 3.4m in respect of reserves set in prior years (2021: deterioration of GBP 8.2m).",
-        "due primarily to an increase in claims estimates",
-        "The syndicate has material exposure to Hurricane Ian. The current ultimate estimated losses for Hurricane Ian are gross and net $48.5m.",
-        "exchange loss of GBP 1.2m versus the average rates over the three-year period"
+        "In 2022, there has been an overall deficit in ultimate claims of GBP 1.7m (2021: deficit of GBP 15.8m) due primarily to an increase in claims estimates."
       ],
       "lob_movements": [
         {
-          "line_of_business": "Reinsurance - Property",
+          "line_of_business": "Treaty",
           "direction": "strengthening",
-          "amount_gbp_m": 3.4,
-          "percentage": 11.7,
-          "confidence": 0.5
+          "amount_gbp_m": 3.313,
+          "percentage": 11.434,
+          "confidence": 0.7
         }
       ],
       "gross_premiums_written_gbp_m": 56.581,
       "gross_premium_mix": [
         {
-          "line_of_business": "reinsurance accepted",
+          "line_of_business": "Reinsurance accepted",
           "amount_gbp_m": 56.581,
           "percentage_of_total": 100.0
         }
       ],
       "gross_premium_page": 48,
-      "gross_premium_confidence": 0.8,
+      "gross_premium_confidence": 0.6,
       "currency": "GBP",
-      "data_quality_notes": "No explicit GROSS prioryear movement figure was presented in the notes. The report states a NET deterioration of GBP 3.4m in respect of prior years; per instructions this NET figure was used as a fallback. The claims development triangle and claims reconciliation indicate RITC movements (e.g. 2019 commutation) which can distort direct triangle-based PYD calculations. Hurricane Ian loss was reported in USD ($48.5m) and converted to GBP using the report's year-end USD:GBP rate of 1.20 (GBP = USD / 1.20). Where amounts were only provided in USD or only net amounts were stated, these have been flagged and noted.",
+      "data_quality_notes": "Opening reserves taken from Balance Sheet 'Claims outstanding' prior-year column (1 Jan 2022). Prior-year development (gross) computed from the gross claims development triangle (comparison of 2020 column current estimate vs prior diagonal 24-month estimate). The report also states a net prior-year deterioration (GBP 3.4m) - net figures quoted in the notes; gross triangle yields ~GBP 3.313m. Some named event losses are quoted in USD in the text and have not been converted to GBP; no explicit gross prior-year movement line in the notes (gross) other than the triangle, so triangle was used as primary source for gross PYD.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -443,20 +429,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_6103_2022_llm.pdf",
-      "content_hash": "72ca88452e04b5d4787cffaa6ec0f3520706f3acd4277551725ad773caada9e6",
-      "standardized_at": "2026-07-06T02:13:05.594802+00:00",
+      "content_hash": "982d5b88cf42e1ce224fad89ccd8498fd6fc30affa7f2045b6c0762ca07e67e9",
+      "standardized_at": "2026-09-11T13:19:49.086831+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 28802,
-        "output_tokens": 7320,
-        "total_tokens": 36122,
-        "cost_usd": 0.02184
+        "input_tokens": 29562,
+        "output_tokens": 5982,
+        "total_tokens": 35544,
+        "cost_usd": 0.019355
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 3.313,
+        "model_value": 3.313,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 58,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2020,
           2021,
@@ -478,6 +476,11 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "12 months",
+          "24 months",
+          "36 months"
         ],
         "source_page": 58,
         "entity": 6103
@@ -618,12 +621,12 @@
       }
     }
   },
-  "total_cost_usd": 0.028548,
-  "total_tokens": 55374,
+  "total_cost_usd": 0.026739,
+  "total_tokens": 55091,
   "validation": {
     "passed": true,
-    "total_discrepancies": 21,
-    "within_tolerance": 21,
+    "total_discrepancies": 18,
+    "within_tolerance": 18,
     "hard_failures": 0,
     "hard_failure_details": []
   }

@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-05T20:16:22.394069+00:00",
+  "extraction_timestamp": "2026-09-13T03:58:44.979958+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -17,27 +19,29 @@
       "prior_year_development_pct": -1.61,
       "direction": "release",
       "prior_year_movement_page": 15,
-      "prior_year_movement_confidence": 1.0,
+      "prior_year_movement_confidence": 0.8,
       "exact_reserve_text": "Change in estimates of technical provisions, including foreign exchange (184,769)",
       "primary_causes": [
-        "Economic inflation / claims cost inflation",
-        "Social inflation / litigation trends",
-        "IBNR recalibration",
-        "Reserve methodology change",
-        "Adverse claims development",
-        "Other"
+        "Favorable claims development",
+        "Economic inflation / claims cost inflation"
       ],
       "specific_events": [],
       "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "Syndicate 3500 reported a gross release of $184.769 million in prior year reserves, representing a 6.24% release of its opening gross claims outstanding. This release is attributed to ongoing review of estimates, including the impact of foreign exchange, and general claims development. The syndicate monitors inflation trends and uncertainties in general liability classes.",
+      "standardized_narrative": "Syndicate 3500 reported a gross prior year reserve release of $184.769 million for the year ended 31st December 2023. This release represents a 6.24% reduction compared to the opening gross claims outstanding of $2,962.436 million. The movement is identified as a \"Change in estimates of technical provisions\" from the Technical Provisions note. While specific causes for this release are not detailed, the Managing Agent's report highlights ongoing risks such as fluctuations in claims severity, late reporting, claims inflation, and market risks, suggesting the release is due to overall favorable development relative to expectations. The claims development triangle is significantly distorted by multiple large reinsurance to close (RITC) and loss portfolio transfer (LPT) transactions effective 1st January 2023, making it unsuitable for direct calculation of prior year development.",
       "raw_causal_phrases": [
-        "Change in estimates of technical provisions, including foreign exchange",
-        "The Board remain cognisant of the potential impacts of inflation and continue to focus on ensuring that our underwriting and pricing adequately addresses inflationary trends.",
-        "The potential impact of excess inflation - both macro-economic and social - is explicitly assessed in syndicate reserves and a variety of potential outcomes are reviewed.",
-        "The assumptions that have the greatest impact on gross and net technical provisions are those that affect the expected level of claims in the general liability classes, notably professional indemnity. The largest sensitivities on these classes are in respect of uncertainties around future numbers and amounts of claims.",
-        "The provision is revised as part of a regular ongoing process as claims experience develops, certain claims are settled and further claims are reported."
+        "fluctuations in the severity of claims compared with expectations",
+        "late reporting of claims",
+        "inadequate reserving",
+        "claims inflation",
+        "inadequate reinsurance protection",
+        "impact of changes to interest rates",
+        "equity price fluctuations",
+        "adverse changes in exchange rates",
+        "potential impacts of inflation",
+        "inflationary trends",
+        "excess inflation - both macro-economic and social"
       ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 1551.0,
@@ -76,7 +80,7 @@
       "gross_premium_page": 14,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "The claims development triangle is significantly distorted by large Reinsurance to Close (RITC) and Loss Portfolio Transfer (LPT) transactions in 2023, making it unsuitable for calculating prior year development. The prior year development figure is taken from the explicit \"Change in estimates of technical provisions\" in Note 7. [RAG OVERRIDE: Model said PYD=-184.769, RAG triangle computed -47.666. Using RAG value.]",
+      "data_quality_notes": "The prior year development figure is taken from \"Change in estimates of technical provisions\" in Note 7, which may include some current year movements as it is not explicitly broken down into prior vs. current years. The claims development triangle is heavily distorted by significant Reinsurance to Close (RITC) and Loss Portfolio Transfer (LPT) transactions effective 1st January 2023, making it unreliable for calculating prior year development directly. [RAG OVERRIDE: Model said PYD=-184.769, RAG triangle computed -47.666. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
@@ -219,20 +223,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_3500_2023_llm.pdf",
-      "content_hash": "bc279950f496f4326ce854a16966c31a263481021a21820ceb6f2e4157526841",
-      "standardized_at": "2026-07-05T15:28:11.739786+00:00",
+      "content_hash": "a5ac4017c14a1dab162891141c597c26f77edd13964d298f295da4a648f45378",
+      "standardized_at": "2026-09-11T12:30:33.791262+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 10121,
-        "output_tokens": 1977,
-        "total_tokens": 16728,
-        "cost_usd": 0.007979
+        "input_tokens": 10925,
+        "output_tokens": 2023,
+        "total_tokens": 18481,
+        "cost_usd": 0.008335
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -47.666,
+        "model_value": -184.769,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 24,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "EUR",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2014,
           2015,
@@ -366,6 +382,18 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At the end of the first year",
+          "- One year later",
+          "- Two years later",
+          "- Three years later",
+          "- Four years later",
+          "- Five years later",
+          "- Six years later",
+          "- Seven years later",
+          "- Eight years later",
+          "- Nine years later"
         ],
         "source_page": 24,
         "entity": 3500
@@ -494,37 +522,21 @@
       "syndicate": 3500,
       "year": 2023,
       "opening_reserves_gbp_m": null,
-      "opening_reserves_page": 14,
+      "opening_reserves_page": null,
       "opening_reserves_confidence": 0.0,
       "prior_year_development_gbp_m": -47.666,
       "prior_year_development_pct": null,
       "direction": "release",
-      "prior_year_movement_page": 30,
+      "prior_year_movement_page": null,
       "prior_year_movement_confidence": 0.0,
-      "exact_reserve_text": "This transaction resulted in the transfer to Syndicate 3500 of gross and net technical provisions of $252.1 million and $169.0 million, respectively.",
-      "primary_causes": [
-        "Reinsurance recoveries",
-        "Other"
-      ],
+      "exact_reserve_text": "",
+      "primary_causes": [],
       "specific_events": [],
       "specific_years_affected": [],
-      "prior_year_events": [
-        {
-          "event_name": "Reinsurance to Close transfers",
-          "event_year": 2023,
-          "impact_description": "Transfer into Syndicate 3500 of gross and net technical provisions from other syndicates (reinsurance to close) during the year",
-          "lobs_affected": [
-            "Treaty"
-          ],
-          "amount_gbp_m": 252.1,
-          "confidence": 0.8
-        }
-      ],
+      "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "The report documents transfers of technical provisions into Syndicate 3500 (reinsurance to close) during the year; however the audited financial statements and notes do not present a clearly extractable single gross prior-year reserve movement figure. RITC transactions materially affected the technical provisions and make direct computation of a consolidated gross prior year reserve movement from the available tables unreliable. Detailed gross 'movement in prior year provision' figures were not unambiguously located.",
-      "raw_causal_phrases": [
-        "This transaction resulted in the transfer to Syndicate 3500 of gross and net technical provisions of $252.1 million and $169.0 million, respectively."
-      ],
+      "standardized_narrative": "Unable to extract reliable gross claims reserve opening balance or a clear gross prior-year reserve movement from the provided images. The PDF images contain relevant tables and notes (technical provisions, claims movement tables and segmental analysis) but characters and numbers are not sufficiently legible to assert gross reserve figures or prior-year development amounts with confidence. Gross written premium is visible and reported below; all other reserve-specific fields are left null and explained in data_quality_notes.",
+      "raw_causal_phrases": [],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 1551.0,
       "gross_premium_mix": [
@@ -561,32 +573,43 @@
       ],
       "gross_premium_page": 13,
       "gross_premium_confidence": 1.0,
-      "currency": "GBP",
-      "data_quality_notes": "Document images are partially legible. Key required figures (gross claims outstanding at the opening/prior year and a gross movement in prior year provision) could not be unambiguously located in the balance sheet/technical reserves notes from the provided images. There are clear reinsurance-to-close (RITC) transactions disclosed (quantified transfers of gross and net technical provisions) which distort claims development tables; this further impedes reliable extraction of a single gross prior-year development figure. Where a gross movement was not found, no net fallback was extracted. Many numeric tables are present but not reliably OCR'd; users should consult original PDF for precise amounts.",
+      "currency": "USD",
+      "data_quality_notes": "The source images of the annual report are low-resolution / rotated and OCR failed for many pages. I could clearly read the Technical Account row 'Gross premiums written' for 2023 (shown as 2,425,384 in the PDF tables) and have reported it as 2,425.384 million in the native currency. However, the Balance Sheet and Technical Provisions notes (which contain the gross claims outstanding and the 'movement in prior year's provision for claims outstanding' GROSS figures required) are not legible enough to extract reliable numeric values or verbatim prior-year movement text. There are multiple references to transfers and reinsurance-to-close (RITC) transactions in the technical provisions notes which would distort a triangle-based extraction; due to image clarity I have not attempted to compute prior-year development from the claims development table. If you can provide a higher-resolution PDF or the specific pages (Balance Sheet liabilities - 'Claims outstanding' and the Technical Provisions note 'Movement in prior year's provision for claims outstanding'), I can extract the requested fields precisely.",
       "_claims_triangle": {
-        "type": "gross",
-        "currency": "GBP",
-        "units": "thousands",
-        "page": 23,
+        "type": "none",
+        "currency": "USD",
+        "units": "millions",
+        "page": null,
         "underwriting_years": [],
         "development_rows": []
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_3500_2023_llm.pdf",
-      "content_hash": "bc279950f496f4326ce854a16966c31a263481021a21820ceb6f2e4157526841",
-      "standardized_at": "2026-07-05T15:28:58.673572+00:00",
+      "content_hash": "a5ac4017c14a1dab162891141c597c26f77edd13964d298f295da4a648f45378",
+      "standardized_at": "2026-09-11T12:31:34.294357+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 20547,
-        "output_tokens": 4757,
-        "total_tokens": 25304,
-        "cost_usd": 0.014651
+        "input_tokens": 21307,
+        "output_tokens": 3258,
+        "total_tokens": 24565,
+        "cost_usd": 0.011843
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -47.666,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 24,
+        "note": "filled a blank model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "EUR",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2014,
           2015,
@@ -721,6 +744,18 @@
             null
           ]
         ],
+        "row_labels": [
+          "At the end of the first year",
+          "- One year later",
+          "- Two years later",
+          "- Three years later",
+          "- Four years later",
+          "- Five years later",
+          "- Six years later",
+          "- Seven years later",
+          "- Eight years later",
+          "- Nine years later"
+        ],
         "source_page": 24,
         "entity": 3500
       },
@@ -845,20 +880,14 @@
       }
     }
   },
-  "total_cost_usd": 0.02263,
-  "total_tokens": 42032,
+  "total_cost_usd": 0.020178,
+  "total_tokens": 43046,
   "validation": {
     "passed": false,
-    "total_discrepancies": 24,
+    "total_discrepancies": 23,
     "within_tolerance": 21,
-    "hard_failures": 3,
+    "hard_failures": 2,
     "hard_failure_details": [
-      {
-        "field": "currency",
-        "type": "value_mismatch",
-        "gemini-2.5-flash": "USD",
-        "gpt-5-mini": "GBP"
-      },
       {
         "field": "opening_reserves_gbp_m",
         "type": "value_mismatch",

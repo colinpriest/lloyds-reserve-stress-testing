@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T11:35:51.618181+00:00",
+  "extraction_timestamp": "2026-09-13T04:11:27.770726+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -16,29 +18,38 @@
       "prior_year_development_gbp_m": -96.222,
       "prior_year_development_pct": -8.0,
       "direction": "release",
-      "prior_year_movement_page": null,
-      "prior_year_movement_confidence": 0.0,
-      "exact_reserve_text": null,
-      "primary_causes": [],
+      "prior_year_movement_page": 11,
+      "prior_year_movement_confidence": 0.8,
+      "exact_reserve_text": "",
+      "primary_causes": [
+        "Adverse claims development"
+      ],
       "specific_events": [],
-      "specific_years_affected": [],
-      "prior_year_events": [],
-      "named_events": [
+      "specific_years_affected": [
+        2012,
+        2013,
+        2014,
+        2015,
+        2016,
+        2017,
+        2018,
+        2019
+      ],
+      "prior_year_events": [
         {
-          "event_name": "Brexit transfer to Lloyd's Europe",
+          "event_name": "Brexit-related policy transfers and reinsurance agreement",
           "event_year": 2020,
-          "event_type": "political",
-          "net_loss_gbp_m": null,
-          "loss_description": "the syndicate transferred all relevant policies and related liabilities for 1993 and later years of account to Lloyd's Europe on 30 December 2020... On the same date the syndicate's member entered a 100% quota share reinsurance agreement whereby Lloyd's Europe reinsured all risks on the same policies back to the relevant open years of account of the syndicate and the sum of USD 65,119,000 was transferred from the syndicate to Lloyd's Europe. The combined impact of the two transactions had no economic effect on the syndicate and accordingly there is no impact on the syndicate's Profit and Loss Account or Balance Sheet.",
-          "lobs_affected": [
-            "Aggregate"
-          ],
-          "page": 12,
-          "confidence": 1.0
+          "impact_description": "The syndicate transferred policies and liabilities to Lloyd's Europe on 30 December 2020, followed by a 100% quota share reinsurance agreement back to the syndicate. The combined impact had no economic effect on the P&L or Balance Sheet in 2020. However, with effect from 2021, results relating to these risks are reported under the inwards reinsurance class of business, which may have influenced reserve estimates.",
+          "lobs_affected": [],
+          "amount_gbp_m": null,
+          "confidence": 0.5
         }
       ],
-      "standardized_narrative": null,
-      "raw_causal_phrases": [],
+      "named_events": [],
+      "standardized_narrative": "The syndicate experienced a significant gross reserve strengthening of GBP 187.1 million for prior underwriting years up to 2019, representing 15.55% of its opening gross claims outstanding. This adverse development is primarily derived from the claims development triangle, with notable increases in estimates for the 2015 and 2016 underwriting years. While no specific causes are detailed, the report mentions Brexit-related policy transfers and changes in reporting for 2021, which may have influenced reserve estimates.",
+      "raw_causal_phrases": [
+        "Adjustments to the amounts of claims provisions established in prior financial years are reflected in the financial statements for the period in which the adjustments are made."
+      ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 449.639,
       "gross_premium_mix": [
@@ -80,13 +91,13 @@
         {
           "line_of_business": "Reinsurance",
           "amount_gbp_m": 215.704,
-          "percentage_of_total": 47.97
+          "percentage_of_total": 48.0
         }
       ],
       "gross_premium_page": 9,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior year development could not be explicitly identified or reliably calculated from the claims development triangle due to potential distortions from the Brexit transfer of liabilities and subsequent quota share reinsurance agreement mentioned in Note 20.",
+      "data_quality_notes": "Prior year development calculated from gross claims development triangle. The calculation shows a significant strengthening, which may be influenced by Brexit-related policy transfers and changes in reporting for 2021 as mentioned in Note 20, or other re-estimations not explicitly detailed. [RAG OVERRIDE: Model said PYD=187.149, RAG triangle computed -96.222. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -114,7 +125,8 @@
             246666,
             214468,
             170512,
-            194024
+            194024,
+            null
           ],
           [
             163384,
@@ -125,6 +137,7 @@
             383090,
             340614,
             302360,
+            null,
             null
           ],
           [
@@ -136,6 +149,7 @@
             367312,
             315892,
             null,
+            null,
             null
           ],
           [
@@ -145,6 +159,7 @@
             223635,
             465832,
             326212,
+            null,
             null,
             null,
             null
@@ -225,20 +240,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_435_2021_llm.pdf",
-      "content_hash": "ff56a16be30a1b4a6afe17116bdab84e3f705854dadc5c709c044214a256fa94",
-      "standardized_at": "2026-03-19T02:17:06.957211+00:00",
+      "content_hash": "53fa35e505b0af7040d05e38107483ea9947fd5c3e732d937ece2e6841f7f8e8",
+      "standardized_at": "2026-09-11T12:54:05.486389+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 9088,
-        "output_tokens": 1811,
-        "total_tokens": 22084,
-        "cost_usd": 0.007254
+        "input_tokens": 9892,
+        "output_tokens": 1995,
+        "total_tokens": 18899,
+        "cost_usd": 0.007955
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -96.222,
+        "model_value": 187.149,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 41,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2012,
           2013,
@@ -373,6 +400,18 @@
             null
           ]
         ],
+        "row_labels": [
+          "At end of underwriting year",
+          "After one year",
+          "After two years",
+          "After three years",
+          "After four years",
+          "After five years",
+          "After six years",
+          "After seven years",
+          "After eight years",
+          "After nine years"
+        ],
         "source_page": 41,
         "entity": 435
       },
@@ -437,7 +476,7 @@
       "syndicate": 435,
       "year": 2021,
       "opening_reserves_gbp_m": 1203.196,
-      "opening_reserves_page": 20,
+      "opening_reserves_page": 21,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": -96.222,
       "prior_year_development_pct": -8.0,
@@ -461,50 +500,57 @@
       ],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "The syndicate shows a gross prior-year reserve release of approximately GBP 96.2m (around 8.0% of opening gross claims outstanding) as at 31 December 2021. This release was driven by favourable claims development across older underwriting years (primarily 2012-2019) as reflected in the gross claims development table. No specific named catastrophe events or RITC distortions are identified in the available text; the movement was determined from the gross claims development triangle.",
+      "standardized_narrative": "The syndicate opened gross claims outstanding at GBP 1,203.196m (1 Jan 2021). Analysis of the gross claims development triangle shows net favourable development across prior underwriting years (2012-2019) amounting to a gross release of approximately GBP 96.2m, driven by favourable claims development across multiple classes. The overall movement resulted in a reduction in prior-year reserves (approximately 8.0% of opening gross reserves).",
       "raw_causal_phrases": [],
       "lob_movements": [
         {
           "line_of_business": "Accident & Health",
           "direction": "release",
           "amount_gbp_m": -1.006,
-          "percentage": -28.11,
-          "confidence": 0.8
+          "percentage": null,
+          "confidence": 1.0
         },
         {
           "line_of_business": "Motor",
           "direction": "strengthening",
           "amount_gbp_m": 3.382,
-          "percentage": 16.15,
-          "confidence": 0.8
+          "percentage": null,
+          "confidence": 1.0
         },
         {
           "line_of_business": "Marine",
           "direction": "strengthening",
           "amount_gbp_m": 9.978,
-          "percentage": 19.64,
-          "confidence": 0.8
+          "percentage": null,
+          "confidence": 1.0
         },
         {
           "line_of_business": "Property",
           "direction": "strengthening",
           "amount_gbp_m": 33.645,
-          "percentage": 27.54,
-          "confidence": 0.8
+          "percentage": null,
+          "confidence": 1.0
         },
         {
           "line_of_business": "Casualty",
           "direction": "strengthening",
           "amount_gbp_m": 18.907,
-          "percentage": 11.29,
-          "confidence": 0.8
+          "percentage": null,
+          "confidence": 1.0
+        },
+        {
+          "line_of_business": "Professional Lines",
+          "direction": "strengthening",
+          "amount_gbp_m": 0.729,
+          "percentage": null,
+          "confidence": 0.5
         },
         {
           "line_of_business": "Treaty",
           "direction": "release",
           "amount_gbp_m": -17.461,
-          "percentage": -1.77,
-          "confidence": 0.8
+          "percentage": null,
+          "confidence": 1.0
         }
       ],
       "gross_premiums_written_gbp_m": 449.639,
@@ -522,7 +568,7 @@
         {
           "line_of_business": "Motor (other classes)",
           "amount_gbp_m": 25.247,
-          "percentage_of_total": 5.62
+          "percentage_of_total": 5.61
         },
         {
           "line_of_business": "Marine, aviation and transport",
@@ -545,15 +591,15 @@
           "percentage_of_total": 0.78
         },
         {
-          "line_of_business": "Reinsurance",
+          "line_of_business": "Reinsurance acceptances",
           "amount_gbp_m": 215.704,
-          "percentage_of_total": 47.99
+          "percentage_of_total": 47.97
         }
       ],
       "gross_premium_page": 28,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior-year development (GBP 96.222m) was calculated from the gross claims development triangle (page 38) using the diagonal comparison method per guidance. No explicit narrative sentence stating a gross prior-year movement was found; exact_reserve_text is blank. LOB mappings for lob_movements were inferred from the 'Gross technical provisions' table: 'Marine, aviation and transport' was mapped to standard 'Marine'; 'Reinsurance' was mapped to 'Treaty'. The triangle values are presented in thousands in the source; monetary figures in this JSON are converted to millions. Confidence values reflect whether figures were explicitly stated (1.0), calculated (0.8) or inferred (0.5).",
+      "data_quality_notes": "Prior-year development was computed from the gross claims development triangle (pages 38-39) by excluding the '2011 and prior' aggregate column and the two most recent underwriting years (2020 and 2021). No single textual narrative sentence quantifying the gross prior-year movement was found. 'Other direct' was mapped to 'Professional Lines' for LOB movement reporting (approximate). Amounts in the triangle and tables are presented in GBP '000 in the report; opening reserves and triangle calculations were converted to millions for this output.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -692,24 +738,37 @@
             null,
             null
           ]
-        ]
+        ],
+        "confidence": 1.0
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_435_2021_llm.pdf",
-      "content_hash": "ff56a16be30a1b4a6afe17116bdab84e3f705854dadc5c709c044214a256fa94",
-      "standardized_at": "2026-03-19T02:18:59.327403+00:00",
+      "content_hash": "53fa35e505b0af7040d05e38107483ea9947fd5c3e732d937ece2e6841f7f8e8",
+      "standardized_at": "2026-09-11T12:56:02.669617+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 12991,
-        "output_tokens": 9607,
-        "total_tokens": 22598,
-        "cost_usd": 0.022462
+        "input_tokens": 13725,
+        "output_tokens": 8339,
+        "total_tokens": 22064,
+        "cost_usd": 0.020109
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -96.222,
+        "model_value": -96.222,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 41,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2012,
           2013,
@@ -844,6 +903,18 @@
             null
           ]
         ],
+        "row_labels": [
+          "At end of underwriting year",
+          "After one year",
+          "After two years",
+          "After three years",
+          "After four years",
+          "After five years",
+          "After six years",
+          "After seven years",
+          "After eight years",
+          "After nine years"
+        ],
         "source_page": 41,
         "entity": 435
       },
@@ -905,12 +976,12 @@
       }
     }
   },
-  "total_cost_usd": 0.029716,
-  "total_tokens": 44682,
+  "total_cost_usd": 0.028064,
+  "total_tokens": 40963,
   "validation": {
     "passed": true,
-    "total_discrepancies": 27,
-    "within_tolerance": 27,
+    "total_discrepancies": 20,
+    "within_tolerance": 20,
     "hard_failures": 0,
     "hard_failure_details": []
   }

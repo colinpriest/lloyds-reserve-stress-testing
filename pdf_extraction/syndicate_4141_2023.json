@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T11:27:32.096268+00:00",
+  "extraction_timestamp": "2026-09-13T04:06:24.953731+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -16,7 +18,7 @@
       "prior_year_development_gbp_m": -14.554,
       "prior_year_development_pct": -5.93,
       "direction": "release",
-      "prior_year_movement_page": 20,
+      "prior_year_movement_page": 16,
       "prior_year_movement_confidence": 0.8,
       "exact_reserve_text": "Net claims incurred include a prior year reserve release of GBP 11.6m (2022: increase GBP 3.6m) on an accident year basis.",
       "primary_causes": [
@@ -26,9 +28,10 @@
       "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "The syndicate reported a net prior year reserve release of GBP 11.6 million, representing a 4.73% release of its opening gross claims outstanding. This favorable development is attributed to a release on an accident year basis, though specific contributing years or events are not detailed. The figure is reported net of reinsurance, as a gross figure was not explicitly provided.",
+      "standardized_narrative": "The syndicate experienced a gross prior year reserve release of GBP 14.554 million, representing a 5.93% reduction of its opening gross claims outstanding. This favorable development is calculated from the gross claims development triangle. The report also notes a net prior year reserve release of GBP 11.6 million.",
       "raw_causal_phrases": [
-        "prior year reserve release of GBP 11.6m on an accident year basis"
+        "prior year reserve release",
+        "on an accident year basis"
       ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 239.3,
@@ -67,7 +70,7 @@
       "gross_premium_page": 19,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The prior year development figure is reported net of reinsurance, as a gross figure was not explicitly available. The gross claims development triangle did not show explicit prior year development beyond the last reported diagonal values. [RAG OVERRIDE: Model said PYD=-11.6, RAG triangle computed -14.554. Using RAG value.]",
+      "data_quality_notes": "The `prior_year_development_gbp_m` is calculated from the gross claims development triangle. The `exact_reserve_text` refers to a net prior year reserve release.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -210,20 +213,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_4141_2023_llm.pdf",
-      "content_hash": "e832178abdf62df22a053eae0df0d59f8623b158e78455bddaaca27626fecd2e",
-      "standardized_at": "2026-07-05T17:02:07.507821+00:00",
+      "content_hash": "b3e0bd663cfe7025ced789fdb50b4473284577b595d03f7d6b8ee389647a8e5d",
+      "standardized_at": "2026-09-11T13:07:09.817946+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 11411,
-        "output_tokens": 1642,
-        "total_tokens": 16564,
-        "cost_usd": 0.007528
+        "input_tokens": 12215,
+        "output_tokens": 1632,
+        "total_tokens": 18750,
+        "cost_usd": 0.007744
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -14.554,
+        "model_value": -14.554,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 32,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2014,
           2015,
@@ -345,6 +360,17 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "- one year later (*)",
+          "- two years later",
+          "- three years later",
+          "- four years later",
+          "- five years later",
+          "- six years later",
+          "- seven years later",
+          "- eight years later",
+          "- nine years later"
         ],
         "source_page": 32,
         "entity": 4141
@@ -507,72 +533,33 @@
       "syndicate": 4141,
       "year": 2023,
       "opening_reserves_gbp_m": 245.356,
-      "opening_reserves_page": 18,
+      "opening_reserves_page": 19,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": -14.554,
       "prior_year_development_pct": -5.93,
       "direction": "release",
-      "prior_year_movement_page": 31,
+      "prior_year_movement_page": 42,
       "prior_year_movement_confidence": 0.8,
       "exact_reserve_text": "Net claims incurred include a prior year reserve release of GBP 11.6m (2022: increase GBP 3.6m) on an accident year basis.",
       "primary_causes": [
         "Favorable claims development"
       ],
       "specific_events": [],
-      "specific_years_affected": [
-        2014,
-        2015,
-        2016,
-        2017,
-        2018,
-        2019,
-        2020,
-        2021
-      ],
+      "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "The syndicate recorded a gross prior year reserve release of approximately GBP 14.6m (a favourable movement, equivalent to about 5.93% of opening gross claims outstanding of GBP 245.356m). This was derived from the gross claims development table (excluding the two most recent underwriting years) and is consistent with the reported net prior year reserve release of GBP 11.6m. The release reflects overall favourable claims development across older underwriting years, partially offset by adverse development in some years.",
+      "standardized_narrative": "The syndicate shows a gross prior year reserve release of GBP 14.554m (about 5.9% of opening gross claims outstanding of GBP 245.356m). The Profit & Loss notes a net prior year reserve release of GBP 11.6m; the gross release above is calculated from the published gross claims development triangle. The release reflects favourable claims development and recalibration of prior estimates across multiple accident years.",
       "raw_causal_phrases": [
         "Net claims incurred include a prior year reserve release of GBP 11.6m (2022: increase GBP 3.6m) on an accident year basis.",
-        "The most significant assumptions made relate to the level of future claims, the level of future claims settlements and the legal interpretation of insurance policies.",
-        "high level sensitivity testing on the impact of changes in future inflation rates has been carried out.",
-        "Reinsurance recoveries are allocated based on the share of gross claims suffered by each entity."
+        "* the significant increase in the estimate of ultimate claims one year later reflects the earning patterns of in-force policies beyond the first calendar year."
       ],
       "lob_movements": [
         {
-          "line_of_business": "Accident & Health",
+          "line_of_business": "Aggregate",
           "direction": "release",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.3
-        },
-        {
-          "line_of_business": "Marine",
-          "direction": "release",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.3
-        },
-        {
-          "line_of_business": "Property",
-          "direction": "release",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.3
-        },
-        {
-          "line_of_business": "Casualty",
-          "direction": "release",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.3
-        },
-        {
-          "line_of_business": "Treaty",
-          "direction": "release",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.3
+          "amount_gbp_m": -14.554,
+          "percentage": -5.93,
+          "confidence": 0.8
         }
       ],
       "gross_premiums_written_gbp_m": 239.3,
@@ -611,7 +598,7 @@
       "gross_premium_page": 41,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Gross prior year development was not explicitly stated as a single gross figure in the notes; the net prior year release (GBP 11.6m) is stated in the P&L. A gross prior year movement of -GBP 14.554m was calculated from the published GROSS claims development triangle (excluded 2022 and 2023). Rounding differences and allocation to specific lines of business are not provided in the report; LOB-level reserve movements could not be quantified from the available disclosures.",
+      "data_quality_notes": "Gross prior year movement was not explicitly stated as a gross amount in a single movement note; the gross PYD was calculated from the published GROSS claims development triangle (see page 31). The P&L narrative states a net prior year release of GBP 11.6m (page 42). The computed gross release (-14.554m) therefore reconciles to the net release when reinsurance movement is considered. Triangle units are in GBP '000 and some development rows are irregular; figures were taken directly from the printed gross triangle and converted to millions. Confidence reflects a calculation from stated values rather than a single explicitly labelled 'gross prior year movement' line.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -754,20 +741,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_4141_2023_llm.pdf",
-      "content_hash": "e832178abdf62df22a053eae0df0d59f8623b158e78455bddaaca27626fecd2e",
-      "standardized_at": "2026-07-05T17:03:33.069906+00:00",
+      "content_hash": "b3e0bd663cfe7025ced789fdb50b4473284577b595d03f7d6b8ee389647a8e5d",
+      "standardized_at": "2026-09-11T13:09:11.341298+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 33097,
-        "output_tokens": 8125,
-        "total_tokens": 41222,
-        "cost_usd": 0.024524
+        "input_tokens": 33857,
+        "output_tokens": 7607,
+        "total_tokens": 41464,
+        "cost_usd": 0.023678
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -14.554,
+        "model_value": -14.554,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 32,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2014,
           2015,
@@ -889,6 +888,17 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "- one year later (*)",
+          "- two years later",
+          "- three years later",
+          "- four years later",
+          "- five years later",
+          "- six years later",
+          "- seven years later",
+          "- eight years later",
+          "- nine years later"
         ],
         "source_page": 32,
         "entity": 4141
@@ -1048,12 +1058,12 @@
       }
     }
   },
-  "total_cost_usd": 0.032052,
-  "total_tokens": 57786,
+  "total_cost_usd": 0.031422,
+  "total_tokens": 60214,
   "validation": {
     "passed": true,
-    "total_discrepancies": 18,
-    "within_tolerance": 18,
+    "total_discrepancies": 10,
+    "within_tolerance": 10,
     "hard_failures": 0,
     "hard_failure_details": []
   }

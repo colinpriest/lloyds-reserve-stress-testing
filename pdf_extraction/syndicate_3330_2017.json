@@ -1,12 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-10T10:41:43.714638+00:00",
+  "extraction_timestamp": "2026-09-13T04:05:20.044393+00:00",
   "spec": {
-    "prompt_version": "2.10",
-    "driver_prompt_version": "2.11",
-    "responses_served_from_cache": {
-      "gemini-2.5-flash": "2.10",
-      "gpt-5-mini": "2.10"
-    },
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -21,22 +18,24 @@
       "prior_year_development_gbp_m": -0.99,
       "prior_year_development_pct": -7.04,
       "direction": "release",
-      "prior_year_movement_page": 12,
-      "prior_year_movement_confidence": 0.8,
-      "exact_reserve_text": "",
+      "prior_year_movement_page": null,
+      "prior_year_movement_confidence": 0.0,
+      "exact_reserve_text": null,
       "primary_causes": [
-        "Favorable claims development"
+        "Adverse claims development",
+        "Reinsurance recoveries"
       ],
       "specific_events": [],
       "specific_years_affected": [
-        2011,
-        2012
+        2012,
+        2013,
+        2014
       ],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "Syndicate 3330 experienced a gross prior year reserve release of GBP 0.990 million in 2017, representing a 7.04% reduction of its opening gross reserves. This release was primarily driven by favorable claims development on the 2011 underwriting year, which saw a release of GBP 1.014 million, partially offset by a small strengthening of GBP 0.024 million on the 2012 underwriting year. The syndicate's business is in run-off, and its activities include accepting Reinsurance to Close (RITC) contracts for other syndicates' legacy business. The report notes historic volatility in the liability book, which may have led to conservative initial reserving.",
+      "standardized_narrative": "The syndicate accepted the Reinsurance to Close (RITC) of the 2014 year of account (which included the 2007 and 2011 years of account of Syndicates 1208 and 102 respectively) into its 2017 year of account. The report notes that the 2012, 2013, and 2014 years of account remained open at 31 December 2016 due to uncertainties from historic volatility in the liability book, suggesting potential adverse development. However, no specific quantified prior year reserve movement (release or strengthening) is disclosed in the financial statements or notes. The claims development triangle is distorted by the RITC, making it unsuitable for calculating prior year development.",
       "raw_causal_phrases": [
-        "continuing assessment of the reserving position due to historic volatility experienced in the liability book"
+        "uncertainties over the final loss arising from a combination of factors, the main factor being the continuing assessment of the reserving position due to historic volatility experienced in the liability book."
       ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 124.0,
@@ -90,78 +89,12 @@
       "gross_premium_page": 11,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The prior year development figure was calculated from the gross claims development triangle as no explicit gross prior year movement was stated. The RITC activity mentioned in the strategic report could influence overall reserve movements but is not directly quantifiable from the claims development triangle for prior year development.",
+      "data_quality_notes": "No explicit prior year development figure (gross or net) was found. The claims development triangle is distorted by the Reinsurance to Close (RITC) of the 2014 year of account (including 2007 and 2011) into the 2017 year of account, making it unsuitable for calculating prior year development. Gross premium mix includes a negative amount for 'Reinsurance' and 'Accident and health' which represents return premiums or cancellations.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
         "page": 12,
-        "underwriting_years": [
-          2011,
-          2012
-        ],
-        "development_rows": [
-          [
-            60526,
-            18240
-          ],
-          [
-            52349,
-            13030
-          ],
-          [
-            57842,
-            9875
-          ],
-          [
-            62834,
-            9855
-          ],
-          [
-            55610,
-            11351
-          ],
-          [
-            57463,
-            11375
-          ],
-          [
-            56449,
-            null
-          ]
-        ]
-      },
-      "source_type": "syndicate",
-      "source_file": "pdf_extraction\\llm_slim\\syndicate_3330_2017_llm.pdf",
-      "content_hash": "cc0eb76e7e835987f0f83fb5ff43a197641cdaf508ae394e6962d2c3534b7ed3",
-      "standardized_at": "2026-07-05T15:07:53.279827+00:00",
-      "standardization_model": "gemini-2.5-flash",
-      "_extraction_meta": {
-        "model": "gemini-2.5-flash",
-        "input_tokens": 9089,
-        "output_tokens": 1207,
-        "total_tokens": 16133,
-        "cost_usd": 0.005744
-      },
-      "_served_from": {
-        "cache_file": "b709e38037152255185cc11fe863a9ba2fe3e661e2b018e50b04ebab63db4a7a.json",
-        "prompt_version": "2.10"
-      },
-      "_pyd_route": {
-        "source": "rag_triangle",
-        "value": -0.99,
-        "model_value": -0.99,
-        "triangle_type": "gross",
-        "triangle_units": "thousands",
-        "triangle_units_evidence": "header",
-        "triangle_source_page": 29,
-        "note": "confirmed by the model value"
-      },
-      "_rag_triangle": {
-        "type": "gross",
-        "currency": "GBP",
-        "units": "thousands",
-        "units_evidence": "header",
         "underwriting_years": [
           2011,
           2012
@@ -195,6 +128,77 @@
             56449.0,
             null
           ]
+        ]
+      },
+      "source_type": "syndicate",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_3330_2017_llm.pdf",
+      "content_hash": "bd209da20fb450d12e66321f1ce14f46d7c3a618dff9ff523d56ee8bfff75f20",
+      "standardized_at": "2026-09-11T12:35:03.259297+00:00",
+      "standardization_model": "gemini-2.5-flash",
+      "_extraction_meta": {
+        "model": "gemini-2.5-flash",
+        "input_tokens": 9893,
+        "output_tokens": 1305,
+        "total_tokens": 17561,
+        "cost_usd": 0.00623
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -0.99,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 29,
+        "note": "filled a blank model value"
+      },
+      "_rag_triangle": {
+        "type": "gross",
+        "currency": "GBP",
+        "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
+        "underwriting_years": [
+          2011,
+          2012
+        ],
+        "development_rows": [
+          [
+            60526.0,
+            18240.0
+          ],
+          [
+            52349.0,
+            13030.0
+          ],
+          [
+            57842.0,
+            9875.0
+          ],
+          [
+            62834.0,
+            9855.0
+          ],
+          [
+            55610.0,
+            11351.0
+          ],
+          [
+            57463.0,
+            11375.0
+          ],
+          [
+            56449.0,
+            null
+          ]
+        ],
+        "row_labels": [
+          "After one year",
+          "After two years",
+          "After three years",
+          "After four years",
+          "After five years",
+          "After six years",
+          "After seven years"
         ],
         "source_page": 29,
         "entity": 3330
@@ -346,26 +350,39 @@
       "prior_year_development_pct": -7.04,
       "direction": "release",
       "prior_year_movement_page": 27,
-      "prior_year_movement_confidence": 0.8,
+      "prior_year_movement_confidence": 0.5,
       "exact_reserve_text": "",
       "primary_causes": [
         "Favorable claims development",
-        "IBNR recalibration",
-        "Reinsurance recoveries"
+        "IBNR recalibration"
       ],
       "specific_events": [],
       "specific_years_affected": [
         2011,
         2012
       ],
-      "prior_year_events": [],
+      "prior_year_events": [
+        {
+          "event_name": "Reinsurance to Close of 2014 year (including 2007 of Syndicate 1208 and 2011 of Syndicate 102)",
+          "event_year": 2017,
+          "impact_description": "Acceptance of the RITC transferred legacy years (including 2007 and 2011 books) into the syndicate, adding legacy reserves and affecting comparability of claims development and reserves.",
+          "lobs_affected": [
+            "Property",
+            "Marine",
+            "Energy",
+            "Aviation",
+            "Professional Lines",
+            "Casualty"
+          ],
+          "amount_gbp_m": null,
+          "confidence": 0.8
+        }
+      ],
       "named_events": [],
-      "standardized_narrative": "The syndicate's opening gross claims outstanding at 1 January 2017 was GBP 14.059m. Analysis of the gross claims development triangle shows a small net prior year release of approximately GBP 0.99m (about 7.0% of opening reserves), driven by favourable development on older underwriting years (notably a release on the 2011 underwriting year partially offset by a small strengthening on 2012). Movements reflect IBNR recalibration and reinsurer recoveries; no specific large named events are quantified as driving the movement.",
+      "standardized_narrative": "The syndicate's gross claims outstanding decreased modestly from GBP 14.059m at the opening balance to GBP 11.701m at year end, with prior-year development implying an overall small release of approximately GBP 0.99m. The claims development triangle shows favourable development in the 2011 underwriting year more than offsetting a small adverse movement in 2012. Interpretation is complicated by RITC activity bringing legacy years into the syndicate and by historical volatility in the liability book.",
       "raw_causal_phrases": [
-        "the main factor being the continuing assessment of the reserving position due to historic volatility experienced in the liability book",
-        "The most critical assumption as regards claims provisions is that the past is a reasonable predictor of the likely level of claims development",
-        "The provision also includes the estimated cost of claims incurred but not reported (IBNR) at the balance sheet date based on statistical methods",
-        "The uncertainty within technical provisions may be mitigated by the element of reinsurers' share"
+        "the continuing assessment of the reserving position due to historic volatility experienced in the liability book.",
+        "The most uncertain element within these technical provisions is the amount for claims outstanding which covers amounts where either the claim has been notified to the syndicate or where there has not yet been a notification or although notified there has been insufficient information to date to be certain regarding its ultimate costs."
       ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 124.0,
@@ -419,7 +436,7 @@
       "gross_premium_page": 26,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior year development was not stated explicitly as a single gross figure in narrative. The gross prior year movement was computed from the gross claims development (triangle) as the primary gross source. No verbatim sentence describing the prior-year gross reserve movement was found. RITC activity is present in the syndicate history and may distort development patterns; triangle-based PYD should be treated with caution.",
+      "data_quality_notes": "Prior-year development computed from the gross claims development triangle (pages 26-27). Triangle covers only two underwriting years (2011 and 2012) and RITC activity (acceptance of 2014 RITC into 2017) may distort comparability; no explicit sentence quantifying gross prior-year movement was found. Amounts in reports are presented in GBP 000; conversions to millions performed by dividing by 1,000. Prior-year development therefore has moderate confidence.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -431,54 +448,46 @@
         ],
         "development_rows": [
           [
-            null,
-            null
+            60526,
+            18240
           ],
           [
-            60.526,
-            18.24
+            52349,
+            13030
           ],
           [
-            52.349,
-            13.03
+            57842,
+            9875
           ],
           [
-            57.842,
-            9.875
+            62834,
+            9855
           ],
           [
-            62.834,
-            9.855
+            55610,
+            11351
           ],
           [
-            55.61,
-            11.351
+            57463,
+            11375
           ],
           [
-            57.463,
-            11.375
-          ],
-          [
-            56.449,
+            56449,
             null
           ]
         ]
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_3330_2017_llm.pdf",
-      "content_hash": "cc0eb76e7e835987f0f83fb5ff43a197641cdaf508ae394e6962d2c3534b7ed3",
-      "standardized_at": "2026-07-05T15:08:37.999346+00:00",
+      "content_hash": "bd209da20fb450d12e66321f1ce14f46d7c3a618dff9ff523d56ee8bfff75f20",
+      "standardized_at": "2026-09-11T12:37:04.878647+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 13312,
-        "output_tokens": 5919,
-        "total_tokens": 19231,
-        "cost_usd": 0.015166
-      },
-      "_served_from": {
-        "cache_file": "f3378b6e71f5b6d2ea0fbb2aae67cfceef18fade5426167c907b2433339c5292.json",
-        "prompt_version": "2.10"
+        "input_tokens": 14072,
+        "output_tokens": 6615,
+        "total_tokens": 20687,
+        "cost_usd": 0.016748
       },
       "_pyd_route": {
         "source": "rag_triangle",
@@ -495,6 +504,7 @@
         "currency": "GBP",
         "units": "thousands",
         "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012
@@ -528,6 +538,15 @@
             56449.0,
             null
           ]
+        ],
+        "row_labels": [
+          "After one year",
+          "After two years",
+          "After three years",
+          "After four years",
+          "After five years",
+          "After six years",
+          "After seven years"
         ],
         "source_page": 29,
         "entity": 3330
@@ -670,12 +689,12 @@
       }
     }
   },
-  "total_cost_usd": 0.02091,
-  "total_tokens": 35364,
+  "total_cost_usd": 0.022978,
+  "total_tokens": 38248,
   "validation": {
     "passed": true,
-    "total_discrepancies": 12,
-    "within_tolerance": 12,
+    "total_discrepancies": 18,
+    "within_tolerance": 18,
     "hard_failures": 0,
     "hard_failure_details": []
   }

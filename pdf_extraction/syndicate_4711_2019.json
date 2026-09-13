@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T11:48:43.085814+00:00",
+  "extraction_timestamp": "2026-09-13T04:06:40.537491+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -18,7 +20,7 @@
       "direction": "strengthening",
       "prior_year_movement_page": 16,
       "prior_year_movement_confidence": 0.8,
-      "exact_reserve_text": "The segment reported a loss for the year, with better than expected current year losses across the segment being offset by deterioration in the prior years for Marine & Energy Liability. The segment showed a sizable loss due to current year losses and prior year deterioration in the Accident & Health account. The gross claims development table on page 16 indicates an overall strengthening of GBP 54.892m for underwriting years 2011-2017.",
+      "exact_reserve_text": "Overall premium for the year has decreased to GBP 379.4m (2018: GBP 387.8m), with the loss for the financial year of GBP 57.4m reflecting the challenging market conditions currently being faced and higher than expected prior year losses, predominantly in Marine & Energy Liability. The segment showed a sizable loss due to current year losses and prior year deterioration in the Accident & Health account.",
       "primary_causes": [
         "Adverse claims development"
       ],
@@ -34,7 +36,7 @@
       ],
       "prior_year_events": [
         {
-          "event_name": "Marine & Energy Liability prior years",
+          "event_name": "Marine & Energy Liability prior year deterioration",
           "event_year": null,
           "impact_description": "deterioration in the prior years for Marine & Energy Liability",
           "lobs_affected": [
@@ -45,7 +47,7 @@
           "confidence": 0.5
         },
         {
-          "event_name": "Accident & Health prior years",
+          "event_name": "Accident & Health prior year deterioration",
           "event_year": null,
           "impact_description": "prior year deterioration in the Accident & Health account",
           "lobs_affected": [
@@ -55,9 +57,21 @@
           "confidence": 0.5
         }
       ],
-      "named_events": [],
-      "standardized_narrative": "The syndicate experienced an overall gross prior year strengthening of GBP 54.892m, representing 6.88% of opening gross reserves. This adverse development was primarily driven by deterioration in prior years for Marine & Energy Liability and Accident & Health accounts, as indicated in the Directors' Report and confirmed by the gross claims development triangle for underwriting years 2011-2017.",
+      "named_events": [
+        {
+          "event_name": "coronavirus (COVID-19) outbreak",
+          "event_year": 2019,
+          "event_type": "other",
+          "net_loss_gbp_m": null,
+          "loss_description": "We currently do not anticipate that this outbreak will have a material impact on our operations, our insurance exposures or the value or liquidity of our investments, however, due to the evolving and highly uncertain nature of this event, it currently is not possible to provide an estimate of the potential impacts.",
+          "lobs_affected": [],
+          "page": 6,
+          "confidence": 0.8
+        }
+      ],
+      "standardized_narrative": "The syndicate's prior year development for 2019, calculated from the gross claims development triangle, indicates a release of GBP 18.424 million. However, the Managing Agent's report explicitly states that the loss for the financial year reflects \"higher than expected prior year losses, predominantly in Marine & Energy Liability\" and \"prior year deterioration in the Accident & Health account,\" suggesting adverse development. This qualitative narrative contradicts the quantitative result from the gross claims development triangle.",
       "raw_causal_phrases": [
+        "higher than expected prior year losses",
         "deterioration in the prior years for Marine & Energy Liability",
         "prior year deterioration in the Accident & Health account"
       ],
@@ -125,7 +139,7 @@
       "gross_premium_page": 22,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior year development was calculated from the gross claims development triangle as no explicit prior year movement figure was provided in the notes or narrative. [RAG OVERRIDE: Model said PYD=54.892, RAG triangle computed 59.303. Using RAG value.]",
+      "data_quality_notes": "The gross prior year development calculated from the claims development triangle shows a release of GBP 18.424m, which contradicts the narrative in the Managing Agent's report on pages 3 and 4, which explicitly states 'higher than expected prior year losses' and 'prior year deterioration' for specific lines of business, implying adverse development. The triangle calculation is used for the quantitative figure as per instructions, but the narrative suggests a different qualitative outcome. [RAG OVERRIDE: Model said PYD=-18.424, RAG triangle computed 59.303. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -246,20 +260,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_4711_2019_llm.pdf",
-      "content_hash": "a5816338ef261177153146857cd79a033207597dc1a0eeca6b8cf5e5f7b87bac",
-      "standardized_at": "2026-03-19T04:18:32.345527+00:00",
+      "content_hash": "112076daddf865cfa1125b43fd7bba8dfe74af902a7e6c0c10b9ccf4dfda62d3",
+      "standardized_at": "2026-09-11T13:04:07.469522+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 12185,
-        "output_tokens": 2062,
-        "total_tokens": 18240,
-        "cost_usd": 0.00881
+        "input_tokens": 12989,
+        "output_tokens": 2311,
+        "total_tokens": 23049,
+        "cost_usd": 0.009674
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 59.303,
+        "model_value": -18.424,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 31,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -371,6 +397,17 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "Estimate of gross claims at end of underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later",
+          "Seven years later",
+          "Eight years later"
         ],
         "source_page": 31,
         "entity": 4711
@@ -558,46 +595,64 @@
       "prior_year_development_gbp_m": 59.303,
       "prior_year_development_pct": 7.44,
       "direction": "strengthening",
-      "prior_year_movement_page": null,
-      "prior_year_movement_confidence": 0.0,
+      "prior_year_movement_page": 30,
+      "prior_year_movement_confidence": 0.8,
       "exact_reserve_text": "",
       "primary_causes": [
         "Adverse claims development",
-        "Reinsurance recoveries",
         "Large loss development",
-        "Other"
+        "Reinsurance recoveries"
       ],
       "specific_events": [],
       "specific_years_affected": [
+        2011,
+        2012,
+        2013,
+        2014,
         2015,
         2016,
-        2017,
-        2018,
-        2019
+        2017
       ],
       "prior_year_events": [
         {
-          "event_name": "Adjustment of historical excess of loss ceded reinsurance contracts",
-          "event_year": 2019,
-          "impact_description": "Delayed recognition of ceded premium adjustments for a limited number of historical excess of loss ceded reinsurance contracts; described as a cumulative adjustment recognised in 2019",
-          "lobs_affected": [
-            "Reinsurance - Specialty",
-            "Reinsurance - Casualty"
-          ],
-          "amount_gbp_m": null,
-          "confidence": 0.3
+          "event_name": "2017 underwriting year adverse development",
+          "event_year": 2017,
+          "impact_description": "Adverse development on the 2017 underwriting year was the single largest contributor to prior year strengthening observed in the claims development table.",
+          "lobs_affected": [],
+          "amount_gbp_m": 70.805,
+          "confidence": 0.7
         }
       ],
       "named_events": [],
-      "standardized_narrative": "Opening gross claims outstanding at 1 January 2019 were GBP 797.389m (balance sheet). The report does not provide a single explicit gross prior-year reserve movement figure labeled as 'movement in prior years' suitable for direct extraction; technical reserves reconciling tables show overall gross changes in claims outstanding during 2019 but do not isolate a gross prioryear development number. Narrative references cite adverse claims development (notably deterioration in Marine & Energy Liability) and issues relating to ceded reinsurance adjustments in 2019 which affected recoveries. As a result the net movement shown in the technical provisions table is small (net -1.034m) but a gross, prior-year-only strengthening/release figure is not clearly stated in gross terms in the report.",
+      "standardized_narrative": "Opening gross claims outstanding at 1 January 2019 were GBP 797.389m. Using the gross claims development table, the syndicate recorded net adverse prior-year development of approximately GBP 59.3m in 2019 (a strengthening of reserves), driven largely by adverse development in older underwriting years (notably the 2017 year). The movement appears to be driven by adverse claims development and large loss development, with some impact from reinsurance/counterparty adjustments referenced elsewhere in the report.",
       "raw_causal_phrases": [
-        "adverse claims development",
+        "higher than expected prior year losses, predominantly in Marine & Energy Liability",
         "deterioration in Marine & Energy Liability",
-        "identified the need for recording additional adjustment premiums for a limited number of historical excess of loss ceded reinsurance contracts",
-        "delay in the recognition of ceded premium adjustments for these contracts",
-        "additional ceded premiums constituted a $11.9m cumulative adjustment in 2019"
+        "adverse claims development versus plan"
       ],
-      "lob_movements": [],
+      "lob_movements": [
+        {
+          "line_of_business": "Marine",
+          "direction": "strengthening",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.8
+        },
+        {
+          "line_of_business": "Energy",
+          "direction": "strengthening",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.8
+        },
+        {
+          "line_of_business": "Accident & Health",
+          "direction": "strengthening",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.8
+        }
+      ],
       "gross_premiums_written_gbp_m": 379.4,
       "gross_premium_mix": [
         {
@@ -639,11 +694,11 @@
       "gross_premium_page": 41,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Opening gross claims outstanding taken from Balance Sheet (Claims outstanding, liabilities) - clear and high confidence. The report does not present an explicit GROSS prior-year-only movement figure labelled as 'movement in prior year provision' suitable for extraction. The technical provisions reconciliation shows an overall gross change in claims outstanding during 2019 (gross change GBP 71.765k) but that is the total movement (includes current year development and new claims) and is not the same as 'prior year development' as required by the task. A net prior year movement (net of reinsurance) of -GBP 1.034m is shown in the Technical Provisions table; using that would be net, not gross - per instructions net values are a last resort. Given absence of a clearly labelled gross PYD figure, prior_year_development_gbp_m is returned as null. Claims development triangle is provided and could be used as a last-resort quantitative source to compute PYD, but the report also contains reinsurance and portfolio adjustments (including recognition delays and ceded adjustments) that may distort triangle-derived PYD; users should treat PYD as not directly extractable without further actuarial reconciliation.",
+      "data_quality_notes": "Opening reserves taken from Balance Sheet (Liabilities: Claims outstanding) 2018 comparative column. Prior-year development computed from the gross claims development table (claims development triangle) by summing diagonal changes for underwriting years up to and including 2017; triangle is presented in GBP 000 in the report and was used to compute a gross PYD of GBP 59.283m. No explicit single-sentence narrative quantifying the gross prior-year movement was found; the P&L 'change in provision for claims outstanding' line is a total-year movement (includes current year) and was not used as the prior-year movement. Some table alignment required interpretation from scanned images; confidence in triangle-derived amount is medium-high (0.8).",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
-        "units": "millions",
+        "units": "thousands",
         "page": 30,
         "underwriting_years": [
           2011,
@@ -658,76 +713,65 @@
         ],
         "development_rows": [
           [
-            74.628,
-            79.193,
-            92.274,
-            78.589,
-            105.607,
-            98.976,
-            114.786,
-            101.344,
-            94.425
+            74628,
+            79193,
+            92274,
+            78589,
+            105607,
+            98976,
+            114786,
+            101344,
+            94425
           ],
           [
-            176.488,
-            165.095,
-            176.27,
-            198.38,
-            250.939,
-            253.774,
-            252.56,
-            257.537,
+            176488,
+            165095,
+            176270,
+            198380,
+            250939,
+            253774,
+            252560,
+            257537,
             null
           ],
           [
-            169.056,
-            178.501,
-            186.192,
-            214.552,
-            240.642,
-            291.247,
-            323.365,
-            null,
-            null
-          ],
-          [
-            165.701,
-            196.279,
-            162.482,
-            207.577,
-            246.528,
-            288.826,
-            null,
+            169056,
+            178501,
+            186192,
+            214552,
+            240642,
+            291247,
+            323365,
             null,
             null
           ],
           [
-            161.412,
-            194.611,
-            169.456,
-            228.068,
-            250.7,
-            null,
+            165701,
+            196279,
+            162482,
+            207577,
+            246528,
+            288826,
             null,
             null,
             null
           ],
           [
-            159.549,
-            196.632,
-            168.342,
-            227.025,
-            null,
+            161412,
+            194611,
+            169456,
+            228068,
+            250700,
             null,
             null,
             null,
             null
           ],
           [
-            156.321,
-            195.966,
-            169.856,
-            null,
+            159549,
+            196632,
+            168342,
+            227025,
             null,
             null,
             null,
@@ -735,9 +779,9 @@
             null
           ],
           [
-            174.827,
-            191.736,
-            null,
+            156321,
+            195986,
+            169856,
             null,
             null,
             null,
@@ -746,7 +790,18 @@
             null
           ],
           [
-            165.333,
+            174827,
+            191736,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            165333,
             null,
             null,
             null,
@@ -757,24 +812,36 @@
             null
           ]
         ],
-        "type_confidence": 0.8
+        "confidence": 0.8
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_4711_2019_llm.pdf",
-      "content_hash": "a5816338ef261177153146857cd79a033207597dc1a0eeca6b8cf5e5f7b87bac",
-      "standardized_at": "2026-03-19T04:19:38.560976+00:00",
+      "content_hash": "112076daddf865cfa1125b43fd7bba8dfe74af902a7e6c0c10b9ccf4dfda62d3",
+      "standardized_at": "2026-09-11T13:08:03.236696+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 28011,
-        "output_tokens": 6720,
-        "total_tokens": 34731,
-        "cost_usd": 0.020443
+        "input_tokens": 28771,
+        "output_tokens": 8916,
+        "total_tokens": 37687,
+        "cost_usd": 0.025025
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 59.303,
+        "model_value": 59.283,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 31,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -886,6 +953,17 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "Estimate of gross claims at end of underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later",
+          "Seven years later",
+          "Eight years later"
         ],
         "source_page": 31,
         "entity": 4711
@@ -1065,12 +1143,12 @@
       }
     }
   },
-  "total_cost_usd": 0.029253,
-  "total_tokens": 52971,
+  "total_cost_usd": 0.034699,
+  "total_tokens": 60736,
   "validation": {
     "passed": true,
-    "total_discrepancies": 24,
-    "within_tolerance": 24,
+    "total_discrepancies": 19,
+    "within_tolerance": 19,
     "hard_failures": 0,
     "hard_failure_details": []
   }

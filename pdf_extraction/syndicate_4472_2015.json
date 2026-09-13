@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T11:39:30.094471+00:00",
+  "extraction_timestamp": "2026-09-13T03:58:28.666228+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -16,73 +18,60 @@
       "prior_year_development_gbp_m": -24.3,
       "prior_year_development_pct": -0.67,
       "direction": "release",
-      "prior_year_movement_page": 2,
+      "prior_year_movement_page": 17,
       "prior_year_movement_confidence": 0.8,
-      "exact_reserve_text": "Gross technical provisions have decreased from $3,605.8m to $3,442.3m as a result of prior year reserve releases primarily on accepted reinsurance business, and sufficient reserving for outstanding claims.",
+      "exact_reserve_text": "The Syndicate's claims ratio improved to 53% (2014: 58%), reflecting a second successive below average Atlantic hurricane season, prior year reserve releases particularly on Marine and Property reinsurance lines, but yet another high incidence of Aviation claims, including Germanwings, Metrojet and the Istanbul airport attacks. Gross technical provisions have decreased from $3,605.8m to $3,442.3m as a result of prior year reserve releases primarily on accepted reinsurance business, and sufficient reserving for outstanding claims.",
       "primary_causes": [
         "Favorable claims development",
+        "Natural catastrophe events",
         "Reinsurance recoveries"
       ],
       "specific_events": [],
       "specific_years_affected": [],
-      "prior_year_events": [],
+      "prior_year_events": [
+        {
+          "event_name": "Benign Atlantic hurricane seasons",
+          "event_year": 2014,
+          "impact_description": "Second successive below average Atlantic hurricane season contributed to prior year reserve releases.",
+          "lobs_affected": [
+            "Marine",
+            "Property"
+          ],
+          "amount_gbp_m": null,
+          "confidence": 0.5
+        }
+      ],
       "named_events": [
         {
           "event_name": "Germanwings",
           "event_year": 2015,
           "event_type": "man_made",
           "net_loss_gbp_m": null,
-          "loss_description": "high incidence of Aviation claims",
+          "loss_description": "High incidence of Aviation claims, including Germanwings.",
           "lobs_affected": [
             "Aviation"
           ],
           "page": 1,
-          "confidence": 1.0
+          "confidence": 0.8
         },
         {
           "event_name": "Metrojet",
           "event_year": 2015,
           "event_type": "man_made",
           "net_loss_gbp_m": null,
-          "loss_description": "high incidence of Aviation claims",
+          "loss_description": "High incidence of Aviation claims, including Metrojet.",
           "lobs_affected": [
             "Aviation"
-          ],
-          "page": 1,
-          "confidence": 1.0
-        },
-        {
-          "event_name": "Istanbul airport attacks",
-          "event_year": 2015,
-          "event_type": "man_made",
-          "net_loss_gbp_m": null,
-          "loss_description": "high incidence of Aviation claims",
-          "lobs_affected": [
-            "Aviation"
-          ],
-          "page": 1,
-          "confidence": 1.0
-        },
-        {
-          "event_name": "Atlantic hurricane season",
-          "event_year": 2015,
-          "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": null,
-          "loss_description": "second successive below average Atlantic hurricane season",
-          "lobs_affected": [
-            "Property"
           ],
           "page": 1,
           "confidence": 0.8
         }
       ],
-      "standardized_narrative": "The syndicate reported a prior year reserve release of $163.5 million in 2015, primarily driven by favorable claims development and reinsurance recoveries, particularly on Marine and Property reinsurance lines. This contributed to an improved claims ratio. The year also saw a second successive below-average Atlantic hurricane season, which was favorable, but experienced a high incidence of Aviation claims from events such as Germanwings, Metrojet, and the Istanbul airport attacks.",
+      "standardized_narrative": "The syndicate reported prior year reserve releases of $125.1 million, primarily driven by favorable claims development in Marine and Property reinsurance lines, influenced by a second successive below-average Atlantic hurricane season. This contributed to an overall decrease in gross technical provisions.",
       "raw_causal_phrases": [
         "prior year reserve releases particularly on Marine and Property reinsurance lines",
         "second successive below average Atlantic hurricane season",
-        "prior year reserve releases primarily on accepted reinsurance business",
-        "sufficient reserving for outstanding claims",
-        "high incidence of Aviation claims, including Germanwings, Metrojet and the Istanbul airport attacks"
+        "prior year reserve releases primarily on accepted reinsurance business"
       ],
       "lob_movements": [
         {
@@ -146,7 +135,7 @@
       "gross_premium_page": 13,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "The prior year development amount is derived from the decrease in total gross technical provisions, as the report explicitly links this decrease to prior year reserve releases. A specific 'Movement in prior year's provision for claims outstanding' note was not found, and the gross claims development triangle could not be used for diagonal comparison as it only presents the current state of the triangle without prior year's estimates for each development stage. [RAG OVERRIDE: Model said PYD=-163.5, RAG triangle computed -24.3. Using RAG value.]",
+      "data_quality_notes": "Prior year development calculated from gross claims development triangle on page 17, as no explicit gross prior year movement note was found. The narrative on pages 1 and 2 confirms prior year reserve releases. The '2010 and prior' column in the claims triangle was excluded from the underwriting_years list as it is an aggregate column, but its contribution was included in the prior_year_development_gbp_m calculation. [RAG OVERRIDE: Model said PYD=-125.1, RAG triangle computed -24.3. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
@@ -165,7 +154,7 @@
             496.4,
             510.6,
             461.3,
-            null
+            461.3
           ],
           [
             916.4,
@@ -199,20 +188,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_4472_2015_llm.pdf",
-      "content_hash": "25522b31b0cdf0c11b938b49bbcaedbfd6793aa560d69732189d0c8aeadf6022",
-      "standardized_at": "2026-03-19T02:53:16.819668+00:00",
+      "content_hash": "e7ad34731b0f9c0eb5a3e4a63fe70696d6329b4e10793b9c30f3238a64b7bb3d",
+      "standardized_at": "2026-09-11T12:56:58.544507+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 11669,
-        "output_tokens": 1848,
-        "total_tokens": 23339,
-        "cost_usd": 0.008121
+        "input_tokens": 12473,
+        "output_tokens": 1759,
+        "total_tokens": 21416,
+        "cost_usd": 0.008139
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -24.3,
+        "model_value": -125.1,
+        "triangle_type": "gross",
+        "triangle_units": "millions",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 40,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "millions",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -256,6 +257,13 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later"
         ],
         "source_page": 40,
         "entity": 4472
@@ -440,13 +448,11 @@
       "prior_year_development_gbp_m": -24.3,
       "prior_year_development_pct": -0.67,
       "direction": "release",
-      "prior_year_movement_page": 3,
+      "prior_year_movement_page": 2,
       "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "Gross technical provisions have decreased from $3,605.8m to $3,442.3m as a result of prior year reserve releases primarily on accepted reinsurance business, and sufficient reserving for outstanding claims. The Syndicate's claims ratio improved to 53% (2014: 58%), reflecting a second successive below average Atlantic hurricane season, prior year reserve releases particularly on Marine and Property reinsurance lines, but yet another high incidence of Aviation claims, including Germanwings, Metrojet and the Istanbul airport attacks.",
+      "exact_reserve_text": "Gross technical provisions have decreased from $3,605.8m to $3,442.3m as a result of prior year reserve releases primarily on accepted reinsurance business, and sufficient reserving for outstanding claims.",
       "primary_causes": [
         "Favorable claims development",
-        "Natural catastrophe events",
-        "Man-made catastrophe / large losses",
         "Reinsurance recoveries"
       ],
       "specific_events": [
@@ -462,73 +468,64 @@
           "event_year": 2015,
           "event_type": "man_made",
           "net_loss_gbp_m": null,
-          "loss_description": "mentioned as part of a high incidence of Aviation claims",
+          "loss_description": "yet another high incidence of Aviation claims, including Germanwings, Metrojet and the Istanbul airport attacks.",
           "lobs_affected": [
             "Aviation"
           ],
           "page": 2,
-          "confidence": 1.0
+          "confidence": 0.8
         },
         {
           "event_name": "Metrojet",
           "event_year": 2015,
           "event_type": "man_made",
           "net_loss_gbp_m": null,
-          "loss_description": "mentioned as part of a high incidence of Aviation claims",
+          "loss_description": "yet another high incidence of Aviation claims, including Germanwings, Metrojet and the Istanbul airport attacks.",
           "lobs_affected": [
             "Aviation"
           ],
           "page": 2,
-          "confidence": 1.0
+          "confidence": 0.8
         },
         {
           "event_name": "Istanbul airport attacks",
           "event_year": 2015,
           "event_type": "man_made",
           "net_loss_gbp_m": null,
-          "loss_description": "mentioned as part of a high incidence of Aviation claims",
+          "loss_description": "yet another high incidence of Aviation claims, including Germanwings, Metrojet and the Istanbul airport attacks.",
           "lobs_affected": [
             "Aviation"
           ],
           "page": 2,
-          "confidence": 1.0
+          "confidence": 0.8
         }
       ],
-      "standardized_narrative": "Gross technical provisions decreased from 3,605.8 to 3,442.3 (USD millions) during 2015, driven primarily by prior-year reserve releases concentrated in accepted reinsurance business and on Marine and Property lines. This favourable development was supported by a below-average Atlantic hurricane season, though it was offset in part by elevated Aviation claims (including Germanwings, Metrojet and Istanbul airport attacks). Overall the movement is described as a release of prior-year reserves.",
+      "standardized_narrative": "Gross claims outstanding reduced from 3,605.8 to 3,442.3 (USD millions) in 2015, a net release of approximately 163.5m driven by prior-year reserve releases primarily on accepted reinsurance business, notably within Marine and Property-related reinsurance portfolios. The report attributes the reduction to favourable claims development and reinsurance outcomes, while noting ongoing reserving for outstanding claims and selected current-year large aviation claims.",
       "raw_causal_phrases": [
         "prior year reserve releases particularly on Marine and Property reinsurance lines",
-        "prior year reserve releases primarily on accepted reinsurance business",
-        "second successive below average Atlantic hurricane season",
-        "yet another high incidence of Aviation claims, including Germanwings, Metrojet and the Istanbul airport attacks"
+        "Gross technical provisions have decreased from $3,605.8m to $3,442.3m as a result of prior year reserve releases primarily on accepted reinsurance business, and sufficient reserving for outstanding claims."
       ],
       "lob_movements": [
-        {
-          "line_of_business": "Marine",
-          "direction": "release",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.8
-        },
         {
           "line_of_business": "Property",
           "direction": "release",
           "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.8
+          "confidence": 0.6
         },
         {
-          "line_of_business": "Treaty",
+          "line_of_business": "Marine",
           "direction": "release",
           "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 1.0
+          "confidence": 0.6
         },
         {
-          "line_of_business": "Aviation",
-          "direction": "strengthening",
+          "line_of_business": "Reinsurance - Specialty",
+          "direction": "release",
           "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 1.0
+          "confidence": 0.4
         }
       ],
       "gross_premiums_written_gbp_m": 1763.2,
@@ -577,7 +574,7 @@
       "gross_premium_page": 25,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "Prior-year development number derived from the reported decrease in gross technical provisions (3,605.8 -> 3,442.3) and the narrative stating this was due to prior year reserve releases. No explicit gross 'movement in prior year's provision for claims outstanding' row with a single gross PYD figure was found. A gross development triangle is present but its diagonal movements appeared inconsistent with the narrative and the change in total gross technical provisions; therefore the reported PYD uses the headline gross provisions change as a proxy. All monetary amounts are reported in the native currency (USD millions) despite field names referencing GBP. [RAG OVERRIDE: Model said PYD=-163.5, RAG triangle computed -24.3. Using RAG value.]",
+      "data_quality_notes": "Prior-year development figure derived from the change in gross claims outstanding between comparative balance sheet columns (3,605.8 -> 3,442.3 = -163.5). No explicit dedicated 'movement in prior year's provision for claims outstanding' gross figure was provided; the report attributes the reduction to prior year reserve releases. A gross claims development triangle is present but its tabular alignment in the PDF is ambiguous; triangle was parsed and included but cells required inferred alignment. All monetary amounts are reported in the report's native currency (USD). [RAG OVERRIDE: Model said PYD=-163.5, RAG triangle computed -24.3. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
@@ -630,20 +627,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_4472_2015_llm.pdf",
-      "content_hash": "25522b31b0cdf0c11b938b49bbcaedbfd6793aa560d69732189d0c8aeadf6022",
-      "standardized_at": "2026-03-19T02:54:35.777647+00:00",
+      "content_hash": "e7ad34731b0f9c0eb5a3e4a63fe70696d6329b4e10793b9c30f3238a64b7bb3d",
+      "standardized_at": "2026-09-11T12:59:26.264551+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 19636,
-        "output_tokens": 9020,
-        "total_tokens": 28656,
-        "cost_usd": 0.022949
+        "input_tokens": 20394,
+        "output_tokens": 8829,
+        "total_tokens": 29223,
+        "cost_usd": 0.022756
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -24.3,
+        "model_value": -163.5,
+        "triangle_type": "gross",
+        "triangle_units": "millions",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 40,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "millions",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -687,6 +696,13 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later"
         ],
         "source_page": 40,
         "entity": 4472
@@ -863,8 +879,8 @@
       }
     }
   },
-  "total_cost_usd": 0.03107,
-  "total_tokens": 51995,
+  "total_cost_usd": 0.030895,
+  "total_tokens": 50639,
   "validation": {
     "passed": true,
     "total_discrepancies": 18,

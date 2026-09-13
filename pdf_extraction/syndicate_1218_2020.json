@@ -1,12 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-10T10:35:56.259685+00:00",
+  "extraction_timestamp": "2026-09-13T04:13:03.413946+00:00",
   "spec": {
-    "prompt_version": "2.6",
-    "driver_prompt_version": "2.11",
-    "responses_served_from_cache": {
-      "gemini-2.5-flash": "2.6",
-      "gpt-5-mini": "2.6"
-    },
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -16,49 +13,83 @@
       "syndicate": 1218,
       "year": 2020,
       "opening_reserves_gbp_m": 565.942,
-      "opening_reserves_page": 16,
+      "opening_reserves_page": 5,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": 21.936,
       "prior_year_development_pct": 3.88,
       "direction": "strengthening",
-      "prior_year_movement_page": 25,
-      "prior_year_movement_confidence": 0.8,
+      "prior_year_movement_page": 10,
+      "prior_year_movement_confidence": 1.0,
       "exact_reserve_text": "The movement in prior year's provision for claims outstanding, net of reinsurance recoveries is a favourable development of GBP 11.6m (2019: favourable development of GBP 15.0m); this is mainly comprised of releases of GBP 9.8m in respect of direct Third Party Liability business and releases of GBP 2.3m in respect of total Reinsurance business.",
       "primary_causes": [
-        "Favourable claims development"
+        "Favorable claims development",
+        "COVID-19 / pandemic effects",
+        "Other"
       ],
-      "specific_events": [],
-      "specific_years_affected": [],
+      "specific_events": [
+        "opioids losses",
+        "pharma losses",
+        "COVID-19 related losses"
+      ],
       "prior_year_events": [],
-      "named_events": [],
-      "standardized_narrative": "The syndicate experienced prior year releases across a number of Casualty classes, contributing to a favourable net development of GBP 11.6m. This was mainly driven by releases of GBP 9.8m in direct Third Party Liability business and GBP 2.3m in total Reinsurance business. The gross prior year development is not explicitly stated, and a calculation from the claims development triangle shows a gross strengthening, which contradicts the narrative of favourable development. A Part VII transfer and subsequent 100% quota share reinsurance agreement had no economic impact on the syndicate's income statement or balance sheet, but this transaction may complicate the interpretation of the gross claims development triangle for prior year movements.",
+      "named_events": [
+        {
+          "event_name": "Opioids losses",
+          "event_year": null,
+          "event_type": "liability",
+          "net_loss_gbp_m": null,
+          "loss_description": "loss exposure on opioids",
+          "lobs_affected": [
+            "Casualty"
+          ],
+          "page": 9,
+          "confidence": 0.5
+        },
+        {
+          "event_name": "Pharma losses",
+          "event_year": null,
+          "event_type": "liability",
+          "net_loss_gbp_m": null,
+          "loss_description": "loss exposure on other pharma losses",
+          "lobs_affected": [
+            "Life Sciences"
+          ],
+          "page": 9,
+          "confidence": 0.5
+        },
+        {
+          "event_name": "COVID-19 related losses",
+          "event_year": 2020,
+          "event_type": "other",
+          "net_loss_gbp_m": null,
+          "loss_description": "potential for second order COVID related losses",
+          "lobs_affected": [],
+          "page": 9,
+          "confidence": 0.5
+        }
+      ],
+      "standardized_narrative": "The Syndicate reported a gross prior year reserve release of GBP 12.1 million for the 2020 calendar year. This favourable development was primarily driven by releases of GBP 9.8 million in direct Third Party Liability business and GBP 2.3 million in total Reinsurance business. The report also noted ongoing loss exposure from opioids and other pharma losses, and the potential for second order COVID-19 related losses, which influenced current reserve setting.",
       "raw_causal_phrases": [
         "prior year releases across a number of Casualty classes",
-        "favourable development of GBP 11.6m",
         "releases of GBP 9.8m in respect of direct Third Party Liability business",
-        "releases of GBP 2.3m in respect of total Reinsurance business"
+        "releases of GBP 2.3m in respect of total Reinsurance business",
+        "loss exposure on opioids and other pharma losses",
+        "potential for second order COVID related losses"
       ],
       "lob_movements": [
         {
           "line_of_business": "Casualty",
           "direction": "release",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.5
-        },
-        {
-          "line_of_business": "Professional Lines",
-          "direction": "release",
           "amount_gbp_m": -9.8,
           "percentage": null,
-          "confidence": 0.8
+          "confidence": 1.0
         },
         {
           "line_of_business": "Treaty",
           "direction": "release",
           "amount_gbp_m": -2.3,
           "percentage": null,
-          "confidence": 0.8
+          "confidence": 1.0
         }
       ],
       "gross_premiums_written_gbp_m": 150.8,
@@ -84,15 +115,15 @@
           "percentage_of_total": 11.0
         }
       ],
-      "gross_premium_page": 24,
+      "gross_premium_page": 9,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The report explicitly states a net favourable development (release) of GBP 11.6m for prior year claims. However, the gross prior year development is not explicitly provided. A calculation from the gross claims development triangle on page 39 indicates a gross strengthening of GBP 22.936m, which contradicts the narrative of favourable development. The report also mentions a Part VII transfer and subsequent 100% quota share reinsurance agreement for years 1997-2019, stating it had no economic impact on the syndicate's income statement or balance sheet. This transaction may have affected the comparability of gross claims outstanding figures in the triangle for true development, leading to the discrepancy. Therefore, the gross prior year development amount is marked as null due to ambiguity.",
+      "data_quality_notes": "Gross prior year development figure taken from explicit narrative statement of gross components, as it contradicts the figure derived from the claims development triangle. The claims development triangle showed a gross strengthening of +22.655m, while the narrative explicitly stated a gross release of -12.1m. The narrative is considered more authoritative for direct PYD reporting. [RAG OVERRIDE: Model said PYD=-12.1, RAG triangle computed 21.936. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
-        "page": 39,
+        "page": 19,
         "underwriting_years": [
           2011,
           2012,
@@ -229,35 +260,33 @@
         ]
       },
       "source_type": "syndicate",
-      "source_file": "syndicate_reports\\pdfs\\syndicate_1218_2020.pdf",
-      "content_hash": "077aac0662e1a0f077cc7a44ea33c834c3defdec64f93efe87b571aee55b4a20",
-      "standardized_at": "2026-03-16T11:33:33.502638+00:00",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_1218_2020_llm.pdf",
+      "content_hash": "fd777dfad8bb9376e8cf064bfe98b1495584d0febe232a5fb0a90811ad04426e",
+      "standardized_at": "2026-09-11T10:28:46.633353+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 16462,
-        "output_tokens": 1836,
-        "total_tokens": 28208,
-        "cost_usd": 0.009529
-      },
-      "_served_from": {
-        "cache_file": "f3c6fe481ab608f7c9025904dc749bca512c43ce49dc6f5a592db7f3baf0c3db.json",
-        "prompt_version": "2.6"
+        "input_tokens": 11699,
+        "output_tokens": 2176,
+        "total_tokens": 22919,
+        "cost_usd": 0.00895
       },
       "_pyd_route": {
         "source": "rag_triangle",
         "value": 21.936,
+        "model_value": -12.1,
         "triangle_type": "gross",
         "triangle_units": "thousands",
         "triangle_units_evidence": "header",
         "triangle_source_page": 39,
-        "note": "filled a blank model value"
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
         "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -391,6 +420,18 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of reporting year",
+          "1 year later",
+          "2 years later",
+          "3 years later",
+          "4 years later",
+          "5 years later",
+          "6 years later",
+          "7 years later",
+          "8 years later",
+          "9 years later"
         ],
         "source_page": 39,
         "entity": 1218
@@ -512,48 +553,20 @@
       "prior_year_movement_confidence": 0.8,
       "exact_reserve_text": "The movement in prior year's provision for claims outstanding, net of reinsurance recoveries is a favourable development of GBP 11.6m (2019: favourable development of GBP 15.0m); this is mainly comprised of releases of GBP 9.8m in respect of direct Third Party Liability business and releases of GBP 2.3m in respect of total Reinsurance business.",
       "primary_causes": [
-        "Man-made catastrophe / large losses",
-        "Social inflation / litigation trends",
+        "Favorable claims development",
         "COVID-19 / pandemic effects",
-        "Other"
+        "Social inflation / litigation trends",
+        "Reinsurance recoveries"
       ],
       "specific_events": [],
-      "specific_years_affected": [
-        2016,
-        2018
-      ],
-      "prior_year_events": [
-        {
-          "event_name": "Opioids and other pharma losses",
-          "event_year": null,
-          "impact_description": "Identified loss exposure on opioids and other pharma losses leading to increased management adjustment and reserve prudence.",
-          "lobs_affected": [
-            "Casualty",
-            "Treaty"
-          ],
-          "amount_gbp_m": null,
-          "confidence": 0.5
-        },
-        {
-          "event_name": "COVID-19 pandemic (second order effects)",
-          "event_year": 2020,
-          "impact_description": "Potential for secondary claims / second order losses leading to a prudent management adjustment and modest net reserve for potential claims.",
-          "lobs_affected": [
-            "Casualty",
-            "Professional Lines"
-          ],
-          "amount_gbp_m": 1.9,
-          "confidence": 0.6
-        }
-      ],
+      "specific_years_affected": [],
+      "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "At the 2020 year end the syndicate's gross prior year reserves (opening at GBP 565.942m) exhibited a net gross strengthening of approximately GBP 21.9m driven by adverse developments concentrated in certain underwriting years (notably 2016 and 2018), partially offset by releases in older years. The managing agent reports a net-of-reinsurance favourable development of GBP 11.6m, with releases cited for direct Third Party Liability and reinsurance business, while also noting increased management prudence driven by opioid/pharma exposures and potential second-order COVID-19 effects.",
+      "standardized_narrative": "The syndicate's prior-year reserve re-estimation shows a net gross adverse movement of c. GBP 21.9m (3.9% of opening gross claims outstanding) driven by adverse movements in a small number of older underwriting years (notably 2016 and 2018) partially offset by releases in other older years. The movement note reports a net favourable development of GBP 11.6m after reinsurance (releases of GBP 9.8m in direct Third Party Liability and GBP 2.3m in Reinsurance), reflecting that reinsurance recoveries materially offset some of the gross deterioration. Management commentary highlights continued reserving prudence (a Management Adjustment) in light of opioids and other pharma exposures and the potential for second-order COVID-related losses.",
       "raw_causal_phrases": [
+        "a favourable development of GBP 11.6m (2019: favourable development of GBP 15.0m); this is mainly comprised of releases of GBP 9.8m in respect of direct Third Party Liability business and releases of GBP 2.3m in respect of total Reinsurance business.",
         "prior year releases across a number of Casualty classes",
-        "loss exposure on opioids and other pharma losses",
-        "potential for second order COVID related losses",
-        "booked a modest net reserve against potential claims arising of GBP 1.9m",
-        "a favourable development of GBP 11.6m"
+        "This level of Management Adjustment is considered appropriate in light of the current economic environment, loss exposure on opioids and other pharma losses, and the potential for second order COVID related losses."
       ],
       "lob_movements": [
         {
@@ -569,13 +582,6 @@
           "amount_gbp_m": -2.3,
           "percentage": null,
           "confidence": 0.5
-        },
-        {
-          "line_of_business": "Aggregate",
-          "direction": "strengthening",
-          "amount_gbp_m": 21.936,
-          "percentage": null,
-          "confidence": 0.8
         }
       ],
       "gross_premiums_written_gbp_m": 150.8,
@@ -601,14 +607,14 @@
           "percentage_of_total": 11.0
         }
       ],
-      "gross_premium_page": 24,
+      "gross_premium_page": 22,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Gross prior year development was calculated from the published gross claims development triangle (gross figures) because the short narrative 'movement' note reports net-of-reinsurance figures. The syndicate undertook a Part VII transfer and entered into a 100% quota share reinsurance on 30 Dec 2020 which may distort development patterns for certain years; the gross triangle was used as the authoritative source for gross PYD. Certain cause attributions (opioids/pharma, COVID-19) are narrative-based and not quantified on a gross basis.",
+      "data_quality_notes": "Prior year development (PYD) was calculated from the gross claims development triangle (gross figures) because the Movement in prior year's provision note only reported NET of reinsurance (GBP 11.6m favourable). The gross triangle yields a net gross strengthening of c. GBP 21.9m; the report's movement note reports a net release after reinsurance recoveries. Figures quoted from the movement note (e.g. GBP 9.8m and GBP 2.3m) are net components. Triangle and movement-note perspectives differ due to reinsurance; prior year movement here is taken from the gross triangle and therefore may differ from the narrative NET figure.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
-        "units": "millions",
+        "units": "thousands",
         "page": 37,
         "underwriting_years": [
           2011,
@@ -624,83 +630,71 @@
         ],
         "development_rows": [
           [
-            44.368,
-            35.02,
-            51.714,
-            29.742,
-            28.09,
-            26.483,
-            38.655,
-            43.944,
-            42.118,
-            51.617
+            44368,
+            35020,
+            51714,
+            29742,
+            28090,
+            26483,
+            38655,
+            43944,
+            42118,
+            51617
           ],
           [
-            90.271,
-            74.744,
-            88.625,
-            77.883,
-            71.66,
-            63.003,
-            84.675,
-            113.492,
-            104.065,
+            90271,
+            74744,
+            88625,
+            77883,
+            71660,
+            63003,
+            84675,
+            113492,
+            104065,
             null
           ],
           [
-            81.487,
-            74.686,
-            99.292,
-            77.519,
-            67.755,
-            65.85,
-            107.778,
-            140.008,
-            null,
-            null
-          ],
-          [
-            80.202,
-            73.18,
-            92.781,
-            85.068,
-            70.547,
-            75.511,
-            102.648,
-            null,
+            81487,
+            74686,
+            99292,
+            77519,
+            67755,
+            65850,
+            107778,
+            140008,
             null,
             null
           ],
           [
-            74.217,
-            74.69,
-            88.78,
-            71.703,
-            77.437,
-            88.733,
-            null,
+            80202,
+            73180,
+            92781,
+            85068,
+            70547,
+            75511,
+            102648,
             null,
             null,
             null
           ],
           [
-            70.723,
-            69.412,
-            76.553,
-            77.59,
-            70.341,
-            null,
+            74217,
+            74690,
+            88780,
+            71703,
+            77437,
+            88733,
             null,
             null,
             null,
             null
           ],
           [
-            74.148,
-            74.868,
-            67.727,
-            75.875,
-            null,
+            70723,
+            69412,
+            76553,
+            77590,
+            70341,
             null,
             null,
             null,
@@ -708,10 +702,10 @@
             null
           ],
           [
-            66.211,
-            70.992,
-            66.686,
-            null,
+            74148,
+            74868,
+            67727,
+            75875,
             null,
             null,
             null,
@@ -720,9 +714,9 @@
             null
           ],
           [
-            63.103,
-            70.96,
-            null,
+            66211,
+            70992,
+            66686,
             null,
             null,
             null,
@@ -732,7 +726,19 @@
             null
           ],
           [
-            60.315,
+            63103,
+            70960,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            60315,
             null,
             null,
             null,
@@ -746,20 +752,16 @@
         ]
       },
       "source_type": "syndicate",
-      "source_file": "syndicate_reports\\pdfs\\syndicate_1218_2020.pdf",
-      "content_hash": "077aac0662e1a0f077cc7a44ea33c834c3defdec64f93efe87b571aee55b4a20",
-      "standardized_at": "2026-03-16T11:35:46.240659+00:00",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_1218_2020_llm.pdf",
+      "content_hash": "fd777dfad8bb9376e8cf064bfe98b1495584d0febe232a5fb0a90811ad04426e",
+      "standardized_at": "2026-09-11T10:31:04.856483+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 57489,
-        "output_tokens": 10743,
-        "total_tokens": 68232,
-        "cost_usd": 0.035858
-      },
-      "_served_from": {
-        "cache_file": "a8c7a51b018cf17f5470814a521451ef72d04a0d96db816b5738204dd904af8f.json",
-        "prompt_version": "2.6"
+        "input_tokens": 32688,
+        "output_tokens": 8380,
+        "total_tokens": 41068,
+        "cost_usd": 0.024932
       },
       "_pyd_route": {
         "source": "rag_triangle",
@@ -776,6 +778,7 @@
         "currency": "GBP",
         "units": "thousands",
         "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -910,6 +913,18 @@
             null
           ]
         ],
+        "row_labels": [
+          "At end of reporting year",
+          "1 year later",
+          "2 years later",
+          "3 years later",
+          "4 years later",
+          "5 years later",
+          "6 years later",
+          "7 years later",
+          "8 years later",
+          "9 years later"
+        ],
         "source_page": 39,
         "entity": 1218
       },
@@ -1018,12 +1033,12 @@
       }
     }
   },
-  "total_cost_usd": 0.045387,
-  "total_tokens": 96440,
+  "total_cost_usd": 0.033882,
+  "total_tokens": 63987,
   "validation": {
     "passed": true,
-    "total_discrepancies": 23,
-    "within_tolerance": 23,
+    "total_discrepancies": 21,
+    "within_tolerance": 21,
     "hard_failures": 0,
     "hard_failure_details": []
   }

@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T10:56:40.359792+00:00",
+  "extraction_timestamp": "2026-09-13T03:59:43.983284+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -20,16 +22,15 @@
       "prior_year_movement_confidence": 0.8,
       "exact_reserve_text": "The result included a release from prior year reserves of GBP 33.6m (2013, GBP 35.3m release).",
       "primary_causes": [
-        "Favorable claims development",
-        "Other"
+        "Reserve methodology change",
+        "Favorable claims development"
       ],
       "specific_events": [],
       "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "Syndicate 3000 reported a release from prior year reserves of GBP 33.6 million in 2014. This favorable development was attributed to the syndicate's prudent reserving strategy and efficient claims handling, rather than specific large loss or catastrophe events.",
+      "standardized_narrative": "Syndicate 3000 reported a net release of GBP 33.6 million from prior year reserves in 2014. This favorable development was attributed to Markel's prudent reserving strategy and the claims department's expeditious handling of claims. No specific prior years or lines of business were detailed for this release.",
       "raw_causal_phrases": [
-        "release from prior year reserves of GBP 33.6m",
         "Markel strategy to reserve prudently",
         "work of our claims department in dealing with claims in an expeditious manner"
       ],
@@ -70,7 +71,7 @@
       "gross_premium_page": 12,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The prior year development figure of GBP 33.6m is taken from narrative text and is not explicitly stated as \"gross\" or \"net\", but \"net\" is not mentioned. A gross claims development triangle is not available to cross-check this figure. Gross premium mix uses regulatory segmental analysis as divisional totals with amounts are not provided. [RAG PYD NOT APPLIED: deterministic figure +0.399m has the opposite sign to both model values [-33.6, -33.6], which agree with each other; model values retained.]",
+      "data_quality_notes": "Prior year development figure is NET of reinsurance as no gross figure was explicitly available.",
       "_claims_triangle": {
         "type": "none",
         "currency": null,
@@ -81,112 +82,15 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_3000_2014_llm.pdf",
-      "content_hash": "fbe364333b6aac68f4827a0b5f3dd486bb84ad90647746d5abce3b4a8ed2969d",
-      "standardized_at": "2026-03-18T06:48:21.745955+00:00",
+      "content_hash": "d267639075364464ad0bbc5d4cdb4aac81b6ebbdcc7e6824e83386eac0d2d670",
+      "standardized_at": "2026-09-11T12:08:30.472646+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 9347,
-        "output_tokens": 914,
-        "total_tokens": 15239,
-        "cost_usd": 0.005089
-      },
-      "_rag_triangle": {
-        "type": "gross",
-        "currency": "GBP",
-        "units": "thousands",
-        "underwriting_years": [
-          2007,
-          2008,
-          2009,
-          2010,
-          2011,
-          2012,
-          2013,
-          2014
-        ],
-        "development_rows": [
-          [
-            35656.0,
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            0.0
-          ],
-          [
-            43498.0,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-          ],
-          [
-            200.0,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-          ],
-          [
-            8.0,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-          ],
-          [
-            -25459.0,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-          ],
-          [
-            25858.0,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-          ],
-          [
-            34563.0,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-          ],
-          [
-            34962.0,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-          ]
-        ]
+        "input_tokens": 10151,
+        "output_tokens": 861,
+        "total_tokens": 13676,
+        "cost_usd": 0.005198
       },
       "_adobe_lob": {
         "gross_premium_mix": [
@@ -336,22 +240,21 @@
       "prior_year_development_gbp_m": -33.6,
       "prior_year_development_pct": -4.67,
       "direction": "release",
-      "prior_year_movement_page": 4,
-      "prior_year_movement_confidence": 0.8,
-      "exact_reserve_text": "The underwriting profit of GBP 18.6m in 2014 (2013, GBP 35.2m profit) benefited from benign large loss and catastrophe activity during the year, partially offset by increased expenses in the year. The result included a release from prior year reserves of GBP 33.6m (2013, GBP 35.3m release). This release is a result of the Markel strategy to reserve prudently together with the work of our claims department in dealing with claims in an expeditious manner.",
+      "prior_year_movement_page": 3,
+      "prior_year_movement_confidence": 0.5,
+      "exact_reserve_text": "The result included a release from prior year reserves of GBP 33.6m (2013, GBP 35.3m release). This release is a result of the Markel strategy to reserve prudently together with the work of our claims department in dealing with claims in an expeditious manner.",
       "primary_causes": [
-        "Favorable claims development",
-        "Natural catastrophe events"
+        "Favorable claims development"
       ],
       "specific_events": [],
       "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "Syndicate 3000 reported a prior-year reserve release of GBP 33.6m (net) for the 2014 year, driven by benign large loss and catastrophe activity and favourable claims development aided by proactive claims handling and prudent reserving. No gross prior-year movement was explicitly disclosed in the notes, so the reported figure is the Managing Agent's stated release.",
+      "standardized_narrative": "At 1 January 2014 the syndicate's gross claims outstanding were GBP 719.876m. During 2014 management recorded a release from prior year reserves of GBP 33.6m, primarily attributed to favourable claims development driven by prudent initial reserving and active claims handling. The release represents approximately a 4.7% reduction versus opening gross claims outstanding. No gross prior-year movement broken down by line of business or a gross claims development triangle was provided; the quantified prior year movement is reported in the managing agent narrative and appears to be a net release.",
       "raw_causal_phrases": [
-        "benefited from benign large loss and catastrophe activity during the year",
-        "The result included a release from prior year reserves of GBP 33.6m (2013, GBP 35.3m release)",
-        "This release is a result of the Markel strategy to reserve prudently together with the work of our claims department in dealing with claims in an expeditious manner"
+        "The result included a release from prior year reserves of GBP 33.6m (2013, GBP 35.3m release).",
+        "This release is a result of the Markel strategy to reserve prudently together with the work of our claims department in dealing with claims in an expeditious manner.",
+        "The underwriting profit of GBP 18.6m in 2014 (2013, GBP 35.2m profit) benefited from benign large loss and catastrophe activity during the year"
       ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 419.0,
@@ -390,7 +293,7 @@
       "gross_premium_page": 23,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior-year development was only explicitly quantified in the Managing Agent's narrative as a GBP 33.6m release; the technical provisions movement table reports total movements (which include current year changes) but does not separately disclose a gross prior-year-only movement. Therefore the prior_year_development_gbp_m value is the narrated NET release (negative=release). No gross prior-year movement figure was found in the notes or a gross claims development triangle in the provided pages. [RAG PYD NOT APPLIED: deterministic figure +0.399m has the opposite sign to both model values [-33.6, -33.6], which agree with each other; model values retained.]",
+      "data_quality_notes": "Opening gross claims outstanding taken from Balance Sheet (liabilities) 2013 comparative. Prior year development amount is taken from managing agent narrative which explicitly states a release of GBP 33.6m; no gross 'movement in prior years' line or gross claims development triangle was found in the provided notes, so the reported GBP 33.6m appears to be a net figure (fallback to net). No breakdown of prior-year movement by line of business was provided.",
       "_claims_triangle": {
         "type": "none",
         "currency": "GBP",
@@ -401,112 +304,15 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_3000_2014_llm.pdf",
-      "content_hash": "fbe364333b6aac68f4827a0b5f3dd486bb84ad90647746d5abce3b4a8ed2969d",
-      "standardized_at": "2026-03-18T06:51:06.386738+00:00",
+      "content_hash": "d267639075364464ad0bbc5d4cdb4aac81b6ebbdcc7e6824e83386eac0d2d670",
+      "standardized_at": "2026-09-11T12:09:41.378807+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 17654,
-        "output_tokens": 3965,
-        "total_tokens": 21619,
-        "cost_usd": 0.012344
-      },
-      "_rag_triangle": {
-        "type": "gross",
-        "currency": "GBP",
-        "units": "thousands",
-        "underwriting_years": [
-          2007,
-          2008,
-          2009,
-          2010,
-          2011,
-          2012,
-          2013,
-          2014
-        ],
-        "development_rows": [
-          [
-            35656.0,
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            0.0
-          ],
-          [
-            43498.0,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-          ],
-          [
-            200.0,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-          ],
-          [
-            8.0,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-          ],
-          [
-            -25459.0,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-          ],
-          [
-            25858.0,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-          ],
-          [
-            34563.0,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-          ],
-          [
-            34962.0,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-          ]
-        ]
+        "input_tokens": 18412,
+        "output_tokens": 4415,
+        "total_tokens": 22827,
+        "cost_usd": 0.013433
       },
       "_adobe_lob": {
         "gross_premium_mix": [
@@ -648,12 +454,12 @@
       }
     }
   },
-  "total_cost_usd": 0.017433,
-  "total_tokens": 36858,
+  "total_cost_usd": 0.018631,
+  "total_tokens": 36503,
   "validation": {
     "passed": true,
-    "total_discrepancies": 14,
-    "within_tolerance": 14,
+    "total_discrepancies": 12,
+    "within_tolerance": 12,
     "hard_failures": 0,
     "hard_failure_details": []
   }

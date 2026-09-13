@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T12:26:11.370368+00:00",
+  "extraction_timestamp": "2026-09-13T04:05:35.592292+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -13,33 +15,33 @@
       "opening_reserves_gbp_m": 821.8,
       "opening_reserves_page": 14,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": 0.0,
-      "prior_year_development_pct": 0.0,
-      "direction": "flat",
-      "prior_year_movement_page": 25,
+      "prior_year_development_gbp_m": -16.5,
+      "prior_year_development_pct": -2.0,
+      "direction": "release",
+      "prior_year_movement_page": 4,
       "prior_year_movement_confidence": 0.8,
       "exact_reserve_text": "During 2020 the syndicate released prior year reserves of $16.5m (2019: $3.7m).",
       "primary_causes": [
         "Favorable claims development",
-        "Reinsurance recoveries",
-        "Other"
+        "Natural catastrophe events",
+        "Large loss development",
+        "Adverse claims development",
+        "Economic inflation / claims cost inflation",
+        "COVID-19 / pandemic effects"
       ],
-      "specific_events": [
-        "Storm Dorian",
-        "Typhoons Hagibis",
-        "Faxai"
-      ],
+      "specific_events": [],
       "specific_years_affected": [
-        2019
+        2019,
+        2018
       ],
       "prior_year_events": [
         {
           "event_name": "Storm Dorian",
           "event_year": 2019,
-          "impact_description": "benefitted from releases on some of the 2019 natural catastrophe events",
+          "impact_description": "Property and reinsurance divisions benefited from releases on 2019 natural catastrophe events.",
           "lobs_affected": [
             "Property",
-            "Reinsurance"
+            "Reinsurance - Property"
           ],
           "amount_gbp_m": null,
           "confidence": 0.8
@@ -47,10 +49,10 @@
         {
           "event_name": "Typhoons Hagibis",
           "event_year": 2019,
-          "impact_description": "benefitted from releases on some of the 2019 natural catastrophe events",
+          "impact_description": "Property and reinsurance divisions benefited from releases on 2019 natural catastrophe events.",
           "lobs_affected": [
             "Property",
-            "Reinsurance"
+            "Reinsurance - Property"
           ],
           "amount_gbp_m": null,
           "confidence": 0.8
@@ -58,10 +60,31 @@
         {
           "event_name": "Typhoons Faxai",
           "event_year": 2019,
-          "impact_description": "benefitted from releases on some of the 2019 natural catastrophe events",
+          "impact_description": "Property and reinsurance divisions benefited from releases on 2019 natural catastrophe events.",
           "lobs_affected": [
             "Property",
-            "Reinsurance"
+            "Reinsurance - Property"
+          ],
+          "amount_gbp_m": null,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "COVID-19 pandemic",
+          "event_year": 2019,
+          "impact_description": "The 2019 year of account was adversely affected by claims experience related to the COVID-19 global pandemic, particularly in the contingency book.",
+          "lobs_affected": [
+            "Accident & Health"
+          ],
+          "amount_gbp_m": null,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Claims strengthening on 2018 year of account",
+          "event_year": 2018,
+          "impact_description": "Increased claims and further deterioration on CyEx claims resulted in a claims strengthening on the 2018 year of account.",
+          "lobs_affected": [
+            "Cyber",
+            "Professional Lines"
           ],
           "amount_gbp_m": null,
           "confidence": 0.8
@@ -73,74 +96,140 @@
           "event_year": 2020,
           "event_type": "other",
           "net_loss_gbp_m": null,
-          "loss_description": "syndicate made a loss of $28.5m... mainly due to the COVID-19 pandemic; heavily impacted by the volume of COVID-19 related claims; contingency book was most severely impacted; claims experience related to the COVID-19 global pandemic",
+          "loss_description": "Syndicate made a loss of $28.5m mainly due to the COVID-19 pandemic. Heavily impacted the contingency book due to cancelled events. Also affected 2019 and 2020 years of account.",
           "lobs_affected": [
-            "Aggregate",
-            "Political, Accident & Contingency",
-            "Property"
+            "Accident & Health"
           ],
           "page": 3,
           "confidence": 1.0
         },
         {
-          "event_name": "Hurricanes Laura, Sally, Delta and Zeta",
+          "event_name": "Hurricane Laura",
           "event_year": 2020,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "impacted by natural catastrophe losses; active hurricane season in the US brought losses",
+          "loss_description": "Impacted 2020 year of account with natural catastrophe losses. Active hurricane season in the US brought losses. Wind proved a greater driver of claims.",
           "lobs_affected": [
-            "Aggregate",
-            "Reinsurance"
+            "Property",
+            "Reinsurance - Property"
           ],
           "page": 3,
           "confidence": 1.0
+        },
+        {
+          "event_name": "Hurricane Sally",
+          "event_year": 2020,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "Impacted 2020 year of account with natural catastrophe losses. Active hurricane season in the US brought losses.",
+          "lobs_affected": [
+            "Property",
+            "Reinsurance - Property"
+          ],
+          "page": 3,
+          "confidence": 1.0
+        },
+        {
+          "event_name": "Hurricane Delta",
+          "event_year": 2020,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "Impacted 2020 year of account with natural catastrophe losses. Active hurricane season in the US brought losses.",
+          "lobs_affected": [
+            "Property",
+            "Reinsurance - Property"
+          ],
+          "page": 3,
+          "confidence": 1.0
+        },
+        {
+          "event_name": "Hurricane Zeta",
+          "event_year": 2020,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "Impacted 2020 year of account with natural catastrophe losses. Active hurricane season in the US brought losses.",
+          "lobs_affected": [
+            "Property",
+            "Reinsurance - Property"
+          ],
+          "page": 3,
+          "confidence": 1.0
+        },
+        {
+          "event_name": "Mid-west Derecho",
+          "event_year": 2020,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "Wind continued to prove the greater driver of claims, this year, in the form of Hurricane Laura and Mid-west Derecho.",
+          "lobs_affected": [
+            "Property",
+            "Reinsurance - Property"
+          ],
+          "page": 10,
+          "confidence": 0.8
         },
         {
           "event_name": "Storm Dorian",
           "event_year": 2019,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "benefitted from releases on some of the 2019 natural catastrophe events",
+          "loss_description": "Property and reinsurance divisions benefited from releases on some of the 2019 natural catastrophe events.",
           "lobs_affected": [
             "Property",
-            "Reinsurance"
+            "Reinsurance - Property"
           ],
           "page": 4,
           "confidence": 1.0
         },
         {
-          "event_name": "Typhoons Hagibis and Faxai",
+          "event_name": "Typhoons Hagibis",
           "event_year": 2019,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "benefitted from releases on some of the 2019 natural catastrophe events",
+          "loss_description": "Property and reinsurance divisions benefited from releases on some of the 2019 natural catastrophe events.",
           "lobs_affected": [
             "Property",
-            "Reinsurance"
+            "Reinsurance - Property"
+          ],
+          "page": 4,
+          "confidence": 1.0
+        },
+        {
+          "event_name": "Typhoons Faxai",
+          "event_year": 2019,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "Property and reinsurance divisions benefited from releases on some of the 2019 natural catastrophe events.",
+          "lobs_affected": [
+            "Property",
+            "Reinsurance - Property"
           ],
           "page": 4,
           "confidence": 1.0
         }
       ],
-      "standardized_narrative": "In 2020, Syndicate 623 experienced a gross prior year reserve release of $32.1 million, representing a 3.91% reduction of opening gross claims outstanding. This was primarily driven by favorable claims development in the 2018 underwriting year. The report also notes net prior year reserve releases of $16.5 million, with specific releases in Specialty Lines, Cyber & Executive Risk, and Marine due to remediation actions. Property and Reinsurance divisions benefited from releases related to 2019 natural catastrophe events such as Storm Dorian, Typhoons Hagibis, and Faxai.",
+      "standardized_narrative": "In 2020, Syndicate 623 reported a net release of prior year reserves totaling $16.5 million, representing a 2.0% release of opening gross claims outstanding. This favourable development was primarily driven by releases in the property and reinsurance divisions, benefiting from benign claims experience related to 2019 natural catastrophe events such as Storm Dorian, Typhoons Hagibis, and Faxai. The Cyber & Executive Risk and Specialty Lines divisions also saw releases, although these were somewhat offset by increased claims activity on liability books in recent years. The Political, Accident & Contingency division experienced a strengthening of $0.7 million. The 2018 year of account saw claims strengthening on the cyber and executive risk book due to increased claims activity and claims inflation, while the 2019 year of account was adversely affected by COVID-19 related claims.",
       "raw_causal_phrases": [
         "released prior year reserves of $16.5m",
-        "Specialty Lines and cyber & executive risk had releases of $8.2m and $1.5m respectively",
-        "Action taken in the marine division to remediate selected areas of the account... have resulted in a release of $1.9m in the division",
-        "Both the property and reinsurance divisions have benefitted from releases on some of the 2019 natural catastrophe events, namely Storm Dorian in the US and Typhoons Hagibis and Faxai in Japan"
+        "Both the property and reinsurance divisions have benefitted from releases on some of the 2019 natural catastrophe events, namely Storm Dorian in the US and Typhoons Hagibis and Faxai in Japan.",
+        "Specialty Lines and cyber & executive risk had releases of $8.2m and $1.5m respectively.",
+        "Both specialty lines and cyber & executive risk have been impacted over the past few years by the increased claims seen on their liability books resulting in decreased releases.",
+        "Action taken in the marine division to remediate selected areas of the account... have resulted in a release of $1.9m in the division.",
+        "The 2018 year of account was closed with a loss on capacity of 2.7%... These increased claims have adversely affected the cyber and executive risk book and combined with some further deterioration on CyEx claims, have resulted in a claims strengthening on the 2018 year of account.",
+        "The 2019 year of account currently forecasts to close with a 2.5% loss on capacity having been adversely affected by claims experience related to the COVID-19 global pandemic, particularly in the contingency book."
       ],
       "lob_movements": [
         {
           "line_of_business": "Cyber",
           "direction": "release",
-          "amount_gbp_m": -1.5,
+          "amount_gbp_m": 1.5,
           "percentage": null,
           "confidence": 1.0
         },
         {
           "line_of_business": "Marine",
           "direction": "release",
-          "amount_gbp_m": -1.9,
+          "amount_gbp_m": 1.9,
           "percentage": null,
           "confidence": 1.0
         },
@@ -154,21 +243,21 @@
         {
           "line_of_business": "Property",
           "direction": "release",
-          "amount_gbp_m": -0.7,
+          "amount_gbp_m": 0.7,
           "percentage": null,
           "confidence": 1.0
         },
         {
           "line_of_business": "Reinsurance - Property",
           "direction": "release",
-          "amount_gbp_m": -4.9,
+          "amount_gbp_m": 4.9,
           "percentage": null,
           "confidence": 1.0
         },
         {
           "line_of_business": "Professional Lines",
           "direction": "release",
-          "amount_gbp_m": -8.2,
+          "amount_gbp_m": 8.2,
           "percentage": null,
           "confidence": 1.0
         }
@@ -178,177 +267,57 @@
         {
           "line_of_business": "Cyber & Executive Risk",
           "amount_gbp_m": 148.4,
-          "percentage_of_total": 25
+          "percentage_of_total": 25.0
         },
         {
           "line_of_business": "Marine",
           "amount_gbp_m": 70.5,
-          "percentage_of_total": 12
+          "percentage_of_total": 12.0
         },
         {
           "line_of_business": "Political, Accident & Contingency",
           "amount_gbp_m": 28.1,
-          "percentage_of_total": 5
+          "percentage_of_total": 5.0
         },
         {
           "line_of_business": "Property",
           "amount_gbp_m": 103.4,
-          "percentage_of_total": 17
+          "percentage_of_total": 17.0
         },
         {
           "line_of_business": "Reinsurance",
           "amount_gbp_m": 41.1,
-          "percentage_of_total": 7
+          "percentage_of_total": 7.0
         },
         {
           "line_of_business": "Specialty Lines",
           "amount_gbp_m": 198.4,
-          "percentage_of_total": 34
+          "percentage_of_total": 34.0
         }
       ],
       "gross_premium_page": 21,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "The narrative explicitly states a net prior year reserve release of $16.5m, while the gross claims development triangle indicates a gross release of $32.1m. The gross figure from the triangle is used for 'prior_year_development_gbp_m' as per instructions, with the narrative text copied verbatim for 'exact_reserve_text'. [CODE OVERRIDE: Model said PYD=-32.1, but code computed 0.0 from triangle (OVERRIDE from gemini-2.5-flash triangle). Using code value.]",
+      "data_quality_notes": "The prior year development figure of -16.5m is explicitly stated as 'released prior year reserves' but is likely a net figure, as no gross figure for total prior year development was found. The breakdown by LOB on page 4 also sums to this net figure.",
       "_claims_triangle": {
-        "type": "gross",
-        "currency": "USD",
-        "units": "millions",
-        "page": 25,
-        "underwriting_years": [
-          2011,
-          2012,
-          2013,
-          2014,
-          2015,
-          2016,
-          2017,
-          2018,
-          2019,
-          2020
-        ],
-        "development_rows": [
-          [
-            172.0,
-            155.2,
-            173.8,
-            179.8,
-            208.1,
-            225.5,
-            326.6,
-            394.7,
-            394.7,
-            405.0
-          ],
-          [
-            172.0,
-            155.2,
-            173.8,
-            179.8,
-            208.1,
-            225.5,
-            326.6,
-            362.6,
-            394.7,
-            null
-          ],
-          [
-            172.0,
-            155.2,
-            173.8,
-            179.8,
-            208.1,
-            225.5,
-            326.6,
-            362.6,
-            null,
-            null
-          ],
-          [
-            172.0,
-            155.2,
-            173.8,
-            179.8,
-            208.1,
-            225.5,
-            null,
-            null,
-            null,
-            null
-          ],
-          [
-            172.0,
-            155.2,
-            173.8,
-            179.8,
-            208.1,
-            null,
-            null,
-            null,
-            null,
-            null
-          ],
-          [
-            172.0,
-            155.2,
-            173.8,
-            179.8,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-          ],
-          [
-            172.0,
-            155.2,
-            173.8,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-          ],
-          [
-            172.0,
-            155.2,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-          ],
-          [
-            172.0,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-          ]
-        ]
+        "type": "none",
+        "currency": null,
+        "units": null,
+        "page": null,
+        "underwriting_years": [],
+        "development_rows": []
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_623_2020_llm.pdf",
-      "content_hash": "a4ea4c06fdba6d2fe221a42b026c2552159fe12a4590276d039d3fe9640c74af",
-      "standardized_at": "2026-03-19T06:57:51.300340+00:00",
+      "content_hash": "81b3a91b106675b328274d3f29a4e0b27f7841ea3c57447355a21c60ddc390d5",
+      "standardized_at": "2026-09-11T13:39:21.901807+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 16312,
-        "output_tokens": 3006,
-        "total_tokens": 27893,
-        "cost_usd": 0.012409
+        "input_tokens": 17116,
+        "output_tokens": 3385,
+        "total_tokens": 25540,
+        "cost_usd": 0.013597
       },
       "_entity_binding": {
         "requested_syndicate": 623,
@@ -511,24 +480,21 @@
       "opening_reserves_gbp_m": 821.8,
       "opening_reserves_page": 27,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": 0.0,
-      "prior_year_development_pct": 0.0,
-      "direction": "flat",
+      "prior_year_development_gbp_m": -16.5,
+      "prior_year_development_pct": -2.007,
+      "direction": "release",
       "prior_year_movement_page": 3,
-      "prior_year_movement_confidence": 0.8,
+      "prior_year_movement_confidence": 0.5,
       "exact_reserve_text": "During 2020 the syndicate released prior year reserves of $16.5m (2019: $3.7m). Specialty Lines and cyber & executive risk had releases of $8.2m and $1.5m respectively. Both specialty lines and cyber & executive risk have been impacted over the past few years by the increased claims seen on their liability books resulting in decreased releases. Action taken in the marine division to remediate selected areas of the account, including the closing of the UK marine portfolio in January 2020, have resulted in a release of $1.9m in the division. Both the property and reinsurance divisions have benefitted from releases on some of the 2019 natural catastrophe events, namely Storm Dorian in the US and Typhoons Hagibis and Faxai in Japan.",
       "primary_causes": [
         "Favorable claims development",
-        "Natural catastrophe events"
+        "Natural catastrophe events",
+        "Other"
       ],
       "specific_events": [
         "Storm Dorian",
         "Typhoon Hagibis",
-        "Typhoon Faxai",
-        "Hurricane Laura",
-        "Hurricane Sally",
-        "Hurricane Delta",
-        "Hurricane Zeta"
+        "Typhoon Faxai"
       ],
       "specific_years_affected": [
         2019,
@@ -538,35 +504,35 @@
         {
           "event_name": "Storm Dorian",
           "event_year": 2019,
-          "impact_description": "Benefitted from releases on 2019 natural catastrophe events leading to reserve releases in Property and Reinsurance divisions",
+          "impact_description": "Releases on some of the 2019 natural catastrophe events contributed to reserve releases",
           "lobs_affected": [
             "Property",
             "Treaty"
           ],
           "amount_gbp_m": null,
-          "confidence": 0.5
+          "confidence": 0.8
         },
         {
           "event_name": "Typhoon Hagibis",
           "event_year": 2019,
-          "impact_description": "Benefitted from releases on 2019 natural catastrophe events leading to reserve releases in Property and Reinsurance divisions",
+          "impact_description": "Releases on some of the 2019 natural catastrophe events contributed to reserve releases",
           "lobs_affected": [
             "Property",
             "Treaty"
           ],
           "amount_gbp_m": null,
-          "confidence": 0.5
+          "confidence": 0.8
         },
         {
           "event_name": "Typhoon Faxai",
           "event_year": 2019,
-          "impact_description": "Benefitted from releases on 2019 natural catastrophe events leading to reserve releases in Property and Reinsurance divisions",
+          "impact_description": "Releases on some of the 2019 natural catastrophe events contributed to reserve releases",
           "lobs_affected": [
             "Property",
             "Treaty"
           ],
           "amount_gbp_m": null,
-          "confidence": 0.5
+          "confidence": 0.8
         }
       ],
       "named_events": [
@@ -575,101 +541,132 @@
           "event_year": 2020,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "Part of active hurricane season in the US; contributed to 2020 losses but within expected range",
+          "loss_description": "Impacted 2020 underwriting year (natural catastrophe losses)",
           "lobs_affected": [
             "Property",
             "Treaty"
           ],
           "page": 3,
-          "confidence": 0.8
+          "confidence": 0.9
         },
         {
           "event_name": "Hurricane Sally",
           "event_year": 2020,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "Part of active hurricane season in the US; contributed to 2020 losses but within expected range",
+          "loss_description": "Impacted 2020 underwriting year (natural catastrophe losses)",
           "lobs_affected": [
             "Property",
             "Treaty"
           ],
           "page": 3,
-          "confidence": 0.8
+          "confidence": 0.9
         },
         {
           "event_name": "Hurricane Delta",
           "event_year": 2020,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "Part of active hurricane season in the US; contributed to 2020 losses but within expected range",
+          "loss_description": "Impacted 2020 underwriting year (natural catastrophe losses)",
           "lobs_affected": [
             "Property",
             "Treaty"
           ],
           "page": 3,
-          "confidence": 0.8
+          "confidence": 0.9
         },
         {
           "event_name": "Hurricane Zeta",
           "event_year": 2020,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "Part of active hurricane season in the US; contributed to 2020 losses but within expected range",
+          "loss_description": "Impacted 2020 underwriting year (natural catastrophe losses)",
           "lobs_affected": [
             "Property",
             "Treaty"
           ],
           "page": 3,
-          "confidence": 0.8
+          "confidence": 0.9
         },
         {
           "event_name": "Storm Dorian",
           "event_year": 2019,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "2019 event from which the property and reinsurance divisions benefitted from releases",
+          "loss_description": "Referenced as a 2019 natural catastrophe that benefitted from reserve releases",
           "lobs_affected": [
-            "Property",
-            "Treaty"
+            "Property"
           ],
           "page": 4,
-          "confidence": 0.7
+          "confidence": 0.8
         },
         {
           "event_name": "Typhoon Hagibis",
           "event_year": 2019,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "2019 event from which the property and reinsurance divisions benefitted from releases",
+          "loss_description": "Referenced as a 2019 natural catastrophe that benefitted from reserve releases",
           "lobs_affected": [
-            "Property",
-            "Treaty"
+            "Property"
           ],
           "page": 4,
-          "confidence": 0.7
+          "confidence": 0.8
         },
         {
           "event_name": "Typhoon Faxai",
           "event_year": 2019,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "2019 event from which the property and reinsurance divisions benefitted from releases",
+          "loss_description": "Referenced as a 2019 natural catastrophe that benefitted from reserve releases",
           "lobs_affected": [
-            "Property",
-            "Treaty"
+            "Property"
+          ],
+          "page": 4,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Typhoon Jebi",
+          "event_year": 2018,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "Referenced as a prior catastrophe (2018) with reserve movements",
+          "lobs_affected": [
+            "Property"
           ],
           "page": 4,
           "confidence": 0.7
+        },
+        {
+          "event_name": "Hurricane Irma",
+          "event_year": 2017,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "Referenced in reinsurance commentary as prior significant event",
+          "lobs_affected": [
+            "Treaty"
+          ],
+          "page": 11,
+          "confidence": 0.6
+        },
+        {
+          "event_name": "Mid-west Derecho",
+          "event_year": 2020,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "Cited as a driver of claims in the reinsurance portfolio in 2020",
+          "lobs_affected": [
+            "Treaty"
+          ],
+          "page": 11,
+          "confidence": 0.8
         }
       ],
-      "standardized_narrative": "During 2020 the syndicate recorded net prior-year reserve releases of $16.5m (approximately -2.0% of opening gross claims outstanding of $821.8m). Releases were concentrated in Specialty Lines and Cyber & Executive Risk, and marine remediation (including closure of the UK marine portfolio) contributed to releases. The Property and Reinsurance divisions also benefitted from favourable development on some 2019 natural catastrophe events (Storm Dorian, Typhoons Hagibis and Faxai). The $16.5m figure is reported in the managing agent narrative (net of reinsurance) and a gross movement breakdown by division is not provided in gross terms in the note, so the gross prior-year movement is not directly stated.",
+      "standardized_narrative": "At 1 January 2020 the syndicate's gross claims outstanding were $821.8m. During 2020 the syndicate reported prior year reserve releases of $16.5m (2019: $3.7m), driven largely by favourable claims development in Specialty Lines and Cyber & Executive Risk (releases of $8.2m and $1.5m respectively), remediation actions in Marine (release of $1.9m) and releases arising from settlement/clarification of several 2019 natural catastrophe events (notably Storm Dorian, Typhoon Hagibis and Typhoon Faxai). Overall the prior year movement represented a modest release (approximately 2.0% of opening gross reserves).",
       "raw_causal_phrases": [
-        "During 2020 the syndicate released prior year reserves of $16.5m (2019: $3.7m).",
-        "Specialty Lines and cyber & executive risk had releases of $8.2m and $1.5m respectively.",
-        "Action taken in the marine division to remediate selected areas of the account, including the closing of the UK marine portfolio in January 2020, have resulted in a release of $1.9m in the division.",
-        "Both the property and reinsurance divisions have benefitted from releases on some of the 2019 natural catastrophe events, namely Storm Dorian in the US and Typhoons Hagibis and Faxai in Japan.",
-        "The contingency book was most severely impacted as cancelled events were the main driver of the syndicate losses",
-        "The syndicate has released prior year reserves of $16.5m (2019: $3.7m)."
+        "released prior year reserves of $16.5m (2019: $3.7m)",
+        "Both specialty lines and cyber & executive risk have been impacted over the past few years by the increased claims seen on their liability books resulting in decreased releases",
+        "Action taken in the marine division to remediate selected areas of the account... have resulted in a release of $1.9m in the division",
+        "both the property and reinsurance divisions have benefitted from releases on some of the 2019 natural catastrophe events, namely Storm Dorian in the US and Typhoons Hagibis and Faxai in Japan"
       ],
       "lob_movements": [
         {
@@ -677,42 +674,42 @@
           "direction": "release",
           "amount_gbp_m": -1.5,
           "percentage": null,
-          "confidence": 0.8
+          "confidence": 1.0
         },
         {
           "line_of_business": "Marine",
           "direction": "release",
           "amount_gbp_m": -1.9,
           "percentage": null,
-          "confidence": 0.8
+          "confidence": 1.0
         },
         {
           "line_of_business": "Accident & Health",
           "direction": "strengthening",
           "amount_gbp_m": 0.7,
           "percentage": null,
-          "confidence": 0.6
+          "confidence": 1.0
         },
         {
           "line_of_business": "Property",
           "direction": "release",
           "amount_gbp_m": -0.7,
           "percentage": null,
-          "confidence": 0.8
+          "confidence": 1.0
         },
         {
           "line_of_business": "Treaty",
           "direction": "release",
           "amount_gbp_m": -4.9,
           "percentage": null,
-          "confidence": 0.8
+          "confidence": 1.0
         },
         {
           "line_of_business": "Professional Lines",
           "direction": "release",
           "amount_gbp_m": -8.2,
           "percentage": null,
-          "confidence": 0.8
+          "confidence": 1.0
         }
       ],
       "gross_premiums_written_gbp_m": 589.9,
@@ -740,25 +737,24 @@
         {
           "line_of_business": "Reinsurance",
           "amount_gbp_m": 41.1,
-          "percentage_of_total": 6.97
+          "percentage_of_total": 6.96
         },
         {
           "line_of_business": "Specialty Lines",
           "amount_gbp_m": 198.4,
-          "percentage_of_total": 33.64
+          "percentage_of_total": 33.65
         }
       ],
       "gross_premium_page": 43,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "Opening gross claims outstanding (821.8) taken directly from Balance Sheet (gross). Prior year development figure used is the $16.5m release quoted in the managing agent narrative - this figure is presented net of reinsurance in the narrative and the report does not provide a single explicit GROSS prior-year movement figure. Where the narrative provided division breakdowns these were net of reinsurance; gross PYD was not available, so NET figure used as fallback and flagged here. LOB mapping for some divisions (e.g. Political, Accident & Contingency -> Accident & Health; Specialty Lines -> Professional Lines; Reinsurance -> Treaty) is approximate for standardization. [CODE OVERRIDE: Model said PYD=-16.5, but code computed 0.0 from triangle (OVERRIDE from gemini-2.5-flash triangle). Using code value.]",
+      "data_quality_notes": "The report explicitly states a $16.5m prior year reserve release; however it is not unambiguously labeled as gross vs net in the narrative. The division-level release figures are explicit. Opening gross claims outstanding (821.8) is taken from the balance sheet (gross technical provisions, claims outstanding) and is therefore authoritative. A gross claims development percentage triangle (presented as percentages) is available in the technical provisions notes; the $16.5m figure was used as the prior-year movement primary source despite possible ambiguity whether it is presented net of reinsurance in some narrative contexts. Where mapping to the standard Lloyd's LOB taxonomy was ambiguous (e.g. 'Political, Accident & Contingency') an approximate mapping to the closest standard LOB was used; this is noted as a potential mismatch.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
-        "units": "percentage",
-        "page": 51,
+        "units": "percent",
+        "page": 50,
         "underwriting_years": [
-          2010,
           2011,
           2012,
           2013,
@@ -781,8 +777,7 @@
             72.4,
             68.1,
             65.8,
-            73.4,
-            null
+            73.4
           ],
           [
             61.7,
@@ -794,7 +789,6 @@
             73.2,
             71.0,
             74.8,
-            null,
             null
           ],
           [
@@ -807,7 +801,6 @@
             73.8,
             74.1,
             null,
-            null,
             null
           ],
           [
@@ -818,7 +811,6 @@
             52.2,
             58.4,
             72.5,
-            null,
             null,
             null,
             null
@@ -833,7 +825,6 @@
             null,
             null,
             null,
-            null,
             null
           ],
           [
@@ -842,7 +833,6 @@
             50.1,
             50.1,
             54.9,
-            null,
             null,
             null,
             null,
@@ -859,14 +849,12 @@
             null,
             null,
             null,
-            null,
             null
           ],
           [
             51.0,
             45.2,
             48.8,
-            null,
             null,
             null,
             null,
@@ -885,12 +873,10 @@
             null,
             null,
             null,
-            null,
             null
           ],
           [
             50.7,
-            null,
             null,
             null,
             null,
@@ -905,15 +891,15 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_623_2020_llm.pdf",
-      "content_hash": "a4ea4c06fdba6d2fe221a42b026c2552159fe12a4590276d039d3fe9640c74af",
-      "standardized_at": "2026-03-19T07:00:30.277778+00:00",
+      "content_hash": "81b3a91b106675b328274d3f29a4e0b27f7841ea3c57447355a21c60ddc390d5",
+      "standardized_at": "2026-09-11T13:41:45.573424+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 70575,
-        "output_tokens": 9201,
-        "total_tokens": 79776,
-        "cost_usd": 0.036046
+        "input_tokens": 71294,
+        "output_tokens": 8588,
+        "total_tokens": 79882,
+        "cost_usd": 0.035
       },
       "_entity_binding": {
         "requested_syndicate": 623,
@@ -1071,12 +1057,12 @@
       }
     }
   },
-  "total_cost_usd": 0.048455,
-  "total_tokens": 107669,
+  "total_cost_usd": 0.048597,
+  "total_tokens": 105422,
   "validation": {
     "passed": true,
-    "total_discrepancies": 43,
-    "within_tolerance": 43,
+    "total_discrepancies": 41,
+    "within_tolerance": 41,
     "hard_failures": 0,
     "hard_failure_details": []
   }

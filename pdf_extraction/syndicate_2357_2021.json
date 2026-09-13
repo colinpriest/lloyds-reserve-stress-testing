@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T10:37:31.442690+00:00",
+  "extraction_timestamp": "2026-09-13T04:13:10.867740+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -11,40 +13,48 @@
       "syndicate": 2357,
       "year": 2021,
       "opening_reserves_gbp_m": 745.531,
-      "opening_reserves_page": 4,
+      "opening_reserves_page": 5,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": 2.322,
       "prior_year_development_pct": 0.31,
       "direction": "strengthening",
-      "prior_year_movement_page": 11,
+      "prior_year_movement_page": 1,
       "prior_year_movement_confidence": 0.8,
-      "exact_reserve_text": null,
-      "primary_causes": [],
-      "specific_events": [],
+      "exact_reserve_text": "The Syndicate's underwriting year of account results for the 2019 closed year of account and forecast results for the two open years were as follows: ... 2019 YOA Closed Result/forecast ($'000) (67,937) ... 2020 YOA Open Result/forecast ($'000) (65,140)",
+      "primary_causes": [
+        "Adverse claims development",
+        "Natural catastrophe events"
+      ],
+      "specific_events": [
+        "multiple landfalling hurricanes"
+      ],
       "specific_years_affected": [
-        2016,
-        2017,
-        2018,
-        2019
+        2019,
+        2020
       ],
       "prior_year_events": [],
       "named_events": [
         {
-          "event_name": "multiple landfalling hurricanes in the United States",
+          "event_name": "multiple landfalling hurricanes",
           "event_year": 2021,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
           "loss_description": "impacted by an above average year for natural catastrophe claims, across both the MGA and Reinsurance class particularly as a result of multiple landfalling hurricanes in the United States.",
           "lobs_affected": [
-            "MGA Insurance",
+            "Property",
             "Reinsurance - Property"
           ],
           "page": 14,
           "confidence": 0.8
         }
       ],
-      "standardized_narrative": "The syndicate experienced a slight gross reserve strengthening of $1.969 million for prior underwriting years (2016-2019), representing 0.264% of opening gross claims outstanding. No specific causes for this prior year development were detailed in the report. The current year's results were significantly impacted by an above-average year for natural catastrophe claims, particularly from multiple landfalling hurricanes in the United States, affecting both MGA Insurance and Reinsurance lines.",
-      "raw_causal_phrases": [],
+      "standardized_narrative": "The Syndicate experienced a significant strengthening of prior year reserves totaling $133.077 million, representing 17.85% of opening gross claims outstanding. This adverse development is primarily attributed to losses on the 2019 closed year of account ($67.937 million) and the 2020 open year of account ($65.140 million). Additionally, the 2021 financial year was impacted by an above-average year for natural catastrophe claims, particularly from multiple landfalling hurricanes in the United States, affecting both MGA Insurance and Reinsurance classes.",
+      "raw_causal_phrases": [
+        "Result/forecast ($'000) (67,937)",
+        "Result/forecast ($'000) (65,140)",
+        "an above average year for natural catastrophe claims",
+        "multiple landfalling hurricanes in the United States"
+      ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 662.732,
       "gross_premium_mix": [
@@ -62,7 +72,7 @@
       "gross_premium_page": 1,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "Prior year development was calculated from the gross claims development table as no explicit prior year movement note or narrative was available. [RAG OPENING NOT APPLIED: table value 663.748 (provisions_movement, page 33, unit source header) disagrees with both model values [745.531, 745.531], which agree with each other; the model value is retained and the table value recorded for audit.]",
+      "data_quality_notes": "Prior year development is derived from the sum of losses on the 2019 closed year of account and the 2020 open year of account, as presented in the underwriting year of account results. This differs from the movement in claims incurred derived from the gross claims development triangle, which showed a strengthening of $1.969m. The YOA result is considered a more comprehensive measure of prior year development in this context. [RAG OVERRIDE: Model said PYD=133.077, RAG triangle computed 2.322. Using RAG value.] [RAG OPENING NOT APPLIED: table value 663.748 (provisions_movement, page 33, unit source header) disagrees with both model values [745.531, 745.531], which agree with each other; the model value is retained and the table value recorded for audit.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
@@ -129,20 +139,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_2357_2021_llm.pdf",
-      "content_hash": "21bc84115c3513871d001ec80bf178baf015038f937ee2f353c992b82e1c7aed",
-      "standardized_at": "2026-07-05T12:34:49.135873+00:00",
+      "content_hash": "124535a104c52b84140718ea623371067c36a3d23c17859791cb1ab5bc6f2ed9",
+      "standardized_at": "2026-09-11T11:51:16.413548+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 10121,
-        "output_tokens": 1118,
-        "total_tokens": 16634,
-        "cost_usd": 0.005831
+        "input_tokens": 10925,
+        "output_tokens": 1372,
+        "total_tokens": 20071,
+        "cost_usd": 0.006707
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 2.322,
+        "model_value": 133.077,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 26,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2016,
           2017,
@@ -200,6 +222,14 @@
             550801.0,
             504837.0
           ]
+        ],
+        "row_labels": [
+          "At end of first year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later"
         ],
         "source_page": 26,
         "entity": 2357
@@ -294,12 +324,17 @@
       "direction": "strengthening",
       "prior_year_movement_page": 25,
       "prior_year_movement_confidence": 0.8,
-      "exact_reserve_text": "",
+      "exact_reserve_text": "The following tables show the Syndicate's cumulative incurred claims development, including both claims notified and IBNR for each underwriting year, together with the cumulative payments to date on a gross and net of reinsurance basis at the balance sheet date.\n\nThe Syndicate has elected to translate estimated claims and claims payments at a consistent rate of exchange as determined at the balance sheet date.\n\nThe uncertainty associated with the ultimate claims experience of an underwriting year is greatest when the underwriting year is at an early stage of development and when the risk margin for future experience potentially being more adverse than has been assumed is at its highest. As claims develop, and the ultimate cost of the claims becomes more certain, the relative level of margin should decrease. Due, however, to the uncertainty inherent in the claims estimation process, initial reserves may not always be in a surplus.",
       "primary_causes": [
+        "Adverse claims development",
+        "Favorable claims development",
         "Natural catastrophe events"
       ],
       "specific_events": [],
       "specific_years_affected": [
+        2016,
+        2017,
+        2018,
         2019
       ],
       "prior_year_events": [],
@@ -315,40 +350,56 @@
             "Reinsurance - Property"
           ],
           "page": 29,
-          "confidence": 0.8
+          "confidence": 0.6
         }
       ],
-      "standardized_narrative": "At 1 January 2021 the Syndicate's gross claims outstanding were $745.531m. There is no quantified gross prior year reserve movement disclosed; analysis of the reported gross claims development table indicates effectively flat prior year development (no material release or strengthening). The 2021 underwriting result was driven by an above-average natural catastrophe year (multiple landfalling US hurricanes) which impacted current year claims rather than producing material prior-year reserve movements.",
+      "standardized_narrative": "At 1 January 2021 the Syndicate's gross claims outstanding were $745.531m. Analysis of the gross claims development triangle shows a small net adverse prior-year development of approximately $1.969m (0.26% of opening reserves), i.e. a modest strengthening of reserves. The movement reflects mixed development across older underwriting years (some releases offset by adverse increases), in the context of an above-average natural catastrophe year (multiple US landfalling hurricanes) which impacted both MGA and Reinsurance portfolios.",
       "raw_causal_phrases": [
-        "an above average year for natural catastrophe claims",
-        "multiple landfalling hurricanes in the United States",
-        "On 11 March 2020, the coronavirus (COVID-19) outbreak was officially designated a pandemic by the World Health Organisation (\"WHO\")",
-        "The directors consider that the provisions for gross claims and related reinsurance recoveries are fairly stated on the basis of the information currently available to them."
+        "The result was impacted by an above average year for natural catastrophe claims, across both the MGA and Reinsurance class particularly as a result of multiple landfalling hurricanes in the United States.",
+        "The principal assumption underlying the liability estimates is that the future claims development will follow a similar pattern to past claims development experience.",
+        "Adjustments to the amounts of claims provisions established in prior years are reflected in the financial statements for the period in which the adjustments are made."
       ],
-      "lob_movements": [],
+      "lob_movements": [
+        {
+          "line_of_business": "Property",
+          "direction": "strengthening",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.2
+        },
+        {
+          "line_of_business": "Reinsurance - Property",
+          "direction": "strengthening",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.2
+        }
+      ],
       "gross_premiums_written_gbp_m": 662.732,
       "gross_premium_mix": [
         {
           "line_of_business": "MGA Insurance",
           "amount_gbp_m": 287.101,
-          "percentage_of_total": 43.3
+          "percentage_of_total": 43.29
         },
         {
           "line_of_business": "Reinsurance",
           "amount_gbp_m": 375.631,
-          "percentage_of_total": 56.7
+          "percentage_of_total": 56.71
         }
       ],
-      "gross_premium_page": 29,
+      "gross_premium_page": 4,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "No explicit gross 'movement in prior year's provision for claims outstanding' note was located. Prior year development was calculated from the gross claims development table (gross triangle) as a fallback and results in zero net movement. exact_reserve_text is empty because no single verbatim sentence quantifying gross prior year reserve movement was found. All amounts are in the report's native currency (USD) and presented in millions. [RAG OVERRIDE: Model said PYD=0.0, RAG triangle computed 2.322. Using RAG value.] [RAG OPENING NOT APPLIED: table value 663.748 (provisions_movement, page 33, unit source header) disagrees with both model values [745.531, 745.531], which agree with each other; the model value is retained and the table value recorded for audit.]",
+      "data_quality_notes": "Prior year development computed from the gross claims development triangle (gross of reinsurance) by comparing the current estimate to the previous diagonal for underwriting years <=2019 and summing the differences. No explicit gross 'movement in prior years' figure or narrative gross PYD amount was provided. Amount is small and derived from the triangle; confidence moderate. All amounts are in the report's native currency (USD). [RAG OPENING NOT APPLIED: table value 663.748 (provisions_movement, page 33, unit source header) disagrees with both model values [745.531, 745.531], which agree with each other; the model value is retained and the table value recorded for audit.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "thousands",
         "page": 25,
         "underwriting_years": [
+          2013,
+          2014,
           2016,
           2017,
           2018,
@@ -358,6 +409,8 @@
         ],
         "development_rows": [
           [
+            null,
+            null,
             49792,
             339881,
             533030,
@@ -366,6 +419,8 @@
             504837
           ],
           [
+            null,
+            null,
             55664,
             422078,
             598221,
@@ -374,6 +429,8 @@
             null
           ],
           [
+            null,
+            null,
             52919,
             458268,
             612574,
@@ -382,6 +439,8 @@
             null
           ],
           [
+            null,
+            null,
             52939,
             475729,
             607452,
@@ -390,6 +449,8 @@
             null
           ],
           [
+            null,
+            null,
             52925,
             476416,
             null,
@@ -398,6 +459,8 @@
             null
           ],
           [
+            null,
+            null,
             52572,
             null,
             null,
@@ -409,20 +472,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_2357_2021_llm.pdf",
-      "content_hash": "21bc84115c3513871d001ec80bf178baf015038f937ee2f353c992b82e1c7aed",
-      "standardized_at": "2026-07-05T12:35:48.815490+00:00",
+      "content_hash": "124535a104c52b84140718ea623371067c36a3d23c17859791cb1ab5bc6f2ed9",
+      "standardized_at": "2026-09-11T11:54:40.909558+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 14493,
-        "output_tokens": 7244,
-        "total_tokens": 21737,
-        "cost_usd": 0.018111
+        "input_tokens": 15253,
+        "output_tokens": 7296,
+        "total_tokens": 22549,
+        "cost_usd": 0.018405
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 2.322,
+        "model_value": 1.969,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 26,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2016,
           2017,
@@ -480,6 +555,14 @@
             550801.0,
             504837.0
           ]
+        ],
+        "row_labels": [
+          "At end of first year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later"
         ],
         "source_page": 26,
         "entity": 2357
@@ -564,12 +647,12 @@
       }
     }
   },
-  "total_cost_usd": 0.023942,
-  "total_tokens": 38371,
+  "total_cost_usd": 0.025112,
+  "total_tokens": 42620,
   "validation": {
     "passed": true,
-    "total_discrepancies": 17,
-    "within_tolerance": 17,
+    "total_discrepancies": 22,
+    "within_tolerance": 22,
     "hard_failures": 0,
     "hard_failure_details": []
   }

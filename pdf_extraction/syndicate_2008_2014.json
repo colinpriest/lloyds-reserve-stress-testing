@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T10:14:04.317582+00:00",
+  "extraction_timestamp": "2026-09-13T04:10:06.191879+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -13,7 +15,7 @@
       "opening_reserves_gbp_m": 348.328,
       "opening_reserves_page": 6,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": -9.715,
+      "prior_year_development_gbp_m": -9.714936,
       "prior_year_development_pct": -2.79,
       "direction": "release",
       "prior_year_movement_page": 9,
@@ -24,13 +26,14 @@
       ],
       "specific_events": [],
       "specific_years_affected": [
+        2011,
         2012
       ],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "The syndicate reported a release of GBP 9.715 million in prior year reserves, primarily attributable to favourable incurred development in the 2012 year of account. This favourable development was noted across a number of classes and on certain individual losses, leading to a technical surplus for the incoming RITC years of account.",
+      "standardized_narrative": "The syndicate experienced a net release of GBP 9.715 million in prior year reserves, primarily driven by favourable incurred development on the 2012 year of account, which resulted in a profit transfer to members' personal reserve funds. Favourable development was also noted for the 2011 year of account.",
       "raw_causal_phrases": [
-        "favourable incurred development at an attritional level in a number of classes",
+        "continuing favourable incurred development at an attritional level in a number of classes",
         "favourable developments on certain individual losses"
       ],
       "lob_movements": [],
@@ -75,7 +78,7 @@
       "gross_premium_page": 8,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The prior year development figure is derived from the transfer to members' personal reserve funds for the 2012 year of account, which is a net figure. A gross figure for prior year development was not explicitly available. The 'Other' category in the gross premium mix includes RITC premiums from Syndicate 1110. [RAG PYD NOT APPLIED: deterministic figure +0.179m has the opposite sign to both model values [-9.715, -40.19], which agree with each other; model values retained.]",
+      "data_quality_notes": "Prior year development is reported as a net profit for the 2012 year of account, as no gross prior year development figure or claims development triangle was available.",
       "_claims_triangle": {
         "type": "none",
         "currency": null,
@@ -86,42 +89,15 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_2008_2014_llm.pdf",
-      "content_hash": "c3a9ffae3134f53cb34d93f0b181d40c434889da6a2c8ec4d4f767298c96cfee",
-      "standardized_at": "2026-07-05T11:04:35.728120+00:00",
+      "content_hash": "af7882fd1e72a9f68a80c01b8290ea94f8291e0c523b18e687c28921db904e04",
+      "standardized_at": "2026-09-11T11:32:42.505501+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 8315,
-        "output_tokens": 1022,
-        "total_tokens": 15685,
-        "cost_usd": 0.00505
-      },
-      "_rag_triangle": {
-        "type": "gross",
-        "currency": "GBP",
-        "units": "thousands",
-        "underwriting_years": [
-          2012,
-          2013,
-          2014
-        ],
-        "development_rows": [
-          [
-            7000.0,
-            0.0,
-            7000.0
-          ],
-          [
-            0.0,
-            955.0,
-            null
-          ],
-          [
-            179.0,
-            null,
-            null
-          ]
-        ]
+        "input_tokens": 9119,
+        "output_tokens": 1000,
+        "total_tokens": 13795,
+        "cost_usd": 0.005236
       },
       "_adobe_lob": {
         "gross_premium_mix": [
@@ -242,52 +218,80 @@
       "opening_reserves_gbp_m": 348.328,
       "opening_reserves_page": 12,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": -40.19,
-      "prior_year_development_pct": -11.545,
+      "prior_year_development_gbp_m": -9.322,
+      "prior_year_development_pct": -2.679,
       "direction": "release",
-      "prior_year_movement_page": 12,
+      "prior_year_movement_page": 3,
       "prior_year_movement_confidence": 0.5,
       "exact_reserve_text": "The 2012, 2013 and 2014 years of account have all shown a profit, with syndicate 1200 being the only syndicate showing a loss. The incoming 2011 and 2012 years of account of RITC produced a technical surplus following continuing favourable incurred development at an attritional level in a number of classes as well as favourable developments on certain individual losses.",
       "primary_causes": [
         "Favorable claims development",
-        "Large loss development"
+        "Reinsurance recoveries"
       ],
       "specific_events": [],
       "specific_years_affected": [
         2011,
         2012
       ],
-      "prior_year_events": [
-        {
-          "event_name": "100% quota share reinsurance agreement with syndicate 1200",
-          "event_year": 2012,
-          "impact_description": "Entered into a 100% quota share reinsurance agreement with syndicate 1200 in respect of the majority of the reserves of the 2009 and prior underwriting years of account (transferring/reserving via quota share/RITC arrangements).",
-          "lobs_affected": [
-            "Treaty"
-          ],
-          "amount_gbp_m": null,
-          "confidence": 0.8
-        },
-        {
-          "event_name": "100% quota share ceded to Fitzwilliam (SAC) Insurance Limited in respect of RITC of syndicates 588 and 861",
-          "event_year": 2008,
-          "impact_description": "Syndicate ceded a 100% quota share in respect of the reinsurance to close of syndicates 588 and 861.",
-          "lobs_affected": [
-            "Treaty"
-          ],
-          "amount_gbp_m": null,
-          "confidence": 0.8
-        }
-      ],
+      "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "Gross claims outstanding decreased from GBP 348.328m at the opening of the year to GBP 308.138m at year end, a release of approximately GBP 40.19m (about 11.5% of opening reserves). The Managing Agent attributes prior-year improvement to continuing favourable incurred development at an attritional level across a number of classes and favourable developments on certain individual losses, and the syndicate also utilised quota share/RITC reinsurance arrangements (notably with syndicate 1200) which affected the composition of reserves.",
+      "standardized_narrative": "The syndicate reports a net favourable movement on prior years resulting in a release of reserves. The managing agent states that the incoming 2011 and 2012 RITC years produced a technical surplus driven by continuing favourable incurred development at an attritional level across a number of classes plus favourable development on some individual losses. Overall the prior-year movement aggregated to a net positive contribution to the 2014 result (net prior-year profit ~GBP 9.322m), indicating a release of reserves.",
       "raw_causal_phrases": [
         "continuing favourable incurred development at an attritional level in a number of classes",
         "favourable developments on certain individual losses",
-        "entered into a 100% quota share reinsurance agreement with syndicate 1200 in respect of the majority of the reserves of the 2009 and prior underwriting years of account",
-        "Syndicates 861 and 588 are fully reinsured"
+        "showed stability of our reserves on all syndicates reinsured into syndicate 2008"
       ],
-      "lob_movements": [],
+      "lob_movements": [
+        {
+          "line_of_business": "Accident & Health",
+          "direction": "release",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.5
+        },
+        {
+          "line_of_business": "Motor",
+          "direction": "release",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.5
+        },
+        {
+          "line_of_business": "Marine",
+          "direction": "release",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.5
+        },
+        {
+          "line_of_business": "Aviation",
+          "direction": "release",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.5
+        },
+        {
+          "line_of_business": "Property",
+          "direction": "release",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.5
+        },
+        {
+          "line_of_business": "Casualty",
+          "direction": "release",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.5
+        },
+        {
+          "line_of_business": "Treaty",
+          "direction": "release",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.4
+        }
+      ],
       "gross_premiums_written_gbp_m": 17.8,
       "gross_premium_mix": [
         {
@@ -329,53 +333,26 @@
       "gross_premium_page": 16,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Opening gross claims outstanding taken from Balance Sheet (Liabilities: Claims outstanding) prior-year column. No explicit 'movement in prior year's provision for claims outstanding' gross figure was found in the notes; prior-year development is inferred from the change in gross claims outstanding between opening and closing balances (release of GBP 40.19m). This may conflate current-year reserve movements and effects of quota-share/RITC arrangements; confidence moderate. [RAG PYD NOT APPLIED: deterministic figure +0.179m has the opposite sign to both model values [-9.715, -40.19], which agree with each other; model values retained.]",
+      "data_quality_notes": "Opening gross claims outstanding taken from Balance Sheet (Liabilities: Claims outstanding) on page 12 (gross GBP 000). Prior-year development amount derived from the Managing Agent's year-of-account profit breakdown on page 3 (sum of 2012 and 2013 year-of-account profits = GBP 9,322k) and therefore represents NET prior-year development (net of reinsurance). No explicit 'Movement in prior year's provision for claims outstanding' gross figure or gross claims development triangle was found in the provided pages; RITC activity (incoming 2011 and 2012 years) is mentioned in the report and may distort comparative movements. Prior-year development therefore flagged as NET of reinsurance and reported as a release (-9.322m). If the full notes (movement tables or gross triangle) are available elsewhere in the full accounts, they should be used to replace this net estimate with a gross figure.",
       "_claims_triangle": {
         "type": "none",
         "currency": "GBP",
-        "units": null,
+        "units": "millions",
         "page": null,
         "underwriting_years": [],
         "development_rows": []
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_2008_2014_llm.pdf",
-      "content_hash": "c3a9ffae3134f53cb34d93f0b181d40c434889da6a2c8ec4d4f767298c96cfee",
-      "standardized_at": "2026-07-05T11:05:43.246961+00:00",
+      "content_hash": "af7882fd1e72a9f68a80c01b8290ea94f8291e0c523b18e687c28921db904e04",
+      "standardized_at": "2026-09-11T11:35:55.515214+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 14016,
-        "output_tokens": 5560,
-        "total_tokens": 19576,
-        "cost_usd": 0.014624
-      },
-      "_rag_triangle": {
-        "type": "gross",
-        "currency": "GBP",
-        "units": "thousands",
-        "underwriting_years": [
-          2012,
-          2013,
-          2014
-        ],
-        "development_rows": [
-          [
-            7000.0,
-            0.0,
-            7000.0
-          ],
-          [
-            0.0,
-            955.0,
-            null
-          ],
-          [
-            179.0,
-            null,
-            null
-          ]
-        ]
+        "input_tokens": 14776,
+        "output_tokens": 7337,
+        "total_tokens": 22113,
+        "cost_usd": 0.018368
       },
       "_adobe_lob": {
         "gross_premium_mix": [
@@ -491,25 +468,25 @@
       }
     }
   },
-  "total_cost_usd": 0.019674,
-  "total_tokens": 35261,
+  "total_cost_usd": 0.023604,
+  "total_tokens": 35908,
   "validation": {
     "passed": false,
-    "total_discrepancies": 16,
-    "within_tolerance": 14,
+    "total_discrepancies": 11,
+    "within_tolerance": 9,
     "hard_failures": 2,
     "hard_failure_details": [
       {
         "field": "prior_year_development_gbp_m",
         "type": "value_mismatch",
-        "gemini-2.5-flash": -9.715,
-        "gpt-5-mini": -40.19
+        "gemini-2.5-flash": -9.714936,
+        "gpt-5-mini": -9.322
       },
       {
         "field": "prior_year_development_pct",
         "type": "value_mismatch",
         "gemini-2.5-flash": -2.79,
-        "gpt-5-mini": -11.545
+        "gpt-5-mini": -2.679
       }
     ]
   }

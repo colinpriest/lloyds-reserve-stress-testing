@@ -1,14 +1,609 @@
 {
-  "extraction_timestamp": "2026-07-05T20:26:03.771897+00:00",
+  "extraction_timestamp": "2026-09-13T04:01:04.335284+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
   "source_file": "syndicate_reports\\pdfs\\syndicate_6117_2019.pdf",
-  "no_triangle_data": true,
-  "excluded": true,
-  "exclusion_reason": "No claims development triangle or reserve movement text found in report - recommend non-inclusion in analysis",
-  "syndicate": 6117,
-  "year": 2019
+  "models": {
+    "gemini-2.5-flash": {
+      "syndicate": 6117,
+      "year": 2019,
+      "opening_reserves_gbp_m": 57.6,
+      "opening_reserves_page": 4,
+      "opening_reserves_confidence": 1.0,
+      "prior_year_development_gbp_m": -4.4,
+      "prior_year_development_pct": -7.64,
+      "direction": "release",
+      "prior_year_movement_page": 12,
+      "prior_year_movement_confidence": 0.8,
+      "exact_reserve_text": "The claims development table shows the Syndicate's cumulative incurred claims development, including both claims notified and IBNR for each underwriting year, together with the cumulative payments to date on a gross and net of reinsurance basis at the balance sheet date. For the 2017 underwriting year, the current estimate of cumulative claims incurred is 97.1, compared to 101.5 one year later, indicating a release of 4.4.",
+      "primary_causes": [
+        "Favorable claims development"
+      ],
+      "specific_events": [],
+      "specific_years_affected": [
+        2017
+      ],
+      "prior_year_events": [],
+      "named_events": [
+        {
+          "event_name": "North East Windstorm",
+          "event_year": null,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": 14.7,
+          "loss_description": "Estimated Gross loss 14.7, Estimated Net loss 14.7",
+          "lobs_affected": [],
+          "page": 11,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Florida Windstorm - Miami Dade",
+          "event_year": null,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": 22.7,
+          "loss_description": "Estimated Gross loss 22.7, Estimated Net loss 22.7",
+          "lobs_affected": [],
+          "page": 11,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Florida Windstorm - Pinellas",
+          "event_year": null,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": 32.1,
+          "loss_description": "Estimated Gross loss 32.1, Estimated Net loss 32.1",
+          "lobs_affected": [],
+          "page": 11,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Gulf of Mexico Windstorm - Major Hurricane landing in Galveston, Texas",
+          "event_year": null,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": 26.0,
+          "loss_description": "Estimated Gross loss 26.0, Estimated Net loss 26.0",
+          "lobs_affected": [],
+          "page": 11,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "California Earthquake - San Francisco",
+          "event_year": null,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": 13.3,
+          "loss_description": "Estimated Gross loss 13.3, Estimated Net loss 13.3",
+          "lobs_affected": [],
+          "page": 11,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "California Earthquake - Los Angeles",
+          "event_year": null,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": 20.1,
+          "loss_description": "Estimated Gross loss 20.1, Estimated Net loss 20.1",
+          "lobs_affected": [],
+          "page": 11,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Japanese Earthquake - based on 1923 Great Kanto Earthquake",
+          "event_year": null,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": 11.7,
+          "loss_description": "Estimated Gross loss 11.7, Estimated Net loss 11.7",
+          "lobs_affected": [],
+          "page": 11,
+          "confidence": 0.8
+        }
+      ],
+      "standardized_narrative": "The syndicate experienced a prior year reserve release of GBP 4.4 million, primarily due to favorable claims development on the 2017 underwriting year. This was calculated from the gross claims development table, comparing the current estimate for the 2017 underwriting year to its estimate from the previous diagonal.",
+      "raw_causal_phrases": [],
+      "lob_movements": [],
+      "gross_premiums_written_gbp_m": 77.3,
+      "gross_premium_mix": [
+        {
+          "line_of_business": "Reinsurance acceptances",
+          "amount_gbp_m": 77.3,
+          "percentage_of_total": 100.0
+        }
+      ],
+      "gross_premium_page": 8,
+      "gross_premium_confidence": 1.0,
+      "currency": "GBP",
+      "data_quality_notes": "Prior year development calculated from the gross claims development table by comparing the current estimate for the 2017 underwriting year to its estimate from the previous diagonal. The 2018 and 2019 underwriting years were excluded as they are considered current/recent years.",
+      "_claims_triangle": {
+        "type": "gross",
+        "currency": "GBP",
+        "units": "millions",
+        "page": 12,
+        "underwriting_years": [
+          2017,
+          2018,
+          2019
+        ],
+        "development_rows": [
+          [
+            92.2,
+            68.5,
+            62.2
+          ],
+          [
+            101.5,
+            78.4,
+            null
+          ],
+          [
+            97.1,
+            null,
+            null
+          ]
+        ]
+      },
+      "source_type": "syndicate",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_6117_2019_llm.pdf",
+      "content_hash": "c957b3ed2a8b8f3fa7e56087f69ad35bd10dca7cda9d9be6b78dfd5e2107a1bb",
+      "standardized_at": "2026-09-11T13:41:38.995208+00:00",
+      "standardization_model": "gemini-2.5-flash",
+      "_extraction_meta": {
+        "model": "gemini-2.5-flash",
+        "input_tokens": 12215,
+        "output_tokens": 1560,
+        "total_tokens": 76686,
+        "cost_usd": 0.007565
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -4.4,
+        "model_value": -4.4,
+        "triangle_type": "gross",
+        "triangle_units": "millions",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 27,
+        "note": "confirmed by the model value"
+      },
+      "_rag_triangle": {
+        "type": "gross",
+        "currency": "GBP",
+        "units": "millions",
+        "units_evidence": "header",
+        "cell_binding": "header",
+        "underwriting_years": [
+          2017,
+          2018,
+          2019
+        ],
+        "development_rows": [
+          [
+            92.2,
+            68.5,
+            62.2
+          ],
+          [
+            101.5,
+            78.4,
+            null
+          ],
+          [
+            97.1,
+            null,
+            null
+          ]
+        ],
+        "row_labels": [
+          "At end of underwriting year",
+          "One year later",
+          "Two years later"
+        ],
+        "source_page": 27,
+        "entity": 6117
+      },
+      "_entity_binding": {
+        "requested_syndicate": 6117,
+        "entity_pages": {
+          "none": [
+            0
+          ],
+          "6117": [
+            1,
+            2,
+            3,
+            4,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            44,
+            45
+          ],
+          "1910": [
+            5,
+            6,
+            7,
+            19,
+            41,
+            42,
+            43
+          ]
+        },
+        "foreign_tables_skipped": 8,
+        "foreign_pages": [
+          7,
+          42,
+          43
+        ],
+        "underwriting_year_pages": [
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46
+        ],
+        "underwriting_year_tables_skipped": 4,
+        "document_unit_hint": 1.0
+      }
+    },
+    "gpt-5-mini": {
+      "syndicate": 6117,
+      "year": 2019,
+      "opening_reserves_gbp_m": 57.6,
+      "opening_reserves_page": 13,
+      "opening_reserves_confidence": 1.0,
+      "prior_year_development_gbp_m": -4.4,
+      "prior_year_development_pct": -7.64,
+      "direction": "release",
+      "prior_year_movement_page": 24,
+      "prior_year_movement_confidence": 0.8,
+      "exact_reserve_text": "In 2019 the surplus was GBP 6.2m (2018 the surplus was GBP 6.1m).",
+      "primary_causes": [
+        "Favorable claims development"
+      ],
+      "specific_events": [],
+      "specific_years_affected": [
+        2017
+      ],
+      "prior_year_events": [
+        {
+          "event_name": "2017 underwriting year favourable development",
+          "event_year": 2017,
+          "impact_description": "Favourable development on the 2017 underwriting year resulting in a net release of reserves (improvement in estimated cumulative claims).",
+          "lobs_affected": [
+            "Treaty"
+          ],
+          "amount_gbp_m": -4.4,
+          "confidence": 0.8
+        }
+      ],
+      "named_events": [
+        {
+          "event_name": "Two events - North East Windstorm",
+          "event_year": null,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": 14.7,
+          "loss_description": "Hypothetical gross/net estimated loss for catastrophe exposure",
+          "lobs_affected": [
+            "Property"
+          ],
+          "page": 23,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Florida Windstorm - Miami Dade",
+          "event_year": null,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": 22.7,
+          "loss_description": "Hypothetical gross/net estimated loss for catastrophe exposure",
+          "lobs_affected": [
+            "Property"
+          ],
+          "page": 23,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Florida Windstorm - Pinellas",
+          "event_year": null,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": 32.1,
+          "loss_description": "Hypothetical gross/net estimated loss for catastrophe exposure",
+          "lobs_affected": [
+            "Property"
+          ],
+          "page": 23,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Gulf of Mexico Windstorm - Major Hurricane landing in Galveston, Texas",
+          "event_year": null,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": 26.0,
+          "loss_description": "Hypothetical gross/net estimated loss for catastrophe exposure",
+          "lobs_affected": [
+            "Property"
+          ],
+          "page": 23,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "California Earthquake - San Francisco",
+          "event_year": null,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": 13.3,
+          "loss_description": "Hypothetical gross/net estimated loss for catastrophe exposure",
+          "lobs_affected": [
+            "Property"
+          ],
+          "page": 23,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "California Earthquake - Los Angeles",
+          "event_year": null,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": 20.1,
+          "loss_description": "Hypothetical gross/net estimated loss for catastrophe exposure",
+          "lobs_affected": [
+            "Property"
+          ],
+          "page": 23,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Japanese Earthquake - based on 1923 Great Kanto Earthquake",
+          "event_year": 1923,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": 11.7,
+          "loss_description": "Hypothetical gross/net estimated loss for catastrophe exposure",
+          "lobs_affected": [
+            "Property"
+          ],
+          "page": 23,
+          "confidence": 0.8
+        }
+      ],
+      "standardized_narrative": "Syndicate 6117 opened 2019 with gross claims outstanding of GBP 57.6m (2018). Analysis of the claims development triangle shows a favourable prior-year development of GBP 4.4m (a release), driven primarily by improvement on the 2017 underwriting year and resulting in a reported surplus of GBP 6.2m at 2019 year end. The syndicate's business is written as reinsurance acceptances (treaty).",
+      "raw_causal_phrases": [
+        "In 2019 the surplus was GBP 6.2m (2018 the surplus was GBP 6.1m)."
+      ],
+      "lob_movements": [
+        {
+          "line_of_business": "Treaty",
+          "direction": "release",
+          "amount_gbp_m": -4.4,
+          "percentage": -7.6,
+          "confidence": 0.8
+        }
+      ],
+      "gross_premiums_written_gbp_m": 77.3,
+      "gross_premium_mix": [
+        {
+          "line_of_business": "Reinsurance acceptances",
+          "amount_gbp_m": 77.3,
+          "percentage_of_total": 100.0
+        }
+      ],
+      "gross_premium_page": 18,
+      "gross_premium_confidence": 1.0,
+      "currency": "GBP",
+      "data_quality_notes": "Opening gross claims outstanding taken from the Statement of Financial Position (Claims outstanding, 2018 column). Prior-year development derived from the gross claims development table (claims triangle) by comparing the 2017 column current estimate to its previous diagonal (one year earlier) producing a GBP 4.4m favourable movement (release). The 2017 underwriting year had closed/reinsured to the host syndicate in the underwriting year accounts context; RITC activity is noted elsewhere in the report and may distort some comparatives but the triangle values were used as primary source. No explicit single-line 'movement in prior years' gross figure was presented; a net surplus sentence was present and is quoted verbatim.",
+      "_claims_triangle": {
+        "type": "gross",
+        "currency": "GBP",
+        "units": "millions",
+        "page": 24,
+        "underwriting_years": [
+          2017,
+          2018,
+          2019
+        ],
+        "development_rows": [
+          [
+            92.2,
+            68.5,
+            62.2
+          ],
+          [
+            101.5,
+            78.4,
+            null
+          ],
+          [
+            97.1,
+            null,
+            null
+          ]
+        ]
+      },
+      "source_type": "syndicate",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_6117_2019_llm.pdf",
+      "content_hash": "c957b3ed2a8b8f3fa7e56087f69ad35bd10dca7cda9d9be6b78dfd5e2107a1bb",
+      "standardized_at": "2026-09-11T13:43:21.719759+00:00",
+      "standardization_model": "gpt-5-mini",
+      "_extraction_meta": {
+        "model": "gpt-5-mini",
+        "input_tokens": 25972,
+        "output_tokens": 5939,
+        "total_tokens": 31911,
+        "cost_usd": 0.018371
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -4.4,
+        "model_value": -4.4,
+        "triangle_type": "gross",
+        "triangle_units": "millions",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 27,
+        "note": "confirmed by the model value"
+      },
+      "_rag_triangle": {
+        "type": "gross",
+        "currency": "GBP",
+        "units": "millions",
+        "units_evidence": "header",
+        "cell_binding": "header",
+        "underwriting_years": [
+          2017,
+          2018,
+          2019
+        ],
+        "development_rows": [
+          [
+            92.2,
+            68.5,
+            62.2
+          ],
+          [
+            101.5,
+            78.4,
+            null
+          ],
+          [
+            97.1,
+            null,
+            null
+          ]
+        ],
+        "row_labels": [
+          "At end of underwriting year",
+          "One year later",
+          "Two years later"
+        ],
+        "source_page": 27,
+        "entity": 6117
+      },
+      "_entity_binding": {
+        "requested_syndicate": 6117,
+        "entity_pages": {
+          "none": [
+            0
+          ],
+          "6117": [
+            1,
+            2,
+            3,
+            4,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            44,
+            45
+          ],
+          "1910": [
+            5,
+            6,
+            7,
+            19,
+            41,
+            42,
+            43
+          ]
+        },
+        "foreign_tables_skipped": 8,
+        "foreign_pages": [
+          7,
+          42,
+          43
+        ],
+        "underwriting_year_pages": [
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46
+        ],
+        "underwriting_year_tables_skipped": 4,
+        "document_unit_hint": 1.0
+      }
+    }
+  },
+  "total_cost_usd": 0.025936,
+  "total_tokens": 108597,
+  "validation": {
+    "passed": true,
+    "total_discrepancies": 10,
+    "within_tolerance": 10,
+    "hard_failures": 0,
+    "hard_failure_details": []
+  }
 }

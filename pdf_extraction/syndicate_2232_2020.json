@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T10:33:12.961698+00:00",
+  "extraction_timestamp": "2026-09-13T04:11:53.089411+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -16,42 +18,49 @@
       "prior_year_development_gbp_m": 55.227,
       "prior_year_development_pct": 13.93,
       "direction": "strengthening",
-      "prior_year_movement_page": 3,
-      "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "The result for the year included favourable prior year development of GBP 4.8m (2019: adverse development of GBP 11.6m). Claims incurred, net of reinsurance, included favourable prior year development of GBP 4,828k (2019: adverse development of GBP 11,550k).",
+      "prior_year_movement_page": 22,
+      "prior_year_movement_confidence": 0.8,
+      "exact_reserve_text": "Claims incurred, net of reinsurance, included favourable prior year development of GBP 4,828k (2019: adverse development of GBP 11,550k).",
       "primary_causes": [
-        "Favorable claims development"
+        "Other"
       ],
       "specific_events": [],
-      "specific_years_affected": [],
+      "specific_years_affected": [
+        2013,
+        2014,
+        2015,
+        2016,
+        2017,
+        2018
+      ],
       "prior_year_events": [],
       "named_events": [
-        {
-          "event_name": "COVID-19",
-          "event_year": 2020,
-          "event_type": "other",
-          "net_loss_gbp_m": 2.0,
-          "loss_description": "assessment of COVID-19 related insurance liabilities across our insurance and treaty reinsurance business reflects a low level of COVID-19 exposure to the Syndicate with our booked losses totaling GBP 4.0m on a gross basis and GBP 2.0m net.",
-          "lobs_affected": [],
-          "page": 3,
-          "confidence": 1.0
-        },
         {
           "event_name": "Catastrophe and large loss events in Asia Pacific region",
           "event_year": 2020,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "current year results have been impacted by lower severity catastrophe and large loss events in the Asia Pacific region.",
+          "loss_description": "lower severity catastrophe and large loss events in the Asia Pacific region",
           "lobs_affected": [],
           "page": 3,
           "confidence": 0.8
+        },
+        {
+          "event_name": "COVID-19",
+          "event_year": 2020,
+          "event_type": "other",
+          "net_loss_gbp_m": 2.0,
+          "loss_description": "COVID-19 related insurance liabilities... booked losses totaling GBP 4.0m on a gross basis and GBP 2.0m net.",
+          "lobs_affected": [],
+          "page": 3,
+          "confidence": 1.0
         }
       ],
-      "standardized_narrative": "The syndicate reported a net favourable prior year development of GBP 4.8m in 2020, following an adverse development of GBP 11.6m in 2019. The report does not specify the lines of business or specific events contributing to this favourable development, but notes lower severity catastrophe and large loss events in the Asia Pacific region and a low level of COVID-19 related losses in the current year.",
+      "standardized_narrative": "The syndicate experienced a significant gross release of GBP 87.162 million in prior year reserves for the 2020 financial year, primarily impacting underwriting years 2013 through 2018. While the report notes a net favourable prior year development of GBP 4.8 million, the gross claims development triangle indicates a much larger gross release. No specific causes for this prior year development are detailed in the report. The current year's results were influenced by lower severity catastrophe and large loss events in the Asia Pacific region and a low level of COVID-19 related insurance liabilities.",
       "raw_causal_phrases": [
-        "favourable prior year development",
+        "favourable prior year development of GBP 4.8m",
         "lower severity catastrophe and large loss events in the Asia Pacific region",
-        "COVID-19 related insurance liabilities"
+        "low level of COVID-19 exposure to the Syndicate with our booked losses totaling GBP 4.0m on a gross basis and GBP 2.0m net"
       ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 239.1,
@@ -90,7 +99,7 @@
       "gross_premium_page": 14,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The prior year development figure of -4.828m is explicitly stated as 'net of reinsurance' in the report. A gross prior year development figure could not be reliably extracted from the claims development triangle due to significant discrepancies with the stated net figure, and no other gross figure was explicitly provided. [RAG OVERRIDE: Model said PYD=-4.828, RAG triangle computed 55.227. Using RAG value.]",
+      "data_quality_notes": "The gross prior year development figure is calculated from the claims development triangle. The report's narrative explicitly states a net favourable prior year development of GBP 4.8 million, which significantly differs from the gross figure derived from the triangle. The gross figure from the triangle is used as per instructions. [RAG OVERRIDE: Model said PYD=-87.162, RAG triangle computed 55.227. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -191,20 +200,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_2232_2020_llm.pdf",
-      "content_hash": "a44dbe5671a0977e9302af1cfc21af596153303ac7588a99c94a9b01800dd76f",
-      "standardized_at": "2026-07-05T12:19:40.941253+00:00",
+      "content_hash": "a7e72443c04e5e2743d455ccf4b50438249e948e551df16b94d3bab1801dd170",
+      "standardized_at": "2026-09-11T11:47:44.967228+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 11927,
-        "output_tokens": 1758,
-        "total_tokens": 18568,
-        "cost_usd": 0.007973
+        "input_tokens": 12731,
+        "output_tokens": 1680,
+        "total_tokens": 19818,
+        "cost_usd": 0.008019
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 55.227,
+        "model_value": -87.162,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 49,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2013,
           2014,
@@ -296,6 +317,16 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "End of underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later",
+          "Seven years later"
         ],
         "source_page": 49,
         "entity": 2232
@@ -467,48 +498,28 @@
       "direction": "strengthening",
       "prior_year_movement_page": 47,
       "prior_year_movement_confidence": 0.8,
-      "exact_reserve_text": "Claims incurred, net of reinsurance, included favourable prior year development of GBP 4,828k (2019: adverse development of GBP 11,550k).\nThe result for the year included favourable prior year development of GBP 4.8m (2019: adverse development of GBP 11.6m).",
+      "exact_reserve_text": "Claims incurred, net of reinsurance included favourable prior year development of GBP 4.8m (2019: adverse development of GBP 11.6m).",
       "primary_causes": [
-        "Natural catastrophe events",
-        "Man-made catastrophe / large losses",
-        "COVID-19 / pandemic effects",
-        "Favourable claims development",
-        "Reinsurance recoveries"
+        "Favorable claims development"
       ],
       "specific_events": [],
-      "specific_years_affected": [],
+      "specific_years_affected": [
+        2013,
+        2014,
+        2015,
+        2016,
+        2017,
+        2018
+      ],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "The syndicate's gross claims development shows a net gross strengthening (increase in gross reserves) of approximately GBP 55.2m across prior underwriting years (2013-2018) based on the published gross claims development table. However, on a net basis (after reinsurance) the syndicate reports a small favourable prior year development of GBP 4.828m. The divergence is explained by large increases in gross estimates for older years (driven by catastrophe and large-loss development, notably in Asia Pacific) being largely offset by reinsurance recoveries and favourable run-off on other portfolios; COVID-19 exposure is reported as low. The overall picture across lines is therefore mixed (gross strengthening, net release).",
+      "standardized_narrative": "Gross claims outstanding at 1 January 2020 were GBP 396.533m. Analysis of the gross claims development triangle shows a net adverse re-estimation (strengthening) of prior years (2013-2018) totalling approximately GBP 55.2m (13.9% of opening gross reserves). Management reports a net favourable prior year development of GBP 4.8m after reinsurance; however the gross triangle indicates an overall gross strengthening driven by increases across multiple older underwriting years.",
       "raw_causal_phrases": [
-        "Claims incurred, net of reinsurance, included favourable prior year development of GBP 4,828k (2019: adverse development of GBP 11,550k).",
-        "The result for the year included favourable prior year development of GBP 4.8m (2019: adverse development of GBP 11.6m).",
+        "Claims incurred, net of reinsurance included favourable prior year development of GBP 4.8m (2019: adverse development of GBP 11.6m).",
         "After a number of years with material natural catastrophe events, the current year results have been impacted by lower severity catastrophe and large loss events in the Asia Pacific region.",
         "The assessment of COVID-19 related insurance liabilities across our insurance and treaty reinsurance business reflects a low level of COVID-19 exposure to the Syndicate with our booked losses totaling GBP 4.0m on a gross basis and GBP 2.0m net."
       ],
-      "lob_movements": [
-        {
-          "line_of_business": "Property",
-          "direction": "strengthening",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.5
-        },
-        {
-          "line_of_business": "Casualty",
-          "direction": "strengthening",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.5
-        },
-        {
-          "line_of_business": "Treaty",
-          "direction": "strengthening",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.5
-        }
-      ],
+      "lob_movements": [],
       "gross_premiums_written_gbp_m": 239.1,
       "gross_premium_mix": [
         {
@@ -545,7 +556,7 @@
       "gross_premium_page": 25,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior year development (gross) was calculated from the gross claims development triangle (current estimates vs previous diagonal) because no single-line gross 'movement in prior years' amount was provided. The report explicitly states a small favourable NET prior year development of GBP 4.828k; the large gross strengthening (~GBP 55.2m) is largely offset by reinsurer's share movements, producing the net favourable result. No specific named prior-year events were given. Figures extracted from tables presented in thousands (converted to millions).",
+      "data_quality_notes": "Gross prior-year development (55.227m) was calculated from the gross claims development triangle (gross figures) because the report only explicitly stated a net prior year development (GBP 4.8m favourable). No explicit gross 'movement in prior year's provision' GROSS figure was provided; therefore triangle-based calculation was used. No line-of-business breakdown of prior-year movements was provided, so lob_movements is empty. Units in the triangle are the report's GBP 000.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -646,20 +657,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_2232_2020_llm.pdf",
-      "content_hash": "a44dbe5671a0977e9302af1cfc21af596153303ac7588a99c94a9b01800dd76f",
-      "standardized_at": "2026-07-05T12:20:52.693344+00:00",
+      "content_hash": "a7e72443c04e5e2743d455ccf4b50438249e948e551df16b94d3bab1801dd170",
+      "standardized_at": "2026-09-11T11:49:59.282537+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 24517,
-        "output_tokens": 7228,
-        "total_tokens": 31745,
-        "cost_usd": 0.020585
+        "input_tokens": 25277,
+        "output_tokens": 7384,
+        "total_tokens": 32661,
+        "cost_usd": 0.021087
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 55.227,
+        "model_value": 55.227,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 49,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2013,
           2014,
@@ -751,6 +774,16 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "End of underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later",
+          "Seven years later"
         ],
         "source_page": 49,
         "entity": 2232
@@ -912,12 +945,12 @@
       }
     }
   },
-  "total_cost_usd": 0.028558,
-  "total_tokens": 50313,
+  "total_cost_usd": 0.029106,
+  "total_tokens": 52479,
   "validation": {
     "passed": true,
-    "total_discrepancies": 21,
-    "within_tolerance": 21,
+    "total_discrepancies": 15,
+    "within_tolerance": 15,
     "hard_failures": 0,
     "hard_failure_details": []
   }

@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T09:37:20.551900+00:00",
+  "extraction_timestamp": "2026-09-13T04:04:58.076826+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -11,17 +13,15 @@
       "syndicate": 1686,
       "year": 2022,
       "opening_reserves_gbp_m": 2167.158,
-      "opening_reserves_page": 24,
+      "opening_reserves_page": 7,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": -21.386,
       "prior_year_development_pct": -0.99,
       "direction": "release",
-      "prior_year_movement_page": 24,
+      "prior_year_movement_page": 13,
       "prior_year_movement_confidence": 1.0,
       "exact_reserve_text": "Included within claims notified of USD 1,398.0m (2021: USD 1,400.1m) is a decrease in claims notified relating to 2021 and prior years of account of USD 229.9m (2021: increase in claims notified relating to 2020 and prior years of account USD 397.3m which is impacted by effect of RITC noted in the table above).",
-      "primary_causes": [
-        "Favorable claims development"
-      ],
+      "primary_causes": [],
       "specific_events": [],
       "specific_years_affected": [
         2021
@@ -29,37 +29,41 @@
       "prior_year_events": [],
       "named_events": [
         {
-          "event_name": "Russia-Ukraine war",
-          "event_year": 2022,
-          "event_type": "geopolitical",
-          "net_loss_gbp_m": null,
-          "loss_description": "reinsurance industry suffering from the Russia-Ukraine war",
-          "lobs_affected": [],
-          "page": 5,
-          "confidence": 0.8
-        },
-        {
-          "event_name": "Natural catastrophes",
-          "event_year": 2022,
-          "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": null,
-          "loss_description": "one of the costliest years of losses arising from natural catastrophes on record",
-          "lobs_affected": [],
-          "page": 5,
-          "confidence": 0.8
-        },
-        {
-          "event_name": "COVID-19 pandemic",
-          "event_year": 2022,
+          "event_name": "COVID-19",
+          "event_year": null,
           "event_type": "other",
           "net_loss_gbp_m": null,
           "loss_description": "Net reserves for losses and loss expenses related to the COVID-19 pandemic represents the Syndicate's best estimate of losses and loss expenses that have been incurred at 31 December 2022.",
           "lobs_affected": [],
-          "page": 7,
+          "page": 2,
           "confidence": 0.8
+        },
+        {
+          "event_name": "Russia-Ukraine war",
+          "event_year": 2022,
+          "event_type": "political",
+          "net_loss_gbp_m": null,
+          "loss_description": "The Syndicate has low and containable exposures to potential losses resulting from war, acts of terrorism, political unrest and geopolitical instability in many regions of the world, including but not limited to, events related to the Russian-Ukraine war.",
+          "lobs_affected": [],
+          "page": 2,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Climate Change",
+          "event_year": null,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "AXIS remains focused on addressing the impact of climate change. AXIS has a Climate Change Working Group, which includes AMAL representation, to ensure that the potential risks from climate change are identified and then managed in line with the standard risk management framework. Additionally AXIS has developed a plan to ensure that the exposures in its managed syndicate are systematically assessed and monitored as appropriate, reviewing its underwriting strategy and potential impact in light of climate related risks as detailed in note 16 on page 27.",
+          "lobs_affected": [
+            "Property",
+            "Reinsurance - Property",
+            "Casualty"
+          ],
+          "page": 2,
+          "confidence": 0.5
         }
       ],
-      "standardized_narrative": "The syndicate experienced a significant gross reserve release of USD 229.9 million for the 2021 and prior years of account, primarily due to favorable claims development as indicated by a decrease in claims notified. This contributed to an improved underwriting profit despite the industry facing challenges from the Russia-Ukraine war and record natural catastrophe losses in 2022.",
+      "standardized_narrative": "The Syndicate reported a gross prior year reserve release of USD 229.9 million, primarily due to a decrease in claims notified relating to the 2021 and prior years of account. No specific causal factors were detailed for this favourable development. The claims development triangle is noted to be distorted by a significant Reinsurance to Close transaction in 2021, making it unsuitable for calculating prior year development.",
       "raw_causal_phrases": [
         "decrease in claims notified relating to 2021 and prior years of account"
       ],
@@ -117,15 +121,15 @@
           "percentage_of_total": 26.6
         }
       ],
-      "gross_premium_page": 6,
+      "gross_premium_page": 12,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "The prior year development figure is based on a decrease in 'claims notified' for 2021 and prior years, as stated in a note, rather than a direct 'movement in prior year provision' line item. The claims development triangle shows a different, smaller net release, but the narrative is more specific to 'prior years of account'. The 2021 PYD was impacted by RITC, which could distort the claims development triangle for prior years. [RAG OVERRIDE: Model said PYD=-229.9, RAG triangle computed -21.386. Using RAG value.]",
+      "data_quality_notes": "The gross claims development triangle is distorted by a significant Reinsurance to Close (RITC) transaction in 2021, making it unsuitable for calculating prior year development. The prior year development figure is taken from narrative text on page 13. [RAG OVERRIDE: Model said PYD=-229.9, RAG triangle computed -21.386. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "thousands",
-        "page": 31,
+        "page": 16,
         "underwriting_years": [
           2014,
           2015,
@@ -240,21 +244,33 @@
         ]
       },
       "source_type": "syndicate",
-      "source_file": "syndicate_reports\\pdfs\\syndicate_1686_2022.pdf",
-      "content_hash": "3f4fdad39276c8f7c0eee75f439fbd4fd71e3c72b812ba16fb5976e5af2bc152",
-      "standardized_at": "2026-03-16T17:27:38.077274+00:00",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_1686_2022_llm.pdf",
+      "content_hash": "41fd4891790d35a0b7c9f83078e5820f4581b773b6361f50c65ee3c61262122e",
+      "standardized_at": "2026-09-11T10:49:43.249615+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 15430,
-        "output_tokens": 2186,
-        "total_tokens": 22847,
-        "cost_usd": 0.010094
+        "input_tokens": 12215,
+        "output_tokens": 2339,
+        "total_tokens": 20516,
+        "cost_usd": 0.009512
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -21.386,
+        "model_value": -229.9,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 31,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2014,
           2015,
@@ -366,6 +382,17 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later",
+          "Seven years later",
+          "Eight years later"
         ],
         "source_page": 31,
         "entity": 1686
@@ -528,18 +555,18 @@
       "syndicate": 1686,
       "year": 2022,
       "opening_reserves_gbp_m": 2167.158,
-      "opening_reserves_page": 22,
+      "opening_reserves_page": 7,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": -21.386,
       "prior_year_development_pct": -0.99,
       "direction": "release",
-      "prior_year_movement_page": 22,
-      "prior_year_movement_confidence": 0.0,
+      "prior_year_movement_page": 16,
+      "prior_year_movement_confidence": 0.8,
       "exact_reserve_text": "Included within claims notified of USD 1,398.0m (2021: USD 1,400.1m) is a decrease in claims notified relating to 2021 and prior years of account of USD 229.9m (2021: increase in claims notified relating to 2020 and prior years of account USD 397.3m which is impacted by effect of RITC noted in the table above ).",
       "primary_causes": [
         "Reinsurance recoveries",
         "Favorable claims development",
-        "Other"
+        "Reserve methodology change"
       ],
       "specific_events": [],
       "specific_years_affected": [
@@ -548,47 +575,32 @@
       ],
       "prior_year_events": [
         {
-          "event_name": "Reinsurance to Close from Syndicate 2007 and Syndicate 6129 into 2019 year of account",
-          "event_year": 2018,
-          "impact_description": "The 2018 year of account of Syndicate 2007 and Syndicate 6129 closed by way of an RITC into the 2019 year of account of Syndicate 1686; the financial impact was nil but the transaction impacted technical provisions and distorts development comparisons.",
-          "lobs_affected": [],
+          "event_name": "Reinsurance to Close (RITC) of Syndicate 2007 and Syndicate 6129 into 2019 year of account of Syndicate 1686",
+          "event_year": 2021,
+          "impact_description": "Transfer of 2018 year liabilities of Syndicate 2007 and Syndicate 6129 into the 2019 year of account of Syndicate 1686; noted as impacting technical provisions and the claims development profile (financial impact stated as nil).",
+          "lobs_affected": [
+            "Professional Lines",
+            "Reinsurance - Specialty"
+          ],
           "amount_gbp_m": null,
-          "confidence": 0.8
+          "confidence": 0.5
         }
       ],
-      "named_events": [
-        {
-          "event_name": "Russia-Ukraine war",
-          "event_year": 2022,
-          "event_type": "political",
-          "net_loss_gbp_m": null,
-          "loss_description": "Evolving risk to which AXIS is exposed; described as low and containable exposures and the Syndicate is minimizing exposure to Russian business; no adverse effect on operating capability reported.",
-          "lobs_affected": [
-            "Political Risk"
-          ],
-          "page": 6,
-          "confidence": 0.8
-        },
-        {
-          "event_name": "Loss Portfolio Reinsurance (LPR) agreement",
-          "event_year": 2022,
-          "event_type": "other",
-          "net_loss_gbp_m": null,
-          "loss_description": "Effective 1 December 2022 the Syndicate completed an LPR indemnifying against potential adverse development on net liabilities for professional lines (predominantly 2019 and prior) for a premium of USD 59.7m; the income statement includes USD 59.7m of reinsurance premium for the LPR and USD 59.7m of reinsurance recoveries in net claims.",
-          "lobs_affected": [
-            "Professional Lines"
-          ],
-          "page": 7,
-          "confidence": 1.0
-        }
-      ],
-      "standardized_narrative": "At 1 January 2022 gross claims outstanding were USD 2,167.158m and at 31 December 2022 gross claims outstanding were USD 2,113.637m (a gross reduction of USD 53.521m). The report highlights a decrease in claims notified relating to 2021 and prior years of USD 229.9m and notes a December 2022 loss portfolio reinsurance (LPR) arrangement that indemnified professional lines (predominantly 2019 and prior) for USD 59.7m (premium and corresponding recoveries). Development is influenced by favourable claims experience and reinsurance actions, while prior-year comparisons are distorted by an earlier RITC transaction (2018 years into 2019). No single explicit aggregate gross prior-year reserve movement (insurance liabilities column) is provided in the movement note, and the claims development triangle is present but affected by RITC, so a consolidated gross prior-year development figure cannot be reliably determined from the disclosures.",
+      "named_events": [],
+      "standardized_narrative": "The syndicate reports a small net favourable prior-year reserve movement (approximately a USD 21.4m release) driven by overall favourable claims development and reinsurance actions. The claims development triangle shows net releases across older underwriting years partially offset by adverse movements in some cohorts; the year was also affected by reinsurance portfolio transactions (an RITC into the 2019 year and a loss portfolio reinsurance covering 2019 and prior) which have influenced the technical provisions presentation.",
       "raw_causal_phrases": [
         "Included within claims notified of USD 1,398.0m (2021: USD 1,400.1m) is a decrease in claims notified relating to 2021 and prior years of account of USD 229.9m (2021: increase in claims notified relating to 2020 and prior years of account USD 397.3m which is impacted by effect of RITC noted in the table above ).",
-        "Effective 1 December 2022, the Syndicate completed a loss portfolio reinsurance contract (LPR) with another Lloyd's syndicate. Under the agreement, the Syndicate has been indemnified against potential adverse development in respect of net liabilities for a premium of USD 59.7m, providing the Syndicate with protection in several professional lines insurance portfolios, predominantly relating to 2019 and prior years of account.",
-        "With effect from 1 January 2021, the 2018 year of account of Syndicate 2007 and Syndicate 6129 closed by way of an RITC into the 2019 year of account of Syndicate 1686 thus concluding the business of both Syndicate 6129 and Syndicate 2007. The financial impact of this transaction is nil. The impact on technical provisions is highlighted in Note 4."
+        "Effective 1 December 2022, the Syndicate completed a loss portfolio reinsurance contract (LPR) with another Lloyd's syndicate. Under the agreement, the Syndicate has been indemnified against potential adverse development in respect of net liabilities for a premium of USD 59.7m, providing the Syndicate with protection in several professional lines insurance portfolios, predominantly relating to 2019 and prior years of account."
       ],
-      "lob_movements": [],
+      "lob_movements": [
+        {
+          "line_of_business": "Professional Lines",
+          "direction": "release",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.7
+        }
+      ],
       "gross_premiums_written_gbp_m": 1567.5,
       "gross_premium_mix": [
         {
@@ -642,15 +654,15 @@
           "percentage_of_total": 26.6
         }
       ],
-      "gross_premium_page": 6,
+      "gross_premium_page": 12,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "No explicit aggregate GROSS prior year reserve movement (insurance liabilities column) is disclosed. A claims development triangle (gross) is present but its reliability is affected by a 2021 RITC transaction (transfer of 2018 years of other syndicates into 2019 YOA), which distorts comparisons; therefore a consolidated gross prior-year development figure could not be reported with high confidence and is set to null. All monetary figures are taken from tables reported in USD '000 and converted to millions.",
+      "data_quality_notes": "Prior-year development was derived from the gross claims development triangle (cumulative incurred triangle) because no explicit gross 'movement in prior year's provision' line was present. An RITC (1 Jan 2021) and a Loss Portfolio Reinsurance (LPR) (1 Dec 2022) are disclosed and may distort development patterns; this reduces confidence in attributing movement solely to claims experience. All amounts are reported in the native currency (USD) and converted from the report's USD '000 into millions. Confidence for the PYD figure is therefore set lower than an explicit movement note.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "thousands",
-        "page": 29,
+        "page": 16,
         "underwriting_years": [
           2014,
           2015,
@@ -765,21 +777,33 @@
         ]
       },
       "source_type": "syndicate",
-      "source_file": "syndicate_reports\\pdfs\\syndicate_1686_2022.pdf",
-      "content_hash": "3f4fdad39276c8f7c0eee75f439fbd4fd71e3c72b812ba16fb5976e5af2bc152",
-      "standardized_at": "2026-03-16T17:30:04.919714+00:00",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_1686_2022_llm.pdf",
+      "content_hash": "41fd4891790d35a0b7c9f83078e5820f4581b773b6361f50c65ee3c61262122e",
+      "standardized_at": "2026-09-11T10:53:44.051973+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 30676,
-        "output_tokens": 10359,
-        "total_tokens": 41035,
-        "cost_usd": 0.028387
+        "input_tokens": 22301,
+        "output_tokens": 10411,
+        "total_tokens": 32712,
+        "cost_usd": 0.026397
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -21.386,
+        "model_value": -21.386,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 31,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2014,
           2015,
@@ -891,6 +915,17 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later",
+          "Seven years later",
+          "Eight years later"
         ],
         "source_page": 31,
         "entity": 1686
@@ -1050,12 +1085,12 @@
       }
     }
   },
-  "total_cost_usd": 0.038481,
-  "total_tokens": 63882,
+  "total_cost_usd": 0.035909,
+  "total_tokens": 53228,
   "validation": {
     "passed": true,
-    "total_discrepancies": 15,
-    "within_tolerance": 15,
+    "total_discrepancies": 14,
+    "within_tolerance": 14,
     "hard_failures": 0,
     "hard_failure_details": []
   }

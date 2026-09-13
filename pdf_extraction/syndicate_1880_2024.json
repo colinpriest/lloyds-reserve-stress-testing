@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T09:45:22.717194+00:00",
+  "extraction_timestamp": "2026-09-13T04:10:23.779079+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -11,31 +13,42 @@
       "syndicate": 1880,
       "year": 2024,
       "opening_reserves_gbp_m": 480.668,
-      "opening_reserves_page": 37,
+      "opening_reserves_page": 9,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": 24.73,
       "prior_year_development_pct": 5.14,
       "direction": "strengthening",
-      "prior_year_movement_page": 67,
+      "prior_year_movement_page": 22,
       "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "Reserve deteriorations on prior year losses (defined as movements on closed years of account and on previous accident years' catastrophe losses) contributed 5.9% (2023: 0.7%) to the net claims ratio and included an increase in provisions held for potential exposures arising from the Russian invasion of Ukraine within the Aviation and Marine & Energy divisions.",
+      "exact_reserve_text": "Within the calendar year technical result, a deficit of GBP 19,004,000 (2023: deficit of GBP 2,013,000) relates to the reassessment of net claims incurred for previous accident years.",
       "primary_causes": [
+        "Adverse claims development",
         "Geopolitical events",
-        "Adverse claims development"
+        "Large loss development"
       ],
       "specific_events": [
         "Russian invasion of Ukraine"
       ],
-      "specific_years_affected": [],
+      "specific_years_affected": [
+        2022,
+        2021,
+        2020,
+        2019,
+        2018,
+        2017,
+        2016,
+        2015
+      ],
       "prior_year_events": [
         {
           "event_name": "Russian invasion of Ukraine",
           "event_year": 2022,
-          "impact_description": "increase in provisions held for potential exposures",
+          "impact_description": "increase in provisions held for potential exposures arising from the Russian invasion of Ukraine",
           "lobs_affected": [
             "Aviation",
             "Marine",
-            "Energy"
+            "Energy",
+            "Professional Lines"
           ],
           "amount_gbp_m": null,
           "confidence": 0.8
@@ -43,41 +56,59 @@
       ],
       "named_events": [
         {
-          "event_name": "Hurricanes Helene and Milton",
+          "event_name": "Hurricane Helene",
           "event_year": 2024,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "resulted in higher losses to the Syndicate compared to the catastrophes reported in 2023",
-          "lobs_affected": [
-            "Property",
-            "Casualty",
-            "Marine",
-            "Energy",
-            "Aviation"
-          ],
-          "page": 9,
+          "loss_description": "resulted in higher losses to the Syndicate",
+          "lobs_affected": [],
+          "page": 2,
           "confidence": 0.8
+        },
+        {
+          "event_name": "Hurricane Milton",
+          "event_year": 2024,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "resulted in higher losses to the Syndicate",
+          "lobs_affected": [],
+          "page": 2,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "COVID-19",
+          "event_year": 2020,
+          "event_type": "other",
+          "net_loss_gbp_m": null,
+          "loss_description": "heightened estimation uncertainty in reserving for estimated losses",
+          "lobs_affected": [],
+          "page": 19,
+          "confidence": 0.5
         },
         {
           "event_name": "Russian invasion of Ukraine",
           "event_year": 2022,
-          "event_type": "political",
+          "event_type": "geopolitical",
           "net_loss_gbp_m": null,
-          "loss_description": "increase in provisions held for potential exposures",
+          "loss_description": "loss exposure... stemming from its Aviation, Special Risks and Marine & Energy divisions",
           "lobs_affected": [
             "Aviation",
+            "Professional Lines",
             "Marine",
             "Energy"
           ],
-          "page": 9,
+          "page": 19,
           "confidence": 0.8
         }
       ],
-      "standardized_narrative": "The Syndicate experienced a gross strengthening of GBP 13.626 million in prior year reserves, representing 2.83% of opening gross claims outstanding. This deterioration was primarily driven by an increase in provisions for potential exposures arising from the Russian invasion of Ukraine within the Aviation and Marine & Energy divisions, as well as general adverse claims development on closed years of account and previous accident years' catastrophe losses.",
+      "standardized_narrative": "The Syndicate experienced a gross strengthening of GBP 13.626 million in prior year reserves for 2024. This adverse development was primarily driven by reserve deteriorations on closed years of account and previous accident years' catastrophe losses. A significant contributor was an increase in provisions for potential exposures arising from the Russian invasion of Ukraine, particularly impacting the Aviation and Marine & Energy divisions.",
       "raw_causal_phrases": [
         "Reserve deteriorations on prior year losses",
-        "movements on closed years of account and on previous accident years' catastrophe losses",
-        "increase in provisions held for potential exposures arising from the Russian invasion of Ukraine within the Aviation and Marine & Energy divisions"
+        "movements on closed years of account",
+        "previous accident years' catastrophe losses",
+        "increase in provisions held for potential exposures arising from the Russian invasion of Ukraine",
+        "stemming from its Aviation, Special Risks and Marine & Energy divisions",
+        "heightened estimation uncertainty in reserving for estimated losses arising from COVID-19"
       ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 17.4,
@@ -113,15 +144,15 @@
           "percentage_of_total": 39.1
         }
       ],
-      "gross_premium_page": 61,
+      "gross_premium_page": 20,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The claims development triangle shows a different total prior year movement than the 'Change in estimates of prior year provisions' in the Technical Provisions note. The figure from the Technical Provisions note is used as it is a direct accounting adjustment for prior year estimates. [RAG OVERRIDE: Model said PYD=13.626, RAG triangle computed 24.73. Using RAG value.]",
+      "data_quality_notes": "The `prior_year_development_gbp_m` is the gross figure from Note 8, while `exact_reserve_text` quotes the net figure from page 23 narrative. The claims development triangle on page 23 shows a different, much smaller prior year movement for UW years <= 2022 (-0.412m gross release) compared to the explicit 'Change in estimates of prior year provisions' figure in Note 8 (13.626m gross strengthening). The Note 8 figure is used as the primary source. [RAG OVERRIDE: Model said PYD=13.626, RAG triangle computed 24.73. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
-        "page": 69,
+        "page": 23,
         "underwriting_years": [
           2015,
           2016,
@@ -258,21 +289,33 @@
         ]
       },
       "source_type": "syndicate",
-      "source_file": "pdf_extraction\\html_converted\\syndicate_1880_2024.pdf",
-      "content_hash": "6712e1461247733791cad513a39bf4e5f7c7ccc4050f3cadfbfde5e3c61ca5f3",
-      "standardized_at": "2026-03-17T07:20:53.858535+00:00",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_1880_2024_llm.pdf",
+      "content_hash": "2632c98074262b07069b8a087ca1707b9d8f4eeb5698b7f81e4d0e498abd3da6",
+      "standardized_at": "2026-09-11T14:54:08.918179+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 29362,
-        "output_tokens": 2252,
-        "total_tokens": 38978,
-        "cost_usd": 0.014439
+        "input_tokens": 14021,
+        "output_tokens": 2578,
+        "total_tokens": 24265,
+        "cost_usd": 0.010651
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 24.73,
+        "model_value": 13.626,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 69,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2015,
           2016,
@@ -407,6 +450,18 @@
             null
           ]
         ],
+        "row_labels": [
+          "at end of underwriting",
+          "one year later",
+          "two years later",
+          "three years later",
+          "four years later",
+          "five years later",
+          "six years later",
+          "seven years later",
+          "eight years later",
+          "nine years later"
+        ],
         "source_page": 69,
         "entity": 1880
       },
@@ -488,6 +543,13 @@
           "entity": 1880,
           "backend": "azure",
           "table_kind": "provisions_movement"
+        },
+        "movement_semantics": {
+          "row_label": "Change in estimates of prior year provisions",
+          "row_index": 6,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": false,
+          "column_index": 1
         },
         "gross_prior_year_claims": 13.6,
         "ri_share_prior_year": 5.4,
@@ -618,14 +680,14 @@
       "syndicate": 1880,
       "year": 2024,
       "opening_reserves_gbp_m": 480.668,
-      "opening_reserves_page": 35,
+      "opening_reserves_page": 19,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": 24.73,
       "prior_year_development_pct": 5.14,
       "direction": "strengthening",
-      "prior_year_movement_page": 35,
+      "prior_year_movement_page": 34,
       "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "Reserve deteriorations on prior year losses (defined as movements on closed years of account and on previous accident years' catastrophe losses) contributed 5.9% (2023: 0.7%) to the net claims ratio and included an increase in provisions held for potential exposures arising from the Russian invasion of Ukraine within the Aviation and Marine & Energy divisions.",
+      "exact_reserve_text": "Within the calendar year technical result, a deficit of GBP 19,004,000 (2023: deficit of GBP 2,013,000) relates to the reassessment of net claims incurred for previous accident years.",
       "primary_causes": [
         "Adverse claims development",
         "Geopolitical events",
@@ -641,14 +703,14 @@
         {
           "event_name": "Russian invasion of Ukraine",
           "event_year": 2022,
-          "impact_description": "Increase in provisions held for potential exposures arising from the Russian invasion of Ukraine within the Aviation and Marine & Energy divisions.",
+          "impact_description": "Increase in provisions held for potential exposures within the Aviation and Marine & Energy divisions (reserve deterioration on prior year losses).",
           "lobs_affected": [
             "Aviation",
             "Marine",
             "Energy"
           ],
           "amount_gbp_m": null,
-          "confidence": 0.8
+          "confidence": 0.5
         }
       ],
       "named_events": [
@@ -657,32 +719,44 @@
           "event_year": 2024,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "Included in catastrophe losses which contributed to a higher net claims ratio in 2024.",
+          "loss_description": "Included within catastrophe losses contributing to higher losses to the Syndicate compared to 2023.",
           "lobs_affected": [
-            "Property",
-            "Marine"
+            "Property"
           ],
           "page": 5,
-          "confidence": 0.9
+          "confidence": 0.8
         },
         {
           "event_name": "Hurricane Milton",
           "event_year": 2024,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "Included in catastrophe losses which contributed to a higher net claims ratio in 2024.",
+          "loss_description": "Included within catastrophe losses contributing to higher losses to the Syndicate compared to 2023.",
           "lobs_affected": [
-            "Property",
-            "Marine"
+            "Property"
           ],
           "page": 5,
-          "confidence": 0.9
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Russian invasion of Ukraine",
+          "event_year": 2022,
+          "event_type": "political",
+          "net_loss_gbp_m": null,
+          "loss_description": "Increase in provisions held for potential exposures within Aviation and Marine & Energy divisions.",
+          "lobs_affected": [
+            "Aviation",
+            "Marine",
+            "Energy"
+          ],
+          "page": 5,
+          "confidence": 0.6
         }
       ],
-      "standardized_narrative": "The Syndicate opened 2024 with gross claims outstanding of GBP 480.668m and recorded a gross prioryear strengthening of GBP 13.626m (2.8% of opening reserves). The movement reflects reserve deteriorations on prior year losses, including increases in provisions related to exposures from the Russian invasion of Ukraine and adverse development on prior accident years' catastrophe losses. Catastrophe events in the year (notably Hurricanes Helene and Milton) also contributed to overall adverse claims experience, with the Aviation, Marine and Energy lines particularly affected.",
+      "standardized_narrative": "Gross claims outstanding at the opening of the year were GBP 480.668m. During 2024 the Syndicate recorded an adverse prior-year reserve movement (strengthening) of GBP 13.626m (2.83% of opening gross reserves), driven by adverse claims development including increases in provisions for prior catastrophe exposures and potential exposures related to the Russian invasion of Ukraine, notably affecting Aviation and Marine & Energy lines. Current-year catastrophes (e.g. Hurricanes Helene and Milton) also increased catastrophe losses in 2024 though these are current-year events.",
       "raw_causal_phrases": [
-        "Reserve deteriorations on prior year losses (defined as movements on closed years of account and on previous accident years' catastrophe losses) contributed 5.9% (2023: 0.7%) to the net claims ratio and included an increase in provisions held for potential exposures arising from the Russian invasion of Ukraine within the Aviation and Marine & Energy divisions.",
-        "Within the calendar year technical result, a deficit of GBP 19,004,000 (2023: deficit of GBP 2,013,000) relates to the reassessment of net claims incurred for previous accident years."
+        "Within the calendar year technical result, a deficit of GBP 19,004,000 (2023: deficit of GBP 2,013,000) relates to the reassessment of net claims incurred for previous accident years.",
+        "Reserve deteriorations on prior year losses (defined as movements on closed years of account and on previous accident years' catastrophe losses) contributed 5.9% (2023: 0.7%) to the net claims ratio and included an increase in provisions held for potential exposures arising from the Russian invasion of Ukraine within the Aviation and Marine & Energy divisions."
       ],
       "lob_movements": [
         {
@@ -690,28 +764,21 @@
           "direction": "strengthening",
           "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.9
+          "confidence": 0.5
         },
         {
           "line_of_business": "Marine",
           "direction": "strengthening",
           "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.8
+          "confidence": 0.5
         },
         {
           "line_of_business": "Energy",
           "direction": "strengthening",
           "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.8
-        },
-        {
-          "line_of_business": "Property",
-          "direction": "strengthening",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.6
+          "confidence": 0.5
         }
       ],
       "gross_premiums_written_gbp_m": 17.4,
@@ -750,7 +817,7 @@
       "gross_premium_page": 31,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Opening reserves and the prior year movement are taken from the Technical Provisions reconciliation (note 8). Prior year movement uses the gross 'Change in estimates of prior year provisions' line (gross, not net). Narrative references to prior year deterioration (including geopolitical exposure to the Russian invasion of Ukraine and catastrophe impacts) are quoted verbatim. Some event-to-LOB mappings are inferred from context where the report does not explicitly allocate amounts by LOB. All monetary conversions to millions are exact divisions by 1,000 from the source (GBP '000). [RAG OVERRIDE: Model said PYD=13.626, RAG triangle computed 24.73. Using RAG value.]",
+      "data_quality_notes": "Opening gross claims outstanding taken from Balance sheet: liabilities (Claims outstanding) (2023 comparative). Prior-year development (gross) taken from the 'Change in estimates of prior year provisions' line in the claims outstanding reconciliation (note 8). The document also contains a narrative sentence describing a GBP 19.004m deficit which is net of reinsurance; that net sentence was quoted verbatim for context but the reported prior_year_development_gbp_m is the gross figure (13.626m). No LOB-level monetary split of the prior-year movement is provided; LOB attributions (Aviation, Marine, Energy) are inferred from narrative references. Claims development triangle present and used as supporting data. [RAG OVERRIDE: Model said PYD=13.626, RAG triangle computed 24.73. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -770,83 +837,71 @@
         ],
         "development_rows": [
           [
-            50.568,
-            81.021,
-            114.358,
-            96.958,
-            96.806,
-            94.341,
-            96.89,
-            121.05,
-            81.768,
-            99.159
+            50568,
+            81021,
+            114358,
+            96958,
+            96806,
+            94341,
+            96890,
+            121050,
+            81768,
+            99159
           ],
           [
-            89.438,
-            144.927,
-            179.438,
-            183.484,
-            208.603,
-            147.538,
-            206.088,
-            209.996,
-            172.677,
+            89438,
+            144927,
+            179438,
+            183484,
+            208603,
+            147538,
+            206088,
+            209996,
+            172677,
             null
           ],
           [
-            93.448,
-            153.169,
-            196.535,
-            197.985,
-            198.542,
-            147.729,
-            225.689,
-            215.053,
-            null,
-            null
-          ],
-          [
-            96.715,
-            153.31,
-            197.952,
-            185.32,
-            189.559,
-            145.132,
-            251.428,
-            null,
+            93448,
+            153169,
+            196535,
+            197985,
+            198542,
+            147729,
+            225689,
+            215053,
             null,
             null
           ],
           [
-            99.636,
-            146.903,
-            196.979,
-            182.783,
-            182.418,
-            131.701,
-            null,
+            96715,
+            153310,
+            197952,
+            185320,
+            189559,
+            145132,
+            251428,
             null,
             null,
             null
           ],
           [
-            93.542,
-            144.158,
-            195.269,
-            187.823,
-            176.984,
-            null,
+            99636,
+            146903,
+            196979,
+            182783,
+            182418,
+            131701,
             null,
             null,
             null,
             null
           ],
           [
-            93.451,
-            143.757,
-            192.271,
-            191.745,
-            null,
+            93542,
+            144158,
+            195269,
+            187823,
+            176984,
             null,
             null,
             null,
@@ -854,10 +909,10 @@
             null
           ],
           [
-            93.65,
-            140.919,
-            197.808,
-            null,
+            93451,
+            143757,
+            192271,
+            191745,
             null,
             null,
             null,
@@ -866,9 +921,9 @@
             null
           ],
           [
-            102.826,
-            144.671,
-            null,
+            93650,
+            140919,
+            197808,
             null,
             null,
             null,
@@ -878,7 +933,19 @@
             null
           ],
           [
-            102.414,
+            102826,
+            144671,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            102414,
             null,
             null,
             null,
@@ -892,21 +959,33 @@
         ]
       },
       "source_type": "syndicate",
-      "source_file": "pdf_extraction\\html_converted\\syndicate_1880_2024.pdf",
-      "content_hash": "6712e1461247733791cad513a39bf4e5f7c7ccc4050f3cadfbfde5e3c61ca5f3",
-      "standardized_at": "2026-03-17T07:22:09.171208+00:00",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_1880_2024_llm.pdf",
+      "content_hash": "2632c98074262b07069b8a087ca1707b9d8f4eeb5698b7f81e4d0e498abd3da6",
+      "standardized_at": "2026-09-11T14:56:48.975196+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 50636,
-        "output_tokens": 7035,
-        "total_tokens": 57671,
-        "cost_usd": 0.026729
+        "input_tokens": 33082,
+        "output_tokens": 7439,
+        "total_tokens": 40521,
+        "cost_usd": 0.023149
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 24.73,
+        "model_value": 13.626,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 69,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2015,
           2016,
@@ -1041,6 +1120,18 @@
             null
           ]
         ],
+        "row_labels": [
+          "at end of underwriting",
+          "one year later",
+          "two years later",
+          "three years later",
+          "four years later",
+          "five years later",
+          "six years later",
+          "seven years later",
+          "eight years later",
+          "nine years later"
+        ],
         "source_page": 69,
         "entity": 1880
       },
@@ -1122,6 +1213,13 @@
           "entity": 1880,
           "backend": "azure",
           "table_kind": "provisions_movement"
+        },
+        "movement_semantics": {
+          "row_label": "Change in estimates of prior year provisions",
+          "row_index": 6,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": false,
+          "column_index": 1
         },
         "gross_prior_year_claims": 13.6,
         "ri_share_prior_year": 5.4,
@@ -1249,12 +1347,12 @@
       }
     }
   },
-  "total_cost_usd": 0.041168,
-  "total_tokens": 96649,
+  "total_cost_usd": 0.0338,
+  "total_tokens": 64786,
   "validation": {
     "passed": true,
-    "total_discrepancies": 15,
-    "within_tolerance": 15,
+    "total_discrepancies": 27,
+    "within_tolerance": 27,
     "hard_failures": 0,
     "hard_failure_details": []
   }

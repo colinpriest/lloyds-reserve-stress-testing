@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-05T20:27:33.117847+00:00",
+  "extraction_timestamp": "2026-09-13T04:02:54.116961+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -13,46 +15,52 @@
       "opening_reserves_gbp_m": 687.047,
       "opening_reserves_page": 7,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": -45.0,
-      "prior_year_development_pct": -6.55,
+      "prior_year_development_gbp_m": -44.183,
+      "prior_year_development_pct": -6.43,
       "direction": "release",
-      "prior_year_movement_page": 20,
+      "prior_year_movement_page": 1,
       "prior_year_movement_confidence": 1.0,
       "exact_reserve_text": "The 2020 net technical result of GBP (26.2)m (2019: GBP 29.4m) includes GBP 45.0m (2019: GBP 5.5m) of releases from reserves in respect of prior accident years.",
       "primary_causes": [
-        "Favorable claims development"
+        "Favorable claims development",
+        "COVID-19 / pandemic effects"
       ],
-      "specific_events": [],
-      "specific_years_affected": [],
+      "specific_events": [
+        "COVID-19 pandemic"
+      ],
+      "specific_years_affected": [
+        2019
+      ],
       "prior_year_events": [
         {
-          "event_name": "COVID-19 pandemic",
+          "event_name": "COVID-19 / pandemic effects",
           "event_year": 2019,
-          "impact_description": "material exposure to the C19 pandemic, particularly in respect of Contingency event cancellation claims on the 2019 year of account, net of reinsurance, contributing to the overall negative financial result for 2020.",
+          "impact_description": "material exposure to the C19 pandemic, particularly in respect of Contingency event cancellation claims on the 2019 year of account, net of reinsurance. Whilst this increases the uncertainty of the Syndicate's total reserves",
           "lobs_affected": [
-            "Reinsurance - Specialty"
+            "Contingency"
           ],
-          "amount_gbp_m": 106.25,
-          "confidence": 1.0
+          "amount_gbp_m": null,
+          "confidence": 0.8
         }
       ],
       "named_events": [
         {
-          "event_name": "COVID-19 pandemic",
+          "event_name": "COVID-19 / pandemic effects",
           "event_year": 2020,
           "event_type": "other",
-          "net_loss_gbp_m": 106.25,
-          "loss_description": "major driver for the negative result is related to C19 losses, which have been estimated by the Board after thorough consideration at an ultimate of net USD136m at Q4 2020. Material exposure particularly in respect of Contingency event cancellation claims on the 2019 year of account.",
+          "net_loss_gbp_m": null,
+          "loss_description": "C19 would result in huge claims numbers, especially from the Contingency class, which has now become a reality, turning the 2020 financial result of MRSL into a loss of GBP 21m. The major driver for the negative result is related to C19 losses, which have been estimated by the Board after thorough consideration at an ultimate of net USD136m at Q4 2020.",
           "lobs_affected": [
-            "Reinsurance - Specialty"
+            "Contingency"
           ],
           "page": 1,
           "confidence": 1.0
         }
       ],
-      "standardized_narrative": "The syndicate reported a prior year reserve release of GBP 45.0 million for the 2020 financial year, representing a 6.55% release relative to its opening gross claims outstanding. This favourable development from prior accident years contributed to the overall financial result. However, the syndicate's 2020 financial result was a loss of GBP 21 million, primarily driven by significant claims related to the COVID-19 pandemic, particularly from Contingency event cancellation claims on the 2019 year of account, which resulted in an estimated net loss of USD136 million (approximately GBP 106.25 million).",
+      "standardized_narrative": "The syndicate reported a gross release of GBP 45.0 million from reserves in respect of prior accident years, representing 6.55% of opening gross claims outstanding. While the C19 pandemic impacted 2019 year of account reserves, leading to increased uncertainty, the overall prior year development was favourable, suggesting other positive claims development.",
       "raw_causal_phrases": [
-        "releases from reserves in respect of prior accident years"
+        "releases from reserves in respect of prior accident years",
+        "material exposure to the C19 pandemic, particularly in respect of Contingency event cancellation claims on the 2019 year of account, net of reinsurance. Whilst this increases the uncertainty of the Syndicate's total reserves"
       ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 739.2,
@@ -91,7 +99,7 @@
       "gross_premium_page": 17,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "[RAG PYD NOT APPLIED: deterministic figure +44.183m has the opposite sign to both model values [-45.0, -44.183], which agree with each other; model values retained.] [CODE PYD NOT APPLIED: deterministic figure +44.183m has the opposite sign to both model values [-45.0, -44.183], which agree with each other; model values retained.]",
+      "data_quality_notes": "Prior year development figure from narrative text, which is slightly different from the calculation based on the gross claims development triangle (-44.183m vs -45.0m). The narrative figure is used as it explicitly states 'releases from reserves'. [RAG OVERRIDE: Model said PYD=-45.0, RAG triangle computed -44.183. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -234,20 +242,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_457_2020_llm.pdf",
-      "content_hash": "066a2058d9f4ec0e0151d9b8c6dc626aabd0c270bf155c482e6778385c43a0fd",
-      "standardized_at": "2026-03-19T03:40:02.045391+00:00",
+      "content_hash": "9c14e6761f3991700642125a2fc751c395337e8dd437221e241b3a639edc5879",
+      "standardized_at": "2026-09-11T13:00:11.851680+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 11926,
-        "output_tokens": 2095,
-        "total_tokens": 19348,
-        "cost_usd": 0.008815
+        "input_tokens": 12730,
+        "output_tokens": 2172,
+        "total_tokens": 19867,
+        "cost_usd": 0.009249
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -44.183,
+        "model_value": -45.0,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 44,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -382,8 +402,21 @@
             null
           ]
         ],
+        "row_labels": [
+          "At end of underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later",
+          "Seven years later",
+          "Eight years later",
+          "Nine years later"
+        ],
         "source_page": 44,
-        "entity": 457
+        "entity": 457,
+        "presentation_sign": "outflow"
       },
       "_adobe_lob": {
         "gross_premium_mix": [
@@ -550,94 +583,42 @@
       "prior_year_development_gbp_m": -44.183,
       "prior_year_development_pct": -6.43,
       "direction": "release",
-      "prior_year_movement_page": 42,
+      "prior_year_movement_page": 21,
       "prior_year_movement_confidence": 0.8,
       "exact_reserve_text": "The 2020 net technical result of GBP (26.2)m (2019: GBP 29.4m) includes GBP 45.0m (2019: GBP 5.5m) of releases from reserves in respect of prior accident years.",
       "primary_causes": [
-        "Favorable claims development",
-        "Reinsurance recoveries"
+        "Favorable claims development"
       ],
       "specific_events": [],
-      "specific_years_affected": [
-        2011,
-        2012,
-        2013,
-        2014,
-        2015,
-        2016,
-        2017,
-        2018
-      ],
+      "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [
         {
           "event_name": "COVID-19 pandemic",
           "event_year": 2020,
           "event_type": "other",
-          "net_loss_gbp_m": null,
-          "loss_description": "Board estimated C19 losses at an ultimate of net USD136m at Q4 2020 (reported in the document in USD).",
-          "lobs_affected": [],
+          "net_loss_gbp_m": 99.27,
+          "loss_description": "The major driver for the negative result is related to C19 losses, which have been estimated by the Board after thorough consideration at an ultimate of net USD136m at Q4 2020.",
+          "lobs_affected": [
+            "Aggregate"
+          ],
           "page": 3,
           "confidence": 0.8
-        },
-        {
-          "event_name": "September 2001 attacks",
-          "event_year": 2001,
-          "event_type": "man_made",
-          "net_loss_gbp_m": null,
-          "loss_description": "Referenced as the last event comparable in scale to COVID-19 for Lloyd's estimated claims pay-out.",
-          "lobs_affected": [],
-          "page": 9,
-          "confidence": 0.5
         }
       ],
-      "standardized_narrative": "The syndicate's gross claims outstanding at 1 January 2020 were GBP 687.047m. Analysis of the gross claims development triangle shows an aggregate favourable prior-year development of approximately GBP 44.2m (gross) across underwriting years 2011-2018, driven by favourable claims development and reinsurance recoveries, partially offset by adverse movement on the 2018 underwriting year. The managing agent reports net releases of GBP 45.0m after reinsurance. COVID-19 produced significant currentyear losses (estimated net USD136m at Q4 2020) but the quantified prioryear movement relates to releases on older years.",
+      "standardized_narrative": "The syndicate reported an opening gross claims outstanding of GBP 687.047m. Analysis of the gross claims development triangle indicates a net release on prior accident years of approximately GBP 44.18m (around 6.43% of opening reserves), driven by favourable claims development across older years, partially offset by adverse development in certain years (notably 2018). The Managing Agent reports a net release of GBP 45.0m (net of reinsurance) from prior accident years. Separately, COVID-19 had a major adverse impact on the 2020 result (Board estimate net USD136m at Q4 2020).",
       "raw_causal_phrases": [
         "includes GBP 45.0m (2019: GBP 5.5m) of releases from reserves in respect of prior accident years.",
-        "The major driver for the negative result is related to C19 losses, which have been estimated by the Board after thorough consideration at an ultimate of net USD136m at Q4 2020."
+        "The major driver for the negative result is related to C19 losses, which have been estimated by the Board after thorough consideration at an ultimate of net USD136m at Q4 2020.",
+        "releases from reserves in respect of prior accident years."
       ],
       "lob_movements": [
         {
-          "line_of_business": "Marine",
+          "line_of_business": "Aggregate",
           "direction": "release",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.2
-        },
-        {
-          "line_of_business": "Property",
-          "direction": "release",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.2
-        },
-        {
-          "line_of_business": "Casualty",
-          "direction": "release",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.2
-        },
-        {
-          "line_of_business": "Accident & Health",
-          "direction": "release",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.2
-        },
-        {
-          "line_of_business": "Motor",
-          "direction": "release",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.2
-        },
-        {
-          "line_of_business": "Treaty",
-          "direction": "release",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.2
+          "amount_gbp_m": -44.183,
+          "percentage": -6.433,
+          "confidence": 0.8
         }
       ],
       "gross_premiums_written_gbp_m": 739.2,
@@ -673,15 +654,15 @@
           "percentage_of_total": 23.1
         }
       ],
-      "gross_premium_page": 28,
+      "gross_premium_page": 15,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Gross prior-year development was not stated explicitly as a gross figure in a single movement note. The document reports a net (after reinsurance) release of GBP 45.0m; a gross PYD has been calculated from the published gross claims development triangle (included here) yielding an aggregate gross release of approximately GBP 44.183m (calculated excluding the two most recent underwriting years per standard practice). Confidence reflects calculated derivation (0.8). No RITC distortion was identified in the technical reserves notes that would invalidate the triangle calculation, but the reported net figure differs slightly due to reinsurance effects. [RAG PYD NOT APPLIED: deterministic figure +44.183m has the opposite sign to both model values [-45.0, -44.183], which agree with each other; model values retained.] [CODE PYD NOT APPLIED: deterministic figure +44.183m has the opposite sign to both model values [-45.0, -44.183], which agree with each other; model values retained.]",
+      "data_quality_notes": "Prior year development (PYD) was calculated from the gross claims development triangle (gross cumulative claims by underwriting year). The Managing Agent also reports a net release of GBP 45.0m (net of reinsurance) but does not state a gross PYD figure; the triangle provides the gross estimate used here. The triangle values were presented in GBP 000 and have been converted to millions. The COVID-19 impact was reported in USD (net USD136m); that amount has been converted to GBP using the year-end rate (1 GBP = 1.37 USD) to provide a GBP-denominated estimate. Page references are to the printed page numbers in the report.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
-        "units": "thousands",
-        "page": 42,
+        "units": "millions",
+        "page": 21,
         "underwriting_years": [
           2011,
           2012,
@@ -696,83 +677,71 @@
         ],
         "development_rows": [
           [
-            -128323,
-            -135795,
-            -152979,
-            -147359,
-            -152430,
-            -124420,
-            -163741,
-            -156783,
-            -151372,
-            -194388
+            -128.323,
+            -135.795,
+            -152.979,
+            -147.359,
+            -152.43,
+            -124.42,
+            -163.741,
+            -156.783,
+            -151.372,
+            -194.388
           ],
           [
-            -245671,
-            -280311,
-            -309452,
-            -281864,
-            -284957,
-            -262392,
-            -288913,
-            -343172,
-            -469314,
+            -245.671,
+            -280.311,
+            -309.452,
+            -281.864,
+            -284.957,
+            -262.392,
+            -288.913,
+            -343.172,
+            -469.314,
             null
           ],
           [
-            -257762,
-            -299705,
-            -309401,
-            -275628,
-            -250736,
-            -238655,
-            -262483,
-            -359887,
-            null,
-            null
-          ],
-          [
-            -252853,
-            -293265,
-            -289971,
-            -250709,
-            -226706,
-            -220716,
-            -242996,
-            null,
+            -257.762,
+            -299.705,
+            -309.401,
+            -275.628,
+            -250.736,
+            -238.655,
+            -262.483,
+            -359.887,
             null,
             null
           ],
           [
-            -268691,
-            -294938,
-            -294701,
-            -253887,
-            -223505,
-            -208738,
-            null,
+            -252.853,
+            -293.265,
+            -289.971,
+            -250.709,
+            -226.706,
+            -220.716,
+            -242.996,
             null,
             null,
             null
           ],
           [
-            -264968,
-            -277298,
-            -293428,
-            -249650,
-            -212652,
-            null,
+            -268.691,
+            -294.938,
+            -294.701,
+            -253.887,
+            -223.505,
+            -208.738,
             null,
             null,
             null,
             null
           ],
           [
-            -266230,
-            -272760,
-            -285314,
-            -241059,
-            null,
+            -264.968,
+            -277.298,
+            -293.428,
+            -249.65,
+            -212.652,
             null,
             null,
             null,
@@ -780,10 +749,10 @@
             null
           ],
           [
-            -260935,
-            -271583,
-            -282125,
-            null,
+            -266.23,
+            -272.76,
+            -285.314,
+            -241.059,
             null,
             null,
             null,
@@ -792,9 +761,9 @@
             null
           ],
           [
-            -258521,
-            -266877,
-            null,
+            -260.935,
+            -271.583,
+            -282.125,
             null,
             null,
             null,
@@ -804,7 +773,19 @@
             null
           ],
           [
-            -256427,
+            -258.521,
+            -266.877,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            -256.427,
             null,
             null,
             null,
@@ -819,20 +800,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_457_2020_llm.pdf",
-      "content_hash": "066a2058d9f4ec0e0151d9b8c6dc626aabd0c270bf155c482e6778385c43a0fd",
-      "standardized_at": "2026-03-19T03:41:53.689962+00:00",
+      "content_hash": "9c14e6761f3991700642125a2fc751c395337e8dd437221e241b3a639edc5879",
+      "standardized_at": "2026-09-11T13:03:32.086758+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 19744,
-        "output_tokens": 8765,
-        "total_tokens": 28509,
-        "cost_usd": 0.022466
+        "input_tokens": 20487,
+        "output_tokens": 11853,
+        "total_tokens": 32340,
+        "cost_usd": 0.028828
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -44.183,
+        "model_value": -44.183,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 44,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -967,8 +960,21 @@
             null
           ]
         ],
+        "row_labels": [
+          "At end of underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later",
+          "Seven years later",
+          "Eight years later",
+          "Nine years later"
+        ],
         "source_page": 44,
-        "entity": 457
+        "entity": 457,
+        "presentation_sign": "outflow"
       },
       "_adobe_lob": {
         "gross_premium_mix": [
@@ -1127,26 +1133,13 @@
       }
     }
   },
-  "total_cost_usd": 0.031281,
-  "total_tokens": 47857,
+  "total_cost_usd": 0.038077,
+  "total_tokens": 52207,
   "validation": {
-    "passed": false,
-    "total_discrepancies": 22,
-    "within_tolerance": 20,
-    "hard_failures": 2,
-    "hard_failure_details": [
-      {
-        "field": "prior_year_development_gbp_m",
-        "type": "value_mismatch",
-        "gemini-2.5-flash": -45.0,
-        "gpt-5-mini": -44.183
-      },
-      {
-        "field": "prior_year_development_pct",
-        "type": "value_mismatch",
-        "gemini-2.5-flash": -6.55,
-        "gpt-5-mini": -6.43
-      }
-    ]
+    "passed": true,
+    "total_discrepancies": 17,
+    "within_tolerance": 17,
+    "hard_failures": 0,
+    "hard_failure_details": []
   }
 }

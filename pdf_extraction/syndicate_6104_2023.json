@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-05T20:36:22.909542+00:00",
+  "extraction_timestamp": "2026-09-13T03:57:52.172470+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -18,25 +20,29 @@
       "direction": "release",
       "prior_year_movement_page": 51,
       "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "Over/under-provision in respect of prior claims and claim adjustment expenses (17,350)",
+      "exact_reserve_text": "Over-provision in respect of prior claims and claim adjustment expenses (17,350)",
       "primary_causes": [
         "COVID-19 / pandemic effects",
+        "Natural catastrophe events",
         "Favorable claims development"
       ],
       "specific_events": [
-        "COVID-19",
+        "Covid-19",
         "Typhoon Hagibis",
         "Typhoon Faxai",
         "Typhoon Jebi",
         "UK EU flooding",
         "Winter Storm Uri"
       ],
-      "specific_years_affected": [],
+      "specific_years_affected": [
+        "older years of account",
+        "prior-year"
+      ],
       "prior_year_events": [
         {
-          "event_name": "COVID-19",
+          "event_name": "Covid-19",
           "event_year": null,
-          "impact_description": "releasing Covid-19 related reserve from older years of account",
+          "impact_description": "releasing Covid-19 related reserve from older years of account based on ground up exposure analysis exercise carried out",
           "lobs_affected": [],
           "amount_gbp_m": null,
           "confidence": 0.8
@@ -84,111 +90,83 @@
       ],
       "named_events": [
         {
-          "event_name": "COVID-19",
-          "event_year": null,
+          "event_name": "Covid-19",
+          "event_year": 2020,
           "event_type": "other",
-          "net_loss_gbp_m": null,
-          "loss_description": "releasing Covid-19 related reserve from older years of account; exposure to reinsurance of business interruption insurance, reserved at $13.5 million (2022: $18.7 million)",
-          "lobs_affected": [],
-          "page": 39,
+          "net_loss_gbp_m": 13.5,
+          "loss_description": "exposed to Covid-19 through potential exposure to reinsurance of business interruption insurance. This exposure has been reserved at $13.5 million, which includes a significant element of margin.",
+          "lobs_affected": [
+            "Reinsurance"
+          ],
+          "page": 55,
           "confidence": 1.0
         },
         {
-          "event_name": "Typhoon Hagibis",
-          "event_year": null,
-          "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": null,
-          "loss_description": "prior-year catastrophe reserve releases",
-          "lobs_affected": [],
-          "page": 39,
-          "confidence": 0.8
-        },
-        {
-          "event_name": "Typhoon Faxai",
-          "event_year": null,
-          "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": null,
-          "loss_description": "prior-year catastrophe reserve releases",
-          "lobs_affected": [],
-          "page": 39,
-          "confidence": 0.8
-        },
-        {
-          "event_name": "Typhoon Jebi",
-          "event_year": null,
-          "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": null,
-          "loss_description": "prior-year catastrophe reserve releases",
-          "lobs_affected": [],
-          "page": 39,
-          "confidence": 0.8
-        },
-        {
-          "event_name": "UK EU flooding",
-          "event_year": null,
-          "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": null,
-          "loss_description": "prior-year catastrophe reserve releases",
-          "lobs_affected": [],
-          "page": 39,
-          "confidence": 0.8
-        },
-        {
           "event_name": "Winter Storm Uri",
-          "event_year": null,
+          "event_year": 2021,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "prior-year catastrophe reserve releases (page 39); 2021 account losses (page 55)",
+          "loss_description": "losses driven by Winter Storm Uri",
           "lobs_affected": [],
-          "page": 39,
+          "page": 55,
           "confidence": 0.8
         },
         {
           "event_name": "Hurricane Ida",
-          "event_year": null,
+          "event_year": 2021,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "2021 account losses",
+          "loss_description": "losses driven by Hurricane Ida",
           "lobs_affected": [],
           "page": 55,
           "confidence": 0.8
         },
         {
           "event_name": "European flooding",
-          "event_year": null,
+          "event_year": 2021,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "2021 account losses",
+          "loss_description": "losses driven by European flooding",
           "lobs_affected": [],
           "page": 55,
           "confidence": 0.8
         },
         {
           "event_name": "Kentucky tornadoes",
-          "event_year": null,
+          "event_year": 2021,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "2021 account losses",
+          "loss_description": "losses driven by Kentucky tornadoes",
           "lobs_affected": [],
           "page": 55,
           "confidence": 0.8
         },
         {
           "event_name": "Russia/Ukraine conflict",
-          "event_year": null,
-          "event_type": "geopolitical",
+          "event_year": 2021,
+          "event_type": "political",
           "net_loss_gbp_m": null,
-          "loss_description": "2021 account impacted, although not material",
+          "loss_description": "2021 was also impacted by the Russia/Ukraine conflict.",
           "lobs_affected": [],
           "page": 55,
           "confidence": 0.8
         },
         {
           "event_name": "Hurricane Ian",
-          "event_year": null,
+          "event_year": 2022,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "2022 account will pick up losses",
+          "loss_description": "2022 account will pick up a number of catastrophe losses following Hurricane Ian.",
+          "lobs_affected": [],
+          "page": 55,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Russia/Ukraine conflict",
+          "event_year": 2022,
+          "event_type": "political",
+          "net_loss_gbp_m": null,
+          "loss_description": "2022 account also carries reserves in relation to the Russia/Ukraine conflict.",
           "lobs_affected": [],
           "page": 55,
           "confidence": 0.8
@@ -198,9 +176,19 @@
           "event_year": 2023,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "2023 account will pick up losses",
+          "loss_description": "2023 account will pick up the loss impact of catastrophe losses, mainly the Hawaii wildfires",
           "lobs_affected": [],
-          "page": 55,
+          "page": 39,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Hurricane Hilary",
+          "event_year": 2023,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "2023 account will pick up the loss impact of catastrophe losses, mainly Hurricane Hilary",
+          "lobs_affected": [],
+          "page": 39,
           "confidence": 0.8
         },
         {
@@ -208,17 +196,37 @@
           "event_year": 2023,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "2023 account will pick up losses",
+          "loss_description": "2023 account will pick up the loss impact of catastrophe losses, mainly Hurricane Idalia",
           "lobs_affected": [],
-          "page": 55,
+          "page": 39,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Canada wildfires",
+          "event_year": 2023,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "2023 account will pick up the loss impact of catastrophe losses, mainly Canada wildfires",
+          "lobs_affected": [],
+          "page": 39,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Morocco earthquake",
+          "event_year": 2023,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "2023 account will pick up the loss impact of catastrophe losses, mainly the Morocco earthquake.",
+          "lobs_affected": [],
+          "page": 39,
           "confidence": 0.8
         }
       ],
-      "standardized_narrative": "The syndicate experienced a prior year reserve release of $17.35 million, primarily driven by favorable claims development, including releases of COVID-19 related reserves and prior-year catastrophe reserves for events such as Typhoon Hagibis, Typhoon Faxai, Typhoon Jebi, UK EU flooding, and Winter Storm Uri. These releases exceeded current year losses due to benign claims experience.",
+      "standardized_narrative": "Syndicate 6104 reported a gross prior year reserve release of $17.35 million in 2023, representing a 27.09% release of opening gross claims outstanding. This was primarily driven by releases of Covid-19 related reserves and prior-year catastrophe reserves, including those related to Typhoon Hagibis, Typhoon Faxai, Typhoon Jebi, UK EU flooding, and Winter Storm Uri, due to benign claims experience. The syndicate's business is entirely reinsurance.",
       "raw_causal_phrases": [
-        "releasing Covid-19 related reserve from older years of account",
+        "releasing Covid-19 related reserve from older years of account based on ground up exposure analysis exercise carried out",
         "prior-year catastrophe reserve releases for several events including Typhoon Hagibis, Typhoon Faxai, Typhoon Jebi, UK EU flooding and Winter Storm Uri",
-        "These releases exceeded current year losses due to the benign claims experience"
+        "These releases exceeded current year losses due to the benign claims experience."
       ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 19.6,
@@ -229,14 +237,14 @@
           "percentage_of_total": 100.0
         }
       ],
-      "gross_premium_page": 50,
+      "gross_premium_page": 39,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "The prior year development figure is taken from the 'Over/under-provision' line in the Technical Provisions note, which is the most direct statement of prior year reserve movement. This figure differs significantly from a calculation based on the claims development triangle, which may be influenced by other factors not explicitly detailed. [RAG OVERRIDE: Model said PYD=-17.35, RAG triangle computed -13.374. Using RAG value.]",
+      "data_quality_notes": "The claims development triangle shows a total prior year development of -8.881 $m, which differs from the -17.350 $m explicitly stated in the Technical Provisions note. The 2020 underwriting year of account received a Reinsurance to Close premium of 38.484 $m, which may distort the claims development triangle for that year. [RAG OVERRIDE: Model said PYD=-17.35, RAG triangle computed -13.374. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
-        "units": "thousands",
+        "units": "millions",
         "page": 53,
         "underwriting_years": [
           2014,
@@ -252,83 +260,71 @@
         ],
         "development_rows": [
           [
-            13675,
-            5381,
-            17761,
-            62762,
-            72078,
-            100688,
-            38611,
-            22726,
-            9122,
-            5825
+            13.675,
+            5.381,
+            17.761,
+            62.762,
+            72.078,
+            100.688,
+            38.611,
+            22.726,
+            9.122,
+            5.825
           ],
           [
-            9951,
-            3172,
-            11928,
-            59130,
-            79688,
-            64041,
-            44163,
-            20941,
-            8990,
+            9.951,
+            3.172,
+            11.928,
+            59.13,
+            79.688,
+            64.041,
+            44.163,
+            20.941,
+            8.99,
             null
           ],
           [
-            10062,
-            3386,
-            8961,
-            60155,
-            74273,
-            51681,
-            41264,
-            19040,
-            null,
-            null
-          ],
-          [
-            9641,
-            2783,
-            8255,
-            58667,
-            65539,
-            43623,
-            36063,
-            null,
+            10.062,
+            3.386,
+            8.961,
+            60.155,
+            74.273,
+            51.681,
+            41.264,
+            19.04,
             null,
             null
           ],
           [
-            9676,
-            2915,
-            8357,
-            58059,
-            65130,
-            39130,
-            null,
+            9.641,
+            2.783,
+            8.255,
+            58.667,
+            65.539,
+            43.623,
+            36.063,
             null,
             null,
             null
           ],
           [
-            9500,
-            2890,
-            8157,
-            56714,
-            63871,
-            null,
+            9.676,
+            2.915,
+            8.357,
+            58.059,
+            65.13,
+            39.13,
             null,
             null,
             null,
             null
           ],
           [
-            9519,
-            2846,
-            8108,
-            56499,
-            null,
+            9.5,
+            2.89,
+            8.157,
+            56.714,
+            63.871,
             null,
             null,
             null,
@@ -336,10 +332,10 @@
             null
           ],
           [
-            9496,
-            2872,
-            7929,
-            null,
+            9.519,
+            2.846,
+            8.108,
+            56.499,
             null,
             null,
             null,
@@ -348,9 +344,9 @@
             null
           ],
           [
-            9646,
-            2871,
-            null,
+            9.496,
+            2.872,
+            7.929,
             null,
             null,
             null,
@@ -360,7 +356,19 @@
             null
           ],
           [
-            9521,
+            9.646,
+            2.871,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            9.521,
             null,
             null,
             null,
@@ -375,20 +383,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_6104_2023_llm.pdf",
-      "content_hash": "00d674667047d4df8a0f8aa6503c5155d3830baa3797337e970a945a9eebc48a",
-      "standardized_at": "2026-07-06T02:26:42.040419+00:00",
+      "content_hash": "4381292465e911e22239cae70c99060140bbfe08818a1fa50256caa5ddc34dca",
+      "standardized_at": "2026-09-11T13:31:57.823589+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 23537,
-        "output_tokens": 3050,
-        "total_tokens": 32807,
-        "cost_usd": 0.014686
+        "input_tokens": 24341,
+        "output_tokens": 3467,
+        "total_tokens": 35018,
+        "cost_usd": 0.01597
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -13.374,
+        "model_value": -17.35,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 79,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2014,
           2015,
@@ -523,6 +543,18 @@
             null
           ]
         ],
+        "row_labels": [
+          "At end of",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later",
+          "Seven years later",
+          "Eight years later",
+          "Nine years later"
+        ],
         "source_page": 79,
         "entity": 6104
       },
@@ -539,6 +571,13 @@
           "entity": 6104,
           "backend": "azure",
           "table_kind": "balance_sheet_liabilities"
+        },
+        "movement_semantics": {
+          "row_label": "Over-provision in respect of prior claims and claim adjustment expenses",
+          "row_index": 4,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": false,
+          "column_index": 1
         },
         "gross_prior_year_claims": -17.4,
         "ri_share_prior_year": 0.0,
@@ -746,7 +785,7 @@
       "direction": "release",
       "prior_year_movement_page": 74,
       "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "Over-provision in respect of prior claims and claim adjustment expenses (17,350) - (17,350)",
+      "exact_reserve_text": "The Syndicate has benefitted from releasing Covid-19 related reserve from older years of account based on ground up exposure analysis exercise carried out, as well as prior-year catastrophe reserve releases for several events including Typhoon Hagibis, Typhoon Faxai, Typhoon Jebi, UK EU flooding and Winter Storm Uri. These releases exceeded current year losses due to the benign claims experience.",
       "primary_causes": [
         "COVID-19 / pandemic effects",
         "Favorable claims development",
@@ -759,15 +798,12 @@
         "UK EU flooding",
         "Winter Storm Uri"
       ],
-      "specific_years_affected": [
-        2020,
-        2021
-      ],
+      "specific_years_affected": [],
       "prior_year_events": [
         {
           "event_name": "Typhoon Hagibis",
-          "event_year": 2019,
-          "impact_description": "Prior-year catastrophe reserve releases referenced in the Directors' report as part of overall prior-year favourable movement",
+          "event_year": null,
+          "impact_description": "Prior-year catastrophe reserve releases referenced as contributing to favourable prior-year development",
           "lobs_affected": [
             "Reinsurance - Property"
           ],
@@ -776,8 +812,8 @@
         },
         {
           "event_name": "Typhoon Faxai",
-          "event_year": 2019,
-          "impact_description": "Prior-year catastrophe reserve releases referenced as contributing to releases",
+          "event_year": null,
+          "impact_description": "Prior-year catastrophe reserve releases referenced as contributing to favourable prior-year development",
           "lobs_affected": [
             "Reinsurance - Property"
           ],
@@ -786,8 +822,8 @@
         },
         {
           "event_name": "Typhoon Jebi",
-          "event_year": 2018,
-          "impact_description": "Prior-year catastrophe reserve releases referenced as contributing to releases",
+          "event_year": null,
+          "impact_description": "Prior-year catastrophe reserve releases referenced as contributing to favourable prior-year development",
           "lobs_affected": [
             "Reinsurance - Property"
           ],
@@ -795,9 +831,9 @@
           "confidence": 0.5
         },
         {
-          "event_name": "UK/EU flooding",
-          "event_year": 2019,
-          "impact_description": "Prior-year catastrophe reserve releases referenced as contributing to releases",
+          "event_name": "UK EU flooding",
+          "event_year": null,
+          "impact_description": "Prior-year catastrophe reserve releases referenced as contributing to favourable prior-year development",
           "lobs_affected": [
             "Reinsurance - Property"
           ],
@@ -806,62 +842,72 @@
         },
         {
           "event_name": "Winter Storm Uri",
-          "event_year": 2021,
-          "impact_description": "Prior-year catastrophe reserve releases referenced as contributing to releases",
+          "event_year": null,
+          "impact_description": "Prior-year catastrophe reserve releases referenced as contributing to favourable prior-year development",
           "lobs_affected": [
             "Reinsurance - Property"
           ],
           "amount_gbp_m": null,
           "confidence": 0.5
+        },
+        {
+          "event_name": "COVID-19 pandemic effects",
+          "event_year": 2020,
+          "impact_description": "Release of Covid-19 related reserves from older years of account following ground-up exposure analysis",
+          "lobs_affected": [
+            "Reinsurance - Property"
+          ],
+          "amount_gbp_m": null,
+          "confidence": 0.7
         }
       ],
       "named_events": [
         {
           "event_name": "Typhoon Hagibis",
-          "event_year": 2019,
+          "event_year": null,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "Referenced as a prior-year catastrophe for which reserves have been released",
+          "loss_description": "listed among prior-year catastrophe reserve releases",
           "lobs_affected": [
             "Reinsurance - Property"
           ],
-          "page": 59,
+          "page": 58,
           "confidence": 0.8
         },
         {
           "event_name": "Typhoon Faxai",
-          "event_year": 2019,
+          "event_year": null,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "Referenced as a prior-year catastrophe for which reserves have been released",
+          "loss_description": "listed among prior-year catastrophe reserve releases",
           "lobs_affected": [
             "Reinsurance - Property"
           ],
-          "page": 59,
+          "page": 58,
           "confidence": 0.8
         },
         {
           "event_name": "Typhoon Jebi",
-          "event_year": 2018,
+          "event_year": null,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "Referenced as a prior-year catastrophe for which reserves have been released",
+          "loss_description": "listed among prior-year catastrophe reserve releases",
           "lobs_affected": [
             "Reinsurance - Property"
           ],
-          "page": 59,
+          "page": 58,
           "confidence": 0.8
         },
         {
-          "event_name": "UK/EU flooding",
-          "event_year": 2019,
+          "event_name": "UK EU flooding",
+          "event_year": null,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "Referenced as a prior-year catastrophe for which reserves have been released",
+          "loss_description": "listed among prior-year catastrophe reserve releases",
           "lobs_affected": [
             "Reinsurance - Property"
           ],
-          "page": 59,
+          "page": 58,
           "confidence": 0.8
         },
         {
@@ -869,63 +915,52 @@
           "event_year": 2021,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "Referenced as a prior-year catastrophe for which reserves have been released",
+          "loss_description": "listed among prior-year catastrophe reserve releases",
           "lobs_affected": [
             "Reinsurance - Property"
           ],
-          "page": 59,
-          "confidence": 0.8
+          "page": 58,
+          "confidence": 0.7
         },
         {
           "event_name": "Hawaii wildfires",
           "event_year": 2023,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "Mentioned as a 2023 loss the 2023 account will pick up",
+          "loss_description": "2023 account will pick up losses including the Hawaii wildfires",
           "lobs_affected": [
             "Reinsurance - Property"
           ],
           "page": 59,
-          "confidence": 0.6
+          "confidence": 0.8
         },
         {
           "event_name": "Hurricane Idalia",
           "event_year": 2023,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "Mentioned as a 2023 loss the 2023 account will pick up",
+          "loss_description": "2023 account will pick up losses including Hurricane Idalia",
           "lobs_affected": [
             "Reinsurance - Property"
           ],
           "page": 59,
-          "confidence": 0.6
-        },
-        {
-          "event_name": "Hurricane Ian",
-          "event_year": 2022,
-          "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": null,
-          "loss_description": "Referenced as a 2022 catastrophe affecting results",
-          "lobs_affected": [
-            "Reinsurance - Property"
-          ],
-          "page": 59,
-          "confidence": 0.6
+          "confidence": 0.8
         }
       ],
-      "standardized_narrative": "Syndicate 6104's gross claims outstanding at 1 January 2023 were $64.038m and reduced to $53.081m at 31 December 2023. The technical provisions note shows an over-provision in respect of prior claims and claim adjustment expenses of $17.35m (gross), representing a favourable prior-year development (release) primarily driven by releases of COVID-19 related reserves and favourable prior-year catastrophe reserve movements (including references to Typhoon Hagibis, Typhoon Faxai, Typhoon Jebi, UK/EU flooding and Winter Storm Uri). The release is explicitly shown in the technical provisions reconciliation and is reflected in the Syndicate's positive calendar year result.",
+      "standardized_narrative": "Syndicate 6104 recorded a gross prior-year release of $17.35m in 2023 (approximately 27.1% of opening gross claims outstanding of $64.04m). Management attributes the release primarily to reductions in COVID-19 related reserves and favourable prior-year development, including prior-year catastrophe reserve releases for events such as Typhoon Hagibis, Faxai, Jebi, UK/EU flooding and Winter Storm Uri. Although the 2023 year picked up catastrophe losses (for example Hawaii wildfires and Hurricane Idalia), the prior-year releases exceeded current-year losses, resulting in a net release overall. The movement predominantly affects the reinsurance/property exposure of the Syndicate.",
       "raw_causal_phrases": [
-        "releasing Covid-19 related reserve from older years of account based on ground up exposure analysis exercise carried out, as well as prior-year catastrophe reserve releases for several events including Typhoon Hagibis, Typhoon Faxai, Typhoon Jebi, UK EU flooding and Winter Storm Uri.",
-        "Over-provision in respect of prior claims and claim adjustment expenses (17,350) - (17,350)",
-        "The Syndicate has material exposure to losses arising out of the Covid-19 pandemic and currently reserves $13.5 million (2022: $18.7 million) for these claims."
+        "releasing Covid-19 related reserve from older years of account based on ground up exposure analysis exercise carried out",
+        "prior-year catastrophe reserve releases for several events including Typhoon Hagibis, Typhoon Faxai, Typhoon Jebi, UK EU flooding and Winter Storm Uri",
+        "These releases exceeded current year losses due to the benign claims experience",
+        "The Syndicate has material exposure to losses arising out of the Covid-19 pandemic and currently reserves $13.5 million (2022: $18.7 million) for these claims"
       ],
       "lob_movements": [
         {
-          "line_of_business": "Treaty",
+          "line_of_business": "Reinsurance - Property",
           "direction": "release",
           "amount_gbp_m": -17.35,
-          "percentage": -27.090570701555617,
-          "confidence": 0.9
+          "percentage": -27.1,
+          "confidence": 0.5
         }
       ],
       "gross_premiums_written_gbp_m": 19.553,
@@ -936,10 +971,10 @@
           "percentage_of_total": 100.0
         }
       ],
-      "gross_premium_page": 73,
+      "gross_premium_page": 65,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "All monetary figures are reported in the syndicate's functional currency (USD) and provided in millions. Field names containing '_gbp_m' refer to amounts in the native currency (USD) millions as requested. Prior-year development (gross) was taken directly from the Technical Provisions reconciliation table 'Over-provision in respect of prior claims and claim adjustment expenses (17,350)' (gross amount). Named-event impacts are described in narrative but not quantified individually. Claims development triangle exists (gross and net); RITC or other transfers were noted elsewhere for other syndicates but none distort the identified gross prior-year movement for 6104. [RAG OVERRIDE: Model said PYD=-17.35, RAG triangle computed -13.374. Using RAG value.]",
+      "data_quality_notes": "All monetary amounts are reported in the syndicate's functional currency (USD). Opening reserves derived from the balance sheet (Claims outstanding at 31 Dec 2022). Prior-year development taken from Technical Provisions note showing an over-provision/(release) of (17,350) in the Insurance liabilities column. Line-of-business attribution is inferred (Syndicate 6104 is a reinsurance vehicle focusing on property catastrophe ceded from Syndicate 33); the report does not split the prior-year movement by LOB. Several named prior events are cited in narrative but specific years for those events are not stated in the text; event-year fields left null where the report did not explicitly state the year. Claims development triangle is present (gross, $000 units). [RAG OVERRIDE: Model said PYD=-17.35, RAG triangle computed -13.374. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
@@ -1082,20 +1117,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_6104_2023_llm.pdf",
-      "content_hash": "00d674667047d4df8a0f8aa6503c5155d3830baa3797337e970a945a9eebc48a",
-      "standardized_at": "2026-07-06T02:28:00.835088+00:00",
+      "content_hash": "4381292465e911e22239cae70c99060140bbfe08818a1fa50256caa5ddc34dca",
+      "standardized_at": "2026-09-11T13:34:23.217955+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 74419,
-        "output_tokens": 8532,
-        "total_tokens": 82951,
-        "cost_usd": 0.035669
+        "input_tokens": 75179,
+        "output_tokens": 7821,
+        "total_tokens": 83000,
+        "cost_usd": 0.034437
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -13.374,
+        "model_value": -17.35,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 79,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2014,
           2015,
@@ -1230,6 +1277,18 @@
             null
           ]
         ],
+        "row_labels": [
+          "At end of",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later",
+          "Seven years later",
+          "Eight years later",
+          "Nine years later"
+        ],
         "source_page": 79,
         "entity": 6104
       },
@@ -1246,6 +1305,13 @@
           "entity": 6104,
           "backend": "azure",
           "table_kind": "balance_sheet_liabilities"
+        },
+        "movement_semantics": {
+          "row_label": "Over-provision in respect of prior claims and claim adjustment expenses",
+          "row_index": 4,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": false,
+          "column_index": 1
         },
         "gross_prior_year_claims": -17.4,
         "ri_share_prior_year": 0.0,
@@ -1443,12 +1509,12 @@
       }
     }
   },
-  "total_cost_usd": 0.050355,
-  "total_tokens": 115758,
+  "total_cost_usd": 0.050407,
+  "total_tokens": 118018,
   "validation": {
     "passed": true,
-    "total_discrepancies": 21,
-    "within_tolerance": 21,
+    "total_discrepancies": 17,
+    "within_tolerance": 17,
     "hard_failures": 0,
     "hard_failure_details": []
   }

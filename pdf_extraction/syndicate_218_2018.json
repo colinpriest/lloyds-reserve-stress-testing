@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T10:30:27.101832+00:00",
+  "extraction_timestamp": "2026-09-13T04:09:20.789584+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -13,42 +15,29 @@
       "opening_reserves_gbp_m": 752.821,
       "opening_reserves_page": 5,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": -90.66,
-      "prior_year_development_pct": -12.04,
+      "prior_year_development_gbp_m": -116.005,
+      "prior_year_development_pct": -15.41,
       "direction": "release",
-      "prior_year_movement_page": 2,
+      "prior_year_movement_page": 11,
       "prior_year_movement_confidence": 0.8,
-      "exact_reserve_text": "The improved performance is credited to the claims ratio improving significantly. This resulted from releases in reserves from 2017, 2015 and prior years, where claims from these years have developed favourably in the year as the impact of the remediation and improvements are starting to emerge.",
+      "exact_reserve_text": "The improved performance is credited to the claims ratio improving significantly. This resulted from releases in reserves from 2017, 2015 and prior years, where claims from these years have developed favourably in the year as the impact of the remediation and improvements are starting to emerge. This offset a deterioration in 2016 and an increase in expense ratio from the reduced income.",
       "primary_causes": [
         "Favorable claims development",
-        "Ogden discount rate",
-        "Economic inflation / claims cost inflation"
+        "Adverse claims development",
+        "Other"
       ],
       "specific_events": [],
       "specific_years_affected": [
         2017,
-        2015
+        2015,
+        2016
       ],
-      "prior_year_events": [
-        {
-          "event_name": "Ogden discount rate change",
-          "event_year": 2017,
-          "impact_description": "The change in Ogden discount rate from 2.5% to -0.75% in 2017 affected the estimate of gross and net provision for prior underwriting years.",
-          "lobs_affected": [
-            "Motor"
-          ],
-          "amount_gbp_m": null,
-          "confidence": 0.8
-        }
-      ],
+      "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "The syndicate reported a gross release of prior year reserves by GBP 115.264m in 2018, calculated from the gross claims development triangle. This aligns with the narrative on page 2, which states \"releases in reserves from 2017, 2015 and prior years\" due to \"favourably developed\" claims. Key causes impacting reserves include the Ogden discount rate change in 2017 (from 2.5% to -0.75%) and ongoing claims cost inflation, particularly from imported parts and claimant behaviour.",
+      "standardized_narrative": "The syndicate experienced an overall gross release in prior year reserves of GBP 90.660m. This was primarily driven by favorable claims development in 2017, 2015, and other prior years, attributed to the impact of remediation and improvements. This favorable development was partially offset by adverse development in 2016, as described in the managing agent's report.",
       "raw_causal_phrases": [
-        "releases in reserves from 2017, 2015 and prior years, where claims from these years have developed favourably",
-        "the estimate of gross and net provision was affected by the change of Ogden discount rate from 2.5% to -0.75%",
-        "Further inflation in claim severities and frequencies",
-        "depreciation of the pound affecting the prices of imported parts",
-        "Claimant behaviour could also increase claim frequencies"
+        "releases in reserves from 2017, 2015 and prior years, where claims from these years have developed favourably in the year as the impact of the remediation and improvements are starting to emerge.",
+        "offset a deterioration in 2016"
       ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 329.4,
@@ -87,7 +76,7 @@
       "gross_premium_page": 15,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior year development figure calculated from the gross claims development triangle. This figure (-115.264m release) contradicts the 'Net claims (strengthening)/release' of +13.213m shown in Note 7, which is a net figure. The narrative on page 2 supports a release. [RAG OVERRIDE: Model said PYD=-115.264, RAG triangle computed -90.66. Using RAG value.]",
+      "data_quality_notes": "The narrative on page 1 states 'deterioration in 2016', but the gross claims development triangle shows a release for the 2016 underwriting year. The overall prior year development amount is calculated from the gross claims development triangle (page 11) for underwriting years 2011-2016, excluding the two most recent years (2017 and 2018). [RAG OVERRIDE: Model said PYD=-90.66, RAG triangle computed -116.005. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -188,20 +177,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_218_2018_llm.pdf",
-      "content_hash": "a67bdcd809b7bfe6f1614a0148044d82d50296859793cb82655771534b212777",
-      "standardized_at": "2026-07-05T12:14:17.290234+00:00",
+      "content_hash": "e5f0dffa8b4b86a531311627689ea450deed90497d9823f72c6ca7817dcc3ed1",
+      "standardized_at": "2026-09-11T11:43:13.554103+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 13216,
-        "output_tokens": 1740,
-        "total_tokens": 22984,
-        "cost_usd": 0.008315
+        "input_tokens": 14020,
+        "output_tokens": 1584,
+        "total_tokens": 21850,
+        "cost_usd": 0.008166
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -116.005,
+        "model_value": -90.66,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 32,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2010,
           2011,
@@ -215,7 +216,7 @@
         ],
         "development_rows": [
           [
-            null,
+            3780828.0,
             208081.0,
             153465.0,
             143566.0,
@@ -226,7 +227,7 @@
             113131.0
           ],
           [
-            null,
+            4032490.0,
             406799.0,
             297639.0,
             283826.0,
@@ -237,7 +238,7 @@
             null
           ],
           [
-            null,
+            4041074.0,
             392977.0,
             285678.0,
             281283.0,
@@ -248,7 +249,7 @@
             null
           ],
           [
-            null,
+            4084200.0,
             391904.0,
             278834.0,
             null,
@@ -259,7 +260,7 @@
             null
           ],
           [
-            null,
+            4097623.0,
             390047.0,
             null,
             287586.0,
@@ -270,7 +271,7 @@
             null
           ],
           [
-            null,
+            4093504.0,
             null,
             275972.0,
             266447.0,
@@ -292,8 +293,19 @@
             null
           ],
           [
-            null,
+            4113577.0,
             386565.0,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            4088232.0,
+            null,
             null,
             null,
             null,
@@ -303,6 +315,22 @@
             null
           ]
         ],
+        "row_labels": [
+          "At end of",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later",
+          "Seven years later",
+          "Eight years or"
+        ],
+        "aggregated_cohort": {
+          "anchor": 2010,
+          "label": "and prior GBP 000",
+          "column": 2
+        },
         "source_page": 32,
         "entity": 218
       },
@@ -476,49 +504,31 @@
       "opening_reserves_gbp_m": 752.821,
       "opening_reserves_page": 19,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": -90.66,
-      "prior_year_development_pct": -12.04,
+      "prior_year_development_gbp_m": -116.005,
+      "prior_year_development_pct": -15.41,
       "direction": "release",
       "prior_year_movement_page": 29,
       "prior_year_movement_confidence": 0.8,
       "exact_reserve_text": "The improved performance is credited to the claims ratio improving significantly. This resulted from releases in reserves from 2017, 2015 and prior years, where claims from these years have developed favourably in the year as the impact of the remediation and improvements are starting to emerge.",
       "primary_causes": [
-        "Favorable claims development",
-        "Reserve methodology change",
-        "Other"
+        "Favorable claims development"
       ],
       "specific_events": [],
       "specific_years_affected": [
         2017,
         2015
       ],
-      "prior_year_events": [
-        {
-          "event_name": "Ogden discount rate change / PIDR review",
-          "event_year": 2017,
-          "impact_description": "Change in the Ogden discount rate and associated reviews affected personal injury reserves; management set claims provisions on a 0% Ogden basis and noted that a move to between 0.5% and 1.0% would reduce reserves on 2018 and prior years by several million pounds.",
-          "lobs_affected": [
-            "Motor"
-          ],
-          "amount_gbp_m": null,
-          "confidence": 0.8
-        }
-      ],
+      "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "Syndicate 218 recorded a net release in prior-year claims reserves at year-end 2018. Using the gross claims development triangle, older underwriting years (2011-2016) show a cumulative favourable development of approximately GBP 90.7m, driven by favourable claims development and remediation/improvement actions in underwriting and claims handling. Management also notes sensitivity to the Ogden discount rate which could further reduce reserves if changed upwards.",
+      "standardized_narrative": "At 1 January 2018 Syndicate 218 had gross claims outstanding of GBP 752.821m. During 2018 there was a material net release in gross claims estimates of approximately GBP 116.0m (about 15.4% of opening gross reserves), driven primarily by favourable development on prior underwriting years (notably 2017, 2015 and earlier) as remediation and improvements in claims handling/pricing began to take effect. The movement was derived from the syndicate's published gross claims development table.",
       "raw_causal_phrases": [
         "releases in reserves from 2017, 2015 and prior years",
-        "claims from these years have developed favourably",
-        "the impact of the remediation and improvements are starting to emerge"
+        "claims from these years have developed favourably in the year",
+        "Net claims (strengthening)/release",
+        "risk margin reserve release",
+        "Loss adjustment expense reserve release"
       ],
       "lob_movements": [
-        {
-          "line_of_business": "Aggregate",
-          "direction": "release",
-          "amount_gbp_m": -90.66,
-          "percentage": -12.05,
-          "confidence": 0.8
-        },
         {
           "line_of_business": "Motor",
           "direction": "release",
@@ -563,7 +573,7 @@
       "gross_premium_page": 36,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Gross prior-year development was calculated from the gross claims development triangle (note 5(e)) because the explicit 'Movement in prior accident year's provision for claims outstanding' note provided only 'Net claims' figures. The triangle values are presented in GBP 000 and have been converted to millions for summary fields. There are two differing narrative ranges quoted for Ogden sensitivity in the report (one stating a GBP 4.2m-GBP 8.5m potential reduction and another stating GBP 3.0m-GBP 6.0m); this inconsistency is noted. RITC / reinsurance commutation activity is present in the report and may distort development for some years, but the triangle was used after review.",
+      "data_quality_notes": "Prior year development (PYD) was calculated from the gross claims development triangle (Analysis of claims development - gross of reinsurance) because the Movement in prior year's provision note presents net figures (and the note breakdown appears net). The triangle includes an aggregate '2010 and prior' column which was excluded from the diagonal comparison per instructions. No explicit gross PYD line was provided, hence triangle-based calculation used. RITC/TPRe commutation activity was disclosed in the report and may affect comparability of some reserve movements; the computed PYD is therefore flagged as derived from the triangle.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -669,25 +679,47 @@
             null,
             null,
             null
+          ],
+          [
+            386565,
+            270479,
+            266447,
+            268144,
+            288019,
+            352039,
+            250072,
+            113131
           ]
         ]
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_218_2018_llm.pdf",
-      "content_hash": "a67bdcd809b7bfe6f1614a0148044d82d50296859793cb82655771534b212777",
-      "standardized_at": "2026-07-05T12:16:05.710164+00:00",
+      "content_hash": "e5f0dffa8b4b86a531311627689ea450deed90497d9823f72c6ca7817dcc3ed1",
+      "standardized_at": "2026-09-11T11:46:08.874132+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 52531,
-        "output_tokens": 9733,
-        "total_tokens": 62264,
-        "cost_usd": 0.032599
+        "input_tokens": 53291,
+        "output_tokens": 9383,
+        "total_tokens": 62674,
+        "cost_usd": 0.032089
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -116.005,
+        "model_value": -116.005,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 32,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2010,
           2011,
@@ -701,7 +733,7 @@
         ],
         "development_rows": [
           [
-            null,
+            3780828.0,
             208081.0,
             153465.0,
             143566.0,
@@ -712,7 +744,7 @@
             113131.0
           ],
           [
-            null,
+            4032490.0,
             406799.0,
             297639.0,
             283826.0,
@@ -723,7 +755,7 @@
             null
           ],
           [
-            null,
+            4041074.0,
             392977.0,
             285678.0,
             281283.0,
@@ -734,7 +766,7 @@
             null
           ],
           [
-            null,
+            4084200.0,
             391904.0,
             278834.0,
             null,
@@ -745,7 +777,7 @@
             null
           ],
           [
-            null,
+            4097623.0,
             390047.0,
             null,
             287586.0,
@@ -756,7 +788,7 @@
             null
           ],
           [
-            null,
+            4093504.0,
             null,
             275972.0,
             266447.0,
@@ -778,8 +810,19 @@
             null
           ],
           [
-            null,
+            4113577.0,
             386565.0,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            4088232.0,
+            null,
             null,
             null,
             null,
@@ -789,6 +832,22 @@
             null
           ]
         ],
+        "row_labels": [
+          "At end of",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later",
+          "Seven years later",
+          "Eight years or"
+        ],
+        "aggregated_cohort": {
+          "anchor": 2010,
+          "label": "and prior GBP 000",
+          "column": 2
+        },
         "source_page": 32,
         "entity": 218
       },
@@ -957,12 +1016,12 @@
       }
     }
   },
-  "total_cost_usd": 0.040914,
-  "total_tokens": 85248,
+  "total_cost_usd": 0.040255,
+  "total_tokens": 84524,
   "validation": {
     "passed": true,
-    "total_discrepancies": 19,
-    "within_tolerance": 19,
+    "total_discrepancies": 16,
+    "within_tolerance": 16,
     "hard_failures": 0,
     "hard_failure_details": []
   }

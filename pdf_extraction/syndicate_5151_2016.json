@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T11:56:30.226117+00:00",
+  "extraction_timestamp": "2026-09-13T04:10:47.995450+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -20,36 +22,55 @@
       "prior_year_movement_confidence": 1.0,
       "exact_reserve_text": "Favourable prior year claims development of GBP 24.7m (2015 - GBP 20.2m) was experienced in 2016, predominantly in respect of Property and Marine & Energy lines of business, as a result of lower than expected claims activity due to the benign claims environment.",
       "primary_causes": [
-        "Favorable claims development"
+        "Favorable claims development",
+        "Other"
       ],
       "specific_events": [],
       "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [
         {
-          "event_name": "Ogden Discount Rate change",
+          "event_name": "Ogden Discount Rate Change",
           "event_year": 2017,
           "event_type": "regulatory",
           "net_loss_gbp_m": null,
-          "loss_description": "immaterial impact",
+          "loss_description": "cut in the Ogden Discount Rate (\"ODR\") from 2.5% to -0.75%... expected to increase lump sum awards... immaterial impact.",
           "lobs_affected": [
             "Casualty",
             "Motor"
           ],
-          "page": 17,
+          "page": 19,
           "confidence": 1.0
         }
       ],
-      "standardized_narrative": "The Syndicate experienced a favourable prior year claims development of GBP 24.7 million in 2016, representing a release of 10.11% of its opening gross reserves. This positive movement was primarily driven by a relatively benign claims environment and lower than expected claims activity, particularly within the Property and Marine & Energy lines of business. No major catastrophic events were noted in 2016. A post-balance sheet event regarding a cut in the Ogden Discount Rate in 2017 is noted, with an expected immaterial impact on the Syndicate's Employers' Liability and Motor Excess of Loss lines.",
+      "standardized_narrative": "The Syndicate experienced a favourable prior year claims development of GBP 24.7 million in 2016, primarily driven by lower than expected claims activity due to a benign claims environment. This positive development was predominantly observed in the Property and Marine & Energy lines of business.",
       "raw_causal_phrases": [
-        "relatively benign claims environment in 2016",
-        "absence of any major catastrophic events",
-        "lower than expected claims activity due to the benign claims environment",
-        "predominantly in respect of Property and Marine & Energy lines of business",
-        "cut in the Ogden Discount Rate",
-        "immaterial impact"
+        "positive development on prior year claims reserves",
+        "lower than expected claims activity due to the benign claims environment"
       ],
-      "lob_movements": [],
+      "lob_movements": [
+        {
+          "line_of_business": "Property",
+          "direction": "release",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.5
+        },
+        {
+          "line_of_business": "Marine",
+          "direction": "release",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.5
+        },
+        {
+          "line_of_business": "Energy",
+          "direction": "release",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.5
+        }
+      ],
       "gross_premiums_written_gbp_m": 235.6,
       "gross_premium_mix": [
         {
@@ -111,12 +132,12 @@
       "gross_premium_page": 11,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The explicit narrative on pages 1 and 12 states a favourable prior year claims development of GBP 24.7m (release). However, a calculation based on the gross claims development triangle on page 14 for underwriting years 2011-2014 (excluding the two most recent years) indicates a net strengthening of approximately GBP 18.85m. The narrative figure is used as it is an explicit statement of prior year development. [RAG PYD NOT APPLIED: deterministic figure +15.108m has the opposite sign to both model values [-24.7, -24.7], which agree with each other; model values retained.]",
+      "data_quality_notes": "The explicit narrative statement of a GBP 24.7m favourable prior year development (release) on pages 1 and 12 contradicts the calculation from the gross claims development triangle on page 16, which indicates a GBP 18.85m strengthening for years 2011-2014. The narrative figure is used as it is an explicit statement of the overall prior year development, but its gross/net nature is not specified. The Ogden Discount Rate change was announced post-balance sheet and is considered immaterial. [RAG PYD NOT APPLIED: deterministic figure +18.850m has the opposite sign to both model values [-24.7, -24.7], which agree with each other; model values retained. Sign agreement between the models is not a reconciliation: where they differ in value the cohort and accrual scope of each still has to be settled from the filing (R140).]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
-        "page": 14,
+        "page": 16,
         "underwriting_years": [
           2011,
           2012,
@@ -178,20 +199,22 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_5151_2016_llm.pdf",
-      "content_hash": "7666a51fad74c1bc8173e10921831013cfec381d7d5cc28764b1d1bc055cd64f",
-      "standardized_at": "2026-03-19T04:50:03.980367+00:00",
+      "content_hash": "223fd03019c6bfcb2a6bb368491d5e2724d94b77d2ec88aefbe2892e963891c4",
+      "standardized_at": "2026-09-11T13:14:15.650262+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 10379,
-        "output_tokens": 1752,
-        "total_tokens": 17963,
-        "cost_usd": 0.007494
+        "input_tokens": 11699,
+        "output_tokens": 1847,
+        "total_tokens": 19570,
+        "cost_usd": 0.008127
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -202,7 +225,7 @@
         ],
         "development_rows": [
           [
-            null,
+            103394.0,
             51344.0,
             48377.0,
             60593.0,
@@ -210,7 +233,7 @@
             73418.0
           ],
           [
-            null,
+            124790.0,
             83678.0,
             87477.0,
             106295.0,
@@ -218,7 +241,7 @@
             null
           ],
           [
-            null,
+            114756.0,
             77071.0,
             91276.0,
             119921.0,
@@ -226,7 +249,7 @@
             null
           ],
           [
-            null,
+            114839.0,
             80021.0,
             88638.0,
             null,
@@ -234,13 +257,29 @@
             null
           ],
           [
-            null,
+            117599.0,
             84141.0,
             null,
             null,
             null,
             null
+          ],
+          [
+            121341.0,
+            null,
+            null,
+            null,
+            null,
+            null
           ]
+        ],
+        "row_labels": [
+          "At end of underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later"
         ],
         "source_page": 44,
         "entity": 5151
@@ -428,22 +467,38 @@
       "opening_reserves_page": 13,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": -24.7,
-      "prior_year_development_pct": -10.11,
+      "prior_year_development_pct": -10.1,
       "direction": "release",
       "prior_year_movement_page": 27,
-      "prior_year_movement_confidence": 1.0,
+      "prior_year_movement_confidence": 0.8,
       "exact_reserve_text": "Favourable prior year claims development of GBP 24.7m (2015 - GBP 20.2m) was experienced in 2016, predominantly in respect of Property and Marine & Energy lines of business, as a result of lower than expected claims activity due to the benign claims environment.",
       "primary_causes": [
-        "Favorable claims development"
+        "Favorable claims development",
+        "Natural catastrophe events"
       ],
       "specific_events": [],
       "specific_years_affected": [],
-      "prior_year_events": [],
+      "prior_year_events": [
+        {
+          "event_name": "Benign claims environment / favourable prior year development",
+          "event_year": null,
+          "impact_description": "Favourable development on prior year claims reserves of GBP 24.7m experienced in 2016",
+          "lobs_affected": [
+            "Property",
+            "Marine",
+            "Energy"
+          ],
+          "amount_gbp_m": -24.7,
+          "confidence": 0.8
+        }
+      ],
       "named_events": [],
-      "standardized_narrative": "The Syndicate reported a favourable prior year development of GBP 24.7m (a release), driven by benign claims experience predominantly in Property and Marine & Energy lines. Opening gross claims outstanding at 1 January 2016 were GBP 244.293m. The release reduced previously recorded reserves and is described by the Syndicate as arising from lower than expected claims activity during the period.",
+      "standardized_narrative": "The Syndicate experienced favourable prior-year reserve development in 2016 amounting to GBP 24.7m (a release). Management attribute this to a benign claims environment and the absence of major catastrophe activity, with the improvement occurring predominantly in Property and Marine & Energy lines.",
       "raw_causal_phrases": [
-        "benefitted from positive development on prior year claims reserves of GBP 24.7m (2015 - GBP 20.2m), predominantly in respect of Property and Marine & Energy lines of business, as a result of lower than expected claims activity due to the benign claims environment.",
-        "Favourable prior year claims development of GBP 24.7m (2015 - GBP 20.2m) was experienced in 2016, predominantly in respect of Property and Marine & Energy lines of business, as a result of lower than expected claims activity due to the benign claims environment."
+        "Favourable prior year claims development of GBP 24.7m (2015 - GBP 20.2m) was experienced in 2016, predominantly in respect of Property and Marine & Energy lines of business, as a result of lower than expected claims activity due to the benign claims environment.",
+        "benign claims environment",
+        "absence of any major catastrophic events",
+        "positive development on prior year claims reserves of GBP 24.7m (2015 - GBP 20.2m)"
       ],
       "lob_movements": [
         {
@@ -451,21 +506,21 @@
           "direction": "release",
           "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.5
+          "confidence": 0.8
         },
         {
           "line_of_business": "Marine",
           "direction": "release",
           "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.5
+          "confidence": 0.8
         },
         {
           "line_of_business": "Energy",
           "direction": "release",
           "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.5
+          "confidence": 0.8
         }
       ],
       "gross_premiums_written_gbp_m": 235.6,
@@ -529,7 +584,7 @@
       "gross_premium_page": 22,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Opening gross claims outstanding taken from Statement of Financial Position technical provisions (claims outstanding) prior-year column. Prior year development figure (GBP 24.7m) is reported in the Claims Outstanding note and director's narrative as 'favourable prior year claims development' - the note context is the gross claims outstanding note so this has been treated as a gross release. No LOB-level quantification provided. Claims development triangle present (gross) used for cross-checking but triangle contains an aggregate 'Pre-2011' column which was excluded. [RAG PYD NOT APPLIED: deterministic figure +15.108m has the opposite sign to both model values [-24.7, -24.7], which agree with each other; model values retained.]",
+      "data_quality_notes": "Prior-year development of GBP 24.7m was taken from the textual note in note 16 which states 'Favourable prior year claims development of GBP 24.7m...'. The note does not explicitly label this amount as gross or net; it has been interpreted as gross consistent with the context and typical presentation. A gross claims development triangle is present (used as a cross-check) but the narrative figure was used as primary. No itemised per-LOB amounts for the GBP 24.7m release were provided. [RAG PYD NOT APPLIED: deterministic figure +18.850m has the opposite sign to both model values [-24.7, -24.7], which agree with each other; model values retained. Sign agreement between the models is not a reconciliation: where they differ in value the cohort and accrual scope of each still has to be settled from the filing (R140).]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -588,20 +643,22 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_5151_2016_llm.pdf",
-      "content_hash": "7666a51fad74c1bc8173e10921831013cfec381d7d5cc28764b1d1bc055cd64f",
-      "standardized_at": "2026-03-19T04:51:34.652578+00:00",
+      "content_hash": "223fd03019c6bfcb2a6bb368491d5e2724d94b77d2ec88aefbe2892e963891c4",
+      "standardized_at": "2026-09-11T13:17:33.668564+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 25398,
-        "output_tokens": 5978,
-        "total_tokens": 31376,
-        "cost_usd": 0.018305
+        "input_tokens": 28784,
+        "output_tokens": 8673,
+        "total_tokens": 37457,
+        "cost_usd": 0.024542
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -612,7 +669,7 @@
         ],
         "development_rows": [
           [
-            null,
+            103394.0,
             51344.0,
             48377.0,
             60593.0,
@@ -620,7 +677,7 @@
             73418.0
           ],
           [
-            null,
+            124790.0,
             83678.0,
             87477.0,
             106295.0,
@@ -628,7 +685,7 @@
             null
           ],
           [
-            null,
+            114756.0,
             77071.0,
             91276.0,
             119921.0,
@@ -636,7 +693,7 @@
             null
           ],
           [
-            null,
+            114839.0,
             80021.0,
             88638.0,
             null,
@@ -644,13 +701,29 @@
             null
           ],
           [
-            null,
+            117599.0,
             84141.0,
             null,
             null,
             null,
             null
+          ],
+          [
+            121341.0,
+            null,
+            null,
+            null,
+            null,
+            null
           ]
+        ],
+        "row_labels": [
+          "At end of underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later"
         ],
         "source_page": 44,
         "entity": 5151
@@ -832,12 +905,12 @@
       }
     }
   },
-  "total_cost_usd": 0.025799,
-  "total_tokens": 49339,
+  "total_cost_usd": 0.032669,
+  "total_tokens": 57027,
   "validation": {
     "passed": true,
-    "total_discrepancies": 14,
-    "within_tolerance": 14,
+    "total_discrepancies": 20,
+    "within_tolerance": 20,
     "hard_failures": 0,
     "hard_failure_details": []
   }

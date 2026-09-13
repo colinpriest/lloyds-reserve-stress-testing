@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T11:01:56.244813+00:00",
+  "extraction_timestamp": "2026-09-13T04:02:47.781740+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -13,19 +15,17 @@
       "opening_reserves_gbp_m": 71.203,
       "opening_reserves_page": 4,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": 31.4,
-      "prior_year_development_pct": 44.1,
+      "prior_year_development_gbp_m": 31.375,
+      "prior_year_development_pct": 44.06,
       "direction": "strengthening",
       "prior_year_movement_page": 16,
       "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "Change in prior year provisions 31,375 7,302 24,073",
+      "exact_reserve_text": "Change in prior year provisions: Gross amount 31,375",
       "primary_causes": [
-        "Other"
+        "Adverse claims development"
       ],
       "specific_events": [],
-      "specific_years_affected": [
-        2018
-      ],
+      "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [
         {
@@ -33,7 +33,7 @@
           "event_year": 2020,
           "event_type": "man_made",
           "net_loss_gbp_m": null,
-          "loss_description": "impacted by losses from WEC Power loss",
+          "loss_description": "impacted underwriting result",
           "lobs_affected": [
             "Energy"
           ],
@@ -45,7 +45,7 @@
           "event_year": 2020,
           "event_type": "man_made",
           "net_loss_gbp_m": null,
-          "loss_description": "impacted by losses from ... the Hammerfest energy loss",
+          "loss_description": "impacted underwriting result",
           "lobs_affected": [
             "Energy"
           ],
@@ -53,22 +53,33 @@
           "confidence": 0.8
         },
         {
-          "event_name": "COVID-19 pandemic",
+          "event_name": "COVID-19",
           "event_year": 2020,
           "event_type": "other",
           "net_loss_gbp_m": 1.6,
-          "loss_description": "current best estimate financial impact of COVID-19 is $1.6 million, net of reinsurance",
+          "loss_description": "current best estimate financial impact of $1.6 million, net of reinsurance",
           "lobs_affected": [
-            "Aggregate"
+            "Accident & Health",
+            "Other"
           ],
           "page": 6,
           "confidence": 1.0
+        },
+        {
+          "event_name": "major natural catastrophes",
+          "event_year": 2020,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "had little impact",
+          "lobs_affected": [
+            "Aggregate"
+          ],
+          "page": 2,
+          "confidence": 0.8
         }
       ],
-      "standardized_narrative": "The syndicate experienced an overall gross prior year reserve strengthening of $31.375 million, representing 44.06% of its opening gross claims outstanding. While the 2018 underwriting year closed with favourable development, this was offset by other movements resulting in an overall strengthening for the portfolio. The report does not specify the causes for the overall strengthening. Named events impacting the 2020 underwriting result included WEC Power loss and Hammerfest energy loss, and the COVID-19 pandemic had a net financial impact of $1.6 million.",
-      "raw_causal_phrases": [
-        "favourable development on prior years"
-      ],
+      "standardized_narrative": "The syndicate reported a gross prior year reserve strengthening of $31.375 million for the 2020 calendar year, representing 44.06% of its opening gross claims outstanding. This movement is primarily attributed to adverse claims development across prior underwriting years. Specific events mentioned as impacting the *current year* underwriting result include the WEC Power loss and Hammerfest energy loss, and a net impact of $1.6 million from COVID-19. The report also noted little impact from major natural catastrophes in the current year.",
+      "raw_causal_phrases": [],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 169.465,
       "gross_premium_mix": [
@@ -80,7 +91,7 @@
         {
           "line_of_business": "Marine, aviation and transport",
           "amount_gbp_m": 58.254,
-          "percentage_of_total": 34.38
+          "percentage_of_total": 34.37
         },
         {
           "line_of_business": "Fire and other damage to property",
@@ -96,7 +107,7 @@
       "gross_premium_page": 14,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "The report states 'favourable development on prior years' for the 2018 underwriting year closure, but the overall 'Change in prior year provisions' for the entire portfolio shows a gross strengthening of $31.375m. The overall prior year development is reported as a strengthening.",
+      "data_quality_notes": "The prior year development figure is taken from the \"Change in prior year provisions\" table in Note 18, which is a direct accounting entry. This figure is a gross strengthening. The narrative mentions \"favourable development on prior years\" for the 2018 YOA, which appears to be a net statement and contradicts the overall gross strengthening reported in Note 18. No specific gross causal factors for the $31.375m prior year strengthening are explicitly detailed in the report. [RAG PYD NOT APPLIED: deterministic figure -0.565m has the opposite sign to both model values [31.375, 31.375], which agree with each other; model values retained. Sign agreement between the models is not a reconciliation: where they differ in value the cohort and accrual scope of each still has to be settled from the filing (R140).] [CODE PYD NOT APPLIED: deterministic figure -0.565m has the opposite sign to both model values [31.375, 31.375], which agree with each other; model values retained. Sign agreement between the models is not a reconciliation: where they differ in value the cohort and accrual scope of each still has to be settled from the filing (R140).]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
@@ -239,20 +250,22 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_3010_2020_llm.pdf",
-      "content_hash": "2672ed4e7f4439e2666227a828a13a14973b5e4ee35b0fac34ff5e019d8031b5",
-      "standardized_at": "2026-07-05T14:39:35.185952+00:00",
+      "content_hash": "8492d3b7ba5a7218f05d650f90164d1980d4bf01952a1465d75dc3242b76876f",
+      "standardized_at": "2026-09-11T12:27:52.939847+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 10379,
-        "output_tokens": 1927,
-        "total_tokens": 16154,
-        "cost_usd": 0.007931
+        "input_tokens": 11183,
+        "output_tokens": 2029,
+        "total_tokens": 20346,
+        "cost_usd": 0.008427
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -387,6 +400,18 @@
             null
           ]
         ],
+        "row_labels": [
+          "At end of the year of account",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later",
+          "Seven years later",
+          "Eight years later",
+          "Nine years later"
+        ],
         "source_page": 39,
         "entity": 3010
       },
@@ -403,6 +428,13 @@
           "entity": 3010,
           "backend": "azure",
           "table_kind": "provisions_movement"
+        },
+        "movement_semantics": {
+          "row_label": "Change in prior year provisions",
+          "row_index": 6,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": false,
+          "column_index": 1
         },
         "gross_prior_year_claims": 31.4,
         "ri_share_prior_year": 7.3,
@@ -487,16 +519,16 @@
       "opening_reserves_gbp_m": 71.203,
       "opening_reserves_page": 14,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": 31.4,
-      "prior_year_development_pct": 44.1,
+      "prior_year_development_gbp_m": 31.375,
+      "prior_year_development_pct": 44.06,
       "direction": "strengthening",
       "prior_year_movement_page": 36,
       "prior_year_movement_confidence": 1.0,
       "exact_reserve_text": "Change in prior year provisions 31,375 7,302 24,073",
       "primary_causes": [
-        "Man-made catastrophe / large losses",
+        "Adverse claims development",
         "Large loss development",
-        "IBNR recalibration"
+        "Reinsurance recoveries"
       ],
       "specific_events": [],
       "specific_years_affected": [],
@@ -512,65 +544,31 @@
             "Energy"
           ],
           "page": 3,
-          "confidence": 0.8
+          "confidence": 0.6
         },
         {
           "event_name": "Hammerfest energy loss",
           "event_year": 2020,
           "event_type": "man_made",
           "net_loss_gbp_m": null,
-          "loss_description": "The underwriting result was impacted by ... the Hammerfest energy loss",
+          "loss_description": "The underwriting result was impacted by losses from ... the Hammerfest energy loss",
           "lobs_affected": [
             "Energy"
           ],
           "page": 3,
-          "confidence": 0.8
-        },
-        {
-          "event_name": "COVID-19 pandemic",
-          "event_year": 2020,
-          "event_type": "other",
-          "net_loss_gbp_m": 1.6,
-          "loss_description": "The current best estimate financial impact of COVID-19 is $1.6 million, net of reinsurance and including the impact of reinstatement premiums.",
-          "lobs_affected": [
-            "Accident & Health"
-          ],
-          "page": 17,
-          "confidence": 1.0
+          "confidence": 0.6
         }
       ],
-      "standardized_narrative": "At 1 January 2020 the syndicate carried gross claims outstanding of $71.203m. During 2020 the syndicate increased its gross prior-year provisions by $31.375m (a 44.1% increase on opening gross claims), i.e. an adverse prior-year strengthening. The technical provisions note records this as a gross \"Change in prior year provisions\" of $31.375k (thousands). The report notes adverse large-loss impacts in 2020 (WEC Power and Hammerfest energy losses) and a modest COVID-19 impact; the gross prior-year strengthening is therefore attributed primarily to large loss / prior-year deterioration and reserve recalibration.",
+      "standardized_narrative": "Gross claims outstanding at 1 January 2020 were $71.203m. During 2020 gross prior-year provisions increased by $31.375m (a 44.1% strengthening relative to opening gross reserves), driven by adverse development on prior years largely related to large-loss development with reinsurance recoveries partially offsetting the movement. The movement is recorded in Note 18 (Technical Provisions).",
       "raw_causal_phrases": [
         "Change in prior year provisions 31,375 7,302 24,073",
+        "favourable development on prior years",
         "The underwriting result was impacted by losses from WEC Power loss and the Hammerfest energy loss.",
-        "The current best estimate financial impact of COVID-19 is $1.6 million, net of reinsurance and including the impact of reinstatement premiums.",
-        "In arriving at the level of claims provisions a margin is applied over and above the actuarial best estimate so as to minimise any adverse run-off deviation.",
-        "All classes have made positive contributions to the underwriting balance with the year of account benefiting from relatively benign catastrophe experience, together with favourable development on prior years."
+        "The Syndicate was fortunate to only be lightly affected by COVID-19 in terms of losses."
       ],
       "lob_movements": [
         {
-          "line_of_business": "Marine",
-          "direction": "strengthening",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.6
-        },
-        {
-          "line_of_business": "Property",
-          "direction": "strengthening",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.6
-        },
-        {
-          "line_of_business": "Accident & Health",
-          "direction": "strengthening",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.4
-        },
-        {
-          "line_of_business": "Treaty",
+          "line_of_business": "Energy",
           "direction": "strengthening",
           "amount_gbp_m": null,
           "percentage": null,
@@ -585,6 +583,11 @@
           "percentage_of_total": 0.65
         },
         {
+          "line_of_business": "Motor (other classes)",
+          "amount_gbp_m": 0.0,
+          "percentage_of_total": 0.0
+        },
+        {
           "line_of_business": "Marine, aviation and transport",
           "amount_gbp_m": 58.254,
           "percentage_of_total": 34.38
@@ -595,15 +598,25 @@
           "percentage_of_total": 14.31
         },
         {
+          "line_of_business": "Third party liability",
+          "amount_gbp_m": 0.0,
+          "percentage_of_total": 0.0
+        },
+        {
+          "line_of_business": "Credit and suretyship",
+          "amount_gbp_m": 0.0,
+          "percentage_of_total": 0.0
+        },
+        {
           "line_of_business": "Reinsurance acceptances",
           "amount_gbp_m": 85.86,
-          "percentage_of_total": 50.67
+          "percentage_of_total": 50.68
         }
       ],
       "gross_premium_page": 29,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "All amounts are reported in the syndicate's native currency (USD) and converted to millions. The prior year development gross figure was taken directly from the Technical Provisions reconciliation (\"Change in prior year provisions\" gross column). No gross per-line prior-year movement amounts are provided in the report; per-line movements are therefore not quantified. Some narrative phrases refer to 'favourable development on prior years' for closed older years (2018) but the technical provisions table for 2020 shows a gross prior-year strengthening overall. Named events (WEC Power loss, Hammerfest) are mentioned but not quantified. The claims development triangle is reported in thousands and was used as supporting data.",
+      "data_quality_notes": "All statement amounts are presented in the report currency (USD). Gross opening claims outstanding (71,203) and the 'Change in prior year provisions' (31,375) are taken directly from Note 18 (Technical Provisions) and the Balance Sheet comparatives. The prior year movement is a gross figure (insurance liabilities) and the reinsurer's share is shown separately (7,302). No LOB-level breakout of prior year movement is provided. Values converted from $'000 to millions where appropriate. [RAG PYD NOT APPLIED: deterministic figure -0.565m has the opposite sign to both model values [31.375, 31.375], which agree with each other; model values retained. Sign agreement between the models is not a reconciliation: where they differ in value the cohort and accrual scope of each still has to be settled from the filing (R140).] [CODE PYD NOT APPLIED: deterministic figure -0.565m has the opposite sign to both model values [31.375, 31.375], which agree with each other; model values retained. Sign agreement between the models is not a reconciliation: where they differ in value the cohort and accrual scope of each still has to be settled from the filing (R140).]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
@@ -746,20 +759,22 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_3010_2020_llm.pdf",
-      "content_hash": "2672ed4e7f4439e2666227a828a13a14973b5e4ee35b0fac34ff5e019d8031b5",
-      "standardized_at": "2026-07-05T14:40:48.838791+00:00",
+      "content_hash": "8492d3b7ba5a7218f05d650f90164d1980d4bf01952a1465d75dc3242b76876f",
+      "standardized_at": "2026-09-11T12:30:14.498365+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 29900,
-        "output_tokens": 7253,
-        "total_tokens": 37153,
-        "cost_usd": 0.021981
+        "input_tokens": 30660,
+        "output_tokens": 6721,
+        "total_tokens": 37381,
+        "cost_usd": 0.021107
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -894,6 +909,18 @@
             null
           ]
         ],
+        "row_labels": [
+          "At end of the year of account",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later",
+          "Seven years later",
+          "Eight years later",
+          "Nine years later"
+        ],
         "source_page": 39,
         "entity": 3010
       },
@@ -910,6 +937,13 @@
           "entity": 3010,
           "backend": "azure",
           "table_kind": "provisions_movement"
+        },
+        "movement_semantics": {
+          "row_label": "Change in prior year provisions",
+          "row_index": 6,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": false,
+          "column_index": 1
         },
         "gross_prior_year_claims": 31.4,
         "ri_share_prior_year": 7.3,
@@ -989,12 +1023,12 @@
       }
     }
   },
-  "total_cost_usd": 0.029912,
-  "total_tokens": 53307,
+  "total_cost_usd": 0.029534,
+  "total_tokens": 57727,
   "validation": {
     "passed": true,
-    "total_discrepancies": 17,
-    "within_tolerance": 17,
+    "total_discrepancies": 15,
+    "within_tolerance": 15,
     "hard_failures": 0,
     "hard_failure_details": []
   }

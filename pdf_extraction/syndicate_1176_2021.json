@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-05T19:21:27.067299+00:00",
+  "extraction_timestamp": "2026-09-13T04:07:18.417421+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -11,33 +13,49 @@
       "syndicate": 1176,
       "year": 2021,
       "opening_reserves_gbp_m": 38.419,
-      "opening_reserves_page": 32,
+      "opening_reserves_page": 4,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": -7.647,
       "prior_year_development_pct": -19.9,
       "direction": "release",
-      "prior_year_movement_page": 26,
-      "prior_year_movement_confidence": 1.0,
+      "prior_year_movement_page": 10,
+      "prior_year_movement_confidence": 0.8,
       "exact_reserve_text": "During the year, the Syndicate released GBP 9.6m of technical reserves in respect of prior years (2020: GBP 9.5m) arising from the nuclear property and nuclear liability classes (2020: from the nuclear property and nuclear liability classes).",
       "primary_causes": [
-        "Favorable claims development"
+        "Favorable claims development",
+        "Other"
       ],
       "specific_events": [],
       "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "Syndicate 1176 reported a gross release of GBP 9.6 million in technical reserves for prior years. This favorable development primarily arose from the nuclear property and nuclear liability classes, contributing to the syndicate's overall financial performance.",
+      "standardized_narrative": "The Syndicate released GBP 7.647 million in gross technical reserves from prior years, primarily driven by favorable claims development in the nuclear property and nuclear liability classes. This represents a 19.90% release relative to the opening gross claims outstanding.",
       "raw_causal_phrases": [
         "released GBP 9.6m of technical reserves in respect of prior years",
         "arising from the nuclear property and nuclear liability classes"
       ],
-      "lob_movements": [],
+      "lob_movements": [
+        {
+          "line_of_business": "Property",
+          "direction": "release",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.5
+        },
+        {
+          "line_of_business": "Casualty",
+          "direction": "release",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.5
+        }
+      ],
       "gross_premiums_written_gbp_m": 26.31,
       "gross_premium_mix": [
         {
           "line_of_business": "Fire and other damage to property",
           "amount_gbp_m": 7.292,
-          "percentage_of_total": 27.71
+          "percentage_of_total": 27.72
         },
         {
           "line_of_business": "Third party liability",
@@ -50,17 +68,16 @@
           "percentage_of_total": 67.05
         }
       ],
-      "gross_premium_page": 25,
+      "gross_premium_page": 9,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": " [RAG OVERRIDE: Model said PYD=-9.6, RAG triangle computed -7.647. Using RAG value.]",
+      "data_quality_notes": "Prior year development amount calculated from gross claims development triangle as the narrative figure on page 10 is stated as net of reinsurance. The '2011 and prior' aggregate column in the claims development triangle was excluded from the PYD calculation as per instructions.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
-        "page": 33,
+        "page": 14,
         "underwriting_years": [
-          2011,
           2012,
           2013,
           2014,
@@ -74,7 +91,6 @@
         ],
         "development_rows": [
           [
-            6121,
             11851,
             5185,
             7553,
@@ -83,11 +99,9 @@
             6618,
             6625,
             7534,
-            6311,
-            null
+            6311
           ],
           [
-            7219,
             11574,
             6220,
             9955,
@@ -96,11 +110,9 @@
             9139,
             10294,
             8624,
-            null,
             null
           ],
           [
-            4351,
             7264,
             4825,
             5979,
@@ -109,11 +121,9 @@
             6849,
             6356,
             null,
-            null,
             null
           ],
           [
-            2999,
             6807,
             3787,
             5419,
@@ -122,11 +132,9 @@
             5927,
             null,
             null,
-            null,
             null
           ],
           [
-            2563,
             5386,
             3218,
             4963,
@@ -135,11 +143,9 @@
             null,
             null,
             null,
-            null,
             null
           ],
           [
-            2153,
             4966,
             2473,
             3842,
@@ -148,11 +154,9 @@
             null,
             null,
             null,
-            null,
             null
           ],
           [
-            1769,
             4599,
             1970,
             3472,
@@ -161,11 +165,9 @@
             null,
             null,
             null,
-            null,
             null
           ],
           [
-            1383,
             4230,
             1444,
             null,
@@ -174,11 +176,9 @@
             null,
             null,
             null,
-            null,
             null
           ],
           [
-            999,
             3868,
             null,
             null,
@@ -187,12 +187,9 @@
             null,
             null,
             null,
-            null,
             null
           ],
           [
-            618,
-            null,
             null,
             null,
             null,
@@ -206,23 +203,34 @@
         ]
       },
       "source_type": "syndicate",
-      "source_file": "syndicate_reports\\pdfs\\syndicate_1176_2021.pdf",
-      "content_hash": "d63189d1a9ef42f3ad77a48800e32872a159e57ba1dd1b37c3808e31586238b1",
-      "standardized_at": "2026-03-16T09:00:20.270688+00:00",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_1176_2021_llm.pdf",
+      "content_hash": "88fe5b4b7194420b4adef3f112279e95a225e19c19a8a6f1e21d6bd2d06293aa",
+      "standardized_at": "2026-09-11T10:14:29.649022+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 16462,
-        "output_tokens": 1235,
-        "total_tokens": 23553,
-        "cost_usd": 0.008026
+        "input_tokens": 10925,
+        "output_tokens": 1487,
+        "total_tokens": 17347,
+        "cost_usd": 0.006995
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -7.647,
+        "model_value": -7.647,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 33,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
-          2011,
           2012,
           2013,
           2014,
@@ -236,7 +244,6 @@
         ],
         "development_rows": [
           [
-            null,
             6121.0,
             11851.0,
             5185.0,
@@ -249,7 +256,6 @@
             6311.0
           ],
           [
-            null,
             7219.0,
             11574.0,
             6220.0,
@@ -262,7 +268,6 @@
             null
           ],
           [
-            null,
             4351.0,
             7264.0,
             4825.0,
@@ -275,7 +280,6 @@
             null
           ],
           [
-            null,
             2999.0,
             6807.0,
             3787.0,
@@ -288,7 +292,6 @@
             null
           ],
           [
-            null,
             2563.0,
             5386.0,
             3218.0,
@@ -301,7 +304,6 @@
             null
           ],
           [
-            null,
             2153.0,
             4966.0,
             2473.0,
@@ -314,7 +316,6 @@
             null
           ],
           [
-            null,
             1769.0,
             4599.0,
             1970.0,
@@ -327,7 +328,6 @@
             null
           ],
           [
-            null,
             1383.0,
             4230.0,
             1444.0,
@@ -340,7 +340,6 @@
             null
           ],
           [
-            null,
             999.0,
             3868.0,
             null,
@@ -353,7 +352,6 @@
             null
           ],
           [
-            null,
             618.0,
             null,
             null,
@@ -365,6 +363,18 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later",
+          "Seven years later",
+          "Eight years later",
+          "Nine years later"
         ],
         "source_page": 33,
         "entity": 1176
@@ -430,78 +440,36 @@
       "syndicate": 1176,
       "year": 2021,
       "opening_reserves_gbp_m": 38.419,
-      "opening_reserves_page": 29,
+      "opening_reserves_page": 16,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": -7.647,
       "prior_year_development_pct": -19.9,
       "direction": "release",
-      "prior_year_movement_page": 26,
-      "prior_year_movement_confidence": 0.8,
+      "prior_year_movement_page": 23,
+      "prior_year_movement_confidence": 1.0,
       "exact_reserve_text": "During the year, the Syndicate released GBP 9.6m of technical reserves in respect of prior years (2020: GBP 9.5m) arising from the nuclear property and nuclear liability classes (2020: from the nuclear property and nuclear liability classes).",
       "primary_causes": [
         "Favorable claims development"
       ],
       "specific_events": [],
       "specific_years_affected": [],
-      "prior_year_events": [],
-      "named_events": [
+      "prior_year_events": [
         {
-          "event_name": "Three Mile Island",
-          "event_year": 1979,
-          "event_type": "man_made",
-          "net_loss_gbp_m": null,
-          "loss_description": "One significant core melt nuclear event paid by the insurance market.",
+          "event_name": "Reserve releases - nuclear property and nuclear liability",
+          "event_year": null,
+          "impact_description": "Released GBP 9.6m of technical reserves in respect of prior years arising from the nuclear property and nuclear liability classes.",
           "lobs_affected": [
             "Property",
             "Casualty"
           ],
-          "page": 5,
-          "confidence": 0.8
-        },
-        {
-          "event_name": "Fukushima",
-          "event_year": 2011,
-          "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": null,
-          "loss_description": "Fukushima accident in March 2011 prompted extensive review of potential catastrophe exposure; exposure considered to be limited following analysis.",
-          "lobs_affected": [
-            "Property"
-          ],
-          "page": 5,
-          "confidence": 0.8
-        },
-        {
-          "event_name": "Hurricane Andrew (spares warehouse loss on a nuclear site)",
-          "event_year": 1992,
-          "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": null,
-          "loss_description": "Largest insured windstorm loss to date was from a spares warehouse on a nuclear site from Hurricane Andrew in 1992; losses in the region of $200m, with no damage to the nuclear unit.",
-          "lobs_affected": [
-            "Property"
-          ],
-          "page": 6,
-          "confidence": 0.8
-        },
-        {
-          "event_name": "COVID-19 pandemic",
-          "event_year": 2020,
-          "event_type": "other",
-          "net_loss_gbp_m": null,
-          "loss_description": "Limited underwriting exposure; all significant insured sites have operated throughout the pandemic and there is no known specific pandemic cover offered.",
-          "lobs_affected": [
-            "Property",
-            "Casualty"
-          ],
-          "page": 6,
-          "confidence": 0.8
+          "amount_gbp_m": -9.6,
+          "confidence": 1.0
         }
       ],
-      "standardized_narrative": "Syndicate 1176 opened 2021 with gross claims outstanding of GBP 38.419m. During 2021 the Syndicate reported a release of technical reserves of GBP 9.6m in respect of prior years, driven by favourable prior-year claims development primarily in its nuclear property and nuclear liability business. The release materially improved results for prior years; no detailed split of the release by line of business was provided.",
+      "named_events": [],
+      "standardized_narrative": "The syndicate reported a prior-year release of GBP 9.6m in 2021, arising from favourable development in its nuclear property and nuclear liability portfolios. This release represents approximately 25% of the opening gross claims outstanding and has driven an overall strengthening in the syndicate's reported underwriting position for prior years.",
       "raw_causal_phrases": [
-        "During the year, the Syndicate released GBP 9.6m of technical reserves in respect of prior years (2020: GBP 9.5m) arising from the nuclear property and nuclear liability classes (2020: from the nuclear property and nuclear liability classes).",
-        "The reduction in net incurred claims in 2021 is mainly driven by favourable prior year development",
-        "We have received very few claims and those we did receive were settled at less than reserved.",
-        "favourable prior year development"
+        "released GBP 9.6m of technical reserves in respect of prior years (2020: GBP 9.5m) arising from the nuclear property and nuclear liability classes (2020: from the nuclear property and nuclear liability classes)."
       ],
       "lob_movements": [
         {
@@ -524,23 +492,23 @@
         {
           "line_of_business": "Fire and other damage to property",
           "amount_gbp_m": 7.292,
-          "percentage_of_total": 27.7
+          "percentage_of_total": 27.73
         },
         {
           "line_of_business": "Third party liability",
           "amount_gbp_m": 1.376,
-          "percentage_of_total": 5.2
+          "percentage_of_total": 5.23
         },
         {
           "line_of_business": "Reinsurance",
           "amount_gbp_m": 17.642,
-          "percentage_of_total": 67.1
+          "percentage_of_total": 67.04
         }
       ],
-      "gross_premium_page": 23,
+      "gross_premium_page": 22,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior year development amount (-GBP 9.6m) was taken from Note 4 narrative stating a release of GBP 9.6m. The note does not explicitly state 'gross' but context and placement in technical reserves suggests this refers to gross technical reserves; confidence reduced accordingly. A gross claims development triangle is present in Note 18 but the OCR/formatting in source made reliable automated extraction of every cell difficult; therefore the triangle was not used to recalculate PYD. No LOB-level split of the GBP 9.6m release was provided. [RAG OVERRIDE: Model said PYD=-9.6, RAG triangle computed -7.647. Using RAG value.]",
+      "data_quality_notes": "Prior year movement sourced from Note 4 narrative which states a GBP 9.6m release of technical reserves; the note does not split the amount by line of business so LOB allocations are not quantified. Opening reserves taken from Statement of Financial Position (prior-year comparative). A gross claims development triangle is present (Note 18) and was used to cross-check but the narrative release was used as primary source. [RAG OVERRIDE: Model said PYD=-9.6, RAG triangle computed -7.647. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -558,26 +526,158 @@
           2020,
           2021
         ],
-        "development_rows": []
+        "development_rows": [
+          [
+            11851,
+            5185,
+            7553,
+            10483,
+            7495,
+            6618,
+            6625,
+            7534,
+            6311,
+            null
+          ],
+          [
+            11574,
+            6220,
+            9955,
+            13590,
+            8710,
+            9139,
+            10294,
+            8624,
+            null,
+            null
+          ],
+          [
+            7264,
+            4825,
+            5979,
+            11339,
+            6107,
+            6849,
+            6356,
+            null,
+            null,
+            null
+          ],
+          [
+            6807,
+            3787,
+            5419,
+            6868,
+            4260,
+            5927,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            5386,
+            3218,
+            4963,
+            6329,
+            3618,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            4966,
+            2473,
+            3842,
+            5823,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            4599,
+            1970,
+            3472,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            4230,
+            1444,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            3868,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ]
+        ]
       },
       "source_type": "syndicate",
-      "source_file": "syndicate_reports\\pdfs\\syndicate_1176_2021.pdf",
-      "content_hash": "d63189d1a9ef42f3ad77a48800e32872a159e57ba1dd1b37c3808e31586238b1",
-      "standardized_at": "2026-03-16T09:02:52.042252+00:00",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_1176_2021_llm.pdf",
+      "content_hash": "88fe5b4b7194420b4adef3f112279e95a225e19c19a8a6f1e21d6bd2d06293aa",
+      "standardized_at": "2026-09-11T10:19:53.063862+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 42179,
-        "output_tokens": 8598,
-        "total_tokens": 50777,
-        "cost_usd": 0.027741
+        "input_tokens": 23716,
+        "output_tokens": 7623,
+        "total_tokens": 31339,
+        "cost_usd": 0.021175
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -7.647,
+        "model_value": -9.6,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 33,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
-          2011,
           2012,
           2013,
           2014,
@@ -591,7 +691,6 @@
         ],
         "development_rows": [
           [
-            null,
             6121.0,
             11851.0,
             5185.0,
@@ -604,7 +703,6 @@
             6311.0
           ],
           [
-            null,
             7219.0,
             11574.0,
             6220.0,
@@ -617,7 +715,6 @@
             null
           ],
           [
-            null,
             4351.0,
             7264.0,
             4825.0,
@@ -630,7 +727,6 @@
             null
           ],
           [
-            null,
             2999.0,
             6807.0,
             3787.0,
@@ -643,7 +739,6 @@
             null
           ],
           [
-            null,
             2563.0,
             5386.0,
             3218.0,
@@ -656,7 +751,6 @@
             null
           ],
           [
-            null,
             2153.0,
             4966.0,
             2473.0,
@@ -669,7 +763,6 @@
             null
           ],
           [
-            null,
             1769.0,
             4599.0,
             1970.0,
@@ -682,7 +775,6 @@
             null
           ],
           [
-            null,
             1383.0,
             4230.0,
             1444.0,
@@ -695,7 +787,6 @@
             null
           ],
           [
-            null,
             999.0,
             3868.0,
             null,
@@ -708,7 +799,6 @@
             null
           ],
           [
-            null,
             618.0,
             null,
             null,
@@ -720,6 +810,18 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later",
+          "Seven years later",
+          "Eight years later",
+          "Nine years later"
         ],
         "source_page": 33,
         "entity": 1176
@@ -782,12 +884,12 @@
       }
     }
   },
-  "total_cost_usd": 0.035767,
-  "total_tokens": 74330,
+  "total_cost_usd": 0.02817,
+  "total_tokens": 48686,
   "validation": {
     "passed": true,
-    "total_discrepancies": 15,
-    "within_tolerance": 15,
+    "total_discrepancies": 13,
+    "within_tolerance": 13,
     "hard_failures": 0,
     "hard_failure_details": []
   }

@@ -1,12 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-10T10:37:36.599190+00:00",
+  "extraction_timestamp": "2026-09-13T04:19:09.089450+00:00",
   "spec": {
-    "prompt_version": "2.10",
-    "driver_prompt_version": "2.11",
-    "responses_served_from_cache": {
-      "gemini-2.5-flash": "2.10",
-      "gpt-5-mini": "2.10"
-    },
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -39,7 +36,10 @@
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
           "loss_description": "adversely impacted by the impact of hurricanes Harvey, Irma and Maria",
-          "lobs_affected": [],
+          "lobs_affected": [
+            "Property",
+            "Marine"
+          ],
           "page": 1,
           "confidence": 0.8
         },
@@ -49,7 +49,10 @@
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
           "loss_description": "adversely impacted by the impact of hurricanes Harvey, Irma and Maria",
-          "lobs_affected": [],
+          "lobs_affected": [
+            "Property",
+            "Marine"
+          ],
           "page": 1,
           "confidence": 0.8
         },
@@ -59,60 +62,20 @@
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
           "loss_description": "adversely impacted by the impact of hurricanes Harvey, Irma and Maria",
-          "lobs_affected": [],
+          "lobs_affected": [
+            "Property",
+            "Marine"
+          ],
           "page": 1,
           "confidence": 0.8
         }
       ],
-      "standardized_narrative": "The syndicate experienced a significant gross prior year reserve strengthening of GBP 77.1 million in 2017, representing 37.9% of its opening gross claims outstanding. This adverse development contributed to a challenging market environment. While specific events causing the prior year strengthening are not detailed, the overall syndicate performance in 2017 was impacted by hurricanes Harvey, Irma, and Maria, alongside increases in attritional claims. The adverse movement was observed across multiple lines of business including Accident and health, Marine, aviation and transport, Fire and other damage to property, Third party liability, Miscellaneous, and Reinsurance.",
+      "standardized_narrative": "The syndicate experienced a significant prior year reserve strengthening of GBP 77.132 million in 2017. This adverse development was primarily driven by increases in attritional claims and was observed across multiple lines of business. The report also notes that the 2017 performance was adversely impacted by hurricanes Harvey, Irma, and Maria, though these are not explicitly linked to the prior year reserve movement.",
       "raw_causal_phrases": [
-        "challenging market environment",
-        "increases in attritional claims"
+        "increases in attritional claims",
+        "Adverse movements of GBP 71.4 million, (2016: GBP 9.1 million favourable), in the past year's provision for claims outstanding, net of expected reinsurance recoveries, are included in claims incurred, net of reinsurance."
       ],
-      "lob_movements": [
-        {
-          "line_of_business": "Accident & Health",
-          "direction": "strengthening",
-          "amount_gbp_m": 2.271,
-          "percentage": null,
-          "confidence": 0.8
-        },
-        {
-          "line_of_business": "Marine",
-          "direction": "strengthening",
-          "amount_gbp_m": 25.119,
-          "percentage": null,
-          "confidence": 0.8
-        },
-        {
-          "line_of_business": "Property",
-          "direction": "strengthening",
-          "amount_gbp_m": 27.806,
-          "percentage": null,
-          "confidence": 0.8
-        },
-        {
-          "line_of_business": "Casualty",
-          "direction": "strengthening",
-          "amount_gbp_m": 5.048,
-          "percentage": null,
-          "confidence": 0.8
-        },
-        {
-          "line_of_business": "Other",
-          "direction": "strengthening",
-          "amount_gbp_m": 0.113,
-          "percentage": null,
-          "confidence": 0.8
-        },
-        {
-          "line_of_business": "Reinsurance - Specialty",
-          "direction": "strengthening",
-          "amount_gbp_m": 11.001,
-          "percentage": null,
-          "confidence": 0.8
-        }
-      ],
+      "lob_movements": [],
       "gross_premiums_written_gbp_m": 235.6,
       "gross_premium_mix": [
         {
@@ -149,7 +112,7 @@
       "gross_premium_page": 16,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The prior_year_development_gbp_m is taken from the gross technical provisions reconciliation table (Note 16), which differs from the net figure (GBP 71.4m) mentioned in the narrative on page 18. The lob_movements are based on net figures as presented in the document (Note 6), as a gross breakdown by LOB for prior year development was not available. [RAG OVERRIDE: Model said PYD=77.132, RAG triangle computed 7.6. Using RAG value.]",
+      "data_quality_notes": "The prior year development figure is taken from the 'Change in prior year provisions' in Note 16, which is a direct gross figure. The claims development triangle, when calculated, yields a different figure, suggesting the Note 16 figure might include other adjustments not reflected in the simple triangle calculation. [RAG OVERRIDE: Model said PYD=77.132, RAG triangle computed 7.6. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -233,18 +196,14 @@
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_1301_2017_llm.pdf",
       "content_hash": "e793195626231ac523f37ada7daf0297dc1fddca5e0869b46e430b9fa62d3c13",
-      "standardized_at": "2026-09-05T18:42:42.894179+00:00",
+      "standardized_at": "2026-09-11T10:40:15.151779+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 11669,
-        "output_tokens": 2016,
-        "total_tokens": 17917,
-        "cost_usd": 0.008541
-      },
-      "_served_from": {
-        "cache_file": "cbfc2c65f3f3dc2be0c89755e85ba75374593d6c4505a31d92fb5a9439ebf022.json",
-        "prompt_version": "2.10"
+        "input_tokens": 12473,
+        "output_tokens": 1671,
+        "total_tokens": 18941,
+        "cost_usd": 0.007919
       },
       "_pyd_route": {
         "source": "rag_triangle",
@@ -261,6 +220,7 @@
         "currency": "GBP",
         "units": "millions",
         "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -334,6 +294,15 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "at end of underwriting year",
+          "one year later",
+          "two years later",
+          "three years later",
+          "four years later",
+          "five years later",
+          "Six years later"
         ],
         "source_page": 46,
         "entity": 1301
@@ -416,6 +385,13 @@
           "entity": 1301,
           "backend": "azure",
           "table_kind": "balance_sheet_liabilities"
+        },
+        "movement_semantics": {
+          "row_label": "Change in prior year provisions",
+          "row_index": 7,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": true,
+          "column_index": 1
         },
         "gross_prior_year_claims": 77.1,
         "ri_share_prior_year": -5.8,
@@ -512,25 +488,14 @@
       "direction": "strengthening",
       "prior_year_movement_page": 46,
       "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "Adverse movements of GBP 71.4 million, (2016: GBP 9.1 million favourable), in the past year's provision for claims outstanding, net of expected reinsurance recoveries, are included in claims incurred, net of reinsurance.",
+      "exact_reserve_text": "Adverse movements of GBP 71.4 million, (2016: GBP 9.1 million favourable), in the past year's provision for claims outstanding, net of expected reinsurance recoveries, are included in claims incurred, net of reinsurance. These arose in respect of the following classes of business: Change in prior year provisions 77,132 (5,774) 71,358 (13,504) 4,423 (9,081)",
       "primary_causes": [
-        "Natural catastrophe events",
         "Adverse claims development",
+        "Large loss development",
         "Reinsurance recoveries"
       ],
-      "specific_events": [
-        "Hurricane Harvey",
-        "Hurricane Irma",
-        "Hurricane Maria"
-      ],
-      "specific_years_affected": [
-        2011,
-        2012,
-        2013,
-        2014,
-        2015,
-        2016
-      ],
+      "specific_events": [],
+      "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [
         {
@@ -538,46 +503,47 @@
           "event_year": 2017,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "adversely impacted the Syndicate performance",
+          "loss_description": "Adversely impacted the Syndicate performance together with some increases in attritional claims",
           "lobs_affected": [
             "Property",
             "Marine"
           ],
           "page": 5,
-          "confidence": 0.9
+          "confidence": 1.0
         },
         {
           "event_name": "Hurricane Irma",
           "event_year": 2017,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "adversely impacted the Syndicate performance",
+          "loss_description": "Adversely impacted the Syndicate performance together with some increases in attritional claims",
           "lobs_affected": [
             "Property",
             "Marine"
           ],
           "page": 5,
-          "confidence": 0.9
+          "confidence": 1.0
         },
         {
           "event_name": "Hurricane Maria",
           "event_year": 2017,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "adversely impacted the Syndicate performance",
+          "loss_description": "Adversely impacted the Syndicate performance together with some increases in attritional claims",
           "lobs_affected": [
             "Property",
             "Marine"
           ],
           "page": 5,
-          "confidence": 0.9
+          "confidence": 1.0
         }
       ],
-      "standardized_narrative": "The Syndicate opened 2017 with gross claims outstanding of GBP 203.717m. During 2017 gross prior-year provisions were strengthened by GBP 77.132m (37.9% of opening reserves) driven by adverse development across several classes - notably marine, fire/property and third party liability - and by the impact of major 2017 hurricanes (Harvey, Irma and Maria) together with higher-than-expected attritional claims. Reinsurance recoveries partially mitigated the net impact. The movement is reported in the technical provisions note and reflected as an adverse movement in claims.",
+      "standardized_narrative": "The Syndicate's gross claims outstanding at 1 January 2017 were GBP 203.717m. During 2017 the Syndicate recorded a gross strengthening in prior year provisions of GBP 77.132m (37.9% of opening reserves), which after reinsurers' share produced a net adverse movement of GBP 71.358m. The deterioration largely arose across property, marine and third party liability classes and reflects adverse claims development and large loss development, with related reinsurance impacts.",
       "raw_causal_phrases": [
         "2017 continued to present a challenging market environment and the Syndicate performance was adversely impacted by the impact of hurricanes Harvey, Irma and Maria together with some increases in attritional claims.",
-        "The impact of the hurricanes and the higher than expected attritional claims has resulted in a claims ratio of 98.4% compared to 56.6% in 2016.",
-        "Adverse movements of GBP 71.4 million, (2016: GBP 9.1 million favourable), in the past year's provision for claims outstanding, net of expected reinsurance recoveries, are included in claims incurred, net of reinsurance."
+        "Adverse movements of GBP 71.4 million, (2016: GBP 9.1 million favourable), in the past year's provision for claims outstanding, net of expected reinsurance recoveries, are included in claims incurred, net of reinsurance.",
+        "Change in prior year provisions 77,132 (5,774) 71,358 (13,504) 4,423 (9,081)",
+        "These arose in respect of the following classes of business:"
       ],
       "lob_movements": [
         {
@@ -585,33 +551,40 @@
           "direction": "strengthening",
           "amount_gbp_m": 2.271,
           "percentage": null,
-          "confidence": 0.9
+          "confidence": 0.8
         },
         {
           "line_of_business": "Marine",
           "direction": "strengthening",
           "amount_gbp_m": 25.119,
           "percentage": null,
-          "confidence": 0.9
+          "confidence": 0.8
         },
         {
           "line_of_business": "Property",
           "direction": "strengthening",
           "amount_gbp_m": 27.806,
           "percentage": null,
-          "confidence": 0.9
+          "confidence": 0.8
         },
         {
           "line_of_business": "Casualty",
           "direction": "strengthening",
           "amount_gbp_m": 5.048,
           "percentage": null,
-          "confidence": 0.9
+          "confidence": 0.8
         },
         {
-          "line_of_business": "Aggregate",
+          "line_of_business": "Reinsurance - Specialty",
           "direction": "strengthening",
           "amount_gbp_m": 0.113,
+          "percentage": null,
+          "confidence": 0.5
+        },
+        {
+          "line_of_business": "Treaty",
+          "direction": "strengthening",
+          "amount_gbp_m": 11.001,
           "percentage": null,
           "confidence": 0.8
         }
@@ -652,7 +625,7 @@
       "gross_premium_page": 35,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Opening gross claims outstanding taken from the Statement of Financial Position (claims outstanding, prior year column). Prior year development (gross) taken from Technical Provisions note (Change in prior year provisions = GBP 77,132k). The descriptive sentence in the claims note reports net adverse movement (GBP 71.4m net of reinsurance); both figures are presented and the gross figure from the technical provisions note was used as primary. Per-class movements in the 'Claims' note are presented in the report in net form (table uses parentheses) and were used to populate LOB movements (absolute values, interpreted as adverse/strengthenings). Some per-LOB numbers in the textual notes are net of reinsurance; where only net numbers were available this is noted here. Confidence levels reflect explicit table values (1.0) vs. derived/inferred LOB mappings (0.8-0.9). [RAG OVERRIDE: Model said PYD=77.132, RAG triangle computed 7.6. Using RAG value.]",
+      "data_quality_notes": "Opening gross claims outstanding taken from Statement of Financial Position (Claims outstanding prior-year column). Prior year development (gross) taken from Technical Provisions note (Change in prior year provisions = GBP 77,132k). The document's textual description reports the NET adverse movement of GBP 71.4m (net of reinsurance) and a class-level breakdown is presented as net contributions; per-class numbers in the 'Claims' note are net of reinsurance. A gross claims development triangle is available (page 44) and was used only as supporting data. [RAG OVERRIDE: Model said PYD=77.132, RAG triangle computed 7.6. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -736,18 +709,14 @@
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_1301_2017_llm.pdf",
       "content_hash": "e793195626231ac523f37ada7daf0297dc1fddca5e0869b46e430b9fa62d3c13",
-      "standardized_at": "2026-09-05T18:44:06.270985+00:00",
+      "standardized_at": "2026-09-11T10:43:28.756536+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 26145,
-        "output_tokens": 8117,
-        "total_tokens": 34262,
-        "cost_usd": 0.02277
-      },
-      "_served_from": {
-        "cache_file": "0526882ee8a0c422250fe6d83c04af4c794dc7fc6698521114c9929c9b78e0cf.json",
-        "prompt_version": "2.10"
+        "input_tokens": 26905,
+        "output_tokens": 7745,
+        "total_tokens": 34650,
+        "cost_usd": 0.022216
       },
       "_pyd_route": {
         "source": "rag_triangle",
@@ -764,6 +733,7 @@
         "currency": "GBP",
         "units": "millions",
         "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -837,6 +807,15 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "at end of underwriting year",
+          "one year later",
+          "two years later",
+          "three years later",
+          "four years later",
+          "five years later",
+          "Six years later"
         ],
         "source_page": 46,
         "entity": 1301
@@ -919,6 +898,13 @@
           "entity": 1301,
           "backend": "azure",
           "table_kind": "balance_sheet_liabilities"
+        },
+        "movement_semantics": {
+          "row_label": "Change in prior year provisions",
+          "row_index": 7,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": true,
+          "column_index": 1
         },
         "gross_prior_year_claims": 77.1,
         "ri_share_prior_year": -5.8,
@@ -1005,12 +991,12 @@
       }
     }
   },
-  "total_cost_usd": 0.031311,
-  "total_tokens": 52179,
+  "total_cost_usd": 0.030135,
+  "total_tokens": 53591,
   "validation": {
     "passed": true,
-    "total_discrepancies": 32,
-    "within_tolerance": 32,
+    "total_discrepancies": 19,
+    "within_tolerance": 19,
     "hard_failures": 0,
     "hard_failure_details": []
   }

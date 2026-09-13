@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T11:17:21.746525+00:00",
+  "extraction_timestamp": "2026-09-13T04:00:30.907351+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -20,38 +22,29 @@
       "prior_year_movement_confidence": 0.8,
       "exact_reserve_text": "Favourable prior year loss development of GBP 0.2 million was recorded in 2022 compared to favourable development of GBP 8.6 million in the prior calendar year. In the current calendar year, the favourable loss development was driven primarily by lower emergence of claims of certain lines of business than previously anticipated.",
       "primary_causes": [
-        "Other"
+        "Favorable claims development"
       ],
       "specific_events": [],
-      "specific_years_affected": [
-        2012,
-        2013,
-        2014,
-        2015,
-        2016,
-        2017,
-        2018,
-        2019,
-        2020
-      ],
+      "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "The syndicate experienced a gross strengthening of GBP 34.169 million in prior year reserves for underwriting years 2012-2020, as calculated from the gross claims development triangle. This contrasts with the report's narrative which indicated a net favourable prior year loss development of GBP 0.2 million, primarily attributed to lower emergence of claims than previously anticipated in certain lines of business.",
+      "standardized_narrative": "The report indicates a \"favourable prior year loss development of GBP 0.2 million\" driven by \"lower emergence of claims of certain lines of business than previously anticipated.\" This narrative figure is likely net of reinsurance. However, a calculation from the gross claims development triangle (the preferred gross source) suggests a gross strengthening of GBP 47.472 million across underwriting years 2012-2020. The prior year development includes a net release for Commercial lines and a net strengthening for Specialty lines.",
       "raw_causal_phrases": [
+        "Favourable prior year loss development",
         "lower emergence of claims of certain lines of business than previously anticipated"
       ],
       "lob_movements": [
         {
           "line_of_business": "Commercial",
-          "direction": "strengthening",
-          "amount_gbp_m": 1.84,
+          "direction": "release",
+          "amount_gbp_m": -1.84,
           "percentage": null,
           "confidence": 0.5
         },
         {
           "line_of_business": "Specialty",
-          "direction": "release",
-          "amount_gbp_m": -1.648,
+          "direction": "strengthening",
+          "amount_gbp_m": 1.648,
           "percentage": null,
           "confidence": 0.5
         }
@@ -97,7 +90,7 @@
       "gross_premium_page": 17,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The narrative on page 18 describes a net favourable prior year development of GBP 0.2 million, but the gross claims development triangle on page 21 indicates a gross strengthening of GBP 34.169 million for underwriting years 2012-2020. The gross triangle calculation was used for 'prior_year_development_gbp_m' and 'direction' as per instructions to prioritize gross figures. LOB movements are net of reinsurance as gross breakdown was not available. [RAG OVERRIDE: Model said opening_reserves=498.626, balance sheet gives 498.085m. Using RAG value.]",
+      "data_quality_notes": "The narrative states a 'favourable prior year loss development of GBP 0.2 million', which is likely a net figure. However, calculation from the gross claims development triangle indicates a gross strengthening of GBP 47.472 million. The gross triangle figure is used for 'prior_year_development_gbp_m' as per instructions to prefer gross sources. The 'lob_movements' are derived from an 'Over/(under) provisions' table which does not specify gross or net, but its total aligns with the narrative's net figure. [RAG OVERRIDE: Model said PYD=47.472, RAG triangle computed 34.169. Using RAG value.] [RAG OVERRIDE: Model said opening_reserves=498.626, balance sheet gives 498.085m. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -264,20 +257,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_382_2022_llm.pdf",
-      "content_hash": "8be6fc67acf8e751d3d8fc83c63ec213e40c4a11d7226dac40a4fc6cca29e3a8",
-      "standardized_at": "2026-03-18T22:06:18.832442+00:00",
+      "content_hash": "f69a269414dbedc9af459a60a056f638a14bd34085b8da90184c21360cce318f",
+      "standardized_at": "2026-09-11T12:34:35.741173+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 11668,
-        "output_tokens": 2171,
-        "total_tokens": 19666,
-        "cost_usd": 0.008928
+        "input_tokens": 12472,
+        "output_tokens": 2142,
+        "total_tokens": 21292,
+        "cost_usd": 0.009097
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 34.169,
+        "model_value": 47.472,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "conflict",
+        "triangle_source_page": 45,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "conflict",
+        "cell_binding": "header",
         "underwriting_years": [
           2012,
           2013,
@@ -435,6 +440,19 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "100% syndicate values At end of first accounting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later",
+          "Seven years later",
+          "Eight years later",
+          "Nine years later",
+          "Ten years later"
         ],
         "source_page": 45,
         "entity": 382
@@ -615,44 +633,18 @@
       "exact_reserve_text": "Over/(under) provisions for claims at the beginning of the year as compared with net payments and provisions at the end of the year in respect of prior years' claims are as follows:\n\nFavourable prior year loss development of GBP 0.2 million was recorded in 2022 compared to favourable development of GBP 8.6 million in the prior calendar year. In the current calendar year, the favourable loss development was driven primarily by lower emergence of claims of certain lines of business than previously anticipated.",
       "primary_causes": [
         "Favorable claims development",
-        "Reinsurance recoveries",
-        "IBNR recalibration"
+        "Large loss development"
       ],
       "specific_events": [],
-      "specific_years_affected": [
-        2012,
-        2013,
-        2014,
-        2015,
-        2016,
-        2017,
-        2018,
-        2019,
-        2020
-      ],
+      "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "The Syndicate carried opening gross claims outstanding of GBP 498.626m (31 December 2021). Analysis of the gross claims development triangle indicates a net adverse movement on prior accident years of approximately GBP 34.2m (gross strengthening), concentrated across multiple older underwriting years. However, on a net basis (after reinsurance) the Syndicate recorded a small favourable prior year loss development of GBP 0.2m driven by lower-than-expected emergence of claims in certain lines and by reinsurance recoveries. Movements vary by class with mixed releases and strengthenings across Commercial and Specialty groupings.",
+      "standardized_narrative": "The gross claims development triangle indicates a net adverse movement (strengthening) of approximately GBP 34.2m for underwriting years 2020 and earlier, driven by increases concentrated in several older underwriting years (notably around 2017-2018). By contrast, the narrative in the notes reports a small favourable prior year loss development of GBP 0.2m (net of reinsurance). This discrepancy reflects that the reported narrative figure is net of reinsurance while the triangle yields a gross prior year movement; the extracted prior-year-development above is derived from the gross claims development table.",
       "raw_causal_phrases": [
-        "Favourable prior year loss development of GBP 0.2 million was recorded in 2022 compared to favourable development of GBP 8.6 million in the prior calendar year.",
-        "In the current calendar year, the favourable loss development was driven primarily by lower emergence of claims of certain lines of business than previously anticipated."
+        "Over/(under) provisions for claims at the beginning of the year as compared with net payments and provisions at the end of the year in respect of prior years' claims are as follows:",
+        "Favourable prior year loss development of GBP 0.2 million was recorded in 2022 compared to favourable development of GBP 8.6 million in the prior calendar year. In the current calendar year, the favourable loss development was driven primarily by lower emergence of claims of certain lines of business than previously anticipated."
       ],
-      "lob_movements": [
-        {
-          "line_of_business": "Casualty",
-          "direction": "strengthening",
-          "amount_gbp_m": 1.84,
-          "percentage": null,
-          "confidence": 0.5
-        },
-        {
-          "line_of_business": "Reinsurance - Specialty",
-          "direction": "release",
-          "amount_gbp_m": -1.648,
-          "percentage": null,
-          "confidence": 0.5
-        }
-      ],
+      "lob_movements": [],
       "gross_premiums_written_gbp_m": 321.2,
       "gross_premium_mix": [
         {
@@ -694,11 +686,11 @@
       "gross_premium_page": 35,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Gross prior year development was not provided as a single explicit gross figure in the movement note; gross PYD was computed from the gross claims development triangle (page 43). The syndicate narrative reports a small net favourable prior year development (GBP 0.2m) - this is NET of reinsurance and reconciles with the triangle showing gross adverse movement offset by increases in reinsurers' share. LOB-level prior year movements in the notes are presented net; mapping 'Commercial' and 'Specialty' to standard Lloyd's LOB names is approximate and amounts used for lob_movements are the net figures from the 'Claims incurred' prior year table. [RAG OVERRIDE: Model said opening_reserves=498.626, balance sheet gives 498.085m. Using RAG value.]",
+      "data_quality_notes": "Primary gross prior-year movement extracted from the gross claims development triangle (page 43). The notes (page 36) state a small favourable prior year development of GBP 0.2m but that figure is presented net of reinsurance; the triangle provides a gross view and yields a net adverse (strengthening) of ~GBP 34.2m for underwriting years <=2020. The movement note in the accounts appears to only present net amounts by class; therefore gross movement was computed from the triangle. No specific named events affecting prior years are clearly identified in the narrative; no RITC disclosures appear to invalidate the triangle. Lob-level prior year movements were only provided in aggregated groups (Commercial / Specialty) net of reinsurance; gross per-LOB movements were not available, so lob_movements is empty. [RAG OVERRIDE: Model said opening_reserves=498.626, balance sheet gives 498.085m. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
-        "units": "thousands",
+        "units": "millions",
         "page": 43,
         "underwriting_years": [
           2012,
@@ -715,90 +707,77 @@
         ],
         "development_rows": [
           [
-            122606,
-            62279,
-            68154,
-            79269,
-            72750,
-            133642,
-            86573,
-            60144,
-            82150,
-            67111,
-            108173
+            122.606,
+            62.279,
+            68.154,
+            79.269,
+            72.75,
+            133.642,
+            86.573,
+            60.144,
+            82.15,
+            67.111,
+            108.173
           ],
           [
-            151611,
-            158726,
-            150574,
-            185680,
-            173528,
-            225477,
-            215068,
-            156034,
-            156508,
-            160852,
+            151.611,
+            158.726,
+            150.574,
+            185.68,
+            173.528,
+            225.477,
+            215.068,
+            156.034,
+            156.508,
+            160.852,
             null
           ],
           [
-            159787,
-            168849,
-            169898,
-            209164,
-            198091,
-            272660,
-            233767,
-            165496,
-            140149,
-            null,
-            null
-          ],
-          [
-            159051,
-            167474,
-            185424,
-            231946,
-            196484,
-            281723,
-            246344,
-            170766,
-            null,
+            159.787,
+            168.849,
+            169.898,
+            209.164,
+            198.091,
+            272.66,
+            233.767,
+            165.496,
+            140.149,
             null,
             null
           ],
           [
-            164524,
-            163900,
-            190130,
-            216613,
-            201908,
-            300190,
-            272164,
-            null,
+            159.051,
+            167.474,
+            185.424,
+            231.946,
+            196.484,
+            281.723,
+            246.344,
+            170.766,
             null,
             null,
             null
           ],
           [
-            164249,
-            167206,
-            184297,
-            214230,
-            211107,
-            313487,
-            null,
+            164.524,
+            163.9,
+            190.13,
+            216.613,
+            201.908,
+            300.19,
+            272.164,
             null,
             null,
             null,
             null
           ],
           [
-            165943,
-            172739,
-            203237,
-            222266,
-            214054,
-            null,
+            164.249,
+            167.206,
+            184.297,
+            214.23,
+            211.107,
+            313.487,
             null,
             null,
             null,
@@ -806,11 +785,11 @@
             null
           ],
           [
-            167167,
-            172737,
-            185693,
-            217967,
-            null,
+            165.943,
+            172.739,
+            203.237,
+            222.266,
+            214.054,
             null,
             null,
             null,
@@ -819,10 +798,10 @@
             null
           ],
           [
-            170807,
-            173463,
-            191492,
-            null,
+            167.167,
+            172.737,
+            185.693,
+            217.967,
             null,
             null,
             null,
@@ -832,9 +811,9 @@
             null
           ],
           [
-            168730,
-            173232,
-            null,
+            170.807,
+            173.463,
+            191.492,
             null,
             null,
             null,
@@ -845,7 +824,20 @@
             null
           ],
           [
-            170655,
+            168.73,
+            173.232,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            170.655,
             null,
             null,
             null,
@@ -857,24 +849,37 @@
             null,
             null
           ]
-        ]
+        ],
+        "confidence": 0.8
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_382_2022_llm.pdf",
-      "content_hash": "8be6fc67acf8e751d3d8fc83c63ec213e40c4a11d7226dac40a4fc6cca29e3a8",
-      "standardized_at": "2026-03-18T22:09:07.452626+00:00",
+      "content_hash": "f69a269414dbedc9af459a60a056f638a14bd34085b8da90184c21360cce318f",
+      "standardized_at": "2026-09-11T12:38:58.646966+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 37002,
-        "output_tokens": 9746,
-        "total_tokens": 46748,
-        "cost_usd": 0.028742
+        "input_tokens": 37760,
+        "output_tokens": 10416,
+        "total_tokens": 48176,
+        "cost_usd": 0.030272
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 34.169,
+        "model_value": 34.169,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "conflict",
+        "triangle_source_page": 45,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "conflict",
+        "cell_binding": "header",
         "underwriting_years": [
           2012,
           2013,
@@ -1032,6 +1037,19 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "100% syndicate values At end of first accounting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later",
+          "Seven years later",
+          "Eight years later",
+          "Nine years later",
+          "Ten years later"
         ],
         "source_page": 45,
         "entity": 382
@@ -1199,12 +1217,12 @@
       }
     }
   },
-  "total_cost_usd": 0.03767,
-  "total_tokens": 66414,
+  "total_cost_usd": 0.039369,
+  "total_tokens": 69468,
   "validation": {
     "passed": true,
-    "total_discrepancies": 17,
-    "within_tolerance": 17,
+    "total_discrepancies": 13,
+    "within_tolerance": 13,
     "hard_failures": 0,
     "hard_failure_details": []
   }

@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T10:02:55.992824+00:00",
+  "extraction_timestamp": "2026-09-13T04:04:10.537290+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -16,30 +18,26 @@
       "prior_year_development_gbp_m": 25.471,
       "prior_year_development_pct": 13.73,
       "direction": "strengthening",
-      "prior_year_movement_page": 22,
-      "prior_year_movement_confidence": 0.8,
-      "exact_reserve_text": "The profit for the calendar year is split between a profit on the 2022 year of account of $8.4m and a profit on the 2021 and prior years of account of $5.0m. The implications of this analysis have been incorporated into our reserving approach for all years of account, which together with a loading for inflation and a margin added over and above actuarial best estimates, has contributed to the back year deterioration on the 2020 and prior years of account on a stand-alone basis.",
+      "prior_year_movement_page": 24,
+      "prior_year_movement_confidence": 1.0,
+      "exact_reserve_text": "Included within net calendar year claims incurred of $75,625,000 (2021: $60,654,000) is a deterioration of $10,434,000 in claims reserves established at the prior year end (2021: deterioration $5,306,000).",
       "primary_causes": [
-        "Adverse claims development",
         "IBNR recalibration",
-        "Economic inflation / claims cost inflation"
+        "Economic inflation / claims cost inflation",
+        "Reserve methodology change"
       ],
       "specific_events": [],
       "specific_years_affected": [
-        2021,
         2020,
-        2019
+        2021
       ],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "For the 2022 financial year, Syndicate 1971 experienced a gross reserve strengthening of $25.471 million, primarily impacting the 2019 and 2020 underwriting years. This adverse development is attributed to back year deterioration on the 2020 and prior years of account, influenced by IBNR recalibration, assumptions from pricing current and prospective business, and a loading for inflation and actuarial best estimates. Despite this gross strengthening, the syndicate reported a net profit of $5.0 million on the 2021 and prior years of account from a P&L perspective.",
+      "standardized_narrative": "The syndicate experienced a net strengthening of $10.434 million in prior year claims reserves, primarily affecting the 2020 and prior years of account. This deterioration was attributed to additional information from pricing current and prospective business, a loading for inflation, and adjustments to the reserving approach, including actuarial best estimates and confidence margins.",
       "raw_causal_phrases": [
-        "profit on the 2021 and prior years of account of $5.0m",
         "back year deterioration on the 2020 and prior years of account on a stand-alone basis",
-        "deterioration of $10,434,000 in claims reserves established at the prior year end",
-        "made a provision within claims that have been incurred at the reporting date but have not yet been reported (\"IBNR\") in the calendar year to allow for this reserving uncertainty",
         "assumptions underlying our reserving methodology reflect additional information obtained from pricing current and prospective business",
-        "loading for inflation and a margin added over and above actuarial best estimates"
+        "a loading for inflation and a margin added over and above actuarial best estimates, has contributed to the back year deterioration"
       ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 260.9,
@@ -63,7 +61,7 @@
       "gross_premium_page": 24,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "The report presents conflicting information regarding prior year development. A net profit of $5.0m is reported for 2021 and prior years of account (P&L result), implying a release. However, the gross claims development triangle indicates a total strengthening of $25.471m for underwriting years 2019 and 2020. Narrative also mentions 'back year deterioration on the 2020 and prior years of account'. The figure used for prior_year_development_gbp_m is derived from the gross claims development triangle, as per instructions to prioritize gross figures. A net deterioration of $10.434m is also mentioned in Note 6.",
+      "data_quality_notes": "The prior year development figure of $10.434m is stated as 'included within net calendar year claims incurred', indicating it is a net figure (after reinsurance). No gross prior year development figure was explicitly available. The gross claims development triangle on page 22 was deemed unreliable for calculating prior year development due to the mention of Reinsurance to Close (RITC) for the 2020 year of account on page 36, which can distort the underlying claims development. [RAG OVERRIDE: Model said PYD=10.434, RAG triangle computed 25.471. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
@@ -104,20 +102,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_1971_2022_llm.pdf",
-      "content_hash": "0f86635a44a8fc1c84da28bd97cc5048a5b97f501605d0867b8227109d12f5a1",
-      "standardized_at": "2026-07-05T23:01:01.105709+00:00",
+      "content_hash": "bad95be3f3644f492c99ee4c4430d594a705c104be614ca2d87269f5e407be9b",
+      "standardized_at": "2026-09-11T11:22:43.060332+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 16313,
-        "output_tokens": 1300,
-        "total_tokens": 25798,
-        "cost_usd": 0.008144
+        "input_tokens": 17117,
+        "output_tokens": 1069,
+        "total_tokens": 22999,
+        "cost_usd": 0.007808
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 25.471,
+        "model_value": 10.434,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 39,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2019,
           2020,
@@ -149,6 +159,12 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later"
         ],
         "source_page": 39,
         "entity": 1971
@@ -330,27 +346,37 @@
       "direction": "strengthening",
       "prior_year_movement_page": 37,
       "prior_year_movement_confidence": 0.8,
-      "exact_reserve_text": "Included within net calendar year claims incurred of $75,625,000 (2021: $60,654,000) is a deterioration of $10,434,000 in claims reserves established at the prior year end (2021: deterioration $5,306,000). The implications of this analysis have been incorporated into our reserving approach for all years of account, which together with a loading for inflation and a margin added over and above actuarial best estimates, has contributed to the back year deterioration on the 2020 and prior years of account on a stand-alone basis.",
+      "exact_reserve_text": "Included within net calendar year claims incurred of $75,625,000 (2021: $60,654,000) is a deterioration of $10,434,000 in claims reserves established at the prior year end (2021: deterioration $5,306,000).",
       "primary_causes": [
+        "Adverse claims development",
         "IBNR recalibration",
         "Economic inflation / claims cost inflation",
-        "Reserve methodology change",
-        "Adverse claims development"
+        "Reserve methodology change"
       ],
       "specific_events": [],
       "specific_years_affected": [
         2019,
         2020
       ],
-      "prior_year_events": [],
+      "prior_year_events": [
+        {
+          "event_name": "Back year deterioration",
+          "event_year": 2020,
+          "impact_description": "Adverse development on 2019 and 2020 underwriting years leading to an increase in gross incurred claims estimates for those years.",
+          "lobs_affected": [
+            "Motor",
+            "Casualty"
+          ],
+          "amount_gbp_m": 25.471,
+          "confidence": 0.8
+        }
+      ],
       "named_events": [],
-      "standardized_narrative": "At the 2022 year end Syndicate 1971 recorded adverse prior-year development. Using the gross claims development table, cumulative estimates for 2019 and 2020 increased by a combined $25.471m (13.7% of opening gross reserves of $185.473m). Management attributes the back-year deterioration to IBNR recalibration, inflationary loadings and changes in reserving assumptions/margins, together with adverse development on older accident years.",
+      "standardized_narrative": "Syndicate 1971 recorded gross prior-year adverse development of approximately 25.47 million (USD) on underwriting years 2019-2020 (an increase of about 13.7% versus opening gross claims outstanding). The movement reflects backyear deterioration driven by recalibration of IBNR and reserving assumptions, allowance for inflationary pressures and adjustments to methodology, primarily affecting its motor and thirdparty liability business.",
       "raw_causal_phrases": [
-        "a deterioration of $10,434,000 in claims reserves established at the prior year end",
-        "reserving uncertainty",
-        "provision within claims that have been incurred at the reporting date but have not yet been reported (\"IBNR\")",
-        "loading for inflation and a margin added over and above actuarial best estimates",
-        "back year deterioration on the 2020 and prior years of account on a stand-alone basis"
+        "Included within net calendar year claims incurred of $75,625,000 (2021: $60,654,000) is a deterioration of $10,434,000 in claims reserves established at the prior year end (2021: deterioration $5,306,000).",
+        "The implications of this analysis have been incorporated into our reserving approach for all years of account, which together with a loading for inflation and a margin added over and above actuarial best estimates, has contributed to the back year deterioration on the 2020 and prior years of account on a stand-alone basis.",
+        "the assumptions underlying our reserving methodology reflect additional information obtained from pricing current and prospective business."
       ],
       "lob_movements": [
         {
@@ -362,13 +388,6 @@
         },
         {
           "line_of_business": "Motor",
-          "direction": "strengthening",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.5
-        },
-        {
-          "line_of_business": "Treaty",
           "direction": "strengthening",
           "amount_gbp_m": null,
           "percentage": null,
@@ -396,7 +415,7 @@
       "gross_premium_page": 39,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "Prior-year development (gross) was calculated from the gross claims development triangle (columns 2019 and 2020) because the narrative explicitly states only a NET prior-year deterioration ($10.434m). The gross triangle yields a combined gross strengthening of $25.471m. Amounts are reported in the report's native currency (USD).",
+      "data_quality_notes": "Prior year development (25.471m) was calculated from the gross claims development triangle (gross incurred claims by underwriting year). The narrative states a deterioration of 10.434m but that sentence refers to 'net calendar year claims incurred' and appears to be a net/reinsuranceaffected figure; the gross triangle yields a larger adverse movement. All monetary figures reported above are in the syndicate's native currency (USD). Triangle and balance sheet amounts in the report are presented in thousands; amounts above converted to millions. Confidence levels reflect source reliability (balance sheet = 1.0; triangle calculation = 0.8).",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
@@ -437,20 +456,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_1971_2022_llm.pdf",
-      "content_hash": "0f86635a44a8fc1c84da28bd97cc5048a5b97f501605d0867b8227109d12f5a1",
-      "standardized_at": "2026-07-05T23:02:02.130670+00:00",
+      "content_hash": "bad95be3f3644f492c99ee4c4430d594a705c104be614ca2d87269f5e407be9b",
+      "standardized_at": "2026-09-11T11:25:02.894475+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 33659,
-        "output_tokens": 5639,
-        "total_tokens": 39298,
-        "cost_usd": 0.019693
+        "input_tokens": 34419,
+        "output_tokens": 6108,
+        "total_tokens": 40527,
+        "cost_usd": 0.020821
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 25.471,
+        "model_value": 25.471,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 39,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2019,
           2020,
@@ -482,6 +513,12 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later"
         ],
         "source_page": 39,
         "entity": 1971
@@ -653,12 +690,12 @@
       }
     }
   },
-  "total_cost_usd": 0.027837,
-  "total_tokens": 65096,
+  "total_cost_usd": 0.028629,
+  "total_tokens": 63526,
   "validation": {
     "passed": true,
-    "total_discrepancies": 15,
-    "within_tolerance": 15,
+    "total_discrepancies": 16,
+    "within_tolerance": 16,
     "hard_failures": 0,
     "hard_failure_details": []
   }

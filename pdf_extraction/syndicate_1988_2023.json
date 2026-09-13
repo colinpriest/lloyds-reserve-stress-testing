@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T10:03:57.812167+00:00",
+  "extraction_timestamp": "2026-09-13T04:04:16.164391+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -18,11 +20,13 @@
       "direction": "strengthening",
       "prior_year_movement_page": 16,
       "prior_year_movement_confidence": 0.8,
-      "exact_reserve_text": "The tables below show the Syndicate's cumulative incurred claims development, including both claims notified and IBNR for each underwriting year, together with the cumulative payments to date on a gross and net of reinsurance basis at the balance sheet date.",
+      "exact_reserve_text": "For underwriting year 2021, the current estimate of cumulative gross claims incurred is $29,492,000, compared to the previous diagonal estimate of $56,147,000 (Two years later), resulting in a release of $26,655,000.",
       "primary_causes": [
+        "Favorable claims development",
         "IBNR recalibration",
         "Economic inflation / claims cost inflation",
-        "Adverse claims development"
+        "Geopolitical events",
+        "Cyber"
       ],
       "specific_events": [],
       "specific_years_affected": [
@@ -30,11 +34,15 @@
       ],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "The syndicate experienced a strengthening of prior year reserves, primarily impacting the 2021 underwriting year. This was calculated from the gross claims development table, showing an increase in the estimated ultimate claims for that year. General factors such as the rapidly changing cyber risk environment, rate changes, and inflation are noted as contributing to overall claims uncertainty.",
+      "standardized_narrative": "The Syndicate experienced a favorable prior year reserve development of $26.655 million, primarily driven by the 2021 underwriting year. This release is calculated from the gross claims development table, where the current estimate for the 2021 underwriting year is lower than its previous diagonal estimate. The report notes that uncertainty in claims estimates decreases as underwriting years mature, suggesting that the favorable development is a result of claims maturing better than initially projected. The report also highlights ongoing uncertainties related to the rapidly changing cyber risk landscape, economic inflation, and geopolitical events, which influence loss estimates and reserve adequacy.",
       "raw_causal_phrases": [
-        "rapidly changing environment in the cyber class of business has a higher degree of uncertainty due to the propensity for changes to the cyber risk landscape and perils, such as ransomware emerging in the past couple of years",
-        "Loss estimates are heavily influenced by expected loss ratios on which there is a high level of uncertainty",
-        "Continued focus remained on inflation throughout 2023 due to the continuing war in Ukraine as well as other supply side issues"
+        "The measurement of the provision for claims outstanding involves judgements and assumptions about the future that have the most significant effect on the amounts recognised in the financial statements.",
+        "Critical judgement is applied when estimating the value of amounts that should be provided for claims that have been incurred at the reporting date but have not yet been reported (IBNR) to the Syndicate.",
+        "Statistical techniques assume that past claims development experience can be used as a basis to project ultimate claims costs.",
+        "The rapidly changing environment in the cyber class of business has a higher degree of uncertainty due to the propensity for changes to the cyber risk landscape and perils, such as ransomware emerging in the past couple of years.",
+        "Loss estimates are heavily influenced by expected loss ratios on which there is a high level of uncertainty.",
+        "Continued focus remained on inflation throughout 2023 due to the continuing war in Ukraine as well as other supply side issues.",
+        "The uncertainty associated with the ultimate claims experience of an underwriting year is greatest when the underwriting year is at an early stage of development and the margin for future experience potentially being more adverse than assumed is at its highest. As claims develop, and the ultimate cost of the claims becomes more certain, the relative level of margin should decrease."
       ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 45.0,
@@ -55,10 +63,10 @@
           "percentage_of_total": 88.4
         }
       ],
-      "gross_premium_page": 2,
+      "gross_premium_page": 12,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "Prior year development was calculated from the gross claims development triangle on page 16, considering only underwriting years older than the two most recent (2023 and 2022).",
+      "data_quality_notes": "Prior year development was calculated from the gross claims development table by comparing the current estimate for the 2021 underwriting year to its previous diagonal estimate, excluding the two most recent underwriting years (2022 and 2023) as per instructions. [RAG OVERRIDE: Model said PYD=-26.655, RAG triangle computed 5.647. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
@@ -89,20 +97,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_1988_2023_llm.pdf",
-      "content_hash": "a1681ad28468508d2cd4cc598759b55eb700e78381fb38c7af4446e5c1aba83d",
-      "standardized_at": "2026-07-05T10:33:34.348463+00:00",
+      "content_hash": "b0929a3ca02b43d6247a657820a4139e118291a8bfcb9a4a1fe316ebff938060",
+      "standardized_at": "2026-09-11T11:35:27.053515+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 10637,
-        "output_tokens": 983,
-        "total_tokens": 14548,
-        "cost_usd": 0.005649
+        "input_tokens": 11441,
+        "output_tokens": 1304,
+        "total_tokens": 15595,
+        "cost_usd": 0.006692
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 5.647,
+        "model_value": -26.655,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 44,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2021,
           2022,
@@ -124,6 +144,11 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of underwriting year",
+          "One year later",
+          "Two years later"
         ],
         "source_page": 44,
         "entity": 1988
@@ -238,7 +263,7 @@
       "prior_year_development_gbp_m": 5.647,
       "prior_year_development_pct": 10.64,
       "direction": "strengthening",
-      "prior_year_movement_page": 44,
+      "prior_year_movement_page": 45,
       "prior_year_movement_confidence": 0.8,
       "exact_reserve_text": "",
       "primary_causes": [
@@ -250,32 +275,22 @@
       "specific_years_affected": [
         2021
       ],
-      "prior_year_events": [
-        {
-          "event_name": "Reserve strengthening for 2021 underwriting year",
-          "event_year": 2021,
-          "impact_description": "Increase in the cumulative gross claims incurred for the 2021 underwriting year (from 50,500 to 56,147 thousand USD), resulting in an adverse prior year development.",
-          "lobs_affected": [
-            "Casualty"
-          ],
-          "amount_gbp_m": 5.647,
-          "confidence": 0.8
-        }
-      ],
+      "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "At 31 December 2023 the Syndicate's gross claims outstanding closed at $123.965m (2023) versus $53.078m at 31 December 2022. Analysis of the gross claims development triangle indicates adverse prior-year development driven by the 2021 underwriting year (an increase of approximately $5.647m), reflecting adverse claims development and inflationary/IBNR recalibration pressures, predominantly affecting casualty/thirdparty liability exposures.",
+      "standardized_narrative": "Using the gross claims development table, underwriting years prior to 2022 (notably 2021) show adverse development resulting in a gross strengthening of approximately 5.647 million (USD) on prior years, equivalent to about 10.6% of the opening gross claims outstanding. The movement appears attributable to adverse claims development on older underwriting years, together with inflationary pressure and recalibration of IBNR assumptions. The Syndicate's casualty/third-party liability portfolio is the principal exposure likely to be affected given its predominance in the premium mix.",
       "raw_causal_phrases": [
-        "Cyber The rapidly changing environment in the cyber class of business has a higher degree of uncertainty due to the propensity for changes to the cyber risk landscape and perils, such as ransomware emerging in the past couple of years.",
-        "Rate change Loss estimates are heavily influenced by expected loss ratios on which there is a high level of uncertainty.",
-        "Inflation Continued focus remained on inflation throughout 2023 due to the continuing war in Ukraine as well as other supply side issues."
+        "The rapidly changing environment in the cyber class of business has a higher degree of uncertainty due to the propensity for changes to the cyber risk landscape and perils, such as ransomware emerging in the past couple of years.",
+        "Loss estimates are heavily influenced by expected loss ratios on which there is a high level of uncertainty.",
+        "There are a number of factors which impact the inflationary environment; such as government or central bank actions, movements in exchange rates impacting the cost of imports, and geopolitical factors such as those already noted above.",
+        "The provision for claims outstanding comprises the estimated cost of settling all claims incurred but unpaid at the balance sheet date, whether reported or not."
       ],
       "lob_movements": [
         {
           "line_of_business": "Casualty",
           "direction": "strengthening",
-          "amount_gbp_m": 5.647,
+          "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.8
+          "confidence": 0.5
         }
       ],
       "gross_premiums_written_gbp_m": 45.0,
@@ -296,15 +311,15 @@
           "percentage_of_total": 88.4
         }
       ],
-      "gross_premium_page": 6,
+      "gross_premium_page": 33,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "All amounts are reported in the syndicate's native currency (USD). Opening reserves taken from the prior-year closing gross claims outstanding on the Statement of Financial Position (page 21). No explicit gross prior-year movement figure was provided; prior-year development was derived from the gross claims development triangle (pages 44-45) using the standard diagonal comparison method and includes only the 2021 underwriting year (2022 and 2023 excluded). exact_reserve_text is empty because no single sentence explicitly quantified the gross prior year movement. Confidence reflects use of the triangle as primary source for prior-year movement.",
+      "data_quality_notes": "Opening reserves taken from balance sheet (Claims outstanding: 2022 comparative). Prior-year development is derived from the gross claims development table (triangle) by comparing the current estimate to the previous diagonal for underwriting years <=2021; triangle is limited (only 2021 is an 'older' year) so the PYD figure (5.647m) is based on a single underwriting year column. No explicit 'movement in prior year's provision' gross figure was found in the narrative. All monetary figures are in the report's native currency (USD) though some field names use '_gbp_m' per schema; amounts are expressed in millions of USD. Confidence reflects derivation from the triangle rather than an explicit gross prior-year movement note.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "thousands",
-        "page": 44,
+        "page": 45,
         "underwriting_years": [
           2021,
           2022,
@@ -330,20 +345,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_1988_2023_llm.pdf",
-      "content_hash": "a1681ad28468508d2cd4cc598759b55eb700e78381fb38c7af4446e5c1aba83d",
-      "standardized_at": "2026-07-05T10:34:40.534361+00:00",
+      "content_hash": "b0929a3ca02b43d6247a657820a4139e118291a8bfcb9a4a1fe316ebff938060",
+      "standardized_at": "2026-09-11T11:39:05.065579+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 14691,
-        "output_tokens": 4800,
-        "total_tokens": 19491,
-        "cost_usd": 0.013273
+        "input_tokens": 15451,
+        "output_tokens": 4797,
+        "total_tokens": 20248,
+        "cost_usd": 0.013457
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 5.647,
+        "model_value": 5.647,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 44,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2021,
           2022,
@@ -365,6 +392,11 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of underwriting year",
+          "One year later",
+          "Two years later"
         ],
         "source_page": 44,
         "entity": 1988
@@ -471,12 +503,12 @@
       }
     }
   },
-  "total_cost_usd": 0.018922,
-  "total_tokens": 34039,
+  "total_cost_usd": 0.020149,
+  "total_tokens": 35843,
   "validation": {
     "passed": true,
-    "total_discrepancies": 14,
-    "within_tolerance": 14,
+    "total_discrepancies": 17,
+    "within_tolerance": 17,
     "hard_failures": 0,
     "hard_failure_details": []
   }

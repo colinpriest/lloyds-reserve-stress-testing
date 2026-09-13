@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T09:37:05.655105+00:00",
+  "extraction_timestamp": "2026-09-13T04:04:56.381588+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -11,42 +13,27 @@
       "syndicate": 1686,
       "year": 2019,
       "opening_reserves_gbp_m": 529.765,
-      "opening_reserves_page": 23,
+      "opening_reserves_page": 8,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": 2.876,
       "prior_year_development_pct": 0.54,
       "direction": "strengthening",
-      "prior_year_movement_page": 30,
+      "prior_year_movement_page": 14,
       "prior_year_movement_confidence": 0.8,
-      "exact_reserve_text": null,
+      "exact_reserve_text": "Included within net outstanding claims of USD 438.1m (2018: USD 309.8m) is an decrease in outstanding claims relating to 2018 and prior years of account of USD 77.0m (2018: decrease in outstanding claims relating to 2017 and prior years of account USD 18.3m).",
       "primary_causes": [
-        "Adverse claims development",
-        "Favorable claims development",
-        "Other"
+        "Favorable claims development"
       ],
       "specific_events": [],
       "specific_years_affected": [
         2018,
-        2017,
-        2016,
-        2015,
-        2014
+        2017
       ],
-      "prior_year_events": [
-        {
-          "event_name": "2016 Year of Account Loss",
-          "event_year": 2016,
-          "impact_description": "Cash call received from corporate member to fund the losses of the 2016 year of account, indicating adverse development.",
-          "lobs_affected": [],
-          "amount_gbp_m": 41.198,
-          "confidence": 1.0
-        }
-      ],
+      "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "The gross claims development table indicates a net strengthening of USD 2.876 million for prior underwriting years (2014-2017). This is derived from comparing the current estimate of cumulative gross claims incurred to the previous diagonal in the claims development table. However, the report also states a net decrease in outstanding claims relating to 2018 and prior years of account of USD 77.0 million, indicating a net release. Additionally, a cash call of USD 41.198 million was received in 2019 to fund losses for the 2016 year of account, which implies adverse development for that specific year. The overall picture for prior year development is mixed, with a small gross strengthening from the triangle, a larger net release mentioned in narrative, and specific cash calls for prior year losses.",
+      "standardized_narrative": "The Syndicate reported a net release of USD 77.0 million in outstanding claims for the 2018 and prior years of account, indicating favorable claims development. No specific causal factors or events were detailed for this movement.",
       "raw_causal_phrases": [
-        "decrease in outstanding claims relating to 2018 and prior years of account",
-        "cash calls were received from the corporate member AXIS Corporate Capital UK Limited to fund the losses of the 2015 and 2016 years of account."
+        "decrease in outstanding claims relating to 2018 and prior years of account"
       ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 1142.6,
@@ -102,15 +89,15 @@
           "percentage_of_total": 34.0
         }
       ],
-      "gross_premium_page": 6,
+      "gross_premium_page": 13,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "The prior year development amount is calculated from the gross claims development triangle (page 30) as it is the only aggregate gross movement figure available. This calculation shows a strengthening of USD 2.876 million. However, the narrative on page 23 explicitly states a 'decrease in outstanding claims relating to 2018 and prior years of account of USD 77.0m', which is a net release. This creates a discrepancy between the gross triangle calculation and the net narrative. Additionally, a cash call of USD 41.198 million was received in 2019 to fund losses for the 2016 year of account (page 15), implying a strengthening for that specific year, which contradicts the release shown for 2016 YOA in the gross claims development triangle. Due to these contradictions, the overall prior year development picture is complex. The 'exact_reserve_text' field is null because the gross prior year development figure was calculated from a table, not explicitly stated in a sentence.",
+      "data_quality_notes": "Prior year development figure is net of reinsurance as explicitly stated in the narrative. A gross figure derived from the claims development triangle showed a strengthening, which contradicted the narrative's net release, leading to the decision to use the explicit net figure. [RAG OVERRIDE: Model said PYD=-77.0, RAG triangle computed 2.876. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "thousands",
-        "page": 30,
+        "page": 16,
         "underwriting_years": [
           2014,
           2015,
@@ -171,21 +158,33 @@
         ]
       },
       "source_type": "syndicate",
-      "source_file": "syndicate_reports\\pdfs\\syndicate_1686_2019.pdf",
-      "content_hash": "4799ab9ad2ebd3cf71d4fa185af8613c975e6037b9448d56bc516b45dbc81be2",
-      "standardized_at": "2026-03-16T17:16:43.603789+00:00",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_1686_2019_llm.pdf",
+      "content_hash": "a8ab3d13a9d14e0ad917db66c398f48e228e390e1c4f4fa4cf511a35f7ccc7d4",
+      "standardized_at": "2026-09-11T10:52:12.857478+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 15172,
-        "output_tokens": 1847,
-        "total_tokens": 25917,
-        "cost_usd": 0.009169
+        "input_tokens": 11957,
+        "output_tokens": 1458,
+        "total_tokens": 19077,
+        "cost_usd": 0.007232
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 2.876,
+        "model_value": -77.0,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 30,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2014,
           2015,
@@ -243,6 +242,14 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later"
         ],
         "source_page": 30,
         "entity": 1686
@@ -404,33 +411,38 @@
       "syndicate": 1686,
       "year": 2019,
       "opening_reserves_gbp_m": 529.765,
-      "opening_reserves_page": 21,
+      "opening_reserves_page": 15,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": 2.876,
       "prior_year_development_pct": 0.54,
       "direction": "strengthening",
-      "prior_year_movement_page": 23,
+      "prior_year_movement_page": 28,
       "prior_year_movement_confidence": 0.8,
       "exact_reserve_text": "Included within net outstanding claims of USD 438.1m (2018: USD 309.8m) is an decrease in outstanding claims relating to 2018 and prior years of account of USD 77.0m (2018: decrease in outstanding claims relating to 2017 and prior years of account USD 18.3m).",
       "primary_causes": [
         "Favorable claims development",
+        "Large loss development",
         "Reinsurance recoveries",
-        "Man-made catastrophe / large losses"
+        "IBNR recalibration"
       ],
       "specific_events": [],
       "specific_years_affected": [
-        2018,
-        2017,
-        2016,
+        2014,
         2015,
-        2014
+        2016,
+        2017,
+        2018
       ],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "The syndicate's opening gross claims outstanding at 1 January 2019 was USD 529.765m. Narrative in the accounts reports a net decrease in outstanding claims relating to 2018 and prior years of USD 77.0m (net of reinsurance), however the gross claims development triangle indicates a small gross adverse prior year development of c. USD 2.9m (i.e. a slight strengthening). The net improvement reported reflects favourable development on reserves together with improved reinsurance recoveries. The movements were driven by development across multiple older underwriting years rather than a single named catastrophe.",
+      "standardized_narrative": "At 1 January 2019 gross claims outstanding were USD 529.765m. The gross prior-year development (years 2014-2017) calculated from the Syndicate's gross claims development table shows a small net adverse movement of approximately USD 2.876m (c.0.54% of opening reserves), reflecting a mixture of favourable run-off on older years offset by adverse development on more recent prior years. The report also notes a net decrease on a reinsurers'-share basis of USD 77.0m for 2018 and prior years (net of reinsurance). No specific named catastrophes are cited as drivers of the prior-year movement; causes discussed in the report include normal claims development, large loss development dynamics and reinsurance recoveries.",
       "raw_causal_phrases": [
         "Included within net outstanding claims of USD 438.1m (2018: USD 309.8m) is an decrease in outstanding claims relating to 2018 and prior years of account of USD 77.0m (2018: decrease in outstanding claims relating to 2017 and prior years of account USD 18.3m).",
-        "continued frequency of large losses particularly from the Direct Aviation (Aviation), Commercial D&O (Professional) and Hull (Marine) portfolios"
+        "Reserving risk",
+        "Claims Handling risk",
+        "Natural Peril Catastrophe risk",
+        "Man-made Catastrophe Risk",
+        "The Syndicate has applied a similar approach at the current year end to that applied at the previous year end in establishing the technical provisions for claims outstanding reserves and the reinsurers' share thereof."
       ],
       "lob_movements": [
         {
@@ -462,42 +474,7 @@
           "confidence": 0.0
         },
         {
-          "line_of_business": "Motor",
-          "direction": "mixed",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.0
-        },
-        {
           "line_of_business": "Aviation",
-          "direction": "mixed",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.0
-        },
-        {
-          "line_of_business": "Reinsurance - Property",
-          "direction": "mixed",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.0
-        },
-        {
-          "line_of_business": "Reinsurance - Casualty",
-          "direction": "mixed",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.0
-        },
-        {
-          "line_of_business": "Reinsurance - Specialty",
-          "direction": "mixed",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.0
-        },
-        {
-          "line_of_business": "Professional Lines",
           "direction": "mixed",
           "amount_gbp_m": null,
           "percentage": null,
@@ -511,14 +488,7 @@
           "confidence": 0.0
         },
         {
-          "line_of_business": "Cyber",
-          "direction": "mixed",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.0
-        },
-        {
-          "line_of_business": "Aggregate",
+          "line_of_business": "Professional Lines",
           "direction": "mixed",
           "amount_gbp_m": null,
           "percentage": null,
@@ -588,12 +558,12 @@
       "gross_premium_page": 20,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "The report explicitly states a net release of USD 77.0m relating to 2018 and prior years (net of reinsurance). A gross prior-year movement is not provided as a single aggregated GROSS figure in the notes; the gross PY movement here has been calculated from the gross claims development table (triangle) and yields a small gross strengthening of ~USD 2.876m. There is therefore an apparent inconsistency between the net narrative (large net release) and the gross triangle (small gross strengthening), explained by movements in reinsurers' share. Gross PY movement is derived (triangle) - confidence 0.8. All monetary amounts are reported in the native currency (USD) and in millions; the source tables are presented in USD '000 in the report.",
+      "data_quality_notes": "Prior-year development (gross) was calculated from the Syndicate's gross claims development table (triangle). The report also cites a net (after reinsurance) decrease of USD 77.0m for 2018 and prior years; that net figure was not used for the gross PYD (triangle preferred). The triangle is presented in USD '000; gross PYD computed by comparing current estimates to the prior diagonal for underwriting years <=2017. No explicit per-LOB prior-year reserve movements were disclosed, so lob_movements are set to 'mixed' with null amounts and low confidence.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "thousands",
-        "page": 29,
+        "page": 28,
         "underwriting_years": [
           2014,
           2015,
@@ -654,21 +624,33 @@
         ]
       },
       "source_type": "syndicate",
-      "source_file": "syndicate_reports\\pdfs\\syndicate_1686_2019.pdf",
-      "content_hash": "4799ab9ad2ebd3cf71d4fa185af8613c975e6037b9448d56bc516b45dbc81be2",
-      "standardized_at": "2026-03-16T17:18:45.292575+00:00",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_1686_2019_llm.pdf",
+      "content_hash": "a8ab3d13a9d14e0ad917db66c398f48e228e390e1c4f4fa4cf511a35f7ccc7d4",
+      "standardized_at": "2026-09-11T10:55:32.586734+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 28368,
-        "output_tokens": 7191,
-        "total_tokens": 35559,
-        "cost_usd": 0.021474
+        "input_tokens": 20472,
+        "output_tokens": 6798,
+        "total_tokens": 27270,
+        "cost_usd": 0.018714
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 2.876,
+        "model_value": 2.876,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 30,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2014,
           2015,
@@ -726,6 +708,14 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later"
         ],
         "source_page": 30,
         "entity": 1686
@@ -884,12 +874,12 @@
       }
     }
   },
-  "total_cost_usd": 0.030643,
-  "total_tokens": 61476,
+  "total_cost_usd": 0.025946,
+  "total_tokens": 46347,
   "validation": {
     "passed": true,
-    "total_discrepancies": 15,
-    "within_tolerance": 15,
+    "total_discrepancies": 18,
+    "within_tolerance": 18,
     "hard_failures": 0,
     "hard_failure_details": []
   }

@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T12:13:58.967204+00:00",
+  "extraction_timestamp": "2026-09-13T04:01:35.399163+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -14,69 +16,36 @@
       "opening_reserves_page": 5,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": -5.786,
-      "prior_year_development_pct": -9.589,
+      "prior_year_development_pct": -9.59,
       "direction": "release",
       "prior_year_movement_page": 16,
       "prior_year_movement_confidence": 1.0,
       "exact_reserve_text": "Change in estimates of prior year provisions (5,786)",
       "primary_causes": [
-        "Favorable claims development"
+        "Favorable claims development",
+        "Other"
       ],
       "specific_events": [],
       "specific_years_affected": [
         2021,
         2022
       ],
-      "prior_year_events": [
-        {
-          "event_name": "Favorable claims development",
-          "event_year": 2021,
-          "impact_description": "improvement in its prior year reserves for 2021 & 2022, due to good experience on its longer tail and Specialty classes.",
-          "lobs_affected": [
-            "Specialty"
-          ],
-          "amount_gbp_m": null,
-          "confidence": 0.5
-        },
-        {
-          "event_name": "Favorable claims development",
-          "event_year": 2022,
-          "impact_description": "improvement in its prior year reserves for 2021 & 2022, due to good experience on its longer tail and Specialty classes.",
-          "lobs_affected": [
-            "Specialty"
-          ],
-          "amount_gbp_m": null,
-          "confidence": 0.5
-        }
-      ],
+      "prior_year_events": [],
       "named_events": [
-        {
-          "event_name": "Baltimore bridge collision",
-          "event_year": 2024,
-          "event_type": "man_made",
-          "net_loss_gbp_m": null,
-          "loss_description": "The Marine and Specialty portfolio continued to also see some positive rate change post the Baltimore bridge collision.",
-          "lobs_affected": [
-            "Marine",
-            "Specialty"
-          ],
-          "page": 2,
-          "confidence": 0.5
-        },
         {
           "event_name": "Wildfires in Los Angeles",
           "event_year": 2025,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "expected to trigger material losses to Syndicate 6117 and considering the uncertainty involved, a reliable estimate of the associated outflows cannot be made.",
+          "loss_description": "a series of devastating wildfires started in Los Angeles, which quickly spiralled out of control due to drought conditions and strong winds. The event is expected to trigger material losses to Syndicate 6117 and considering the uncertainty involved, a reliable estimate of the associated outflows cannot be made. However, this is not expected to impact the going concern of Syndicate 6117. As the event occurred after the balance sheet date, the technical provisions included in these financial statements do not contain any estimates in relation to the wildfires.",
           "lobs_affected": [],
-          "page": 2,
+          "page": 17,
           "confidence": 0.8
         }
       ],
-      "standardized_narrative": "The syndicate reported a gross prior year reserve release of GBP 5.786 million, representing a 9.59% release of its opening gross claims outstanding. This favorable development was primarily driven by good experience on longer tail and Specialty classes for the 2021 and 2022 underwriting years.",
+      "standardized_narrative": "The syndicate reported a release of GBP 5.786 million in prior year reserves, primarily due to favourable claims development. This improvement was observed in the 2021 and 2022 underwriting years, particularly within longer tail and Specialty classes.",
       "raw_causal_phrases": [
-        "improvement in its prior year reserves for 2021 & 2022, due to good experience on its longer tail and Specialty classes."
+        "improvement in its prior year reserves for 2021 & 2022, due to good experience on its longer tail and Specialty classes"
       ],
       "lob_movements": [
         {
@@ -95,49 +64,21 @@
           "percentage_of_total": 100.0
         }
       ],
-      "gross_premium_page": 3,
-      "gross_premium_confidence": 0.8,
+      "gross_premium_page": 14,
+      "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Gross premium mix is inferred from the syndicate's nature as a sidecar reinsurer and the 2022 segmental analysis, indicating all premium is 'Reinsurance acceptances'. The Chairman's statement mentions underlying LOBs of the host syndicate (Property, Marine, Specialty, US Professional Lines) but these are not direct LOBs for Syndicate 6117. [RAG PYD NOT APPLIED: deterministic figure +12.607m has the opposite sign to both model values [-5.786, -5.786], which agree with each other; model values retained.] [CODE PYD NOT APPLIED: deterministic figure +12.607m has the opposite sign to both model values [-5.786, -5.786], which agree with each other; model values retained.]",
-      "_claims_triangle": {
-        "type": "gross",
-        "currency": "GBP",
-        "units": "thousands",
-        "page": 15,
-        "underwriting_years": [
-          2022,
-          2023,
-          2024
-        ],
-        "development_rows": [
-          [
-            43452,
-            10470,
-            81401
-          ],
-          [
-            49478,
-            12580,
-            null
-          ],
-          [
-            62085,
-            null,
-            null
-          ]
-        ]
-      },
+      "data_quality_notes": "The claims development triangle on page 15 could not be used to calculate prior year development as it only covers the current and two most recent underwriting years, and a previous report's triangle is needed for comparison. The prior year development figure is taken from the 'Technical Provisions' note which explicitly states 'Change in estimates of prior year provisions'. [RAG PYD NOT APPLIED: deterministic figure +12.607m has the opposite sign to both model values [-5.786, -5.786], which agree with each other; model values retained. Sign agreement between the models is not a reconciliation: where they differ in value the cohort and accrual scope of each still has to be settled from the filing (R140).] [CODE PYD NOT APPLIED: deterministic figure +12.607m has the opposite sign to both model values [-5.786, -5.786], which agree with each other; model values retained. Sign agreement between the models is not a reconciliation: where they differ in value the cohort and accrual scope of each still has to be settled from the filing (R140).]",
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_6117_2024_llm.pdf",
       "content_hash": "79702246312f0c41ceff713aa17808130a638d234f2edd1014736885f4effc48",
-      "standardized_at": "2026-09-05T19:00:55.550814+00:00",
+      "standardized_at": "2026-09-11T14:21:43.705362+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 12701,
-        "output_tokens": 1287,
-        "total_tokens": 18467,
-        "cost_usd": 0.007028
+        "input_tokens": 13505,
+        "output_tokens": 839,
+        "total_tokens": 17645,
+        "cost_usd": 0.006149
       },
       "_rag_triangle": {
         "type": "gross",
@@ -296,7 +237,7 @@
       "opening_reserves_page": 17,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": -5.786,
-      "prior_year_development_pct": -9.6,
+      "prior_year_development_pct": -9.588,
       "direction": "release",
       "prior_year_movement_page": 31,
       "prior_year_movement_confidence": 1.0,
@@ -309,129 +250,151 @@
         2021,
         2022
       ],
-      "prior_year_events": [],
+      "prior_year_events": [
+        {
+          "event_name": "Favourable claims development (longer-tail and Specialty classes)",
+          "event_year": 2021,
+          "impact_description": "Improvement in prior year reserves attributed to good claims experience on longer-tail and Specialty classes",
+          "lobs_affected": [
+            "Reinsurance - Specialty"
+          ],
+          "amount_gbp_m": null,
+          "confidence": 0.5
+        },
+        {
+          "event_name": "Favourable claims development (longer-tail and Specialty classes)",
+          "event_year": 2022,
+          "impact_description": "Improvement in prior year reserves attributed to good claims experience on longer-tail and Specialty classes",
+          "lobs_affected": [
+            "Reinsurance - Specialty"
+          ],
+          "amount_gbp_m": null,
+          "confidence": 0.5
+        }
+      ],
       "named_events": [
         {
           "event_name": "Baltimore bridge collision",
           "event_year": null,
           "event_type": "man_made",
           "net_loss_gbp_m": null,
-          "loss_description": "Referenced as having driven positive rate change in Marine and Specialty portfolios",
+          "loss_description": "mentioned as driver of positive rate change in Marine and Specialty portfolio post-event",
           "lobs_affected": [
             "Marine",
             "Reinsurance - Specialty"
           ],
           "page": 5,
-          "confidence": 0.5
+          "confidence": 0.9
         },
         {
           "event_name": "Los Angeles wildfires",
           "event_year": 2025,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "Expected to trigger material losses to Syndicate 6117; as event occurred after the balance sheet date technical provisions do not contain any estimates in relation to the wildfires",
+          "loss_description": "devastating wildfires in Los Angeles in January 2025 expected to trigger material losses; event occurred after the balance sheet date",
           "lobs_affected": [
             "Property"
           ],
           "page": 32,
-          "confidence": 0.9
+          "confidence": 1.0
         },
         {
           "event_name": "Two events - North East U.S Windstorm (RDS)",
           "event_year": null,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": 30.652,
-          "loss_description": "Estimated gross and net loss from RDS exposure at 1 July 2024",
+          "loss_description": "Realistic Disaster Scenario estimated gross and net loss",
           "lobs_affected": [
             "Property"
           ],
           "page": 25,
-          "confidence": 0.8
+          "confidence": 1.0
         },
         {
           "event_name": "Florida Windstorm - Miami Dade (RDS)",
           "event_year": null,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": 2.482,
-          "loss_description": "Estimated gross and net loss from RDS exposure at 1 July 2024",
+          "loss_description": "Realistic Disaster Scenario estimated gross and net loss",
           "lobs_affected": [
             "Property"
           ],
           "page": 25,
-          "confidence": 0.8
+          "confidence": 1.0
         },
         {
           "event_name": "Florida Windstorm - Pinellas (RDS)",
           "event_year": null,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": 49.823,
-          "loss_description": "Estimated gross and net loss from RDS exposure at 1 July 2024",
+          "loss_description": "Realistic Disaster Scenario estimated gross and net loss",
           "lobs_affected": [
             "Property"
           ],
           "page": 25,
-          "confidence": 0.8
+          "confidence": 1.0
         },
         {
           "event_name": "Gulf of Mexico Windstorm - Major Hurricane landing in Galveston, Texas (RDS)",
           "event_year": null,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": 4.904,
-          "loss_description": "Estimated gross and net loss from RDS exposure at 1 July 2024",
+          "loss_description": "Realistic Disaster Scenario estimated gross and net loss",
           "lobs_affected": [
             "Property"
           ],
           "page": 25,
-          "confidence": 0.8
+          "confidence": 1.0
         },
         {
           "event_name": "California Earthquake - San Francisco (RDS)",
           "event_year": null,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": 3.383,
-          "loss_description": "Estimated gross and net loss from RDS exposure at 1 July 2024",
+          "loss_description": "Realistic Disaster Scenario estimated gross and net loss",
           "lobs_affected": [
             "Property"
           ],
           "page": 25,
-          "confidence": 0.8
+          "confidence": 1.0
         },
         {
           "event_name": "California Earthquake - Los Angeles (RDS)",
           "event_year": null,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": 3.456,
-          "loss_description": "Estimated gross and net loss from RDS exposure at 1 July 2024",
+          "loss_description": "Realistic Disaster Scenario estimated gross and net loss",
           "lobs_affected": [
             "Property"
           ],
           "page": 25,
-          "confidence": 0.8
+          "confidence": 1.0
         },
         {
           "event_name": "Japanese Earthquake - based on 1923 Great Kanto Earthquake (RDS)",
           "event_year": 1923,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": 5.529,
-          "loss_description": "Estimated gross and net loss from RDS exposure at 1 July 2024 based on 1923 Great Kanto Earthquake scenario",
+          "loss_description": "Realistic Disaster Scenario estimated gross and net loss based on 1923 event",
           "lobs_affected": [
             "Property"
           ],
           "page": 25,
-          "confidence": 0.8
+          "confidence": 1.0
         }
       ],
-      "standardized_narrative": "Opening gross claims outstanding at 1 January 2024 were GBP 60.337m. During 2024 there was a net favourable prior year reserve movement of GBP 5.786m (release), primarily attributed to good experience on longer-tail business and Specialty classes relating to the 2021 and 2022 underwriting years. The Syndicate writes reinsurance acceptances (quota share of host Syndicate 1910) and the reserves are held on a funds-withheld basis; post-balance sheet wildfires in Los Angeles (Jan 2025) are expected to give rise to material losses but are not included in the 2024 technical provisions.",
+      "standardized_narrative": "Syndicate 6117 recorded a gross prior-year reserve release of GBP 5.786m (a ~9.6% release on opening gross claims outstanding of GBP 60.337m). The managing agent attributes the improvement primarily to favourable claims experience on longer-tail items and Specialty classes affecting the 2021 and 2022 years of account. The release is modest in size and reflected in the change in estimates of prior year provisions in the technical provisions note.",
       "raw_causal_phrases": [
-        "The Syndicate has also seen improvement in its prior year reserves for 2021 & 2022, due to good experience on its longer tail and Specialty classes."
+        "The Syndicate has also seen improvement in its prior year reserves for 2021 & 2022, due to good experience on its longer tail and Specialty classes.",
+        "Change in estimates of prior year provisions (5,786)"
       ],
       "lob_movements": [
         {
-          "line_of_business": "Treaty",
+          "line_of_business": "Reinsurance - Specialty",
           "direction": "release",
-          "amount_gbp_m": -5.786,
+          "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.8
+          "confidence": 0.5
         }
       ],
       "gross_premiums_written_gbp_m": 86.338,
@@ -445,7 +408,7 @@
       "gross_premium_page": 15,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior year movement taken from Technical Provisions reconciliation 'Change in estimates of prior year provisions' (gross = (5,786) GBP 000 => release of 5.786m). Opening reserves taken from Balance Sheet 'Claims outstanding' prior year column (60,337 GBP 000). Gross premium mix only lists 'Reinsurance acceptances' in the segmental/analysis tables; no further statutory class breakdown provided for total premium. Post-balance sheet LA wildfires (7 Jan 2025) noted and may affect future reserves. Claims development triangle exists but is limited to UW years 2022-2024; RITC and funds-withheld structure may distort certain comparisons. [RAG PYD NOT APPLIED: deterministic figure +12.607m has the opposite sign to both model values [-5.786, -5.786], which agree with each other; model values retained.] [CODE PYD NOT APPLIED: deterministic figure +12.607m has the opposite sign to both model values [-5.786, -5.786], which agree with each other; model values retained.]",
+      "data_quality_notes": "Opening reserves and prior-year movement taken from Balance Sheet (claims outstanding comparative column) and Technical Provisions note 'Change in estimates of prior year provisions' respectively. exact_reserve_text is a narrative sentence from the Chairman's statement; the numeric prior-year movement is taken from Note 9. LOB mapping for the reserve movement is inferred from the phrase 'Specialty classes' and is therefore given medium confidence. gross_premium_mix uses the single available class 'Reinsurance acceptances' because no detailed regulatory segmental breakdown by standard statutory class was provided for the full year in the notes. [RAG PYD NOT APPLIED: deterministic figure +12.607m has the opposite sign to both model values [-5.786, -5.786], which agree with each other; model values retained. Sign agreement between the models is not a reconciliation: where they differ in value the cohort and accrual scope of each still has to be settled from the filing (R140).] [CODE PYD NOT APPLIED: deterministic figure +12.607m has the opposite sign to both model values [-5.786, -5.786], which agree with each other; model values retained. Sign agreement between the models is not a reconciliation: where they differ in value the cohort and accrual scope of each still has to be settled from the filing (R140).]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -472,19 +435,20 @@
             null,
             null
           ]
-        ]
+        ],
+        "_confidence": 1.0
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_6117_2024_llm.pdf",
       "content_hash": "79702246312f0c41ceff713aa17808130a638d234f2edd1014736885f4effc48",
-      "standardized_at": "2026-09-05T19:02:15.646773+00:00",
+      "standardized_at": "2026-09-11T14:23:36.683543+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 22060,
-        "output_tokens": 5792,
-        "total_tokens": 27852,
-        "cost_usd": 0.017099
+        "input_tokens": 22820,
+        "output_tokens": 6302,
+        "total_tokens": 29122,
+        "cost_usd": 0.018309
       },
       "_rag_triangle": {
         "type": "gross",
@@ -637,8 +601,8 @@
       }
     }
   },
-  "total_cost_usd": 0.024127,
-  "total_tokens": 46319,
+  "total_cost_usd": 0.024458,
+  "total_tokens": 46767,
   "validation": {
     "passed": true,
     "total_discrepancies": 13,

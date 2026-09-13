@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-05T19:46:56.179832+00:00",
+  "extraction_timestamp": "2026-09-13T03:59:03.393106+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -11,71 +13,175 @@
       "syndicate": 1919,
       "year": 2017,
       "opening_reserves_gbp_m": 506.799,
-      "opening_reserves_page": 19,
+      "opening_reserves_page": 5,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": -6.661,
       "prior_year_development_pct": -1.31,
       "direction": "release",
-      "prior_year_movement_page": 40,
+      "prior_year_movement_page": 17,
       "prior_year_movement_confidence": 0.8,
-      "exact_reserve_text": "During 2017, net ultimate claims in respect of prior underwriting years (2015 & prior) reduced by GBP 10.1m. This was mainly due to favourable claims experience in Director and Officers, Marine Liability and Marine Cargo resulting in reserve releases in line with standard actuarial techniques. This was offset by net ultimate claims increases in International Construction (adverse attritional and large loss development on Starr coverholder business), Professional Indemnity (large losses reported in the year; Appleyby, Shepherd Building Group, Precision and Pitcher Partners) and General Liability (adverse attritional development).",
+      "exact_reserve_text": "During 2017, net ultimate claims in respect of prior underwriting years (2015 & prior) reduced by GBP 10.1m.",
       "primary_causes": [
         "Favorable claims development",
         "Adverse claims development",
-        "Large loss development"
+        "Large loss development",
+        "Other"
       ],
       "specific_events": [],
       "specific_years_affected": [
         2015
       ],
-      "prior_year_events": [],
+      "prior_year_events": [
+        {
+          "event_name": "Favourable claims experience",
+          "event_year": null,
+          "impact_description": "favourable claims experience in Director and Officers, Marine Liability and Marine Cargo resulting in reserve releases in line with standard actuarial techniques",
+          "lobs_affected": [
+            "Professional Lines",
+            "Marine"
+          ],
+          "amount_gbp_m": null,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Adverse development on International Construction",
+          "event_year": null,
+          "impact_description": "net ultimate claims increases in International Construction (adverse attritional and large loss development on Starr coverholder business)",
+          "lobs_affected": [
+            "Property",
+            "Casualty"
+          ],
+          "amount_gbp_m": null,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Large losses in Professional Indemnity (Appleyby, Shepherd Building Group, Precision and Pitcher Partners)",
+          "event_year": null,
+          "impact_description": "Professional Indemnity (large losses reported in the year; Appleyby, Shepherd Building Group, Precision and Pitcher Partners)",
+          "lobs_affected": [
+            "Professional Lines"
+          ],
+          "amount_gbp_m": null,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Adverse attritional development in General Liability",
+          "event_year": null,
+          "impact_description": "General Liability (adverse attritional development)",
+          "lobs_affected": [
+            "Casualty"
+          ],
+          "amount_gbp_m": null,
+          "confidence": 0.8
+        }
+      ],
       "named_events": [
         {
           "event_name": "US hurricanes",
           "event_year": 2017,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "low exposure, favourable results for Technical Risks division; resulted in a small loss for ACT given exposure to US catastrophe events",
+          "loss_description": "low exposure to US catastrophe events and this was borne out in results for the Tech division",
           "lobs_affected": [
-            "Property",
-            "Treaty"
+            "Property"
           ],
-          "page": 5,
+          "page": 1,
           "confidence": 0.8
         },
         {
-          "event_name": "US baseball risk",
+          "event_name": "US baseball risk large loss",
           "event_year": 2017,
-          "event_type": "liability",
+          "event_type": "other",
           "net_loss_gbp_m": null,
-          "loss_description": "A&H class was affected by a large loss of value claim",
+          "loss_description": "large loss of value claim in respect of a US baseball risk",
           "lobs_affected": [
             "Accident & Health"
           ],
-          "page": 6,
+          "page": 2,
           "confidence": 0.8
         },
         {
-          "event_name": "Appleyby, Shepherd Building Group, Precision and Pitcher Partners",
+          "event_name": "US catastrophe events (via Aon Client Treaty)",
           "event_year": 2017,
-          "event_type": "man_made",
+          "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "large losses reported in the year for Professional Indemnity",
+          "loss_description": "small loss during 2017, given the exposure this treaty has to US catastrophe events",
+          "lobs_affected": [
+            "Treaty"
+          ],
+          "page": 2,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Energy unforeseen clash with drilling contractor",
+          "event_year": 2018,
+          "event_type": "man_made",
+          "net_loss_gbp_m": 10.3,
+          "loss_description": "hypothetical claims arising for various realistic disaster scenarios",
+          "lobs_affected": [
+            "Energy"
+          ],
+          "page": 14,
+          "confidence": 0.5
+        },
+        {
+          "event_name": "Aviation war event",
+          "event_year": 2018,
+          "event_type": "geopolitical",
+          "net_loss_gbp_m": 11.0,
+          "loss_description": "hypothetical claims arising for various realistic disaster scenarios",
+          "lobs_affected": [
+            "Aviation"
+          ],
+          "page": 14,
+          "confidence": 0.5
+        },
+        {
+          "event_name": "Financial lines event",
+          "event_year": 2018,
+          "event_type": "liability",
+          "net_loss_gbp_m": 18.7,
+          "loss_description": "hypothetical claims arising for various realistic disaster scenarios",
           "lobs_affected": [
             "Professional Lines"
           ],
-          "page": 41,
-          "confidence": 0.8
+          "page": 14,
+          "confidence": 0.5
+        },
+        {
+          "event_name": "General liability event",
+          "event_year": 2018,
+          "event_type": "liability",
+          "net_loss_gbp_m": 18.2,
+          "loss_description": "hypothetical claims arising for various realistic disaster scenarios",
+          "lobs_affected": [
+            "Casualty"
+          ],
+          "page": 14,
+          "confidence": 0.5
+        },
+        {
+          "event_name": "Aviation collision",
+          "event_year": 2018,
+          "event_type": "man_made",
+          "net_loss_gbp_m": 10.2,
+          "loss_description": "hypothetical claims arising for various realistic disaster scenarios",
+          "lobs_affected": [
+            "Aviation"
+          ],
+          "page": 14,
+          "confidence": 0.5
         }
       ],
-      "standardized_narrative": "The syndicate experienced a gross prior year reserve release of GBP 6.661 million in 2017, representing 1.31% of its opening gross reserves. This was primarily driven by favourable claims experience and reserve releases in Director and Officers, Marine Liability, Marine Cargo, and Political Risks. However, these releases were partially offset by adverse development and large losses in International Construction, Professional Indemnity, General Liability, and the Aon Client Treaty division.",
+      "standardized_narrative": "Syndicate 1919 experienced a gross release of reserves for prior underwriting years (2015 & prior), primarily driven by favourable claims development in Director and Officers, Marine Liability, and Marine Cargo. This was partially offset by adverse development in International Construction, Professional Indemnity (including specific large losses), and General Liability.",
       "raw_causal_phrases": [
+        "continued favourable development of prior years",
+        "most notably in the Directors & Officers class",
+        "The Marine division has continued to run off favourably",
         "favourable claims experience in Director and Officers, Marine Liability and Marine Cargo resulting in reserve releases in line with standard actuarial techniques",
-        "offset by net ultimate claims increases in International Construction (adverse attritional and large loss development on Starr coverholder business)",
+        "net ultimate claims increases in International Construction (adverse attritional and large loss development on Starr coverholder business)",
         "Professional Indemnity (large losses reported in the year; Appleyby, Shepherd Building Group, Precision and Pitcher Partners)",
-        "General Liability (adverse attritional development)",
-        "Reserves have been running off as expected in this division during 2017",
-        "ACT has resulted in a small loss during 2017, given the exposure this treaty has to US catastrophe events"
+        "General Liability (adverse attritional development)"
       ],
       "lob_movements": [
         {
@@ -101,20 +207,6 @@
         },
         {
           "line_of_business": "Casualty",
-          "direction": "strengthening",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.8
-        },
-        {
-          "line_of_business": "Political Risks",
-          "direction": "release",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.8
-        },
-        {
-          "line_of_business": "Treaty",
           "direction": "strengthening",
           "amount_gbp_m": null,
           "percentage": null,
@@ -149,106 +241,38 @@
           "percentage_of_total": 37.1
         }
       ],
-      "gross_premium_page": 28,
+      "gross_premium_page": 8,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The prior year development amount is calculated from the gross claims development triangle, as the narrative only provides a net figure. Individual LOB movements are directional only, as gross amounts were not quantified in the narrative.",
-      "_claims_triangle": {
-        "type": "gross",
-        "currency": "GBP",
-        "units": "thousands",
-        "page": 40,
-        "underwriting_years": [
-          2011,
-          2012,
-          2013,
-          2014,
-          2015,
-          2016,
-          2017
-        ],
-        "development_rows": [
-          [
-            132692,
-            80983,
-            86471,
-            82466,
-            78247,
-            88866,
-            72270
-          ],
-          [
-            225948,
-            172084,
-            174560,
-            156338,
-            184754,
-            195780,
-            null
-          ],
-          [
-            215683,
-            195417,
-            165821,
-            156816,
-            190055,
-            null,
-            null
-          ],
-          [
-            210805,
-            189801,
-            159878,
-            151759,
-            null,
-            null,
-            null
-          ],
-          [
-            212986,
-            187221,
-            157641,
-            null,
-            null,
-            null,
-            null
-          ],
-          [
-            210493,
-            183704,
-            null,
-            null,
-            null,
-            null,
-            null
-          ],
-          [
-            209342,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-          ]
-        ]
-      },
+      "data_quality_notes": "Prior year development calculated from gross claims development triangle for years 2015 and prior. The narrative explicitly states a net prior year movement of -GBP 10.1m, which is different from the gross triangle calculation. Hypothetical named events from the RDS table are for the 2018 forecast, not actual 2017 losses.",
       "source_type": "syndicate",
-      "source_file": "syndicate_reports\\pdfs\\syndicate_1919_2017.pdf",
-      "content_hash": "dd043a3b96b8bb03070e02caa1fab4cc08337fe90bc21d4d3dea8d82f1531e89",
-      "standardized_at": "2026-03-17T03:36:32.909251+00:00",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_1919_2017_llm.pdf",
+      "content_hash": "42f24e86bec849ddc4c988fcd15548a77cef12a0c8538468c61c1550eb1a66ee",
+      "standardized_at": "2026-09-11T11:07:48.300545+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 19042,
-        "output_tokens": 2215,
-        "total_tokens": 26585,
-        "cost_usd": 0.01125
+        "input_tokens": 11957,
+        "output_tokens": 2513,
+        "total_tokens": 19690,
+        "cost_usd": 0.00987
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -6.661,
+        "model_value": -6.661,
+        "triangle_type": "gross",
+        "triangle_units": "millions",
+        "triangle_units_evidence": "default",
+        "triangle_source_page": 40,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "millions",
+        "units_evidence": "default",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -453,56 +477,33 @@
       "syndicate": 1919,
       "year": 2017,
       "opening_reserves_gbp_m": 506.799,
-      "opening_reserves_page": 32,
-      "opening_reserves_confidence": 0.8,
+      "opening_reserves_page": 18,
+      "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": -6.661,
       "prior_year_development_pct": -1.31,
       "direction": "release",
-      "prior_year_movement_page": 40,
-      "prior_year_movement_confidence": 0.5,
+      "prior_year_movement_page": 39,
+      "prior_year_movement_confidence": 0.8,
       "exact_reserve_text": "During 2017, net ultimate claims in respect of prior underwriting years (2015 & prior) reduced by GBP 10.1m. This was mainly due to favourable claims experience in Director and Officers, Marine Liability and Marine Cargo resulting in reserve releases in line with standard actuarial techniques. This was offset by net ultimate claims increases in International Construction (adverse attritional and large loss development on Starr coverholder business), Professional Indemnity (large losses reported in the year; Appleby, Shepherd Building Group, Precision and Pitcher Partners) and General Liability (adverse attritional development).",
       "primary_causes": [
         "Favorable claims development",
-        "Large loss development",
         "Adverse claims development",
-        "Other"
+        "Large loss development"
       ],
       "specific_events": [
         "Appleby",
         "Shepherd Building Group",
         "Precision",
-        "Pitcher Partners",
-        "US hurricanes 2017"
+        "Pitcher Partners"
       ],
       "specific_years_affected": [
         2015
       ],
       "prior_year_events": [
         {
-          "event_name": "Favourable claims experience in Director and Officers, Marine Liability and Marine Cargo",
+          "event_name": "Favourable claims experience in Directors & Officers",
           "event_year": null,
-          "impact_description": "Led to reserve releases across those classes resulting in a net reduction in prior years' ultimate claims",
-          "lobs_affected": [
-            "Professional Lines",
-            "Marine"
-          ],
-          "amount_gbp_m": null,
-          "confidence": 0.5
-        },
-        {
-          "event_name": "International Construction adverse development (Starr coverholder business)",
-          "event_year": null,
-          "impact_description": "Adverse attritional and large loss development increased reserves in International Construction",
-          "lobs_affected": [
-            "Casualty"
-          ],
-          "amount_gbp_m": null,
-          "confidence": 0.5
-        },
-        {
-          "event_name": "Professional Indemnity large losses (Appleby, Shepherd Building Group, Precision, Pitcher Partners)",
-          "event_year": null,
-          "impact_description": "Large losses in professional indemnity caused adverse development and increased reserves",
+          "impact_description": "Favourable development on prior years in Directors & Officers leading to reserve releases for 2015 & prior",
           "lobs_affected": [
             "Professional Lines"
           ],
@@ -510,9 +511,50 @@
           "confidence": 0.5
         },
         {
-          "event_name": "General Liability adverse attritional development",
+          "event_name": "Favourable claims experience in Marine Liability",
           "event_year": null,
-          "impact_description": "Adverse attritional development in General Liability increased reserves",
+          "impact_description": "Favourable development on prior years in Marine Liability leading to reserve releases for 2015 & prior",
+          "lobs_affected": [
+            "Marine"
+          ],
+          "amount_gbp_m": null,
+          "confidence": 0.5
+        },
+        {
+          "event_name": "Favourable claims experience in Marine Cargo",
+          "event_year": null,
+          "impact_description": "Favourable development on prior years in Marine Cargo leading to reserve releases for 2015 & prior",
+          "lobs_affected": [
+            "Marine"
+          ],
+          "amount_gbp_m": null,
+          "confidence": 0.5
+        },
+        {
+          "event_name": "Adverse development in International Construction (Starr coverholder business)",
+          "event_year": null,
+          "impact_description": "Adverse attritional and large loss development on Starr coverholder business increased prior year reserves",
+          "lobs_affected": [
+            "Property",
+            "Casualty"
+          ],
+          "amount_gbp_m": null,
+          "confidence": 0.5
+        },
+        {
+          "event_name": "Professional Indemnity large losses (Appleby; Shepherd Building Group; Precision; Pitcher Partners)",
+          "event_year": null,
+          "impact_description": "Large losses reported in the year increased prior year reserves for Professional Indemnity",
+          "lobs_affected": [
+            "Professional Lines"
+          ],
+          "amount_gbp_m": null,
+          "confidence": 0.5
+        },
+        {
+          "event_name": "Adverse attritional development in General Liability",
+          "event_year": null,
+          "impact_description": "Adverse attritional development increased prior year reserves for General Liability",
           "lobs_affected": [
             "Casualty"
           ],
@@ -522,25 +564,11 @@
       ],
       "named_events": [
         {
-          "event_name": "US hurricanes 2017",
-          "event_year": 2017,
-          "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": null,
-          "loss_description": "Referenced as an industry event during 2017; the Technical Risks division nevertheless generated favourable results despite US hurricanes during 2017",
-          "lobs_affected": [
-            "Property",
-            "Aviation",
-            "Marine"
-          ],
-          "page": 5,
-          "confidence": 0.6
-        },
-        {
           "event_name": "Appleby",
           "event_year": null,
           "event_type": "man_made",
           "net_loss_gbp_m": null,
-          "loss_description": "Large loss reported in the year affecting Professional Indemnity",
+          "loss_description": "Large loss reported in the year (named in Professional Indemnity commentary)",
           "lobs_affected": [
             "Professional Lines"
           ],
@@ -552,7 +580,7 @@
           "event_year": null,
           "event_type": "man_made",
           "net_loss_gbp_m": null,
-          "loss_description": "Large loss reported in the year affecting Professional Indemnity",
+          "loss_description": "Large loss reported in the year (named in Professional Indemnity commentary)",
           "lobs_affected": [
             "Professional Lines"
           ],
@@ -564,7 +592,7 @@
           "event_year": null,
           "event_type": "man_made",
           "net_loss_gbp_m": null,
-          "loss_description": "Large loss reported in the year affecting Professional Indemnity",
+          "loss_description": "Large loss reported in the year (named in Professional Indemnity commentary)",
           "lobs_affected": [
             "Professional Lines"
           ],
@@ -576,7 +604,7 @@
           "event_year": null,
           "event_type": "man_made",
           "net_loss_gbp_m": null,
-          "loss_description": "Large loss reported in the year affecting Professional Indemnity",
+          "loss_description": "Large loss reported in the year (named in Professional Indemnity commentary)",
           "lobs_affected": [
             "Professional Lines"
           ],
@@ -584,18 +612,30 @@
           "confidence": 0.5
         }
       ],
-      "standardized_narrative": "At 1 January 2017 the syndicate's gross claims outstanding stood at GBP 506.799m and at 31 December 2017 gross claims outstanding were GBP 480.244m. The report highlights a net reduction in prior underwriting years (2015 & prior) of GBP 10.1m driven by favourable claims experience in Director & Officers and Marine classes which produced reserve releases, partly offset by adverse development in International Construction, Professional Indemnity (several large reported losses) and General Liability which increased reserves. The closing position was also materially affected by foreign exchange movements noted in the technical provisions reconciliation.",
+      "standardized_narrative": "Syndicate 1919 recorded a small net prior-year reserve release in 2017. Using the gross claims development triangle the gross prior-year reserves released by approximately GBP 6.7m (about 1.3% of the opening gross claims outstanding of GBP 506.8m). The release was driven by favourable prior-year development in Directors & Officers and Marine (Liability and Cargo) but was partly offset by adverse development in International Construction, Professional Indemnity (notably a number of large named losses) and General Liability.",
       "raw_causal_phrases": [
-        "net ultimate claims in respect of prior underwriting years (2015 & prior) reduced by GBP 10.1m",
-        "favourable claims experience in Director and Officers, Marine Liability and Marine Cargo resulting in reserve releases in line with standard actuarial techniques",
-        "net ultimate claims increases in International Construction (adverse attritional and large loss development on Starr coverholder business)",
-        "Professional Indemnity (large losses reported in the year; Appleby, Shepherd Building Group, Precision and Pitcher Partners)",
-        "General Liability (adverse attritional development)"
+        "net ultimate claims in respect of prior underwriting years (2015 & prior) reduced by GBP 10.1m.",
+        "favourable claims experience in Director and Officers, Marine Liability and Marine Cargo resulting in reserve releases in line with standard actuarial techniques.",
+        "offset by net ultimate claims increases in International Construction (adverse attritional and large loss development on Starr coverholder business), Professional Indemnity (large losses reported in the year; Appleby, Shepherd Building Group, Precision and Pitcher Partners) and General Liability (adverse attritional development)."
       ],
       "lob_movements": [
         {
+          "line_of_business": "Professional Lines",
+          "direction": "release",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.5
+        },
+        {
           "line_of_business": "Marine",
           "direction": "release",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.5
+        },
+        {
+          "line_of_business": "Property",
+          "direction": "strengthening",
           "amount_gbp_m": null,
           "percentage": null,
           "confidence": 0.5
@@ -613,13 +653,6 @@
           "amount_gbp_m": null,
           "percentage": null,
           "confidence": 0.5
-        },
-        {
-          "line_of_business": "Aviation",
-          "direction": "release",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.3
         }
       ],
       "gross_premiums_written_gbp_m": 283.9,
@@ -653,7 +686,7 @@
       "gross_premium_page": 27,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Gross prior-year development (GROSS movement) not explicitly stated in the notes. The report provides a net prior-year reduction of GBP 10.1m (page 40). A gross reconciliation table is present (page 32) showing opening and closing gross claims outstanding and FX movements; closing < opening driven largely by foreign exchange effects. A gross claims development triangle is provided (pages 39-40) but the precise per-year diagonal comparisons were not fully extracted here, so no authoritative aggregated gross prior year development figure has been reported. Users should treat prior_year_development_gbp_m as unavailable (null) and rely on the net GBP 10.1m statement and the reconciliation/triangle for further analysis.",
+      "data_quality_notes": "Opening gross claims outstanding taken from Statement of Financial Position (Claims outstanding, 2016 comparative column). Prior-year gross movement was calculated from the gross claims development triangle (page 39) by comparing current estimates to the previous diagonal for underwriting years 2011-2015; that calculation yields approximately a GBP 6.661m gross release. The report text quotes a net prior-year reduction of GBP 10.1m (net of reinsurance). Where LOB mapping was ambiguous (e.g. 'International Construction') an approximate mapping was used. Some verbatim phrases were transcribed from scanned images and may contain minor OCR variances.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -735,21 +768,33 @@
         ]
       },
       "source_type": "syndicate",
-      "source_file": "syndicate_reports\\pdfs\\syndicate_1919_2017.pdf",
-      "content_hash": "dd043a3b96b8bb03070e02caa1fab4cc08337fe90bc21d4d3dea8d82f1531e89",
-      "standardized_at": "2026-03-17T03:38:26.299450+00:00",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_1919_2017_llm.pdf",
+      "content_hash": "42f24e86bec849ddc4c988fcd15548a77cef12a0c8538468c61c1550eb1a66ee",
+      "standardized_at": "2026-09-11T11:10:38.949012+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 53770,
-        "output_tokens": 9644,
-        "total_tokens": 63414,
-        "cost_usd": 0.03273
+        "input_tokens": 25039,
+        "output_tokens": 7116,
+        "total_tokens": 32155,
+        "cost_usd": 0.020492
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -6.661,
+        "model_value": -6.661,
+        "triangle_type": "gross",
+        "triangle_units": "millions",
+        "triangle_units_evidence": "default",
+        "triangle_source_page": 40,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "millions",
+        "units_evidence": "default",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -951,12 +996,12 @@
       }
     }
   },
-  "total_cost_usd": 0.04398,
-  "total_tokens": 89999,
+  "total_cost_usd": 0.030362,
+  "total_tokens": 51845,
   "validation": {
     "passed": true,
-    "total_discrepancies": 26,
-    "within_tolerance": 26,
+    "total_discrepancies": 28,
+    "within_tolerance": 28,
     "hard_failures": 0,
     "hard_failure_details": []
   }

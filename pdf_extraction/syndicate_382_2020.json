@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T11:17:09.266384+00:00",
+  "extraction_timestamp": "2026-09-13T04:00:29.895100+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -11,37 +13,46 @@
       "syndicate": 382,
       "year": 2020,
       "opening_reserves_gbp_m": 482.119,
-      "opening_reserves_page": 8,
+      "opening_reserves_page": 7,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": 7.3,
-      "prior_year_development_pct": 1.51,
+      "prior_year_development_gbp_m": 7.269,
+      "prior_year_development_pct": 1.507,
       "direction": "strengthening",
       "prior_year_movement_page": 18,
       "prior_year_movement_confidence": 0.8,
-      "exact_reserve_text": "Unfavourable prior year loss development of GBP 7.3 million was recorded in 2020 compared to unfavourable development of GBP 5.5 million in the prior calendar year.",
+      "exact_reserve_text": "Over/(under) provisions for claims at the beginning of the year as compared with net payments and provisions at the end of the year in respect of prior years' claims are as follows: (7,269)",
       "primary_causes": [
         "Adverse claims development",
-        "COVID-19 / pandemic effects",
-        "Large loss development"
+        "Large loss development",
+        "COVID-19 / pandemic effects"
       ],
-      "specific_events": [
-        "COVID-19 pandemic"
+      "specific_events": [],
+      "specific_years_affected": [
+        "prior accident years"
       ],
-      "specific_years_affected": [],
-      "prior_year_events": [],
+      "prior_year_events": [
+        {
+          "event_name": "COVID-19 / pandemic effects",
+          "event_year": 2020,
+          "impact_description": "unfavourable loss development relating to prior accident years driven by increased loss activity on certain lines of business as well as by the impact of losses related to the COVID-19 pandemic.",
+          "lobs_affected": [],
+          "amount_gbp_m": null,
+          "confidence": 0.8
+        }
+      ],
       "named_events": [
         {
           "event_name": "COVID-19 pandemic",
           "event_year": 2020,
           "event_type": "other",
           "net_loss_gbp_m": null,
-          "loss_description": "impact of losses related to the COVID-19 pandemic",
+          "loss_description": "impact of losses related to the COVID-19 pandemic.",
           "lobs_affected": [],
           "page": 2,
           "confidence": 0.8
         },
         {
-          "event_name": "Catastrophes",
+          "event_name": "Catastrophes 2020",
           "event_year": 2020,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
@@ -51,12 +62,11 @@
           "confidence": 0.8
         }
       ],
-      "standardized_narrative": "The Syndicate recorded an unfavourable prior year loss development of GBP 7.3 million in 2020, representing a strengthening of reserves. This deterioration was primarily driven by increased loss activity and higher emergence of claims than anticipated in certain lines of business, as well as the impact of losses related to the COVID-19 pandemic.",
+      "standardized_narrative": "The syndicate reported a net strengthening of GBP 7.269 million in prior year reserves, representing 1.51% of opening gross claims outstanding. This adverse development was attributed to a relatively small amount of unfavourable loss development relating to prior accident years, driven by increased loss activity on certain lines of business and the impact of losses related to the COVID-19 pandemic.",
       "raw_causal_phrases": [
-        "increased loss activity on certain lines of business",
-        "impact of losses related to the COVID-19 pandemic",
         "relatively small amount of unfavourable loss development relating to prior accident years",
-        "higher emergence of claims of certain lines business than previously anticipated"
+        "increased loss activity on certain lines of business",
+        "impact of losses related to the COVID-19 pandemic."
       ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 277.4,
@@ -100,7 +110,7 @@
       "gross_premium_page": 17,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The prior year development figure of GBP 7.3 million is explicitly stated as 'unfavourable prior year loss development' in the narrative and table on page 18. However, it is likely a net figure (after reinsurance) as no gross figure for prior year development was explicitly found. The 'lob_movements' section is omitted as the LOB names 'Commercial' and 'Specialty' used in the claims incurred note are not in the standard Lloyd's LOB list and cannot be confidently mapped. [RAG PYD NOT APPLIED: deterministic figure -123.866m has the opposite sign to both model values [7.3, 7.269], which agree with each other; model values retained.] [RAG OPENING NOT APPLIED: table value 493.738 (provisions_movement, page 46, unit source header) disagrees with both model values [482.119, 482.119], which agree with each other; the model value is retained and the table value recorded for audit.]",
+      "data_quality_notes": "Prior year development figure is net of reinsurance as no gross figure was explicitly stated or reliably derivable from the gross claims development triangle due to potential distortions or misinterpretation. [RAG PYD NOT APPLIED: deterministic figure -123.866m has the opposite sign to both model values [7.269, 7.269], which agree with each other; model values retained. Sign agreement between the models is not a reconciliation: where they differ in value the cohort and accrual scope of each still has to be settled from the filing (R140).] [CODE PYD NOT APPLIED: deterministic figure -167.143m has the opposite sign to both model values [7.269, 7.269], which agree with each other; model values retained. Sign agreement between the models is not a reconciliation: where they differ in value the cohort and accrual scope of each still has to be settled from the filing (R140).] [RAG OPENING NOT APPLIED: table value 493.738 (provisions_movement, page 46, unit source header) disagrees with both model values [482.119, 482.119], which agree with each other; the model value is retained and the table value recorded for audit.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -267,20 +277,22 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_382_2020_llm.pdf",
-      "content_hash": "b92643091e27d3ad617e8bca47a2167537ab6f02c477389207487226dbf0f07e",
-      "standardized_at": "2026-03-18T21:58:42.893309+00:00",
+      "content_hash": "427fdc2e4d5fdbc797e9a3af74e08270156ae5ebc153fdcd909056d6bf501b4e",
+      "standardized_at": "2026-09-11T12:40:05.385206+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 11668,
-        "output_tokens": 2134,
-        "total_tokens": 20642,
-        "cost_usd": 0.008835
+        "input_tokens": 12472,
+        "output_tokens": 2181,
+        "total_tokens": 21632,
+        "cost_usd": 0.009194
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "conflict",
+        "cell_binding": "header",
         "underwriting_years": [
           2010,
           2011,
@@ -438,6 +450,19 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of first accounting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later",
+          "Seven years later",
+          "Eight years later",
+          "Nine years later",
+          "Ten years later"
         ],
         "source_page": 48,
         "entity": 382
@@ -610,7 +635,7 @@
       "syndicate": 382,
       "year": 2020,
       "opening_reserves_gbp_m": 482.119,
-      "opening_reserves_page": 18,
+      "opening_reserves_page": 17,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": 7.269,
       "prior_year_development_pct": 1.507,
@@ -625,22 +650,12 @@
       "specific_events": [],
       "specific_years_affected": [],
       "prior_year_events": [],
-      "named_events": [
-        {
-          "event_name": "COVID-19 pandemic",
-          "event_year": 2020,
-          "event_type": "other",
-          "net_loss_gbp_m": null,
-          "loss_description": "Report notes losses related to the COVID-19 pandemic contributed to increased loss activity",
-          "lobs_affected": [],
-          "page": 3,
-          "confidence": 0.8
-        }
-      ],
-      "standardized_narrative": "The Syndicate recorded unfavourable prior year loss development of GBP 7.3m in 2020 (a strengthening of reserves). The movement was driven primarily by higher-than-expected emergence of claims on certain lines of business; the report does not provide a gross movement breakdown (the GBP 7.3m figure is reported in the claims note and is net of reinsurance).",
+      "named_events": [],
+      "standardized_narrative": "The syndicate recorded an unfavourable prior year loss development of GBP 7.3m in 2020 (gross), driven predominantly by adverse emergence of claims in certain lines of business. The overall calendar year deterioration was also influenced by losses related to the COVID-19 pandemic. The prior year movement represents a net strengthening of reserves compared to the opening gross claims outstanding.",
       "raw_causal_phrases": [
         "Unfavourable prior year loss development of GBP 7.3 million was recorded in 2020 compared to unfavourable development of GBP 5.5 million in the prior calendar year.",
-        "the unfavourable loss development was driven primarily by higher emergence of claims of certain lines business than previously anticipated."
+        "the unfavourable loss development was driven primarily by higher emergence of claims of certain lines business than previously anticipated.",
+        "the impact of losses related to the COVID-19 pandemic."
       ],
       "lob_movements": [
         {
@@ -648,14 +663,14 @@
           "direction": "strengthening",
           "amount_gbp_m": 7.557,
           "percentage": null,
-          "confidence": 0.8
+          "confidence": 0.2
         },
         {
           "line_of_business": "Reinsurance - Specialty",
           "direction": "release",
           "amount_gbp_m": -0.288,
           "percentage": null,
-          "confidence": 0.8
+          "confidence": 0.2
         }
       ],
       "gross_premiums_written_gbp_m": 277.4,
@@ -699,7 +714,7 @@
       "gross_premium_page": 38,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The reported prior year movement (GBP 7.3m) is taken from the claims note narrative and the prior-year breakdown table in Note 5; that figure appears to be presented net of reinsurance. No explicit GROSS (insurance liabilities) prior-year movement figure was found in the notes. A gross reconciling calculation from the gross claims development triangle was not performed due to parsing complexity; consequently the prior year movement used is net of reinsurance and flagged accordingly. [RAG PYD NOT APPLIED: deterministic figure -123.866m has the opposite sign to both model values [7.3, 7.269], which agree with each other; model values retained.] [RAG OPENING NOT APPLIED: table value 493.738 (provisions_movement, page 46, unit source header) disagrees with both model values [482.119, 482.119], which agree with each other; the model value is retained and the table value recorded for audit.]",
+      "data_quality_notes": "Prior year development extracted from Note 5 ('Claims incurred' / 'Over/(under) provisions...') which explicitly states 'Unfavourable prior year loss development of GBP 7.3 million...' (taken as gross). There is some ambiguity in the sign/parenthesis convention in the tabular lines; the narrative clarifies direction. A claims development triangle (gross) is present in the report (pages 45-46) but parsing of the triangle rows programmatically was uncertain in this extraction, so the triangle rows are not fully reproduced here. Mapping of the small split by 'Commercial' and 'Specialty' to standard Lloyd's LOBs is judgmental and low confidence; these mappings are provided as best-effort. [RAG PYD NOT APPLIED: deterministic figure -123.866m has the opposite sign to both model values [7.269, 7.269], which agree with each other; model values retained. Sign agreement between the models is not a reconciliation: where they differ in value the cohort and accrual scope of each still has to be settled from the filing (R140).] [CODE PYD NOT APPLIED: deterministic figure -167.143m has the opposite sign to both model values [7.269, 7.269], which agree with each other; model values retained. Sign agreement between the models is not a reconciliation: where they differ in value the cohort and accrual scope of each still has to be settled from the filing (R140).] [RAG OPENING NOT APPLIED: table value 493.738 (provisions_movement, page 46, unit source header) disagrees with both model values [482.119, 482.119], which agree with each other; the model value is retained and the table value recorded for audit.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -718,168 +733,26 @@
           2019,
           2020
         ],
-        "development_rows": [
-          [
-            115632,
-            125305,
-            111904,
-            57637,
-            62387,
-            73919,
-            64579,
-            120603,
-            80402,
-            54165,
-            75659
-          ],
-          [
-            171233,
-            89595,
-            28480,
-            87052,
-            76049,
-            96482,
-            107867,
-            88412,
-            151179,
-            89038,
-            null
-          ],
-          [
-            10446,
-            6277,
-            6465,
-            9882,
-            18890,
-            22169,
-            22703,
-            41928,
-            10667,
-            149427,
-            null
-          ],
-          [
-            4974,
-            -3335,
-            -695,
-            -1152,
-            13927,
-            2411,
-            -2118,
-            7166,
-            21178,
-            null,
-            null
-          ],
-          [
-            4603,
-            5250,
-            5114,
-            -3403,
-            4939,
-            4467,
-            5259,
-            26229,
-            null,
-            null,
-            null
-          ],
-          [
-            980,
-            2398,
-            -18,
-            3146,
-            -6029,
-            -2466,
-            -1989,
-            null,
-            null,
-            null,
-            null
-          ],
-          [
-            3992,
-            1696,
-            1545,
-            4875,
-            6694,
-            18802,
-            null,
-            null,
-            null,
-            null,
-            null
-          ],
-          [
-            62,
-            1591,
-            1041,
-            385,
-            3079,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-          ],
-          [
-            753,
-            1039,
-            3607,
-            5399,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-          ],
-          [
-            381,
-            -1885,
-            -1504,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-          ],
-          [
-            193,
-            193,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-          ]
-        ]
+        "development_rows": []
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_382_2020_llm.pdf",
-      "content_hash": "b92643091e27d3ad617e8bca47a2167537ab6f02c477389207487226dbf0f07e",
-      "standardized_at": "2026-03-18T22:01:08.665378+00:00",
+      "content_hash": "427fdc2e4d5fdbc797e9a3af74e08270156ae5ebc153fdcd909056d6bf501b4e",
+      "standardized_at": "2026-09-11T12:42:38.468179+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 37405,
-        "output_tokens": 8748,
-        "total_tokens": 46153,
-        "cost_usd": 0.026847
+        "input_tokens": 38162,
+        "output_tokens": 8671,
+        "total_tokens": 46833,
+        "cost_usd": 0.026883
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "conflict",
+        "cell_binding": "header",
         "underwriting_years": [
           2010,
           2011,
@@ -1037,6 +910,19 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of first accounting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later",
+          "Seven years later",
+          "Eight years later",
+          "Nine years later",
+          "Ten years later"
         ],
         "source_page": 48,
         "entity": 382
@@ -1206,12 +1092,12 @@
       }
     }
   },
-  "total_cost_usd": 0.035682,
-  "total_tokens": 66795,
+  "total_cost_usd": 0.036077,
+  "total_tokens": 68465,
   "validation": {
     "passed": true,
-    "total_discrepancies": 20,
-    "within_tolerance": 20,
+    "total_discrepancies": 19,
+    "within_tolerance": 19,
     "hard_failures": 0,
     "hard_failure_details": []
   }

@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T11:34:24.366200+00:00",
+  "extraction_timestamp": "2026-09-13T04:11:21.587548+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -20,8 +22,7 @@
       "prior_year_movement_confidence": 0.8,
       "exact_reserve_text": "",
       "primary_causes": [
-        "Adverse claims development",
-        "Reinsurance recoveries"
+        "Favorable claims development"
       ],
       "specific_events": [],
       "specific_years_affected": [
@@ -35,14 +36,16 @@
         {
           "event_name": "Reinsurance asset under dispute",
           "event_year": 2017,
-          "impact_description": "50% bad debt provision against a $21.6m recoverable amount due to dispute over collectability, resulting in a $10.8m net asset.",
-          "lobs_affected": [],
+          "impact_description": "An element of uncertainty over the collectability of a reinsurance recovery led to a 50% bad debt provision against a $21.6m asset, resulting in a $10.8m strengthening.",
+          "lobs_affected": [
+            "Treaty"
+          ],
           "amount_gbp_m": 10.8,
-          "confidence": 1.0
+          "confidence": 0.8
         }
       ],
       "named_events": [],
-      "standardized_narrative": "For the 2020 financial year, Syndicate 4242 experienced a gross prior year reserve strengthening of $13.147 million, primarily driven by adverse claims development across underwriting years 2014-2018. This strengthening was partially offset by reinsurance recoveries, as evidenced by a net prior year release of $9.134 million. A significant factor contributing to adverse development was a reinsurance asset under dispute for the 2017 underwriting year, which required a $10.8 million bad debt provision due to collectability uncertainty.",
+      "standardized_narrative": "The syndicate experienced a significant gross prior year reserve release of $620.6 million, representing 268.1% of its opening gross claims outstanding. This overall favorable development across underwriting years 2014 to 2018 was partially offset by an adverse development of $10.8 million for the 2017 underwriting year, stemming from a reinsurance asset under dispute for which a 50% bad debt provision was applied.",
       "raw_causal_phrases": [
         "reinsurance asset under dispute",
         "uncertainty over the collectability of the recovery pending resolution of the dispute",
@@ -92,10 +95,10 @@
           "percentage_of_total": 0.4
         }
       ],
-      "gross_premium_page": 2,
+      "gross_premium_page": 11,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "Prior year development calculated from gross claims development triangle as no explicit prior year movement figure was provided in narrative text or a dedicated note. The gross claims development triangle shows a small RITC accepted from SPA 6123, which could slightly distort the triangle's pure development.",
+      "data_quality_notes": "The prior year development figure is calculated from the gross claims development triangle. The overall large release is not explicitly explained by specific causes in the narrative, though a specific adverse development related to a 2017 reinsurance asset dispute is noted. [RAG OVERRIDE: Model said PYD=-620.628, RAG triangle computed 13.147. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
@@ -187,20 +190,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_4242_2020_llm.pdf",
-      "content_hash": "72374c61e965c384127980dfd33e422e3a60838b96cf3790cbddebcd43b40c76",
-      "standardized_at": "2026-07-05T17:04:54.353392+00:00",
+      "content_hash": "f2442090cf5b98111b2eac70c84fe9aea52e90850ed53bec01eedec9a7b4c1e8",
+      "standardized_at": "2026-09-11T12:56:57.337750+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 10379,
-        "output_tokens": 1581,
-        "total_tokens": 21425,
-        "cost_usd": 0.007066
+        "input_tokens": 11183,
+        "output_tokens": 1664,
+        "total_tokens": 18235,
+        "cost_usd": 0.007515
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 13.147,
+        "model_value": -620.628,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 46,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2014,
           2015,
@@ -266,6 +281,15 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of first underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later"
         ],
         "source_page": 46,
         "entity": 4242
@@ -435,9 +459,9 @@
       "prior_year_movement_confidence": 0.8,
       "exact_reserve_text": "",
       "primary_causes": [
-        "Man-made catastrophe / large losses",
-        "Adverse claims development",
-        "Reinsurance recoveries"
+        "Natural catastrophe events",
+        "Reinsurance recoveries",
+        "Adverse claims development"
       ],
       "specific_events": [],
       "specific_years_affected": [
@@ -451,71 +475,38 @@
         {
           "event_name": "Reinsurance asset dispute (2017)",
           "event_year": 2017,
-          "impact_description": "There is a reinsurance asset under dispute for the 2017 underwriting year. Management have applied a 50% bad debt provision against the recognised recoverable ($21.6m recognised, net asset on balance sheet $10.8m) and kept the 2017 year open for an additional year pending resolution.",
+          "impact_description": "There is naturally an element of uncertainty over the collectability of the recovery pending resolution of the dispute. The recoverable amount recognised in the accounts is $21.6m. Management have applied, with the aid of experts, a 50% bad debt provision against this asset. And as such the net asset on the balance sheet is $10.8m.",
           "lobs_affected": [
             "Property",
-            "Treaty"
+            "Reinsurance - Specialty"
           ],
           "amount_gbp_m": 10.8,
           "confidence": 0.8
         }
       ],
       "named_events": [],
-      "standardized_narrative": "Using the gross claims development triangle, the syndicate shows a net adverse prior-year development of approximately 13.15 million (USD) driven mainly by adverse movement in the 2016 and 2017 underwriting years, partially offset by favourable development in 2018 and very small changes in earlier years. The 2017 underwriting year is subject to a disputed reinsurance recovery (recognized $21.6m with a 50% bad-debt provision), which introduced uncertainty and delayed closure of that year.",
+      "standardized_narrative": "Using the gross claims development triangle the Syndicate recognises a net adverse prior-year development of approximately 13.15 million USD (c. 5.7% of opening gross claims reserves), driven by adverse development across older property-exposed underwriting years. The 2017 underwriting year also has a disputed reinsurance recoverable which has resulted in a 50% bad debt provision against the recognised $21.6m recoverable (net $10.8m), adding uncertainty to prior year recovery expectations.",
       "raw_causal_phrases": [
+        "specialises in underwriting property insurance located in areas of the United States (U.S.) that are prone to hurricanes and earthquakes.",
         "The 2017 underwriting year has a reinsurance asset under dispute.",
-        "Management have applied, with the aid of experts, a 50% bad debt provision against this asset.",
-        "Due to the associated uncertainty over the timing of collectability pending resolution of the dispute, the Directors of the Managing Agent have decided to keep the 2017 underwriting year of account open for an additional year to allow time for this dispute to be fully assessed and closed."
+        "There is naturally an element of uncertainty over the collectability of the recovery pending resolution of the dispute.",
+        "The recoverable amount recognised in the accounts is $21.6m.",
+        "Management have applied, with the aid of experts, a 50% bad debt provision against this asset."
       ],
       "lob_movements": [
         {
           "line_of_business": "Property",
           "direction": "strengthening",
-          "amount_gbp_m": null,
+          "amount_gbp_m": 13.147,
+          "percentage": 5.68,
+          "confidence": 0.6
+        },
+        {
+          "line_of_business": "Reinsurance - Specialty",
+          "direction": "strengthening",
+          "amount_gbp_m": 10.8,
           "percentage": null,
           "confidence": 0.8
-        },
-        {
-          "line_of_business": "Casualty",
-          "direction": "release",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.5
-        },
-        {
-          "line_of_business": "Motor",
-          "direction": "strengthening",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.5
-        },
-        {
-          "line_of_business": "Energy",
-          "direction": "release",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.4
-        },
-        {
-          "line_of_business": "Professional Lines",
-          "direction": "release",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.4
-        },
-        {
-          "line_of_business": "Treaty",
-          "direction": "strengthening",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.5
-        },
-        {
-          "line_of_business": "Accident & Health",
-          "direction": "flat",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.3
         }
       ],
       "gross_premiums_written_gbp_m": 159.9,
@@ -564,11 +555,11 @@
       "gross_premium_page": 29,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "Prior-year development (PYD) was calculated from the gross claims development triangle (pages 43-44) because the report does not provide a clear, single-line gross 'movement in prior year's provision for claims outstanding'. The triangle was used following the prescribed diagonal comparison method (excluding 2019 and 2020). RITC from SPA 6123 is present but small (note 4) and a significant reinsurance asset dispute for 2017 may distort comparability. All monetary values are reported in the report's native currency (USD) and converted to millions. No explicit verbatim sentence quantifying gross prior-year reserve movement was found.",
+      "data_quality_notes": "No explicit gross 'movement in prior year's provision for claims outstanding' line was located. Prior-year development was calculated from the gross claims development triangle (cumulative gross incurred by underwriting year). Numbers in the financial statements are presented in $'000; triangle used as thousands. A small RITC / SPA item is present and a disputed 2017 reinsurer recovery may distort net outcomes; exact textual statement quantifying gross prior-year movement was not found in narrative.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
-        "units": "millions",
+        "units": "thousands",
         "page": 43,
         "underwriting_years": [
           2014,
@@ -581,62 +572,53 @@
         ],
         "development_rows": [
           [
-            5.822,
-            12.08,
-            25.71,
-            125.844,
-            196.19,
-            52.383,
-            205.367
+            5822,
+            12080,
+            25710,
+            125844,
+            196190,
+            52383,
+            205367
           ],
           [
-            13.743,
-            26.304,
-            70.487,
-            316.595,
-            247.927,
-            214.069,
+            13743,
+            26304,
+            70487,
+            316595,
+            247927,
+            214069,
             null
           ],
           [
-            13.627,
-            28.315,
-            98.862,
-            327.507,
-            246.029,
-            null,
-            null
-          ],
-          [
-            12.356,
-            28.385,
-            98.901,
-            337.564,
-            null,
+            13627,
+            28315,
+            98862,
+            327507,
+            246029,
             null,
             null
           ],
           [
-            12.538,
-            32.194,
-            103.652,
-            null,
+            12356,
+            28385,
+            98901,
+            337564,
             null,
             null,
             null
           ],
           [
-            12.676,
-            32.401,
-            null,
+            12538,
+            32194,
+            103652,
             null,
             null,
             null,
             null
           ],
           [
-            12.706,
-            null,
+            12676,
+            32401,
             null,
             null,
             null,
@@ -644,7 +626,7 @@
             null
           ],
           [
-            null,
+            12706,
             null,
             null,
             null,
@@ -656,20 +638,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_4242_2020_llm.pdf",
-      "content_hash": "72374c61e965c384127980dfd33e422e3a60838b96cf3790cbddebcd43b40c76",
-      "standardized_at": "2026-07-05T17:06:16.148331+00:00",
+      "content_hash": "f2442090cf5b98111b2eac70c84fe9aea52e90850ed53bec01eedec9a7b4c1e8",
+      "standardized_at": "2026-09-11T12:59:28.320570+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 13539,
-        "output_tokens": 8541,
-        "total_tokens": 22080,
-        "cost_usd": 0.020467
+        "input_tokens": 14299,
+        "output_tokens": 7060,
+        "total_tokens": 21359,
+        "cost_usd": 0.017695
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 13.147,
+        "model_value": 13.147,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 46,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2014,
           2015,
@@ -735,6 +729,15 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of first underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later"
         ],
         "source_page": 46,
         "entity": 4242
@@ -892,12 +895,12 @@
       }
     }
   },
-  "total_cost_usd": 0.027533,
-  "total_tokens": 43505,
+  "total_cost_usd": 0.02521,
+  "total_tokens": 39594,
   "validation": {
     "passed": true,
-    "total_discrepancies": 13,
-    "within_tolerance": 13,
+    "total_discrepancies": 20,
+    "within_tolerance": 20,
     "hard_failures": 0,
     "hard_failure_details": []
   }

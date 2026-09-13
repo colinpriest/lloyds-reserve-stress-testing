@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T11:17:28.407146+00:00",
+  "extraction_timestamp": "2026-09-13T04:00:31.382310+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -16,34 +18,45 @@
       "prior_year_development_gbp_m": -7.893,
       "prior_year_development_pct": -1.25,
       "direction": "release",
-      "prior_year_movement_page": 18,
+      "prior_year_movement_page": 21,
       "prior_year_movement_confidence": 0.8,
       "exact_reserve_text": "Favourable prior year loss development of GBP 11.1 million was recorded in 2023 compared to favourable development of GBP 0.2 million in the prior calendar year. In the current calendar year, the favourable loss development was driven primarily by lower emergence of claims of certain lines of business than previously anticipated.",
       "primary_causes": [
         "Favorable claims development"
       ],
       "specific_events": [],
-      "specific_years_affected": [],
+      "specific_years_affected": [
+        2013,
+        2014,
+        2015,
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021
+      ],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "The syndicate recorded a net release of GBP 11.138 million in prior year reserves for 2023. This favourable development was primarily driven by lower emergence of claims than previously anticipated in certain lines of business. The release was composed of a GBP 14.229 million release in Commercial lines and a GBP 3.091 million strengthening in Specialty lines.",
+      "standardized_narrative": "The syndicate recorded a gross prior year reserve release of GBP 23.87 million in 2023, primarily driven by favourable claims development across various underwriting years up to 2021. This contrasts with the net favourable prior year loss development of GBP 11.1 million reported in the notes, which was attributed to lower emergence of claims than previously anticipated. The gross movement was calculated from the claims development triangle.",
       "raw_causal_phrases": [
-        "lower emergence of claims of certain lines of business than previously anticipated"
+        "Favourable prior year loss development of GBP 11.1 million was recorded in 2023 compared to favourable development of GBP 0.2 million in the prior calendar year.",
+        "the favourable loss development was driven primarily by lower emergence of claims of certain lines of business than previously anticipated."
       ],
       "lob_movements": [
         {
-          "line_of_business": "Aggregate",
+          "line_of_business": "Commercial",
           "direction": "release",
           "amount_gbp_m": -14.229,
           "percentage": null,
-          "confidence": 0.8
+          "confidence": 0.5
         },
         {
           "line_of_business": "Specialty",
           "direction": "strengthening",
           "amount_gbp_m": 3.091,
           "percentage": null,
-          "confidence": 0.8
+          "confidence": 0.5
         }
       ],
       "gross_premiums_written_gbp_m": 364.4,
@@ -87,7 +100,7 @@
       "gross_premium_page": 17,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The prior year development figure of -11.138m is explicitly stated as 'Favourable prior year loss development of GBP 11.1 million' on page 18, and is inferred to be net of reinsurance. The LOB 'Commercial' in lob_movements has been mapped to 'Aggregate' as it is a broad category not directly listed in the standard Lloyd's LOBs. [RAG OVERRIDE: Model said PYD=-11.138, RAG triangle computed -7.893. Using RAG value.] [RAG OPENING NOT APPLIED: table value 498.626 (provisions_movement, page 44, unit source header) disagrees with both model values [631.136, 631.136], which agree with each other; the model value is retained and the table value recorded for audit.]",
+      "data_quality_notes": "The `prior_year_development_gbp_m` is derived from the gross claims development triangle, as the explicit narrative figure for prior year development (GBP 11.1m) is stated as a net figure. `lob_movements` are based on net figures for \"Commercial\" and \"Specialty\" as gross LOB-specific prior year development was not available. [RAG OVERRIDE: Model said PYD=-23.87, RAG triangle computed -7.893. Using RAG value.] [RAG OPENING NOT APPLIED: table value 498.626 (provisions_movement, page 44, unit source header) disagrees with both model values [631.136, 631.136], which agree with each other; the model value is retained and the table value recorded for audit.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -254,20 +267,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_382_2023_llm.pdf",
-      "content_hash": "e1aa9fdf86e38c582f1b1333162107cd405c48b8ef421ec7fd45e2c851ed0806",
-      "standardized_at": "2026-03-18T22:10:09.524906+00:00",
+      "content_hash": "c98a7eaeec59d624691c0f74b8c6322ece40f5e9b3de5a7f8e44b244fccf56e0",
+      "standardized_at": "2026-09-11T12:34:18.396693+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 11668,
-        "output_tokens": 1875,
-        "total_tokens": 19430,
-        "cost_usd": 0.008188
+        "input_tokens": 12472,
+        "output_tokens": 2197,
+        "total_tokens": 19937,
+        "cost_usd": 0.009234
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -7.893,
+        "model_value": -23.87,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "conflict",
+        "triangle_source_page": 45,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "conflict",
+        "cell_binding": "header",
         "underwriting_years": [
           2013,
           2014,
@@ -425,6 +450,19 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "100% syndicate values At end of first accounting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later",
+          "Seven years later",
+          "Eight years later",
+          "Nine years later",
+          "Ten years later"
         ],
         "source_page": 45,
         "entity": 382
@@ -601,7 +639,7 @@
       "prior_year_development_pct": -1.25,
       "direction": "release",
       "prior_year_movement_page": 36,
-      "prior_year_movement_confidence": 0.5,
+      "prior_year_movement_confidence": 1.0,
       "exact_reserve_text": "Favourable prior year loss development of GBP 11.1 million was recorded in 2023 compared to favourable development of GBP 0.2 million in the prior calendar year. In the current calendar year, the favourable loss development was driven primarily by lower emergence of claims of certain lines of business than previously anticipated.",
       "primary_causes": [
         "Favorable claims development"
@@ -610,10 +648,10 @@
       "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "At the start of 2023 gross claims outstanding were GBP 631.136m. During 2023 the syndicate recorded a favourable prior year loss development of GBP 11.138m (a release), driven primarily by lower-than-expected emergence of claims across certain lines of business. No gross prior-year movement by insurance-liability column was explicitly reported, so the quantified prior-year improvement reported in the notes (net) has been used.",
+      "standardized_narrative": "The syndicate experienced a modest gross release in prior year reserves in 2023. Analysis of the gross claims development triangle shows a net reduction in older underwriting year gross claims estimates of approximately GBP 7.9m (a c.1.25% release versus opening gross claims outstanding of GBP 631.1m). The managing agent's narrative reports favourable prior year loss development (GBP 11.1m) driven by lower-than-anticipated emergence of claims in certain lines of business (this figure in the narrative appears to be reported net of reinsurance). The gross triangle shows mixed movements across underwriting years with larger favourable development in several older years partially offset by deterioration in some mid-tailed years.",
       "raw_causal_phrases": [
-        "Favourable prior year loss development of GBP 11.1 million was recorded in 2023 compared to favourable development of GBP 0.2 million in the prior calendar year.",
-        "the favourable loss development was driven primarily by lower emergence of claims of certain lines of business than previously anticipated."
+        "Favourable prior year loss development of GBP 11.1 million was recorded in 2023",
+        "driven primarily by lower emergence of claims of certain lines of business than previously anticipated"
       ],
       "lob_movements": [
         {
@@ -672,7 +710,7 @@
       "gross_premium_page": 35,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The report does not present an explicit GROSS prior-year movement (insurance liabilities column) in a dedicated 'movement in prior years' note. The only explicit quantified prior-year movement is stated in the Claims note as a GBP 11.1m favourable prior year loss development; that figure appears to be NET (after reinsurance). Per extraction rules, the NET figure has been used as a fallback and flagged accordingly. Line-of-business mapping for the 'Commercial' and 'Specialty' breakout in the prior-year movement table was inferred (mapped to standard Lloyd's names) and carries low confidence. All monetary amounts are reported in the report's native currency (GBP). [RAG OVERRIDE: Model said PYD=-11.138, RAG triangle computed -7.893. Using RAG value.] [RAG OPENING NOT APPLIED: table value 498.626 (provisions_movement, page 44, unit source header) disagrees with both model values [631.136, 631.136], which agree with each other; the model value is retained and the table value recorded for audit.]",
+      "data_quality_notes": "Prior year development: the managing agent narrative (Note 5) reports a favourable prior year loss development of GBP 11.1m (text at page 36) but does not explicitly state whether that figure is gross or net. A gross claims development triangle is available (Claims development table - gross of reinsurance) and was used to compute a gross prior-year release of GBP 7.893m (calculated by comparing the current estimate to the previous diagonal for underwriting years 2013-2021). The narrative GBP 11.1m appears to be net of reinsurance whereas the triangle provides gross amounts. Lob mapping from the short 'Commercial' / 'Specialty' labels in the PYD table to standard Lloyd's LOBs is approximate and therefore assigned low confidence. The claims development triangle numbers are presented in the report in GBP '000; the prior_year_development_gbp_m here is converted to millions. [RAG OPENING NOT APPLIED: table value 498.626 (provisions_movement, page 44, unit source header) disagrees with both model values [631.136, 631.136], which agree with each other; the model value is retained and the table value recorded for audit.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -839,20 +877,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_382_2023_llm.pdf",
-      "content_hash": "e1aa9fdf86e38c582f1b1333162107cd405c48b8ef421ec7fd45e2c851ed0806",
-      "standardized_at": "2026-03-18T22:12:16.767213+00:00",
+      "content_hash": "c98a7eaeec59d624691c0f74b8c6322ece40f5e9b3de5a7f8e44b244fccf56e0",
+      "standardized_at": "2026-09-11T12:38:10.428848+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 36784,
-        "output_tokens": 8638,
-        "total_tokens": 45422,
-        "cost_usd": 0.026472
+        "input_tokens": 37541,
+        "output_tokens": 9700,
+        "total_tokens": 47241,
+        "cost_usd": 0.028785
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -7.893,
+        "model_value": -7.893,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "conflict",
+        "triangle_source_page": 45,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "conflict",
+        "cell_binding": "header",
         "underwriting_years": [
           2013,
           2014,
@@ -1010,6 +1060,19 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "100% syndicate values At end of first accounting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later",
+          "Seven years later",
+          "Eight years later",
+          "Nine years later",
+          "Ten years later"
         ],
         "source_page": 45,
         "entity": 382
@@ -1177,12 +1240,12 @@
       }
     }
   },
-  "total_cost_usd": 0.03466,
-  "total_tokens": 64852,
+  "total_cost_usd": 0.038019,
+  "total_tokens": 67178,
   "validation": {
     "passed": true,
-    "total_discrepancies": 13,
-    "within_tolerance": 13,
+    "total_discrepancies": 23,
+    "within_tolerance": 23,
     "hard_failures": 0,
     "hard_failure_details": []
   }

@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T12:32:29.505967+00:00",
+  "extraction_timestamp": "2026-09-13T04:08:18.282798+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -24,31 +26,18 @@
       ],
       "specific_events": [],
       "specific_years_affected": [
-        2013
+        2013,
+        2012
       ],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "The syndicate experienced a favourable prior year reserve development of GBP 6.4 million gross, primarily due to overall favourable claims development across its insurance lines of business. This contributed to a net release of GBP 15.6 million for the 2013 and prior years of account, with a further GBP 9.2 million release from reinsurance.",
+      "standardized_narrative": "Syndicate 780 reported a gross release of GBP 6.4 million in prior year claims reserves for the 2013 and prior years of account, driven by favourable claims development. This contributed to a net release of GBP 15.6 million after reinsurance.",
       "raw_causal_phrases": [
         "favourable net claims development",
+        "release of GBP 15.6 million of reserves held at 31 December 2014",
         "release of prior year reserves was split GBP 9.2 million reinsurance and GBP 6.4 million insurance lines of business"
       ],
-      "lob_movements": [
-        {
-          "line_of_business": "Aggregate",
-          "direction": "release",
-          "amount_gbp_m": -6.4,
-          "percentage": null,
-          "confidence": 1.0
-        },
-        {
-          "line_of_business": "Treaty",
-          "direction": "release",
-          "amount_gbp_m": -9.2,
-          "percentage": null,
-          "confidence": 1.0
-        }
-      ],
+      "lob_movements": [],
       "gross_premiums_written_gbp_m": 178.4,
       "gross_premium_mix": [
         {
@@ -90,26 +79,24 @@
       "gross_premium_page": 8,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The gross prior year development for 'insurance lines of business' was explicitly stated as GBP 6.4 million, separate from the reinsurance share. The 'Motor (other classes)' line of business shows a negative gross premium written, as per the document. [RAG OVERRIDE: Model said PYD=-6.4, RAG triangle computed -0.009. Using RAG value.]",
-      "_claims_triangle": {
-        "type": "none",
-        "currency": null,
-        "units": null,
-        "page": null,
-        "underwriting_years": [],
-        "development_rows": []
-      },
+      "data_quality_notes": "The gross prior year development figure is explicitly stated for 'insurance lines of business'. No claims development triangle was found. One line of business in the gross premium mix ('Motor (other classes)') shows a negative amount for gross premiums written, which has been included as reported. [RAG OVERRIDE: Model said PYD=-6.4, RAG general narrative computed -0.009. Using RAG value.]",
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_780_2014_llm.pdf",
-      "content_hash": "872900b5ad19d1f31d9f39b7bb353a6078a6e8f404ea3f753d0b9f696319f2d3",
-      "standardized_at": "2026-03-19T07:55:15.767636+00:00",
+      "content_hash": "a109ae57f1e43d046ff0f44ce12c05c72f2bed138ef2da1b54e37d34bb18a9c9",
+      "standardized_at": "2026-09-11T13:54:38.409769+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 8572,
-        "output_tokens": 1109,
-        "total_tokens": 12175,
-        "cost_usd": 0.005344
+        "input_tokens": 9376,
+        "output_tokens": 958,
+        "total_tokens": 12861,
+        "cost_usd": 0.005208
+      },
+      "_pyd_route": {
+        "source": "rag_general_narrative",
+        "value": -0.009,
+        "model_value": -6.4,
+        "note": "overrode the model value"
       },
       "_adobe_lob": {
         "gross_premium_mix": [
@@ -261,12 +248,12 @@
       "syndicate": 780,
       "year": 2014,
       "opening_reserves_gbp_m": 269.182,
-      "opening_reserves_page": 14,
+      "opening_reserves_page": null,
       "opening_reserves_confidence": 0.0,
       "prior_year_development_gbp_m": -0.009,
       "prior_year_development_pct": -0.0,
       "direction": "release",
-      "prior_year_movement_page": 16,
+      "prior_year_movement_page": null,
       "prior_year_movement_confidence": 0.0,
       "exact_reserve_text": "",
       "primary_causes": [],
@@ -274,7 +261,7 @@
       "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "Unable to extract reliable detailed reserve movement figures from the provided scanned pages. The balance sheet and notes are visible but numeric lines required for gross claims outstanding and the gross prior year reserve movement could not be unambiguously read from the images.",
+      "standardized_narrative": "Unable to extract reliable numeric reserve movement information from the provided scanned pages. The report images are low resolution / rotated which prevented confident identification of the Balance Sheet 'Claims outstanding' closing or prior year movement note required to calculate prior-year development.",
       "raw_causal_phrases": [],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 178.4,
@@ -315,29 +302,34 @@
           "percentage_of_total": 70.5
         }
       ],
-      "gross_premium_page": 19,
+      "gross_premium_page": null,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Document pages were provided as low-resolution scanned images with rotation and partial legibility. I could locate the Balance Sheet and Notes pages but could not reliably read the exact numeric lines required (gross 'Claims outstanding' prior-year comparative and the 'Movement in prior year's provision for claims outstanding' gross column). Therefore key fields (opening_reserves_gbp_m, prior_year_development_gbp_m, gross premiums breakdown) are null. If you can provide a higher-resolution PDF or the text extract of the Balance Sheet (liabilities: 'Claims outstanding' gross for 2013) and the specific 'Movement in prior year's provision for claims outstanding' note (insurance liabilities/gross column), I can fill all fields precisely and compute percentages and mappings.",
+      "data_quality_notes": "Document pages were provided as low-resolution images; text parsing failed. Key source lines (Balance Sheet 'Claims outstanding' and the 'Movement in prior year's provision for claims outstanding' note) could not be confidently read. Gross premiums written figure estimated from a visible total '125,715' in the segmental table but individual segment names and amounts could not be reliably transcribed. All reserve movement fields are left null due to insufficient legible data.",
       "_claims_triangle": {
         "type": "none",
         "currency": "GBP",
-        "units": "millions",
+        "units": "thousands",
         "page": null,
         "underwriting_years": [],
         "development_rows": []
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_780_2014_llm.pdf",
-      "content_hash": "872900b5ad19d1f31d9f39b7bb353a6078a6e8f404ea3f753d0b9f696319f2d3",
-      "standardized_at": "2026-03-19T07:55:44.847928+00:00",
+      "content_hash": "a109ae57f1e43d046ff0f44ce12c05c72f2bed138ef2da1b54e37d34bb18a9c9",
+      "standardized_at": "2026-09-11T13:55:41.201402+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 14947,
-        "output_tokens": 2769,
-        "total_tokens": 17716,
-        "cost_usd": 0.009275
+        "input_tokens": 15707,
+        "output_tokens": 3004,
+        "total_tokens": 18711,
+        "cost_usd": 0.009935
+      },
+      "_pyd_route": {
+        "source": "rag_general_narrative",
+        "value": -0.009,
+        "note": "filled a blank model value"
       },
       "_adobe_lob": {
         "gross_premium_mix": [
@@ -486,8 +478,8 @@
       }
     }
   },
-  "total_cost_usd": 0.014619,
-  "total_tokens": 29891,
+  "total_cost_usd": 0.015143,
+  "total_tokens": 31572,
   "validation": {
     "passed": true,
     "total_discrepancies": 14,

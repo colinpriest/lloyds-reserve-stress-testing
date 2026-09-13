@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T10:39:34.029037+00:00",
+  "extraction_timestamp": "2026-09-13T04:15:02.952545+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -11,26 +13,38 @@
       "syndicate": 2468,
       "year": 2021,
       "opening_reserves_gbp_m": 468.644,
-      "opening_reserves_page": 14,
+      "opening_reserves_page": 4,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": -61.996,
       "prior_year_development_pct": -13.23,
       "direction": "release",
       "prior_year_movement_page": 14,
       "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "Change in estimates of technical provisions, including foreign exchange",
+      "exact_reserve_text": "Change in estimates of technical provisions, including foreign exchange (48,439)",
       "primary_causes": [
-        "Favorable claims development",
-        "Other"
+        "Favorable claims development"
       ],
       "specific_events": [],
-      "specific_years_affected": [],
+      "specific_years_affected": [
+        2019
+      ],
       "prior_year_events": [],
-      "named_events": [],
-      "standardized_narrative": "Syndicate 2468 reported a prior year reserve release of GBP 48.4 million in 2021, representing a 10.33% reduction of its opening gross claims outstanding. This release is attributed to a general change in estimates of technical provisions, including foreign exchange movements. The syndicate is in run-off, and the 2020 year of account entered a 100% whole account loss portfolio transfer reinsurance with Syndicate 3500 on 31st December 2021, while the 2019 and prior underwriting years reinsured to close into Syndicate 3500 as of 1st January 2022. The report states no material impact from COVID-19 related claims.",
+      "named_events": [
+        {
+          "event_name": "COVID-19",
+          "event_year": 2020,
+          "event_type": "other",
+          "net_loss_gbp_m": null,
+          "loss_description": "Syndicate 2468 does not have material insurance exposure to COVID-19 related claims and its 2021 financial results have not been meaningfully impacted by this pandemic, this is consistent with the 2020 financial results.",
+          "lobs_affected": [],
+          "page": 2,
+          "confidence": 1.0
+        }
+      ],
+      "standardized_narrative": "Syndicate 2468 reported a significant gross prior year reserve release of GBP 48.439 million in 2021, representing a 10.34% reduction of its opening gross claims outstanding. This release is reflected in the 'Change in estimates of technical provisions' and indicates favorable claims development across prior underwriting years. The syndicate is in run-off, and its 2019 and prior years of account were reinsured to close into Syndicate 3500 as of 1st January 2022. The report explicitly states that COVID-19 did not materially impact its 2021 financial results.",
       "raw_causal_phrases": [
-        "Change in estimates of technical provisions, including foreign exchange",
-        "Syndicate 2468 does not have material insurance exposure to COVID-19 related claims and its 2021 financial results have not been meaningfully impacted by this pandemic"
+        "Adjustments to the amounts of provision are reflected in the financial statements for the year in which the adjustments are made.",
+        "Syndicate 2468 does not have material insurance exposure to COVID-19 related claims and its 2021 financial results have not been meaningfully impacted by this pandemic, this is consistent with the 2020 financial results."
       ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 5690.0,
@@ -69,12 +83,12 @@
       "gross_premium_page": 13,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The gross premiums written for 2021 are negative, indicating return premiums exceeded new premiums, which is reflected in the percentage calculations for the gross premium mix. The claims development triangle is likely impacted by the 100% loss portfolio transfer reinsurance for the 2020 year of account and the reinsurance to close for the 2019 and prior years of account, making direct calculation of prior year development from the triangle unreliable for those years. The prior year development figure is taken from the explicit 'Change in estimates of technical provisions' note. [RAG OVERRIDE: Model said PYD=-48.439, RAG triangle computed -61.996. Using RAG value.]",
+      "data_quality_notes": "The total gross premiums written for 2021 is negative (-GBP 2.190m), making percentage calculation for the gross premium mix misleading. Individual line amounts are provided without percentages. The syndicate is prepared on a basis other than going concern. The 2019 and prior years of account were reinsured to close into Syndicate 3500 as of 1st January 2022. [RAG OVERRIDE: Model said PYD=-48.439, RAG triangle computed -61.996. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
-        "page": 10,
+        "page": 11,
         "underwriting_years": [
           2016,
           2017,
@@ -129,20 +143,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_2468_2021_llm.pdf",
-      "content_hash": "830d5fcd2bb0a2e459c8c12f06885dd6a88d70571d28fe3ba26bec4aac3302aa",
-      "standardized_at": "2026-03-18T02:34:16.768443+00:00",
+      "content_hash": "60af60360b68c2312baedff6696cf0ba713e39c5134ac355bd6a8478b14462e3",
+      "standardized_at": "2026-09-11T12:02:57.590276+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 9366,
-        "output_tokens": 1345,
-        "total_tokens": 17459,
-        "cost_usd": 0.006172
+        "input_tokens": 10409,
+        "output_tokens": 1445,
+        "total_tokens": 19377,
+        "cost_usd": 0.006735
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -61.996,
+        "model_value": -48.439,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 24,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2016,
           2017,
@@ -193,6 +219,14 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At the end of the first year",
+          "- One year later",
+          "- Two years later",
+          "- Three years later",
+          "- Four years later",
+          "- Five years later"
         ],
         "source_page": 24,
         "entity": 2468
@@ -321,18 +355,17 @@
       "syndicate": 2468,
       "year": 2021,
       "opening_reserves_gbp_m": 468.644,
-      "opening_reserves_page": 29,
+      "opening_reserves_page": 13,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": -61.996,
       "prior_year_development_pct": -13.23,
       "direction": "release",
       "prior_year_movement_page": 23,
       "prior_year_movement_confidence": 0.8,
-      "exact_reserve_text": "The change in the provisions for claims outstanding during the year was as follows:",
+      "exact_reserve_text": "",
       "primary_causes": [
         "Favorable claims development",
-        "Reinsurance recoveries",
-        "Other"
+        "Reinsurance recoveries"
       ],
       "specific_events": [],
       "specific_years_affected": [
@@ -343,77 +376,54 @@
       ],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "At 31 December 2021 Syndicate 2468's opening gross claims outstanding were GBP 468.644m. Analysis of the claims development table shows net favourable development on prior underwriting years (2016-2019) amounting to a gross release of approximately GBP 62.0m (c.13.2% of opening gross claims). The release appears driven by favourable claims development across multiple older years, together with reinsurance recoveries and foreign exchange effects. The 2020 year was subject to a whole account loss portfolio transfer into Syndicate 3500 at 31 December 2021.",
+      "standardized_narrative": "Gross claims outstanding reduced from GBP 468.644m at 1 January 2021 to GBP 312.493m at 31 December 2021 driven by paid claims and changes in estimates. The gross claims development table shows negligible movement on underwriting years 2016-2019 (effectively flat prior-year development). No material COVID-19 related reserve impact is noted.",
       "raw_causal_phrases": [
-        "The change in the provisions for claims outstanding during the year was as follows:",
-        "Change in estimates of technical provisions, including foreign exchange",
-        "Included within reinsurers' share of technical provisions - claims outstanding are amounts recoverable from related companies of GBP 23.3 million (2020: GBP Nil)",
-        "Syndicate 2468 mitigates insurance risk through the use of reinsurance",
-        "The 31st December 2021 technical provisions make allowance for potential claims arising in relation to this pandemic"
+        "The principal risks faced by Syndicate 2468 arise from fluctuations in the severity of claims compared with expectations, late reporting of claims, inadequate reserving and inadequate reinsurance protection (including the credit worthiness of major reinsurers).",
+        "Syndicate 2468 is judged not to have material insurance exposure to COVID-19 related claims and has experienced limited claims notifications in this regard during 2020 and 2021.",
+        "Change in estimates of technical provisions, including foreign exchange (48,439)"
       ],
       "lob_movements": [
         {
           "line_of_business": "Property",
-          "direction": "release",
-          "amount_gbp_m": -27.225,
+          "direction": "flat",
+          "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.8
+          "confidence": 0.0
         },
         {
           "line_of_business": "Casualty",
-          "direction": "release",
-          "amount_gbp_m": -76.97,
+          "direction": "flat",
+          "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.8
+          "confidence": 0.0
         },
         {
           "line_of_business": "Marine",
-          "direction": "release",
-          "amount_gbp_m": -14.817,
+          "direction": "flat",
+          "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.8
+          "confidence": 0.0
         },
         {
           "line_of_business": "Accident & Health",
-          "direction": "release",
-          "amount_gbp_m": -2.424,
+          "direction": "flat",
+          "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.8
+          "confidence": 0.0
         },
         {
           "line_of_business": "Reinsurance - Property",
-          "direction": "release",
-          "amount_gbp_m": -10.316,
+          "direction": "flat",
+          "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.8
+          "confidence": 0.0
         },
         {
           "line_of_business": "Professional Lines",
-          "direction": "release",
-          "amount_gbp_m": -0.113,
+          "direction": "flat",
+          "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.5
-        },
-        {
-          "line_of_business": "Aggregate",
-          "direction": "release",
-          "amount_gbp_m": -5.608,
-          "percentage": null,
-          "confidence": 0.8
-        },
-        {
-          "line_of_business": "Casualty",
-          "direction": "release",
-          "amount_gbp_m": -18.677,
-          "percentage": null,
-          "confidence": 0.6
-        },
-        {
-          "line_of_business": "Accident & Health",
-          "direction": "release",
-          "amount_gbp_m": -0.104,
-          "percentage": null,
-          "confidence": 0.6
+          "confidence": 0.0
         }
       ],
       "gross_premiums_written_gbp_m": 5690.0,
@@ -452,7 +462,7 @@
       "gross_premium_page": 28,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior year development was calculated from the gross claims development triangle (claims outstanding - gross) on page 23 because no explicit gross 'movement in prior year's provision' figure was provided. The reported 2020 year was subject to a whole account loss portfolio transfer into Syndicate 3500 at 31-Dec-2021 which may distort comparability. Premiums for 2021 are a net negative (run-off adjustments); percentages are computed against a negative total which yields counterintuitive percentage signs. Line-of-business mappings to standard Lloyd's categories were inferred where exact matches did not exist and carry lower confidence.",
+      "data_quality_notes": "Prior-year development was derived from the gross claims development triangle (gross) which shows effectively zero movement for underwriting years 2016-2019. The technical provisions reconciliation table shows a gross 'Change in estimates of technical provisions, including foreign exchange' of -48,439k, but that line includes current-year movements and the instructions disallow using the overall 'movement in provision' line. No explicit narrative sentence quantifying gross prior-year development was found. Premium mix contains both positive and negative line items leading to percentages that can exceed 100% or be negative when computed against the (negative) total gross premium written. [RAG OVERRIDE: Model said PYD=-0.001, RAG triangle computed -61.996. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -507,25 +517,44 @@
             null,
             null,
             null
+          ],
+          [
+            117684,
+            251218,
+            304656,
+            235350,
+            28431
           ]
         ]
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_2468_2021_llm.pdf",
-      "content_hash": "830d5fcd2bb0a2e459c8c12f06885dd6a88d70571d28fe3ba26bec4aac3302aa",
-      "standardized_at": "2026-03-18T02:36:09.500777+00:00",
+      "content_hash": "60af60360b68c2312baedff6696cf0ba713e39c5134ac355bd6a8478b14462e3",
+      "standardized_at": "2026-09-11T12:06:07.227700+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 16423,
-        "output_tokens": 7751,
-        "total_tokens": 24174,
-        "cost_usd": 0.019608
+        "input_tokens": 17337,
+        "output_tokens": 7477,
+        "total_tokens": 24814,
+        "cost_usd": 0.019288
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -61.996,
+        "model_value": -0.001,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 24,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2016,
           2017,
@@ -576,6 +605,14 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At the end of the first year",
+          "- One year later",
+          "- Two years later",
+          "- Three years later",
+          "- Four years later",
+          "- Five years later"
         ],
         "source_page": 24,
         "entity": 2468
@@ -701,12 +738,12 @@
       }
     }
   },
-  "total_cost_usd": 0.02578,
-  "total_tokens": 41633,
+  "total_cost_usd": 0.026023,
+  "total_tokens": 44191,
   "validation": {
     "passed": true,
-    "total_discrepancies": 24,
-    "within_tolerance": 24,
+    "total_discrepancies": 17,
+    "within_tolerance": 17,
     "hard_failures": 0,
     "hard_failure_details": []
   }

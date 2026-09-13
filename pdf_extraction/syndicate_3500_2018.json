@@ -1,48 +1,637 @@
 {
-  "extraction_timestamp": "2026-07-05T15:17:19.841113+00:00",
+  "extraction_timestamp": "2026-09-13T04:06:17.087412+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
   "source_file": "syndicate_reports\\pdfs\\syndicate_3500_2018.pdf",
-  "no_triangle_data": true,
-  "excluded": true,
-  "exclusion_reason": "No claims development triangle or reserve movement text found in report - recommend non-inclusion in analysis",
-  "syndicate": 3500,
-  "year": 2018,
-  "gross_premium_mix": [
-    {
-      "line_of_business": "Accident and health",
-      "amount_gbp_m": 0.0,
-      "percentage_of_total": 0.0
+  "models": {
+    "gemini-2.5-flash": {
+      "syndicate": 3500,
+      "year": 2018,
+      "opening_reserves_gbp_m": 42.799,
+      "opening_reserves_page": 3,
+      "opening_reserves_confidence": 1.0,
+      "prior_year_development_gbp_m": 25.157,
+      "prior_year_development_pct": 58.77,
+      "direction": "strengthening",
+      "prior_year_movement_page": 12,
+      "prior_year_movement_confidence": 1.0,
+      "exact_reserve_text": "Change in estimates of technical provision provisions, including foreign exchange",
+      "primary_causes": [
+        "Other"
+      ],
+      "specific_events": [],
+      "specific_years_affected": [
+        2017
+      ],
+      "prior_year_events": [
+        {
+          "event_name": "Loss Portfolio Transfer (30 Nov 2018)",
+          "event_year": 2018,
+          "impact_description": "Acquisition of discontinued business with underwriting years of 2017 and prior, leading to significant increase in gross claims incurred and outstanding claims.",
+          "lobs_affected": [],
+          "amount_gbp_m": null,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Loss Portfolio Transfer (21 Dec 2018)",
+          "event_year": 2018,
+          "impact_description": "Acquisition of discontinued business with underwriting years of 2017 and prior, leading to significant increase in gross claims incurred and outstanding claims.",
+          "lobs_affected": [],
+          "amount_gbp_m": null,
+          "confidence": 0.8
+        }
+      ],
+      "named_events": [],
+      "standardized_narrative": "Syndicate 3500 reported a prior year reserve strengthening of GBP 25.157 million in 2018, representing a 58.77% increase relative to its opening gross claims outstanding. This adverse development was predominantly driven by significant loss portfolio transfer reinsurance transactions entered into during 2018, which involved the acquisition of discontinued business with underwriting years of 2017 and prior. The increase in outstanding claims is directly linked to these transactions. The syndicate's gross premiums written for the year were GBP 206.586 million, with the vast majority (100.0%) derived from reinsurance acceptances, and a negligible amount from direct third-party liability business.",
+      "raw_causal_phrases": [
+        "Increases in outstanding claims and cash balances predominantly arise as a result of transactions entered into during 2018.",
+        "Effective 30th November 2018, Syndicate 3500 entered into a loss portfolio transfer reinsurance with another Lloyd's syndicate for certain lines of discontinued business with underwriting years of 2017 and prior.",
+        "Effective 21st December 2018, Syndicate 3500 entered into a loss portfolio transfer reinsurance with another Lloyd's syndicate for certain lines of discontinued business with underwriting years of 2017 and prior."
+      ],
+      "lob_movements": [],
+      "gross_premiums_written_gbp_m": 2.0,
+      "gross_premium_mix": [
+        {
+          "line_of_business": "Accident and health",
+          "amount_gbp_m": 0.0,
+          "percentage_of_total": 0.0
+        },
+        {
+          "line_of_business": "Motor",
+          "amount_gbp_m": 0.0,
+          "percentage_of_total": 0.0
+        },
+        {
+          "line_of_business": "Marine, aviation and transport",
+          "amount_gbp_m": 0.0,
+          "percentage_of_total": 0.0
+        },
+        {
+          "line_of_business": "Credit and surety",
+          "amount_gbp_m": 0.0,
+          "percentage_of_total": 0.0
+        },
+        {
+          "line_of_business": "Fire and other damage to property",
+          "amount_gbp_m": 0.0,
+          "percentage_of_total": 0.0
+        },
+        {
+          "line_of_business": "Third party liability",
+          "amount_gbp_m": 2.0,
+          "percentage_of_total": 100.0
+        }
+      ],
+      "gross_premium_page": 11,
+      "gross_premium_confidence": 1.0,
+      "currency": "GBP",
+      "data_quality_notes": "The claims development triangle is very sparse and does not reflect the full prior year development, which is largely influenced by loss portfolio transfer transactions in 2018 relating to prior underwriting years. The prior year development figure is taken from the 'Change in estimates of technical provision provisions' line in Note 7, which is a comprehensive figure. [RAG PYD NOT APPLIED: deterministic figure -0.408m has the opposite sign to both model values [25.157, 25.157], which agree with each other; model values retained. Sign agreement between the models is not a reconciliation: where they differ in value the cohort and accrual scope of each still has to be settled from the filing (R140).] [CODE PYD NOT APPLIED: deterministic figure -0.408m has the opposite sign to both model values [25.157, 25.157], which agree with each other; model values retained. Sign agreement between the models is not a reconciliation: where they differ in value the cohort and accrual scope of each still has to be settled from the filing (R140).]",
+      "_claims_triangle": {
+        "type": "gross",
+        "currency": "GBP",
+        "units": "thousands",
+        "page": 8,
+        "underwriting_years": [
+          2009,
+          2018
+        ],
+        "development_rows": [
+          [
+            null,
+            199935
+          ],
+          [
+            null,
+            null
+          ],
+          [
+            null,
+            null
+          ],
+          [
+            682,
+            null
+          ],
+          [
+            653,
+            null
+          ],
+          [
+            268,
+            null
+          ],
+          [
+            1333,
+            null
+          ],
+          [
+            1185,
+            null
+          ],
+          [
+            777,
+            null
+          ]
+        ]
+      },
+      "source_type": "syndicate",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_3500_2018_llm.pdf",
+      "content_hash": "a0fdb35b7599c40f1a8bb9745db883c84cf8b671b5e30e9c96bab8c89624470d",
+      "standardized_at": "2026-09-11T12:21:51.939712+00:00",
+      "standardization_model": "gemini-2.5-flash",
+      "_extraction_meta": {
+        "model": "gemini-2.5-flash",
+        "input_tokens": 9893,
+        "output_tokens": 1255,
+        "total_tokens": 16712,
+        "cost_usd": 0.006105
+      },
+      "_rag_triangle": {
+        "type": "gross",
+        "currency": "GBP",
+        "units": "thousands",
+        "underwriting_years": [
+          2009,
+          2018
+        ],
+        "development_rows": [
+          [
+            null,
+            199935
+          ],
+          [
+            null,
+            null
+          ],
+          [
+            null,
+            null
+          ],
+          [
+            682,
+            null
+          ],
+          [
+            653,
+            null
+          ],
+          [
+            268,
+            null
+          ],
+          [
+            1333,
+            null
+          ],
+          [
+            1933,
+            null
+          ],
+          [
+            1185,
+            null
+          ],
+          [
+            777,
+            null
+          ]
+        ]
+      },
+      "_adobe_lob": {
+        "gross_premium_mix": [
+          {
+            "line_of_business": "Accident and health",
+            "amount_gbp_m": 0.0,
+            "percentage_of_total": 0.0
+          },
+          {
+            "line_of_business": "Motor",
+            "amount_gbp_m": 0.0,
+            "percentage_of_total": 0.0
+          },
+          {
+            "line_of_business": "Marine, aviation and transport",
+            "amount_gbp_m": 0.0,
+            "percentage_of_total": 0.0
+          },
+          {
+            "line_of_business": "Credit and surety",
+            "amount_gbp_m": 0.0,
+            "percentage_of_total": 0.0
+          },
+          {
+            "line_of_business": "Fire and other damage to property",
+            "amount_gbp_m": 0.0,
+            "percentage_of_total": 0.0
+          },
+          {
+            "line_of_business": "Third party liability",
+            "amount_gbp_m": 2.0,
+            "percentage_of_total": 100.0
+          }
+        ],
+        "gross_premiums_written_gbp_m": 2.0,
+        "claims_incurred_by_lob": [
+          {
+            "line_of_business": "Accident and health",
+            "amount_gbp_m": 31.0
+          },
+          {
+            "line_of_business": "Motor",
+            "amount_gbp_m": -8.0
+          },
+          {
+            "line_of_business": "Marine, aviation and transport",
+            "amount_gbp_m": 37.0
+          },
+          {
+            "line_of_business": "Credit and surety",
+            "amount_gbp_m": 18.0
+          },
+          {
+            "line_of_business": "Fire and other damage to property",
+            "amount_gbp_m": 2.0
+          },
+          {
+            "line_of_business": "Third party liability",
+            "amount_gbp_m": -19354.0
+          }
+        ],
+        "currency": "GBP",
+        "method": "azure",
+        "source_page": 29,
+        "entity": 3500
+      },
+      "_entity_binding": {
+        "requested_syndicate": 3500,
+        "entity_pages": {
+          "none": [
+            0
+          ],
+          "3500": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37
+          ]
+        },
+        "foreign_tables_skipped": 0,
+        "foreign_pages": [],
+        "underwriting_year_pages": [],
+        "underwriting_year_tables_skipped": 0,
+        "document_unit_hint": 0.001
+      }
     },
-    {
-      "line_of_business": "Motor",
-      "amount_gbp_m": 0.0,
-      "percentage_of_total": 0.0
-    },
-    {
-      "line_of_business": "Marine, aviation and transport",
-      "amount_gbp_m": 0.0,
-      "percentage_of_total": 0.0
-    },
-    {
-      "line_of_business": "Credit and surety",
-      "amount_gbp_m": 0.0,
-      "percentage_of_total": 0.0
-    },
-    {
-      "line_of_business": "Fire and other damage to property",
-      "amount_gbp_m": 0.0,
-      "percentage_of_total": 0.0
-    },
-    {
-      "line_of_business": "Third party liability",
-      "amount_gbp_m": 2.0,
-      "percentage_of_total": 100.0
+    "gpt-5-mini": {
+      "syndicate": 3500,
+      "year": 2018,
+      "opening_reserves_gbp_m": 42.799,
+      "opening_reserves_page": 14,
+      "opening_reserves_confidence": 1.0,
+      "prior_year_development_gbp_m": 25.157,
+      "prior_year_development_pct": 58.786,
+      "direction": "strengthening",
+      "prior_year_movement_page": 29,
+      "prior_year_movement_confidence": 0.8,
+      "exact_reserve_text": "The change in the provisions for claims outstanding during the year was as follows:\n\nChange in estimates of technical provision provisions, including foreign exchange 25,157 25,425 (268) (59,963) (63,582) 3,619",
+      "primary_causes": [
+        "Adverse claims development",
+        "Reinsurance recoveries",
+        "Other"
+      ],
+      "specific_events": [],
+      "specific_years_affected": [
+        2009
+      ],
+      "prior_year_events": [],
+      "named_events": [],
+      "standardized_narrative": "Opening gross claims outstanding at 1 January 2018 were GBP 42.799m. During 2018 gross claims outstanding increased materially to GBP 259.790m, largely driven by the reinsurance of new liabilities (199.935m) acquired during the year and a gross change in technical provision estimates of GBP 25.157m (a gross strengthening). The report also discloses a reserve in respect of prior years of GBP 59.855m included in the balance sheet. The movement used here is the gross 'change in estimates of technical provision' line from the claims outstanding movement note; note that the acquisition of new portfolios and reinsurance restructurings in 2018 materially distort year-on-year comparatives.",
+      "raw_causal_phrases": [
+        "The change in the provisions for claims outstanding during the year was as follows:",
+        "Reinsurance of new liabilities 199,935",
+        "New ceded reinsurance entered into - 100,084 (100,084)",
+        "Change in estimates of technical provision provisions, including foreign exchange 25,157 25,425 (268)",
+        "Paid claims (8,101) (8,369) 268",
+        "Claims outstanding at 31 December GBP 259,790 GBP 159,939 GBP 99,851 GBP 42,799 GBP 42,799 GBP -",
+        "Reserve in respect of prior years 59,855"
+      ],
+      "lob_movements": [],
+      "gross_premiums_written_gbp_m": 2.0,
+      "gross_premium_mix": [
+        {
+          "line_of_business": "Accident and health",
+          "amount_gbp_m": 0.0,
+          "percentage_of_total": 0.0
+        },
+        {
+          "line_of_business": "Motor",
+          "amount_gbp_m": 0.0,
+          "percentage_of_total": 0.0
+        },
+        {
+          "line_of_business": "Marine, aviation and transport",
+          "amount_gbp_m": 0.0,
+          "percentage_of_total": 0.0
+        },
+        {
+          "line_of_business": "Credit and surety",
+          "amount_gbp_m": 0.0,
+          "percentage_of_total": 0.0
+        },
+        {
+          "line_of_business": "Fire and other damage to property",
+          "amount_gbp_m": 0.0,
+          "percentage_of_total": 0.0
+        },
+        {
+          "line_of_business": "Third party liability",
+          "amount_gbp_m": 2.0,
+          "percentage_of_total": 100.0
+        }
+      ],
+      "gross_premium_page": 28,
+      "gross_premium_confidence": 1.0,
+      "currency": "GBP",
+      "data_quality_notes": "Prior-year movement taken from the claims outstanding movement table line 'Change in estimates of technical provision provisions, including foreign exchange' (gross = GBP 25,157k). The 2018 year includes acquisition of two new portfolios (reinsurance of new liabilities GBP 199,935k) and new reinsurance arrangements which materially distort comparisons; the movement line may include both prior-year re-estimates and items related to portfolio acquisitions. Claims development triangle is sparse (only 2009 and 2018 columns) and therefore not sufficient alone to compute PYD. Where amounts could not be unambiguously identified as \"prior year development\" by underwriting-year, values are left null or omitted. [RAG PYD NOT APPLIED: deterministic figure -0.408m has the opposite sign to both model values [25.157, 25.157], which agree with each other; model values retained. Sign agreement between the models is not a reconciliation: where they differ in value the cohort and accrual scope of each still has to be settled from the filing (R140).] [CODE PYD NOT APPLIED: deterministic figure -0.408m has the opposite sign to both model values [25.157, 25.157], which agree with each other; model values retained. Sign agreement between the models is not a reconciliation: where they differ in value the cohort and accrual scope of each still has to be settled from the filing (R140).]",
+      "_claims_triangle": {
+        "type": "gross",
+        "currency": "GBP",
+        "units": "thousands",
+        "page": 23,
+        "underwriting_years": [
+          2009,
+          2018
+        ],
+        "development_rows": [
+          [
+            null,
+            199935
+          ],
+          [
+            null,
+            null
+          ],
+          [
+            null,
+            null
+          ],
+          [
+            682,
+            null
+          ],
+          [
+            653,
+            null
+          ],
+          [
+            268,
+            null
+          ],
+          [
+            1333,
+            null
+          ],
+          [
+            1933,
+            null
+          ],
+          [
+            1185,
+            null
+          ],
+          [
+            777,
+            null
+          ]
+        ]
+      },
+      "source_type": "syndicate",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_3500_2018_llm.pdf",
+      "content_hash": "a0fdb35b7599c40f1a8bb9745db883c84cf8b671b5e30e9c96bab8c89624470d",
+      "standardized_at": "2026-09-11T12:24:41.880430+00:00",
+      "standardization_model": "gpt-5-mini",
+      "_extraction_meta": {
+        "model": "gpt-5-mini",
+        "input_tokens": 17575,
+        "output_tokens": 8119,
+        "total_tokens": 25694,
+        "cost_usd": 0.020632
+      },
+      "_rag_triangle": {
+        "type": "gross",
+        "currency": "GBP",
+        "units": "thousands",
+        "underwriting_years": [
+          2009,
+          2018
+        ],
+        "development_rows": [
+          [
+            null,
+            199935
+          ],
+          [
+            null,
+            null
+          ],
+          [
+            null,
+            null
+          ],
+          [
+            682,
+            null
+          ],
+          [
+            653,
+            null
+          ],
+          [
+            268,
+            null
+          ],
+          [
+            1333,
+            null
+          ],
+          [
+            1933,
+            null
+          ],
+          [
+            1185,
+            null
+          ],
+          [
+            777,
+            null
+          ]
+        ]
+      },
+      "_adobe_lob": {
+        "gross_premium_mix": [
+          {
+            "line_of_business": "Accident and health",
+            "amount_gbp_m": 0.0,
+            "percentage_of_total": 0.0
+          },
+          {
+            "line_of_business": "Motor",
+            "amount_gbp_m": 0.0,
+            "percentage_of_total": 0.0
+          },
+          {
+            "line_of_business": "Marine, aviation and transport",
+            "amount_gbp_m": 0.0,
+            "percentage_of_total": 0.0
+          },
+          {
+            "line_of_business": "Credit and surety",
+            "amount_gbp_m": 0.0,
+            "percentage_of_total": 0.0
+          },
+          {
+            "line_of_business": "Fire and other damage to property",
+            "amount_gbp_m": 0.0,
+            "percentage_of_total": 0.0
+          },
+          {
+            "line_of_business": "Third party liability",
+            "amount_gbp_m": 2.0,
+            "percentage_of_total": 100.0
+          }
+        ],
+        "gross_premiums_written_gbp_m": 2.0,
+        "claims_incurred_by_lob": [
+          {
+            "line_of_business": "Accident and health",
+            "amount_gbp_m": 31.0
+          },
+          {
+            "line_of_business": "Motor",
+            "amount_gbp_m": -8.0
+          },
+          {
+            "line_of_business": "Marine, aviation and transport",
+            "amount_gbp_m": 37.0
+          },
+          {
+            "line_of_business": "Credit and surety",
+            "amount_gbp_m": 18.0
+          },
+          {
+            "line_of_business": "Fire and other damage to property",
+            "amount_gbp_m": 2.0
+          },
+          {
+            "line_of_business": "Third party liability",
+            "amount_gbp_m": -19354.0
+          }
+        ],
+        "currency": "GBP",
+        "method": "azure",
+        "source_page": 29,
+        "entity": 3500
+      },
+      "_entity_binding": {
+        "requested_syndicate": 3500,
+        "entity_pages": {
+          "none": [
+            0
+          ],
+          "3500": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37
+          ]
+        },
+        "foreign_tables_skipped": 0,
+        "foreign_pages": [],
+        "underwriting_year_pages": [],
+        "underwriting_year_tables_skipped": 0,
+        "document_unit_hint": 0.001
+      }
     }
-  ],
-  "gross_premiums_written_gbp_m": 2.0,
-  "currency": "GBP"
+  },
+  "total_cost_usd": 0.026737,
+  "total_tokens": 42406,
+  "validation": {
+    "passed": true,
+    "total_discrepancies": 23,
+    "within_tolerance": 23,
+    "hard_failures": 0,
+    "hard_failure_details": []
+  }
 }

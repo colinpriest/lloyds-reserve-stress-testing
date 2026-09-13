@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-05T20:16:36.421495+00:00",
+  "extraction_timestamp": "2026-09-13T03:59:28.613687+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -11,28 +13,31 @@
       "syndicate": 3624,
       "year": 2016,
       "opening_reserves_gbp_m": 393.088,
-      "opening_reserves_page": 6,
+      "opening_reserves_page": 7,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": -17.0,
+      "prior_year_development_gbp_m": -16.973,
       "prior_year_development_pct": -4.32,
       "direction": "release",
-      "prior_year_movement_page": 14,
+      "prior_year_movement_page": 16,
       "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "Over-provision in respect of prior claims and claim adjustment expenses",
+      "exact_reserve_text": "Over-provision in respect of prior claims and claim adjustment expenses (16,973)",
       "primary_causes": [
         "Favorable claims development"
       ],
       "specific_events": [],
-      "specific_years_affected": [
-        2011,
-        2012,
-        2013,
-        2014,
-        2015
+      "specific_years_affected": [],
+      "prior_year_events": [
+        {
+          "event_name": "2014 Year of Account Closure",
+          "event_year": 2014,
+          "impact_description": "The 2014 year of account closed with a profit of GBP 17.2 million on the Syndicate's GBP 300 million of capacity.",
+          "lobs_affected": [],
+          "amount_gbp_m": -17.2,
+          "confidence": 0.8
+        }
       ],
-      "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "Hiscox Syndicate 3624 reported a prior year reserve release of GBP 16.973 million in 2016, representing a 4.32% reduction of its opening gross claims outstanding. This release is attributed to an over-provision in respect of prior claims and claim adjustment expenses, indicating favorable claims development across prior underwriting years, including 2011 through 2015.",
+      "standardized_narrative": "The syndicate reported a gross over-provision of GBP 17.0 million in respect of prior claims and claim adjustment expenses, indicating favorable claims development. This represents a 4.32% release of the opening gross claims outstanding. The 2014 year of account closed with a profit of GBP 17.2 million, contributing to the overall favorable development.",
       "raw_causal_phrases": [
         "Over-provision in respect of prior claims and claim adjustment expenses"
       ],
@@ -80,15 +85,15 @@
           "percentage_of_total": 3.5
         }
       ],
-      "gross_premium_page": 2,
+      "gross_premium_page": 15,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": null,
+      "data_quality_notes": "The gross prior year development figure of -16.973m is taken from the explicit 'Over-provision in respect of prior claims' line in the Technical Provisions note. This figure differs from a calculation based on the claims development triangle, which would suggest a strengthening of +4.849m. The explicit 'Over-provision' line is considered more direct for prior year development. [RAG PYD NOT APPLIED: deterministic figure +4.849m has the opposite sign to both model values [-16.973, -16.973], which agree with each other; model values retained. Sign agreement between the models is not a reconciliation: where they differ in value the cohort and accrual scope of each still has to be settled from the filing (R140).] [CODE PYD NOT APPLIED: deterministic figure +4.849m has the opposite sign to both model values [-16.973, -16.973], which agree with each other; model values retained. Sign agreement between the models is not a reconciliation: where they differ in value the cohort and accrual scope of each still has to be settled from the filing (R140).]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
-        "page": 15,
+        "page": 17,
         "underwriting_years": [
           2011,
           2012,
@@ -150,20 +155,22 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_3624_2016_llm.pdf",
-      "content_hash": "b484d873d74270c046246d3491545aee00273e469634358dc61149cbd2733d6d",
-      "standardized_at": "2026-03-18T12:06:12.462076+00:00",
+      "content_hash": "6fb294b10456f251580d41e03bc31b2052a73229aabc0fae39d2080b9047e955",
+      "standardized_at": "2026-09-11T12:37:17.518449+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 9863,
-        "output_tokens": 1375,
-        "total_tokens": 14962,
-        "cost_usd": 0.006396
+        "input_tokens": 11183,
+        "output_tokens": 1450,
+        "total_tokens": 16384,
+        "cost_usd": 0.00698
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -221,6 +228,14 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of underwriting year one",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later"
         ],
         "source_page": 32,
         "entity": 3624
@@ -321,6 +336,13 @@
           "entity": 3624,
           "backend": "azure",
           "table_kind": "balance_sheet_liabilities"
+        },
+        "movement_semantics": {
+          "row_label": "Over-provision in respect of prior claims and claim adjustment expenses",
+          "row_index": 3,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": false,
+          "column_index": 1
         },
         "gross_prior_year_claims": -17.0,
         "ri_share_prior_year": -0.1,
@@ -397,7 +419,7 @@
       "opening_reserves_gbp_m": 393.088,
       "opening_reserves_page": 12,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": -17.0,
+      "prior_year_development_gbp_m": -16.973,
       "prior_year_development_pct": -4.32,
       "direction": "release",
       "prior_year_movement_page": 28,
@@ -410,20 +432,12 @@
       "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "At 31 December 2016 the Syndicate's opening gross claims outstanding were GBP 393.088m. The technical provisions note records an over-provision in respect of prior claims and claim adjustment expenses of GBP 16.973m (gross), resulting in a net release of reserves for prior years. No line-by-line LOB movements or specific named prior-year events are disclosed in connection with this prior year movement.",
+      "standardized_narrative": "At 1 January 2016 the Syndicate carried gross claims outstanding of GBP 393.088m. During 2016 there was an over-provision in respect of prior claims and claim adjustment expenses of GBP 16.973m (gross), representing a release of prior year reserves. The movement is recorded in the Technical Provisions note and is attributed to favourable claims development; no specific prior-year incidents or per-line quantitative breakdown of the prior year movement is provided.",
       "raw_causal_phrases": [
-        "Over-provision in respect of prior claims and claim adjustment expenses (16,973) (77) (17,050)",
-        "Adjustments to the amounts of claims provisions established in prior years are reflected in the annual accounts for the period in which the adjustments are made."
+        "Over-provision in respect of prior claims and claim adjustment expenses",
+        "Provision in respect of prior years"
       ],
-      "lob_movements": [
-        {
-          "line_of_business": "Aggregate",
-          "direction": "release",
-          "amount_gbp_m": -16.973,
-          "percentage": -4.32,
-          "confidence": 1.0
-        }
-      ],
+      "lob_movements": [],
       "gross_premiums_written_gbp_m": 533.5,
       "gross_premium_mix": [
         {
@@ -467,10 +481,10 @@
           "percentage_of_total": 3.5
         }
       ],
-      "gross_premium_page": 2,
+      "gross_premium_page": 24,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior year development (gross) taken from the Technical Provisions reconciliation line 'Over-provision in respect of prior claims and claim adjustment expenses' (gross GBP 16,973k). No LOB-specific prior year movement amounts or specific named prior-year events are provided. Gross premiums and divisional premium mix taken from the Managing Agent's report/divisional table; small rounding differences may exist versus P&L totals. Claims development triangle is present and has been captured separately; it was not used to compute PYD because an explicit gross movement line is available.",
+      "data_quality_notes": "Opening gross claims outstanding taken from Balance Sheet (Technical provisions: Claims outstanding, comparative 2015 column). Prior year development taken from the Technical Provisions note row 'Over-provision in respect of prior claims and claim adjustment expenses' (gross). No explicit per-line prior-year movement figures provided. Claims development triangle is available (gross) and was not used to recalculate PYD because an explicit gross prior-year movement line exists. All monetary values are reported in millions (from reported GBP 000). [RAG PYD NOT APPLIED: deterministic figure +4.849m has the opposite sign to both model values [-16.973, -16.973], which agree with each other; model values retained. Sign agreement between the models is not a reconciliation: where they differ in value the cohort and accrual scope of each still has to be settled from the filing (R140).] [CODE PYD NOT APPLIED: deterministic figure +4.849m has the opposite sign to both model values [-16.973, -16.973], which agree with each other; model values retained. Sign agreement between the models is not a reconciliation: where they differ in value the cohort and accrual scope of each still has to be settled from the filing (R140).]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -537,20 +551,22 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_3624_2016_llm.pdf",
-      "content_hash": "b484d873d74270c046246d3491545aee00273e469634358dc61149cbd2733d6d",
-      "standardized_at": "2026-03-18T12:07:30.198530+00:00",
+      "content_hash": "6fb294b10456f251580d41e03bc31b2052a73229aabc0fae39d2080b9047e955",
+      "standardized_at": "2026-09-11T12:39:08.166933+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 20600,
-        "output_tokens": 5024,
-        "total_tokens": 25624,
-        "cost_usd": 0.015198
+        "input_tokens": 23485,
+        "output_tokens": 4565,
+        "total_tokens": 28050,
+        "cost_usd": 0.015001
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -608,6 +624,14 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of underwriting year one",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later"
         ],
         "source_page": 32,
         "entity": 3624
@@ -709,6 +733,13 @@
           "backend": "azure",
           "table_kind": "balance_sheet_liabilities"
         },
+        "movement_semantics": {
+          "row_label": "Over-provision in respect of prior claims and claim adjustment expenses",
+          "row_index": 3,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": false,
+          "column_index": 1
+        },
         "gross_prior_year_claims": -17.0,
         "ri_share_prior_year": -0.1,
         "net_prior_year_claims": -17.1,
@@ -779,12 +810,12 @@
       }
     }
   },
-  "total_cost_usd": 0.021594,
-  "total_tokens": 40586,
+  "total_cost_usd": 0.021981,
+  "total_tokens": 44434,
   "validation": {
     "passed": true,
-    "total_discrepancies": 14,
-    "within_tolerance": 14,
+    "total_discrepancies": 8,
+    "within_tolerance": 8,
     "hard_failures": 0,
     "hard_failure_details": []
   }

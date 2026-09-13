@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T09:41:45.322548+00:00",
+  "extraction_timestamp": "2026-09-13T04:09:13.024553+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -11,24 +13,30 @@
       "syndicate": 1840,
       "year": 2023,
       "opening_reserves_gbp_m": 0.209,
-      "opening_reserves_page": 39,
+      "opening_reserves_page": 7,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": 0.095,
       "prior_year_development_pct": 45.45,
       "direction": "strengthening",
-      "prior_year_movement_page": 39,
+      "prior_year_movement_page": 18,
       "prior_year_movement_confidence": 0.8,
-      "exact_reserve_text": "Change in claims outstanding Gross amount (805)",
+      "exact_reserve_text": null,
       "primary_causes": [
-        "Favorable claims development"
+        "IBNR recalibration",
+        "Reserve methodology change"
       ],
       "specific_events": [],
-      "specific_years_affected": [],
+      "specific_years_affected": [
+        2020,
+        2021
+      ],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "The syndicate, being in run-off since 31 December 2022, recorded a gross release of GBP 0.805 million in its claims outstanding for the year ended 31 December 2023. This release represents a significant percentage of the opening gross claims reserves, reflecting favorable claims development on prior underwriting years as the syndicate winds down its operations. The managing agent adopted a cautious approach to reserving, considering inflationary impacts, but the overall movement was a release.",
+      "standardized_narrative": "The syndicate experienced a gross prior year strengthening of GBP 0.095 million, representing 45.45% of its opening gross claims outstanding. This strengthening was primarily observed in the 2021 underwriting year, with no specific causal factors detailed in the report, though general reserving practices and IBNR estimation are noted.",
       "raw_causal_phrases": [
-        "At 2023 year end, MRSL adopted a cautious approach to reserving in recognition of the inherent uncertainty of forecasting inflationary impacts."
+        "judgements and assumptions about the future",
+        "statistical techniques of estimation",
+        "margin is applied over and above the actuarial best estimate"
       ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 1323.0,
@@ -59,15 +67,15 @@
           "percentage_of_total": 0.0
         }
       ],
-      "gross_premium_page": 34,
+      "gross_premium_page": 16,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The prior year development is inferred from the total change in gross claims outstanding, assuming all movement relates to prior years due to the syndicate being in run-off. The claims development triangle is not used for PYD calculation due to its non-standard format and potential distortion from Reinsurance to Close (RITC) arrangements. [RAG OVERRIDE: Model said PYD=-0.805, RAG triangle computed 0.095. Using RAG value.]",
+      "data_quality_notes": "The prior year development figure was calculated from the gross claims development triangle as no explicit prior year movement note or narrative was available. The claims development table is for underwriting years 2020, 2021, and 2022, and the calculation excludes the 2022 underwriting year.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
-        "page": 40,
+        "page": 18,
         "underwriting_years": [
           2020,
           2021,
@@ -76,42 +84,54 @@
         "development_rows": [
           [
             19,
-            null,
+            2244,
             188
           ],
           [
-            2244,
-            1247,
-            null
-          ],
-          [
+            null,
             3284,
-            1247,
-            null
+            1247
           ],
           [
-            3379,
+            null,
+            null,
+            3379
+          ],
+          [
+            null,
             null,
             null
           ]
         ]
       },
       "source_type": "syndicate",
-      "source_file": "syndicate_reports\\pdfs\\syndicate_1840_2023.pdf",
-      "content_hash": "66e73741bce9088a08b1d360348172eb84d03739d28ab17882902031b9fc8846",
-      "standardized_at": "2026-03-17T04:25:00.670364+00:00",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_1840_2023_llm.pdf",
+      "content_hash": "68f50d1255468ffc8e5f553bb40d4040bd6085eb62b23b30dd871ed4f7caab10",
+      "standardized_at": "2026-09-11T10:52:59.589313+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 16978,
-        "output_tokens": 926,
-        "total_tokens": 25094,
-        "cost_usd": 0.007408
+        "input_tokens": 11441,
+        "output_tokens": 950,
+        "total_tokens": 17090,
+        "cost_usd": 0.005807
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 0.095,
+        "model_value": 0.095,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 40,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2020,
           2021,
@@ -133,6 +153,11 @@
             3379.0,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of underwriting year",
+          "One year after",
+          "Two years after"
         ],
         "source_page": 40,
         "entity": 1840
@@ -256,34 +281,51 @@
       "syndicate": 1840,
       "year": 2023,
       "opening_reserves_gbp_m": 0.209,
-      "opening_reserves_page": 38,
+      "opening_reserves_page": 17,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": 0.095,
       "prior_year_development_pct": 45.45,
       "direction": "strengthening",
-      "prior_year_movement_page": null,
-      "prior_year_movement_confidence": 0.0,
+      "prior_year_movement_page": 18,
+      "prior_year_movement_confidence": 0.8,
       "exact_reserve_text": "",
-      "primary_causes": [
-        "Economic inflation / claims cost inflation",
-        "Geopolitical events",
-        "Natural catastrophe events"
-      ],
+      "primary_causes": [],
       "specific_events": [],
-      "specific_years_affected": [
-        2020,
-        2021,
-        2022
-      ],
+      "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "Opening gross claims outstanding at 1 January 2023 was GBP 0.209m. The report does not disclose an explicit gross aggregate movement exclusively attributable to prior underwriting years. Gross claims outstanding increased to GBP 1.023m at 31 December 2023 (movement driven by claims development and exchange differences and including current year activity). The Managing Agent highlights elevated reserving uncertainty driven by claims inflation and geopolitical and climate-related risks and states a cautious approach to reserving in run-off.",
-      "raw_causal_phrases": [
-        "Given the Syndicate is in run-off, the primary consideration for inflation is around reserves:",
-        "Reserving: At 2023 year end, MRSL adopted a cautious approach to reserving in recognition of the inherent uncertainty of forecasting inflationary impacts. This was informed through guidance provided by MR Central Reserving, and through regulatory guidance on claims inflation trends relative to economic inflation.",
-        "Geopolitical uncertainty has continued to dominate the risk landscape."
+      "standardized_narrative": "Gross claims outstanding at 1 January 2023 were GBP 0.209m and increased to a gross outstanding of GBP 1.023m at 31 December 2023. Analysis of the gross claims development table indicates a gross prioryear adverse movement of approximately GBP 0.095m (strengthening), primarily from the 2021 underwriting year. No explicit narrative quantifying gross prioryear movements or assigning causes is provided in the report; the prioryear development here is calculated from the syndicate's gross claims development table.",
+      "raw_causal_phrases": [],
+      "lob_movements": [
+        {
+          "line_of_business": "Fire and other damage to property",
+          "direction": "strengthening",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.0
+        },
+        {
+          "line_of_business": "Third party liability",
+          "direction": "strengthening",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.0
+        },
+        {
+          "line_of_business": "Pecuniary Loss",
+          "direction": "strengthening",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.0
+        },
+        {
+          "line_of_business": "Marine, Energy, Aviation and Transport",
+          "direction": "strengthening",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.0
+        }
       ],
-      "lob_movements": [],
       "gross_premiums_written_gbp_m": 1323.0,
       "gross_premium_mix": [
         {
@@ -315,12 +357,12 @@
       "gross_premium_page": 32,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "No explicit gross 'movement in prior year's provision for claims outstanding' figure is provided. The claims development triangle is present but sparse (only UW years 2020-2022) and the technical provisions movement lines combine current and prior year movements. The Syndicate is in run-off and an RITC closure of 2021 into 2022 (and intended closure into Syndicate 457) is referenced which may distort comparatives. Prior-year development could not be reliably quantified from the disclosures.",
+      "data_quality_notes": "Prior year development (PYD) was not provided as a single explicit gross figure. PYD was computed from the gross claims development table (claims development table gross of reinsurance) on page 18. The triangle is sparse (only 2020-2022 columns) and the previous-diagonal comparison yields a gross adverse movement of GBP 95k (0.095m) largely from the 2021 column; this produces a high percentage relative to the small opening reserve. No explicit textual description of gross prioryear reserve movement or causes was found. Lob-level PYD amounts are not disclosed. Confidence in the triangle extraction is moderate (0.8).",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
-        "page": 37,
+        "page": 18,
         "underwriting_years": [
           2020,
           2021,
@@ -350,21 +392,33 @@
         ]
       },
       "source_type": "syndicate",
-      "source_file": "syndicate_reports\\pdfs\\syndicate_1840_2023.pdf",
-      "content_hash": "66e73741bce9088a08b1d360348172eb84d03739d28ab17882902031b9fc8846",
-      "standardized_at": "2026-03-17T04:25:46.264784+00:00",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_1840_2023_llm.pdf",
+      "content_hash": "68f50d1255468ffc8e5f553bb40d4040bd6085eb62b23b30dd871ed4f7caab10",
+      "standardized_at": "2026-09-11T10:55:10.083482+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 27379,
-        "output_tokens": 7544,
-        "total_tokens": 34923,
-        "cost_usd": 0.021933
+        "input_tokens": 15477,
+        "output_tokens": 6123,
+        "total_tokens": 21600,
+        "cost_usd": 0.016115
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 0.095,
+        "model_value": 0.095,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 40,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2020,
           2021,
@@ -386,6 +440,11 @@
             3379.0,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of underwriting year",
+          "One year after",
+          "Two years after"
         ],
         "source_page": 40,
         "entity": 1840
@@ -506,12 +565,12 @@
       }
     }
   },
-  "total_cost_usd": 0.029341,
-  "total_tokens": 60017,
+  "total_cost_usd": 0.021922,
+  "total_tokens": 38690,
   "validation": {
     "passed": true,
-    "total_discrepancies": 18,
-    "within_tolerance": 18,
+    "total_discrepancies": 12,
+    "within_tolerance": 12,
     "hard_failures": 0,
     "hard_failure_details": []
   }

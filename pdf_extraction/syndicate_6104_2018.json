@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-05T20:36:06.548411+00:00",
+  "extraction_timestamp": "2026-09-13T03:57:47.847198+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -20,11 +22,12 @@
       "prior_year_movement_confidence": 1.0,
       "exact_reserve_text": "Over-provision in respect of prior claims and claim adjustment expenses (30,805)",
       "primary_causes": [
-        "Favorable claims development",
-        "Natural catastrophe events"
+        "Favorable claims development"
       ],
       "specific_events": [
-        "Hurricanes Harvey, Irma and Maria"
+        "Hurricanes Harvey",
+        "Hurricane Irma",
+        "Hurricane Maria"
       ],
       "specific_years_affected": [
         2016,
@@ -34,43 +37,57 @@
         {
           "event_name": "Hurricanes Harvey, Irma and Maria",
           "event_year": 2017,
-          "impact_description": "Hurricanes Harvey, Irma and Maria have been reserved at $36.2 million. These three hurricanes were the only significant losses materially impacting the account.",
+          "impact_description": "These three hurricanes were the only significant losses materially impacting the account.",
           "lobs_affected": [
             "Reinsurance - Property"
           ],
           "amount_gbp_m": 36.2,
           "confidence": 1.0
-        },
-        {
-          "event_name": "Benign catastrophe activity",
-          "event_year": 2016,
-          "impact_description": "absence of major catastrophe activity in 2016",
-          "lobs_affected": [
-            "Reinsurance - Property"
-          ],
-          "amount_gbp_m": null,
-          "confidence": 0.8
         }
       ],
       "named_events": [
         {
-          "event_name": "Hurricanes Harvey, Irma and Maria",
+          "event_name": "Hurricanes Harvey",
           "event_year": 2017,
           "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": 36.2,
+          "net_loss_gbp_m": null,
           "loss_description": "Hurricanes Harvey, Irma and Maria have been reserved at $36.2 million. These three hurricanes were the only significant losses materially impacting the account.",
           "lobs_affected": [
             "Reinsurance - Property"
           ],
           "page": 48,
-          "confidence": 1.0
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Hurricane Irma",
+          "event_year": 2017,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "Hurricanes Harvey, Irma and Maria have been reserved at $36.2 million. These three hurricanes were the only significant losses materially impacting the account.",
+          "lobs_affected": [
+            "Reinsurance - Property"
+          ],
+          "page": 48,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Hurricane Maria",
+          "event_year": 2017,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "Hurricanes Harvey, Irma and Maria have been reserved at $36.2 million. These three hurricanes were the only significant losses materially impacting the account.",
+          "lobs_affected": [
+            "Reinsurance - Property"
+          ],
+          "page": 48,
+          "confidence": 0.8
         },
         {
           "event_name": "2018 hurricane, typhoon and wildfire losses",
           "event_year": 2018,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "reinsurance loss from the 2018 hurricane, typhoon and wildfire losses",
+          "loss_description": "The 2018 account will pick up almost all of the reinsurance loss from the 2018 hurricane, typhoon and wildfire losses together with a relatively modest share of direct property loss.",
           "lobs_affected": [
             "Reinsurance - Property"
           ],
@@ -78,14 +95,21 @@
           "confidence": 0.8
         }
       ],
-      "standardized_narrative": "Syndicate 6104 reported an overall gross prior year reserve release of $30.8 million in 2018. This release was primarily driven by favorable claims development on the 2016 and older years of account, which experienced a benign catastrophe environment. This favorable development outweighed adverse development from 2017, which included significant losses from Hurricanes Harvey, Irma, and Maria, reserved at $36.2 million. The syndicate's business is quota share reinsurance of property catastrophe risks.",
+      "standardized_narrative": "Syndicate 6104 experienced a significant release of $30.805 million in prior year reserves, primarily due to an over-provision in respect of prior claims and claim adjustment expenses. This favorable development is linked to benign loss activity in 2016 for reinsurance property accounts. However, prior year events such as Hurricanes Harvey, Irma, and Maria in 2017 had resulted in $36.2 million in reserves, indicating some adverse development from those specific events in the prior year.",
       "raw_causal_phrases": [
         "Over-provision in respect of prior claims and claim adjustment expenses",
-        "absence of major catastrophe activity in 2016",
-        "Losses from Hurricanes Harvey, Irma and Maria were almost entirely in 2017 year of account.",
-        "Hurricanes Harvey, Irma and Maria have been reserved at $36.2 million."
+        "benign loss activity in 2016 calendar years",
+        "Hurricanes Harvey, Irma and Maria have been reserved at $36.2 million. These three hurricanes were the only significant losses materially impacting the account."
       ],
-      "lob_movements": [],
+      "lob_movements": [
+        {
+          "line_of_business": "Reinsurance - Property",
+          "direction": "release",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.5
+        }
+      ],
       "gross_premiums_written_gbp_m": 47.6,
       "gross_premium_mix": [
         {
@@ -94,10 +118,10 @@
           "percentage_of_total": 100.0
         }
       ],
-      "gross_premium_page": 34,
+      "gross_premium_page": 43,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": " [RAG OVERRIDE: Model said PYD=-30.805, RAG triangle computed -3.489. Using RAG value.]",
+      "data_quality_notes": "Claims development triangle likely distorted by Reinsurance to Close (RITC) activity, so prior year development is taken from the Technical Provisions note. [RAG OVERRIDE: Model said PYD=-30.805, RAG triangle computed -3.489. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
@@ -115,69 +139,59 @@
         ],
         "development_rows": [
           [
-            25782,
-            40817,
-            19483,
-            13713,
-            5411,
-            17757,
-            62769,
-            58834
+            25782.0,
+            40817.0,
+            19483.0,
+            13713.0,
+            5411.0,
+            17757.0,
+            62769.0,
+            58834.0
           ],
           [
-            27723,
-            25183,
-            9290,
-            9955,
-            3165,
-            11921,
-            59218,
+            27723.0,
+            25183.0,
+            9290.0,
+            9955.0,
+            3165.0,
+            11921.0,
+            59218.0,
             null
           ],
           [
-            26540,
-            20381,
-            6115,
-            10063,
-            3376,
-            8956,
-            null,
-            null
-          ],
-          [
-            26057,
-            20204,
-            6272,
-            9644,
-            2774,
-            null,
+            26540.0,
+            20381.0,
+            6115.0,
+            10063.0,
+            3376.0,
+            8956.0,
             null,
             null
           ],
           [
-            24924,
-            21070,
-            6345,
-            9679,
-            null,
+            26057.0,
+            20204.0,
+            6272.0,
+            9644.0,
+            2774.0,
             null,
             null,
             null
           ],
           [
-            24947,
-            18349,
-            6454,
-            null,
+            24924.0,
+            21070.0,
+            6345.0,
+            9679.0,
             null,
             null,
             null,
             null
           ],
           [
-            23229,
-            18350,
-            null,
+            24947.0,
+            18349.0,
+            6454.0,
             null,
             null,
             null,
@@ -185,7 +199,17 @@
             null
           ],
           [
-            23162,
+            23229.0,
+            18350.0,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            23162.0,
             null,
             null,
             null,
@@ -198,20 +222,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_6104_2018_llm.pdf",
-      "content_hash": "a75b788ee096fd7c1509b0bc88e70e30b18f68aa44c9f491a84e93eccbee1bc2",
-      "standardized_at": "2026-07-05T19:31:36.834647+00:00",
+      "content_hash": "da8c3c29672bd79ed510a61b23ffed67ab0076e60d356397b4a9a4a370c13d8f",
+      "standardized_at": "2026-09-11T13:48:54.340600+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 20699,
-        "output_tokens": 1664,
-        "total_tokens": 26666,
-        "cost_usd": 0.01037
+        "input_tokens": 21503,
+        "output_tokens": 1986,
+        "total_tokens": 27447,
+        "cost_usd": 0.011416
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -3.489,
+        "model_value": -30.805,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 73,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -304,6 +340,16 @@
             null
           ]
         ],
+        "row_labels": [
+          "At end of underwriting year one",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later",
+          "Seven years later"
+        ],
         "source_page": 73,
         "entity": 6104
       },
@@ -320,6 +366,13 @@
           "entity": 6104,
           "backend": "azure",
           "table_kind": "balance_sheet_liabilities"
+        },
+        "movement_semantics": {
+          "row_label": "Over-provision in respect of prior claims and claim adjustment expenses",
+          "row_index": 4,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": false,
+          "column_index": 1
         },
         "gross_prior_year_claims": -30.8,
         "ri_share_prior_year": 0.0,
@@ -450,15 +503,31 @@
         ],
         "underwriting_year_pages": [
           42,
+          45,
+          46,
           47,
           48,
+          49,
           50,
+          51,
+          52,
+          53,
+          54,
           75,
+          78,
+          79,
           80,
           81,
-          83
+          82,
+          83,
+          84,
+          85,
+          86,
+          87,
+          88,
+          89
         ],
-        "underwriting_year_tables_skipped": 3,
+        "underwriting_year_tables_skipped": 4,
         "document_unit_hint": 0.001
       },
       "opening_reserves_provenance": {
@@ -491,18 +560,18 @@
         "Favorable claims development"
       ],
       "specific_events": [
-        "Hurricanes Harvey, Irma and Maria"
+        "Hurricanes Harvey",
+        "Hurricane Irma",
+        "Hurricane Maria"
       ],
-      "specific_years_affected": [
-        2017
-      ],
+      "specific_years_affected": [],
       "prior_year_events": [
         {
           "event_name": "Hurricanes Harvey, Irma and Maria",
           "event_year": 2017,
-          "impact_description": "These three hurricanes were reserved at $36.2 million and were the only significant losses materially impacting the account.",
+          "impact_description": "These three hurricanes were reserved at $36.2 million and were the only significant losses materially impacting the account",
           "lobs_affected": [
-            "Reinsurance - Property"
+            "Treaty"
           ],
           "amount_gbp_m": 36.2,
           "confidence": 0.8
@@ -514,19 +583,19 @@
           "event_year": 2017,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": 36.2,
-          "loss_description": "Hurricanes Harvey, Irma and Maria have been reserved at $36.2 million. These three hurricanes were the only significant losses materially impacting the account.",
+          "loss_description": "reserved at $36.2 million; these three hurricanes were the only significant losses materially impacting the account",
           "lobs_affected": [
-            "Reinsurance - Property"
+            "Treaty"
           ],
           "page": 73,
           "confidence": 0.8
         }
       ],
-      "standardized_narrative": "Syndicate 6104's gross claims outstanding at 1 January 2018 were $72.606m. During 2018 the Syndicate recorded an over-provision on prior years of $30.805m (a release), principally reflecting favourable claims development and an absence of major catastrophe activity on the years reinsured by the Syndicate. The 2017 hurricanes (Harvey, Irma and Maria) were identified separately and had been reserved at $36.2m and were the principal prior-year catastrophe items affecting the account.",
+      "standardized_narrative": "Syndicate 6104 closed 2018 with a material prior-year release: gross claims outstanding at 1 January 2018 were $72.606m and the notes show an over-provision in respect of prior claims and claim adjustment expenses of $30.805m (a release). This reflects favourable development on prior years' claims. The syndicate's business is quota-share reinsurance (treaty) of Syndicate 33's property catastrophe account; Hurricanes Harvey, Irma and Maria (2017) were highlighted as the only significant catastrophe losses impacting recent years and were reserved at $36.2m.",
       "raw_causal_phrases": [
-        "Over-provision in respect of prior claims and claim adjustment expenses (30,805) - (30,805)",
-        "Hurricanes Harvey, Irma and Maria have been reserved at $36.2 million.",
-        "This is another very good result reflecting in part the absence of major catastrophe activity in 2016 calendar year."
+        "Over-provision in respect of prior claims and claim adjustment expenses (30,805)",
+        "Hurricanes Harvey, Irma and Maria have been reserved at $36.2 million",
+        "These three hurricanes were the only significant losses materially impacting the account"
       ],
       "lob_movements": [
         {
@@ -542,13 +611,13 @@
         {
           "line_of_business": "Reinsurance",
           "amount_gbp_m": 47.597,
-          "percentage_of_total": 100.0
+          "percentage_of_total": 100
         }
       ],
       "gross_premium_page": 59,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "All monetary values are taken from the syndicate annual accounts denominated in USD. Opening reserves (72,606) taken from Balance Sheet liabilities (Claims outstanding) 2017 comparative column; prior year movement (-30,805) taken from the Technical Provisions 'Over-provision in respect of prior claims' row. Values in source tables are presented in $000; converted here to millions. Exact reserve descriptive text was taken from the Technical Provisions table row. Confidence levels are high as figures are explicit in the notes. No gross/net ambiguity for the prior year movement since the table shows the gross 'Over-provision' line. [RAG OVERRIDE: Model said PYD=-30.805, RAG triangle computed -3.489. Using RAG value.]",
+      "data_quality_notes": "All monetary figures are reported in the accounts' native currency (USD). Field names use '_gbp_m' but amounts are in USD millions per the report. Opening reserves taken from Balance Sheet (claims outstanding, prior year column). Prior-year development taken from Technical Provisions note 'Over-provision in respect of prior claims...' (gross figure). Claims development triangle is available (gross, in thousands) and was cross-checked against the movement note. [RAG OVERRIDE: Model said PYD=-30.805, RAG triangle computed -3.489. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
@@ -649,20 +718,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_6104_2018_llm.pdf",
-      "content_hash": "a75b788ee096fd7c1509b0bc88e70e30b18f68aa44c9f491a84e93eccbee1bc2",
-      "standardized_at": "2026-07-05T19:33:11.837728+00:00",
+      "content_hash": "da8c3c29672bd79ed510a61b23ffed67ab0076e60d356397b4a9a4a370c13d8f",
+      "standardized_at": "2026-09-11T13:51:16.955283+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 62062,
-        "output_tokens": 5734,
-        "total_tokens": 67796,
-        "cost_usd": 0.026984
+        "input_tokens": 62822,
+        "output_tokens": 6005,
+        "total_tokens": 68827,
+        "cost_usd": 0.027716
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -3.489,
+        "model_value": -30.805,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 73,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -755,6 +836,16 @@
             null
           ]
         ],
+        "row_labels": [
+          "At end of underwriting year one",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later",
+          "Seven years later"
+        ],
         "source_page": 73,
         "entity": 6104
       },
@@ -771,6 +862,13 @@
           "entity": 6104,
           "backend": "azure",
           "table_kind": "balance_sheet_liabilities"
+        },
+        "movement_semantics": {
+          "row_label": "Over-provision in respect of prior claims and claim adjustment expenses",
+          "row_index": 4,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": false,
+          "column_index": 1
         },
         "gross_prior_year_claims": -30.8,
         "ri_share_prior_year": 0.0,
@@ -901,15 +999,31 @@
         ],
         "underwriting_year_pages": [
           42,
+          45,
+          46,
           47,
           48,
+          49,
           50,
+          51,
+          52,
+          53,
+          54,
           75,
+          78,
+          79,
           80,
           81,
-          83
+          82,
+          83,
+          84,
+          85,
+          86,
+          87,
+          88,
+          89
         ],
-        "underwriting_year_tables_skipped": 3,
+        "underwriting_year_tables_skipped": 4,
         "document_unit_hint": 0.001
       },
       "opening_reserves_provenance": {
@@ -927,12 +1041,12 @@
       }
     }
   },
-  "total_cost_usd": 0.037354,
-  "total_tokens": 94462,
+  "total_cost_usd": 0.039132,
+  "total_tokens": 96274,
   "validation": {
     "passed": true,
-    "total_discrepancies": 18,
-    "within_tolerance": 18,
+    "total_discrepancies": 19,
+    "within_tolerance": 19,
     "hard_failures": 0,
     "hard_failure_details": []
   }

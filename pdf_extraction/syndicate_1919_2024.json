@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T09:54:14.922886+00:00",
+  "extraction_timestamp": "2026-09-13T04:00:06.367458+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -17,32 +19,34 @@
       "prior_year_development_pct": 9.79,
       "direction": "strengthening",
       "prior_year_movement_page": 23,
-      "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "Change in estimates of prior year provisions",
+      "prior_year_movement_confidence": 0.8,
+      "exact_reserve_text": "During 2024, gross ultimate claims in respect of prior underwriting years (2022 and prior) increased by $99.5m.",
       "primary_causes": [
         "Adverse claims development",
-        "Reserve methodology change"
+        "IBNR recalibration"
       ],
       "specific_events": [],
       "specific_years_affected": [
-        2022
+        2022,
+        2021
       ],
       "prior_year_events": [],
       "named_events": [
         {
           "event_name": "Russia and Ukraine conflict",
-          "event_year": 2022,
+          "event_year": null,
           "event_type": "geopolitical",
           "net_loss_gbp_m": null,
-          "loss_description": "Syndicate's claims team have already made provisions reflecting the expected exposure to Syndicate 1919.",
+          "loss_description": "Syndicate's claims team have already made provisions reflecting the expected exposure to Syndicate 1919",
           "lobs_affected": [],
           "page": 23,
           "confidence": 0.8
         }
       ],
-      "standardized_narrative": "The Syndicate reported a prior year reserve strengthening of $20.838 million for the 2024 calendar year. This movement is primarily attributed to poor experience and reserve strengthening in the Casualty Division, particularly for US business, affecting underwriting years 2022 and prior. The Syndicate has also made provisions for exposure related to the Russia and Ukraine conflict.",
+      "standardized_narrative": "The syndicate experienced a gross strengthening of $99.5 million in prior year reserves, primarily driven by adverse claims development and reserve strengthening in the Casualty division, particularly for US business. This also included IBNR strengthening on the 2021 and post underwriting years. The overall movement represents a 9.79% increase relative to the opening gross claims outstanding.",
       "raw_causal_phrases": [
-        "poor experience and reserve strengthening in Syndicate 1919's Casualty Division in respect of the US business"
+        "poor experience and reserve strengthening in Syndicate 1919's Casualty Division in respect of the US business",
+        "IBNR strengthening on the 2021 and post underwriting years"
       ],
       "lob_movements": [
         {
@@ -114,7 +118,7 @@
       "gross_premium_page": 19,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "The narrative states that gross ultimate claims for prior underwriting years (2022 and prior) increased by $99.5m due to poor experience and reserve strengthening in the Casualty Division, while the 'Change in estimates of prior year provisions' in the technical provisions reconciliation table shows a gross strengthening of $20.838m. The latter figure is used for prior_year_development_gbp_m as it represents the direct balance sheet movement. [RAG OVERRIDE: Model said PYD=20.838, RAG triangle computed 99.541. Using RAG value.]",
+      "data_quality_notes": "The 'Change in estimates of prior year provisions' in the Technical Provisions table (page 23) shows a gross strengthening of $20.838m, while the narrative on the same page states 'gross ultimate claims in respect of prior underwriting years (2022 and prior) increased by $99.5m'. The narrative figure is used for prior_year_development_gbp_m as it explicitly describes the overall increase in gross ultimate claims for prior years, consistent with the 'exact_reserve_text' rule.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
@@ -257,20 +261,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_1919_2024_llm.pdf",
-      "content_hash": "90c817dd62dd758fb4db3205b530c9151565f097abf4c45f5c737df6b0d37b9b",
-      "standardized_at": "2026-07-05T22:08:03.788253+00:00",
+      "content_hash": "2743319596ebeb5eb76abc427a8c5f450a12c0f42a1f04585671d7f0b8a9c79d",
+      "standardized_at": "2026-09-11T14:24:52.820191+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 12443,
-        "output_tokens": 1913,
-        "total_tokens": 20811,
-        "cost_usd": 0.008515
+        "input_tokens": 13247,
+        "output_tokens": 1978,
+        "total_tokens": 21340,
+        "cost_usd": 0.008919
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 99.541,
+        "model_value": 99.5,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 48,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2015,
           2016,
@@ -405,6 +421,18 @@
             null
           ]
         ],
+        "row_labels": [
+          "at end of underwriting year",
+          "one year later",
+          "two years later",
+          "three years later",
+          "four years later",
+          "five years later",
+          "six years later",
+          "seven years later",
+          "eight years later",
+          "nine years later"
+        ],
         "source_page": 48,
         "entity": 1919
       },
@@ -532,6 +560,13 @@
           "backend": "azure",
           "table_kind": "provisions_movement"
         },
+        "movement_semantics": {
+          "row_label": "Change in estimates of prior year provisions",
+          "row_index": 6,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": true,
+          "column_index": 1
+        },
         "gross_prior_year_claims": 20.8,
         "ri_share_prior_year": -20.6,
         "net_prior_year_claims": 0.3,
@@ -630,13 +665,13 @@
       "prior_year_development_gbp_m": 99.541,
       "prior_year_development_pct": 9.79,
       "direction": "strengthening",
-      "prior_year_movement_page": 23,
+      "prior_year_movement_page": 49,
       "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "During 2024, gross ultimate claims in respect of prior underwriting years (2022 and prior) increased by $99.5m. This was primarily due to poor experience and reserve strengthening in Syndicate 1919's Casualty Division in respect of the US business. On a net basis ultimate claims have increased by $21.3m. On 2020 and prior this gross experience in Casualty is net nil, due to the loss portfolio transfer on the 2020 & prior years of account. However, as there was IBNR strengthening on the 2021 and post underwriting years, these years have seen a net impact.",
+      "exact_reserve_text": "The total gross claims reserves including prior years is $1,049m and the net total is $222m. During 2024, gross ultimate claims in respect of prior underwriting years (2022 and prior) increased by $99.5m. This was primarily due to poor experience and reserve strengthening in Syndicate 1919's Casualty Division in respect of the US business. On a net basis ultimate claims have increased by $21.3m. On 2020 and prior this gross experience in Casualty is net nil, due to the loss portfolio transfer on the 2020 & prior years of account. However, as there was IBNR strengthening on the 2021 and post underwriting years, these years have seen a net impact.",
       "primary_causes": [
         "Adverse claims development",
         "IBNR recalibration",
-        "Man-made catastrophe / large losses"
+        "Social inflation / litigation trends"
       ],
       "specific_events": [],
       "specific_years_affected": [
@@ -646,35 +681,14 @@
       ],
       "prior_year_events": [
         {
-          "event_name": "Poor experience and reserve strengthening in US Casualty",
+          "event_name": "Casualty US reserve strengthening / poor experience",
           "event_year": 2022,
-          "impact_description": "Primary driver of increased gross ultimate claims in respect of prior underwriting years (2022 and prior); described as poor experience and reserve strengthening in the Syndicate's Casualty Division (US business).",
+          "impact_description": "Poor experience and reserve strengthening in Syndicate 1919's Casualty Division (US business) leading to adverse development on prior underwriting years",
           "lobs_affected": [
             "Casualty"
           ],
           "amount_gbp_m": null,
-          "confidence": 0.8
-        },
-        {
-          "event_name": "Loss Portfolio Transfer (LPT) on 2020 & prior years",
-          "event_year": 2020,
-          "impact_description": "Resulted in gross experience in Casualty on 2020 and prior being net nil due to the LPT enacted in December 2022.",
-          "lobs_affected": [
-            "Casualty",
-            "Treaty"
-          ],
-          "amount_gbp_m": null,
-          "confidence": 0.9
-        },
-        {
-          "event_name": "IBNR strengthening on 2021 and post underwriting years",
-          "event_year": 2021,
-          "impact_description": "The report notes IBNR strengthening on 2021 and post years which contributed to a net impact on those years' reserves.",
-          "lobs_affected": [
-            "Casualty"
-          ],
-          "amount_gbp_m": null,
-          "confidence": 0.8
+          "confidence": 0.6
         }
       ],
       "named_events": [
@@ -683,69 +697,68 @@
           "event_year": null,
           "event_type": "man_made",
           "net_loss_gbp_m": 40.0,
-          "loss_description": "Estimated net claims",
+          "loss_description": "Estimated net claims as per realistic disaster scenario table",
           "lobs_affected": [
             "Aviation"
           ],
-          "page": 13,
-          "confidence": 0.8
+          "page": 32,
+          "confidence": 0.9
         },
         {
           "event_name": "Cyber - Major Data Security Breach",
           "event_year": null,
           "event_type": "other",
           "net_loss_gbp_m": 32.0,
-          "loss_description": "Estimated net claims",
+          "loss_description": "Estimated net claims as per realistic disaster scenario table",
           "lobs_affected": [
             "Cyber"
           ],
-          "page": 13,
-          "confidence": 0.8
+          "page": 32,
+          "confidence": 0.9
         },
         {
           "event_name": "Third Party Liability Event",
           "event_year": null,
           "event_type": "liability",
           "net_loss_gbp_m": 27.0,
-          "loss_description": "Estimated net claims",
+          "loss_description": "Estimated net claims as per realistic disaster scenario table",
           "lobs_affected": [
             "Casualty"
           ],
-          "page": 13,
-          "confidence": 0.8
+          "page": 32,
+          "confidence": 0.9
         },
         {
           "event_name": "Directors and Officers Liability Event",
           "event_year": null,
           "event_type": "liability",
           "net_loss_gbp_m": 27.0,
-          "loss_description": "Estimated net claims",
+          "loss_description": "Estimated net claims as per realistic disaster scenario table",
           "lobs_affected": [
             "Professional Lines"
           ],
-          "page": 13,
-          "confidence": 0.8
+          "page": 32,
+          "confidence": 0.9
         },
         {
           "event_name": "Chile Earthquake Event",
           "event_year": null,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": 15.0,
-          "loss_description": "Estimated net claims",
+          "loss_description": "Estimated net claims as per realistic disaster scenario table",
           "lobs_affected": [
             "Property"
           ],
-          "page": 13,
-          "confidence": 0.8
+          "page": 32,
+          "confidence": 0.9
         }
       ],
-      "standardized_narrative": "The Syndicate reported a gross strengthening of prior year reserves in 2024. The technical provisions note records a gross increase in prior year provisions, driven primarily by adverse experience and reserve strengthening in the US Casualty division, with additional IBNR strengthening on 2021 and later years; a loss portfolio transfer (LPT) on 2020 and prior years neutralised gross Casualty exposure for those years. Overall the report shows a modest gross prior year strengthening in the technical provisions reconciliation, while narrative cites larger movements in ultimate estimates for specific prior-year cohorts.",
+      "standardized_narrative": "Gross claims reserves at the opening of 2024 were $1,016.525m. During 2024 the Syndicate recorded an adverse prioryear development of $99.5m (gross), driven primarily by poor experience and reserve strengthening in the Casualty division (US business) and by IBNR strengthening on 2021 and later underwriting years. This resulted in a net increase in ultimate claims of $21.3m after reinsurance. The movement is therefore an overall prioryear strengthening concentrated in Casualty.",
       "raw_causal_phrases": [
-        "gross ultimate claims in respect of prior underwriting years (2022 and prior) increased by $99.5m.",
+        "During 2024, gross ultimate claims in respect of prior underwriting years (2022 and prior) increased by $99.5m.",
         "This was primarily due to poor experience and reserve strengthening in Syndicate 1919's Casualty Division in respect of the US business.",
         "On a net basis ultimate claims have increased by $21.3m.",
-        "IBNR strengthening on the 2021 and post underwriting years",
-        "Favourable claims experience on the Technical Risks division is the material driver for the underwriting profit generated during the year."
+        "However, as there was IBNR strengthening on the 2021 and post underwriting years, these years have seen a net impact."
       ],
       "lob_movements": [
         {
@@ -754,13 +767,6 @@
           "amount_gbp_m": null,
           "percentage": null,
           "confidence": 0.8
-        },
-        {
-          "line_of_business": "Technical risks",
-          "direction": "release",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.5
         }
       ],
       "gross_premiums_written_gbp_m": 387.2,
@@ -821,10 +827,10 @@
           "percentage_of_total": 0.0
         }
       ],
-      "gross_premium_page": 20,
+      "gross_premium_page": 41,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "Prior year development (gross) has been taken from the Technical Provisions reconciliation line 'Change in estimates of prior year provisions' (gross $20,838k = 20.838m). The narrative elsewhere references a different gross measure ('gross ultimate claims in respect of prior underwriting years (2022 and prior) increased by $99.5m') and a net increase of $21.3m; these are different metrics (gross ultimate movement vs movement in held prior year provisions vs net after reinsurance). The chosen figure follows the specified requirement to use the movement in prior year provisions (insurance liabilities gross). All monetary values are reported in the report's native currency (USD) and converted to millions; the JSON field names use the original schema naming convention. [RAG OVERRIDE: Model said PYD=20.838, RAG triangle computed 99.541. Using RAG value.]",
+      "data_quality_notes": "All monetary amounts are reported in the report's native currency USD. The prior year gross movement ($99.5m) is taken verbatim from the managing agent's narrative (explicit gross figure). The report does not quantify the PYD by individual LOB other than stating it was primarily due to Casualty (US); therefore per-LOB PYD amounts are not provided. Claims development triangle is present (gross amounts in thousands) and was used for cross-checking.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
@@ -967,20 +973,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_1919_2024_llm.pdf",
-      "content_hash": "90c817dd62dd758fb4db3205b530c9151565f097abf4c45f5c737df6b0d37b9b",
-      "standardized_at": "2026-07-05T22:09:39.729791+00:00",
+      "content_hash": "2743319596ebeb5eb76abc427a8c5f450a12c0f42a1f04585671d7f0b8a9c79d",
+      "standardized_at": "2026-09-11T14:26:46.719113+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 29811,
-        "output_tokens": 7951,
-        "total_tokens": 37762,
-        "cost_usd": 0.023355
+        "input_tokens": 30571,
+        "output_tokens": 6284,
+        "total_tokens": 36855,
+        "cost_usd": 0.020211
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 99.541,
+        "model_value": 99.5,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 48,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2015,
           2016,
@@ -1115,6 +1133,18 @@
             null
           ]
         ],
+        "row_labels": [
+          "at end of underwriting year",
+          "one year later",
+          "two years later",
+          "three years later",
+          "four years later",
+          "five years later",
+          "six years later",
+          "seven years later",
+          "eight years later",
+          "nine years later"
+        ],
         "source_page": 48,
         "entity": 1919
       },
@@ -1242,6 +1272,13 @@
           "backend": "azure",
           "table_kind": "provisions_movement"
         },
+        "movement_semantics": {
+          "row_label": "Change in estimates of prior year provisions",
+          "row_index": 6,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": true,
+          "column_index": 1
+        },
         "gross_prior_year_claims": 20.8,
         "ri_share_prior_year": -20.6,
         "net_prior_year_claims": 0.3,
@@ -1332,12 +1369,12 @@
       }
     }
   },
-  "total_cost_usd": 0.03187,
-  "total_tokens": 58573,
+  "total_cost_usd": 0.02913,
+  "total_tokens": 58195,
   "validation": {
     "passed": true,
-    "total_discrepancies": 18,
-    "within_tolerance": 18,
+    "total_discrepancies": 17,
+    "within_tolerance": 17,
     "hard_failures": 0,
     "hard_failure_details": []
   }

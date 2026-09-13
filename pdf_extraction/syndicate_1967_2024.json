@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T10:01:43.039770+00:00",
+  "extraction_timestamp": "2026-09-13T04:03:49.271183+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -18,43 +20,15 @@
       "direction": "strengthening",
       "prior_year_movement_page": 21,
       "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "In the financial year there was prior accident year adverse development of claims incurred of $3.0 million (2023: $0.1 million favourable).",
+      "exact_reserve_text": "Change in estimates of prior year provisions (2024): Gross 15,410, Reinsurance assets (12,361), Net 3,049",
       "primary_causes": [
-        "Adverse claims development",
-        "Economic inflation / claims cost inflation",
-        "Natural catastrophe events"
+        "Adverse claims development"
       ],
       "specific_events": [
         "Hurricane Ian"
       ],
-      "specific_years_affected": [
-        2009,
-        2010,
-        2011,
-        2012,
-        2013,
-        2014,
-        2015,
-        2016,
-        2017,
-        2018,
-        2019,
-        2020,
-        2021,
-        2022
-      ],
-      "prior_year_events": [
-        {
-          "event_name": "Hurricane Ian",
-          "event_year": 2022,
-          "impact_description": "significant losses from catastrophes, in particular Hurricane Ian ($41.0 million)",
-          "lobs_affected": [
-            "Property"
-          ],
-          "amount_gbp_m": 41.0,
-          "confidence": 0.8
-        }
-      ],
+      "specific_years_affected": [],
+      "prior_year_events": [],
       "named_events": [
         {
           "event_name": "Hurricane Ian",
@@ -69,14 +43,13 @@
           "confidence": 0.8
         }
       ],
-      "standardized_narrative": "The syndicate experienced a gross strengthening of prior year reserves by $15.410 million in 2024. This was primarily driven by adverse claims development, including claims inflation and significant losses from natural catastrophe events such as Hurricane Ian in 2022. While the 2023 underwriting year saw favourable claims experience, the overall closed years (2009-2021) resulted in a small net loss.",
+      "standardized_narrative": "The syndicate experienced a gross prior year reserve strengthening of $15.410 million (2.55% of opening gross reserves) in 2024, primarily due to adverse claims development. The report also noted a net adverse development of $3.0 million for prior accident years. Significant losses from catastrophes, notably Hurricane Ian in 2022 ($41.0 million), impacted results. Inflation and geopolitical concerns were also cited as potential impacts on results.",
       "raw_causal_phrases": [
-        "small loss on the closed years (2009-2021)",
-        "claims inflation",
-        "more competitive underwriting environment putting pressure on underwriting performance",
-        "significant losses from catastrophes, in particular Hurricane Ian ($41.0 million)",
-        "favourable claims experience",
-        "prior accident year adverse development of claims incurred of $3.0 million"
+        "prior accident year adverse development of claims incurred",
+        "Change in estimates of prior year provisions",
+        "significant losses from catastrophes",
+        "Inflation",
+        "geo-political concerns"
       ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 506.9,
@@ -120,7 +93,7 @@
       "gross_premium_page": 18,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "The `prior_year_development_gbp_m` is sourced from Note 17 'Change in estimates of prior year provisions' (Gross). This figure of $15.410 million differs from the narrative on page 15 which states 'prior accident year adverse development of claims incurred of $3.0 million'. The Note 17 figure is considered more authoritative for reserve movements. The `exact_reserve_text` is taken from the narrative on page 15 as it is a direct sentence describing prior year development, despite the discrepancy in amount and the use of 'claims incurred'. The `net_loss_gbp_m` for Hurricane Ian is stated as 'losses from catastrophes' and is assumed to be a gross impact on the underwriting year's performance, not necessarily the net loss to the syndicate after all reinsurance recoveries. [RAG OVERRIDE: Model said PYD=15.41, RAG triangle computed 6.853. Using RAG value.]",
+      "data_quality_notes": "The narrative on page 15 states a net prior accident year adverse development of $3.0 million, while the Technical Provisions note on page 21 shows a gross strengthening of $15.410 million and a net strengthening of $3.049 million. The gross figure from the Technical Provisions note is used as per instructions. [RAG OVERRIDE: Model said PYD=15.41, RAG triangle computed 6.853. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
@@ -263,20 +236,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_1967_2024_llm.pdf",
-      "content_hash": "5643dddfb99234c6d98f13f7255cfad8079f8e50ab2b4ca151a72d30cfffd8f9",
-      "standardized_at": "2026-07-05T22:38:56.404887+00:00",
+      "content_hash": "e2edf85a43419325a12f19ea3d55b9b2a19d79362c5b265f0f1a189ef7f824b0",
+      "standardized_at": "2026-09-11T14:41:00.149741+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 11411,
-        "output_tokens": 2353,
-        "total_tokens": 22545,
-        "cost_usd": 0.009306
+        "input_tokens": 12215,
+        "output_tokens": 2017,
+        "total_tokens": 22054,
+        "cost_usd": 0.008707
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 6.853,
+        "model_value": 15.41,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 47,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2015,
           2016,
@@ -411,6 +396,18 @@
             null
           ]
         ],
+        "row_labels": [
+          "Estimate of gross claims at end of underwriting year",
+          "one year later",
+          "two years later",
+          "three years later",
+          "four years later",
+          "five years later",
+          "six years later",
+          "seven years later",
+          "eight years later",
+          "nine years later"
+        ],
         "source_page": 47,
         "entity": 1967
       },
@@ -501,6 +498,13 @@
           "entity": 1967,
           "backend": "azure",
           "table_kind": "provisions_movement"
+        },
+        "movement_semantics": {
+          "row_label": "Provision in respect of prior years",
+          "row_index": 14,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": false,
+          "column_index": 1
         },
         "gross_prior_year_claims": 0.0,
         "ri_share_prior_year": 0.0,
@@ -600,37 +604,24 @@
       "exact_reserve_text": "Change in estimates of prior year provisions 15,410 (12,361) 3,049",
       "primary_causes": [
         "Adverse claims development",
-        "Economic inflation / claims cost inflation"
+        "Reinsurance recoveries"
       ],
       "specific_events": [
-        "Hurricane Ian 2022"
+        "Hurricane Ian"
       ],
       "specific_years_affected": [
-        2009,
-        2010,
-        2011,
-        2012,
-        2013,
-        2014,
-        2015,
-        2016,
-        2017,
-        2018,
-        2019,
-        2020,
-        2021,
         2022
       ],
       "prior_year_events": [
         {
           "event_name": "Hurricane Ian",
           "event_year": 2022,
-          "impact_description": "Significant catastrophe losses incurred in 2022; cited as a major catastrophe loss contributing to 2022 underwriting losses",
+          "impact_description": "Significant losses from catastrophes, in particular Hurricane Ian were recognised (noted as $41.0 million).",
           "lobs_affected": [
             "Property"
           ],
           "amount_gbp_m": 41.0,
-          "confidence": 0.8
+          "confidence": 1.0
         }
       ],
       "named_events": [
@@ -644,23 +635,22 @@
             "Property"
           ],
           "page": 5,
-          "confidence": 0.8
+          "confidence": 1.0
         }
       ],
-      "standardized_narrative": "The Syndicate recorded a gross prior-year strengthening of reserves of 15.41m (USD) in 2024 (net movement 3.049m after reinsurance), representing approximately a 2.55% increase versus opening gross claims outstanding (605.074m). The movement is recorded in the technical provisions as a change in estimates of prior year provisions and is described as adverse/prior-year development in the accounts, driven by adverse claims development and inflationary pressures, with property catastrophe activity (e.g. Hurricane Ian 2022) contributing to prior loss experience.",
+      "standardized_narrative": "The Syndicate recorded a gross prior-year strengthening of reserves of $15.41m (15,410 in the table) for claims outstanding at 1 January 2024, representing a c.2.55% adverse movement relative to opening gross reserves. The movement is disclosed in the technical provisions reconciliation as a change in estimates of prior year provisions and is described in the accounts as adverse/prior accident year development; reinsurance recoverable movements partially offset the gross strengthening (reinsurers' share (12,361)). Named catastrophe activity in prior years included Hurricane Ian (2022).",
       "raw_causal_phrases": [
-        "Change in estimates of prior year provisions",
-        "prior accident year adverse development of claims incurred of $3.0 million",
-        "claims inflation and a more competitive underwriting environment putting pressure on underwriting performance",
+        "Change in estimates of prior year provisions 15,410 (12,361) 3,049",
+        "In the financial year there was prior accident year adverse development of claims incurred of $3.0 million (2023: $0.1 million favourable).",
         "significant losses from catastrophes, in particular Hurricane Ian ($41.0 million)"
       ],
       "lob_movements": [
         {
-          "line_of_business": "Property",
+          "line_of_business": "Aggregate",
           "direction": "strengthening",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.6
+          "amount_gbp_m": 15.41,
+          "percentage": 2.545,
+          "confidence": 1.0
         }
       ],
       "gross_premiums_written_gbp_m": 506.9,
@@ -701,10 +691,10 @@
           "percentage_of_total": 2.3
         }
       ],
-      "gross_premium_page": 8,
+      "gross_premium_page": 40,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "All monetary figures are reported in the native currency of the financial statements (USD). Field names include 'gbp_m' per request template but values are USD millions. Opening gross claims outstanding taken from Balance Sheet (Claims outstanding, prior year column). Prior year movement taken from Note 17 'Change in estimates of prior year provisions' (gross column). Exact_reserve_text is a verbatim extract of the table row. The document also contains a P&L line referencing a $3.0m adverse prior accident year CLAIMS INCURRED figure (net) - this was not used for the prior year reserve movement, per instructions. LOB-level prior-year reserve movements are not explicitly broken down in the notes; LOB movement entry is inferred (Property affected by catastrophes) and left unquantified. [RAG OVERRIDE: Model said PYD=15.41, RAG triangle computed 6.853. Using RAG value.]",
+      "data_quality_notes": "All amounts are reported in the statements' native currency (USD). Opening reserves taken from the Balance Sheet (Claims outstanding) prior-year comparative column. Prior year development taken from the Technical Provisions reconciliation row 'Change in estimates of prior year provisions' (gross amount used). A gross claims development triangle is present and could be used as cross-check. No RITC distortion noted. Exact_reserve_text is taken from the movements table row rather than P&L 'claims incurred in prior underwriting years' (the latter was explicitly avoided). [RAG OVERRIDE: Model said PYD=15.41, RAG triangle computed 6.853. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
@@ -847,20 +837,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_1967_2024_llm.pdf",
-      "content_hash": "5643dddfb99234c6d98f13f7255cfad8079f8e50ab2b4ca151a72d30cfffd8f9",
-      "standardized_at": "2026-07-05T22:40:03.765006+00:00",
+      "content_hash": "e2edf85a43419325a12f19ea3d55b9b2a19d79362c5b265f0f1a189ef7f824b0",
+      "standardized_at": "2026-09-11T14:43:03.263092+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 26578,
-        "output_tokens": 6394,
-        "total_tokens": 32972,
-        "cost_usd": 0.019433
+        "input_tokens": 27338,
+        "output_tokens": 5936,
+        "total_tokens": 33274,
+        "cost_usd": 0.018707
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 6.853,
+        "model_value": 15.41,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 47,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2015,
           2016,
@@ -995,6 +997,18 @@
             null
           ]
         ],
+        "row_labels": [
+          "Estimate of gross claims at end of underwriting year",
+          "one year later",
+          "two years later",
+          "three years later",
+          "four years later",
+          "five years later",
+          "six years later",
+          "seven years later",
+          "eight years later",
+          "nine years later"
+        ],
         "source_page": 47,
         "entity": 1967
       },
@@ -1086,6 +1100,13 @@
           "backend": "azure",
           "table_kind": "provisions_movement"
         },
+        "movement_semantics": {
+          "row_label": "Provision in respect of prior years",
+          "row_index": 14,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": false,
+          "column_index": 1
+        },
         "gross_prior_year_claims": 0.0,
         "ri_share_prior_year": 0.0,
         "net_prior_year_claims": 0.0,
@@ -1171,12 +1192,12 @@
       }
     }
   },
-  "total_cost_usd": 0.028739,
-  "total_tokens": 55517,
+  "total_cost_usd": 0.027414,
+  "total_tokens": 55328,
   "validation": {
     "passed": true,
-    "total_discrepancies": 17,
-    "within_tolerance": 17,
+    "total_discrepancies": 19,
+    "within_tolerance": 19,
     "hard_failures": 0,
     "hard_failure_details": []
   }

@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T09:09:54.673451+00:00",
+  "extraction_timestamp": "2026-09-13T04:07:21.313039+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -11,63 +13,28 @@
       "syndicate": 1176,
       "year": 2024,
       "opening_reserves_gbp_m": 41.426,
-      "opening_reserves_page": 24,
+      "opening_reserves_page": 4,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": -6.286,
       "prior_year_development_pct": -15.17,
       "direction": "release",
-      "prior_year_movement_page": 44,
+      "prior_year_movement_page": 15,
       "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "Change in estimates of prior year provisions (7,852)",
+      "exact_reserve_text": "During the year, the Syndicate released GBP 7.7m of technical reserves in respect of prior years (2023: GBP 7.0m) arising from the nuclear property and nuclear liability classes (2023: nuclear property and nuclear liability classes).",
       "primary_causes": [
         "Favorable claims development",
-        "Large loss development"
+        "Economic inflation / claims cost inflation"
       ],
       "specific_events": [],
-      "specific_years_affected": [
-        2023,
-        2022
-      ],
-      "prior_year_events": [
-        {
-          "event_name": "Nuclear property and nuclear liability classes",
-          "event_year": 2023,
-          "impact_description": "Release of technical reserves in respect of prior years.",
-          "lobs_affected": [
-            "Property",
-            "Casualty"
-          ],
-          "amount_gbp_m": null,
-          "confidence": 0.8
-        },
-        {
-          "event_name": "Material damage notifications",
-          "event_year": 2023,
-          "impact_description": "Property losses were slightly ahead of what might have been anticipated.",
-          "lobs_affected": [
-            "Property"
-          ],
-          "amount_gbp_m": null,
-          "confidence": 0.5
-        },
-        {
-          "event_name": "Smaller losses",
-          "event_year": 2022,
-          "impact_description": "Smaller losses reserved at year end were slightly higher than in most recent years, but the year of account closed with a profit.",
-          "lobs_affected": [],
-          "amount_gbp_m": null,
-          "confidence": 0.5
-        }
-      ],
+      "specific_years_affected": [],
+      "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "The syndicate reported a gross release of GBP 7.852m in prior year reserves for 2024. This was primarily attributed to favorable development in nuclear property and nuclear liability classes from prior years. However, there were also indications of some adverse development on 2023 property losses due to material damage notifications being slightly ahead of initial expectations. The 2022 year of account closed with a profit despite some smaller losses being slightly higher than anticipated.",
+      "standardized_narrative": "The Syndicate experienced a release of GBP 7.852m in gross claims reserves relating to prior underwriting years. This favourable development was noted in the nuclear property and nuclear liability classes. The Managing Agent considers future inflation expectations when setting IBNR, which may have contributed to the release.",
       "raw_causal_phrases": [
         "released GBP 7.7m of technical reserves in respect of prior years",
         "arising from the nuclear property and nuclear liability classes",
-        "material damage notifications that have been reserved at year end",
-        "Syndicate's property losses are slightly ahead of what might",
-        "smaller losses which have been reserved at the year end, within loss expectations. These were slightly higher than in the most recent years",
-        "closing profit is a return on capacity of 39.3%"
+        "future inflation expectations",
+        "Change in estimates of prior year provisions"
       ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 22.1,
@@ -98,15 +65,15 @@
           "percentage_of_total": 11.3
         }
       ],
-      "gross_premium_page": 33,
+      "gross_premium_page": 11,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The claims development triangle may be distorted for prior years due to the reinsurance to close (RITC) of the 2022 year of account into the 2023 year of account, as mentioned on page 66. [RAG OVERRIDE: Model said PYD=-7.852, RAG triangle computed -6.286. Using RAG value.]",
+      "data_quality_notes": "The narrative on page 11 states a release of GBP 7.7m of 'technical reserves', while the 'Change in estimates of prior year provisions' in the Technical Provisions table on page 15 shows a gross release of GBP 7.852m. The gross figure from the table is used for the amount. The 2023 comparatives were restated. In 2023, Marine, aviation and transport business was presented as part of Fire and Other Damage to Property. The calculated prior year development from the gross claims development triangle (-GBP 8.593m) differs from the explicit gross movement (-GBP 7.852m) in the Technical Provisions note. [RAG OVERRIDE: Model said PYD=-7.852, RAG triangle computed -6.286. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
-        "page": 46,
+        "page": 17,
         "underwriting_years": [
           2015,
           2016,
@@ -243,21 +210,33 @@
         ]
       },
       "source_type": "syndicate",
-      "source_file": "pdf_extraction\\html_converted\\syndicate_1176_2024.pdf",
-      "content_hash": "417b04bc0f20b68fae7ff2747f80a6522b1a1b8eb4f273256fcdc2b9063cfe03",
-      "standardized_at": "2026-03-16T09:14:09.558546+00:00",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_1176_2024_llm.pdf",
+      "content_hash": "81a977ecdfbd0f871c4f086888dde37a15a6c57b1fdc9cc5b107f8e9daf6abf8",
+      "standardized_at": "2026-09-11T14:27:20.054628+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 23428,
-        "output_tokens": 1702,
-        "total_tokens": 29004,
-        "cost_usd": 0.011283
+        "input_tokens": 15569,
+        "output_tokens": 1448,
+        "total_tokens": 25260,
+        "cost_usd": 0.008291
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -6.286,
+        "model_value": -7.852,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 46,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2015,
           2016,
@@ -392,6 +371,18 @@
             null
           ]
         ],
+        "row_labels": [
+          "At end of underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later",
+          "Seven years later",
+          "Eight years later",
+          "Nine years later"
+        ],
         "source_page": 46,
         "entity": 1176
       },
@@ -464,6 +455,13 @@
           "entity": 1176,
           "backend": "azure",
           "table_kind": "provisions_movement"
+        },
+        "movement_semantics": {
+          "row_label": "Change in estimates of prior year provisions",
+          "row_index": 7,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": true,
+          "column_index": 1
         },
         "gross_prior_year_claims": -7.9,
         "ri_share_prior_year": 0.1,
@@ -589,7 +587,7 @@
       "syndicate": 1176,
       "year": 2024,
       "opening_reserves_gbp_m": 41.426,
-      "opening_reserves_page": 41,
+      "opening_reserves_page": 21,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": -6.286,
       "prior_year_development_pct": -15.17,
@@ -602,63 +600,24 @@
       ],
       "specific_events": [],
       "specific_years_affected": [],
-      "prior_year_events": [],
-      "named_events": [
+      "prior_year_events": [
         {
-          "event_name": "Three Mile Island",
-          "event_year": 1979,
-          "event_type": "man_made",
-          "net_loss_gbp_m": null,
-          "loss_description": "Referenced as the only significant core melt nuclear event paid by the insurance market (historical context).",
+          "event_name": "Technical reserves release - nuclear property and nuclear liability classes",
+          "event_year": null,
+          "impact_description": "Release of technical reserves in respect of prior years arising from the nuclear property and nuclear liability classes",
           "lobs_affected": [
             "Property",
             "Casualty"
           ],
-          "page": 5,
-          "confidence": 0.8
-        },
-        {
-          "event_name": "Fukushima",
-          "event_year": 2011,
-          "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": null,
-          "loss_description": "Referenced regarding extensive review of potential catastrophe exposure and exclusion of earthquake/tsunami in some policies; safety upgrades noted.",
-          "lobs_affected": [
-            "Property",
-            "Casualty"
-          ],
-          "page": 6,
-          "confidence": 0.8
-        },
-        {
-          "event_name": "Hurricane Andrew",
-          "event_year": 1992,
-          "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": null,
-          "loss_description": "Mentioned as largest insured windstorm loss to date involving damage to a spares warehouse on a nuclear site; no damage to nuclear unit.",
-          "lobs_affected": [
-            "Property"
-          ],
-          "page": 6,
-          "confidence": 0.7
-        },
-        {
-          "event_name": "Conflict in Ukraine",
-          "event_year": 2022,
-          "event_type": "geopolitical",
-          "net_loss_gbp_m": null,
-          "loss_description": "Mentioned as reason for review of reliance on certain markets and noting a small exposure in Ukraine with an appropriate war exclusion in place.",
-          "lobs_affected": [
-            "Casualty"
-          ],
-          "page": 6,
-          "confidence": 0.7
+          "amount_gbp_m": null,
+          "confidence": 0.5
         }
       ],
-      "standardized_narrative": "Syndicate 1176 reported opening gross claims outstanding of GBP 41.426m at 1 January 2024. During 2024 the Syndicate recorded a gross prior-year release of GBP 7.852m (a favourable development of c.19% of opening gross reserves). The release is described as arising from the nuclear property and nuclear liability classes and is attributed to favourable claims development.",
+      "named_events": [],
+      "standardized_narrative": "The Syndicate's opening gross claims outstanding at 1 January 2024 was GBP 41.426m. During 2024 the Syndicate recorded a prior-year release of gross claims provisions of GBP 7.852m (reported as a GBP 7.7m release in the narrative), driven primarily by favourable development in the nuclear property and nuclear liability classes. The movement represents a c.19% release of opening gross claims outstanding.",
       "raw_causal_phrases": [
         "During the year, the Syndicate released GBP 7.7m of technical reserves in respect of prior years (2023: GBP 7.0m) arising from the nuclear property and nuclear liability classes (2023: nuclear property and nuclear liability classes).",
-        "increase in attritional losses in 2024"
+        "Change in estimates of prior year provisions (7,852)"
       ],
       "lob_movements": [
         {
@@ -707,7 +666,7 @@
       "gross_premium_page": 30,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Opening reserves and prior-year movement taken from Note 18 (technical provisions) 'Claims outstanding' reconciliation (gross column). Prior year movement uses the 'Change in estimates of prior year provisions' gross figure. Gross premiums from Note 3 segmental analysis. Claims development triangle present and used as cross-check. RITC and inter-pool reinsurance restatements are present in the report (see Note 31) but do not distort the specific gross prior-year movement figure used here. [RAG OVERRIDE: Model said PYD=-7.852, RAG triangle computed -6.286. Using RAG value.]",
+      "data_quality_notes": "Opening gross claims outstanding taken from Statement of Financial Position (Claims outstanding comparative 2023). Prior year movement taken from Note 18 'Change in estimates of prior year provisions' (gross column: (7,852) shown in GBP 000) and corroborated by narrative in Note 3 which states a GBP 7.7m release. All monetary conversions: GBP 000 -> millions. Claims development triangle present and unadjusted; no specific quantified per-LOB split for the GBP 7.852m release was provided. RITC restatements noted elsewhere in the report but did not materially affect the gross prior-year movement used here. [RAG OVERRIDE: Model said PYD=-7.852, RAG triangle computed -6.286. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -849,21 +808,33 @@
         ]
       },
       "source_type": "syndicate",
-      "source_file": "pdf_extraction\\html_converted\\syndicate_1176_2024.pdf",
-      "content_hash": "417b04bc0f20b68fae7ff2747f80a6522b1a1b8eb4f273256fcdc2b9063cfe03",
-      "standardized_at": "2026-03-16T09:16:11.287792+00:00",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_1176_2024_llm.pdf",
+      "content_hash": "81a977ecdfbd0f871c4f086888dde37a15a6c57b1fdc9cc5b107f8e9daf6abf8",
+      "standardized_at": "2026-09-11T14:28:44.240877+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 65910,
-        "output_tokens": 5554,
-        "total_tokens": 71464,
-        "cost_usd": 0.027585
+        "input_tokens": 36335,
+        "output_tokens": 5351,
+        "total_tokens": 41686,
+        "cost_usd": 0.019786
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -6.286,
+        "model_value": -7.852,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 46,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2015,
           2016,
@@ -998,6 +969,18 @@
             null
           ]
         ],
+        "row_labels": [
+          "At end of underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later",
+          "Seven years later",
+          "Eight years later",
+          "Nine years later"
+        ],
         "source_page": 46,
         "entity": 1176
       },
@@ -1070,6 +1053,13 @@
           "entity": 1176,
           "backend": "azure",
           "table_kind": "provisions_movement"
+        },
+        "movement_semantics": {
+          "row_label": "Change in estimates of prior year provisions",
+          "row_index": 7,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": true,
+          "column_index": 1
         },
         "gross_prior_year_claims": -7.9,
         "ri_share_prior_year": 0.1,
@@ -1192,12 +1182,12 @@
       }
     }
   },
-  "total_cost_usd": 0.038868,
-  "total_tokens": 100468,
+  "total_cost_usd": 0.028077,
+  "total_tokens": 66946,
   "validation": {
     "passed": true,
-    "total_discrepancies": 19,
-    "within_tolerance": 19,
+    "total_discrepancies": 13,
+    "within_tolerance": 13,
     "hard_failures": 0,
     "hard_failure_details": []
   }

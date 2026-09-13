@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T09:29:00.305895+00:00",
+  "extraction_timestamp": "2026-09-13T03:58:45.077854+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -23,34 +25,21 @@
         "Favorable claims development"
       ],
       "specific_events": [],
-      "specific_years_affected": [],
-      "prior_year_events": [
-        {
-          "event_name": "Tianjin explosion",
-          "event_year": 2015,
-          "impact_description": "major catastrophe loss, gross loss GBP 27m, net GBP 13m",
-          "lobs_affected": [],
-          "amount_gbp_m": 27.0,
-          "confidence": 1.0
-        },
-        {
-          "event_name": "Abkatun platform explosion",
-          "event_year": 2015,
-          "impact_description": "major catastrophe loss, gross loss GBP 20m, net GBP 9m",
-          "lobs_affected": [
-            "Energy"
-          ],
-          "amount_gbp_m": 20.0,
-          "confidence": 1.0
-        }
+      "specific_years_affected": [
+        2015,
+        2014,
+        2013,
+        2012,
+        2011
       ],
+      "prior_year_events": [],
       "named_events": [
         {
           "event_name": "Hurricane Matthew",
           "event_year": 2016,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": 9.0,
-          "loss_description": "major catastrophe loss, gross loss GBP 19m, net GBP 9m",
+          "loss_description": "gross loss GBP 19m, net GBP 9m",
           "lobs_affected": [],
           "page": 2,
           "confidence": 1.0
@@ -60,10 +49,8 @@
           "event_year": 2016,
           "event_type": "man_made",
           "net_loss_gbp_m": 3.0,
-          "loss_description": "major catastrophe loss, gross loss GBP 19m, net GBP 3m",
-          "lobs_affected": [
-            "Energy"
-          ],
+          "loss_description": "gross loss GBP 19m, net GBP 3m",
+          "lobs_affected": [],
           "page": 2,
           "confidence": 1.0
         },
@@ -72,10 +59,8 @@
           "event_year": 2016,
           "event_type": "man_made",
           "net_loss_gbp_m": 5.0,
-          "loss_description": "major catastrophe loss, gross loss GBP 17m, net GBP 5m",
-          "lobs_affected": [
-            "Aviation"
-          ],
+          "loss_description": "gross loss GBP 17m, net GBP 5m",
+          "lobs_affected": [],
           "page": 2,
           "confidence": 1.0
         },
@@ -84,7 +69,7 @@
           "event_year": 2015,
           "event_type": "man_made",
           "net_loss_gbp_m": 13.0,
-          "loss_description": "major catastrophe loss, gross loss GBP 27m, net GBP 13m",
+          "loss_description": "gross loss GBP 27m, net GBP 13m",
           "lobs_affected": [],
           "page": 2,
           "confidence": 1.0
@@ -94,17 +79,15 @@
           "event_year": 2015,
           "event_type": "man_made",
           "net_loss_gbp_m": 9.0,
-          "loss_description": "major catastrophe loss, gross loss GBP 20m, net GBP 9m",
-          "lobs_affected": [
-            "Energy"
-          ],
+          "loss_description": "gross loss GBP 20m, net GBP 9m",
+          "lobs_affected": [],
           "page": 2,
           "confidence": 1.0
         }
       ],
-      "standardized_narrative": "Syndicate 1414 reported a gross prior year reserve release of GBP 21.5 million for the year ended 31 December 2016, representing a 4.68% release against opening gross claims outstanding. This favorable development was attributed to a run-off surplus across prior accident years, with GBP 5.5 million from reinsurance acceptance business and GBP 16.0 million from direct business. The report also noted several major catastrophe losses in 2016, including Hurricane Matthew, Jubilee FPSO business interruption, and the Space X explosion, as well as 2015 events like the Tianjin and Abkatun platform explosions.",
+      "standardized_narrative": "Syndicate 1414 reported a gross run-off surplus of GBP 21.5 million for prior accident years in 2016, indicating favorable claims development. This release was split between GBP 5.5 million from reinsurance acceptance business and GBP 16.0 million from direct business. The report also noted several major catastrophe losses in 2016 including Hurricane Matthew, Jubilee FPSO business interruption, and the Space X explosion, as well as 2015 events like the Tianjin and Abkatun platform explosions.",
       "raw_causal_phrases": [
-        "run-off surplus",
+        "run-off surplus of GBP 21.5m for prior accident years",
         "surplus of GBP 5.5m for reinsurance acceptance business",
         "surplus of GBP 16.0m on direct business"
       ],
@@ -121,7 +104,7 @@
           "direction": "release",
           "amount_gbp_m": -16.0,
           "percentage": null,
-          "confidence": 0.8
+          "confidence": 1.0
         }
       ],
       "gross_premiums_written_gbp_m": 375.9,
@@ -157,10 +140,10 @@
           "percentage_of_total": 5.5
         }
       ],
-      "gross_premium_page": 3,
+      "gross_premium_page": 8,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The prior year development calculated from the claims development triangle (-GBP 2.2m) differs significantly from the explicitly stated run-off surplus (-GBP 21.5m). The explicit statement is used as the primary source. [RAG OVERRIDE: Model said PYD=-21.5, RAG triangle computed -0.195. Using RAG value.]",
+      "data_quality_notes": "The explicit prior year development figure of -21.5m from Note 10 is used, as it is a direct statement. A calculation from the gross claims development triangle yields a different figure (-5.055m), which is not used due to the explicit narrative. The 'Motor (other)' line of business shows a negative gross written premium. [RAG OVERRIDE: Model said PYD=-21.5, RAG triangle computed -0.195. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -227,20 +210,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_1414_2016_llm.pdf",
-      "content_hash": "1dac7eb84d8746b0bfa954f6c1a2d6d55310c9ddb95dc2eb00183827a7770139",
-      "standardized_at": "2026-03-20T06:50:04.414199+00:00",
+      "content_hash": "f98d2b5d12795268113b93b6bc08e298fc5154f018231be75ee027f600507a53",
+      "standardized_at": "2026-09-11T10:38:13.993804+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 10637,
-        "output_tokens": 2329,
-        "total_tokens": 18438,
-        "cost_usd": 0.009014
+        "input_tokens": 11441,
+        "output_tokens": 2142,
+        "total_tokens": 18376,
+        "cost_usd": 0.008787
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -0.195,
+        "model_value": -21.5,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 29,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -298,6 +293,14 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of reporting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later"
         ],
         "source_page": 29,
         "entity": 1414
@@ -427,41 +430,15 @@
       "prior_year_development_gbp_m": -0.195,
       "prior_year_development_pct": -0.04,
       "direction": "release",
-      "prior_year_movement_page": 15,
+      "prior_year_movement_page": 16,
       "prior_year_movement_confidence": 0.8,
       "exact_reserve_text": "The profit on the technical account of GBP 21.4m (2015: profit GBP 38.2m) includes a run-off surplus of GBP 21.5m for prior accident years (2015: GBP 16.4m surplus). This included a surplus of GBP 5.5m for reinsurance acceptance business and a surplus of GBP 16.0m on direct business (2015: surplus of GBP 5.8m for reinsurance acceptance business and a surplus of GBP 10.6m on direct business).",
       "primary_causes": [
         "Favorable claims development"
       ],
       "specific_events": [],
-      "specific_years_affected": [
-        2011,
-        2012,
-        2013,
-        2014
-      ],
-      "prior_year_events": [
-        {
-          "event_name": "Explosion in Tianjin",
-          "event_year": 2015,
-          "impact_description": "Major catastrophe loss in 2015; gross loss GBP 27m, net GBP 13m noted as a major 2015 catastrophe",
-          "lobs_affected": [
-            "Property"
-          ],
-          "amount_gbp_m": 27.0,
-          "confidence": 1.0
-        },
-        {
-          "event_name": "Explosion at the Abkatun platform",
-          "event_year": 2015,
-          "impact_description": "Major catastrophe loss in 2015; gross loss GBP 20m, net GBP 9m noted as a major 2015 catastrophe",
-          "lobs_affected": [
-            "Energy"
-          ],
-          "amount_gbp_m": 20.0,
-          "confidence": 1.0
-        }
-      ],
+      "specific_years_affected": [],
+      "prior_year_events": [],
       "named_events": [
         {
           "event_name": "Hurricane Matthew",
@@ -473,7 +450,7 @@
             "Property"
           ],
           "page": 3,
-          "confidence": 1.0
+          "confidence": 0.9
         },
         {
           "event_name": "Business interruption at Jubilee FPSO",
@@ -485,7 +462,7 @@
             "Energy"
           ],
           "page": 3,
-          "confidence": 1.0
+          "confidence": 0.9
         },
         {
           "event_name": "Space X explosion",
@@ -494,13 +471,13 @@
           "net_loss_gbp_m": 5.0,
           "loss_description": "gross loss GBP 17m, net GBP 5m",
           "lobs_affected": [
-            "Other"
+            "Marine"
           ],
           "page": 3,
-          "confidence": 1.0
+          "confidence": 0.8
         },
         {
-          "event_name": "Explosion in Tianjin",
+          "event_name": "Tianjin explosion",
           "event_year": 2015,
           "event_type": "man_made",
           "net_loss_gbp_m": 13.0,
@@ -509,10 +486,10 @@
             "Property"
           ],
           "page": 3,
-          "confidence": 1.0
+          "confidence": 0.9
         },
         {
-          "event_name": "Explosion at the Abkatun platform",
+          "event_name": "Abkatun platform explosion",
           "event_year": 2015,
           "event_type": "man_made",
           "net_loss_gbp_m": 9.0,
@@ -521,14 +498,15 @@
             "Energy"
           ],
           "page": 3,
-          "confidence": 1.0
+          "confidence": 0.9
         }
       ],
-      "standardized_narrative": "Syndicate 1414 reported a very small net favourable prior-year development on a gross basis for 2016 (approx. a GBP 0.2m release, c. 0.04% of opening gross reserves). The claims development triangle shows releases in the 2012 and 2013 underwriting years largely offset by adverse movement in 2014. The managing agent also reports a reported run-off surplus for prior accident years of GBP 21.5m (narrative figure, presented as a surplus split between reinsurance acceptance and direct business), which appears to be a net figure after reinsurance. Major named large losses in prior periods (notably Tianjin and the Abkatun platform in 2015) are disclosed separately.",
+      "standardized_narrative": "Syndicate 1414 recorded a run-off surplus (favourable prior-year reserve movement) of GBP 21.5m for prior accident years in 2016, comprising a GBP 5.5m surplus on reinsurance acceptance (treaty) business and a GBP 16.0m surplus on direct business. This release represents approximately a 4.7% reduction of the opening gross claims outstanding. The report attributes this to favourable claims development on prior years; the syndicate also experienced several current-year large losses (e.g. Hurricane Matthew, Jubilee FPSO, SpaceX) which are disclosed separately.",
       "raw_causal_phrases": [
-        "run-off surplus of GBP 21.5m for prior accident years (2015: GBP 16.4m surplus).",
-        "This included a surplus of GBP 5.5m for reinsurance acceptance business and a surplus of GBP 16.0m on direct business",
-        "a large number of significant attritional losses"
+        "run-off surplus of GBP 21.5m for prior accident years",
+        "surplus of GBP 5.5m for reinsurance acceptance business",
+        "surplus of GBP 16.0m on direct business",
+        "prior accident years"
       ],
       "lob_movements": [
         {
@@ -536,14 +514,14 @@
           "direction": "release",
           "amount_gbp_m": -5.5,
           "percentage": null,
-          "confidence": 1.0
+          "confidence": 0.8
         },
         {
           "line_of_business": "Aggregate",
           "direction": "release",
           "amount_gbp_m": -16.0,
           "percentage": null,
-          "confidence": 1.0
+          "confidence": 0.5
         }
       ],
       "gross_premiums_written_gbp_m": 375.9,
@@ -582,12 +560,12 @@
       "gross_premium_page": 17,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior-year development (PYD) gross figure was calculated from the gross claims development triangle (pages 15). Narrative 'run-off surplus of GBP 21.5m' appears in the technical note but is a net/run-off technical account figure (likely after reinsurance) and does not match the small gross PYD derived from the triangle. The PYD reported here (-0.195m gross) is calculated from the gross triangle and thus has been assigned calculated confidence. Mapping of 'direct business' to a single standard Lloyd's LOB was not possible from the text; 'Aggregate' was used to represent combined direct business for lob_movements.",
+      "data_quality_notes": "Prior-year development (GBP 21.5m surplus) taken from the 'Movement in prior year's provision for claims outstanding' narrative which does not explicitly label the figure 'gross' but provides component splits by reinsurance acceptance and direct business that sum to the total; interpreted as gross and used accordingly (confidence 0.8). Direct business movement was not broken down by regulatory class so it is represented as an Aggregate movement. A gross claims development triangle is present and could be used for cross-checks; triangle units are GBP 7000s. Page number mapping between the parsed text and source PDF was inferred and may differ by +/-1 page. [RAG OVERRIDE: Model said PYD=-21.5, RAG triangle computed -0.195. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
-        "page": 15,
+        "page": 26,
         "underwriting_years": [
           2011,
           2012,
@@ -645,24 +623,37 @@
             null,
             null
           ]
-        ]
+        ],
+        "confidence": 0.9
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_1414_2016_llm.pdf",
-      "content_hash": "1dac7eb84d8746b0bfa954f6c1a2d6d55310c9ddb95dc2eb00183827a7770139",
-      "standardized_at": "2026-03-20T06:51:35.234066+00:00",
+      "content_hash": "f98d2b5d12795268113b93b6bc08e298fc5154f018231be75ee027f600507a53",
+      "standardized_at": "2026-09-11T10:40:25.754465+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 23941,
-        "output_tokens": 8133,
-        "total_tokens": 32074,
-        "cost_usd": 0.022251
+        "input_tokens": 24677,
+        "output_tokens": 6395,
+        "total_tokens": 31072,
+        "cost_usd": 0.018959
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -0.195,
+        "model_value": -21.5,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 29,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -720,6 +711,14 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of reporting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later"
         ],
         "source_page": 29,
         "entity": 1414
@@ -841,12 +840,12 @@
       }
     }
   },
-  "total_cost_usd": 0.031265,
-  "total_tokens": 50512,
+  "total_cost_usd": 0.027746,
+  "total_tokens": 49448,
   "validation": {
     "passed": true,
-    "total_discrepancies": 19,
-    "within_tolerance": 19,
+    "total_discrepancies": 14,
+    "within_tolerance": 14,
     "hard_failures": 0,
     "hard_failure_details": []
   }

@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T11:35:19.449504+00:00",
+  "extraction_timestamp": "2026-09-13T04:11:24.981799+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -18,34 +20,17 @@
       "direction": "release",
       "prior_year_movement_page": 12,
       "prior_year_movement_confidence": 0.8,
-      "exact_reserve_text": "The 2016 Property results were impacted by wildfires in Canada at the start of 2016, Hurricane Matthew, severe storms in Texas and surrounding states as well as the earthquake in New Zealand. However, despite losses from these events the Property team was profitable in part due to favourable development which has resulted in releases from prior year reserves. US Casualty business has faced difficult market conditions for some years, however, technical rates on our portfolio remain favourable; Faraday's loss experience continues to be relatively benign. This book has performed well and it has been possible again to release reserves from prior years.",
+      "exact_reserve_text": "Property team was profitable in part due to favourable development which has resulted in releases from prior year reserves.\nUS Casualty business... it has been possible again to release reserves from prior years.",
       "primary_causes": [
         "Favorable claims development",
         "Adverse claims development"
       ],
       "specific_events": [],
-      "specific_years_affected": [
-        2011,
-        2012,
-        2013,
-        2014
-      ],
-      "prior_year_events": [
-        {
-          "event_name": "Favourable development",
-          "event_year": null,
-          "impact_description": "favourable development which has resulted in releases from prior year reserves",
-          "lobs_affected": [
-            "Property",
-            "Casualty"
-          ],
-          "amount_gbp_m": null,
-          "confidence": 0.8
-        }
-      ],
+      "specific_years_affected": [],
+      "prior_year_events": [],
       "named_events": [
         {
-          "event_name": "Wildfires in Canada",
+          "event_name": "wildfires in Canada",
           "event_year": 2016,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
@@ -69,7 +54,7 @@
           "confidence": 0.8
         },
         {
-          "event_name": "Severe storms in Texas and surrounding states",
+          "event_name": "severe storms in Texas and surrounding states",
           "event_year": 2016,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
@@ -81,7 +66,7 @@
           "confidence": 0.8
         },
         {
-          "event_name": "Earthquake in New Zealand",
+          "event_name": "earthquake in New Zealand",
           "event_year": 2016,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
@@ -93,11 +78,10 @@
           "confidence": 0.8
         }
       ],
-      "standardized_narrative": "The syndicate experienced mixed prior year development in 2016. While the overall gross prior year development, calculated from the claims development triangle, indicated a strengthening of GBP 34.632 million (5.31% of opening gross reserves), the narrative explicitly states releases from prior year reserves for the Property and US Casualty lines of business due to favourable development and benign loss experience.",
+      "standardized_narrative": "The syndicate experienced mixed prior year development in 2016. While the Property and US Casualty lines of business saw releases from prior year reserves due to favourable development and benign claims experience respectively, the overall gross prior year development, as calculated from the claims development triangle, indicated a strengthening of GBP 34.632 million, representing 5.31% of opening gross reserves. This suggests that while some lines performed well, others experienced adverse development.",
       "raw_causal_phrases": [
         "favourable development which has resulted in releases from prior year reserves",
-        "possible again to release reserves from prior years",
-        "benign loss experience"
+        "possible again to release reserves from prior years"
       ],
       "lob_movements": [
         {
@@ -105,14 +89,14 @@
           "direction": "release",
           "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.8
+          "confidence": 0.5
         },
         {
           "line_of_business": "Casualty",
           "direction": "release",
           "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.8
+          "confidence": 0.5
         }
       ],
       "gross_premiums_written_gbp_m": 42.3,
@@ -141,7 +125,7 @@
       "gross_premium_page": 10,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The overall gross prior year development was calculated from the gross claims development table, which showed a strengthening. This contrasts with narrative statements of releases for specific lines of business (Property, US Casualty), suggesting a mixed development across the portfolio. [RAG OVERRIDE: Model said PYD=34.632, RAG triangle computed -44.233. Using RAG value.]",
+      "data_quality_notes": "The narrative text on page 1 explicitly states releases from prior year reserves for Property and US Casualty business. However, the calculation from the gross claims development triangle on page 12 indicates an overall strengthening of GBP 34.632 million for underwriting years 2014 and prior. This suggests a mixed development across the portfolio, with specific lines performing favourably while the overall gross position deteriorated. [RAG OVERRIDE: Model said PYD=34.632, RAG triangle computed -44.233. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -208,20 +192,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_435_2016_llm.pdf",
-      "content_hash": "e427c2332b8beb6b02681ba47cbaa4e25d13d5966a9556a9e08d125648051656",
-      "standardized_at": "2026-03-19T01:59:45.116873+00:00",
+      "content_hash": "d7a2e0cfafc87680a16fa1f13b2e7a212bedf9bc0968227aed29a1b83b634d8b",
+      "standardized_at": "2026-09-11T13:00:19.245323+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 9088,
-        "output_tokens": 2095,
-        "total_tokens": 19478,
-        "cost_usd": 0.007964
+        "input_tokens": 9892,
+        "output_tokens": 1918,
+        "total_tokens": 15699,
+        "cost_usd": 0.007763
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -44.233,
+        "model_value": 34.632,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 35,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -279,6 +275,14 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of underwriting year",
+          "After one year",
+          "After two years",
+          "After three years",
+          "After four years",
+          "After five years"
         ],
         "source_page": 35,
         "entity": 435
@@ -388,6 +392,7 @@
       "prior_year_movement_confidence": 0.8,
       "exact_reserve_text": "However, despite losses from these events the Property team was profitable in part due to favourable development which has resulted in releases from prior year reserves. Faraday's loss experience continues to be relatively benign. This book has performed well and it has been possible again to release reserves from prior years.",
       "primary_causes": [
+        "Natural catastrophe events",
         "Favorable claims development"
       ],
       "specific_events": [
@@ -396,111 +401,78 @@
         "severe storms in Texas",
         "earthquake in New Zealand"
       ],
-      "specific_years_affected": [
-        2011,
-        2012,
-        2013,
-        2014
-      ],
+      "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [
         {
-          "event_name": "Wildfires in Canada",
+          "event_name": "wildfires in Canada",
           "event_year": 2016,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "The 2016 Property results were impacted by wildfires in Canada at the start of 2016",
+          "loss_description": "impacted the 2016 Property results",
           "lobs_affected": [
             "Property"
           ],
           "page": 5,
-          "confidence": 1.0
+          "confidence": 0.8
         },
         {
           "event_name": "Hurricane Matthew",
           "event_year": 2016,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "The 2016 Property results were impacted by ... Hurricane Matthew",
+          "loss_description": "impacted the 2016 Property results",
           "lobs_affected": [
             "Property"
           ],
           "page": 5,
-          "confidence": 1.0
+          "confidence": 0.8
         },
         {
-          "event_name": "Severe storms in Texas and surrounding states",
+          "event_name": "severe storms in Texas",
           "event_year": 2016,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "The 2016 Property results were impacted by ... severe storms in Texas and surrounding states",
+          "loss_description": "impacted the 2016 Property results",
           "lobs_affected": [
             "Property"
           ],
           "page": 5,
-          "confidence": 1.0
+          "confidence": 0.8
         },
         {
-          "event_name": "Earthquake in New Zealand",
+          "event_name": "earthquake in New Zealand",
           "event_year": 2016,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "The 2016 Property results were impacted by ... the earthquake in New Zealand",
+          "loss_description": "impacted the 2016 Property results",
           "lobs_affected": [
             "Property"
           ],
           "page": 5,
-          "confidence": 1.0
+          "confidence": 0.8
         }
       ],
-      "standardized_narrative": "The syndicate recorded an overall favourable prior-year development in 2016, with gross prior-year reserves releasing by approximately GBP 44.2m (around 6.8% of opening gross reserves). The releases were driven by favourable claims development across older underwriting years. Current-year catastrophe events (wildfires in Canada, Hurricane Matthew, severe storms in Texas and an earthquake in New Zealand) impacted the 2016 Property results but did not prevent releases on prior years.",
+      "standardized_narrative": "Opening gross claims outstanding at 1 Jan 2016 was GBP 651.88m. The gross claims development triangle indicates a net favourable re-estimation (release) of prior years of approximately GBP 44.23m (about 6.8% of opening reserves), driven by favourable claims development and explicit releases from prior years reported by the Underwriters (notably within Property and parts of Casualty). The report also notes significant 2016 natural catastrophe events (Canadian wildfires, Hurricane Matthew, Texas storms, New Zealand earthquake) which affected 2016 results, but overall prior-year development was favourable.",
       "raw_causal_phrases": [
-        "favourable development which has resulted in releases from prior year reserves.",
-        "it has been possible again to release reserves from prior years.",
-        "Faraday's loss experience continues to be relatively benign."
+        "favourable development which has resulted in releases from prior year reserves",
+        "it has been possible again to release reserves from prior years",
+        "Faraday's loss experience continues to be relatively benign"
       ],
       "lob_movements": [
         {
-          "line_of_business": "Accident & Health",
-          "direction": "strengthening",
-          "amount_gbp_m": 0.005,
-          "percentage": null,
-          "confidence": 1.0
-        },
-        {
-          "line_of_business": "Motor",
-          "direction": "release",
-          "amount_gbp_m": -1.204,
-          "percentage": null,
-          "confidence": 1.0
-        },
-        {
-          "line_of_business": "Marine",
-          "direction": "release",
-          "amount_gbp_m": -5.277,
-          "percentage": null,
-          "confidence": 1.0
-        },
-        {
           "line_of_business": "Property",
-          "direction": "strengthening",
-          "amount_gbp_m": 20.073,
+          "direction": "release",
+          "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 1.0
+          "confidence": 0.8
         },
         {
           "line_of_business": "Casualty",
           "direction": "release",
-          "amount_gbp_m": -1.689,
+          "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 1.0
-        },
-        {
-          "line_of_business": "Treaty",
-          "direction": "strengthening",
-          "amount_gbp_m": 115.02,
-          "percentage": null,
-          "confidence": 1.0
+          "confidence": 0.7
         }
       ],
       "gross_premiums_written_gbp_m": 42.3,
@@ -529,7 +501,7 @@
       "gross_premium_page": 10,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior-year development amount derived from gross claims development triangle (page 32) by comparing latest estimates to prior diagonal for underwriting years 2011-2014 (aggregate '2010 and prior' excluded) because no explicit gross 'movement in prior year provision' note was present. Table values are presented in thousands in source tables; amounts above are converted to millions. Mapping of aggregated statutory class 'Marine, aviation and transport' was used for the Marine movement; reinsurance technical provisions mapped to 'Treaty'. Narrative references to 'releases' are net-language but the prior-year development used is gross as calculated from the triangle.",
+      "data_quality_notes": "Prior-year development was calculated from the gross claims development triangle (page 32) by excluding the aggregated '2010 and prior' column and the two most recent underwriting years (2015, 2016) per instructions. Narrative repeatedly refers to 'releases from prior year reserves' but does not quantify a gross amount; therefore the triangle-derived gross PYD (-GBP 44.233m) was used. No explicit gross 'movement in prior year's provision for claims outstanding' note was found. No RITC or other distortion was identified in the notes provided.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -596,20 +568,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_435_2016_llm.pdf",
-      "content_hash": "e427c2332b8beb6b02681ba47cbaa4e25d13d5966a9556a9e08d125648051656",
-      "standardized_at": "2026-03-19T02:01:46.643458+00:00",
+      "content_hash": "d7a2e0cfafc87680a16fa1f13b2e7a212bedf9bc0968227aed29a1b83b634d8b",
+      "standardized_at": "2026-09-11T13:02:37.399383+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 12597,
-        "output_tokens": 8102,
-        "total_tokens": 20699,
-        "cost_usd": 0.019353
+        "input_tokens": 13295,
+        "output_tokens": 7705,
+        "total_tokens": 21000,
+        "cost_usd": 0.018734
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -44.233,
+        "model_value": -44.233,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 35,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -667,6 +651,14 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of underwriting year",
+          "After one year",
+          "After two years",
+          "After three years",
+          "After four years",
+          "After five years"
         ],
         "source_page": 35,
         "entity": 435
@@ -764,12 +756,12 @@
       }
     }
   },
-  "total_cost_usd": 0.027317,
-  "total_tokens": 40177,
+  "total_cost_usd": 0.026497,
+  "total_tokens": 36699,
   "validation": {
     "passed": true,
-    "total_discrepancies": 26,
-    "within_tolerance": 26,
+    "total_discrepancies": 17,
+    "within_tolerance": 17,
     "hard_failures": 0,
     "hard_failure_details": []
   }

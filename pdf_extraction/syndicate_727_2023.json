@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T12:28:30.243796+00:00",
+  "extraction_timestamp": "2026-09-13T04:06:41.530140+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -16,44 +18,64 @@
       "prior_year_development_gbp_m": -0.431,
       "prior_year_development_pct": -0.14,
       "direction": "release",
-      "prior_year_movement_page": 34,
-      "prior_year_movement_confidence": 0.8,
-      "exact_reserve_text": "The combined ratio of 100.8% is largely due to a strengthening of reserves on the 2021 and prior years of account. The increases in provisions in the third party liability and liability reinsurance classes are a result of increases in our casualty catastrophe and PFAS reserves.",
+      "prior_year_movement_page": 14,
+      "prior_year_movement_confidence": 1.0,
+      "exact_reserve_text": "Change in provision for 2020 and prior claims 5,986 (1,652) 4,334\nEffect of movements in exchange rates (11,635) 161 (11,474)",
       "primary_causes": [
         "Adverse claims development",
-        "Man-made catastrophe / large losses",
         "Other"
       ],
       "specific_events": [],
       "specific_years_affected": [
-        2022,
-        2021,
         2020,
-        2019,
-        2018,
-        2017,
-        2016,
-        2015,
-        2014
+        2021
       ],
       "prior_year_events": [
         {
-          "event_name": "PFAS claims",
-          "event_year": null,
-          "impact_description": "increases in provisions in the third party liability and liability reinsurance classes",
+          "event_name": "Unfavourable claims developments",
+          "event_year": 2023,
+          "impact_description": "loss arising from the reinsurance to close received from 2020 year of account of GBP 1.5m due to an increase in the estimate of 2020 and prior years' liability reserves",
+          "lobs_affected": [
+            "Casualty"
+          ],
+          "amount_gbp_m": 1.5,
+          "confidence": 0.8
+        }
+      ],
+      "named_events": [
+        {
+          "event_name": "Casualty catastrophe",
+          "event_year": 2023,
+          "event_type": "other",
+          "net_loss_gbp_m": null,
+          "loss_description": "increases in provisions in the third party liability and liability reinsurance classes",
           "lobs_affected": [
             "Casualty",
             "Reinsurance - Casualty"
           ],
-          "amount_gbp_m": null,
+          "page": 35,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "PFAS reserves",
+          "event_year": 2023,
+          "event_type": "liability",
+          "net_loss_gbp_m": null,
+          "loss_description": "increases in provisions in the third party liability and liability reinsurance classes",
+          "lobs_affected": [
+            "Casualty",
+            "Reinsurance - Casualty"
+          ],
+          "page": 35,
           "confidence": 0.8
         }
       ],
-      "named_events": [],
-      "standardized_narrative": "The syndicate experienced an overall gross prior year reserve release of GBP 24.389 million, representing a 7.75% reduction in opening gross claims outstanding. This is primarily derived from the gross claims development triangle. However, the report's narrative states that the combined ratio was largely due to a strengthening of reserves on the 2021 and prior years of account. Specific increases in net provisions were noted for Third Party Liability and Liability Reinsurance classes, attributed to casualty catastrophe and PFAS reserves, while other lines experienced releases.",
+      "standardized_narrative": "The syndicate experienced a gross prior year release of GBP 5.649 million for the 2020 and prior claims. This was a result of a gross strengthening of GBP 5.986 million in claims provisions for 2020 and prior claims, offset by a gross release of GBP 11.635 million due to movements in exchange rates. The 2021 closed year of account also saw a net loss of GBP 1.5 million from the reinsurance to close received from the 2020 year of account, attributed to unfavourable claims developments in 2023 for 2020 and prior years' liability reserves.",
       "raw_causal_phrases": [
-        "strengthening of reserves on the 2021 and prior years of account",
-        "increases in provisions in the third party liability and liability reinsurance classes are a result of increases in our casualty catastrophe and PFAS reserves"
+        "increase in the estimate of 2020 and prior years' liability reserves as a result of unfavourable claims developments in 2023",
+        "Change in provision for 2020 and prior claims",
+        "Effect of movements in exchange rates",
+        "increases in our casualty catastrophe and PFAS reserves"
       ],
       "lob_movements": [
         {
@@ -120,7 +142,7 @@
           "percentage_of_total": 26.56
         },
         {
-          "line_of_business": "Third party liability",
+          "line_of_business": "Third Party Liability",
           "amount_gbp_m": 20.344,
           "percentage_of_total": 17.65
         },
@@ -132,13 +154,13 @@
         {
           "line_of_business": "Reinsurance inwards",
           "amount_gbp_m": 49.361,
-          "percentage_of_total": 42.84
+          "percentage_of_total": 42.83
         }
       ],
       "gross_premium_page": 31,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "There is a contradiction between the narrative statement of 'strengthening of reserves on the 2021 and prior years of account' (page 17, 29) and the calculated gross prior year development from the claims development triangle (page 34), which indicates an overall release of GBP 24.389m. The LOB-specific movements on page 35 are stated as 'net ultimate claims provisions' and also sum to a net release. The gross prior year development figure is derived from the gross claims development triangle as per instructions. LOB movements are net of reinsurance. [RAG OVERRIDE: Model said PYD=-24.389, RAG triangle computed -0.431. Using RAG value.]",
+      "data_quality_notes": "Prior year development LOB movements are net of reinsurance as gross breakdown was not available. Claims development triangle was not used for PYD calculation due to Reinsurance to Close distortion. [RAG OVERRIDE: Model said PYD=-5.649, RAG triangle computed -0.431. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -171,14 +193,14 @@
           ],
           [
             54213,
-            50202,
-            51099,
-            51613,
             52758,
             55997,
-            63984,
-            66591,
-            72890,
+            51613,
+            52683,
+            55944,
+            63931,
+            59151,
+            71766,
             null
           ],
           [
@@ -281,20 +303,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_727_2023_llm.pdf",
-      "content_hash": "fe3c540254ba0410a77c5b47f2993d9df651600446f1729a1e34993a16320c59",
-      "standardized_at": "2026-03-19T07:44:40.526786+00:00",
+      "content_hash": "6d81171980741f3a330f0e6a505282a20a6c827fa688a6023b449f3c4792eaeb",
+      "standardized_at": "2026-09-11T13:41:57.851505+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 15538,
-        "output_tokens": 2220,
-        "total_tokens": 29423,
-        "cost_usd": 0.010211
+        "input_tokens": 16342,
+        "output_tokens": 2571,
+        "total_tokens": 25138,
+        "cost_usd": 0.01133
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -0.431,
+        "model_value": -5.649,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 71,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2014,
           2015,
@@ -428,6 +462,18 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At the end of the underwriting year",
+          "After one year",
+          "After two years",
+          "After three years",
+          "After four years",
+          "After five years",
+          "After six years",
+          "After seven years",
+          "After eight years",
+          "After nine years"
         ],
         "source_page": 71,
         "entity": 727
@@ -602,71 +648,53 @@
       "prior_year_development_gbp_m": -0.431,
       "prior_year_development_pct": -0.14,
       "direction": "release",
-      "prior_year_movement_page": 68,
+      "prior_year_movement_page": 25,
       "prior_year_movement_confidence": 0.8,
-      "exact_reserve_text": "Significant movements in year 2023 for net ultimate claims provisions created at previous year end and relating to accident years up to year 2022 (positive values show increases in provisions):\n\nThe movements are consistent in general with a prudent reserving approach.\n\nThe increases in provisions in the third party liability and liability reinsurance classes are a result of increases in our casualty catastrophe and PFAS reserves.",
+      "exact_reserve_text": "Within this profit, there was a loss arising from the reinsurance to close received from 2020 year of account of GBP 1.5m. This arose from an increase in the estimate of 2020 and prior year's liability reserves as a result of unfavourable claims developments in 2023. See page 24 for a more detailed analysis of the various sources of profit and loss.",
       "primary_causes": [
-        "Adverse claims development",
-        "Social inflation / litigation trends",
-        "Large loss development",
-        "IBNR recalibration"
+        "Adverse claims development"
       ],
       "specific_events": [],
       "specific_years_affected": [
-        2014,
-        2015,
-        2016,
-        2017,
-        2018,
-        2019,
-        2020,
-        2021,
-        2022
+        2020
       ],
-      "prior_year_events": [],
+      "prior_year_events": [
+        {
+          "event_name": "Increase in estimate of 2020 and prior years' liability reserves",
+          "event_year": 2020,
+          "impact_description": "Increase in provision for 2020 and prior claims (gross change recorded in RITC reconciliation), reflecting adverse development in liability lines",
+          "lobs_affected": [
+            "Casualty"
+          ],
+          "amount_gbp_m": 5.986,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "PFAS / casualty reserve increases",
+          "event_year": null,
+          "impact_description": "The report identifies increases in provisions in third party liability and liability reinsurance classes driven by casualty catastrophe and PFAS reserves.",
+          "lobs_affected": [
+            "Casualty",
+            "Reinsurance - Casualty"
+          ],
+          "amount_gbp_m": null,
+          "confidence": 0.4
+        }
+      ],
       "named_events": [],
-      "standardized_narrative": "Using the gross claims development triangle the Syndicate shows a net favourable prior-year development (gross) of GBP 7.638m (a ~2.4% release on opening gross reserves of GBP 314.671m). This gross release was driven by favourable development on several older accident years but was partially offset by adverse development in the 2021 cohort (notably casualty/third party liability). The notes also highlight increases in casualty catastrophe and PFAS reserves which added adverse pressure (net), and overall the movements are described as consistent with a prudent reserving approach. LOB-specific movements reported in the notes are presented net of reinsurance.",
+      "standardized_narrative": "Opening gross claims outstanding at 1 Jan 2023 were GBP 314.671m. During 2023 there was a net adverse prior-year movement primarily driven by increases in liability (casualty) reserves, with a gross strengthening of approximately GBP 5.986m (c.1.9% of opening gross reserves) recorded in the RITC / claims provision reconciliation. The Managing Agent links the movement to unfavourable claims development in 2023 (notably increases in casualty/PFAS exposures) and to adjustments in the estimate for 2020 and prior years.",
       "raw_causal_phrases": [
+        "an increase in the estimate of 2020 and prior year's liability reserves",
         "unfavourable claims developments in 2023",
-        "potential for latent claims to emerge for many years after the risk was underwritten",
-        "increases in our casualty catastrophe and PFAS reserves",
-        "The movements are consistent in general with a prudent reserving approach."
+        "increases in provisions in the third party liability and liability reinsurance classes are a result of increases in our casualty catastrophe and PFAS reserves"
       ],
       "lob_movements": [
         {
-          "line_of_business": "Accident & Health",
-          "direction": "release",
-          "amount_gbp_m": -1.112,
-          "percentage": null,
-          "confidence": 1.0
-        },
-        {
-          "line_of_business": "Property",
-          "direction": "release",
-          "amount_gbp_m": -1.271,
-          "percentage": null,
-          "confidence": 1.0
-        },
-        {
           "line_of_business": "Casualty",
           "direction": "strengthening",
-          "amount_gbp_m": 6.266,
-          "percentage": null,
-          "confidence": 1.0
-        },
-        {
-          "line_of_business": "Reinsurance - Property",
-          "direction": "release",
-          "amount_gbp_m": -7.753,
-          "percentage": null,
-          "confidence": 1.0
-        },
-        {
-          "line_of_business": "Reinsurance - Casualty",
-          "direction": "strengthening",
-          "amount_gbp_m": 1.192,
-          "percentage": null,
-          "confidence": 1.0
+          "amount_gbp_m": 5.986,
+          "percentage": 1.903,
+          "confidence": 0.6
         }
       ],
       "gross_premiums_written_gbp_m": 115.238,
@@ -674,48 +702,48 @@
         {
           "line_of_business": "Accident and health",
           "amount_gbp_m": 0.373,
-          "percentage_of_total": 0.32
+          "percentage_of_total": 0.324
         },
         {
           "line_of_business": "Motor (third party liability)",
           "amount_gbp_m": 1.196,
-          "percentage_of_total": 1.04
+          "percentage_of_total": 1.038
         },
         {
           "line_of_business": "Motor (other classes)",
           "amount_gbp_m": 8.163,
-          "percentage_of_total": 7.09
+          "percentage_of_total": 7.086
         },
         {
           "line_of_business": "Marine aviation and transport",
           "amount_gbp_m": 3.845,
-          "percentage_of_total": 3.34
+          "percentage_of_total": 3.337
         },
         {
           "line_of_business": "Fire and other damage to property",
           "amount_gbp_m": 30.605,
-          "percentage_of_total": 26.56
+          "percentage_of_total": 26.57
         },
         {
-          "line_of_business": "Third Party Liability",
+          "line_of_business": "Third party liability",
           "amount_gbp_m": 20.344,
           "percentage_of_total": 17.66
         },
         {
           "line_of_business": "Credit and suretyship",
           "amount_gbp_m": 1.35,
-          "percentage_of_total": 1.17
+          "percentage_of_total": 1.172
         },
         {
           "line_of_business": "Reinsurance inwards",
           "amount_gbp_m": 49.361,
-          "percentage_of_total": 42.83
+          "percentage_of_total": 42.84
         }
       ],
       "gross_premium_page": 65,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior-year development (gross) was calculated from the gross claims development triangle (page 68). The technical note provides class movements but these are presented net of reinsurance; gross PYD by LOB is not provided. LOB-specific movement amounts used are net figures from the note (explicitly labelled net). RITC / transfers may distort long-tail development for very old years, but no specific distortion affecting the 2014-2021 diagonal was flagged for 2023; confidence is medium-high for the triangle-derived gross PYD (0.8) and high for balance sheet and premium line extractions (1.0). [RAG OVERRIDE: Model said PYD=-7.638, RAG triangle computed -0.431. Using RAG value.]",
+      "data_quality_notes": "Prior-year movement used is the GROSS 'Change in provision for 2020 and prior claims' line from the Reinsurance to Close / RITC reconciliation (gross +5.986m). The Managing Agent's narrative refers to a net loss of GBP 1.5m relating to RITC (net of reinsurance) - net and gross figures differ; gross figure was used per instructions. A gross claims development triangle is present (page 68) and could be used to cross-check; the RITC entries distort some comparisons. Some attribution to casualty/PFAS is narrative rather than quantified by LOB. [RAG OVERRIDE: Model said PYD=5.986, RAG triangle computed -0.431. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -772,18 +800,18 @@
           ],
           [
             53414,
-            58758,
-            55121,
+            58755,
+            51822,
             62055,
             59728,
-            55007,
+            55077,
             68027,
             null,
             null,
             null
           ],
           [
-            50675,
+            54675,
             60975,
             55812,
             59508,
@@ -809,7 +837,7 @@
           [
             50384,
             58209,
-            53416,
+            53414,
             57454,
             null,
             null,
@@ -819,7 +847,7 @@
             null
           ],
           [
-            48436,
+            48416,
             56880,
             51800,
             null,
@@ -858,20 +886,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_727_2023_llm.pdf",
-      "content_hash": "fe3c540254ba0410a77c5b47f2993d9df651600446f1729a1e34993a16320c59",
-      "standardized_at": "2026-03-19T07:46:21.913252+00:00",
+      "content_hash": "6d81171980741f3a330f0e6a505282a20a6c827fa688a6023b449f3c4792eaeb",
+      "standardized_at": "2026-09-11T13:45:07.936346+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 40068,
-        "output_tokens": 8550,
-        "total_tokens": 48618,
-        "cost_usd": 0.027117
+        "input_tokens": 40898,
+        "output_tokens": 9356,
+        "total_tokens": 50254,
+        "cost_usd": 0.028936
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -0.431,
+        "model_value": 5.986,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 71,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2014,
           2015,
@@ -1005,6 +1045,18 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At the end of the underwriting year",
+          "After one year",
+          "After two years",
+          "After three years",
+          "After four years",
+          "After five years",
+          "After six years",
+          "After seven years",
+          "After eight years",
+          "After nine years"
         ],
         "source_page": 71,
         "entity": 727
@@ -1171,12 +1223,12 @@
       }
     }
   },
-  "total_cost_usd": 0.037328,
-  "total_tokens": 78041,
+  "total_cost_usd": 0.040266,
+  "total_tokens": 75392,
   "validation": {
     "passed": true,
-    "total_discrepancies": 27,
-    "within_tolerance": 27,
+    "total_discrepancies": 34,
+    "within_tolerance": 34,
     "hard_failures": 0,
     "hard_failure_details": []
   }

@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-05T20:07:08.244723+00:00",
+  "extraction_timestamp": "2026-09-13T04:18:55.632415+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -18,10 +20,11 @@
       "direction": "strengthening",
       "prior_year_movement_page": 16,
       "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "As a result, the claims reserves were strengthened materially, in particular on the 2013 and prior years.",
+      "exact_reserve_text": "Changes for prior years 71,180 (17,711) 53,469",
       "primary_causes": [
         "Adverse claims development",
-        "Large loss development"
+        "Large loss development",
+        "Reserve methodology change"
       ],
       "specific_events": [],
       "specific_years_affected": [
@@ -30,19 +33,25 @@
       ],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "The syndicate experienced a significant strengthening of prior year reserves totaling GBP 71.180 million, representing a 52.79% increase over opening gross claims outstanding. This adverse development was primarily driven by a material increase in incurred claims for the 2013 and prior years of account, particularly within the professional indemnity, Directors and Officers, and medical malpractice classes of business, which fall under Third Party Liability. The 2014 year of account also contributed to the adverse development.",
+      "standardized_narrative": "The syndicate experienced a significant strengthening of prior year reserves by GBP 71.18 million, representing 52.8% of opening gross claims outstanding. This adverse development was primarily driven by a large deterioration in the 2013 and prior years of account, particularly impacting professional indemnity, Directors and Officers, and medical malpractice classes of business. The strengthening followed an independent review of open claims instigated by the new Managing Agent, leading to a significant increase in incurred claims positions.",
       "raw_causal_phrases": [
         "large deterioration that arose on the 2013 and prior years of account on the professional indemnity, Directors and Officers and medical malpractice classes of business",
-        "claims reserves were strengthened materially, in particular on the 2013 and prior years",
-        "significant increase in the incurred claims position on the professional indemnity, Directors and Officers and medical malpractice classes of business"
+        "claims reserves were strengthened materially, in particular on the 2013 and prior years. This was primarily due to a significant increase in the incurred claims position on the professional indemnity, Directors and Officers and medical malpractice classes of business"
       ],
       "lob_movements": [
         {
-          "line_of_business": "Third Party Liability",
+          "line_of_business": "Professional Lines",
           "direction": "strengthening",
           "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.8
+          "confidence": 0.5
+        },
+        {
+          "line_of_business": "Casualty",
+          "direction": "strengthening",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.5
         }
       ],
       "gross_premiums_written_gbp_m": 23.2,
@@ -66,7 +75,7 @@
       "gross_premium_page": 14,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The narrative on page 18 states a 'net adverse claims development of GBP 34.5 million on the 2013 and prior years and GBP 1.3 million on the 2014 year of account', totaling GBP 35.8 million net. However, the Technical Provisions note on page 16 shows 'Changes for prior years' as Gross GBP 71,180k and Net GBP 53,469k. The table figure for gross prior year development (GBP 71.180m) is used as it is a direct accounting figure, but there is a notable discrepancy with the narrative's net figure. [RAG OVERRIDE: Model said PYD=71.18, RAG triangle computed 37.668. Using RAG value.]",
+      "data_quality_notes": "The prior year development figure of GBP 71.18 million is taken from the explicit 'Changes for prior years' line in the Technical Provisions note (page 16). This figure is significantly higher than the GBP 37.668 million calculated from the gross claims development triangle (page 17) for years 2013 and prior. The explicit note is considered the primary source. Individual LOB movements for prior year development are not quantified in the report, only qualitatively linked to specific classes of business. [RAG OVERRIDE: Model said PYD=71.18, RAG triangle computed 37.668. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -119,20 +128,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_2526_2015_llm.pdf",
-      "content_hash": "f5d34969faa289f65f78234a152de2bc706165732a20c81d43dab449cc6cc27b",
-      "standardized_at": "2026-03-18T09:34:23.760690+00:00",
+      "content_hash": "6c03e4452dea767328c56bdbaeb65a306eaf6076de9da3405a31572d81b54bcc",
+      "standardized_at": "2026-09-11T11:50:45.276790+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 10637,
-        "output_tokens": 1261,
-        "total_tokens": 16660,
-        "cost_usd": 0.006344
+        "input_tokens": 11441,
+        "output_tokens": 1291,
+        "total_tokens": 16231,
+        "cost_usd": 0.00666
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 37.668,
+        "model_value": 71.18,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 35,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -176,6 +197,13 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At the end of underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later"
         ],
         "source_page": 35,
         "entity": 2526
@@ -231,6 +259,13 @@
           "entity": 2526,
           "backend": "azure",
           "table_kind": "provisions_movement"
+        },
+        "movement_semantics": {
+          "row_label": "Changes for prior years",
+          "row_index": 6,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": false,
+          "column_index": 1
         },
         "gross_prior_year_claims": 71.2,
         "opening_gross_claims_outstanding": 134.822
@@ -309,14 +344,14 @@
       "prior_year_development_gbp_m": 37.668,
       "prior_year_development_pct": 27.94,
       "direction": "strengthening",
-      "prior_year_movement_page": 16,
+      "prior_year_movement_page": 31,
       "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "As a result, the claims reserves were strengthened materially, in particular on the 2013 and prior years. During the year there was net adverse claims development of GBP 34.5 million on the 2013 and prior years and GBP 1.3 million on the 2014 year of account.",
+      "exact_reserve_text": "During the year there was net adverse claims development of GBP 34.5 million on the 2013 and prior years and GBP 1.3 million on the 2014 year of account.",
       "primary_causes": [
         "Adverse claims development",
-        "Social inflation / litigation trends",
         "Reserve methodology change",
-        "IBNR recalibration"
+        "Social inflation / litigation trends",
+        "Large loss development"
       ],
       "specific_events": [],
       "specific_years_affected": [
@@ -325,9 +360,9 @@
       ],
       "prior_year_events": [
         {
-          "event_name": "Adverse development on Professional Indemnity, Directors & Officers and Medical Malpractice",
-          "event_year": 2013,
-          "impact_description": "Significant increase in the incurred claims position on the professional indemnity, Directors and Officers and medical malpractice classes leading to a material strengthening of claims reserves on 2013 and prior years.",
+          "event_name": "Reserve strengthening following independent claims review",
+          "event_year": 2015,
+          "impact_description": "Independent claims review led to material strengthening of claims reserves, particularly on professional indemnity, Directors & Officers and medical malpractice (2013 and prior underwriting years).",
           "lobs_affected": [
             "Professional Lines"
           ],
@@ -336,34 +371,19 @@
         }
       ],
       "named_events": [],
-      "standardized_narrative": "During 2015 the Syndicate materially strengthened its claims reserves, driven principally by adverse development on professional indemnity, Directors & Officers and medical malpractice business originating in 2013 and prior years. An independent review of open claims led to a significant increase in incurred claims estimates and consequent reserve strengthening, producing a large adverse prior-year movement concentrated in professional lines.",
+      "standardized_narrative": "During 2015 the Managing Agent and independent claims consultants reviewed open claims and materially strengthened claims reserves. The gross prior-year (2013 & prior) provision was increased by GBP 71.18m (a strengthening), driven principally by adverse development on professional indemnity, Directors & Officers and medical malpractice business; the report also states a net adverse development of GBP 34.5m on 2013 & prior (net of reinsurance).",
       "raw_causal_phrases": [
         "claims reserves were strengthened materially, in particular on the 2013 and prior years",
         "significant increase in the incurred claims position on the professional indemnity, Directors and Officers and medical malpractice classes of business",
-        "high degree of uncertainty over the outcome of many claims and therefore wide variability in the possible outcomes",
-        "deterioration in the loss ratios arising in the 2013 and prior years"
+        "net adverse claims development of GBP 34.5 million on the 2013 and prior years and GBP 1.3 million on the 2014 year of account"
       ],
       "lob_movements": [
         {
           "line_of_business": "Professional Lines",
           "direction": "strengthening",
-          "amount_gbp_m": null,
+          "amount_gbp_m": 71.18,
           "percentage": null,
           "confidence": 0.8
-        },
-        {
-          "line_of_business": "Accident & Health",
-          "direction": "strengthening",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.5
-        },
-        {
-          "line_of_business": "Casualty",
-          "direction": "strengthening",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.5
         }
       ],
       "gross_premiums_written_gbp_m": 23.2,
@@ -387,12 +407,12 @@
       "gross_premium_page": 6,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Opening gross claims outstanding taken from Statement of Financial Position (claims outstanding, prior year column). Prior-year development (gross) taken from the 'Changes for prior years' gross figure in Technical Provisions reconciliation (Note 17). The report also discloses net adverse development (GBP 34.5m) for 2013 & prior; gross figure used where available. Premiums and triangle values in the report are presented in GBP '000 and have been converted to millions where required. Line-of-business mapping to standard Lloyd's LOBs is approximate for professional liability classes. [RAG OVERRIDE: Model said PYD=71.18, RAG triangle computed 37.668. Using RAG value.]",
+      "data_quality_notes": "Prior-year movement: the gross change for 'Changes for prior years' in the Technical Provisions reconciliation is +GBP 71,180k (used here). The narrative elsewhere reports a 'net adverse' movement of GBP 34.5m for 2013 & prior (net of reinsurance). The gross figure (71.18m) was taken from the Technical Provisions movement table; the narrative net figure is noted but not used as the primary prior-year gross movement. Page references for notes derived from the document's printed page headers and may vary slightly by pagination. [RAG OVERRIDE: Model said PYD=71.18, RAG triangle computed 37.668. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
-        "page": 17,
+        "page": 32,
         "underwriting_years": [
           2011,
           2012,
@@ -440,20 +460,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_2526_2015_llm.pdf",
-      "content_hash": "f5d34969faa289f65f78234a152de2bc706165732a20c81d43dab449cc6cc27b",
-      "standardized_at": "2026-03-18T09:36:08.048551+00:00",
+      "content_hash": "6c03e4452dea767328c56bdbaeb65a306eaf6076de9da3405a31572d81b54bcc",
+      "standardized_at": "2026-09-11T11:52:47.700430+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 19616,
-        "output_tokens": 6446,
-        "total_tokens": 26062,
-        "cost_usd": 0.017796
+        "input_tokens": 20332,
+        "output_tokens": 6238,
+        "total_tokens": 26570,
+        "cost_usd": 0.017559
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 37.668,
+        "model_value": 71.18,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 35,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -497,6 +529,13 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At the end of underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later"
         ],
         "source_page": 35,
         "entity": 2526
@@ -552,6 +591,13 @@
           "entity": 2526,
           "backend": "azure",
           "table_kind": "provisions_movement"
+        },
+        "movement_semantics": {
+          "row_label": "Changes for prior years",
+          "row_index": 6,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": false,
+          "column_index": 1
         },
         "gross_prior_year_claims": 71.2,
         "opening_gross_claims_outstanding": 134.822
@@ -622,12 +668,12 @@
       }
     }
   },
-  "total_cost_usd": 0.02414,
-  "total_tokens": 42722,
+  "total_cost_usd": 0.024219,
+  "total_tokens": 42801,
   "validation": {
     "passed": true,
-    "total_discrepancies": 13,
-    "within_tolerance": 13,
+    "total_discrepancies": 15,
+    "within_tolerance": 15,
     "hard_failures": 0,
     "hard_failure_details": []
   }

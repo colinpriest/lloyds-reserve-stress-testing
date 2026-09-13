@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T10:58:28.792276+00:00",
+  "extraction_timestamp": "2026-09-13T04:00:17.510649+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -26,10 +28,9 @@
       "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "The syndicate experienced a favourable run-off deviation of GBP 3.3 million during the year, indicating a release of prior year reserves. This positive development was attributed to favourable claims development in prior accident years.",
+      "standardized_narrative": "The syndicate experienced a favourable run-off deviation of GBP 3.3 million in 2017, indicating a release of prior year reserves due to better-than-expected claims development. This movement relates to prior accident years.",
       "raw_causal_phrases": [
-        "favourable run off deviation",
-        "prior accident year release"
+        "favourable run off deviation (prior accident year release)"
       ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 34.373,
@@ -43,7 +44,7 @@
       "gross_premium_page": 13,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The prior year development figure of -3.3m is explicitly stated as a 'favourable run off deviation (prior accident year release)' in Note 5. The claims development triangle (Note 10) for older underwriting years (2012-2015) shows no change in 'Estimated total losses' from their previous development stage, which appears to contradict the stated release. The explicit narrative statement is prioritized. The gross premium mix is based on the syndicate's stated single business segment of 'long-term insurance business'. [RAG PYD NOT APPLIED: deterministic figure +1.051m has the opposite sign to both model values [-3.3, -3.3], which agree with each other; model values retained.] [CODE PYD NOT APPLIED: deterministic figure +1.051m has the opposite sign to both model values [-3.3, -3.3], which agree with each other; model values retained.]",
+      "data_quality_notes": "Gross premium mix derived from the statement that the syndicate operates in a single business segment: long-term insurance business. The claims development triangle was not used for prior year development calculation as its format (Estimated total losses row repeating last development point) does not allow for direct calculation of year-on-year changes in estimates for prior underwriting years. [RAG PYD NOT APPLIED: deterministic figure +1.051m has the opposite sign to both model values [-3.3, -3.3], which agree with each other; model values retained. Sign agreement between the models is not a reconciliation: where they differ in value the cohort and accrual scope of each still has to be settled from the filing (R140).] [CODE PYD NOT APPLIED: deterministic figure +1.051m has the opposite sign to both model values [-3.3, -3.3], which agree with each other; model values retained. Sign agreement between the models is not a reconciliation: where they differ in value the cohort and accrual scope of each still has to be settled from the filing (R140).]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -110,20 +111,22 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_3002_2017_llm.pdf",
-      "content_hash": "b557a5af5d3b835d51d08af822865112eda14b29791639249e42806b44d413e8",
-      "standardized_at": "2026-07-05T14:28:38.203839+00:00",
+      "content_hash": "3538d76c67fd7bb7eb79ba42269af8d2bfe1ffb6053369947df84ca3ba2631ac",
+      "standardized_at": "2026-09-11T12:31:08.601725+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 10379,
-        "output_tokens": 954,
-        "total_tokens": 15401,
-        "cost_usd": 0.005499
+        "input_tokens": 11183,
+        "output_tokens": 901,
+        "total_tokens": 15709,
+        "cost_usd": 0.005607
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2012,
           2013,
@@ -181,6 +184,14 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "12 months",
+          "24 months",
+          "36 months",
+          "48 months",
+          "60 months",
+          "72 months"
         ],
         "source_page": 35,
         "entity": 3002
@@ -274,7 +285,7 @@
       "prior_year_development_pct": -18.79,
       "direction": "release",
       "prior_year_movement_page": 29,
-      "prior_year_movement_confidence": 0.8,
+      "prior_year_movement_confidence": 1.0,
       "exact_reserve_text": "A favourable run off deviation (prior accident year release) of GBP 3.3m (2016: GBP 1.5m favourable deviation) was experienced during the year.",
       "primary_causes": [
         "Favorable claims development"
@@ -283,7 +294,7 @@
       "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "The syndicate opened the year with gross claims outstanding of GBP 17.563m and experienced a favourable prior accident year run-off (a release) of GBP 3.3m during 2017 (approximately an 18.8% release relative to opening gross claims). The movement is described as a prior accident year release driven by favourable claims development; no specific named events or years are cited as drivers in the disclosed commentary.",
+      "standardized_narrative": "Syndicate 3002 recorded a favourable prior-accident-year run-off in 2017, releasing GBP 3.3m in respect of prior years (a release equal to approximately 18.8% of the opening gross claims outstanding of GBP 17.563m). The movement is reported as a favourable run-off (release) and is attributed to favourable claims development.",
       "raw_causal_phrases": [
         "A favourable run off deviation (prior accident year release) of GBP 3.3m (2016: GBP 1.5m favourable deviation) was experienced during the year."
       ],
@@ -292,8 +303,8 @@
           "line_of_business": "Accident & Health",
           "direction": "release",
           "amount_gbp_m": -3.3,
-          "percentage": -18.79,
-          "confidence": 0.6
+          "percentage": -18.8,
+          "confidence": 0.5
         }
       ],
       "gross_premiums_written_gbp_m": 34.373,
@@ -312,7 +323,7 @@
       "gross_premium_page": 28,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior year movement sourced from Note 5 narrative which states a GBP 3.3m favourable run-off deviation. The note does not explicitly state whether this figure is gross or net of reinsurance; the report does not present a separate explicit gross figure labelled 'prior year movement' elsewhere. Therefore the GBP 3.3m has been recorded as the prior year movement but may be net of reinsurance. The syndicate is a long-term term-life writer and LOB mapping to 'Accident & Health' is an inference (life business not explicitly in the standard Lloyd's LOB list). A gross claims development triangle is available and has been included in _claims_triangle for cross-checking. [RAG PYD NOT APPLIED: deterministic figure +1.051m has the opposite sign to both model values [-3.3, -3.3], which agree with each other; model values retained.] [CODE PYD NOT APPLIED: deterministic figure +1.051m has the opposite sign to both model values [-3.3, -3.3], which agree with each other; model values retained.]",
+      "data_quality_notes": "Opening reserves taken from the Statement of Financial Position (Long term business provision) 2016 comparative column. Prior year movement taken from Note titled 'Movement in prior year's provision for claims outstanding' which explicitly states a GBP 3.3m favourable run-off; the note does not explicitly label the figure as gross or net, but it is presented as the movement in prior years' provision. A gross claims development triangle is present in the report (page 32) but parsing of the triangle rows/columns from the supplied text was ambiguous due to an 'X and prior' aggregate column and formatting; therefore the triangle was not used to recalculate the PYD. LOB mapping (Accident & Health) is an inferred mapping for long-term/term-life business; confidence for the LOB-specific allocation is lower than for the headline figures. [RAG PYD NOT APPLIED: deterministic figure +1.051m has the opposite sign to both model values [-3.3, -3.3], which agree with each other; model values retained. Sign agreement between the models is not a reconciliation: where they differ in value the cohort and accrual scope of each still has to be settled from the filing (R140).] [CODE PYD NOT APPLIED: deterministic figure +1.051m has the opposite sign to both model values [-3.3, -3.3], which agree with each other; model values retained. Sign agreement between the models is not a reconciliation: where they differ in value the cohort and accrual scope of each still has to be settled from the filing (R140).]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -326,73 +337,26 @@
           2016,
           2017
         ],
-        "development_rows": [
-          [
-            1953,
-            3349,
-            1342,
-            14188,
-            8549,
-            10253
-          ],
-          [
-            4038,
-            5890,
-            5157,
-            13076,
-            16176,
-            null
-          ],
-          [
-            4397,
-            5155,
-            4592,
-            13917,
-            null,
-            null
-          ],
-          [
-            4067,
-            4945,
-            4677,
-            null,
-            null,
-            null
-          ],
-          [
-            4059,
-            5075,
-            null,
-            null,
-            null,
-            null
-          ],
-          [
-            4054,
-            null,
-            null,
-            null,
-            null,
-            null
-          ]
-        ]
+        "development_rows": []
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_3002_2017_llm.pdf",
-      "content_hash": "b557a5af5d3b835d51d08af822865112eda14b29791639249e42806b44d413e8",
-      "standardized_at": "2026-07-05T14:29:56.765404+00:00",
+      "content_hash": "3538d76c67fd7bb7eb79ba42269af8d2bfe1ffb6053369947df84ca3ba2631ac",
+      "standardized_at": "2026-09-11T12:33:09.068755+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 14169,
-        "output_tokens": 7616,
-        "total_tokens": 21785,
-        "cost_usd": 0.018774
+        "input_tokens": 14929,
+        "output_tokens": 5535,
+        "total_tokens": 20464,
+        "cost_usd": 0.014802
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2012,
           2013,
@@ -450,6 +414,14 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "12 months",
+          "24 months",
+          "36 months",
+          "48 months",
+          "60 months",
+          "72 months"
         ],
         "source_page": 35,
         "entity": 3002
@@ -534,12 +506,12 @@
       }
     }
   },
-  "total_cost_usd": 0.024273,
-  "total_tokens": 37186,
+  "total_cost_usd": 0.020409,
+  "total_tokens": 36173,
   "validation": {
     "passed": true,
-    "total_discrepancies": 13,
-    "within_tolerance": 13,
+    "total_discrepancies": 11,
+    "within_tolerance": 11,
     "hard_failures": 0,
     "hard_failure_details": []
   }

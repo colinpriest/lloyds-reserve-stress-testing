@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T10:04:41.058738+00:00",
+  "extraction_timestamp": "2026-09-13T04:04:21.471383+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -11,41 +13,33 @@
       "syndicate": 1991,
       "year": 2020,
       "opening_reserves_gbp_m": 160.783,
-      "opening_reserves_page": 6,
+      "opening_reserves_page": 7,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": 114.371,
       "prior_year_development_pct": 71.13,
       "direction": "strengthening",
       "prior_year_movement_page": 20,
       "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "The significant movements in gross claims incurred in respect of claims provisions created at the end of the previous period are analysed as follows: Fire and other damage to property 13,920 Third party liability 80,545 Accident & Health 801 Total 95,266",
+      "exact_reserve_text": "The significant movements in gross claims incurred in respect of claims provisions created at the end of the previous period are analysed as follows: Fire and other damage to property 13,920, Third party liability 80,545, Accident & Health 801. Total 95,266.",
       "primary_causes": [
         "Large loss development",
         "Natural catastrophe events",
         "COVID-19 / pandemic effects"
       ],
-      "specific_events": [
-        "COVID-19"
-      ],
+      "specific_events": [],
       "specific_years_affected": [
-        2018,
-        2017,
-        2016,
-        2015,
-        2014,
-        2013
+        2018
       ],
       "prior_year_events": [
         {
-          "event_name": "COVID-19",
+          "event_name": "COVID-19 pandemic",
           "event_year": 2020,
-          "impact_description": "Additional reserves were booked in relation to COVID-19 at GBP 12.0m net, of which GBP 7.2m related to 2018 and prior years of account.",
+          "impact_description": "Additional reserves booked in relation to COVID-19, GBP 7.2m net related to 2018 and prior years of account.",
           "lobs_affected": [
-            "Property",
-            "Casualty"
+            "Property"
           ],
           "amount_gbp_m": 7.2,
-          "confidence": 0.8
+          "confidence": 1.0
         }
       ],
       "named_events": [
@@ -54,7 +48,7 @@
           "event_year": 2020,
           "event_type": "liability",
           "net_loss_gbp_m": 12.0,
-          "loss_description": "Gross loss to syndicate GBP 22.5m, Net loss to syndicate GBP 12.0m",
+          "loss_description": "Gross loss to syndicate GBP 22.5m, Net loss to syndicate GBP 12.0m. Impacted business interruption claims across UK, US, Australia.",
           "lobs_affected": [
             "Property",
             "Casualty"
@@ -67,7 +61,7 @@
           "event_year": 2020,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": 2.5,
-          "loss_description": "Gross loss to syndicate GBP 2.5m, Net loss to syndicate GBP 2.5m",
+          "loss_description": "Gross loss to syndicate GBP 2.5m, Net loss to syndicate GBP 2.5m.",
           "lobs_affected": [
             "Property"
           ],
@@ -75,12 +69,10 @@
           "confidence": 1.0
         }
       ],
-      "standardized_narrative": "The syndicate experienced a significant prior year strengthening of GBP 95.266 million in 2020, representing 59.25% of its opening gross claims outstanding. This adverse development was primarily driven by a substantial increase in large and catastrophe claims, particularly in the fourth quarter, and additional reserves booked in relation to COVID-19, with GBP 7.2 million net specifically impacting the 2018 and prior years of account. The strengthening was observed across Fire and other damage to property, Third party liability, and Accident & Health lines of business.",
+      "standardized_narrative": "The syndicate reported a gross prior year reserve strengthening of GBP 95.266 million for the 2018 and prior years of account, representing 59.25% of opening gross claims outstanding. This adverse development was primarily driven by a substantial increase in new large and catastrophe claims, particularly in the fourth quarter, and additional reserves booked for COVID-19 related business interruption claims. The strengthening was observed across Fire and other damage to property, Third party liability, and Accident & Health lines of business.",
       "raw_causal_phrases": [
         "substantial increase in new large and cat claims, particularly in the fourth quarter",
-        "Additional reserves were booked in relation to COVID-19 at GBP 12.0m net, of which GBP 7.2m related to 2018 and prior years of account",
-        "The ultimate amounts of these claims is still uncertain together with related reinsurance recoveries and this could have a material impact on the reserves held by the 2018 year of account.",
-        "The ultimate amounts of these claims are subject to a great deal of uncertainty which, combined with their total size, increases the level of uncertainty in the actuarial best estimate of the syndicate significantly beyond the normal range of uncertainty for insurance liabilities at this stage of development."
+        "Additional reserves were booked in relation to COVID-19 at GBP 12.0m net, of which GBP 7.2m related to 2018 and prior years of account."
       ],
       "lob_movements": [
         {
@@ -232,20 +224,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_1991_2020_llm.pdf",
-      "content_hash": "4c8c286fd691b65e006c297b330b59ca999c939b164322154cc50e416cb8e5b2",
-      "standardized_at": "2026-07-05T23:08:51.450144+00:00",
+      "content_hash": "9fd3f35677013e12506f4a247f265053ed59d58293801b5a6389e8e91bb60125",
+      "standardized_at": "2026-09-11T11:24:22.950254+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 15023,
-        "output_tokens": 2241,
-        "total_tokens": 22852,
-        "cost_usd": 0.010109
+        "input_tokens": 15827,
+        "output_tokens": 2089,
+        "total_tokens": 26002,
+        "cost_usd": 0.009971
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 114.371,
+        "model_value": 95.266,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 38,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2013,
           2014,
@@ -337,6 +341,16 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "After one year",
+          "After two years",
+          "After three years",
+          "After four years",
+          "After five years",
+          "After six years",
+          "After seven years",
+          "After eight years"
         ],
         "source_page": 38,
         "entity": 1991
@@ -506,13 +520,12 @@
       "exact_reserve_text": "The underwriting result was a loss of GBP 28.2m, of which GBP 22.8m is in respect of the 2018 and prior years of account. The main driver of this deterioration was a substantial increase in new large and cat claims, particularly in the fourth quarter. Additional reserves were booked in relation to COVID-19 at GBP 12.0m net, of which GBP 7.2m related to 2018 and prior years of account.",
       "primary_causes": [
         "Man-made catastrophe / large losses",
-        "Natural catastrophe events",
         "COVID-19 / pandemic effects",
         "Court rulings / legal developments",
-        "Adverse claims development"
+        "Reinsurance recoveries"
       ],
       "specific_events": [
-        "COVID-19",
+        "COVID-19 pandemic",
         "Hurricane Laura"
       ],
       "specific_years_affected": [
@@ -521,37 +534,39 @@
       "prior_year_events": [],
       "named_events": [
         {
-          "event_name": "COVID-19",
+          "event_name": "COVID-19 pandemic",
           "event_year": 2020,
           "event_type": "other",
           "net_loss_gbp_m": 12.0,
-          "loss_description": "Gross loss to syndicate 22.5; Net loss to syndicate 12.0; reserves held at year end for COVID-19 are GBP 12.0m net (UK Travel GBP 0.6m, UK BI GBP 8.8m, US GBP 1.7m, Australian GBP 0.9m).",
+          "loss_description": "Net loss to the syndicate relating to pandemic business interruption exposures; reserves held at year end for COVID-19 are GBP 12.0m net (UK BI net reserve GBP 8.8m, US net reserve GBP 1.7m, Australian net reserve GBP 0.9m, UK Travel net reserve GBP 0.6m).",
           "lobs_affected": [
             "Property",
+            "Casualty",
             "Accident & Health"
           ],
-          "page": 26,
-          "confidence": 1.0
+          "page": 5,
+          "confidence": 0.9
         },
         {
           "event_name": "Hurricane Laura",
           "event_year": 2020,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": 2.5,
-          "loss_description": "Hurricane Laura - gross loss to syndicate 2.5; net loss to syndicate 2.5.",
+          "loss_description": "Listed as one of the largest events during 2020 with estimated gross and net loss to the syndicate.",
           "lobs_affected": [
             "Property"
           ],
           "page": 26,
-          "confidence": 1.0
+          "confidence": 0.8
         }
       ],
-      "standardized_narrative": "Opening gross claims outstanding at 1 January 2020 were GBP 160.783m. During 2020 the syndicate recorded a material adverse prior-year development of approximately GBP 114.4m (strengthening), driven principally by substantial increases in large and catastrophe claims (notably during Q4) and additional COVID-19 related reserves. The 2018 year of account, and prior years, were particularly impacted. The deterioration affected property/business interruption exposures and casualty lines and was compounded by legal uncertainty on COVID-19 BI coverage and related reinsurance recoveries.",
+      "standardized_narrative": "During 2020 the syndicate's gross prior-year claims reserves deteriorated materially: analysis of the gross claims development triangle indicates a gross adverse prior-year development of approximately GBP 114.4m. The deterioration was driven by large new and catastrophic claims (notably adverse development in casualty exposures), and additional COVID-19 related reserve strengthening. Legal and reinsurance uncertainty (including court actions and uncertainty over reinsurance to close availability/cost) also contributed to reserve strengthening. The 2018 year of account remains open and carries material exposure to COVID-19.",
       "raw_causal_phrases": [
-        "The main driver of this deterioration was a substantial increase in new large and cat claims, particularly in the fourth quarter.",
+        "substantial increase in new large and cat claims, particularly in the fourth quarter",
         "Additional reserves were booked in relation to COVID-19 at GBP 12.0m net, of which GBP 7.2m related to 2018 and prior years of account.",
-        "The reserves held at year end for COVID-19 are GBP 12.0m net",
-        "The underwriting result was a loss of GBP 28.2m, of which GBP 22.8m is in respect of the 2018 and prior years of account."
+        "The final outcome of these claims is still uncertain together with related reinsurance recoveries",
+        "There is significant uncertainty as to the cost and availability of reinsurance to close via a third party.",
+        "loss ratios, capital ratios, expense ratios and acquisition costs have all been too high"
       ],
       "lob_movements": [
         {
@@ -602,7 +617,7 @@
       "gross_premium_page": 6,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior-year development (gross) was calculated from the gross claims development triangle in the notes (page 20) by comparing the current cumulative incurred for underwriting years 2013-2018 to the previous diagonal (per Lloyd's triangle method). There is no single explicit gross 'movement in prior year's provision' note. The Part VII / RITC activity and transfers described in the report may distort some comparative movements; the triangle appears to be the best available gross source. COVID-19 amounts quoted elsewhere in the report are presented net of reinsurance; where only net figures were available these were not used for the gross PYD calculation.",
+      "data_quality_notes": "Prior-year development figure derived from the gross claims development triangle (gross cumulative estimates by underwriting year) because the report does not publish a single labelled 'gross prior year movement' figure. The syndicate had Part VII / reinsurance-to-close transactions near year-end and ongoing reinsurance uncertainties which may affect comparability; many narrative amounts are reported net of reinsurance, but the PYD above is calculated on gross triangle data. Triangle numbers are presented in thousands in the source tables; main monetary fields in this output are converted to millions.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -619,16 +634,6 @@
           2020
         ],
         "development_rows": [
-          [
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-          ],
           [
             834,
             425,
@@ -713,20 +718,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_1991_2020_llm.pdf",
-      "content_hash": "4c8c286fd691b65e006c297b330b59ca999c939b164322154cc50e416cb8e5b2",
-      "standardized_at": "2026-07-05T23:10:30.904798+00:00",
+      "content_hash": "9fd3f35677013e12506f4a247f265053ed59d58293801b5a6389e8e91bb60125",
+      "standardized_at": "2026-09-11T11:27:36.850101+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 28832,
-        "output_tokens": 9959,
-        "total_tokens": 38791,
-        "cost_usd": 0.027126
+        "input_tokens": 29592,
+        "output_tokens": 7950,
+        "total_tokens": 37542,
+        "cost_usd": 0.023298
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 114.371,
+        "model_value": 114.371,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 38,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2013,
           2014,
@@ -818,6 +835,16 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "After one year",
+          "After two years",
+          "After three years",
+          "After four years",
+          "After five years",
+          "After six years",
+          "After seven years",
+          "After eight years"
         ],
         "source_page": 38,
         "entity": 1991
@@ -974,12 +1001,12 @@
       }
     }
   },
-  "total_cost_usd": 0.037235,
-  "total_tokens": 61643,
+  "total_cost_usd": 0.033269,
+  "total_tokens": 63544,
   "validation": {
     "passed": true,
-    "total_discrepancies": 29,
-    "within_tolerance": 29,
+    "total_discrepancies": 21,
+    "within_tolerance": 21,
     "hard_failures": 0,
     "hard_failure_details": []
   }

@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T11:16:37.330853+00:00",
+  "extraction_timestamp": "2026-09-13T04:00:27.212465+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -11,14 +13,14 @@
       "syndicate": 382,
       "year": 2015,
       "opening_reserves_gbp_m": 235.385,
-      "opening_reserves_page": 6,
+      "opening_reserves_page": 7,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": -15.848,
       "prior_year_development_pct": -6.73,
       "direction": "release",
-      "prior_year_movement_page": 17,
+      "prior_year_movement_page": 20,
       "prior_year_movement_confidence": 0.8,
-      "exact_reserve_text": "Over/(under) provisions for claims at the beginning of the year as compared with net payments and provisions at the end of the year in respect of prior years' claims are as follows:\nEnergy, Marine and Aviation 8,514\nProperty 4,074\nSpecialty (8,902)\nRelease/(Strengthening) 3,686",
+      "exact_reserve_text": "The Syndicate also recorded a relatively low level of favourable development of prior accident year loss reserves.",
       "primary_causes": [
         "Favorable claims development"
       ],
@@ -31,7 +33,7 @@
           "event_year": 2015,
           "event_type": "man_made",
           "net_loss_gbp_m": null,
-          "loss_description": "The majority of this increase was driven by a small number of large current accident year losses, the most notable of which was the Tianjin port explosion.",
+          "loss_description": "most notable of which was the Tianjin port explosion.",
           "lobs_affected": [],
           "page": 2,
           "confidence": 0.8
@@ -41,35 +43,35 @@
           "event_year": 2015,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "The Syndicate incurred relatively low levels of losses emanating from natural catastrophes, the most significant being the UK storm events in December 2015.",
+          "loss_description": "most significant being the UK storm events in December 2015.",
           "lobs_affected": [],
           "page": 2,
           "confidence": 0.8
         }
       ],
-      "standardized_narrative": "The Syndicate reported a net release of GBP 3.686 million in prior year loss reserves for 2015. This favourable development was described as a \"relatively low level of favourable development of prior accident year loss reserves\" in the strategic report. This release was driven by favourable development in Energy, Marine and Aviation, and Property lines, partially offset by strengthening in Specialty lines.",
+      "standardized_narrative": "The gross claims development triangle indicates a strengthening of prior year reserves by GBP 15.637 million. This contradicts a narrative statement on page 2 which mentions \"a relatively low level of favourable development of prior accident year loss reserves.\" No specific causes for this movement are detailed. The report also notes net prior year movements by line of business, showing strengthenings in Energy, Marine and Aviation and Property, and a release in Specialty.",
       "raw_causal_phrases": [
-        "relatively low level of favourable development of prior accident year loss reserves"
+        "a relatively low level of favourable development of prior accident year loss reserves"
       ],
       "lob_movements": [
         {
-          "line_of_business": "Marine",
-          "direction": "release",
-          "amount_gbp_m": -8.514,
+          "line_of_business": "Energy",
+          "direction": "strengthening",
+          "amount_gbp_m": 8.514,
           "percentage": null,
           "confidence": 0.8
         },
         {
           "line_of_business": "Property",
-          "direction": "release",
-          "amount_gbp_m": -4.074,
+          "direction": "strengthening",
+          "amount_gbp_m": 4.074,
           "percentage": null,
           "confidence": 0.8
         },
         {
-          "line_of_business": "Other",
-          "direction": "strengthening",
-          "amount_gbp_m": 8.902,
+          "line_of_business": "Reinsurance - Specialty",
+          "direction": "release",
+          "amount_gbp_m": -8.902,
           "percentage": null,
           "confidence": 0.8
         }
@@ -112,15 +114,15 @@
           "percentage_of_total": 9.7
         }
       ],
-      "gross_premium_page": 16,
+      "gross_premium_page": 17,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior year development figure is likely net of reinsurance, as a gross figure was not explicitly provided in the movement note or narrative. The gross claims development triangle calculation showed a strengthening, which contradicted the narrative and the explicit 'Release/(Strengthening)' line in Note 6. The figure from Note 6 was used as it is a direct statement of prior year movement. [RAG OVERRIDE: Model said PYD=-3.686, RAG triangle computed -15.848. Using RAG value.]",
+      "data_quality_notes": "The gross prior year development calculated from the claims development triangle (strengthening of GBP 15.637m) contradicts the narrative statement on page 2 which mentions 'favourable development of prior accident year loss reserves'. The LOB movements for prior year development are net of reinsurance as gross breakdown was not available. The claims development triangle is structured with rows representing movements from the initial estimate, requiring reconstruction of cumulative estimates for diagonal comparison. [RAG OVERRIDE: Model said PYD=15.637, RAG triangle computed -15.848. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
-        "page": 19,
+        "page": 20,
         "underwriting_years": [
           2005,
           2006,
@@ -282,20 +284,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_382_2015_llm.pdf",
-      "content_hash": "0a8e83f4b20ee60c740a0ac817e5f81c7bca087c0b21bbaf132b5dd7b00b3207",
-      "standardized_at": "2026-03-18T21:25:57.579044+00:00",
+      "content_hash": "3aaf2c11210a9c1a8c166ffa2317e0755c1f33f8cea2035cba7b286f1c5b8c11",
+      "standardized_at": "2026-09-11T12:47:02.995935+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 11410,
-        "output_tokens": 2246,
-        "total_tokens": 21418,
-        "cost_usd": 0.009038
+        "input_tokens": 12472,
+        "output_tokens": 2180,
+        "total_tokens": 22872,
+        "cost_usd": 0.009192
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -15.848,
+        "model_value": 15.637,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "conflict",
+        "triangle_source_page": 47,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "conflict",
+        "cell_binding": "header",
         "underwriting_years": [
           2005,
           2006,
@@ -453,6 +467,19 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of first year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later",
+          "Seven years later",
+          "Eight years later",
+          "Nine years later",
+          "Ten years later"
         ],
         "source_page": 47,
         "entity": 382
@@ -627,12 +654,10 @@
       "prior_year_development_pct": -6.73,
       "direction": "release",
       "prior_year_movement_page": 38,
-      "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "Over/(under) provisions for claims at the beginning of the year as compared with net payments and provisions at the end of the year in respect of prior years' claims are as follows:\n\nRelease/(Strengthening) 3,686 (172)",
+      "prior_year_movement_confidence": 0.8,
+      "exact_reserve_text": "Over/(under) provisions for claims at the beginning of the year as compared with net payments and provisions at the end of the year in respect of prior years' claims are as follows:\n\nEnergy, Marine and Aviation 8,514\nProperty 4,074\nSpecialty (8,902)\n\nRelease/(Strengthening) 3,686 (172)",
       "primary_causes": [
-        "Favorable claims development",
-        "IBNR recalibration",
-        "Large loss development"
+        "Favorable claims development"
       ],
       "specific_events": [],
       "specific_years_affected": [],
@@ -645,11 +670,11 @@
           "net_loss_gbp_m": null,
           "loss_description": "The majority of this increase was driven by a small number of large current accident year losses, the most notable of which was the Tianjin port explosion.",
           "lobs_affected": [
-            "Property",
-            "Marine"
+            "Marine",
+            "Property"
           ],
           "page": 3,
-          "confidence": 1.0
+          "confidence": 0.9
         },
         {
           "event_name": "UK storm events (December 2015)",
@@ -661,37 +686,36 @@
             "Property"
           ],
           "page": 3,
-          "confidence": 1.0
+          "confidence": 0.7
         }
       ],
-      "standardized_narrative": "The syndicate recorded a small favourable prior-year reserve movement in 2015: a gross release of GBP 3.686m driven by favourable development primarily in the Energy/Marine/Aviation and Property classes, partially offset by adverse development in Specialty. This resulted in a modest reduction in gross claims outstanding relative to the opening position.",
+      "standardized_narrative": "The Syndicate recorded a small favourable development in prior accident year claims totalling GBP 3.686m (a release). The managing agent notes a relatively low level of favourable prior-year development; movements by class in the prior-year reconciliation were recorded mainly in Energy/Marine/Aviation and Property (favourable) while Specialty showed an adverse movement. The release is modest relative to opening gross claims outstanding (approximately 1.57% of opening reserves).",
       "raw_causal_phrases": [
-        "Over/(under) provisions for claims at the beginning of the year as compared with net payments and provisions at the end of the year in respect of prior years' claims are as follows:",
-        "Release/(Strengthening)",
         "The Syndicate also recorded a relatively low level of favourable development of prior accident year loss reserves.",
-        "The majority of this increase was driven by a small number of large current accident year losses, the most notable of which was the Tianjin port explosion."
+        "Over/(under) provisions for claims at the beginning of the year as compared with net payments and provisions at the end of the year in respect of prior years' claims are as follows:",
+        "Release/(Strengthening) 3,686 (172)"
       ],
       "lob_movements": [
+        {
+          "line_of_business": "Aggregate",
+          "direction": "release",
+          "amount_gbp_m": -8.514,
+          "percentage": null,
+          "confidence": 0.8
+        },
         {
           "line_of_business": "Property",
           "direction": "release",
           "amount_gbp_m": -4.074,
           "percentage": null,
-          "confidence": 1.0
+          "confidence": 0.8
         },
         {
           "line_of_business": "Reinsurance - Specialty",
           "direction": "strengthening",
           "amount_gbp_m": 8.902,
           "percentage": null,
-          "confidence": 1.0
-        },
-        {
-          "line_of_business": "Energy",
-          "direction": "release",
-          "amount_gbp_m": -8.514,
-          "percentage": null,
-          "confidence": 0.6
+          "confidence": 0.8
         }
       ],
       "gross_premiums_written_gbp_m": 267.9,
@@ -735,7 +759,7 @@
       "gross_premium_page": 37,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior year development sourced from the 'Over/(under) provisions...' table in Note 6 (claims incurred) which is presented as gross prior year movement. Lob movements: the class 'Energy, Marine and Aviation' is reported as a combined line in the note; the combined amount has been associated primarily with 'Energy' for the standardized LOB mapping (partial allocation) - this creates uncertainty for LOB-specific amounts. All monetary figures taken from tables presented in GBP '000 and converted to millions. No explicit gross prior-year movement by underwriting year was given outside the development triangle; triangle was used only for completeness. [RAG OVERRIDE: Model said PYD=-3.686, RAG triangle computed -15.848. Using RAG value.]",
+      "data_quality_notes": "Prior year development extracted from Note 6 (Claims incurred) where a total 'Release/(Strengthening) 3,686' is shown; wording in the note refers to 'net payments and provisions' so there is some ambiguity whether the table is presented net of reinsurance. A gross claims development triangle (gross of reinsurance) is present in the technical provisions notes (page 44) but parsing of that triangle in the source text was incomplete; the Note 6 movement was used as primary figure. LOB mapping: the note groups 'Energy, Marine and Aviation' together; this was represented as 'Aggregate' in lob_movements because the amount cannot be apportioned to individual standard LOBs. Users should treat the prior-year development amount as reasonably reliable but note the potential gross/net ambiguity. [RAG OVERRIDE: Model said PYD=-3.686, RAG triangle computed -15.848. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -902,20 +926,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_382_2015_llm.pdf",
-      "content_hash": "0a8e83f4b20ee60c740a0ac817e5f81c7bca087c0b21bbaf132b5dd7b00b3207",
-      "standardized_at": "2026-03-18T21:27:46.602833+00:00",
+      "content_hash": "3aaf2c11210a9c1a8c166ffa2317e0755c1f33f8cea2035cba7b286f1c5b8c11",
+      "standardized_at": "2026-09-11T12:49:24.873139+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 35235,
-        "output_tokens": 7837,
-        "total_tokens": 43072,
-        "cost_usd": 0.024483
+        "input_tokens": 37398,
+        "output_tokens": 8122,
+        "total_tokens": 45520,
+        "cost_usd": 0.025594
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -15.848,
+        "model_value": -3.686,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "conflict",
+        "triangle_source_page": 47,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "conflict",
+        "cell_binding": "header",
         "underwriting_years": [
           2005,
           2006,
@@ -1073,6 +1109,19 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of first year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later",
+          "Seven years later",
+          "Eight years later",
+          "Nine years later",
+          "Ten years later"
         ],
         "source_page": 47,
         "entity": 382
@@ -1238,12 +1287,12 @@
       }
     }
   },
-  "total_cost_usd": 0.033521,
-  "total_tokens": 64490,
+  "total_cost_usd": 0.034786,
+  "total_tokens": 68392,
   "validation": {
     "passed": true,
-    "total_discrepancies": 20,
-    "within_tolerance": 20,
+    "total_discrepancies": 17,
+    "within_tolerance": 17,
     "hard_failures": 0,
     "hard_failure_details": []
   }

@@ -1,12 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-10T10:44:42.142375+00:00",
+  "extraction_timestamp": "2026-09-13T04:13:27.353726+00:00",
   "spec": {
-    "prompt_version": "2.10",
-    "driver_prompt_version": "2.11",
-    "responses_served_from_cache": {
-      "gemini-2.5-flash": "2.10",
-      "gpt-5-mini": "2.10"
-    },
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -18,17 +15,14 @@
       "opening_reserves_gbp_m": 57.106,
       "opening_reserves_page": 10,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": 38.38,
-      "prior_year_development_pct": 67.21,
+      "prior_year_development_gbp_m": 38.4,
+      "prior_year_development_pct": 67.24,
       "direction": "strengthening",
       "prior_year_movement_page": 22,
       "prior_year_movement_confidence": 0.8,
-      "exact_reserve_text": "Gross basis as at 31 December 2016 claims development table on page 22 shows cumulative incurred claims by underwriting year.",
+      "exact_reserve_text": "Included within net claims incurred of GBP 81.9m (2015: GBP 48.0m) is a deterioration of GBP 10.9m (2015: improvement of GBP 0.2m) to claims reserves established at the prior year end principally due to the unfavourable development of Property, Political Risks and European Creditor business.",
       "primary_causes": [
         "Adverse claims development",
-        "Geopolitical events",
-        "Other",
-        "Property",
         "Large loss development"
       ],
       "specific_events": [],
@@ -38,17 +32,81 @@
         2013,
         2014
       ],
-      "prior_year_events": [],
+      "prior_year_events": [
+        {
+          "event_name": "Large loss notifications",
+          "event_year": null,
+          "impact_description": "large loss notifications in relation to the credit book impacting single premium exposures on prior years of account",
+          "lobs_affected": [
+            "Political Risks"
+          ],
+          "amount_gbp_m": null,
+          "confidence": 0.5
+        },
+        {
+          "event_name": "Unfavourable settlement",
+          "event_year": null,
+          "impact_description": "unfavourable settlement on a long-standing Property claim",
+          "lobs_affected": [
+            "Property"
+          ],
+          "amount_gbp_m": null,
+          "confidence": 0.5
+        },
+        {
+          "event_name": "Adverse performance on Consumer Products accounts",
+          "event_year": null,
+          "impact_description": "adverse performance on certain large Consumer Products accounts",
+          "lobs_affected": [
+            "Casualty"
+          ],
+          "amount_gbp_m": null,
+          "confidence": 0.5
+        },
+        {
+          "event_name": "Higher than anticipated attrition",
+          "event_year": null,
+          "impact_description": "higher than anticipated levels of attrition on the legacy European Creditor business",
+          "lobs_affected": [
+            "Casualty"
+          ],
+          "amount_gbp_m": null,
+          "confidence": 0.5
+        }
+      ],
       "named_events": [],
-      "standardized_narrative": "The syndicate experienced a gross prior year reserve strengthening of GBP 38.4 million in 2016, calculated from the gross claims development triangle. This adverse development was primarily driven by prior years in the Political Risks and Consumer Products classes, including higher than expected attritional development in legacy European Creditor business, large notifications in the Political Risks class, and an unfavourable development in a legacy Property claim.",
+      "standardized_narrative": "The syndicate experienced a gross strengthening of GBP 38.4 million in prior year reserves, representing a 67.24% increase relative to opening gross claims outstanding. This adverse development was primarily driven by unfavourable claims experience in Political Risks, Consumer Products, and Property classes. Specific issues included large loss notifications in the Political Risks credit book, adverse performance on certain large Consumer Products accounts, higher attrition in legacy European Creditor business, and an unfavourable settlement on a long-standing Property claim.",
       "raw_causal_phrases": [
         "adverse development on prior years in the Political Risks and Consumer Products classes",
+        "Consumer business saw adverse development in certain large binding authority arrangements which have either been discontinued or re-underwritten",
         "higher than expected attritional development in the legacy European Creditor business",
         "Political Risks class was impacted by a number of large notifications in relation to the credit book impacting single premium exposures on prior years of account",
         "unfavourable development in a legacy Property claim",
         "unfavourable development of Property, Political Risks and European Creditor business"
       ],
-      "lob_movements": [],
+      "lob_movements": [
+        {
+          "line_of_business": "Political Risks",
+          "direction": "strengthening",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.5
+        },
+        {
+          "line_of_business": "Casualty",
+          "direction": "strengthening",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.5
+        },
+        {
+          "line_of_business": "Property",
+          "direction": "strengthening",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.5
+        }
+      ],
       "gross_premiums_written_gbp_m": 251.4,
       "gross_premium_mix": [
         {
@@ -95,38 +153,12 @@
       "gross_premium_page": 20,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior year development is calculated from the gross claims development triangle on page 22, excluding the two most recent underwriting years (2015 and 2016). The narrative on page 21 mentions a 'deterioration of GBP 10.9m' to claims reserves, which is likely a net figure and differs from the gross triangle calculation.",
-      "source_type": "syndicate",
-      "source_file": "pdf_extraction\\llm_slim\\syndicate_5820_2016_llm.pdf",
-      "content_hash": "31635f41ad09606a09f1b4f692b99b0821f28533d9ffd6ce7c4f717fd4f938f9",
-      "standardized_at": "2026-07-05T18:59:52.394873+00:00",
-      "standardization_model": "gemini-2.5-flash",
-      "_extraction_meta": {
-        "model": "gemini-2.5-flash",
-        "input_tokens": 15539,
-        "output_tokens": 1101,
-        "total_tokens": 23548,
-        "cost_usd": 0.007414
-      },
-      "_served_from": {
-        "cache_file": "c08b8e85a6129a875e78633c8ac892e8755bfb99f4df6bcf14af63876e9841cb.json",
-        "prompt_version": "2.10"
-      },
-      "_pyd_route": {
-        "source": "rag_triangle",
-        "value": 38.38,
-        "model_value": 38.4,
-        "triangle_type": "gross",
-        "triangle_units": "millions",
-        "triangle_units_evidence": "header",
-        "triangle_source_page": 42,
-        "note": "confirmed by the model value"
-      },
-      "_rag_triangle": {
+      "data_quality_notes": "Prior year development amount is derived from the gross claims development triangle, as the narrative text only provided a net figure.",
+      "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "millions",
-        "units_evidence": "header",
+        "page": 22,
         "underwriting_years": [
           2011,
           2012,
@@ -154,15 +186,15 @@
           ],
           [
             65.8,
-            58.51,
-            60.31,
+            58.5,
+            60.3,
             66.4,
             null,
             null
           ],
           [
             63.0,
-            60.21,
+            60.2,
             68.0,
             null,
             null,
@@ -184,6 +216,101 @@
             null,
             null
           ]
+        ]
+      },
+      "source_type": "syndicate",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_5820_2016_llm.pdf",
+      "content_hash": "a8dedfa7714ea72e05520877e52883621b4092914e9d5ffd16a7a12e4a107b0d",
+      "standardized_at": "2026-09-11T10:07:42.700071+00:00",
+      "standardization_model": "gemini-2.5-flash",
+      "_extraction_meta": {
+        "model": "gemini-2.5-flash",
+        "input_tokens": 16343,
+        "output_tokens": 1996,
+        "total_tokens": 23564,
+        "cost_usd": 0.009893
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 38.4,
+        "model_value": 38.4,
+        "triangle_type": "gross",
+        "triangle_units": "millions",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 42,
+        "note": "confirmed by the model value"
+      },
+      "_rag_triangle": {
+        "type": "gross",
+        "currency": "GBP",
+        "units": "millions",
+        "units_evidence": "header",
+        "cell_binding": "header",
+        "underwriting_years": [
+          2011,
+          2012,
+          2013,
+          2014,
+          2015,
+          2016
+        ],
+        "development_rows": [
+          [
+            44.7,
+            27.4,
+            18.4,
+            15.9,
+            14.3,
+            21.1
+          ],
+          [
+            77.6,
+            45.2,
+            53.8,
+            40.8,
+            45.7,
+            null
+          ],
+          [
+            65.8,
+            58.5,
+            60.3,
+            66.4,
+            null,
+            null
+          ],
+          [
+            63.0,
+            60.2,
+            68.0,
+            null,
+            null,
+            null
+          ],
+          [
+            64.5,
+            63.4,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            66.4,
+            null,
+            null,
+            null,
+            null,
+            null
+          ]
+        ],
+        "row_labels": [
+          "At end of underwriting year",
+          "one year later",
+          "two years later",
+          "three years later",
+          "four years later",
+          "five years later"
         ],
         "source_page": 42,
         "entity": 5820
@@ -275,6 +402,13 @@
         "unit_source": "header",
         "source_page": 42,
         "entity": 5820,
+        "movement_semantics": {
+          "row_label": "Gross ultimate claims on premium earned to date for 2010 & Prior years",
+          "row_index": 10,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": false,
+          "column_index": 1
+        },
         "gross_prior_year_claims": 11.8,
         "ri_share_prior_year": 0.0,
         "net_prior_year_claims": 0.0
@@ -388,11 +522,11 @@
       "opening_reserves_gbp_m": 57.106,
       "opening_reserves_page": 18,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": 38.38,
-      "prior_year_development_pct": 67.21,
+      "prior_year_development_gbp_m": 38.4,
+      "prior_year_development_pct": 67.24,
       "direction": "strengthening",
       "prior_year_movement_page": 34,
-      "prior_year_movement_confidence": 0.8,
+      "prior_year_movement_confidence": 1.0,
       "exact_reserve_text": "Included within net claims incurred of GBP 81.9m (2015: GBP 48.0m) is a deterioration of GBP 10.9m (2015: improvement of GBP 0.2m) to claims reserves established at the prior year end principally due to the unfavourable development of Property, Political Risks and European Creditor business.",
       "primary_causes": [
         "Adverse claims development",
@@ -401,14 +535,16 @@
       ],
       "specific_events": [],
       "specific_years_affected": [
+        2011,
+        2012,
         2013,
         2014
       ],
       "prior_year_events": [
         {
-          "event_name": "Political Risks large notifications (credit book single premium exposures)",
+          "event_name": "Political Risks credit book notifications",
           "event_year": null,
-          "impact_description": "Large notifications in relation to the credit book impacting single premium exposures on prior years of account leading to adverse development",
+          "impact_description": "Adverse development on prior years in the Political Risks class due to a number of large notifications in relation to the credit book impacting single premium exposures on prior years of account.",
           "lobs_affected": [
             "Reinsurance - Specialty",
             "Casualty"
@@ -417,42 +553,36 @@
           "confidence": 0.5
         },
         {
-          "event_name": "Consumer Products large binding authority arrangements adverse development",
-          "event_year": null,
-          "impact_description": "Adverse development on certain large Consumer Products accounts which have either been discontinued or re-underwritten",
-          "lobs_affected": [
-            "Casualty"
-          ],
-          "amount_gbp_m": null,
-          "confidence": 0.5
-        },
-        {
           "event_name": "Legacy European Creditor attritional development",
           "event_year": null,
-          "impact_description": "Higher than expected attritional development in the legacy European Creditor business",
+          "impact_description": "Higher than expected attritional development in the legacy European Creditor business.",
           "lobs_affected": [
             "Casualty"
           ],
           "amount_gbp_m": null,
-          "confidence": 0.5
+          "confidence": 0.6
         },
         {
           "event_name": "Long-standing Property claim settlement",
           "event_year": null,
-          "impact_description": "An unfavourable settlement on a long-standing Property claim contributed to adverse development",
+          "impact_description": "An unfavourable settlement on a long-standing Property claim resulted in adverse development on prior years.",
           "lobs_affected": [
             "Property"
           ],
           "amount_gbp_m": null,
-          "confidence": 0.6
+          "confidence": 0.7
         }
       ],
       "named_events": [],
-      "standardized_narrative": "At 1 January 2016 gross claims outstanding were GBP 57.106m. During the 2016 calendar year there was adverse prior-year development: the Managing Agent reports a deterioration (net) of GBP 10.9m to claims reserves established at the prior year end. The deterioration was principally driven by unfavourable development in Property, Political Risks and legacy European Creditor / Consumer Products business, resulting in a material strengthening of prior year reserves.",
+      "standardized_narrative": "The syndicate experienced adverse prior-year reserve development in 2016 with a deterioration of GBP 10.9m (net) to claims reserves established at the prior year end. The movement was principally driven by adverse development in Property, Political Risks and legacy European Creditor (Credit & Suretyship/Consumer Products) business. This reserve strengthening materially contributed to higher net claims incurred for the year.",
       "raw_causal_phrases": [
-        "is a deterioration of GBP 10.9m (2015: improvement of GBP 0.2m) to claims reserves established at the prior year end principally due to the unfavourable development of Property, Political Risks and European Creditor business.",
-        "The net claims ratio increased by 6.0% to 42.5% for the 2016 calendar year driven largely by adverse development on prior years in the Political Risks and Consumer Products classes.",
-        "The adverse development of the 2013 & Prior years of account during the calendar year followed a number of large loss notifications on the Political Risks book in relation to the long period single premium exposures, adverse performance on certain large Consumer Products accounts, higher than anticipated levels of attrition on the legacy European Creditor business and an unfavourable settlement on a long-standing Property claim."
+        "a deterioration of GBP 10.9m (2015: improvement of GBP 0.2m) to claims reserves established at the prior year end principally due to the unfavourable development of Property, Political Risks and European Creditor business",
+        "adverse development on prior years in the Political Risks and Consumer Products classes",
+        "The Consumer business saw adverse development in certain large binding authority arrangements",
+        "higher than expected attritional development in the legacy European Creditor business",
+        "an unfavourable settlement on a long-standing Property claim",
+        "material adverse performance on two large Consumer Products accounts",
+        "adverse movement in the claims ratio"
       ],
       "lob_movements": [
         {
@@ -460,21 +590,21 @@
           "direction": "strengthening",
           "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.6
+          "confidence": 0.8
         },
         {
           "line_of_business": "Casualty",
           "direction": "strengthening",
           "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.5
+          "confidence": 0.7
         },
         {
           "line_of_business": "Reinsurance - Specialty",
           "direction": "strengthening",
           "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.5
+          "confidence": 0.6
         }
       ],
       "gross_premiums_written_gbp_m": 251.4,
@@ -523,7 +653,7 @@
       "gross_premium_page": 33,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Gross prior-year reserve movement (GROSS) not explicitly stated. The report explicitly states a net deterioration of GBP 10.9m included within net claims incurred; no gross 'movement in prior year's provision' (insurance liabilities column) figure was provided separately. The gross claims development triangle is present but may be distorted by RITC / reinsurance-to-close activity and RITC accepted on closure of earlier years; therefore the gross triangle was not used to compute a gross PYD. Prior-year development figure provided here is NET of reinsurance as the only explicit quantified movement; flagging as NET fallback. [RAG OVERRIDE: Model said PYD=10.9, RAG triangle computed 38.38. Using RAG value.]",
+      "data_quality_notes": "The prior-year development figure used is taken from the notes as an explicitly stated deterioration of GBP 10.9m but is described in the text as included within 'net claims incurred' (i.e. net of reinsurance). No explicit gross (insurance liabilities) prior-year movement line was provided; a gross claims development triangle exists but is impacted by reinsurance-to-close and prior-year reinsurances (RITC) in the period which can distort a triangle-based PYD calculation. Opening gross claims outstanding used the Balance Sheet prior-year column. Where gross amounts were not available per event/LOB, amounts are left null. [RAG OVERRIDE: Model said PYD=10.9, RAG triangle computed 38.4. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -556,15 +686,15 @@
           ],
           [
             65.8,
-            58.51,
-            60.31,
+            58.5,
+            60.3,
             66.4,
             null,
             null
           ],
           [
             63.0,
-            60.21,
+            60.2,
             68.0,
             null,
             null,
@@ -590,23 +720,19 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_5820_2016_llm.pdf",
-      "content_hash": "31635f41ad09606a09f1b4f692b99b0821f28533d9ffd6ce7c4f717fd4f938f9",
-      "standardized_at": "2026-07-05T19:01:07.425669+00:00",
+      "content_hash": "a8dedfa7714ea72e05520877e52883621b4092914e9d5ffd16a7a12e4a107b0d",
+      "standardized_at": "2026-09-11T10:09:55.120390+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 65667,
-        "output_tokens": 6921,
-        "total_tokens": 72588,
-        "cost_usd": 0.030259
-      },
-      "_served_from": {
-        "cache_file": "7a0d97b7f604203d3062c9683bc3677a8badcd1b40eefc5d6102725f423f431e.json",
-        "prompt_version": "2.10"
+        "input_tokens": 66427,
+        "output_tokens": 7092,
+        "total_tokens": 73519,
+        "cost_usd": 0.030791
       },
       "_pyd_route": {
         "source": "rag_triangle",
-        "value": 38.38,
+        "value": 38.4,
         "model_value": 10.9,
         "triangle_type": "gross",
         "triangle_units": "millions",
@@ -619,6 +745,7 @@
         "currency": "GBP",
         "units": "millions",
         "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -646,15 +773,15 @@
           ],
           [
             65.8,
-            58.51,
-            60.31,
+            58.5,
+            60.3,
             66.4,
             null,
             null
           ],
           [
             63.0,
-            60.21,
+            60.2,
             68.0,
             null,
             null,
@@ -676,6 +803,14 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of underwriting year",
+          "one year later",
+          "two years later",
+          "three years later",
+          "four years later",
+          "five years later"
         ],
         "source_page": 42,
         "entity": 5820
@@ -767,6 +902,13 @@
         "unit_source": "header",
         "source_page": 42,
         "entity": 5820,
+        "movement_semantics": {
+          "row_label": "Gross ultimate claims on premium earned to date for 2010 & Prior years",
+          "row_index": 10,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": false,
+          "column_index": 1
+        },
         "gross_prior_year_claims": 11.8,
         "ri_share_prior_year": 0.0,
         "net_prior_year_claims": 0.0
@@ -875,8 +1017,8 @@
       }
     }
   },
-  "total_cost_usd": 0.037673,
-  "total_tokens": 96136,
+  "total_cost_usd": 0.040684,
+  "total_tokens": 97083,
   "validation": {
     "passed": true,
     "total_discrepancies": 19,

@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-05T20:40:34.269043+00:00",
+  "extraction_timestamp": "2026-09-13T04:05:19.579452+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -18,17 +20,24 @@
       "direction": "strengthening",
       "prior_year_movement_page": 11,
       "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "Claims incurred in the prior accident years 764 (223) 541",
+      "exact_reserve_text": "Claims incurred in the prior accident years 764 (223) 541\nRITC of closed years (14,403) 6,374 (8,029)\nAs at the 31 December 2020, the 2018 underwriting year was reinsured to close (\"RITC\") externally resulting in the Syndicate having only transactions relating to 2019 to 2021 underwriting years during the 2021 financial year.",
       "primary_causes": [
-        "Adverse claims development"
+        "Reserve methodology change",
+        "Favorable claims development"
       ],
       "specific_events": [],
-      "specific_years_affected": [],
+      "specific_years_affected": [
+        2018,
+        2019,
+        2020
+      ],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "For the 2021 financial year, Syndicate 6132 experienced a gross strengthening of GBP 0.764 million in its claims outstanding provision related to prior accident years. This represents a 1.30% increase relative to the opening gross claims outstanding. The 2018 underwriting year was reinsured to close during 2020, which resulted in a significant reduction in claims outstanding for that year of account, but this is treated as an accounting transfer rather than a re-estimation of existing reserves.",
+      "standardized_narrative": "The Syndicate experienced a gross prior year reserve release of GBP 13.639 million. This was primarily driven by a significant release of GBP 14.403 million due to the Reinsurance to Close (RITC) of the 2018 underwriting year and prior years. This RITC externally closed the 2018 year of account. Partially offsetting this release was a gross strengthening of GBP 0.764 million from claims incurred in other prior accident years (2019 and 2020). The overall movement for prior years was a release.",
       "raw_causal_phrases": [
-        "Claims incurred in the prior accident years"
+        "Claims incurred in the prior accident years",
+        "RITC of closed years",
+        "the 2018 underwriting year was reinsured to close (\"RITC\") externally"
       ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 52.0,
@@ -42,7 +51,7 @@
       "gross_premium_page": 10,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The RITC (Reinsurance to Close) of the 2018 underwriting year externally in 2020 significantly impacts the overall claims outstanding and makes the claims development triangle unreliable for calculating total prior year development. The `prior_year_development_gbp_m` is taken from the 'Claims incurred in the prior accident years' line in Note 8, which represents re-estimation of prior year claims, but does not include the impact of the RITC transfer of -GBP 14.403 million. [RAG OVERRIDE: Model said PYD=0.764, RAG triangle computed 2.558. Using RAG value.]",
+      "data_quality_notes": "The prior year development includes a significant Reinsurance to Close (RITC) transaction, which represents a transfer of liabilities for older underwriting years rather than a pure re-estimation of existing reserves. [RAG OVERRIDE: Model said PYD=-13.639, RAG triangle computed 2.558. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -73,20 +82,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_6132_2021_llm.pdf",
-      "content_hash": "a2e36b5f6fb257e66e0304e42989d3583d3511a46125d8f30e9f86680370e114",
-      "standardized_at": "2026-07-05T21:35:42.304131+00:00",
+      "content_hash": "5c51510295d1d66278c0e1e4f303295c6038c575e6a0c3d57a8e045e9795ce3b",
+      "standardized_at": "2026-09-11T13:44:38.932003+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 10121,
-        "output_tokens": 798,
-        "total_tokens": 18231,
-        "cost_usd": 0.005031
+        "input_tokens": 10925,
+        "output_tokens": 891,
+        "total_tokens": 15944,
+        "cost_usd": 0.005505
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 2.558,
+        "model_value": -13.639,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 28,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2019,
           2020,
@@ -108,6 +129,11 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of underwriting year",
+          "One year later",
+          "Two years later"
         ],
         "source_page": 28,
         "entity": 6132
@@ -136,6 +162,13 @@
         "unit_source": "header",
         "source_page": 24,
         "entity": 6132,
+        "movement_semantics": {
+          "row_label": "Claims incurred in the prior accident years",
+          "row_index": 4,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": false,
+          "column_index": 1
+        },
         "gross_prior_year_claims": 0.8,
         "ri_share_prior_year": -0.2,
         "net_prior_year_claims": 0.5
@@ -199,12 +232,11 @@
       "prior_year_development_gbp_m": 2.558,
       "prior_year_development_pct": 4.36,
       "direction": "strengthening",
-      "prior_year_movement_page": 26,
+      "prior_year_movement_page": 23,
       "prior_year_movement_confidence": 0.8,
-      "exact_reserve_text": "As at the 31 December 2020, the 2018 underwriting year was reinsured to close (\"RITC\") externally resulting in the Syndicate having only transactions relating to 2019 to 2021 underwriting years during the 2021 financial year.",
+      "exact_reserve_text": "",
       "primary_causes": [
-        "Favorable claims development",
-        "Reinsurance recoveries",
+        "Adverse claims development",
         "IBNR recalibration"
       ],
       "specific_events": [],
@@ -214,60 +246,67 @@
       ],
       "prior_year_events": [
         {
-          "event_name": "RITC of 2018 underwriting year",
+          "event_name": "2018 RITC (external)",
           "event_year": 2018,
-          "impact_description": "2018 underwriting year was reinsured to close externally, reducing gross claims outstanding recorded on the Syndicate.",
+          "impact_description": "2018 underwriting year was reinsured to close externally resulting in the Syndicate having only transactions relating to 2019 to 2021 underwriting years during the 2021 financial year.",
           "lobs_affected": [
             "Treaty"
           ],
-          "amount_gbp_m": -14.403,
-          "confidence": 1.0
+          "amount_gbp_m": null,
+          "confidence": 0.8
         }
       ],
       "named_events": [],
-      "standardized_narrative": "Opening gross claims outstanding at 1 January 2021 was GBP 58.723m and closing gross claims outstanding at 31 December 2021 was GBP 65.471m. Prior-year development excluding current year movements is effectively flat based on the gross claims development table (no net movement identified). The reported movements include a material RITC of closed years which reduced gross reserves by GBP 14.403m and other current-year claim activity increased the overall gross reserves. No quantified adverse or favourable prior-year development (net) is reported in gross terms.",
+      "standardized_narrative": "Opening gross claims outstanding at 1 January 2021 were GBP 58.723m. During 2021 there was a small adverse prior-year development of GBP 0.764m (approximately 1.3% of opening reserves), i.e. a modest strengthening of prior-year reserves. The movements in gross claims outstanding were also affected by Reinsurance-to-Close activity (RITC of closed years) which materially reduced certain closed-year gross balances. The prior-year change arises from re-estimation of prior accident years rather than the current accident year.",
       "raw_causal_phrases": [
-        "As at the 31 December 2020, the 2018 underwriting year was reinsured to close (\"RITC\") externally resulting in the Syndicate having only transactions relating to 2019 to 2021 underwriting years during the 2021 financial year.",
-        "Claims incurred in the prior accident years"
+        "estimates of claims subsequently prove to be insufficient (reserving risk)",
+        "changes in external or market factors such as public attitudes to claiming, economic conditions, levels of claims inflation, judicial decisions and legislation"
       ],
       "lob_movements": [
         {
-          "line_of_business": "Energy",
-          "direction": "release",
-          "amount_gbp_m": -0.585,
+          "line_of_business": "Energy - marine",
+          "direction": "strengthening",
+          "amount_gbp_m": 1.398,
           "percentage": null,
           "confidence": 0.8
         },
         {
-          "line_of_business": "Marine",
+          "line_of_business": "Energy - non-marine",
+          "direction": "release",
+          "amount_gbp_m": -1.983,
+          "percentage": null,
+          "confidence": 0.8
+        },
+        {
+          "line_of_business": "Marine, aviation and transport",
           "direction": "release",
           "amount_gbp_m": -3.073,
           "percentage": null,
           "confidence": 0.8
         },
         {
-          "line_of_business": "Property",
+          "line_of_business": "Fire and other damage to property",
           "direction": "strengthening",
           "amount_gbp_m": 1.832,
           "percentage": null,
           "confidence": 0.8
         },
         {
-          "line_of_business": "Casualty",
+          "line_of_business": "Third party liability",
           "direction": "strengthening",
           "amount_gbp_m": 2.716,
           "percentage": null,
           "confidence": 0.8
         },
         {
-          "line_of_business": "Accident & Health",
+          "line_of_business": "Accident and health",
           "direction": "strengthening",
           "amount_gbp_m": 6.029,
           "percentage": null,
           "confidence": 0.8
         },
         {
-          "line_of_business": "Professional Lines",
+          "line_of_business": "Pecuniary loss",
           "direction": "release",
           "amount_gbp_m": -0.171,
           "percentage": null,
@@ -285,7 +324,7 @@
       "gross_premium_page": 21,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "No explicit single-line 'movement in prior year's provision for claims outstanding' gross figure was provided. Prior-year development was derived from the gross claims development triangle (gross) which shows no net movement for the older underwriting years (2019 and earlier columns available). The claims outstanding reconciliation includes 'Claims incurred in the prior accident years' (GBP 0.764m) and a substantial 'RITC of closed years' (-GBP 14.403m) which is a reinsurance-to-close transaction that materially reduces gross reserves; care was taken to treat RITC as a transfer rather than pure prior-year development. If a report-level gross prior-year movement figure is required, none is explicitly stated; the triangle-based result (0.0) was used. [RAG OVERRIDE: Model said PYD=0.0, RAG triangle computed 2.558. Using RAG value.]",
+      "data_quality_notes": "Opening gross claims outstanding taken from Statement of Financial Position (Claims outstanding, prior year column). Prior-year development taken from Note 8 reconciliation line 'Claims incurred in the prior accident years' (gross) = GBP 764k. There is material RITC activity (RITC of closed years GBP 14.403m gross) which affects comparability of gross balances; no explicit narrative sentence quantifying gross prior-year reserve movement was found, so the numeric PYD is taken from the technical provisions reconciliation table. Lob mapping for movements was derived from the gross liabilities by segment table. Exact verbatim reserve-movement sentence was not present; exact_reserve_text left empty. [RAG OVERRIDE: Model said PYD=0.764, RAG triangle computed 2.558. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -316,20 +355,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_6132_2021_llm.pdf",
-      "content_hash": "a2e36b5f6fb257e66e0304e42989d3583d3511a46125d8f30e9f86680370e114",
-      "standardized_at": "2026-07-05T21:36:53.513299+00:00",
+      "content_hash": "5c51510295d1d66278c0e1e4f303295c6038c575e6a0c3d57a8e045e9795ce3b",
+      "standardized_at": "2026-09-11T13:47:24.326358+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 17362,
-        "output_tokens": 6776,
-        "total_tokens": 24138,
-        "cost_usd": 0.017892
+        "input_tokens": 18122,
+        "output_tokens": 6787,
+        "total_tokens": 24909,
+        "cost_usd": 0.018104
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 2.558,
+        "model_value": 0.764,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 28,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2019,
           2020,
@@ -351,6 +402,11 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of underwriting year",
+          "One year later",
+          "Two years later"
         ],
         "source_page": 28,
         "entity": 6132
@@ -379,6 +435,13 @@
         "unit_source": "header",
         "source_page": 24,
         "entity": 6132,
+        "movement_semantics": {
+          "row_label": "Claims incurred in the prior accident years",
+          "row_index": 4,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": false,
+          "column_index": 1
+        },
         "gross_prior_year_claims": 0.8,
         "ri_share_prior_year": -0.2,
         "net_prior_year_claims": 0.5
@@ -434,12 +497,12 @@
       }
     }
   },
-  "total_cost_usd": 0.022923,
-  "total_tokens": 42369,
+  "total_cost_usd": 0.023609,
+  "total_tokens": 40853,
   "validation": {
     "passed": true,
-    "total_discrepancies": 21,
-    "within_tolerance": 21,
+    "total_discrepancies": 25,
+    "within_tolerance": 25,
     "hard_failures": 0,
     "hard_failure_details": []
   }

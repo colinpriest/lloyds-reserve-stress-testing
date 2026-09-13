@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-05T20:52:47.533274+00:00",
+  "extraction_timestamp": "2026-09-13T04:10:11.732737+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -13,24 +15,26 @@
       "opening_reserves_gbp_m": 232.321,
       "opening_reserves_page": 6,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": -17.969,
-      "prior_year_development_pct": -7.73,
+      "prior_year_development_gbp_m": -35.856,
+      "prior_year_development_pct": -15.43,
       "direction": "release",
-      "prior_year_movement_page": 14,
+      "prior_year_movement_page": 1,
       "prior_year_movement_confidence": 0.8,
       "exact_reserve_text": "Favourable prior year claims development of GBP 20.2m (2014 - GBP 19.8m) was experienced in 2015, predominantly in respect of Property and Marine lines of business, as a result of lower than expected claims activity due to the benign claims environment.",
       "primary_causes": [
-        "Favorable claims development"
+        "Favorable claims development",
+        "Natural catastrophe events"
       ],
       "specific_events": [],
       "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "The syndicate experienced a gross prior year reserve release of GBP 8.376 million in 2015. This favourable development was primarily driven by lower than expected claims activity and a benign claims environment, predominantly impacting Property and Marine lines of business.",
+      "standardized_narrative": "The syndicate experienced a favourable net prior year claims development of GBP 20.2 million in 2015, representing a release of 8.70% of its opening gross reserves. This positive development was primarily observed in the Property and Marine lines of business, attributed to a generally benign claims environment and lower than expected claims activity, including the absence of major catastrophic events.",
       "raw_causal_phrases": [
         "Favourable prior year claims development",
         "lower than expected claims activity",
-        "benign claims environment"
+        "benign claims environment",
+        "absence of any major catastrophic events"
       ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 175.3,
@@ -84,12 +88,12 @@
       "gross_premium_page": 12,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The narrative on page 13 states 'Favourable prior year claims development of GBP 20.2m', which is likely a net figure. The gross prior year development of -GBP 8.376m was calculated from the gross claims development triangle on page 14, as per instructions to prioritize gross figures. LOB movements could not be quantified on a gross basis. [RAG OVERRIDE: Model said PYD=-8.376, RAG triangle computed -17.969. Using RAG value.]",
+      "data_quality_notes": "Prior year development figure is NET of reinsurance as no gross figure was explicitly stated or calculable from the provided claims development table. [RAG OVERRIDE: Model said PYD=-20.2, RAG triangle computed -35.856. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
-        "page": 14,
+        "page": 13,
         "underwriting_years": [
           2011,
           2012,
@@ -99,35 +103,35 @@
         ],
         "development_rows": [
           [
+            103394,
             51344,
             48377,
             60593,
-            42095,
-            null
+            42095
           ],
           [
+            124790,
             83678,
             87477,
             97599,
-            null,
             null
           ],
           [
+            114756,
             77071,
             78897,
             null,
-            null,
             null
           ],
           [
+            114839,
             67682,
             null,
             null,
-            null,
             null
           ],
           [
-            null,
+            96952,
             null,
             null,
             null,
@@ -137,20 +141,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_5151_2015_llm.pdf",
-      "content_hash": "5a5fe1e2843dd25368cfe69463c9f77d27fea569cf6b8bf5bdf754ccee611ecd",
-      "standardized_at": "2026-03-19T04:46:05.895357+00:00",
+      "content_hash": "259a489714ca169808a8db5f511a4ed4c2661fb8930f8f7a2e887b3192bad105",
+      "standardized_at": "2026-09-11T13:21:21.447073+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 10121,
-        "output_tokens": 1300,
-        "total_tokens": 19790,
-        "cost_usd": 0.006286
+        "input_tokens": 11441,
+        "output_tokens": 1307,
+        "total_tokens": 19262,
+        "cost_usd": 0.0067
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -35.856,
+        "model_value": -20.2,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 41,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -160,33 +176,47 @@
         ],
         "development_rows": [
           [
-            null,
+            103394.0,
             51344.0,
             48377.0,
             60593.0,
             42095.0
           ],
           [
-            null,
+            124790.0,
             83678.0,
             87477.0,
             97599.0,
             null
           ],
           [
-            null,
+            114756.0,
             77071.0,
             78897.0,
             null,
             null
           ],
           [
-            null,
+            114839.0,
             67682.0,
             null,
             null,
             null
+          ],
+          [
+            96952.0,
+            null,
+            null,
+            null,
+            null
           ]
+        ],
+        "row_labels": [
+          "At end of accident year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later"
         ],
         "source_page": 41,
         "entity": 5151
@@ -377,11 +407,11 @@
       "opening_reserves_gbp_m": 232.321,
       "opening_reserves_page": 13,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": -17.969,
-      "prior_year_development_pct": -7.73,
+      "prior_year_development_gbp_m": -35.856,
+      "prior_year_development_pct": -15.43,
       "direction": "release",
-      "prior_year_movement_page": 2,
-      "prior_year_movement_confidence": 0.8,
+      "prior_year_movement_page": 26,
+      "prior_year_movement_confidence": 1.0,
       "exact_reserve_text": "Favourable prior year claims development of GBP 20.2m (2014 - GBP 19.8m) was experienced in 2015, predominantly in respect of Property and Marine lines of business, as a result of lower than expected claims activity due to the benign claims environment.",
       "primary_causes": [
         "Favorable claims development",
@@ -391,12 +421,10 @@
       "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "The syndicate reported a favourable prior year claims development of GBP 20.2m in 2015, driven predominantly by Property and Marine lines. Management attributes this release to a benign claims environment and lower-than-expected claims activity, including the absence of major catastrophic events. The opening gross claims outstanding at 1 January 2015 was GBP 232.321m. The reported prior year development figure is taken from the directors' narrative; no single gross movement line labelled \"movement in prior year's provision for claims outstanding\" is separately tabulated in the financial statements, so the narrative figure has been used as the primary quantified prior-year release.",
+      "standardized_narrative": "The syndicate experienced a favourable prior-year reserve movement in 2015 of GBP 20.2m (a release), driven by benign claims activity and the absence of major catastrophe events. The report explicitly attributes the improvement predominantly to Property and Marine lines. No specific named catastrophe events were cited as drivers of the prior-year movement.",
       "raw_causal_phrases": [
-        "benign claims environment",
-        "lower than expected claims activity",
-        "absence of any major catastrophic events",
-        "positive development on prior year claims reserves of GBP 20.2m"
+        "Favourable prior year claims development of GBP 20.2m (2014 - GBP 19.8m) was experienced in 2015, predominantly in respect of Property and Marine lines of business, as a result of lower than expected claims activity due to the benign claims environment.",
+        "absence of any major catastrophic events"
       ],
       "lob_movements": [
         {
@@ -462,10 +490,10 @@
           "percentage_of_total": 33.2
         }
       ],
-      "gross_premium_page": 1,
+      "gross_premium_page": 21,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior year development amount GBP 20.2m is taken from the directors' narrative (explicitly stated) but the financial notes/tables do not present a single labelled gross \"movement in prior year's provision for claims outstanding\" figure. There is some inconsistency between the narrative (favourable GBP 20.2m) and movements in the claims schedules (overall gross claims outstanding increased year-on-year). The reported prior year figure appears to refer to portfolio-level favourable development in certain lines (Property and Marine) rather than the aggregate gross movement in the claims balance; users should treat the GBP 20.2m as the managing agent's reported favourable prior-year development and note potential reconciliation differences in the technical notes. [RAG OVERRIDE: Model said PYD=-20.2, RAG triangle computed -17.969. Using RAG value.]",
+      "data_quality_notes": "Prior-year development taken from Note 16 narrative which explicitly states a GBP 20.2m favourable prior-year development. A gross claims development triangle is present and yields a small net adverse movement if calculated by diagonal comparison; however the report narrative explicitly states a GBP 20.2m favourable movement and that wording has been used as the authoritative gross PYD. All monetary figures in the accounts are presented in GBP '000; primary fields here have been converted to millions. LOB-level prior-year amounts are not quantified in the report (only stated as 'predominantly' Property and Marine). [RAG OVERRIDE: Model said PYD=-20.2, RAG triangle computed -35.856. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -506,26 +534,45 @@
             null,
             null,
             null
+          ],
+          [
+            null,
+            null,
+            null,
+            null,
+            null
           ]
         ],
         "confidence": 1.0
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_5151_2015_llm.pdf",
-      "content_hash": "5a5fe1e2843dd25368cfe69463c9f77d27fea569cf6b8bf5bdf754ccee611ecd",
-      "standardized_at": "2026-03-19T04:47:56.283083+00:00",
+      "content_hash": "259a489714ca169808a8db5f511a4ed4c2661fb8930f8f7a2e887b3192bad105",
+      "standardized_at": "2026-09-11T13:23:31.089017+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 25716,
-        "output_tokens": 8687,
-        "total_tokens": 34403,
-        "cost_usd": 0.023803
+        "input_tokens": 29108,
+        "output_tokens": 6900,
+        "total_tokens": 36008,
+        "cost_usd": 0.021077
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -35.856,
+        "model_value": -20.2,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 41,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -535,33 +582,47 @@
         ],
         "development_rows": [
           [
-            null,
+            103394.0,
             51344.0,
             48377.0,
             60593.0,
             42095.0
           ],
           [
-            null,
+            124790.0,
             83678.0,
             87477.0,
             97599.0,
             null
           ],
           [
-            null,
+            114756.0,
             77071.0,
             78897.0,
             null,
             null
           ],
           [
-            null,
+            114839.0,
             67682.0,
             null,
             null,
             null
+          ],
+          [
+            96952.0,
+            null,
+            null,
+            null,
+            null
           ]
+        ],
+        "row_labels": [
+          "At end of accident year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later"
         ],
         "source_page": 41,
         "entity": 5151
@@ -747,12 +808,12 @@
       }
     }
   },
-  "total_cost_usd": 0.030089,
-  "total_tokens": 54193,
+  "total_cost_usd": 0.027777,
+  "total_tokens": 55270,
   "validation": {
     "passed": true,
-    "total_discrepancies": 9,
-    "within_tolerance": 9,
+    "total_discrepancies": 10,
+    "within_tolerance": 10,
     "hard_failures": 0,
     "hard_failure_details": []
   }

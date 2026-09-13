@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T09:54:05.508185+00:00",
+  "extraction_timestamp": "2026-09-13T04:00:04.862840+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -22,7 +24,8 @@
       "primary_causes": [
         "Adverse claims development",
         "IBNR recalibration",
-        "Economic inflation / claims cost inflation"
+        "Economic inflation / claims cost inflation",
+        "Other"
       ],
       "specific_events": [],
       "specific_years_affected": [
@@ -31,24 +34,42 @@
         2019,
         2020
       ],
-      "prior_year_events": [],
+      "prior_year_events": [
+        {
+          "event_name": "Loss Portfolio Transfer (LPT)",
+          "event_year": 2022,
+          "impact_description": "net basis ultimate claims have reduced by $162.7m due to the LPT",
+          "lobs_affected": [],
+          "amount_gbp_m": -162.7,
+          "confidence": 1.0
+        },
+        {
+          "event_name": "COVID-19",
+          "event_year": 2020,
+          "impact_description": "Direct COVID-19 claims exposure at this stage is estimated to be less than $3.5m net of reinsurance, as few claims have been notified to date, with many denied on coverage grounds.",
+          "lobs_affected": [],
+          "amount_gbp_m": -3.5,
+          "confidence": 1.0
+        }
+      ],
       "named_events": [
         {
           "event_name": "COVID-19",
           "event_year": 2020,
           "event_type": "other",
-          "net_loss_gbp_m": null,
-          "loss_description": "The Syndicate considers the uncertainty in respect of COVID-19 to have reduced over the year as further time has passed. Direct COVID-19 claims exposure at this stage is estimated to be less than $3.5m net of reinsurance, as few claims have been notified to date, with many denied on coverage grounds.",
+          "net_loss_gbp_m": 3.5,
+          "loss_description": "Direct COVID-19 claims exposure at this stage is estimated to be less than $3.5m net of reinsurance, as few claims have been notified to date, with many denied on coverage grounds.",
           "lobs_affected": [],
           "page": 17,
-          "confidence": 0.8
+          "confidence": 1.0
         }
       ],
-      "standardized_narrative": "Syndicate 1919 experienced a gross prior year reserve strengthening of $95.6 million in 2022, representing 10.8% of its opening gross claims outstanding. This adverse development was primarily driven by strengthening of reserves on longer tail classes from 2017 and prior underwriting years, following a review of IBNR estimates and the impact of ongoing inflationary pressures on longer term reserves. The syndicate also noted reduced uncertainty and low net exposure to COVID-19 claims.",
+      "standardized_narrative": "Syndicate 1919 experienced a gross prior year strengthening of $95.6 million in 2022, primarily driven by adverse development on longer tail classes from 2017 to 2020 and prior underwriting years. This strengthening was a result of a review of IBNR estimates and ongoing inflationary pressures. A Loss Portfolio Transfer (LPT) in December 2022, while contributing to the underwriting loss, resulted in a net reduction of ultimate claims by $162.7 million for 2020 and prior years of account. Direct COVID-19 claims exposure was estimated at less than $3.5 million net of reinsurance.",
       "raw_causal_phrases": [
-        "gross ultimate claims in respect of prior underwriting years (2020 and prior) increased by $95.6m due to strengthening of Syndicate 1919 reserves on long tail classes",
-        "review of the assumptions underlying IBNR estimates",
+        "increased by $95.6m due to strengthening of Syndicate 1919 reserves on long tail classes",
+        "review of the assumptions underlying IBNR estimates during the year",
         "Adverse prior year development on longer tail classes (on 2017 and prior underwriting years)",
+        "risk premium associated with the LPT",
         "ongoing inflationary pressures leading to the reassessment of longer term reserves and price adequacy"
       ],
       "lob_movements": [],
@@ -88,7 +109,7 @@
       "gross_premium_page": 9,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "The 'RDS event' table on page 12 lists hypothetical scenarios, not actual named events that impacted the syndicate's results. [RAG OVERRIDE: Model said PYD=95.6, RAG triangle computed 82.221. Using RAG value.]",
+      "data_quality_notes": "The Loss Portfolio Transfer (LPT) is described as a driver for the underwriting loss (adverse) but also as reducing net ultimate claims (favourable). The gross prior year development figure used is explicitly stated as a strengthening. [RAG OVERRIDE: Model said PYD=95.6, RAG triangle computed 82.221. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
@@ -231,20 +252,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_1919_2022_llm.pdf",
-      "content_hash": "727149435febc8e5718fee53b1a4e3d156edd475f20f38957cca27dbfc0e0d51",
-      "standardized_at": "2026-07-05T09:34:41.348225+00:00",
+      "content_hash": "aeaeca66df2d68079a6be3597125eedeb0e9e05d5c951daf5a082fd2d5e574e1",
+      "standardized_at": "2026-09-11T11:09:17.408292+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 11153,
-        "output_tokens": 2016,
-        "total_tokens": 17382,
-        "cost_usd": 0.008386
+        "input_tokens": 11957,
+        "output_tokens": 2275,
+        "total_tokens": 19785,
+        "cost_usd": 0.009275
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 82.221,
+        "model_value": 95.6,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 48,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2013,
           2014,
@@ -544,43 +577,35 @@
       ],
       "specific_events": [],
       "specific_years_affected": [
-        2020,
-        2017
+        2020
       ],
       "prior_year_events": [
         {
-          "event_name": "Loss Portfolio Transfer to Starr Insurance and Reinsurance Limited (SIRL)",
-          "event_year": 2022,
-          "impact_description": "LPT ceded the 2020 and prior years of account on certain classes; premium ceded $215.2m and the reinsurers' share of the change in provisions for claims includes the recoveries due on the business reinsured under the agreement. The LPT operated on a funds withheld basis and materially affected net recoverables and net prior year development.",
+          "event_name": "Adverse prior year development on longer tail classes",
+          "event_year": 2017,
+          "impact_description": "Adverse prior year development on longer tail classes (2017 and prior) identified as a material driver of underwriting loss and remediation actions; led to strengthening of reserves on long-tail classes",
           "lobs_affected": [
-            "Casualty",
-            "Accident & Health"
+            "Casualty"
           ],
           "amount_gbp_m": null,
-          "confidence": 0.8
+          "confidence": 0.6
         }
       ],
       "named_events": [],
-      "standardized_narrative": "Gross ultimate claims for prior underwriting years (2020 and prior) strengthened by $95.6m in 2022 following a review and uplift to IBNR assumptions affecting long-tail business (notably casualty/third-party liability and similar long-tail classes). This gross deterioration was partially offset on a net basis by a Loss Portfolio Transfer (LPT) to a group reinsurer which reduced net ultimate claims by $162.7m. The movements reflect both recalibration of IBNR and broader inflationary/claims-cost pressures on older years.",
+      "standardized_narrative": "The Syndicate's opening gross claims outstanding at 1 January 2022 was $885.053m. During 2022 gross ultimate claims for prior underwriting years (2020 and prior) increased by $95.6m, reflecting a strengthening of reserves on long-tail classes following a review and recalibration of IBNR assumptions and in the context of heightened inflationary pressures. Net ultimate claims reduced by $162.7m due to the Loss Portfolio Transfer (LPT) completed with SIRL. The movement is therefore a gross strengthening driven by IBNR recalibration and adverse prior development concentrated in long-tail casualty-type business.",
       "raw_causal_phrases": [
-        "increased by $95.6m due to strengthening of Syndicate 1919 reserves on long tail classes, following a review of the assumptions underlying IBNR estimates during the year.",
+        "gross ultimate claims in respect of prior underwriting years (2020 and prior) increased by $95.6m due to strengthening of Syndicate 1919 reserves on long tail classes, following a review of the assumptions underlying IBNR estimates during the year.",
         "On a net basis ultimate claims have reduced by $162.7m due to the LPT that is discussed in more detail on page 5.",
-        "Adverse prior year development on longer tail classes (on 2017 and prior underwriting years) and the risk premium associated with the LPT are the material drivers for the underwriting loss during the year."
+        "Adverse prior year development on longer tail classes (on 2017 and prior underwriting years)",
+        "inflationary pressures leading to the reassessment of longer term reserves and price adequacy"
       ],
       "lob_movements": [
         {
           "line_of_business": "Casualty",
           "direction": "strengthening",
-          "amount_gbp_m": 95.6,
-          "percentage": null,
-          "confidence": 0.6
-        },
-        {
-          "line_of_business": "Accident & Health",
-          "direction": "strengthening",
           "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.4
+          "confidence": 0.6
         }
       ],
       "gross_premiums_written_gbp_m": 471.7,
@@ -619,7 +644,7 @@
       "gross_premium_page": 33,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "All amounts are reported in the report's native currency (USD) and converted from the reported thousands into millions. Opening gross claims outstanding taken from the balance sheet (liabilities) prior-year column. Prior year development (gross) taken from an explicit narrative sentence (page 49) stating a $95.6m increase for 2020 and prior underwriting years. The LPT produced a quantified net reduction ($162.7m) but the gross reserve movement is reported as +$95.6m. Allocation of the PYD to specific LOBs is inferred (long-tail classes / casualty) and not explicitly quantified by LOB in the report. [RAG OVERRIDE: Model said PYD=95.6, RAG triangle computed 82.221. Using RAG value.]",
+      "data_quality_notes": "Opening gross claims outstanding taken from Statement of Financial Position (Technical provisions - Claims outstanding, prior year column). Prior year development (gross) comes from explicit narrative sentence on page 49 stating a $95.6m increase for 2020 and prior. Figures in the report are presented in $000; converted here to millions. Claims development triangle is present but the printed table in the provided extract is partially ambiguous for per-cell extraction; triangle rows were not reliably parsed into numeric development rows for automated diagonal analysis. LPT materially affects net recoverables; gross and net movements diverge (gross strengthening vs net reduction). LOB attribution of the $95.6m is not quantified in the report; casualty/third party liability is inferred as the primary long-tail impacted line. [RAG OVERRIDE: Model said PYD=95.6, RAG triangle computed 82.221. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
@@ -637,145 +662,36 @@
           2021,
           2022
         ],
-        "development_rows": [
-          [
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-          ],
-          [
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-          ],
-          [
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-          ],
-          [
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-          ],
-          [
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-          ],
-          [
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-          ],
-          [
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-          ],
-          [
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-          ],
-          [
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-          ],
-          [
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-          ]
-        ]
+        "development_rows": []
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_1919_2022_llm.pdf",
-      "content_hash": "727149435febc8e5718fee53b1a4e3d156edd475f20f38957cca27dbfc0e0d51",
-      "standardized_at": "2026-07-05T09:35:26.662915+00:00",
+      "content_hash": "aeaeca66df2d68079a6be3597125eedeb0e9e05d5c951daf5a082fd2d5e574e1",
+      "standardized_at": "2026-09-11T11:11:40.472213+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 16420,
-        "output_tokens": 5582,
-        "total_tokens": 22002,
-        "cost_usd": 0.015269
+        "input_tokens": 17180,
+        "output_tokens": 6131,
+        "total_tokens": 23311,
+        "cost_usd": 0.016557
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 82.221,
+        "model_value": 95.6,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 48,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2013,
           2014,
@@ -1057,12 +973,12 @@
       }
     }
   },
-  "total_cost_usd": 0.023655,
-  "total_tokens": 39384,
+  "total_cost_usd": 0.025832,
+  "total_tokens": 43096,
   "validation": {
     "passed": true,
-    "total_discrepancies": 18,
-    "within_tolerance": 18,
+    "total_discrepancies": 19,
+    "within_tolerance": 19,
     "hard_failures": 0,
     "hard_failure_details": []
   }

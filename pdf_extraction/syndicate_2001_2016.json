@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-05T19:50:43.785741+00:00",
+  "extraction_timestamp": "2026-09-13T04:06:01.433245+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -11,61 +13,38 @@
       "syndicate": 2001,
       "year": 2016,
       "opening_reserves_gbp_m": 1601.0,
-      "opening_reserves_page": 6,
+      "opening_reserves_page": 4,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": -69.6,
       "prior_year_development_pct": -4.35,
       "direction": "release",
-      "prior_year_movement_page": 6,
+      "prior_year_movement_page": 8,
       "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "Movements arising from prior year claims (69.6)",
+      "exact_reserve_text": "Movements arising from prior year claims (69.6) 29.8 (39.8)",
       "primary_causes": [
-        "Favorable claims development"
+        "Favorable claims development",
+        "Ogden discount rate"
       ],
       "specific_events": [],
       "specific_years_affected": [],
-      "prior_year_events": [],
-      "named_events": [
+      "prior_year_events": [
         {
-          "event_name": "Ogden discount rate change",
+          "event_name": "Ogden discount rate",
           "event_year": 2017,
-          "event_type": "regulatory",
-          "net_loss_gbp_m": 30.3,
-          "loss_description": "reduction in the discount rate which UK courts must consider when awarding compensation for future financial losses in the form of a lump sum in personal injury cases from 2.5% to minus 0.75%... The impact of the Ogden rate change for the Syndicate was a GBP 53.9 million increase in Gross IBNR (all in the P&C SBU) and a net impact of GBP 30.3 million.",
+          "impact_description": "GBP 53.9 million increase in Gross IBNR (all in the P&C SBU) due to reduction in discount rate for personal injury claims, impacting 2016 year-end reserves.",
           "lobs_affected": [
             "Motor",
             "Casualty"
           ],
-          "page": 2,
+          "amount_gbp_m": 53.9,
           "confidence": 1.0
-        },
-        {
-          "event_name": "11 September 2001 terrorist attacks",
-          "event_year": 2001,
-          "event_type": "man_made",
-          "net_loss_gbp_m": null,
-          "loss_description": "Claims arising from events such as the 11 September 2001 terrorist attacks in the US are examples of cases where there continues to be some uncertainty over the eventual value of claims.",
-          "lobs_affected": [
-            "Casualty"
-          ],
-          "page": 9,
-          "confidence": 0.8
-        },
-        {
-          "event_name": "large catastrophe losses",
-          "event_year": 2016,
-          "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": null,
-          "loss_description": "The Syndicate's claims ratio deteriorated significantly to 63% (2015: 49%), reflecting a number of large catastrophe losses experienced during the year",
-          "lobs_affected": [],
-          "page": 2,
-          "confidence": 0.5
         }
       ],
-      "standardized_narrative": "The syndicate reported a gross prior year reserve release of GBP 69.6 million in 2016, representing a 4.35% reduction of opening gross reserves. This favorable development was primarily due to general favorable claims development across the portfolio. However, the syndicate also noted an adverse impact from the Ogden discount rate change, which resulted in a GBP 53.9 million increase in Gross IBNR for UK motor and liability insurance, although this appears to be a current year adjustment or was offset by other favorable prior year movements.",
+      "named_events": [],
+      "standardized_narrative": "The syndicate reported a gross prior year reserve release of GBP 69.6 million in 2016, primarily due to favorable claims development. This release was partially offset by a GBP 53.9 million strengthening of gross IBNR due to the Ogden discount rate change, which impacted UK motor and liability insurance reserves at the 2016 year-end.",
       "raw_causal_phrases": [
-        "releases from reserves established in prior years of GBP 39.8 million",
-        "The impact of the Ogden rate change for the Syndicate was a GBP 53.9 million increase in Gross IBNR"
+        "releases from reserves established in prior years",
+        "impact of the change in Ogden rates"
       ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 1830.7,
@@ -111,15 +90,15 @@
           "percentage_of_total": 40.99
         }
       ],
-      "gross_premium_page": 5,
+      "gross_premium_page": 7,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The Ogden discount rate change was announced in 2017 but its impact was recorded in the 2016 financial statements, causing a strengthening in IBNR. However, the overall prior year development was a release, suggesting other favorable movements offset the Ogden impact.",
+      "data_quality_notes": "The 'exact_reserve_text' is extracted from a table row as it provides the most direct gross figure. There is a significant discrepancy between the prior year development figure from the movement note (-69.6m release) and the calculation from the gross claims development triangle (+88.1m strengthening), suggesting potential underlying complexities or different bases. The Ogden rate change, announced in 2017, impacted 2016 year-end reserves, causing a strengthening.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "millions",
-        "page": 7,
+        "page": 9,
         "underwriting_years": [
           2011,
           2012,
@@ -138,39 +117,39 @@
             null
           ],
           [
+            860.2,
             851.7,
             884.0,
             804.7,
             1164.0,
-            null,
             null
           ],
           [
+            836.4,
             864.9,
             761.5,
             862.3,
             null,
-            null,
             null
           ],
           [
+            840.5,
             805.5,
             804.4,
             null,
             null,
-            null,
             null
           ],
           [
+            836.0,
             806.9,
             null,
             null,
             null,
-            null,
             null
           ],
           [
-            null,
+            822.2,
             null,
             null,
             null,
@@ -181,20 +160,28 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_2001_2016_llm.pdf",
-      "content_hash": "bdce3e58307c5474f725411764f7a6d79e88014e85bdaad8557db318f3b098c1",
-      "standardized_at": "2026-03-17T13:51:06.559568+00:00",
+      "content_hash": "b68c8b4f8da8c022486ef02ad99b8a83b7f3052db58009c9d64d03076a51a755",
+      "standardized_at": "2026-09-11T11:18:48.371571+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 8334,
-        "output_tokens": 1789,
-        "total_tokens": 17801,
-        "cost_usd": 0.006973
+        "input_tokens": 10151,
+        "output_tokens": 1472,
+        "total_tokens": 19723,
+        "cost_usd": 0.006725
+      },
+      "_pyd_route": {
+        "source": "rag_provisions",
+        "value": -69.6,
+        "model_value": -69.6,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "millions",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -253,6 +240,14 @@
             null
           ]
         ],
+        "row_labels": [
+          "At end of underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later"
+        ],
         "source_page": 35,
         "entity": 2001
       },
@@ -260,6 +255,13 @@
         "unit_source": "header",
         "source_page": 34,
         "entity": 2001,
+        "movement_semantics": {
+          "row_label": "Movements arising from prior year claims",
+          "row_index": 5,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": true,
+          "column_index": 1
+        },
         "gross_prior_year_claims": -69.6,
         "ri_share_prior_year": 29.8,
         "net_prior_year_claims": -39.8
@@ -329,13 +331,13 @@
     "gpt-5-mini": {
       "syndicate": 2001,
       "year": 2016,
-      "opening_reserves_gbp_m": 1601.0,
-      "opening_reserves_page": 31,
-      "opening_reserves_confidence": 1.0,
+      "opening_reserves_gbp_m": 1581.9,
+      "opening_reserves_page": 32,
+      "opening_reserves_confidence": 0.8,
       "prior_year_development_gbp_m": -69.6,
-      "prior_year_development_pct": -4.35,
+      "prior_year_development_pct": -4.4,
       "direction": "release",
-      "prior_year_movement_page": 31,
+      "prior_year_movement_page": null,
       "prior_year_movement_confidence": 0.0,
       "exact_reserve_text": "",
       "primary_causes": [],
@@ -343,15 +345,15 @@
       "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "The scanned report shows opening gross claims outstanding at 1 January 2016 of 1,601.0m GBP and a closing gross outstanding claims balance of 2,068.0m GBP; however an explicit gross figure for the movement in prior years' provision for claims outstanding (the gross prioryear development amount) could not be located in the provided images. The available tables include totals and a claims development table but the specific gross 'movement in prior years' line was not clearly identifiable in the scanned pages.",
+      "standardized_narrative": "Opening gross claims outstanding at 1 January 2016 is reported as GBP 1,581.9m. The report contains reserving notes and a claims development table, but a clear, extractable GROSS prior-year movement figure (movement in prior years' provision for claims outstanding) could not be unambiguously located in the legible parts of the provided images. No reliable gross prior-year release/strengthening amount was confidently determined from the available pages.",
       "raw_causal_phrases": [],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 1830.7,
       "gross_premium_mix": [],
-      "gross_premium_page": 16,
-      "gross_premium_confidence": 0.9,
+      "gross_premium_page": 4,
+      "gross_premium_confidence": 0.6,
       "currency": "GBP",
-      "data_quality_notes": "Extraction limited by image resolution and rotation. Opening gross claims outstanding (1,601.0m) and total gross written premiums (1,830.7m) were readable. I could not find a clearly labelled gross 'movement in prior year's provision for claims outstanding' figure in the scanned notes (the notes and claims development table are present but the specific gross PY movement row/wording was not legible). Therefore prior_year_development_gbp_m is returned as null. A higher-resolution or text-searchable PDF is required to extract the gross prioryear movement, the gross perLOB prior year movements, the regulatory segmental premium breakdown, and to populate the claims development triangle.",
+      "data_quality_notes": "Extraction uncertainty: scanned images are low-resolution and rotated. I was able to locate the gross closing/opening claims outstanding total (2,068.0 total outstanding at 31/12/2016 and 1,581.9 at 31/12/2015 opening for 2016 = 1,581.9) on the Technical Reserves tables (page 32). I could not confidently locate a single clear GROSS prior-year movement (movement in prior year's provision for claims outstanding) figure in the available images. Some narrative and P&L lines (claims incurred in relation to prior underwriting years) are visible but these are P&L claims incurred lines and specifically excluded by the instructions. The segmental gross premium breakdown (required for gross_premium_mix) appears in the notes but was not legible enough to transcribe exact class names and amounts; therefore gross_premium_mix is left empty. A claims development (triangle) table appears present on page 32 but the numeric cells were not legible enough to extract a reliable triangle for automated prior-year development calculation. Where figures were taken, confidence levels are noted above.",
       "_claims_triangle": {
         "type": "none",
         "currency": "GBP",
@@ -362,20 +364,27 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_2001_2016_llm.pdf",
-      "content_hash": "bdce3e58307c5474f725411764f7a6d79e88014e85bdaad8557db318f3b098c1",
-      "standardized_at": "2026-03-17T13:52:13.131825+00:00",
+      "content_hash": "b68c8b4f8da8c022486ef02ad99b8a83b7f3052db58009c9d64d03076a51a755",
+      "standardized_at": "2026-09-11T11:20:12.891359+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 14713,
-        "output_tokens": 4555,
-        "total_tokens": 19268,
-        "cost_usd": 0.012788
+        "input_tokens": 18508,
+        "output_tokens": 4299,
+        "total_tokens": 22807,
+        "cost_usd": 0.013225
+      },
+      "_pyd_route": {
+        "source": "rag_provisions",
+        "value": -69.6,
+        "note": "filled a blank model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "millions",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -434,6 +443,14 @@
             null
           ]
         ],
+        "row_labels": [
+          "At end of underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later"
+        ],
         "source_page": 35,
         "entity": 2001
       },
@@ -441,6 +458,13 @@
         "unit_source": "header",
         "source_page": 34,
         "entity": 2001,
+        "movement_semantics": {
+          "row_label": "Movements arising from prior year claims",
+          "row_index": 5,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": true,
+          "column_index": 1
+        },
         "gross_prior_year_claims": -69.6,
         "ri_share_prior_year": 29.8,
         "net_prior_year_claims": -39.8
@@ -508,13 +532,26 @@
       }
     }
   },
-  "total_cost_usd": 0.019761,
-  "total_tokens": 37069,
+  "total_cost_usd": 0.01995,
+  "total_tokens": 42530,
   "validation": {
-    "passed": true,
-    "total_discrepancies": 20,
-    "within_tolerance": 20,
-    "hard_failures": 0,
-    "hard_failure_details": []
+    "passed": false,
+    "total_discrepancies": 24,
+    "within_tolerance": 22,
+    "hard_failures": 2,
+    "hard_failure_details": [
+      {
+        "field": "opening_reserves_gbp_m",
+        "type": "value_mismatch",
+        "gemini-2.5-flash": 1601.0,
+        "gpt-5-mini": 1581.9
+      },
+      {
+        "field": "prior_year_development_pct",
+        "type": "value_mismatch",
+        "gemini-2.5-flash": -4.35,
+        "gpt-5-mini": -4.4
+      }
+    ]
   }
 }

@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T10:23:01.136701+00:00",
+  "extraction_timestamp": "2026-09-13T04:04:55.473807+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -16,7 +18,7 @@
       "prior_year_development_gbp_m": -2.458,
       "prior_year_development_pct": -0.79,
       "direction": "release",
-      "prior_year_movement_page": 3,
+      "prior_year_movement_page": 16,
       "prior_year_movement_confidence": 0.8,
       "exact_reserve_text": "The Syndicate recorded an underwriting profit before investment income of GBP 15.0m (2018: profit GBP 4.0m), mainly driven by the favourable prior year releases and total comprehensive profit of GBP 22.3m (2018: loss GBP 0.8m) driven by a non- technical profit of GBP 6.9m (2018: loss GBP 5.0m).",
       "primary_causes": [
@@ -55,10 +57,12 @@
           "confidence": 0.8
         }
       ],
-      "standardized_narrative": "The syndicate experienced a favorable prior year development of GBP 2.458 million, primarily driven by overall benign claims experience. This release contributed to the syndicate's underwriting profit for the year. The prior year development was calculated from the gross claims development triangle, reflecting a net reduction in estimated ultimate claims for underwriting years 2011 through 2017.",
+      "standardized_narrative": "The Syndicate recorded a release of GBP 2.458 million in prior year reserves, primarily driven by favourable claims development across underwriting years up to 2017. This contributed to an overall underwriting profit for the year. The 2019 underwriting year was described as benign with limited exposure to events like hurricane Dorian and Australian bushfires.",
       "raw_causal_phrases": [
         "favourable prior year releases",
-        "benign year with regards to claims experience"
+        "benign year with regards to claims experience",
+        "relatively mild hurricane season",
+        "limited exposure on market events"
       ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 223.9,
@@ -94,15 +98,15 @@
           "percentage_of_total": 0.2
         }
       ],
-      "gross_premium_page": 16,
+      "gross_premium_page": 15,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior year development was calculated from the gross claims development triangle by summing the changes in estimated ultimate claims for underwriting years 2011 through 2017. This calculation is supported by narrative text indicating 'favourable prior year releases'.",
+      "data_quality_notes": "Prior year development calculated from gross claims development triangle as no explicit gross figure was provided in narrative or movement notes.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
-        "page": 17,
+        "page": 16,
         "underwriting_years": [
           2011,
           2012,
@@ -218,20 +222,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_2012_2019_llm.pdf",
-      "content_hash": "289ecf9972c87b4322555dd929b12c69cdbf8976ccbbee347aeea6eb32a9488c",
-      "standardized_at": "2026-07-05T11:48:40.185279+00:00",
+      "content_hash": "8726478d6e5b415a1939f28743771d8e486cc4879e5f9875f257694c7c6e3191",
+      "standardized_at": "2026-09-11T11:27:12.763981+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 10637,
-        "output_tokens": 1785,
-        "total_tokens": 17382,
-        "cost_usd": 0.007654
+        "input_tokens": 11183,
+        "output_tokens": 1771,
+        "total_tokens": 19402,
+        "cost_usd": 0.007782
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -2.458,
+        "model_value": -2.458,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 44,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -471,77 +487,23 @@
     "gpt-5-mini": {
       "syndicate": 2012,
       "year": 2019,
-      "opening_reserves_gbp_m": 310.931,
-      "opening_reserves_page": 16,
-      "opening_reserves_confidence": 1.0,
+      "opening_reserves_gbp_m": null,
+      "opening_reserves_page": null,
+      "opening_reserves_confidence": 0.0,
       "prior_year_development_gbp_m": -2.458,
-      "prior_year_development_pct": -0.79,
+      "prior_year_development_pct": null,
       "direction": "release",
-      "prior_year_movement_page": 2,
-      "prior_year_movement_confidence": 0.5,
-      "exact_reserve_text": "The Syndicate recorded an underwriting profit before investment income of GBP 15.0m (2018: profit GBP 4.0m), mainly driven by the favourable prior year releases and total comprehensive profit of GBP 22.3m (2018: loss GBP 0.8m): loss GBP 0.8m driven by a non-technical profit of GBP 6.9m (2018: loss GBP 5.0m).",
-      "primary_causes": [
-        "Favorable claims development"
-      ],
+      "prior_year_movement_page": null,
+      "prior_year_movement_confidence": 0.0,
+      "exact_reserve_text": "",
+      "primary_causes": [],
       "specific_events": [],
       "specific_years_affected": [],
       "prior_year_events": [],
-      "named_events": [
-        {
-          "event_name": "Hurricane Dorian",
-          "event_year": 2019,
-          "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": null,
-          "loss_description": "Syndicate states it had limited exposure to Hurricane Dorian",
-          "lobs_affected": [
-            "Property",
-            "Marine"
-          ],
-          "page": 3,
-          "confidence": 0.8
-        },
-        {
-          "event_name": "Australian bushfires",
-          "event_year": 2019,
-          "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": null,
-          "loss_description": "Syndicate states it had limited exposure to the Australian bushfires",
-          "lobs_affected": [
-            "Property"
-          ],
-          "page": 3,
-          "confidence": 0.8
-        }
-      ],
-      "standardized_narrative": "The syndicate's gross claims outstanding at the start of the year (31/12/2018) was GBP 310.931m. The manager reports favourable prior year releases which contributed to an improved underwriting result in 2019; however the report does not disclose a single explicit gross prior-year movement amount in the notes accessible. The vintage claims development table (gross) is present and the narrative describes benign claims experience with limited exposure to Hurricane Dorian and the Australian bushfires. No quantified gross prior-year reserve movement was unambiguously identified in the published movement notes, so a precise gross PYD amount could not be determined from the available text.",
-      "raw_causal_phrases": [
-        "favourable prior year releases",
-        "benign year with regards to claims experience",
-        "the Syndicate has limited exposure on market events, such as hurricane Dorian and the Australian bushfires"
-      ],
-      "lob_movements": [
-        {
-          "line_of_business": "Directors and Officers",
-          "direction": "release",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.3
-        },
-        {
-          "line_of_business": "Onshore Energy",
-          "direction": "release",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.3
-        },
-        {
-          "line_of_business": "Hull",
-          "direction": "release",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.3
-        }
-      ],
+      "named_events": [],
+      "standardized_narrative": "Unable to reliably extract gross claims opening reserves or a gross prior-year-reserve movement from the scanned images provided. The scanned PDF pages are low-resolution and rotated, preventing accurate reading of the Balance Sheet 'Claims outstanding' line and the 'Movement in prior year's provision for claims outstanding' note. Gross premiums written (total) was readable from the income statement, but detailed segmental and reserve movement tables could not be parsed with confidence.",
+      "raw_causal_phrases": [],
+      "lob_movements": [],
       "gross_premiums_written_gbp_m": 223.9,
       "gross_premium_mix": [
         {
@@ -575,144 +537,45 @@
           "percentage_of_total": 0.2
         }
       ],
-      "gross_premium_page": 2,
+      "gross_premium_page": 5,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Opening gross claims outstanding taken from Balance Sheet (Technical provisions - Claims outstanding) - clear. No unambiguous GROSS prior year development figure was located in the movement notes accessible; the report uses narrative 'favourable prior year releases' but does not state a gross amount. A gross claims development triangle is present (page 40) but extracting a definitive PYD from the triangle was not completed; consequently prior_year_development_gbp_m is null. Gross premium mix percentages for top lines were taken from narrative percentage quotes (Directors and Officers 35.2%, Onshore Energy 30.8%, Hull 19.1%) - these were used to estimate amounts; the exact statutory/regulatory segmental table text was not reliably machine-readable in the provided images.",
+      "data_quality_notes": "Source documents are scanned, rotated and low-resolution images. I could read the 'Gross premiums written' total (shown as GBP 223,899 in the statement; converted to millions = 223.899) but could not reliably locate or read the Balance Sheet line 'Provision for outstanding claims' (gross claims outstanding) or the 'Movement in prior year's provision for claims outstanding' note in a way that yields unambiguous gross figures. No gross claims development triangle was confidently extractable from the images. Therefore opening reserves and prior-year development are returned null. If a higher-quality, correctly oriented PDF or images of the specific notes/pages are provided I can extract the requested numeric reserve amounts and triangles.",
       "_claims_triangle": {
-        "type": "gross",
+        "type": "none",
         "currency": "GBP",
-        "units": "thousands",
-        "page": 40,
-        "underwriting_years": [
-          2011,
-          2012,
-          2013,
-          2014,
-          2015,
-          2016,
-          2017,
-          2018,
-          2019
-        ],
-        "development_rows": [
-          [
-            39993,
-            38222,
-            54436,
-            40844,
-            39643,
-            41933,
-            63487,
-            45448,
-            48185
-          ],
-          [
-            108790,
-            79003,
-            107811,
-            93602,
-            103126,
-            116315,
-            133268,
-            107400,
-            null
-          ],
-          [
-            115138,
-            72919,
-            113091,
-            106494,
-            115987,
-            126557,
-            146393,
-            null,
-            null
-          ],
-          [
-            111851,
-            72738,
-            115472,
-            104744,
-            116291,
-            124873,
-            null,
-            null,
-            null
-          ],
-          [
-            107900,
-            72073,
-            110047,
-            113710,
-            112403,
-            null,
-            null,
-            null,
-            null
-          ],
-          [
-            109319,
-            69029,
-            102658,
-            111202,
-            null,
-            null,
-            null,
-            null,
-            null
-          ],
-          [
-            108887,
-            69694,
-            98927,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-          ],
-          [
-            107946,
-            65889,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-          ],
-          [
-            107979,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-          ]
-        ]
+        "units": "millions",
+        "page": null,
+        "underwriting_years": [],
+        "development_rows": []
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_2012_2019_llm.pdf",
-      "content_hash": "289ecf9972c87b4322555dd929b12c69cdbf8976ccbbee347aeea6eb32a9488c",
-      "standardized_at": "2026-07-05T11:50:47.075305+00:00",
+      "content_hash": "8726478d6e5b415a1939f28743771d8e486cc4879e5f9875f257694c7c6e3191",
+      "standardized_at": "2026-09-11T11:28:03.487514+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 22413,
-        "output_tokens": 9356,
-        "total_tokens": 31769,
-        "cost_usd": 0.024315
+        "input_tokens": 22240,
+        "output_tokens": 2371,
+        "total_tokens": 24611,
+        "cost_usd": 0.010302
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -2.458,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 44,
+        "note": "filled a blank model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -950,13 +813,26 @@
       }
     }
   },
-  "total_cost_usd": 0.031969,
-  "total_tokens": 49151,
+  "total_cost_usd": 0.018084,
+  "total_tokens": 44013,
   "validation": {
-    "passed": true,
-    "total_discrepancies": 16,
-    "within_tolerance": 16,
-    "hard_failures": 0,
-    "hard_failure_details": []
+    "passed": false,
+    "total_discrepancies": 23,
+    "within_tolerance": 21,
+    "hard_failures": 2,
+    "hard_failure_details": [
+      {
+        "field": "opening_reserves_gbp_m",
+        "type": "value_mismatch",
+        "gemini-2.5-flash": 310.931,
+        "gpt-5-mini": null
+      },
+      {
+        "field": "prior_year_development_pct",
+        "type": "value_mismatch",
+        "gemini-2.5-flash": -0.79,
+        "gpt-5-mini": null
+      }
+    ]
   }
 }

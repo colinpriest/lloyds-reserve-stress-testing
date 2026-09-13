@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T11:11:03.880079+00:00",
+  "extraction_timestamp": "2026-09-13T03:58:45.232415+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -15,10 +17,10 @@
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": null,
       "prior_year_development_pct": null,
-      "direction": "strengthening",
+      "direction": "mixed",
       "prior_year_movement_page": 1,
-      "prior_year_movement_confidence": 0.8,
-      "exact_reserve_text": "Driven by higher than anticipated claims notifications, the 2013 year of account declares a loss on capacity of 5.9%.",
+      "prior_year_movement_confidence": 0.5,
+      "exact_reserve_text": "Driven by higher than anticipated claims notifications, the 2013 year of account declares a loss on capacity of 5.9%. The 2014 year of account currently forecasts closing at a break even position.",
       "primary_causes": [
         "Adverse claims development"
       ],
@@ -26,11 +28,20 @@
       "specific_years_affected": [
         2013
       ],
-      "prior_year_events": [],
+      "prior_year_events": [
+        {
+          "event_name": "Higher than anticipated claims notifications",
+          "event_year": 2013,
+          "impact_description": "The 2013 year of account declares a loss on capacity of 5.9% due to higher than anticipated claims notifications.",
+          "lobs_affected": [],
+          "amount_gbp_m": null,
+          "confidence": 0.8
+        }
+      ],
       "named_events": [],
-      "standardized_narrative": "The syndicate experienced adverse development for its 2013 year of account, which declared a loss on capacity of 5.9% due to higher than anticipated claims notifications. The 2014 year of account is currently forecast to close at a break-even position, indicating no significant movement for that year.",
+      "standardized_narrative": "The 2013 year of account experienced adverse development, declaring a loss on capacity of 5.9% driven by higher than anticipated claims notifications. The 2014 year of account is currently forecasting a break-even position. No specific gross prior year reserve movement amount is quantified in the report.",
       "raw_causal_phrases": [
-        "higher than anticipated claims notifications"
+        "Driven by higher than anticipated claims notifications"
       ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 13.5703,
@@ -49,7 +60,7 @@
       "gross_premium_page": 6,
       "gross_premium_confidence": 0.8,
       "currency": "GBP",
-      "data_quality_notes": "Prior year development amount not quantified in GBP. Gross premium mix uses 'Operating divisions' breakdown as no regulatory segmental analysis was provided. Claims development tables are not in a standard triangle format for extracting development rows.",
+      "data_quality_notes": "No explicit gross prior year development figure was found. The narrative mentions a loss on capacity for the 2013 year of account due to higher than anticipated claims notifications, and a break-even forecast for the 2014 year of account. The 'Gross Claims Development' table is not a standard cumulative claims incurred triangle and could not be used to calculate prior year development. Gross premium mix is derived from the 'Operating divisions' table, which is a divisional breakdown rather than a regulatory segmental analysis.",
       "_claims_triangle": {
         "type": "none",
         "currency": null,
@@ -60,15 +71,15 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_3622_2015_llm.pdf",
-      "content_hash": "a7f6c83ea9f2ff69842e689c79057e34470f2f689321b8cc9d7c2a0bf959a029",
-      "standardized_at": "2026-07-05T15:32:26.988744+00:00",
+      "content_hash": "3111640d4ee58706b4d90f5041be6c92faf617740da08a4f0021b586ae43f7bb",
+      "standardized_at": "2026-09-11T12:45:31.362454+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 8831,
-        "output_tokens": 641,
-        "total_tokens": 17648,
-        "cost_usd": 0.004252
+        "input_tokens": 9635,
+        "output_tokens": 822,
+        "total_tokens": 15775,
+        "cost_usd": 0.004946
       },
       "_adobe_provisions": {
         "opening_provenance": {
@@ -152,55 +163,49 @@
       "prior_year_development_gbp_m": null,
       "prior_year_development_pct": null,
       "direction": "mixed",
-      "prior_year_movement_page": 4,
-      "prior_year_movement_confidence": 0.5,
-      "exact_reserve_text": "Driven by higher than anticipated claims notifications, the 2013 year of account declares a loss on capacity of 5.9%.",
+      "prior_year_movement_page": 29,
+      "prior_year_movement_confidence": 0.0,
+      "exact_reserve_text": "",
       "primary_causes": [
         "Adverse claims development",
         "IBNR recalibration"
       ],
       "specific_events": [],
       "specific_years_affected": [
-        2013
+        2013,
+        2014,
+        2012
       ],
-      "prior_year_events": [
-        {
-          "event_name": "2013 year of account deterioration",
-          "event_year": 2013,
-          "impact_description": "Loss on capacity of 5.9% driven by higher than anticipated claims notifications",
-          "lobs_affected": [],
-          "amount_gbp_m": null,
-          "confidence": 0.6
-        }
-      ],
+      "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "No explicit gross prioryear reserve movement amount is disclosed. The report notes adverse development for prior years, specifically that the 2013 year of account \"declares a loss on capacity of 5.9%\" driven by higher than anticipated claims notifications. No quantified gross prioryear movement (insurance liabilities) is provided in the movement notes; the gross claims development table is present at group level but does not supply a clear syndicate gross PYD figure extractable for 2015.",
+      "standardized_narrative": "The syndicate's reported gross claims outstanding at the opening of the year (prior-year comparative) was GBP 5.0967m. The report does not state an explicit gross prioryear (pre2014) movement amount. Narrative notes reference higher than anticipated claims notifications (notably a deterioration on the 2013 year of account) and IBNR as the critical reserving estimate, but no single gross prioryear movement figure is provided in the notes. A gross claims development table (presented in percentages and ultimate amounts) is included but does not provide a direct, unambiguous gross prioryear movement figure in the disclosures available.",
       "raw_causal_phrases": [
         "Driven by higher than anticipated claims notifications, the 2013 year of account declares a loss on capacity of 5.9%.",
-        "The most critical estimate included within the syndicate's financial position is the estimate for losses incurred but not reported."
+        "The most critical estimate included within the syndicate's financial position is the estimate for losses incurred but not reported.",
+        "claims incurred but not reported ('IBNR')"
       ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 13.5703,
       "gross_premium_mix": [
         {
           "line_of_business": "Life insurance",
-          "amount_gbp_m": 11.932664,
-          "percentage_of_total": 88
+          "amount_gbp_m": 11.9419,
+          "percentage_of_total": 88.0
         },
         {
           "line_of_business": "Life reinsurance",
-          "amount_gbp_m": 1.637636,
-          "percentage_of_total": 12
+          "amount_gbp_m": 1.6284,
+          "percentage_of_total": 12.0
         }
       ],
       "gross_premium_page": 20,
-      "gross_premium_confidence": 1.0,
+      "gross_premium_confidence": 0.8,
       "currency": "GBP",
-      "data_quality_notes": "No explicit gross movement in 'movement in prior year's provision for claims outstanding' is presented. The technical provisions movement lines show aggregate movements (including current year) but do not isolate prioryear development as a gross insurance liabilities figure. A gross claims development triangle is present (group level and a small 3622 share row) but the document does not provide the required priordiagonal development rows for the syndicate share to calculate a reliable gross PYD. Therefore prior_year_development_gbp_m is returned as null.",
+      "data_quality_notes": "Opening gross claims outstanding taken from Balance Sheet (liabilities technical provisions, prior-year comparative). No explicit gross \"movement in prior year's provision for claims outstanding\" figure found. Gross claims development table is present (percentage development rows and ultimate amounts) but does not present the standard cumulative gross development triangle values needed to compute a clear prioryear movement; therefore prior_year_development_gbp_m is null. Gross premium mix taken from the Managing Agent's divisional summary ('Life insurance' / 'Life reinsurance') because no regulatory segmental analysis with statutory class names was available. All amounts in the accounts are presented in GBP '000; values here converted to millions. No specific named catastrophe events or quantified prior-year impacts were identified in the report.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
-        "units": "millions",
+        "units": "percentage",
         "page": 29,
         "underwriting_years": [
           2010,
@@ -210,19 +215,60 @@
           2014,
           2015
         ],
-        "development_rows": []
+        "development_rows": [
+          [
+            59.4,
+            62.0,
+            63.0,
+            64.9,
+            64.5,
+            null
+          ],
+          [
+            59.0,
+            62.0,
+            68.9,
+            63.8,
+            null,
+            null
+          ],
+          [
+            63.6,
+            58.7,
+            64.5,
+            null,
+            null,
+            null
+          ],
+          [
+            61.9,
+            55.1,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            60.8,
+            null,
+            null,
+            null,
+            null,
+            null
+          ]
+        ]
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_3622_2015_llm.pdf",
-      "content_hash": "a7f6c83ea9f2ff69842e689c79057e34470f2f689321b8cc9d7c2a0bf959a029",
-      "standardized_at": "2026-07-05T15:33:18.317273+00:00",
+      "content_hash": "3111640d4ee58706b4d90f5041be6c92faf617740da08a4f0021b586ae43f7bb",
+      "standardized_at": "2026-09-11T12:47:36.808617+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 14676,
-        "output_tokens": 6295,
-        "total_tokens": 20971,
-        "cost_usd": 0.016259
+        "input_tokens": 15436,
+        "output_tokens": 6234,
+        "total_tokens": 21670,
+        "cost_usd": 0.016327
       },
       "_adobe_provisions": {
         "opening_provenance": {
@@ -298,20 +344,13 @@
       }
     }
   },
-  "total_cost_usd": 0.020511,
-  "total_tokens": 38619,
+  "total_cost_usd": 0.021273,
+  "total_tokens": 37445,
   "validation": {
-    "passed": false,
-    "total_discrepancies": 15,
-    "within_tolerance": 14,
-    "hard_failures": 1,
-    "hard_failure_details": [
-      {
-        "field": "direction",
-        "type": "value_mismatch",
-        "gemini-2.5-flash": "strengthening",
-        "gpt-5-mini": "mixed"
-      }
-    ]
+    "passed": true,
+    "total_discrepancies": 17,
+    "within_tolerance": 17,
+    "hard_failures": 0,
+    "hard_failure_details": []
   }
 }

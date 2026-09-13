@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-05T20:15:54.628445+00:00",
+  "extraction_timestamp": "2026-09-13T03:58:48.212184+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -18,7 +20,7 @@
       "direction": "mixed",
       "prior_year_movement_page": 1,
       "prior_year_movement_confidence": 0.5,
-      "exact_reserve_text": "The 2015 year of account declares a return on capacity of 2.1%. Due to an adverse underwriting event the 2016 year of account currently forecasts closing with a loss on capacity of 20%. The 2017 year of account is developing in line with expectation at this early stage.",
+      "exact_reserve_text": "The 2015 year of account declares a return on capacity of 2.1%. Due to an adverse underwriting event the 2016 year of account currently forecasts closing with a loss on capacity of 20%.",
       "primary_causes": [
         "Favorable claims development",
         "Adverse claims development"
@@ -30,7 +32,7 @@
       ],
       "prior_year_events": [
         {
-          "event_name": "2015 year of account closure",
+          "event_name": null,
           "event_year": 2015,
           "impact_description": "declares a return on capacity of 2.1%",
           "lobs_affected": [],
@@ -38,18 +40,20 @@
           "confidence": 0.5
         },
         {
-          "event_name": "Adverse underwriting event",
+          "event_name": null,
           "event_year": 2016,
-          "impact_description": "2016 year of account currently forecasts closing with a loss on capacity of 20%",
+          "impact_description": "currently forecasts closing with a loss on capacity of 20% due to an adverse underwriting event",
           "lobs_affected": [],
           "amount_gbp_m": null,
           "confidence": 0.5
         }
       ],
       "named_events": [],
-      "standardized_narrative": "The syndicate experienced mixed prior year development. The 2015 year of account closed with a return on capacity, indicating favourable development. However, the 2016 year of account is forecasting a loss due to an adverse underwriting event, suggesting adverse development. No specific monetary amounts for these reserve movements were disclosed.",
+      "standardized_narrative": "The 2015 year of account closed with a return on capacity of 2.1%, indicating favorable claims development and a release of reserves for that year. Conversely, the 2016 year of account is currently forecasting a loss on capacity of 20% due to an adverse underwriting event, suggesting a strengthening of reserves for that period. Overall, the prior year development is mixed, with both favorable and adverse movements noted for different underwriting years.",
       "raw_causal_phrases": [
-        "adverse underwriting event"
+        "declares a return on capacity of 2.1%",
+        "adverse underwriting event",
+        "forecasts closing with a loss on capacity of 20%"
       ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 17.7201,
@@ -66,28 +70,176 @@
         }
       ],
       "gross_premium_page": 7,
-      "gross_premium_confidence": 1.0,
+      "gross_premium_confidence": 0.8,
       "currency": "GBP",
-      "data_quality_notes": "Prior year development amount is not explicitly stated in gross or net terms. Qualitative information from the 'Outlook' section indicates mixed development (favourable for 2015, adverse for 2016). The claims development tables are not in a format that allows for direct calculation of prior year development.",
+      "data_quality_notes": "Prior year development in GBP m could not be directly identified or calculated from the provided tables or narrative. The direction is inferred from year-of-account closure results (profit/loss on capacity). Gross premium mix is derived from the \"Operating divisions\" table, which is a business unit breakdown, not a regulatory segmental analysis.",
       "_claims_triangle": {
-        "type": "none",
-        "currency": null,
-        "units": null,
+        "type": "loss_ratio",
+        "currency": "GBP",
+        "units": "percentage",
         "page": 11,
-        "underwriting_years": [],
-        "development_rows": []
+        "underwriting_years": [
+          2008,
+          2009,
+          2010,
+          2011,
+          2012,
+          2013,
+          2014,
+          2015,
+          2016,
+          2017
+        ],
+        "development_rows": [
+          [
+            51.2,
+            50.9,
+            59.3,
+            62.0,
+            63.0,
+            64.9,
+            65.0,
+            89.3,
+            60.1,
+            null
+          ],
+          [
+            null,
+            51.1,
+            49.8,
+            59.5,
+            62.8,
+            68.5,
+            63.8,
+            62.3,
+            85.0,
+            null
+          ],
+          [
+            null,
+            null,
+            48.0,
+            47.8,
+            63.5,
+            58.7,
+            64.2,
+            52.8,
+            61.8,
+            null,
+            null
+          ],
+          [
+            null,
+            null,
+            null,
+            46.1,
+            45.8,
+            61.3,
+            55.0,
+            59.2,
+            49.5,
+            null,
+            null,
+            null
+          ],
+          [
+            null,
+            null,
+            null,
+            null,
+            45.1,
+            46.2,
+            60.1,
+            53.2,
+            54.8,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            null,
+            null,
+            null,
+            null,
+            null,
+            45.0,
+            46.3,
+            60.1,
+            50.8,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            45.1,
+            46.4,
+            57.7,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            45.1,
+            46.4,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            45.1,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ]
+        ]
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_3622_2017_llm.pdf",
-      "content_hash": "ba6fcc94af253dc7d7a583bf621352e2dbde685fb3cdda227b9cba3cf7bb191c",
-      "standardized_at": "2026-07-05T15:37:12.293568+00:00",
+      "content_hash": "eae13a43b24f8505aeeeb4c90124bd4da10efe3b1739d84377b1345295ca6071",
+      "standardized_at": "2026-09-11T12:41:59.310529+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 8831,
-        "output_tokens": 894,
-        "total_tokens": 12515,
-        "cost_usd": 0.004884
+        "input_tokens": 9635,
+        "output_tokens": 1657,
+        "total_tokens": 17440,
+        "cost_usd": 0.007033
       },
       "_adobe_provisions": {
         "opening_provenance": {
@@ -168,43 +320,24 @@
       "opening_reserves_gbp_m": 11.788,
       "opening_reserves_page": 14,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": null,
-      "prior_year_development_pct": null,
-      "direction": "mixed",
-      "prior_year_movement_page": null,
-      "prior_year_movement_confidence": 0.0,
+      "prior_year_development_gbp_m": 1.4223,
+      "prior_year_development_pct": 12.07,
+      "direction": "strengthening",
+      "prior_year_movement_page": 28,
+      "prior_year_movement_confidence": 0.5,
       "exact_reserve_text": "",
       "primary_causes": [
-        "Man-made catastrophe / large losses",
-        "Adverse claims development"
+        "Adverse claims development",
+        "Large loss development"
       ],
       "specific_events": [],
       "specific_years_affected": [
-        2015,
         2016
       ],
-      "prior_year_events": [
-        {
-          "event_name": "Adverse underwriting event",
-          "event_year": 2016,
-          "impact_description": "2016 year of account currently forecasts closing with a loss on capacity of 20%",
-          "lobs_affected": [],
-          "amount_gbp_m": null,
-          "confidence": 0.5
-        },
-        {
-          "event_name": "2015 year of account return",
-          "event_year": 2015,
-          "impact_description": "The 2015 year of account declares a return on capacity of 2.1%",
-          "lobs_affected": [],
-          "amount_gbp_m": null,
-          "confidence": 0.5
-        }
-      ],
+      "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "Gross claims outstanding increased from GBP 11.788m at 1 January 2017 to GBP 12.814m at 31 December 2017 (gross movement +GBP 1.422m for the year). The syndicate describes mixed prior year development: a positive outcome for the 2015 year of account (return on capacity 2.1%) but an adverse underwriting event impacting the 2016 year of account (forecast loss on capacity of 20%). No explicit gross prior-year movement figure was disclosed in the movement note or narrative that can be unambiguously extracted.",
+      "standardized_narrative": "Gross claims outstanding at 1 January 2017 were GBP 11.788m. During 2017 the gross provision for claims increased by GBP 1.422m (a 12.1% increase versus opening gross claims outstanding), indicating an adverse/strengthening movement in reserves. The report references an adverse underwriting event affecting the 2016 year of account which is consistent with the observed reserve strengthening.",
       "raw_causal_phrases": [
-        "The 2015 year of account declares a return on capacity of 2.1%.",
         "Due to an adverse underwriting event the 2016 year of account currently forecasts closing with a loss on capacity of 20%."
       ],
       "lob_movements": [],
@@ -224,11 +357,11 @@
       "gross_premium_page": 18,
       "gross_premium_confidence": 0.8,
       "currency": "GBP",
-      "data_quality_notes": "No explicit GROSS 'movement in prior year's provision for claims outstanding' figure was found in the available pages. The balance sheet gross opening claims outstanding was taken from the prior-year comparative column. The report discusses prior-year outcomes qualitatively (2015 positive, 2016 adverse) but does not quantify a gross prior-year development amount that can be directly extracted; therefore prior_year_development_gbp_m is null. A gross claims development table exists but the printed layout in the provided extract prevents reliable diagonal comparison to compute PYD; the triangle was not used to compute a numeric PYD. The operating division breakdown is 'Life insurance' / 'Life reinsurance' (used for premium mix) which does not map cleanly to standard Lloyd's LOBs.",
+      "data_quality_notes": "Prior-year development figure taken from the 'Movement in the provision' (gross claims outstanding) line in the Technical Provisions note. The note shows the total movement in the gross claims provision for the year (1,422.3) which may include current-year movements; an explicit 'movement in prior years' sentence was not found. A gross claims development table (percentages) is present (page 29) but the per-year numeric diagonals required to compute a strict prior-year development sum were not straightforward to extract from the printed rows, so the table was not used to recalculate PYD. Gross premium mix is derived from the operating divisions (divisional summary) percentages printed in the risk section; amounts were calculated from the total gross premium.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
-        "units": "millions",
+        "units": "percentage",
         "page": 29,
         "underwriting_years": [
           2008,
@@ -242,19 +375,129 @@
           2016,
           2017
         ],
-        "development_rows": []
+        "development_rows": [
+          [
+            51.2,
+            50.9,
+            59.3,
+            62.0,
+            63.0,
+            64.9,
+            65.0,
+            89.3,
+            60.1,
+            null
+          ],
+          [
+            51.1,
+            49.8,
+            59.5,
+            62.8,
+            68.5,
+            63.8,
+            62.3,
+            85.0,
+            null,
+            null
+          ],
+          [
+            48.0,
+            47.8,
+            63.5,
+            58.7,
+            64.2,
+            52.8,
+            61.8,
+            null,
+            null,
+            null
+          ],
+          [
+            46.1,
+            45.8,
+            61.3,
+            55.0,
+            59.2,
+            49.5,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            45.1,
+            46.2,
+            60.1,
+            53.2,
+            54.8,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            45.0,
+            46.3,
+            60.1,
+            50.8,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            45.1,
+            46.4,
+            57.7,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            45.1,
+            46.4,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            45.1,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ]
+        ],
+        "type_confidence_note": "The claims development table is printed as percentages (gross). Numeric per-year cumulative liabilities for the syndicate share are present elsewhere in the table but the previous-diagonal values needed to compute a robust prior-year development sum were not unambiguously extractable from the scanned rows, so percentages were captured as the triangle representation."
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_3622_2017_llm.pdf",
-      "content_hash": "ba6fcc94af253dc7d7a583bf621352e2dbde685fb3cdda227b9cba3cf7bb191c",
-      "standardized_at": "2026-07-05T15:38:19.359022+00:00",
+      "content_hash": "eae13a43b24f8505aeeeb4c90124bd4da10efe3b1739d84377b1345295ca6071",
+      "standardized_at": "2026-09-11T12:48:30.546105+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 23644,
-        "output_tokens": 5954,
-        "total_tokens": 29598,
-        "cost_usd": 0.017819
+        "input_tokens": 24404,
+        "output_tokens": 7097,
+        "total_tokens": 31501,
+        "cost_usd": 0.020295
       },
       "_adobe_provisions": {
         "opening_provenance": {
@@ -330,13 +573,32 @@
       }
     }
   },
-  "total_cost_usd": 0.022703,
-  "total_tokens": 42113,
+  "total_cost_usd": 0.027328,
+  "total_tokens": 48941,
   "validation": {
-    "passed": true,
-    "total_discrepancies": 14,
+    "passed": false,
+    "total_discrepancies": 17,
     "within_tolerance": 14,
-    "hard_failures": 0,
-    "hard_failure_details": []
+    "hard_failures": 3,
+    "hard_failure_details": [
+      {
+        "field": "direction",
+        "type": "value_mismatch",
+        "gemini-2.5-flash": "mixed",
+        "gpt-5-mini": "strengthening"
+      },
+      {
+        "field": "prior_year_development_gbp_m",
+        "type": "value_mismatch",
+        "gemini-2.5-flash": null,
+        "gpt-5-mini": 1.4223
+      },
+      {
+        "field": "prior_year_development_pct",
+        "type": "value_mismatch",
+        "gemini-2.5-flash": null,
+        "gpt-5-mini": 12.07
+      }
+    ]
   }
 }

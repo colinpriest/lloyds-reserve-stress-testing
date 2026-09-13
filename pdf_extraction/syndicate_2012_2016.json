@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T10:20:15.018194+00:00",
+  "extraction_timestamp": "2026-09-13T04:00:48.789774+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -16,8 +18,8 @@
       "prior_year_development_gbp_m": 9.38,
       "prior_year_development_pct": 4.2,
       "direction": "strengthening",
-      "prior_year_movement_page": 2,
-      "prior_year_movement_confidence": 1.0,
+      "prior_year_movement_page": 15,
+      "prior_year_movement_confidence": 0.8,
       "exact_reserve_text": "The main driver for the increase is due to adverse prior year development of GBP 10.3m as compared to GBP 9.3m favorable prior year development during the same period in 2015.",
       "primary_causes": [
         "Adverse claims development",
@@ -25,21 +27,18 @@
       ],
       "specific_events": [],
       "specific_years_affected": [
-        2015,
-        2014,
-        2013,
-        2012
+        "prior years"
       ],
       "prior_year_events": [
         {
           "event_name": "Personal Accident prior year losses",
           "event_year": null,
-          "impact_description": "booked losses from prior years (GBP 6.0m)",
+          "impact_description": "booked losses from prior years",
           "lobs_affected": [
             "Accident & Health"
           ],
           "amount_gbp_m": 6.0,
-          "confidence": 0.8
+          "confidence": 1.0
         },
         {
           "event_name": "Property and DUAL Australia prior year losses",
@@ -49,11 +48,11 @@
             "Property"
           ],
           "amount_gbp_m": null,
-          "confidence": 0.5
+          "confidence": 0.8
         }
       ],
       "named_events": [],
-      "standardized_narrative": "In 2016, Syndicate 2012 experienced an adverse prior year development of GBP 10.3 million, leading to a strengthening of reserves. This was primarily driven by losses booked from prior years in the Personal Accident line of business, amounting to GBP 6.0 million, and unquantified prior year losses in Property and DUAL Australia.",
+      "standardized_narrative": "The syndicate experienced a gross prior year strengthening of GBP 9.38 million in 2016, primarily driven by adverse development in the Personal Accident line of business, which booked GBP 6.0 million in losses from prior years. Additionally, prior year losses in Property and DUAL Australia contributed to the higher loss ratio. This adverse development contrasts with a favorable prior year development of GBP 9.3 million in 2015.",
       "raw_causal_phrases": [
         "adverse prior year development of GBP 10.3m",
         "Personal Accident line of business which during 2016 booked losses from prior years (GBP 6.0m)",
@@ -65,14 +64,14 @@
           "direction": "strengthening",
           "amount_gbp_m": 6.0,
           "percentage": null,
-          "confidence": 0.8
+          "confidence": 1.0
         },
         {
           "line_of_business": "Property",
           "direction": "strengthening",
           "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.5
+          "confidence": 0.8
         }
       ],
       "gross_premiums_written_gbp_m": 179.0,
@@ -111,7 +110,7 @@
       "gross_premium_page": 14,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The prior year development figure is taken from the narrative text as it explicitly states the adverse development for the current year. A calculation from the gross claims development triangle yields a slightly different figure (+9.380m GBP), but the narrative is prioritized for its directness. [RAG OVERRIDE: Model said PYD=10.3, RAG triangle computed 9.38. Using RAG value.]",
+      "data_quality_notes": "Prior year development amount derived from gross claims development triangle as narrative figure on page 2 is likely net of reinsurance.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -164,20 +163,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_2012_2016_llm.pdf",
-      "content_hash": "a72098b0ed9c12387ba91fb0323988b68ade59d14c819a49a5d9ec08f7eb258b",
-      "standardized_at": "2026-07-05T11:33:19.486854+00:00",
+      "content_hash": "4a5310878db705a93612481f3643ecb4fba888dc09311e96db0d9056c30c1261",
+      "standardized_at": "2026-09-11T11:31:20.410354+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 10121,
-        "output_tokens": 1413,
-        "total_tokens": 14193,
-        "cost_usd": 0.006569
+        "input_tokens": 10925,
+        "output_tokens": 1418,
+        "total_tokens": 16948,
+        "cost_usd": 0.006823
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 9.38,
+        "model_value": 9.38,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 47,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2012,
           2013,
@@ -370,23 +381,53 @@
       "direction": "strengthening",
       "prior_year_movement_page": 44,
       "prior_year_movement_confidence": 0.8,
-      "exact_reserve_text": "Losses and loss adjustment expenses are GBP 35.6m higher than 2015 resulting in an increase in the loss ratio from 54.3% to 67.3%. The main driver for the increase is due to adverse prior year development of GBP 10.3m as compared to GBP 9.3m favorable prior year development during the same period in 2015.\n\nThe adverse development in 2016 is mainly attributable to the Personal Accident line of business which during 2016 booked losses from prior years (GBP 6.0m). There were also prior year losses in Property and DUAL Australia that contributed to the higher loss ratio.",
+      "exact_reserve_text": "Losses and loss adjustment expenses are GBP 35.6m higher than 2015 resulting in an increase in the loss ratio from 54.3% to 67.3%. The main driver for the increase is due to adverse prior year development of GBP 10.3m as compared to GBP 9.3m favorable prior year development during the same period in 2015. The adverse development in 2016 is mainly attributable to the Personal Accident line of business which during 2016 booked losses from prior years (GBP 6.0m). There were also prior year losses in Property and DUAL Australia that contributed to the higher loss ratio.",
       "primary_causes": [
         "Adverse claims development",
         "Large loss development"
       ],
       "specific_events": [],
-      "specific_years_affected": [
-        2012,
-        2013,
-        2014
+      "specific_years_affected": [],
+      "prior_year_events": [
+        {
+          "event_name": "Personal Accident prior year losses",
+          "event_year": null,
+          "impact_description": "Booked losses from prior years in the Personal Accident line",
+          "lobs_affected": [
+            "Accident & Health"
+          ],
+          "amount_gbp_m": 6.0,
+          "confidence": 1.0
+        },
+        {
+          "event_name": "Property prior year losses",
+          "event_year": null,
+          "impact_description": "Prior year losses in Property contributed to higher loss ratio",
+          "lobs_affected": [
+            "Property"
+          ],
+          "amount_gbp_m": null,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "DUAL Australia prior year losses",
+          "event_year": null,
+          "impact_description": "Prior year losses in DUAL Australia contributed to higher loss ratio",
+          "lobs_affected": [
+            "Reinsurance - Specialty"
+          ],
+          "amount_gbp_m": null,
+          "confidence": 0.5
+        }
       ],
-      "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "The syndicate experienced a net adverse prior-year reserve movement (gross) of approximately GBP 9.4m in 2016 (a strengthening of reserves of ~4.2% versus opening gross claims outstanding of GBP 223.5m). The deterioration was concentrated in prior-year development, principally driven by Personal Accident (with ~GBP 6.0m of prior-year losses booked) and additional prior-year losses in Property and Australian operations. The figure above is derived from the gross claims development triangle and is consistent with the narrative that prior-year development was adverse in 2016.",
+      "standardized_narrative": "At 1 January 2016 the Syndicate's gross claims outstanding were GBP 223.495m. During 2016 there was net adverse prior-year reserve development of approximately GBP 9.38m (a strengthening of c.4.2% of opening gross reserves), driven mainly by adverse development in prior underwriting years. Management attribute the movement principally to prior-year losses in the Personal Accident portfolio (c.GBP 6.0m) with additional contributions from Property and DUAL Australia. The triangle gross development and the narrative both indicate an adverse/prior-year strengthening, though the narrative cites an adverse amount of GBP 10.3m (minor difference to the triangle-derived GBP 9.38m).",
       "raw_causal_phrases": [
-        "adverse prior year development of GBP 10.3m as compared to GBP 9.3m favorable prior year development during the same period in 2015.",
-        "The adverse development in 2016 is mainly attributable to the Personal Accident line of business which during 2016 booked losses from prior years (GBP 6.0m). There were also prior year losses in Property and DUAL Australia that contributed to the higher loss ratio."
+        "adverse prior year development of GBP 10.3m",
+        "9.3m favorable prior year development",
+        "booked losses from prior years (GBP 6.0m)",
+        "prior year losses in Property and DUAL Australia",
+        "Losses and loss adjustment expenses are GBP 35.6m higher than 2015 resulting in an increase in the loss ratio from 54.3% to 67.3%."
       ],
       "lob_movements": [
         {
@@ -394,10 +435,17 @@
           "direction": "strengthening",
           "amount_gbp_m": 6.0,
           "percentage": null,
-          "confidence": 0.8
+          "confidence": 1.0
         },
         {
           "line_of_business": "Property",
+          "direction": "strengthening",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.8
+        },
+        {
+          "line_of_business": "Reinsurance - Specialty",
           "direction": "strengthening",
           "amount_gbp_m": null,
           "percentage": null,
@@ -440,7 +488,7 @@
       "gross_premium_page": 39,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior-year development (gross) was calculated from the gross claims development triangle (page 44). The Managing Agent narrative quotes an 'adverse prior year development of GBP 10.3m' (page 2) but does not explicitly state whether that is gross or net; the triangle-based gross calculation yields ~GBP 9.38m. The narrative figure may be net of reinsurance or rounded; triangle-derived gross PYD used as primary quantity. Some LOB references (e.g. 'DUAL Australia') are mentioned without precise gross amounts and have been treated qualitatively.",
+      "data_quality_notes": "Prior-year development was computed from the gross claims development triangle (Technical Provisions note, page 44). The Managing Agent's narrative (page 2) states an adverse prior year development of GBP 10.3m; the triangle-based calculation gives GBP 9.38m (gross) - small discrepancy likely rounding/presentation and/or net/gross wording in the narrative. The triangle and balance sheet are in GBP 000 units; all triangle values were read from the gross triangle and converted to millions. No specific named catastrophe events were identified as drivers; some amounts (Property, DUAL Australia) are described but not quantified.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -493,20 +541,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_2012_2016_llm.pdf",
-      "content_hash": "a72098b0ed9c12387ba91fb0323988b68ade59d14c819a49a5d9ec08f7eb258b",
-      "standardized_at": "2026-07-05T11:34:26.025442+00:00",
+      "content_hash": "4a5310878db705a93612481f3643ecb4fba888dc09311e96db0d9056c30c1261",
+      "standardized_at": "2026-09-11T11:34:08.253723+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 20547,
-        "output_tokens": 5881,
-        "total_tokens": 26428,
-        "cost_usd": 0.016899
+        "input_tokens": 21307,
+        "output_tokens": 7690,
+        "total_tokens": 28997,
+        "cost_usd": 0.020707
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 9.38,
+        "model_value": 9.38,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 47,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2012,
           2013,
@@ -689,8 +749,8 @@
       }
     }
   },
-  "total_cost_usd": 0.023468,
-  "total_tokens": 40621,
+  "total_cost_usd": 0.02753,
+  "total_tokens": 45945,
   "validation": {
     "passed": true,
     "total_discrepancies": 14,

@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T10:55:46.383407+00:00",
+  "extraction_timestamp": "2026-09-13T03:59:39.891910+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -25,23 +27,40 @@
       "prior_year_events": [],
       "named_events": [
         {
-          "event_name": "Hurricanes Harvey, Irma and Maria (HIM)",
+          "event_name": "Hurricane Harvey",
           "event_year": 2017,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
           "loss_description": "exceptional catastrophe loss experience",
-          "lobs_affected": [
-            "Property",
-            "Reinsurance - Property",
-            "Marine",
-            "Energy"
-          ],
+          "lobs_affected": [],
+          "page": 2,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Hurricane Irma",
+          "event_year": 2017,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "exceptional catastrophe loss experience",
+          "lobs_affected": [],
+          "page": 2,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Hurricane Maria",
+          "event_year": 2017,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "exceptional catastrophe loss experience",
+          "lobs_affected": [],
           "page": 2,
           "confidence": 0.8
         }
       ],
-      "standardized_narrative": "The report does not explicitly quantify prior year reserve development on a gross basis. The claims development table is presented on a net basis.",
-      "raw_causal_phrases": [],
+      "standardized_narrative": "No explicit prior year reserve development figure (gross or net) was found in the report. The report mentions exceptional catastrophe loss experience, including hurricanes Harvey, Irma and Maria, as a dominant theme for the 2017 financial year.",
+      "raw_causal_phrases": [
+        "exceptional catastrophe loss experience, including hurricanes Harvey, Irma and Maria (HIM)"
+      ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 706.0,
       "gross_premium_mix": [
@@ -79,7 +98,7 @@
       "gross_premium_page": 12,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "No explicit gross prior year development figure was found. The claims development table is presented on a net basis. [NET TRIANGLE: PYD from net-of-reinsurance claims development triangle.]",
+      "data_quality_notes": "No explicit gross or net prior year development figure was found in the report's narrative or financial notes. The claims development triangle on page 17 is explicitly for 'net cumulative claims cost' and therefore cannot be used to derive a gross prior year development figure. [NET TRIANGLE: PYD from net-of-reinsurance claims development triangle.]",
       "_claims_triangle": {
         "type": "net",
         "currency": "GBP",
@@ -162,20 +181,31 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_2999_2017_llm.pdf",
-      "content_hash": "f77e9a2f242ca039eef500a0469401107877e5237328f7d6f6abba82dd22046c",
-      "standardized_at": "2026-07-05T13:42:19.157498+00:00",
+      "content_hash": "54961dfefbf4af8da2b91b110f38d0807588e9fa0001a41b5f8a4eea67779a26",
+      "standardized_at": "2026-09-11T12:07:03.554210+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 10379,
-        "output_tokens": 1326,
-        "total_tokens": 16555,
-        "cost_usd": 0.006429
+        "input_tokens": 11183,
+        "output_tokens": 1559,
+        "total_tokens": 20243,
+        "cost_usd": 0.007252
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -29.295,
+        "triangle_type": "net",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 41,
+        "note": "filled a blank model value"
       },
       "_rag_triangle": {
         "type": "net",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -249,6 +279,15 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later"
         ],
         "source_page": 41,
         "entity": 2999
@@ -408,7 +447,7 @@
       "syndicate": 2999,
       "year": 2017,
       "opening_reserves_gbp_m": 2236.936,
-      "opening_reserves_page": 19,
+      "opening_reserves_page": 20,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": -29.295,
       "prior_year_development_pct": -1.31,
@@ -416,11 +455,7 @@
       "prior_year_movement_page": 38,
       "prior_year_movement_confidence": 0.8,
       "exact_reserve_text": "",
-      "primary_causes": [
-        "Natural catastrophe events",
-        "Economic inflation / claims cost inflation",
-        "Large loss development"
-      ],
+      "primary_causes": [],
       "specific_events": [
         "Hurricane Harvey",
         "Hurricane Irma",
@@ -434,48 +469,48 @@
           "event_year": 2017,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "exceptional catastrophe loss experience, including hurricanes Harvey, Irma and Maria (HIM).",
+          "loss_description": "exceptional catastrophe loss experience (part of HIM)",
           "lobs_affected": [
             "Property",
             "Reinsurance - Property",
             "Marine"
           ],
           "page": 3,
-          "confidence": 0.8
+          "confidence": 0.5
         },
         {
           "event_name": "Hurricane Irma",
           "event_year": 2017,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "exceptional catastrophe loss experience, including hurricanes Harvey, Irma and Maria (HIM).",
+          "loss_description": "exceptional catastrophe loss experience (part of HIM)",
           "lobs_affected": [
             "Property",
             "Reinsurance - Property",
             "Marine"
           ],
           "page": 3,
-          "confidence": 0.8
+          "confidence": 0.5
         },
         {
           "event_name": "Hurricane Maria",
           "event_year": 2017,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "exceptional catastrophe loss experience, including hurricanes Harvey, Irma and Maria (HIM).",
+          "loss_description": "exceptional catastrophe loss experience (part of HIM)",
           "lobs_affected": [
             "Property",
             "Reinsurance - Property",
             "Marine"
           ],
           "page": 3,
-          "confidence": 0.8
+          "confidence": 0.5
         }
       ],
-      "standardized_narrative": "Opening gross claims outstanding at 1 January 2017 was GBP 2,236.936m (Balance Sheet). No material prior year reserve movement is evident from the claims development table (net claims development aggregated to approximately nil), hence prior year development is effectively flat. The year was impacted by significant 2017 catastrophe activity (notably Hurricanes Harvey, Irma and Maria) and market pressures (pricing weakness and currency movements), but these are described as current year catastrophe experience rather than indicating a material prior-year reserve strengthening or release.",
+      "standardized_narrative": "Opening gross claims outstanding at 1 January 2017 was GBP 2,236.936m. The report does not disclose an explicit gross prior-year reserve movement; the only available claims development table is a net cumulative triangle which, when analysed (excluding the two most recent underwriting years), shows effectively nil net prior-year development. The 2017 underwriting result was materially affected by natural catastrophe events (Hurricanes Harvey, Irma and Maria) which drove current-year claims activity, but these are current-year impacts rather than prior-year reserve movements.",
       "raw_causal_phrases": [
-        "The year was dominated by two principal themes: continued pricing pressure across all lines, and; exceptional catastrophe loss experience, including hurricanes Harvey, Irma and Maria (HIM).",
-        "The gross written premium growth of 9% relative to 2016 was predominantly due to a significantly weaker sterling, offsetting shortfalls in London market business, particularly Energy."
+        "exceptional catastrophe loss experience, including hurricanes Harvey, Irma and Maria (HIM).",
+        "continued pricing pressure across all lines"
       ],
       "lob_movements": [
         {
@@ -557,7 +592,7 @@
       "gross_premium_page": 26,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Opening gross claims outstanding taken from Balance Sheet (Liabilities - Claims outstanding) 2016 comparative column. No explicit gross prior-year movement (gross PYD) was presented in the notes; a net claims development triangle is provided and was used as a fallback to calculate prior year development (resulting in ~0.0m net movement). Therefore prior_year_development_gbp_m reflects a calculation from the net triangle (NET, not GROSS) due to absence of a gross PYD figure. Exact textual description of a gross prior-year movement was not found. [RAG OVERRIDE: Model said PYD=0.0, RAG triangle computed -29.295. Using RAG value.]",
+      "data_quality_notes": "No explicit gross 'movement in prior year's provision for claims outstanding' figure was found. A net claims development triangle (note 15) was available and was used as a last-resort fallback to estimate prior-year development (result: nil). The triangle is presented in net terms and includes an 'X and prior' aggregate column which was excluded per rules. Exact gross PYD was not disclosed; therefore the prior_year_development_gbp_m is derived from net triangle (flagged as fallback). No verbatim sentence describing gross prior-year reserve movement was found. [RAG OVERRIDE: Model said PYD=0.0, RAG triangle computed -29.295. Using RAG value.]",
       "_claims_triangle": {
         "type": "net",
         "currency": "GBP",
@@ -569,7 +604,8 @@
           2013,
           2014,
           2015,
-          2016
+          2016,
+          2017
         ],
         "development_rows": [
           [
@@ -578,7 +614,8 @@
             169601,
             183877,
             281076,
-            315776
+            315776,
+            null
           ],
           [
             449860,
@@ -586,6 +623,7 @@
             345927,
             422512,
             504163,
+            null,
             null
           ],
           [
@@ -594,12 +632,14 @@
             441363,
             490671,
             null,
+            null,
             null
           ],
           [
             473157,
             457978,
             419204,
+            null,
             null,
             null,
             null
@@ -610,51 +650,57 @@
             null,
             null,
             null,
-            null
-          ],
-          [
-            459753,
-            null,
-            null,
-            null,
-            null,
-            null
-          ],
-          [
-            null,
-            null,
-            null,
-            null,
             null,
             null
           ],
           [
             459753,
-            410662,
-            419204,
-            490671,
-            504163,
-            315776
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
           ]
-        ],
-        "confidence": 0.8
+        ]
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_2999_2017_llm.pdf",
-      "content_hash": "f77e9a2f242ca039eef500a0469401107877e5237328f7d6f6abba82dd22046c",
-      "standardized_at": "2026-07-05T13:44:18.395512+00:00",
+      "content_hash": "54961dfefbf4af8da2b91b110f38d0807588e9fa0001a41b5f8a4eea67779a26",
+      "standardized_at": "2026-09-11T12:10:07.295295+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 14389,
-        "output_tokens": 9928,
-        "total_tokens": 24317,
-        "cost_usd": 0.023453
+        "input_tokens": 15149,
+        "output_tokens": 9014,
+        "total_tokens": 24163,
+        "cost_usd": 0.021815
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -29.295,
+        "model_value": 0.0,
+        "triangle_type": "net",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 41,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "net",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -728,6 +774,15 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later"
         ],
         "source_page": 41,
         "entity": 2999
@@ -884,12 +939,12 @@
       }
     }
   },
-  "total_cost_usd": 0.029882,
-  "total_tokens": 40872,
+  "total_cost_usd": 0.029067,
+  "total_tokens": 44406,
   "validation": {
     "passed": true,
-    "total_discrepancies": 16,
-    "within_tolerance": 16,
+    "total_discrepancies": 14,
+    "within_tolerance": 14,
     "hard_failures": 0,
     "hard_failure_details": []
   }

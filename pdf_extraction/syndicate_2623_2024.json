@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T10:47:39.358147+00:00",
+  "extraction_timestamp": "2026-09-13T04:19:57.589458+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -21,25 +23,18 @@
       "exact_reserve_text": "Change in estimates of prior year provisions (196,137)",
       "primary_causes": [
         "Favorable claims development",
-        "Reserve methodology change",
-        "Natural catastrophe events",
-        "Mixed"
+        "Adverse claims development",
+        "Reserve methodology change"
       ],
-      "specific_events": [
-        "Hurricane Ian",
-        "Storm Elliott"
-      ],
-      "specific_years_affected": [
-        2022
-      ],
+      "specific_events": [],
+      "specific_years_affected": [],
       "prior_year_events": [
         {
           "event_name": "Hurricane Ian",
           "event_year": 2022,
-          "impact_description": "adversely impacted the syndicate's 2022 year of account",
+          "impact_description": "adversely impacted the 2022 year of account, which still closed with a gain on capacity",
           "lobs_affected": [
-            "Property",
-            "Casualty"
+            "Property"
           ],
           "amount_gbp_m": null,
           "confidence": 0.8
@@ -47,10 +42,9 @@
         {
           "event_name": "Storm Elliott",
           "event_year": 2022,
-          "impact_description": "adversely impacted the syndicate's 2022 year of account",
+          "impact_description": "adversely impacted the 2022 year of account, which still closed with a gain on capacity",
           "lobs_affected": [
-            "Property",
-            "Casualty"
+            "Property"
           ],
           "amount_gbp_m": null,
           "confidence": 0.8
@@ -62,11 +56,8 @@
           "event_year": 2022,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "adversely impacted the syndicate's 2022 year of account",
-          "lobs_affected": [
-            "Property",
-            "Casualty"
-          ],
+          "loss_description": "adversely impacted the 2022 year of account",
+          "lobs_affected": [],
           "page": 1,
           "confidence": 0.8
         },
@@ -75,16 +66,13 @@
           "event_year": 2022,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "adversely impacted the syndicate's 2022 year of account",
-          "lobs_affected": [
-            "Property",
-            "Casualty"
-          ],
+          "loss_description": "adversely impacted the 2022 year of account",
+          "lobs_affected": [],
           "page": 1,
           "confidence": 0.8
         },
         {
-          "event_name": "Hurricane Milton",
+          "event_name": "Hurricanes Milton",
           "event_year": 2024,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
@@ -96,7 +84,7 @@
           "confidence": 0.8
         },
         {
-          "event_name": "Hurricane Helene",
+          "event_name": "Hurricanes Helene",
           "event_year": 2024,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
@@ -108,13 +96,48 @@
           "confidence": 0.8
         }
       ],
-      "standardized_narrative": "The syndicate reported a gross prior year reserve release of $196.137 million in 2024, representing a 3.30% reduction of opening gross reserves. This release was primarily driven by favorable claims development and margin releases due to a revision in actuarial methodology. However, the syndicate experienced a net release on most divisions, offset by a strengthening on the MAP and Specialty Risk divisions on older years of account. The 2022 year of account closed with a gain despite adverse impacts from catastrophe events like Hurricane Ian and Storm Elliott. The 2024 calendar year also saw more catastrophe losses, including Hurricanes Milton and Helene, which worsened the current year's claims ratio.",
+      "standardized_narrative": "The syndicate released $196.137 million in gross prior year reserves in 2024, primarily due to favorable claims development across most divisions and margin releases from a revision in actuarial methodology. This was partially offset by strengthening on MAP and Specialty Risk divisions for older years of account. The 2022 year of account closed with a gain despite adverse impacts from Hurricane Ian and Storm Elliott.",
       "raw_causal_phrases": [
-        "a positive impact from margin releases on some classes due to a revision in the actuarial methodology in determining risk margin that is held.",
-        "a gain on capacity of 18.1% despite being adversely impacted by a number of catastrophe events including Hurricane Ian and Storm Elliott.",
-        "experienced a net release on most divisions, offset by a strengthening on the MAP and Specialty Risk divisions on older years of account."
+        "net release on most divisions, offset by a strengthening on the MAP and Specialty Risk divisions on older years of account",
+        "a positive impact from margin releases on some classes due to a revision in the actuarial methodology in determining risk margin that is held"
       ],
-      "lob_movements": [],
+      "lob_movements": [
+        {
+          "line_of_business": "Cyber",
+          "direction": "release",
+          "amount_gbp_m": -40.0,
+          "percentage": null,
+          "confidence": 0.8
+        },
+        {
+          "line_of_business": "Other",
+          "direction": "release",
+          "amount_gbp_m": -26.4,
+          "percentage": null,
+          "confidence": 0.8
+        },
+        {
+          "line_of_business": "Aggregate",
+          "direction": "strengthening",
+          "amount_gbp_m": 61.8,
+          "percentage": null,
+          "confidence": 0.8
+        },
+        {
+          "line_of_business": "Property",
+          "direction": "release",
+          "amount_gbp_m": -122.5,
+          "percentage": null,
+          "confidence": 0.8
+        },
+        {
+          "line_of_business": "Other",
+          "direction": "strengthening",
+          "amount_gbp_m": 5.1,
+          "percentage": null,
+          "confidence": 0.8
+        }
+      ],
       "gross_premiums_written_gbp_m": 2258.8,
       "gross_premium_mix": [
         {
@@ -141,7 +164,7 @@
       "gross_premium_page": 13,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "The LOB breakdown for prior year movements on page 2 is presented as net releases/strengthenings, not gross. Therefore, lob_movements cannot be populated with gross figures. The claims development triangle on page 16 shows a different prior year movement than the explicit 'Change in estimates of prior year provisions' on page 15. The explicit note is used as the primary source. [RAG OVERRIDE: Model said PYD=-196.137, RAG triangle computed -182.07. Using RAG value.]",
+      "data_quality_notes": "LOB movements for prior year development are reported net of reinsurance as gross breakdown is not available. [RAG OVERRIDE: Model said PYD=-196.137, RAG triangle computed -182.07. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
@@ -161,77 +184,71 @@
         ],
         "development_rows": [
           [
-            1042820,
-            1122079,
-            1440873,
-            1432387,
-            1485823,
-            1814814,
-            2089987,
-            2473033,
-            2579139,
-            1555688,
+            1042820.0,
+            1122079.0,
+            1440873.0,
+            1432387.0,
+            1485823.0,
+            1814814.0,
+            2089987.0,
+            2473033.0,
+            2579139.0,
+            1555688.0
+          ],
+          [
+            988579.0,
+            1115312.0,
+            1466845.0,
+            1527524.0,
+            1757410.0,
+            2017414.0,
+            2282964.0,
+            2142076.0,
+            2287049.0,
             null
           ],
           [
-            988579,
-            1115312,
-            1466845,
-            1527524,
-            1757410,
-            2017414,
-            2282964,
-            2142076,
-            2287049,
+            924095.0,
+            1062131.0,
+            1502821.0,
+            1618391.0,
+            1658057.0,
+            2095252.0,
+            2000972.0,
+            2072602.0,
             null,
             null
           ],
           [
-            924095,
-            1062131,
-            1502821,
-            1618391,
-            1658057,
-            2095252,
-            2000972,
-            2072602,
-            null,
-            null,
-            null
-          ],
-          [
-            887747,
-            1028246,
-            1468817,
-            1605586,
-            1667457,
-            1916393,
-            1882025,
-            null,
+            887747.0,
+            1028246.0,
+            1468817.0,
+            1605586.0,
+            1667457.0,
+            1916393.0,
+            1882025.0,
             null,
             null,
             null
           ],
           [
-            882658,
-            1008258,
-            1480463,
-            1641686,
-            1636357,
-            1875208,
-            null,
+            882658.0,
+            1008258.0,
+            1480463.0,
+            1641686.0,
+            1636357.0,
+            1875208.0,
             null,
             null,
             null,
             null
           ],
           [
-            933187,
-            1001826,
-            1517739,
-            1670378,
-            1667481,
-            null,
+            933187.0,
+            1001826.0,
+            1517739.0,
+            1670378.0,
+            1667481.0,
             null,
             null,
             null,
@@ -239,11 +256,10 @@
             null
           ],
           [
-            952561,
-            1006662,
-            1504501,
-            1665977,
-            null,
+            952561.0,
+            1006662.0,
+            1504501.0,
+            1665977.0,
             null,
             null,
             null,
@@ -252,10 +268,9 @@
             null
           ],
           [
-            966810,
-            1040955,
-            1518453,
-            null,
+            966810.0,
+            1040955.0,
+            1518453.0,
             null,
             null,
             null,
@@ -265,9 +280,8 @@
             null
           ],
           [
-            944953,
-            1052994,
-            null,
+            944953.0,
+            1052994.0,
             null,
             null,
             null,
@@ -278,8 +292,7 @@
             null
           ],
           [
-            939775,
-            null,
+            939775.0,
             null,
             null,
             null,
@@ -294,20 +307,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_2623_2024_llm.pdf",
-      "content_hash": "7acf109a2ffee754ffa2676a525dc19de90be4a28b7da37240da846d3c162616",
-      "standardized_at": "2026-03-18T05:33:46.162722+00:00",
+      "content_hash": "9912c4bc502b1bf202fca862048969f67f88388273622cd7525929ec9d2773e5",
+      "standardized_at": "2026-09-11T14:19:36.219343+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 10637,
-        "output_tokens": 2399,
-        "total_tokens": 22875,
-        "cost_usd": 0.009189
+        "input_tokens": 11441,
+        "output_tokens": 2744,
+        "total_tokens": 18156,
+        "cost_usd": 0.010292
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -182.07,
+        "model_value": -196.137,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 49,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2015,
           2016,
@@ -442,6 +467,18 @@
             null
           ]
         ],
+        "row_labels": [
+          "12 months",
+          "24 months",
+          "36 months",
+          "48 months",
+          "60 months",
+          "72 months",
+          "84 months",
+          "96 months",
+          "108 months",
+          "120 months"
+        ],
         "source_page": 49,
         "entity": 2623
       },
@@ -505,6 +542,13 @@
           "entity": 2623,
           "backend": "azure",
           "table_kind": "provisions_movement"
+        },
+        "movement_semantics": {
+          "row_label": "Change in estimates of prior year provisions",
+          "row_index": 6,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": true,
+          "column_index": 1
         },
         "gross_prior_year_claims": -196.1,
         "ri_share_prior_year": 74.2,
@@ -603,21 +647,24 @@
       "direction": "release",
       "prior_year_movement_page": 48,
       "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "Prior year releases During 2024 the syndicate released prior year reserves of $122.0m (2023: $267.9m). The syndicate experienced a net release on most divisions, offset by a strengthening on the MAP and Specialty Risk divisions on older years of account. Net (releases)/strengthening are shown by division in the table below: 2024 2023 $m $m Cyber Risks (40.0) 25.9 Digital (26.4) (36.6) MAP Risks 61.8 (103.1) Property Risks (122.5) (37.0) Specialty Risks 5.1 (117.1) Total (122.0) (267.9)",
+      "exact_reserve_text": "Prior year releases During 2024 the syndicate released prior year reserves of $122.0m (2023: $267.9m). The syndicate experienced a net release on most divisions, offset by a strengthening on the MAP and Specialty Risk divisions on older years of account. Net (releases)/strengthening are shown by division in the table below:",
       "primary_causes": [
         "Favorable claims development",
-        "Reserve methodology change"
+        "Reserve methodology change",
+        "Man-made catastrophe / large losses"
       ],
       "specific_events": [
         "Hurricane Ian",
         "Storm Elliott"
       ],
-      "specific_years_affected": [],
+      "specific_years_affected": [
+        2022
+      ],
       "prior_year_events": [
         {
           "event_name": "Hurricane Ian",
           "event_year": 2022,
-          "impact_description": "Adversely impacted the 2022 year of account but the 2022 YOA closed with a gain on capacity of 18.1%; contributed to claims on older years",
+          "impact_description": "Adversely impacted the 2022 year of account and contributed to catastrophe losses affecting prior years' experience.",
           "lobs_affected": [
             "Property"
           ],
@@ -627,7 +674,7 @@
         {
           "event_name": "Storm Elliott",
           "event_year": 2022,
-          "impact_description": "Adversely impacted the 2022 year of account but the 2022 YOA closed with a gain on capacity of 18.1%; contributed to claims on older years",
+          "impact_description": "Adversely impacted the 2022 year of account and contributed to catastrophe losses affecting prior years' experience.",
           "lobs_affected": [
             "Property"
           ],
@@ -641,7 +688,7 @@
           "event_year": 2024,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "Worsened the claims ratio in 2024",
+          "loss_description": "Worsened the claims ratio in 2024.",
           "lobs_affected": [
             "Property"
           ],
@@ -653,7 +700,7 @@
           "event_year": 2024,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "Worsened the claims ratio in 2024",
+          "loss_description": "Worsened the claims ratio in 2024.",
           "lobs_affected": [
             "Property"
           ],
@@ -665,7 +712,7 @@
           "event_year": 2022,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "Adversely impacted the 2022 year of account",
+          "loss_description": "Adversely impacted prior year underwriting (2022 YOA).",
           "lobs_affected": [
             "Property"
           ],
@@ -677,7 +724,7 @@
           "event_year": 2022,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "Adversely impacted the 2022 year of account",
+          "loss_description": "Adversely impacted prior year underwriting (2022 YOA).",
           "lobs_affected": [
             "Property"
           ],
@@ -685,47 +732,48 @@
           "confidence": 0.9
         }
       ],
-      "standardized_narrative": "During 2024 the syndicate recorded a net release of prior year reserves. The gross movement in prior year claims provisions (insurance liabilities) was a release of $196.137m (net of reinsurance $121.946m, narrative reports a net release of $122.0m). Releases were broad-based across divisions but were partially offset by strengthenings in MAP Risks and Specialty Risks. Key drivers cited include favourable claims development and an actuarial change in margin methodology that produced releases in some classes.",
+      "standardized_narrative": "The syndicate recorded a gross prior-year release of $196.137m (a net release of $122.0m after reinsurance). Releases were driven by favourable claims development and margin releases (including impacts from an actuarial methodology revision), while older years in MAP and Specialty showed some strengthening. 2024 saw more catastrophe losses (e.g., Hurricanes Milton and Helene) which worsened the current year claims ratio, and 2022 remained impacted by events such as Hurricane Ian and Storm Elliott.",
       "raw_causal_phrases": [
-        "released prior year reserves of $122.0m (2023: $267.9m).",
+        "During 2024 the syndicate released prior year reserves of $122.0m (2023: $267.9m).",
         "The syndicate experienced a net release on most divisions, offset by a strengthening on the MAP and Specialty Risk divisions on older years of account.",
-        "Net (releases)/strengthening are shown by division in the table below:"
+        "There were more catastrophe losses in 2024 relative to 2023, such as Hurricanes Milton and Helene which have worsened the claims ratio.",
+        "The prior year claims ratio included a positive impact from margin releases on some classes due to a revision in the actuarial methodology in determining risk margin that is held."
       ],
       "lob_movements": [
         {
-          "line_of_business": "Cyber Risks",
+          "line_of_business": "Cyber",
           "direction": "release",
           "amount_gbp_m": -40.0,
           "percentage": null,
           "confidence": 1.0
         },
         {
-          "line_of_business": "Digital",
+          "line_of_business": "Professional Lines",
           "direction": "release",
           "amount_gbp_m": -26.4,
           "percentage": null,
-          "confidence": 1.0
+          "confidence": 0.5
         },
         {
-          "line_of_business": "MAP Risks",
+          "line_of_business": "Marine",
           "direction": "strengthening",
           "amount_gbp_m": 61.8,
           "percentage": null,
-          "confidence": 1.0
+          "confidence": 0.9
         },
         {
-          "line_of_business": "Property Risks",
+          "line_of_business": "Property",
           "direction": "release",
           "amount_gbp_m": -122.5,
           "percentage": null,
           "confidence": 1.0
         },
         {
-          "line_of_business": "Specialty Risks",
+          "line_of_business": "Reinsurance - Specialty",
           "direction": "strengthening",
           "amount_gbp_m": 5.1,
           "percentage": null,
-          "confidence": 1.0
+          "confidence": 0.6
         }
       ],
       "gross_premiums_written_gbp_m": 2258.8,
@@ -754,12 +802,12 @@
       "gross_premium_page": 39,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "Gross prior year movement used is from the technical reserves movement table (gross = -196.137m). The managing agent narrative reports a net prior year release of $122.0m (consistent with gross -196.137m and reinsurers' share +74.191m). LOB name mappings in lob_movements are taken directly from the document's division table (Cyber Risks, Digital, MAP Risks, Property Risks, Specialty Risks). No gross amounts were provided in narrative for individual named catastrophe events, so event impacts are unquantified. All monetary values are in the syndicate's reporting currency (USD). [RAG OVERRIDE: Model said PYD=-196.137, RAG triangle computed -182.07. Using RAG value.]",
+      "data_quality_notes": "Opening gross claims outstanding taken from Balance Sheet (Claims outstanding) comparative column (2023) in $'000; prior year movement taken from note 17 'Change in estimates of prior year provisions' (gross column) (196,137 $'000 = -196.137m release). The report also states a net prior year release of $122.0m (which matches the net line in the note). Amounts are reported in the report's native currency (USD). Mapping of 'Digital' and 'Specialty Risks' to standard Lloyd's LOBs is approximate and has lower confidence. Triangle numbers are in $'000 as printed. [RAG OVERRIDE: Model said PYD=-196.137, RAG triangle computed -182.07. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "thousands",
-        "page": 48,
+        "page": 49,
         "underwriting_years": [
           2015,
           2016,
@@ -897,20 +945,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_2623_2024_llm.pdf",
-      "content_hash": "7acf109a2ffee754ffa2676a525dc19de90be4a28b7da37240da846d3c162616",
-      "standardized_at": "2026-03-18T05:35:13.308822+00:00",
+      "content_hash": "9912c4bc502b1bf202fca862048969f67f88388273622cd7525929ec9d2773e5",
+      "standardized_at": "2026-09-11T14:22:13.491063+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 23873,
-        "output_tokens": 7078,
-        "total_tokens": 30951,
-        "cost_usd": 0.020124
+        "input_tokens": 24631,
+        "output_tokens": 8195,
+        "total_tokens": 32826,
+        "cost_usd": 0.022548
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -182.07,
+        "model_value": -196.137,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 49,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2015,
           2016,
@@ -1045,6 +1105,18 @@
             null
           ]
         ],
+        "row_labels": [
+          "12 months",
+          "24 months",
+          "36 months",
+          "48 months",
+          "60 months",
+          "72 months",
+          "84 months",
+          "96 months",
+          "108 months",
+          "120 months"
+        ],
         "source_page": 49,
         "entity": 2623
       },
@@ -1108,6 +1180,13 @@
           "entity": 2623,
           "backend": "azure",
           "table_kind": "provisions_movement"
+        },
+        "movement_semantics": {
+          "row_label": "Change in estimates of prior year provisions",
+          "row_index": 6,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": true,
+          "column_index": 1
         },
         "gross_prior_year_claims": -196.1,
         "ri_share_prior_year": 74.2,
@@ -1196,12 +1275,12 @@
       }
     }
   },
-  "total_cost_usd": 0.029313,
-  "total_tokens": 53826,
+  "total_cost_usd": 0.03284,
+  "total_tokens": 50982,
   "validation": {
     "passed": true,
-    "total_discrepancies": 22,
-    "within_tolerance": 22,
+    "total_discrepancies": 26,
+    "within_tolerance": 26,
     "hard_failures": 0,
     "hard_failure_details": []
   }

@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-05T19:24:47.513975+00:00",
+  "extraction_timestamp": "2026-09-13T04:12:58.951311+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -11,31 +13,26 @@
       "syndicate": 1209,
       "year": 2016,
       "opening_reserves_gbp_m": 559.601,
-      "opening_reserves_page": 36,
+      "opening_reserves_page": 5,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": 11.649,
-      "prior_year_development_pct": 2.08,
-      "direction": "strengthening",
-      "prior_year_movement_page": 34,
-      "prior_year_movement_confidence": 0.8,
+      "prior_year_development_gbp_m": -19.0,
+      "prior_year_development_pct": -3.395,
+      "direction": "release",
+      "prior_year_movement_page": 16,
+      "prior_year_movement_confidence": 1.0,
       "exact_reserve_text": "An overall release of prior year's provisions for claims during the year of approximately GBP 19.0m (2015: release of GBP 37.6m) was primarily driven by the favourable experience on the Marine accounts in Aviation and Marine of GBP 26.5m (2015: release of GBP 54.7m), and Property and Fire release of GBP 0.5m (2015: release of GBP 5.3m). This is offset by the adverse experience on the Public Liability accounts in Third Party Liability of GBP 11.0m (2015: strengthening of GBP 23.4m).",
       "primary_causes": [
         "Favorable claims development",
         "Adverse claims development"
       ],
       "specific_events": [],
-      "specific_years_affected": [
-        2011,
-        2012,
-        2013,
-        2014
-      ],
+      "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "The syndicate experienced a gross prior year reserve strengthening of GBP 11.6m, representing 2.08% of its opening gross reserves. This was primarily driven by adverse experience in Public Liability accounts, offset by favourable development in Marine (Aviation and Marine) and Property and Fire accounts.",
+      "standardized_narrative": "The syndicate reported an overall gross release of GBP 19.0 million in prior year claims provisions, representing a 3.4% reduction against opening gross claims outstanding. This favourable development was primarily driven by positive experience in Marine, Aviation, and Property accounts, which saw releases of GBP 26.5 million and GBP 0.5 million respectively. However, this was partially offset by adverse experience in the Third Party Liability accounts, which required a strengthening of GBP 11.0 million.",
       "raw_causal_phrases": [
         "favourable experience on the Marine accounts in Aviation and Marine",
-        "Property and Fire release",
+        "favourable experience on the Property and Fire",
         "adverse experience on the Public Liability accounts in Third Party Liability"
       ],
       "lob_movements": [
@@ -47,25 +44,18 @@
           "confidence": 0.8
         },
         {
-          "line_of_business": "Aviation",
-          "direction": "release",
-          "amount_gbp_m": -26.5,
-          "percentage": null,
-          "confidence": 0.8
-        },
-        {
           "line_of_business": "Property",
           "direction": "release",
           "amount_gbp_m": -0.5,
           "percentage": null,
-          "confidence": 0.8
+          "confidence": 1.0
         },
         {
           "line_of_business": "Casualty",
           "direction": "strengthening",
           "amount_gbp_m": 11.0,
           "percentage": null,
-          "confidence": 0.8
+          "confidence": 1.0
         }
       ],
       "gross_premiums_written_gbp_m": 32.5,
@@ -101,15 +91,15 @@
           "percentage_of_total": 8.0
         }
       ],
-      "gross_premium_page": 33,
+      "gross_premium_page": 15,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The aggregate prior year development figure of +11.649m is calculated from the gross claims development triangle (page 37) for underwriting years 2011-2014, as the narrative statement on page 34 refers to an 'overall release of approximately GBP 19.0m' which is likely a net figure and thus not used for the primary prior_year_development_gbp_m field. The LOB-specific movements mentioned in the narrative are also likely net figures. The gross premiums written for 'Accident and health' and 'Marine aviation and transport' are negative, as reported in the segmental analysis.",
+      "data_quality_notes": "The GBP 26.5m release for 'Marine accounts in Aviation and Marine' is a combined figure for both Marine and Aviation lines of business, but is listed under 'Marine' in lob_movements as per standard LOB mapping. [RAG PYD NOT APPLIED: deterministic figure +11.649m has the opposite sign to both model values [-19.0, -19.0], which agree with each other; model values retained. Sign agreement between the models is not a reconciliation: where they differ in value the cohort and accrual scope of each still has to be settled from the filing (R140).] [CODE PYD NOT APPLIED: deterministic figure +11.649m has the opposite sign to both model values [-19.0, -19.0], which agree with each other; model values retained. Sign agreement between the models is not a reconciliation: where they differ in value the cohort and accrual scope of each still has to be settled from the filing (R140).]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
-        "page": 37,
+        "page": 18,
         "underwriting_years": [
           2011,
           2012,
@@ -163,21 +153,23 @@
         ]
       },
       "source_type": "syndicate",
-      "source_file": "syndicate_reports\\pdfs\\syndicate_1209_2016.pdf",
-      "content_hash": "0a760032f9a4996fdf3ebd9955158584953410d2de6f6a3145e0b387db7ee2e1",
-      "standardized_at": "2026-03-16T10:55:08.710901+00:00",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_1209_2016_llm.pdf",
+      "content_hash": "545018b7db030646b0b7b834ff47bf4bf076e39c39742eefaf1999d74eb71fa9",
+      "standardized_at": "2026-09-11T10:25:09.551721+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 15946,
-        "output_tokens": 1698,
-        "total_tokens": 23269,
-        "cost_usd": 0.009029
+        "input_tokens": 11441,
+        "output_tokens": 1567,
+        "total_tokens": 19613,
+        "cost_usd": 0.00735
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -228,6 +220,14 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "12 months",
+          "24 months",
+          "36 months",
+          "48 months",
+          "60 months",
+          "72 months"
         ],
         "source_page": 37,
         "entity": 1209
@@ -356,60 +356,61 @@
       "syndicate": 1209,
       "year": 2016,
       "opening_reserves_gbp_m": 559.601,
-      "opening_reserves_page": 33,
+      "opening_reserves_page": 10,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": 11.649,
-      "prior_year_development_pct": 2.08,
-      "direction": "strengthening",
+      "prior_year_development_gbp_m": -19.0,
+      "prior_year_development_pct": -3.4,
+      "direction": "release",
       "prior_year_movement_page": 31,
-      "prior_year_movement_confidence": 0.8,
-      "exact_reserve_text": "An overall release of prior year's provisions for claims during the year of approximately GBP 19.0m (2015: release of GBP 37.6m) was primarily driven by the favourable experience on the Marine accounts in Aviation and Marine of GBP 26.5m (2015: release of GBP 54.7m) and Property and Fire release of GBP 0.5m (2015: release of GBP 5.3m). This is offset by the adverse experience on the Public Liability accounts in Third Party Liability of GBP 11.0m (2015: strengthening of GBP 23.4m).",
+      "prior_year_movement_confidence": 1.0,
+      "exact_reserve_text": "An overall release of prior year's provisions for claims during the year of approximately GBP 19.0m (2015: release of GBP 37.6m) was primarily driven by the favourable experience on the Marine accounts in Aviation and Marine of GBP 26.5m (2015: release of GBP 54.7m), and Property and Fire release of GBP 0.5m (2015: release of GBP 5.3m). This is offset by the adverse experience on the Public Liability accounts in Third Party Liability of GBP 11.0m (2015: strengthening of GBP 23.4m).",
       "primary_causes": [
         "Favorable claims development",
-        "Adverse claims development"
+        "Adverse claims development",
+        "Large loss development"
       ],
       "specific_events": [],
       "specific_years_affected": [],
       "prior_year_events": [
         {
-          "event_name": "Favourable experience on Marine accounts (Aviation and Marine)",
+          "event_name": "Favourable experience on the Marine accounts (Aviation and Marine)",
           "event_year": null,
-          "impact_description": "Favourable claims development in the Marine/Aviation classes leading to a release of reserves.",
+          "impact_description": "Favourable development on Marine/Aviation prior years leading to a release of GBP 26.5m",
           "lobs_affected": [
             "Marine",
             "Aviation"
           ],
           "amount_gbp_m": -26.5,
-          "confidence": 0.9
+          "confidence": 1.0
         },
         {
-          "event_name": "Property and Fire favourable experience",
+          "event_name": "Adverse experience on Public Liability (Third Party Liability)",
           "event_year": null,
-          "impact_description": "Small favourable development on Property and Fire resulting in a minor release of reserves.",
-          "lobs_affected": [
-            "Property"
-          ],
-          "amount_gbp_m": -0.5,
-          "confidence": 0.9
-        },
-        {
-          "event_name": "Adverse experience on Public Liability accounts (Third Party Liability)",
-          "event_year": null,
-          "impact_description": "Adverse claims development in Third Party Liability producing a strengthening of reserves.",
+          "impact_description": "Adverse development on Public Liability prior years leading to a strengthening of GBP 11.0m",
           "lobs_affected": [
             "Casualty"
           ],
           "amount_gbp_m": 11.0,
-          "confidence": 0.9
+          "confidence": 1.0
+        },
+        {
+          "event_name": "Property and Fire prior year release",
+          "event_year": null,
+          "impact_description": "Small release on Property and Fire prior years of GBP 0.5m",
+          "lobs_affected": [
+            "Property"
+          ],
+          "amount_gbp_m": -0.5,
+          "confidence": 1.0
         }
       ],
       "named_events": [],
-      "standardized_narrative": "The syndicate recorded an overall release of prior years' claims provisions of approximately GBP 19.0m in 2016. This release was driven principally by favourable development in the Marine/Aviation portfolios (c. GBP 26.5m) and a small release in Property and Fire (c. GBP 0.5m), partly offset by adverse development in Third Party Liability (c. GBP 11.0m). Net prior year development therefore resulted in an overall release.",
+      "standardized_narrative": "The syndicate reported an overall release of prior years' claims provisions of approximately GBP 19.0m in 2016 (2015: release GBP 37.6m). The release was primarily driven by favourable prior-year experience in Aviation and Marine (GBP 26.5m) and a small release in Property & Fire (GBP 0.5m), partly offset by adverse development in Public Liability/Third Party Liability (GBP 11.0m). The net effect is a release of reserves, equivalent to roughly a 3.4% reduction versus opening gross claims outstanding.",
       "raw_causal_phrases": [
         "An overall release of prior year's provisions for claims during the year of approximately GBP 19.0m (2015: release of GBP 37.6m)",
-        "the favourable experience on the Marine accounts in Aviation and Marine of GBP 26.5m (2015: release of GBP 54.7m)",
+        "favourable experience on the Marine accounts in Aviation and Marine of GBP 26.5m (2015: release of GBP 54.7m)",
         "Property and Fire release of GBP 0.5m (2015: release of GBP 5.3m)",
-        "This is offset by the adverse experience on the Public Liability accounts in Third Party Liability of GBP 11.0m (2015: strengthening of GBP 23.4m)"
+        "adverse experience on the Public Liability accounts in Third Party Liability of GBP 11.0m (2015: strengthening of GBP 23.4m)"
       ],
       "lob_movements": [
         {
@@ -417,21 +418,28 @@
           "direction": "release",
           "amount_gbp_m": -26.5,
           "percentage": null,
-          "confidence": 0.9
+          "confidence": 1.0
+        },
+        {
+          "line_of_business": "Aviation",
+          "direction": "release",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.5
         },
         {
           "line_of_business": "Property",
           "direction": "release",
           "amount_gbp_m": -0.5,
           "percentage": null,
-          "confidence": 0.9
+          "confidence": 1.0
         },
         {
           "line_of_business": "Casualty",
           "direction": "strengthening",
           "amount_gbp_m": 11.0,
           "percentage": null,
-          "confidence": 0.9
+          "confidence": 1.0
         }
       ],
       "gross_premiums_written_gbp_m": 32.5,
@@ -470,7 +478,7 @@
       "gross_premium_page": 30,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior year development used the Managing Agent's narrative (note 6) which explicitly states an overall release of approximately GBP 19.0m. The note does not state 'net' and provides gross component amounts for certain classes; therefore this figure was used as the gross movement (confidence 0.8). A claims development triangle is present (page 34) but detailed cell extraction from the scanned image was not fully reliable; accordingly the triangle was not used to independently compute the aggregate prior year movement. All monetary amounts taken from tables are in GBP 000s in the report and were converted to millions for this output. [RAG OVERRIDE: Model said PYD=-19.0, RAG triangle computed 11.649. Using RAG value.]",
+      "data_quality_notes": "Opening gross claims outstanding taken from Balance Sheet (Technical provisions: Claims outstanding) 2015 comparative column. Prior year movement taken from the 'Movement in prior year's provision for claims outstanding' narrative which explicitly states a GBP 19.0m release (treated as gross). Segmental premium mix taken from the Segmental Analysis table (2016 gross premiums written). A gross claims development triangle (gross) is present on page 34 and was used for cross-check; it includes an '2010 & Prior' aggregate column which was excluded per rules. Some negative premium line items (e.g. Accident and health, Marine) are printed as negative in the segmental table; values copied verbatim. Triangle extraction from scanned image may carry minor transcription uncertainty; triangle provided in thousands as printed. [RAG PYD NOT APPLIED: deterministic figure +11.649m has the opposite sign to both model values [-19.0, -19.0], which agree with each other; model values retained. Sign agreement between the models is not a reconciliation: where they differ in value the cohort and accrual scope of each still has to be settled from the filing (R140).] [CODE PYD NOT APPLIED: deterministic figure +11.649m has the opposite sign to both model values [-19.0, -19.0], which agree with each other; model values retained. Sign agreement between the models is not a reconciliation: where they differ in value the cohort and accrual scope of each still has to be settled from the filing (R140).]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -483,24 +491,69 @@
           2014,
           2015
         ],
-        "development_rows": []
+        "development_rows": [
+          [
+            232677,
+            108347,
+            92381,
+            103533,
+            91248
+          ],
+          [
+            261914,
+            209972,
+            205659,
+            210666,
+            203717
+          ],
+          [
+            255641,
+            210550,
+            200477,
+            216512,
+            null
+          ],
+          [
+            241375,
+            202872,
+            198601,
+            null,
+            null
+          ],
+          [
+            252500,
+            211516,
+            null,
+            null,
+            null
+          ],
+          [
+            251535,
+            null,
+            null,
+            null,
+            null
+          ]
+        ]
       },
       "source_type": "syndicate",
-      "source_file": "syndicate_reports\\pdfs\\syndicate_1209_2016.pdf",
-      "content_hash": "0a760032f9a4996fdf3ebd9955158584953410d2de6f6a3145e0b387db7ee2e1",
-      "standardized_at": "2026-03-16T10:58:23.786213+00:00",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_1209_2016_llm.pdf",
+      "content_hash": "545018b7db030646b0b7b834ff47bf4bf076e39c39742eefaf1999d74eb71fa9",
+      "standardized_at": "2026-09-11T10:27:04.005713+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 42574,
-        "output_tokens": 6947,
-        "total_tokens": 49521,
-        "cost_usd": 0.024538
+        "input_tokens": 23173,
+        "output_tokens": 7332,
+        "total_tokens": 30505,
+        "cost_usd": 0.020457
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -551,6 +604,14 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "12 months",
+          "24 months",
+          "36 months",
+          "48 months",
+          "60 months",
+          "72 months"
         ],
         "source_page": 37,
         "entity": 1209
@@ -676,12 +737,12 @@
       }
     }
   },
-  "total_cost_usd": 0.033567,
-  "total_tokens": 72790,
+  "total_cost_usd": 0.027807,
+  "total_tokens": 50118,
   "validation": {
     "passed": true,
-    "total_discrepancies": 22,
-    "within_tolerance": 22,
+    "total_discrepancies": 16,
+    "within_tolerance": 16,
     "hard_failures": 0,
     "hard_failure_details": []
   }

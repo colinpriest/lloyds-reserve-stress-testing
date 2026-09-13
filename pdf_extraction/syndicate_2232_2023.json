@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T10:33:33.251557+00:00",
+  "extraction_timestamp": "2026-09-13T04:11:57.380941+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -16,33 +18,28 @@
       "prior_year_development_gbp_m": -12.667,
       "prior_year_development_pct": -2.37,
       "direction": "release",
-      "prior_year_movement_page": 3,
+      "prior_year_movement_page": 16,
       "prior_year_movement_confidence": 0.8,
       "exact_reserve_text": "The result for the year included net prior year reserve releases of GBP 7.0m (2022: reserve strengthening of GBP 9.8m) which improved the net combined ratio by 2.9% (2022: deterioration of 5.5%).",
       "primary_causes": [
-        "Favorable claims development"
+        "Favorable claims development",
+        "Natural catastrophe events"
       ],
       "specific_events": [],
       "specific_years_affected": [
-        2020
+        2016,
+        2017,
+        2018,
+        2019,
+        2020,
+        2021
       ],
-      "prior_year_events": [
-        {
-          "event_name": "2020 year of account closure",
-          "event_year": 2020,
-          "impact_description": "profit distribution on the closed 2020 year of account",
-          "lobs_affected": [],
-          "amount_gbp_m": null,
-          "confidence": 0.5
-        }
-      ],
+      "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "The syndicate reported net prior year reserve releases of GBP 7.0m, which improved the net combined ratio. This favorable development was partially offset by a profit distribution on the closed 2020 year of account. The current accident year results were positively impacted by lower levels of frequency and severity in catastrophe and large loss events.",
+      "standardized_narrative": "The syndicate reported a gross prior year reserve release of GBP 12.667 million for the 2023 financial year, representing a 2.37% release of opening gross claims outstanding. This was primarily driven by favorable claims development, specifically lower levels of frequency and severity in catastrophe and large loss events affecting prior underwriting years. The net prior year reserve movement was a release of GBP 7.0 million.",
       "raw_causal_phrases": [
         "net prior year reserve releases of GBP 7.0m",
-        "improved the net combined ratio by 2.9%",
-        "profit distribution on the closed 2020 year of account",
-        "lower levels of frequency and severity in catastrophe and large loss events"
+        "positively impacted by lower levels of frequency and severity in catastrophe and large loss events."
       ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 416.8,
@@ -81,7 +78,7 @@
       "gross_premium_page": 12,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior year development is stated as a net figure in the narrative. A gross figure could not be explicitly identified. The claims development triangle calculation for prior year development also showed a different net figure, suggesting potential distortions from portfolio transfers or other factors, so the narrative net figure was used. [RAG OVERRIDE: Model said PYD=-7.0, RAG triangle computed -12.667. Using RAG value.]",
+      "data_quality_notes": "The prior year development figure is calculated from the gross claims development triangle. The narrative on page 3 provides a net prior year reserve release of GBP 7.0m, but the gross figure from the triangle is used as per instructions.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -182,20 +179,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_2232_2023_llm.pdf",
-      "content_hash": "3da65272e1cbf51358a142f708d9422de6c72dc5e17188d33f1e0f66c6165f05",
-      "standardized_at": "2026-07-05T12:26:17.767450+00:00",
+      "content_hash": "7ab47bc6296cfea61de3c562fae22e5bbc32857439a213bab7577a90429cc606",
+      "standardized_at": "2026-09-11T11:48:47.562477+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 10379,
-        "output_tokens": 1580,
-        "total_tokens": 21628,
-        "cost_usd": 0.007064
+        "input_tokens": 11183,
+        "output_tokens": 1519,
+        "total_tokens": 17425,
+        "cost_usd": 0.007152
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -12.667,
+        "model_value": -12.667,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 51,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2016,
           2017,
@@ -287,6 +296,16 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "End of underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later",
+          "Seven years later"
         ],
         "source_page": 51,
         "entity": 2232
@@ -454,12 +473,12 @@
       "syndicate": 2232,
       "year": 2023,
       "opening_reserves_gbp_m": 533.793,
-      "opening_reserves_page": 19,
+      "opening_reserves_page": 8,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": -12.667,
       "prior_year_development_pct": -2.37,
       "direction": "release",
-      "prior_year_movement_page": 48,
+      "prior_year_movement_page": 16,
       "prior_year_movement_confidence": 0.8,
       "exact_reserve_text": "The result for the year included net prior year reserve releases of GBP 7.0m (2022: reserve strengthening of GBP 9.8m) which improved the net combined ratio by 2.9% (2022: deterioration of 5.5%).",
       "primary_causes": [
@@ -478,12 +497,27 @@
       ],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "The syndicate recorded a gross prior-year release of approximately GBP 23.4m (a favourable movement), representing a c.4.4% reduction versus opening gross claims outstanding of GBP 533.8m. The managing agent reports net prior year reserve releases of GBP 7.0m; the larger gross release is partially offset by reinsurance. The improvement was driven by lower frequency and severity of catastrophe and large loss events and generally favourable claims development across older accident years.",
+      "standardized_narrative": "The syndicate recorded prior-year favourable reserve development. Management reported a net prior year release of GBP 7.0m (net of reinsurance). Analysis of the gross claims development triangle shows aggregate favourable development across underwriting years 2016-2021 totalling approximately GBP 23.35m (gross), a release equivalent to about 4.4% of opening gross claims outstanding. Management attributes the improvement mainly to lower frequency and severity of catastrophe and large loss events and generally favourable claims development across older years.",
       "raw_causal_phrases": [
-        "The result for the year included net prior year reserve releases of GBP 7.0m (2022: reserve strengthening of GBP 9.8m) which improved the net combined ratio by 2.9% (2022: deterioration of 5.5%).",
-        "lower levels of frequency and severity in catastrophe and large loss events"
+        "net prior year reserve releases of GBP 7.0m (2022: reserve strengthening of GBP 9.8m)",
+        "positively impacted by lower levels of frequency and severity in catastrophe and large loss events"
       ],
-      "lob_movements": [],
+      "lob_movements": [
+        {
+          "line_of_business": "Property",
+          "direction": "release",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.5
+        },
+        {
+          "line_of_business": "Casualty",
+          "direction": "release",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.5
+        }
+      ],
       "gross_premiums_written_gbp_m": 416.8,
       "gross_premium_mix": [
         {
@@ -517,15 +551,15 @@
           "percentage_of_total": 39.6
         }
       ],
-      "gross_premium_page": 27,
+      "gross_premium_page": 12,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Gross prior-year movement was not given explicitly as a gross figure in a single movement note; gross prior-year development has been calculated from the published GROSS claims development triangle (page 48). The managing agent narrative provides a NET prior-year release of GBP 7.0m (net of reinsurance). Triangle figures are reported in GBP 000; they were converted to millions for this output. No line-of-business specific prior-year movements were quantified in the report. [RAG OVERRIDE: Model said PYD=-23.351, RAG triangle computed -12.667. Using RAG value.]",
+      "data_quality_notes": "Prior year development (gross) was not given explicitly as a single gross movement figure in the text; a net prior-year release of GBP 7.0m is stated (net of reinsurance). The gross prior-year movement was calculated from the gross claims development triangle (gross cumulative estimates by underwriting year). Triangle values are presented in GBP 000 in the notes; figures were converted to millions. Confidence graded as 0.8 for the computed gross PYD. [RAG OVERRIDE: Model said PYD=-23.351, RAG triangle computed -12.667. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
-        "page": 48,
+        "page": 16,
         "underwriting_years": [
           2016,
           2017,
@@ -621,20 +655,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_2232_2023_llm.pdf",
-      "content_hash": "3da65272e1cbf51358a142f708d9422de6c72dc5e17188d33f1e0f66c6165f05",
-      "standardized_at": "2026-07-05T12:27:28.789735+00:00",
+      "content_hash": "7ab47bc6296cfea61de3c562fae22e5bbc32857439a213bab7577a90429cc606",
+      "standardized_at": "2026-09-11T11:50:42.149404+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 20025,
-        "output_tokens": 7188,
-        "total_tokens": 27213,
-        "cost_usd": 0.019382
+        "input_tokens": 20785,
+        "output_tokens": 5747,
+        "total_tokens": 26532,
+        "cost_usd": 0.01669
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -12.667,
+        "model_value": -23.351,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 51,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2016,
           2017,
@@ -726,6 +772,16 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "End of underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later",
+          "Seven years later"
         ],
         "source_page": 51,
         "entity": 2232
@@ -890,12 +946,12 @@
       }
     }
   },
-  "total_cost_usd": 0.026446,
-  "total_tokens": 48841,
+  "total_cost_usd": 0.023842,
+  "total_tokens": 43957,
   "validation": {
     "passed": true,
-    "total_discrepancies": 17,
-    "within_tolerance": 17,
+    "total_discrepancies": 7,
+    "within_tolerance": 7,
     "hard_failures": 0,
     "hard_failure_details": []
   }

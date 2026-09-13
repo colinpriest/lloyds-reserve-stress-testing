@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-05T20:03:16.827014+00:00",
+  "extraction_timestamp": "2026-09-13T04:11:18.811766+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -11,16 +13,17 @@
       "syndicate": 2232,
       "year": 2018,
       "opening_reserves_gbp_m": 396.75,
-      "opening_reserves_page": 5,
+      "opening_reserves_page": 6,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": 1.949,
       "prior_year_development_pct": 0.49,
       "direction": "strengthening",
-      "prior_year_movement_page": 14,
+      "prior_year_movement_page": 15,
       "prior_year_movement_confidence": 0.8,
       "exact_reserve_text": "Prior year net reserve releases totaled GBP 8.5m the movement was primarily in Treaty Property CAT in relation to the HIM losses.",
       "primary_causes": [
-        "Favorable claims development"
+        "Treaty",
+        "Man-made catastrophe / large losses"
       ],
       "specific_events": [
         "HIM losses"
@@ -30,33 +33,28 @@
         {
           "event_name": "HIM losses",
           "event_year": null,
-          "impact_description": "net reserve releases",
+          "impact_description": "movement was primarily in Treaty Property CAT in relation to the HIM losses, contributing to net reserve releases",
           "lobs_affected": [
-            "Reinsurance - Property"
+            "Treaty"
           ],
           "amount_gbp_m": null,
           "confidence": 0.5
         }
       ],
-      "named_events": [
+      "named_events": [],
+      "standardized_narrative": "The syndicate experienced a gross prior year reserve strengthening of GBP 7.608 million in 2018, primarily driven by the re-estimation of older underwriting years as calculated from the claims development triangle. This contrasts with a narrative statement of net reserve releases totaling GBP 8.5 million, primarily attributed to Treaty Property CAT business in relation to HIM losses.",
+      "raw_causal_phrases": [
+        "movement was primarily in Treaty Property CAT in relation to the HIM losses"
+      ],
+      "lob_movements": [
         {
-          "event_name": "HIM losses",
-          "event_year": null,
-          "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": null,
-          "loss_description": "net reserve releases totaled GBP 8.5m the movement was primarily in Treaty Property CAT in relation to the HIM losses.",
-          "lobs_affected": [
-            "Reinsurance - Property"
-          ],
-          "page": 10,
-          "confidence": 0.8
+          "line_of_business": "Treaty",
+          "direction": "release",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.5
         }
       ],
-      "standardized_narrative": "The syndicate experienced a gross prior year strengthening of GBP 1.949 million, calculated from the claims development triangle for underwriting years 2013-2016. This contrasts with a reported net prior year reserve release of GBP 8.5 million, primarily driven by favorable development in Treaty Property CAT related to \"HIM losses\".",
-      "raw_causal_phrases": [
-        "Prior year net reserve releases totaled GBP 8.5m the movement was primarily in Treaty Property CAT in relation to the HIM losses."
-      ],
-      "lob_movements": [],
       "gross_premiums_written_gbp_m": 225.2,
       "gross_premium_mix": [
         {
@@ -90,15 +88,15 @@
           "percentage_of_total": 46.1
         }
       ],
-      "gross_premium_page": 9,
+      "gross_premium_page": 10,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The prior year development figure is calculated from the gross claims development triangle for underwriting years 2013-2016. The report also states a net prior year reserve release of GBP 8.5m, which is not directly reconcilable to the gross figure. The primary causes are based on the narrative describing the net movement.",
+      "data_quality_notes": "There is a discrepancy between the gross prior year development calculated from the claims development triangle (+GBP 7.608m strengthening) and the narrative statement of net prior year reserve releases (-GBP 8.5m). The gross triangle figure is used for `prior_year_development_gbp_m` as per instructions, but the narrative text is preserved in `exact_reserve_text`. [RAG OVERRIDE: Model said PYD=7.608, RAG triangle computed 1.949. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
-        "page": 14,
+        "page": 15,
         "underwriting_years": [
           2013,
           2014,
@@ -160,20 +158,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_2232_2018_llm.pdf",
-      "content_hash": "a9d9b8053ab8f73b4e0ee4610a8295edc1fca40b8faaf24c062c82d1c4cadf5f",
-      "standardized_at": "2026-03-18T01:07:54.328396+00:00",
+      "content_hash": "d4fd05a4550e251d0f525b6f6973c5fb40ba21bf7128cf83530c46d6a34c9c09",
+      "standardized_at": "2026-09-11T11:56:30.703209+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 9624,
-        "output_tokens": 1434,
-        "total_tokens": 16222,
-        "cost_usd": 0.006472
+        "input_tokens": 10925,
+        "output_tokens": 1391,
+        "total_tokens": 17589,
+        "cost_usd": 0.006755
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 1.949,
+        "model_value": 7.608,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 43,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2013,
           2014,
@@ -231,6 +241,14 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "End of underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later"
         ],
         "source_page": 43,
         "entity": 2232
@@ -394,25 +412,29 @@
       "prior_year_development_gbp_m": 1.949,
       "prior_year_development_pct": 0.49,
       "direction": "strengthening",
-      "prior_year_movement_page": 23,
+      "prior_year_movement_page": 39,
       "prior_year_movement_confidence": 0.8,
-      "exact_reserve_text": "Prior year net reserve releases totalled GBP 8.5m the movement was primarily in Treaty Property CAT in relation to the HIM losses.",
+      "exact_reserve_text": "Prior year net reserve releases totaled GBP 8.5m the movement was primarily in Treaty Property CAT in relation to the HIM losses.",
       "primary_causes": [
-        "Favorable claims development",
-        "Reinsurance recoveries"
+        "Natural catastrophe events",
+        "Large loss development"
       ],
       "specific_events": [
         "HIM losses"
       ],
-      "specific_years_affected": [],
+      "specific_years_affected": [
+        2013,
+        2014,
+        2015,
+        2016
+      ],
       "prior_year_events": [
         {
           "event_name": "HIM losses",
           "event_year": null,
-          "impact_description": "Movement primarily in Treaty Property CAT related to the HIM losses leading to prior year net reserve releases",
+          "impact_description": "Movement primarily in Treaty Property CAT in relation to the HIM losses (report states prior year net reserve releases primarily related to HIM losses).",
           "lobs_affected": [
-            "Treaty",
-            "Property"
+            "Treaty"
           ],
           "amount_gbp_m": null,
           "confidence": 0.5
@@ -424,31 +446,23 @@
           "event_year": null,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "Movement primarily in Treaty Property CAT in relation to the HIM losses (prior year net reserve releases)",
+          "loss_description": "Movement primarily in Treaty Property CAT in relation to the HIM losses; referenced as driving prior year net reserve releases.",
           "lobs_affected": [
-            "Treaty",
-            "Property"
+            "Treaty"
           ],
           "page": 23,
           "confidence": 0.5
         }
       ],
-      "standardized_narrative": "At 1 January 2018 the syndicate's gross claims outstanding were GBP 396.75m. During 2018 gross provisions for claims reduced by GBP 34.074m (a release of ~8.6% of opening reserves), with the managers describing prior year net reserve releases primarily driven by Treaty Property catastrophe (HIM) items and related reinsurance movements. The report cites a net prior-year release of GBP 8.5m in the narrative (after reinsurance).",
+      "standardized_narrative": "Opening gross claims outstanding at 1 January 2018 were GBP 396.75m. Using the gross claims development table the syndicate shows a small gross prior-year strengthening of GBP 1.95m (c.0.49% of opening reserves) driven by development on older underwriting years (2013-2016). The managing agent narrative, however, reports prior year net reserve releases of GBP 8.5m, primarily in Treaty Property catastrophe business in relation to the 'HIM' losses; this net figure reflects reinsurance recoveries and explains the apparent discrepancy between the gross triangle (small strengthening) and the net narrative (release).",
       "raw_causal_phrases": [
-        "Prior year net reserve releases totalled GBP 8.5m the movement was primarily in Treaty Property CAT in relation to the HIM losses."
+        "Prior year net reserve releases totaled GBP 8.5m the movement was primarily in Treaty Property CAT in relation to the HIM losses."
       ],
       "lob_movements": [
         {
           "line_of_business": "Treaty",
           "direction": "release",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.5
-        },
-        {
-          "line_of_business": "Property",
-          "direction": "release",
-          "amount_gbp_m": null,
+          "amount_gbp_m": -8.5,
           "percentage": null,
           "confidence": 0.5
         }
@@ -489,7 +503,7 @@
       "gross_premium_page": 22,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior year movement: the note 'Change in net provision for claims' shows a GROSS movement of (34,074) (GBP 000) (a gross release) and a reinsurers' share; the narrative reports a net prior year release of GBP 8.5m. I have used the gross movement from the movement note as the primary figure (34.074m). The report also contains a gross claims development triangle that could be used to cross-check but the movement note provided an explicit gross figure. 'HIM losses' is mentioned as the driver but not clearly defined or dated in the report. [RAG OVERRIDE: Model said PYD=-34.074, RAG triangle computed 1.949. Using RAG value.]",
+      "data_quality_notes": "Prior-year development chosen from the gross claims development table (claims triangle) on page 39. The managing agent text on the movement (note 4) reports a net prior-year release of GBP 8.5m (net of reinsurance) primarily in Treaty Property CAT relating to 'HIM losses' - this is a NET figure and differs from the gross triangle result (small gross strengthening of GBP 1.949m). The triangle and movement note are consistent in identifying Treaty/Property catastrophe activity but differ in sign/magnitude after reinsurance. 'HIM losses' is mentioned but not defined or dated. All monetary figures extracted from tables presented in GBP 000 and converted to millions; triangle units are thousands (GBP 000).",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -556,20 +570,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_2232_2018_llm.pdf",
-      "content_hash": "a9d9b8053ab8f73b4e0ee4610a8295edc1fca40b8faaf24c062c82d1c4cadf5f",
-      "standardized_at": "2026-03-18T01:10:02.252538+00:00",
+      "content_hash": "d4fd05a4550e251d0f525b6f6973c5fb40ba21bf7128cf83530c46d6a34c9c09",
+      "standardized_at": "2026-09-11T11:58:59.302446+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 19378,
-        "output_tokens": 6154,
-        "total_tokens": 25532,
-        "cost_usd": 0.017153
+        "input_tokens": 21307,
+        "output_tokens": 7900,
+        "total_tokens": 29207,
+        "cost_usd": 0.021127
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 1.949,
+        "model_value": 1.949,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 43,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2013,
           2014,
@@ -627,6 +653,14 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "End of underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later"
         ],
         "source_page": 43,
         "entity": 2232
@@ -782,12 +816,12 @@
       }
     }
   },
-  "total_cost_usd": 0.023625,
-  "total_tokens": 41754,
+  "total_cost_usd": 0.027882,
+  "total_tokens": 46796,
   "validation": {
     "passed": true,
-    "total_discrepancies": 11,
-    "within_tolerance": 11,
+    "total_discrepancies": 18,
+    "within_tolerance": 18,
     "hard_failures": 0,
     "hard_failure_details": []
   }

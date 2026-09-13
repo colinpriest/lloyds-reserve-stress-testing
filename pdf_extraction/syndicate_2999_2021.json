@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T10:56:13.169550+00:00",
+  "extraction_timestamp": "2026-09-13T03:59:42.021645+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -22,81 +24,55 @@
       "primary_causes": [
         "Adverse claims development",
         "Favorable claims development",
-        "Large loss development",
-        "IBNR recalibration",
+        "Ogden discount rate",
         "Economic inflation / claims cost inflation",
-        "Social inflation / litigation trends",
-        "COVID-19 / pandemic effects"
+        "Other"
       ],
       "specific_events": [],
-      "specific_years_affected": [],
-      "prior_year_events": [
-        {
-          "event_name": "COVID-19 / pandemic effects",
-          "event_year": 2020,
-          "impact_description": "Continued benefit from lower attritional claims experience in certain portfolios, driven by a lack of activity during lockdown periods",
-          "lobs_affected": [],
-          "amount_gbp_m": null,
-          "confidence": 0.5
-        }
+      "specific_years_affected": [
+        2019
       ],
+      "prior_year_events": [],
       "named_events": [
         {
           "event_name": "Hurricane Ida",
           "event_year": 2021,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "costliest natural disaster; Syndicate 2999's net catastrophe loss experience was marginally worse than expectation, albeit manageable",
-          "lobs_affected": [
-            "Property"
-          ],
+          "loss_description": "costliest natural disaster",
+          "lobs_affected": [],
           "page": 2,
-          "confidence": 0.9
+          "confidence": 0.8
         },
         {
           "event_name": "US winter storms (Uri and Texas)",
           "event_year": 2021,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "secondary peril events contributing more than half of the total natural catastrophe losses; Syndicate 2999's net catastrophe loss experience was marginally worse than expectation, albeit manageable",
-          "lobs_affected": [
-            "Property"
-          ],
+          "loss_description": "contributing more than half of the total natural catastrophe losses",
+          "lobs_affected": [],
           "page": 2,
-          "confidence": 0.9
+          "confidence": 0.8
         },
         {
           "event_name": "European Floods (Bernd)",
           "event_year": 2021,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "Syndicate 2999's net catastrophe loss experience was marginally worse than expectation, albeit manageable",
-          "lobs_affected": [
-            "Property"
-          ],
+          "loss_description": "Syndicate 2999's net catastrophe loss experience was marginally worse than expectation",
+          "lobs_affected": [],
           "page": 2,
-          "confidence": 0.9
-        },
-        {
-          "event_name": "COVID-19 / pandemic effects",
-          "event_year": 2021,
-          "event_type": "other",
-          "net_loss_gbp_m": null,
-          "loss_description": "limited impact to the Syndicate during 2021 financial year; No material increase in claims incurred via inward reinsurance exposures through sub-syndicate 566, or business interruption insurance exposures written primarily by sub-syndicate 1886. Continued benefit from lower attritional claims experience in certain portfolios, driven by a lack of activity during lockdown periods",
-          "lobs_affected": [
-            "Property",
-            "Casualty"
-          ],
-          "page": 2,
-          "confidence": 0.9
+          "confidence": 0.8
         }
       ],
-      "standardized_narrative": "The Syndicate experienced an overall gross prior year reserve strengthening of GBP 209.4 million in 2021, representing 8.46% of its opening gross claims outstanding. This movement was primarily driven by adverse development in certain financial lines classes, partially offset by positive developments across other classes. General factors influencing reserve estimates include changes in claims incidence, volatility in long-tail classes, catastrophic events, legal environment changes (including Ogden rate), and social/economic trends like inflation. The Syndicate also noted continued benefits from lower attritional claims experience in some portfolios due to lockdown periods, which could contribute to favourable prior year development.",
+      "standardized_narrative": "The syndicate experienced a net release of GBP 24.0m in prior year reserves, primarily driven by positive developments across various classes, although some financial lines experienced adverse development. The movement was calculated from the gross claims development triangle. Key variables affecting outstanding claims include the Ogden rate and foreign exchange movements.",
       "raw_causal_phrases": [
-        "adverse prior year development relating to certain financial lines classes; reduced by positive developments across a number of other classes.",
-        "Continued benefit from lower attritional claims experience in certain portfolios, driven by a lack of activity during lockdown periods",
+        "adverse prior year development relating to certain financial lines classes",
+        "reduced by positive developments across a number of other classes",
+        "movements in the Ogden rate",
+        "movements in exchange rates",
         "Changes in patterns of claims incidence, reporting and payment",
-        "Volatility in the estimation of future costs for long tail insurance classes due to the longer period of time that elapses before a definitive determination of the ultimate claims cost can be made",
+        "Volatility in the estimation of future costs for long tail insurance classes",
         "Incidence of catastrophic events close to the balance sheet date",
         "Changes in the legal environment, including the interpretation of liability laws and changes in methodologies to estimate the quantum of damages including changes to the Ogden rate and interpretation of business interruption policy coverage",
         "Social and economic trends, for example price and wage inflation and interest rates"
@@ -143,13 +119,14 @@
       "gross_premium_page": 15,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": " [RAG OVERRIDE: Model said PYD=209.4, RAG triangle computed 166.2. Using RAG value.]",
+      "data_quality_notes": "Prior year development calculated from the gross claims development triangle as no explicit gross figure was available in narrative or movement notes. The narrative mentions 'adverse prior year development relating to certain financial lines classes; reduced by positive developments across a number of other classes' but does not quantify the gross amount. [RAG OVERRIDE: Model said PYD=-24.0, RAG triangle computed 166.2. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "millions",
         "page": 21,
         "underwriting_years": [
+          2011,
           2012,
           2013,
           2014,
@@ -163,6 +140,7 @@
         ],
         "development_rows": [
           [
+            412.9,
             259.6,
             187.3,
             225.1,
@@ -172,9 +150,10 @@
             318.9,
             374.9,
             496.3,
-            496.3
+            null
           ],
           [
+            625.4,
             503.8,
             456.6,
             533.9,
@@ -187,6 +166,7 @@
             null
           ],
           [
+            695.9,
             567.8,
             584.3,
             614.8,
@@ -199,6 +179,7 @@
             null
           ],
           [
+            678.2,
             580.2,
             571.6,
             637.4,
@@ -211,6 +192,7 @@
             null
           ],
           [
+            686.8,
             539.2,
             613.8,
             621.1,
@@ -223,6 +205,7 @@
             null
           ],
           [
+            668.1,
             550.9,
             614.8,
             650.7,
@@ -235,6 +218,7 @@
             null
           ],
           [
+            654.6,
             557.7,
             633.9,
             651.9,
@@ -247,6 +231,7 @@
             null
           ],
           [
+            636.6,
             559.3,
             650.9,
             null,
@@ -259,6 +244,7 @@
             null
           ],
           [
+            630.1,
             556.4,
             null,
             null,
@@ -271,6 +257,7 @@
             null
           ],
           [
+            633.7,
             null,
             null,
             null,
@@ -286,20 +273,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_2999_2021_llm.pdf",
-      "content_hash": "36b027e79a4f93658a66917d0d37327540f7ad9722487ec5230f9f7f13fbabc1",
-      "standardized_at": "2026-07-05T13:56:36.353363+00:00",
+      "content_hash": "488eaa38c6d053e28c20829cc4d3bb4b6ff6184656c6e6ef5b179877159ef47f",
+      "standardized_at": "2026-09-11T12:16:08.963440+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 12443,
-        "output_tokens": 2533,
-        "total_tokens": 25613,
-        "cost_usd": 0.010065
+        "input_tokens": 13247,
+        "output_tokens": 2214,
+        "total_tokens": 20834,
+        "cost_usd": 0.009509
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 166.2,
+        "model_value": -24.0,
+        "triangle_type": "gross",
+        "triangle_units": "millions",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 46,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "millions",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2012,
           2013,
@@ -433,6 +432,18 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later",
+          "Seven years later",
+          "Eight years later",
+          "Nine years later"
         ],
         "source_page": 46,
         "entity": 2999
@@ -590,15 +601,17 @@
       "direction": "strengthening",
       "prior_year_movement_page": 43,
       "prior_year_movement_confidence": 0.8,
-      "exact_reserve_text": "Included within net claims incurred is adverse prior year development relating to certain financial lines classes; reduced by positive developments across a number of other classes.",
+      "exact_reserve_text": "The Syndicate has applied a consistent approach to prior years in establishing the technical provisions for claims outstanding and reinsurers share thereof. Included within net claims incurred is adverse prior year development relating to certain financial lines classes; reduced by positive developments across a number of other classes.",
       "primary_causes": [
         "Adverse claims development",
-        "Favorable claims development"
+        "Favorable claims development",
+        "Large loss development"
       ],
       "specific_events": [
-        "Hurricane Ida",
-        "Winter storm Uri (and Texas winter storm)",
-        "European Floods (Bernd)"
+        "Hurricane Ida 2021",
+        "Winter storm Uri 2021",
+        "Winter storm (Texas) 2021",
+        "European Floods (Bernd) 2021"
       ],
       "specific_years_affected": [],
       "prior_year_events": [],
@@ -608,98 +621,47 @@
           "event_year": 2021,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "With losses from Hurricane Ida ... Syndicate 2999's net catastrophe loss experience was marginally worse than expectation, albeit manageable",
+          "loss_description": "Included among the 2021 catastrophe losses; contributed to net catastrophe loss experience which was marginally worse than expectation",
           "lobs_affected": [
             "Property",
-            "Marine"
-          ],
-          "page": 4,
-          "confidence": 0.8
-        },
-        {
-          "event_name": "Winter storm Uri (and Texas winter storm)",
-          "event_year": 2021,
-          "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": null,
-          "loss_description": "Winter storm Uri and other secondary peril events contributing more than half of the total natural catastrophe losses",
-          "lobs_affected": [
-            "Property",
-            "Energy",
+            "Marine",
             "Motor"
           ],
           "page": 4,
-          "confidence": 0.7
+          "confidence": 1.0
+        },
+        {
+          "event_name": "Winter storm Uri (and Texas winter storms)",
+          "event_year": 2021,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "Contributed to the 2021 natural catastrophe losses (US winter storms Uri and Texas cited as contributors)",
+          "lobs_affected": [
+            "Property",
+            "Motor"
+          ],
+          "page": 4,
+          "confidence": 1.0
         },
         {
           "event_name": "European Floods (Bernd)",
           "event_year": 2021,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "European Floods (Bernd) contributed to 2021 natural catastrophe losses",
+          "loss_description": "Included among the 2021 natural catastrophe losses",
           "lobs_affected": [
             "Property"
           ],
           "page": 4,
-          "confidence": 0.8
+          "confidence": 1.0
         }
       ],
-      "standardized_narrative": "The opening gross claims outstanding at 1 January 2021 was GBP 2,474.1m. The syndicate's claims development table and notes indicate no material aggregate gross prior-year reserve movement at year-end (net prior year development is described as mixed: adverse development in certain financial/professional lines offset by favourable development in other classes). Overall, the claims development triangle shows effectively no change in gross ultimates for underwriting years prior to 2020, producing a net prior year development of c.GBP 0.0m. Separately, 2021 experienced notable catastrophe activity (Hurricane Ida, US winter storms including Uri, and European Floods (Bernd)) which produced a slightly worse than expected net catastrophe outcome but was manageable given reinsurance arrangements.",
+      "standardized_narrative": "Gross prior year reserves showed an adverse re-estimation (gross strengthening) of approximately GBP 463.3m (about 18.7% of opening gross reserves), driven by adverse development in several prior underwriting years (notably material one-year development in 2019 and increases in other earlier years) and adverse development in certain financial lines, partially offset by favourable development in other portfolios. The report also notes 2021 catastrophe activity (Hurricane Ida, US winter storms including Uri/Texas and European Floods Bernd) which affected 2021 losses but the prior year deterioration observed in the gross triangle is principally reserve re-estimation rather than newly-named prior-year events.",
       "raw_causal_phrases": [
         "Included within net claims incurred is adverse prior year development relating to certain financial lines classes; reduced by positive developments across a number of other classes.",
-        "With losses from Hurricane Ida, US winter storms (Uri and Texas) and European Floods (Bernd), Syndicate 2999's net catastrophe loss experience was marginally worse than expectation, albeit manageable, due to the favourable rating environment, combined with a beneficial reinsurance programme, resulting in a net ultimate claims ratio of 62.8% (2020 61.7%).",
-        "No material increase in claims incurred via inward reinsurance exposures through sub-syndicate 566, or business interruption insurance exposures written primarily by sub-syndicate 1886."
+        "With losses from Hurricane Ida, US winter storms (Uri and Texas) and European Floods (Bernd), Syndicate 2999's net catastrophe loss experience was marginally worse than expectation, albeit manageable, due to the favourable rating environment, combined with a beneficial reinsurance programme, resulting in a net ultimate claims ratio of 62.8% (2020 61.7%)."
       ],
-      "lob_movements": [
-        {
-          "line_of_business": "Professional Lines",
-          "direction": "strengthening",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.6
-        },
-        {
-          "line_of_business": "Property",
-          "direction": "release",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.5
-        },
-        {
-          "line_of_business": "Casualty",
-          "direction": "release",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.5
-        },
-        {
-          "line_of_business": "Marine",
-          "direction": "release",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.5
-        },
-        {
-          "line_of_business": "Motor",
-          "direction": "release",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.5
-        },
-        {
-          "line_of_business": "Accident & Health",
-          "direction": "release",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.4
-        },
-        {
-          "line_of_business": "Treaty",
-          "direction": "release",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.5
-        }
-      ],
+      "lob_movements": [],
       "gross_premiums_written_gbp_m": 948.8,
       "gross_premium_mix": [
         {
@@ -741,7 +703,7 @@
       "gross_premium_page": 31,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "No explicit gross prior-year movement figure was provided in a single 'movement in prior years' note. Prior-year development was calculated from the gross claims development triangle (Note 16), which indicates effectively zero aggregate gross movement for underwriting years prior to 2020. The report also discusses net prior-year outcomes (adverse in financial lines, favourable in others) but these are net of reinsurance. LOB-level reserve movements are not quantified in the report and have been inferred where indicated; amounts are therefore null and confidence is reduced for those entries. [RAG OVERRIDE: Model said PYD=0.0, RAG triangle computed 166.2. Using RAG value.]",
+      "data_quality_notes": "No explicit gross 'movement in prior year's provision for claims outstanding' line item was present. Prior year development was calculated from the published gross claims development triangle (Note 16). The triangle required mapping rows to column positions; some early/aggregate '2011 and prior' column was excluded per instructions. Per-LOB prior-year movements are not provided in the accounts and have not been inferred. The PYD figure is therefore derived from the gross triangle (calculated) and flagged with confidence 0.8. [RAG OVERRIDE: Model said PYD=463.3, RAG triangle computed 166.2. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -869,7 +831,7 @@
             null
           ],
           [
-            null,
+            633.7,
             null,
             null,
             null,
@@ -884,20 +846,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_2999_2021_llm.pdf",
-      "content_hash": "36b027e79a4f93658a66917d0d37327540f7ad9722487ec5230f9f7f13fbabc1",
-      "standardized_at": "2026-07-05T13:58:23.513398+00:00",
+      "content_hash": "488eaa38c6d053e28c20829cc4d3bb4b6ff6184656c6e6ef5b179877159ef47f",
+      "standardized_at": "2026-09-11T12:21:55.285831+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 21130,
-        "output_tokens": 9995,
-        "total_tokens": 31125,
-        "cost_usd": 0.025272
+        "input_tokens": 21890,
+        "output_tokens": 12284,
+        "total_tokens": 34174,
+        "cost_usd": 0.03004
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 166.2,
+        "model_value": 463.3,
+        "triangle_type": "gross",
+        "triangle_units": "millions",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 46,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "millions",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2012,
           2013,
@@ -1031,6 +1005,18 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later",
+          "Seven years later",
+          "Eight years later",
+          "Nine years later"
         ],
         "source_page": 46,
         "entity": 2999
@@ -1178,12 +1164,12 @@
       }
     }
   },
-  "total_cost_usd": 0.035337,
-  "total_tokens": 56738,
+  "total_cost_usd": 0.039549,
+  "total_tokens": 55008,
   "validation": {
     "passed": true,
-    "total_discrepancies": 25,
-    "within_tolerance": 25,
+    "total_discrepancies": 27,
+    "within_tolerance": 27,
     "hard_failures": 0,
     "hard_failure_details": []
   }

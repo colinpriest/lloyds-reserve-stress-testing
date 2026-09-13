@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T12:28:13.540098+00:00",
+  "extraction_timestamp": "2026-09-13T04:06:35.802150+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -16,35 +18,75 @@
       "prior_year_development_gbp_m": -10.157,
       "prior_year_development_pct": -3.79,
       "direction": "release",
-      "prior_year_movement_page": 35,
+      "prior_year_movement_page": 36,
       "prior_year_movement_confidence": 0.8,
-      "exact_reserve_text": "Significant movements in year 2021 for net ultimate claims provisions created at previous year end and relating to accident years up to year 2020 (positive values show increases in provisions): Accident and health: (2,240) Fire & other damage to property: (4,025) Third party liability: (9,833) Property Reinsurance: (2,119) Liability Reinsurance: 4,016",
+      "exact_reserve_text": null,
       "primary_causes": [
-        "Favorable claims development",
-        "Adverse claims development"
+        "Favorable claims development"
       ],
       "specific_events": [],
       "specific_years_affected": [
         2019,
-        2020
+        2018
       ],
       "prior_year_events": [
         {
-          "event_name": "Opioid claims",
+          "event_name": "Accident and health claims development",
           "event_year": 2020,
-          "impact_description": "A separate reserve has been set up in the Solvency II reserve to anticipate opioid claims. This was also held as at 31 December 2020.",
+          "impact_description": "Net ultimate claims provisions for accident and health showed a release.",
+          "lobs_affected": [
+            "Accident & Health"
+          ],
+          "amount_gbp_m": -2.24,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Fire & other damage to property claims development",
+          "event_year": 2020,
+          "impact_description": "Net ultimate claims provisions for fire & other damage to property showed a release.",
+          "lobs_affected": [
+            "Property"
+          ],
+          "amount_gbp_m": -4.025,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Third party liability claims development",
+          "event_year": 2020,
+          "impact_description": "Net ultimate claims provisions for third party liability showed a release.",
           "lobs_affected": [
             "Casualty"
           ],
-          "amount_gbp_m": null,
+          "amount_gbp_m": -9.833,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Property Reinsurance claims development",
+          "event_year": 2020,
+          "impact_description": "Net ultimate claims provisions for property reinsurance showed a release.",
+          "lobs_affected": [
+            "Reinsurance - Property"
+          ],
+          "amount_gbp_m": -2.119,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Liability Reinsurance claims development",
+          "event_year": 2020,
+          "impact_description": "Net ultimate claims provisions for liability reinsurance showed a strengthening.",
+          "lobs_affected": [
+            "Reinsurance - Casualty"
+          ],
+          "amount_gbp_m": 4.016,
           "confidence": 0.8
         }
       ],
       "named_events": [],
-      "standardized_narrative": "The syndicate reported a net release of GBP 14.201 million in prior year claims provisions for accident years up to 2020. This was primarily driven by favourable claims development across Accident & Health, Property, Third Party Liability, and Property Reinsurance, which saw releases of GBP 2.240 million, GBP 4.025 million, GBP 9.833 million, and GBP 2.119 million respectively. However, this was partially offset by a strengthening of GBP 4.016 million in Liability Reinsurance reserves, particularly related to concussion claims. The overall movement is consistent with a prudent reserving approach.",
+      "standardized_narrative": "The syndicate experienced a gross prior year reserve release of GBP 4.438 million, primarily driven by favourable claims developments in 2019. Net ultimate claims provisions for prior accident years also showed an overall positive result, with releases across Accident & Health, Property, Third Party Liability, and Property Reinsurance, partially offset by a strengthening in Liability Reinsurance.",
       "raw_causal_phrases": [
-        "main constituents of the liability reinsurance reserve increased (concussion) or remained largely unaltered (casualty catastrophe), several other areas produced reduced concern allowing this overall positive result",
-        "prudent reserving approach"
+        "favourable claims developments in 2021",
+        "reduced concern",
+        "overall positive result"
       ],
       "lob_movements": [
         {
@@ -129,7 +171,7 @@
       "gross_premium_page": 33,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior year development is reported net of reinsurance. Gross prior year development is not explicitly quantified. The claims development triangles show no movement for prior years, which is unusual and may indicate a specific presentation method rather than actual zero development. [RAG OVERRIDE: Model said PYD=-14.201, RAG triangle computed -10.157. Using RAG value.]",
+      "data_quality_notes": "The exact_reserve_text is null as no direct gross prior year development statement was found. The lob_movements are reported as net figures, as gross breakdown was not available. [RAG OVERRIDE: Model said PYD=-4.438, RAG triangle computed -10.157. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -272,20 +314,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_727_2021_llm.pdf",
-      "content_hash": "34f8d362fff7c34134c5d59835ad4ae17aecc455f44726a5a60af18cd508d3c1",
-      "standardized_at": "2026-03-19T07:39:03.875265+00:00",
+      "content_hash": "08b5758419fd59b42532d95cb2bb2d03de42e0e3f8035837b59b53e64624f010",
+      "standardized_at": "2026-09-11T13:43:12.094961+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 16054,
-        "output_tokens": 2334,
-        "total_tokens": 28542,
-        "cost_usd": 0.010651
+        "input_tokens": 16858,
+        "output_tokens": 2526,
+        "total_tokens": 28288,
+        "cost_usd": 0.011372
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -10.157,
+        "model_value": -4.438,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 70,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2012,
           2013,
@@ -419,6 +473,18 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At the end of the underwriting year",
+          "After one year",
+          "After two years",
+          "After three years",
+          "After four years",
+          "After five years",
+          "After six years",
+          "After seven years",
+          "After eight years",
+          "After nine years"
         ],
         "source_page": 70,
         "entity": 727
@@ -596,44 +662,50 @@
       "direction": "release",
       "prior_year_movement_page": 68,
       "prior_year_movement_confidence": 0.8,
-      "exact_reserve_text": "Significant movements in year 2021 for net ultimate claims provisions created at previous year end and relating to accident years up to year 2020 (positive values show increases in provisions):\n2021 2020\nGBP '000 GBP '000\nAccident and health (2,240) 1,734 \nFire & other damage to property (4,025) (4,552)\nThird party liability (9,833) 1,796\nProperty Reinsurance (2,119) (5,526)\nLiability Reinsurance 4,016 (1,400)\nWhile the main constituents of the liability reinsurance reserve increased (concussion) or remained largely unaltered (casualty catastrophe), several other areas produced reduced concern allowing this overall positive result. The movements in all other classes and the overall pattern are consistent with a prudent reserving approach.",
+      "exact_reserve_text": "Significant movements in year 2021 for net ultimate claims provisions created at previous year end and relating to accident years up to year 2020 (positive values show increases in provisions):\n\n2021 2020\nGBP '000 GBP '000\nAccident and health (2,240) 1,734 \nFire & other damage to property (4,025) (4,552)\nThird party liability (9,833) 1,796\nProperty Reinsurance (2,119) (5,526)\nLiability Reinsurance 4,016 (1,400)",
       "primary_causes": [
         "Favorable claims development",
-        "IBNR recalibration",
         "Social inflation / litigation trends",
-        "Reinsurance recoveries"
+        "IBNR recalibration"
       ],
       "specific_events": [],
       "specific_years_affected": [
-        2012,
-        2013,
-        2014,
-        2015,
-        2016,
-        2017,
         2018,
         2019,
         2020
       ],
       "prior_year_events": [
         {
-          "event_name": "Opioid / latent liability concerns and regulatory attention",
-          "event_year": 2016,
-          "impact_description": "Regulators highlighted potential latent US casualty exposures (opioids etc). Syndicate maintained a cautious reserving stance and a separate reserve was held in Solvency II to anticipate opioid claims; model for latent exposures developed in 2016 and used thereafter.",
+          "event_name": "Opioid claims / litigation",
+          "event_year": null,
+          "impact_description": "Regulators highlighted potential opioid exposures; the Syndicate holds a separate reserve in Solvency II to anticipate opioid claims and considers latent liabilities when setting reserves.",
           "lobs_affected": [
             "Casualty"
           ],
           "amount_gbp_m": null,
           "confidence": 0.5
+        },
+        {
+          "event_name": "Favourable claims developments in 2021 (impacting prior years)",
+          "event_year": 2021,
+          "impact_description": "Reduction in the estimate of 2018 and prior years' liability reserves as a result of favourable claims developments in 2021 (reported by the managing agent).",
+          "lobs_affected": [
+            "Casualty",
+            "Property"
+          ],
+          "amount_gbp_m": -8.9,
+          "confidence": 0.6
         }
       ],
       "named_events": [],
-      "standardized_narrative": "The syndicate recorded net favourable prior-year reserve development for accident years up to 2020, driven primarily by favourable claims development and IBNR recalibration across a number of classes (notably Accident & Health, Property and Third Party Liability). The gross claims development triangle indicates an aggregate release of approximately GBP 10.16m (around 3.8% of opening gross claims outstanding). The syndicate continues to hold conservative margins above actuarial best estimates to allow for long-tail US liability latent exposures and regulatory concerns such as opioids and social inflation.",
+      "standardized_narrative": "Using the gross claims development triangle the Syndicate recorded a net favourable prior-year development of approximately GBP 10.16m (a c.3.8% release of opening gross reserves), driven mainly by favourable development across older liability and property years, partially offset by deterioration in the 2019 column. The report attributes reserve strength and subsequent movements to latent US liability exposures, vigilance on social inflation and litigation trends (including opioid-related concerns), and explicit cautious reserving margins above actuarial best estimates.",
       "raw_causal_phrases": [
-        "favourable claims developments in 2021",
         "reduction in the estimate of 2018 and prior years' liability reserves as a result of favourable claims developments in 2021",
-        "the syndicate adopts an approach to claims reserving that is above the actuary's best estimate, primarily to allow for the future emergence of latent losses on its long tail US liability business",
-        "favourable development of paid and incurred claims during 2021"
+        "latent claims to emerge",
+        "future emergence of latent losses",
+        "opioid claims",
+        "favourable development of paid and incurred claims during 2021",
+        "This margin above the net earned best estimate of technical provisions amounted to GBP 106.2 million as at 31 December 2021"
       ],
       "lob_movements": [
         {
@@ -697,7 +769,7 @@
         {
           "line_of_business": "Fire and other damage to property",
           "amount_gbp_m": 21.295,
-          "percentage_of_total": 23.14
+          "percentage_of_total": 23.15
         },
         {
           "line_of_business": "Third party liability",
@@ -710,7 +782,7 @@
           "percentage_of_total": 0.84
         },
         {
-          "line_of_business": "Reinsurance acceptances",
+          "line_of_business": "Reinsurance inwards",
           "amount_gbp_m": 25.252,
           "percentage_of_total": 27.45
         }
@@ -718,7 +790,7 @@
       "gross_premium_page": 65,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior year development (gross) was calculated from the gross claims development triangle (claims development table) because the narrative/movement note in the reserves section reports net movements by class. The triangle excludes the aggregated '2011 and prior' column (per report) and that aggregate was omitted per rules. Some reserve movement discussion in the notes is presented net of reinsurance; where only net figures were available by class those have been reported in 'lob_movements' with lower confidence. RITC items were considered; no material distortion of the triangle by RITC at 2021 year-end was identified for the included UW columns.",
+      "data_quality_notes": "Prior-year development (PYD) derived from the gross claims development triangle (gross amounts in GBP '000 converted to millions). The Notes provide a 'Significant movements' table for net (after reinsurance) movements by class which was used for LOB-level direction and amounts (net), because gross per-LOB prior-year movements were not separately disclosed. RITC and Part VII transfers are discussed in the report and can distort comparisons; triangle method applied excluding the two most recent underwriting years (2021 and 2020) per standard rules. Amounts and classification for LOB movements are therefore of lower confidence (net figures) and are flagged above.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -861,20 +933,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_727_2021_llm.pdf",
-      "content_hash": "34f8d362fff7c34134c5d59835ad4ae17aecc455f44726a5a60af18cd508d3c1",
-      "standardized_at": "2026-03-19T07:40:19.481876+00:00",
+      "content_hash": "08b5758419fd59b42532d95cb2bb2d03de42e0e3f8035837b59b53e64624f010",
+      "standardized_at": "2026-09-11T13:46:07.602429+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 43234,
-        "output_tokens": 7576,
-        "total_tokens": 50810,
-        "cost_usd": 0.025961
+        "input_tokens": 43829,
+        "output_tokens": 9413,
+        "total_tokens": 53242,
+        "cost_usd": 0.029783
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -10.157,
+        "model_value": -10.157,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 70,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2012,
           2013,
@@ -1008,6 +1092,18 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At the end of the underwriting year",
+          "After one year",
+          "After two years",
+          "After three years",
+          "After four years",
+          "After five years",
+          "After six years",
+          "After seven years",
+          "After eight years",
+          "After nine years"
         ],
         "source_page": 70,
         "entity": 727
@@ -1175,12 +1271,12 @@
       }
     }
   },
-  "total_cost_usd": 0.036612,
-  "total_tokens": 79352,
+  "total_cost_usd": 0.041155,
+  "total_tokens": 81530,
   "validation": {
     "passed": true,
-    "total_discrepancies": 32,
-    "within_tolerance": 32,
+    "total_discrepancies": 27,
+    "within_tolerance": 27,
     "hard_failures": 0,
     "hard_failure_details": []
   }

@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-05T19:58:11.120363+00:00",
+  "extraction_timestamp": "2026-09-13T04:05:25.813122+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -21,9 +23,12 @@
       "exact_reserve_text": "Claims incurred, net of reinsurance, include favourable prior year development of GBP 3.9m (2017: adverse development of GBP 0.7m).",
       "primary_causes": [
         "Favorable claims development",
-        "Reinsurance recoveries"
+        "Adverse claims development",
+        "Natural catastrophe events"
       ],
       "specific_events": [
+        "Californian Wildfires",
+        "Hurricane Michael",
         "Hurricanes Harvey, Irma and Maria"
       ],
       "specific_years_affected": [
@@ -33,9 +38,21 @@
         {
           "event_name": "Hurricanes Harvey, Irma and Maria",
           "event_year": 2017,
-          "impact_description": "The ultimate losses for Hurricanes Harvey, Irma and Maria reduced during 2018 by GBP 0.9m (excluding foreign currency movements).",
-          "lobs_affected": [],
+          "impact_description": "ultimate losses for Hurricanes Harvey, Irma and Maria reduced during 2018 by GBP 0.9m (excluding foreign currency movements).",
+          "lobs_affected": null,
           "amount_gbp_m": -0.9,
+          "confidence": 1.0
+        },
+        {
+          "event_name": "Reserve deterioration on longer tail classes",
+          "event_year": null,
+          "impact_description": "reserve deterioration on certain products (predominantly longer tail classes)",
+          "lobs_affected": [
+            "Casualty",
+            "Professional Lines",
+            "Reinsurance - Casualty"
+          ],
+          "amount_gbp_m": null,
           "confidence": 0.8
         }
       ],
@@ -45,8 +62,8 @@
           "event_year": 2018,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "principal drivers of net claims incurred",
-          "lobs_affected": [],
+          "loss_description": "principal drivers [of net claims incurred] were a combination of catastrophe events",
+          "lobs_affected": null,
           "page": 2,
           "confidence": 0.8
         },
@@ -55,8 +72,8 @@
           "event_year": 2018,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "principal drivers of net claims incurred",
-          "lobs_affected": [],
+          "loss_description": "principal drivers [of net claims incurred] were a combination of catastrophe events",
+          "lobs_affected": null,
           "page": 2,
           "confidence": 0.8
         },
@@ -64,69 +81,73 @@
           "event_name": "Hurricanes Harvey, Irma and Maria",
           "event_year": 2017,
           "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": null,
-          "loss_description": "ultimate losses ... reduced during 2018 by GBP 0.9m (excluding foreign currency movements)",
-          "lobs_affected": [],
+          "net_loss_gbp_m": -0.9,
+          "loss_description": "ultimate losses for Hurricanes Harvey, Irma and Maria reduced during 2018 by GBP 0.9m (excluding foreign currency movements).",
+          "lobs_affected": null,
           "page": 2,
-          "confidence": 0.8
+          "confidence": 1.0
         },
         {
           "event_name": "California Earthquake - Los Angeles",
           "event_year": 2017,
           "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": 78.852,
-          "loss_description": "highest gross event loss for year ended 31 December 2017",
-          "lobs_affected": [],
+          "net_loss_gbp_m": null,
+          "loss_description": "highest gross event loss for year ended 31 December 2017 was California Earthquake - Los Angeles at GBP 78,852,000",
+          "lobs_affected": null,
           "page": 9,
-          "confidence": 1.0
+          "confidence": 0.8
         }
       ],
-      "standardized_narrative": "The syndicate reported a gross favourable prior year development (release) of GBP 6.76 million in 2018. This release was primarily driven by favourable claims development, specifically a reduction in ultimate losses for the 2017 Atlantic hurricane season events (Hurricanes Harvey, Irma, and Maria). The movement also includes a reinsurance share. While overall development was favourable, some lines experienced adverse development.",
+      "standardized_narrative": "The syndicate reported a net favourable prior year development of GBP 3.9m, which translates to a gross release of GBP 6.760m. This was driven by a reduction in ultimate losses for 2017 hurricanes (Harvey, Irma, Maria) by GBP 0.9m, but also included reserve deterioration on certain longer tail classes. The overall net claims incurred for the year were influenced by current year catastrophe events such as Californian Wildfires and Hurricane Michael.",
       "raw_causal_phrases": [
-        "favourable prior year development",
-        "reduction in ultimate losses for Hurricanes Harvey, Irma and Maria",
-        "reserve deterioration on certain products (predominantly longer tail classes)"
+        "favourable prior year development of GBP 3.9m",
+        "adverse development of GBP 0.7m",
+        "loss events",
+        "reserving movements during the year",
+        "catastrophe events (notably Californian Wildfires and Hurricane Michael)",
+        "reserve deterioration on certain products (predominantly longer tail classes)",
+        "ultimate losses for Hurricanes Harvey, Irma and Maria reduced"
       ],
       "lob_movements": [
         {
           "line_of_business": "Accident & Health",
           "direction": "strengthening",
-          "amount_gbp_m": 0.119,
+          "amount_gbp_m": -0.119,
           "percentage": null,
           "confidence": 0.8
         },
         {
           "line_of_business": "Marine",
           "direction": "release",
-          "amount_gbp_m": -1.463,
+          "amount_gbp_m": 1.463,
           "percentage": null,
           "confidence": 0.8
         },
         {
           "line_of_business": "Property",
           "direction": "strengthening",
-          "amount_gbp_m": 4.004,
+          "amount_gbp_m": -4.004,
           "percentage": null,
           "confidence": 0.8
         },
         {
           "line_of_business": "Casualty",
           "direction": "release",
-          "amount_gbp_m": -2.62,
+          "amount_gbp_m": 2.62,
           "percentage": null,
           "confidence": 0.8
         },
         {
           "line_of_business": "Other",
           "direction": "release",
-          "amount_gbp_m": -1.629,
+          "amount_gbp_m": 1.629,
           "percentage": null,
           "confidence": 0.8
         },
         {
           "line_of_business": "Reinsurance - Specialty",
           "direction": "release",
-          "amount_gbp_m": -2.353,
+          "amount_gbp_m": 2.353,
           "percentage": null,
           "confidence": 0.8
         }
@@ -164,10 +185,10 @@
           "percentage_of_total": 39.3
         }
       ],
-      "gross_premium_page": 13,
+      "gross_premium_page": 3,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The `exact_reserve_text` describes the net prior year development, while `prior_year_development_gbp_m` reflects the gross figure from the Technical Provisions note. LOB movements are reported net of reinsurance, with signs adjusted to standard convention (negative for release, positive for strengthening). [RAG OVERRIDE: Model said PYD=-6.76, RAG triangle computed 18.438. Using RAG value.]",
+      "data_quality_notes": "The LOB movements for prior year development are NET figures, as the gross breakdown is not provided. The sign convention for 'Change in prior year provisions' in Note 14 (page 15) is interpreted as positive for releases and negative for strengthenings, consistent with the narrative's 'favourable development' description. [RAG OVERRIDE: Model said PYD=-6.76, RAG triangle computed 18.438. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -220,20 +241,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_2014_2018_llm.pdf",
-      "content_hash": "1962835099d37d241b2728d6d83a4d2f44d1db1e36a505026bbf4702dfd39085",
-      "standardized_at": "2026-07-05T11:57:21.904684+00:00",
+      "content_hash": "2af6dcbc6acd64df4c711c0cabb25db6d15ded0aeb8c0297cc30a3dd4f62d8bf",
+      "standardized_at": "2026-09-11T11:42:59.206920+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 13733,
-        "output_tokens": 2100,
-        "total_tokens": 23878,
-        "cost_usd": 0.00937
+        "input_tokens": 14537,
+        "output_tokens": 2335,
+        "total_tokens": 23546,
+        "cost_usd": 0.010199
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 18.438,
+        "model_value": -6.76,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 28,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2014,
           2015,
@@ -277,6 +310,13 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At the end of the underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later"
         ],
         "source_page": 28,
         "entity": 2014
@@ -360,6 +400,13 @@
           "backend": "azure",
           "table_kind": "provisions_movement"
         },
+        "movement_semantics": {
+          "row_label": "Change in prior year provisions",
+          "row_index": 6,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": true,
+          "column_index": 1
+        },
         "gross_prior_year_claims": 6.8,
         "net_prior_year_claims": 3.9,
         "opening_gross_claims_outstanding": 205.27
@@ -425,6 +472,10 @@
         "foreign_pages": [],
         "underwriting_year_pages": [
           34,
+          35,
+          36,
+          37,
+          38,
           39,
           40,
           41,
@@ -434,7 +485,8 @@
           45,
           46,
           47,
-          48
+          48,
+          49
         ],
         "underwriting_year_tables_skipped": 13,
         "document_unit_hint": 0.001
@@ -462,20 +514,18 @@
       "prior_year_development_gbp_m": 18.438,
       "prior_year_development_pct": 8.98,
       "direction": "strengthening",
-      "prior_year_movement_page": 27,
+      "prior_year_movement_page": 31,
       "prior_year_movement_confidence": 1.0,
       "exact_reserve_text": "Claims incurred, net of reinsurance, include favourable prior year development of GBP 3.9m (2017: adverse development of GBP 0.7m). Prior year claims development is analysed by line of business in the table below.",
       "primary_causes": [
-        "Favorable claims development",
+        "Natural catastrophe events",
         "Adverse claims development",
-        "Natural catastrophe events"
+        "Large loss development"
       ],
       "specific_events": [
         "Californian Wildfires",
         "Hurricane Michael",
-        "Hurricane Harvey",
-        "Hurricane Irma",
-        "Hurricane Maria"
+        "Hurricanes Harvey, Irma and Maria"
       ],
       "specific_years_affected": [
         2014,
@@ -485,58 +535,13 @@
       ],
       "prior_year_events": [
         {
-          "event_name": "Hurricane Harvey",
+          "event_name": "Hurricanes Harvey, Irma and Maria",
           "event_year": 2017,
-          "impact_description": "Ultimate losses for Hurricanes Harvey, Irma and Maria reduced during 2018 by GBP 0.9m (excluding foreign currency movements).",
+          "impact_description": "The ultimate losses for Hurricanes Harvey, Irma and Maria reduced during 2018 by GBP 0.9m (excluding foreign currency movements).",
           "lobs_affected": [
-            "Property",
-            "Casualty"
+            "Property"
           ],
-          "amount_gbp_m": null,
-          "confidence": 0.8
-        },
-        {
-          "event_name": "Hurricane Irma",
-          "event_year": 2017,
-          "impact_description": "Ultimate losses for Hurricanes Harvey, Irma and Maria reduced during 2018 by GBP 0.9m (excluding foreign currency movements).",
-          "lobs_affected": [
-            "Property",
-            "Casualty"
-          ],
-          "amount_gbp_m": null,
-          "confidence": 0.8
-        },
-        {
-          "event_name": "Hurricane Maria",
-          "event_year": 2017,
-          "impact_description": "Ultimate losses for Hurricanes Harvey, Irma and Maria reduced during 2018 by GBP 0.9m (excluding foreign currency movements).",
-          "lobs_affected": [
-            "Property",
-            "Casualty"
-          ],
-          "amount_gbp_m": null,
-          "confidence": 0.8
-        },
-        {
-          "event_name": "Californian Wildfires",
-          "event_year": 2018,
-          "impact_description": "Identified as one of the principal catastrophe events driving claims in the year.",
-          "lobs_affected": [
-            "Property",
-            "Marine"
-          ],
-          "amount_gbp_m": null,
-          "confidence": 0.8
-        },
-        {
-          "event_name": "Hurricane Michael",
-          "event_year": 2018,
-          "impact_description": "Identified as one of the principal catastrophe events driving claims in the year.",
-          "lobs_affected": [
-            "Property",
-            "Casualty"
-          ],
-          "amount_gbp_m": null,
+          "amount_gbp_m": -0.9,
           "confidence": 0.8
         }
       ],
@@ -546,86 +551,43 @@
           "event_year": 2018,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "Noted as one of the principal catastrophe events in the year.",
+          "loss_description": "Noted as a principal driver among catastrophe events impacting claims incurred in 2018.",
           "lobs_affected": [
-            "Property",
-            "Marine"
+            "Property"
           ],
           "page": 5,
-          "confidence": 0.9
+          "confidence": 0.8
         },
         {
           "event_name": "Hurricane Michael",
           "event_year": 2018,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "Noted as one of the principal catastrophe events in the year.",
-          "lobs_affected": [
-            "Property",
-            "Casualty"
-          ],
-          "page": 5,
-          "confidence": 0.9
-        },
-        {
-          "event_name": "Hurricane Harvey",
-          "event_year": 2017,
-          "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": null,
-          "loss_description": "Ultimate losses for Hurricanes Harvey, Irma and Maria reduced during 2018 by GBP 0.9m (excluding foreign currency movements).",
-          "lobs_affected": [
-            "Property",
-            "Casualty"
-          ],
-          "page": 5,
-          "confidence": 0.8
-        },
-        {
-          "event_name": "Hurricane Irma",
-          "event_year": 2017,
-          "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": null,
-          "loss_description": "Ultimate losses for Hurricanes Harvey, Irma and Maria reduced during 2018 by GBP 0.9m (excluding foreign currency movements).",
-          "lobs_affected": [
-            "Property",
-            "Casualty"
-          ],
-          "page": 5,
-          "confidence": 0.8
-        },
-        {
-          "event_name": "Hurricane Maria",
-          "event_year": 2017,
-          "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": null,
-          "loss_description": "Ultimate losses for Hurricanes Harvey, Irma and Maria reduced during 2018 by GBP 0.9m (excluding foreign currency movements).",
-          "lobs_affected": [
-            "Property",
-            "Casualty"
-          ],
-          "page": 5,
-          "confidence": 0.8
-        },
-        {
-          "event_name": "California Earthquake - Los Angeles",
-          "event_year": 2017,
-          "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": null,
-          "loss_description": "Highest gross event loss for year ended 31 December 2017 was California Earthquake - Los Angeles at GBP 78,852,000 (reported as highest gross event loss).",
+          "loss_description": "Noted as a principal driver among catastrophe events impacting claims incurred in 2018.",
           "lobs_affected": [
             "Property"
           ],
-          "page": 20,
-          "confidence": 0.9
+          "page": 5,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Hurricanes Harvey, Irma and Maria",
+          "event_year": 2017,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "Ultimate losses reduced during 2018 by GBP 0.9m (excluding foreign currency movements).",
+          "lobs_affected": [
+            "Property"
+          ],
+          "page": 5,
+          "confidence": 0.8
         }
       ],
-      "standardized_narrative": "Opening gross claims outstanding at 1 January 2018 were GBP 205.27m. During 2018 the syndicate recorded a gross prior-year strengthening of GBP 6.76m (3.29% of opening reserves). Net prior-year development was reported favourably at GBP 3.94m after reinsurance. The movement reflects a mixture of favourable releases in Property-related classes and adverse development in Marine and Third Party Liability; current year catastrophe events (notably Californian wildfires and Hurricane Michael) were material drivers of claims activity in 2018, while earlier 2017 Atlantic hurricane losses (Harvey, Irma, Maria) reduced slightly during the year.",
+      "standardized_narrative": "At 1 January 2018 gross claims outstanding were GBP 205.27m. During 2018 gross claims outstanding movement included a prior-year strengthening of GBP 6.76m (c.3.3% of opening reserves) driven by reserve deterioration on longer-tail classes and large loss development, together with catastrophe activity (notably Californian wildfires and Hurricane Michael). Some favourable movements on prior hurricane exposures (Harvey, Irma and Maria) partially offset the increase on a net basis.",
       "raw_causal_phrases": [
-        "The loss for the financial year is attributable to loss events (detailed below) and reserving movements during the year",
+        "The loss for the financial year is attributable to loss events (detailed below) and reserving movements during the year, and is reflected in the net combined ratio of 112% (2017: 117%).",
         "The principal drivers were a combination of catastrophe events (notably Californian Wildfires and Hurricane Michael) and reserve deterioration on certain products (predominantly longer tail classes).",
-        "Claims incurred, net of reinsurance, include favourable prior year development of GBP 3.9m (2017: adverse development of GBP 0.7m).",
-        "The ultimate losses for Hurricanes Harvey, Irma and Maria reduced during 2018 by GBP 0.9m (excluding foreign currency movements).",
-        "highest gross event loss for year ended 31 December 2017 was California Earthquake - Los Angeles at GBP 78,852,000"
+        "Claims incurred, net of reinsurance, include favourable prior year development of GBP 3.9m (2017: adverse development of GBP 0.7m)."
       ],
       "lob_movements": [
         {
@@ -707,7 +669,7 @@
       "gross_premium_page": 26,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Opening gross claims outstanding taken from Statement of Financial Position (Claims outstanding, prior year column). Prior year development gross figure taken from Technical Provisions note 'Change in prior year provisions' (gross = GBP 6,760k). Many line-by-line prior year movements provided in the claims note are presented as net of reinsurance (these have been used for LOB-level directions but are NET amounts and therefore do not sum to the gross prior year movement). Some named event impacts are mentioned qualitatively or as net movements (e.g. Hurricanes Harvey/Irma/Maria reduced by GBP 0.9m) and are not quantified on a gross basis in the report; where only net figures were available these were not used as the primary gross prior-year movement. [RAG OVERRIDE: Model said PYD=6.76, RAG triangle computed 18.438. Using RAG value.]",
+      "data_quality_notes": "Primary source for prior year movement used: Technical provisions movement note (Gross column) which shows a gross prior year change of GBP 6.760k (= GBP 6.76m). The Managing Agent narrative and other P&L lines quote net favourable prior year development of GBP 3.9m; this is a NET figure. LOB-level prior-year movements are only presented net in the table in note 4, therefore LOB movements above are based on net figures (confidence reduced). The gross triangle is present and was used for development table extraction. There is an apparent sign/terminology inconsistency between the gross movement in the technical provisions table (a gross increase of GBP 6.76m) and the narrative stating \"favourable prior year development of GBP 3.9m\" (net). Following the rules, the gross movement from the technical provisions note was used as authoritative for prior_year_development_gbp_m. [RAG OVERRIDE: Model said PYD=6.76, RAG triangle computed 18.438. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -760,20 +722,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_2014_2018_llm.pdf",
-      "content_hash": "1962835099d37d241b2728d6d83a4d2f44d1db1e36a505026bbf4702dfd39085",
-      "standardized_at": "2026-07-05T11:58:42.489002+00:00",
+      "content_hash": "2af6dcbc6acd64df4c711c0cabb25db6d15ded0aeb8c0297cc30a3dd4f62d8bf",
+      "standardized_at": "2026-09-11T11:45:52.002464+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 35221,
-        "output_tokens": 8848,
-        "total_tokens": 44069,
-        "cost_usd": 0.026501
+        "input_tokens": 35981,
+        "output_tokens": 8722,
+        "total_tokens": 44703,
+        "cost_usd": 0.026439
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 18.438,
+        "model_value": 6.76,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 28,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2014,
           2015,
@@ -817,6 +791,13 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At the end of the underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later"
         ],
         "source_page": 28,
         "entity": 2014
@@ -900,6 +881,13 @@
           "backend": "azure",
           "table_kind": "provisions_movement"
         },
+        "movement_semantics": {
+          "row_label": "Change in prior year provisions",
+          "row_index": 6,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": true,
+          "column_index": 1
+        },
         "gross_prior_year_claims": 6.8,
         "net_prior_year_claims": 3.9,
         "opening_gross_claims_outstanding": 205.27
@@ -965,6 +953,10 @@
         "foreign_pages": [],
         "underwriting_year_pages": [
           34,
+          35,
+          36,
+          37,
+          38,
           39,
           40,
           41,
@@ -974,7 +966,8 @@
           45,
           46,
           47,
-          48
+          48,
+          49
         ],
         "underwriting_year_tables_skipped": 13,
         "document_unit_hint": 0.001
@@ -994,12 +987,12 @@
       }
     }
   },
-  "total_cost_usd": 0.035871,
-  "total_tokens": 67947,
+  "total_cost_usd": 0.036638,
+  "total_tokens": 68249,
   "validation": {
     "passed": true,
-    "total_discrepancies": 44,
-    "within_tolerance": 44,
+    "total_discrepancies": 35,
+    "within_tolerance": 35,
     "hard_failures": 0,
     "hard_failure_details": []
   }

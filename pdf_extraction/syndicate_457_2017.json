@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-05T20:27:27.392511+00:00",
+  "extraction_timestamp": "2026-09-13T04:01:36.845236+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -13,23 +15,25 @@
       "opening_reserves_gbp_m": 744.848,
       "opening_reserves_page": 6,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": 71.388,
-      "prior_year_development_pct": 9.58,
-      "direction": "strengthening",
-      "prior_year_movement_page": 17,
-      "prior_year_movement_confidence": 0.8,
+      "prior_year_development_gbp_m": -71.388,
+      "prior_year_development_pct": -9.58,
+      "direction": "release",
+      "prior_year_movement_page": 16,
+      "prior_year_movement_confidence": 1.0,
       "exact_reserve_text": "The 2017 net technical result of GBP 43.7m (2016: GBP 35.6m) includes GBP 51.2m (2016: GBP 40.4m) of releases from reserves in respect of prior accident years.",
       "primary_causes": [
-        "Favorable claims development",
-        "IBNR recalibration"
+        "Favorable claims development"
       ],
       "specific_events": [],
-      "specific_years_affected": [],
+      "specific_years_affected": [
+        "prior accident years"
+      ],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "The syndicate reported a net technical result of GBP 43.7m for 2017, which included GBP 51.2m of net releases from reserves in respect of prior accident years. This net release was attributed to better actual experience compared to expected, leading to reserve redundancies on old years of account. However, a detailed analysis of the gross claims development triangle indicates a gross strengthening of GBP 71.388m for prior underwriting years, suggesting that while the net position was favourable, the gross claims estimates for older years increased.",
+      "standardized_narrative": "The syndicate reported a release of GBP 51.2 million from gross reserves in respect of prior accident years, driven by better actual claims experience compared to expected. This favorable development contributed to the 2017 financial year result.",
       "raw_causal_phrases": [
-        "better actual experience compared to expected leading to reserve redundancies on old years of account"
+        "reserve redundancies on old years of account",
+        "better actual experience compared to expected"
       ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 423.4,
@@ -68,23 +72,115 @@
       "gross_premium_page": 12,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The narrative on page 16 states a net release of GBP 51.2m for prior accident years, and the Managing Agent's report on page 1 mentions 'reserve redundancies' (favourable development). However, the gross claims development triangle on page 17, when analyzed according to the prompt's rules, indicates a gross strengthening of GBP 71.388m. The gross triangle calculation was prioritized for the 'prior_year_development_gbp_m' value as per instructions, leading to a discrepancy with the stated net release and narrative causes.",
+      "data_quality_notes": "The gross claims development triangle on page 17 indicates a prior year release of -GBP 71.388m, which differs from the explicitly stated gross release of -GBP 51.2m on page 16. The explicit statement is used as the primary source. [RAG OVERRIDE: Model said PYD=-51.2, RAG triangle computed -71.388. Using RAG value.]",
+      "_claims_triangle": {
+        "type": "gross",
+        "currency": "GBP",
+        "units": "thousands",
+        "page": 17,
+        "underwriting_years": [
+          2011,
+          2012,
+          2013,
+          2014,
+          2015,
+          2016,
+          2017
+        ],
+        "development_rows": [
+          [
+            -129388,
+            -136729,
+            -154209,
+            -148500,
+            -153707,
+            -125343,
+            -165196
+          ],
+          [
+            -247366,
+            -281831,
+            -311961,
+            -284075,
+            -287333,
+            -264557,
+            null
+          ],
+          [
+            -259468,
+            -301224,
+            -311865,
+            -277662,
+            -252753,
+            null,
+            null
+          ],
+          [
+            -254518,
+            -294753,
+            -292244,
+            -252538,
+            null,
+            null,
+            null
+          ],
+          [
+            -270539,
+            -296471,
+            -297039,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            -266768,
+            -278716,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            -268044,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ]
+        ]
+      },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_457_2017_llm.pdf",
-      "content_hash": "a142d5d1c0488436cec14192a1fbe57c0572c65272a1aa52a248dbb9cc52d350",
-      "standardized_at": "2026-03-19T03:28:32.159152+00:00",
+      "content_hash": "5814b26479dda50460298e5dac4963e239736f986b17fb1b35cb253ba08dc595",
+      "standardized_at": "2026-09-11T13:00:15.415327+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 10894,
-        "output_tokens": 970,
-        "total_tokens": 18015,
-        "cost_usd": 0.005693
+        "input_tokens": 11698,
+        "output_tokens": 1361,
+        "total_tokens": 19117,
+        "cost_usd": 0.006912
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -71.388,
+        "model_value": -51.2,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 45,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -159,8 +255,18 @@
             null
           ]
         ],
+        "row_labels": [
+          "At end of underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later"
+        ],
         "source_page": 45,
-        "entity": 457
+        "entity": 457,
+        "presentation_sign": "outflow"
       },
       "_adobe_lob": {
         "gross_premium_mix": [
@@ -323,38 +429,22 @@
       "syndicate": 457,
       "year": 2017,
       "opening_reserves_gbp_m": 744.848,
-      "opening_reserves_page": 43,
-      "opening_reserves_confidence": 0.8,
-      "prior_year_development_gbp_m": 71.388,
-      "prior_year_development_pct": 9.58,
-      "direction": "strengthening",
-      "prior_year_movement_page": 43,
-      "prior_year_movement_confidence": 0.8,
+      "opening_reserves_page": null,
+      "opening_reserves_confidence": 0.0,
+      "prior_year_development_gbp_m": -71.388,
+      "prior_year_development_pct": -9.58,
+      "direction": "release",
+      "prior_year_movement_page": null,
+      "prior_year_movement_confidence": 0.0,
       "exact_reserve_text": "",
-      "primary_causes": [
-        "Favorable claims development"
-      ],
+      "primary_causes": [],
       "specific_events": [],
-      "specific_years_affected": [
-        2011,
-        2012,
-        2013,
-        2014,
-        2015
-      ],
+      "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "Using the gross claims development table, the syndicate shows a net prior-year release of approximately GBP 71.4m (a reduction of ~12.2% of opening gross claims outstanding). This movement is driven by favourable development across older underwriting years (2011-2015). Closing gross claims outstanding at 31 December 2017 per the gross claims development table is GBP 670.419m; the opening (prior year closing) gross claims outstanding used for the percentage calculation is GBP 584.167m. Figures were derived from the gross claims development table (claims development triangle) as a fallback source; no explicit gross prior-year movement line was located in the notes.",
+      "standardized_narrative": "Unable to extract reliable reserve figures or narrative from the provided images. The report images are low-resolution/rotated and OCR failed to produce usable numeric tables or movement notes, so no definitive statement on prior year development, opening reserves, or line-by-line reserve movements can be made.",
       "raw_causal_phrases": [],
-      "lob_movements": [
-        {
-          "line_of_business": "Aggregate",
-          "direction": "release",
-          "amount_gbp_m": -71.388,
-          "percentage": null,
-          "confidence": 0.8
-        }
-      ],
+      "lob_movements": [],
       "gross_premiums_written_gbp_m": 423.4,
       "gross_premium_mix": [
         {
@@ -388,106 +478,45 @@
           "percentage_of_total": 35.2
         }
       ],
-      "gross_premium_page": 34,
+      "gross_premium_page": null,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Primary reserve and prior-year movement figures were derived from the gross claims development table (claims triangle) on page 43 because a clear gross 'movement in prior year's provision for claims outstanding' note was not found. Opening reserves are taken as the prior-year closing gross claims from the triangle (584,167k). Prior-year development was calculated by comparing each older underwriting year's current estimate to its previous diagonal (triangle method) and summing for UW years 2011-2015; this is a fallback method per instructions. Gross premium total and premium mix were not clearly extractable from the scanned pages; gross premium total is an approximate read from the underwriting analysis table and premium mix entries were not reliably parsed. All monetary amounts are in the report's native currency (GBP). Confidence levels reflect use of the triangle as a fallback. [RAG OVERRIDE: Model said PYD=-71.388, RAG triangle computed 71.388. Using RAG value.] [RAG OVERRIDE: Model said opening_reserves=584.167, balance sheet gives 744.848m. Using RAG value.]",
+      "data_quality_notes": "The supplied PDF pages were provided as images with rotation and low legibility. Numeric tables and notes (Balance Sheet technical provisions, Movement in prior years provision for claims outstanding, and the Claims Development table) could not be reliably read or transcribed. Therefore key fields (opening reserves, prior year development, gross premiums and segmental premium mix, claims triangle) are returned as null/empty. If you can supply a higher-resolution PDF (text layer or upright pages) or the specific pages containing: (a) Balance Sheet - Technical provisions (claims outstanding) with prior-year column, and (b) the note titled 'Movement in prior year's provision for claims outstanding' or the claims development table, I can extract precise values and populate the JSON with confidence scores.",
       "_claims_triangle": {
-        "type": "gross",
+        "type": "none",
         "currency": "GBP",
-        "units": "thousands",
-        "page": 43,
-        "underwriting_years": [
-          2011,
-          2012,
-          2013,
-          2014,
-          2015,
-          2016,
-          2017
-        ],
-        "development_rows": [
-          [
-            -129388,
-            -136729,
-            -154209,
-            -148500,
-            -153707,
-            -125343,
-            -165196
-          ],
-          [
-            -247366,
-            -281831,
-            -311961,
-            -284075,
-            -287333,
-            -264557,
-            null
-          ],
-          [
-            -259468,
-            -301224,
-            -311865,
-            -277662,
-            -252753,
-            null,
-            null
-          ],
-          [
-            -254518,
-            -294753,
-            -292244,
-            -252538,
-            null,
-            null,
-            null
-          ],
-          [
-            -270539,
-            -296471,
-            -297039,
-            null,
-            null,
-            null,
-            null
-          ],
-          [
-            -266768,
-            -278716,
-            null,
-            null,
-            null,
-            null,
-            null
-          ],
-          [
-            -268044,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-          ]
-        ]
+        "units": "millions",
+        "page": null,
+        "underwriting_years": [],
+        "development_rows": []
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_457_2017_llm.pdf",
-      "content_hash": "a142d5d1c0488436cec14192a1fbe57c0572c65272a1aa52a248dbb9cc52d350",
-      "standardized_at": "2026-03-19T03:30:01.705654+00:00",
+      "content_hash": "5814b26479dda50460298e5dac4963e239736f986b17fb1b35cb253ba08dc595",
+      "standardized_at": "2026-09-11T13:00:42.995085+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 23344,
-        "output_tokens": 6239,
-        "total_tokens": 29583,
-        "cost_usd": 0.018314
+        "input_tokens": 24104,
+        "output_tokens": 1499,
+        "total_tokens": 25603,
+        "cost_usd": 0.009024
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -71.388,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 45,
+        "note": "filled a blank model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -562,8 +591,18 @@
             null
           ]
         ],
+        "row_labels": [
+          "At end of underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later"
+        ],
         "source_page": 45,
-        "entity": 457
+        "entity": 457,
+        "presentation_sign": "outflow"
       },
       "_adobe_lob": {
         "gross_premium_mix": [
@@ -723,12 +762,12 @@
       }
     }
   },
-  "total_cost_usd": 0.024007,
-  "total_tokens": 47598,
+  "total_cost_usd": 0.015936,
+  "total_tokens": 44720,
   "validation": {
     "passed": true,
-    "total_discrepancies": 15,
-    "within_tolerance": 15,
+    "total_discrepancies": 12,
+    "within_tolerance": 12,
     "hard_failures": 0,
     "hard_failure_details": []
   }

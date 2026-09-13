@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T09:10:46.221274+00:00",
+  "extraction_timestamp": "2026-09-13T04:07:51.036887+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -11,17 +13,17 @@
       "syndicate": 1183,
       "year": 2019,
       "opening_reserves_gbp_m": 1532.1,
-      "opening_reserves_page": 19,
+      "opening_reserves_page": 7,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": 20.0,
-      "prior_year_development_pct": 1.31,
-      "direction": "strengthening",
-      "prior_year_movement_page": 32,
+      "prior_year_development_gbp_m": -18.5,
+      "prior_year_development_pct": -1.21,
+      "direction": "release",
+      "prior_year_movement_page": 17,
       "prior_year_movement_confidence": 0.8,
-      "exact_reserve_text": "There has been a reassessment of the net provision for claims outstanding held at the previous year end. The release in 2019 amounted to $41.5m (2018: $42.8m)",
+      "exact_reserve_text": "There has been a reassessment of the net provision for claims outstanding held at the previous year end. The release in 2019 amounted to $41.5m (2018: $42.8m), attributable to the following classes of business:",
       "primary_causes": [
         "Favorable claims development",
-        "Adverse claims development"
+        "Other"
       ],
       "specific_events": [],
       "specific_years_affected": [],
@@ -32,9 +34,9 @@
           "event_year": 2019,
           "event_type": "political",
           "net_loss_gbp_m": null,
-          "loss_description": "largest claims in the current year",
+          "loss_description": "disturbances in Hong Kong",
           "lobs_affected": [],
-          "page": 8,
+          "page": 1,
           "confidence": 0.8
         },
         {
@@ -42,35 +44,36 @@
           "event_year": 2019,
           "event_type": "political",
           "net_loss_gbp_m": null,
-          "loss_description": "largest claims in the current year",
+          "loss_description": "disturbances in Chile",
           "lobs_affected": [],
-          "page": 8,
+          "page": 1,
           "confidence": 0.8
         },
         {
-          "event_name": "shipyard crane collapse",
+          "event_name": "a shipyard crane collapse",
           "event_year": 2019,
           "event_type": "man_made",
           "net_loss_gbp_m": null,
-          "loss_description": "largest claims in the current year",
+          "loss_description": "a shipyard crane collapse",
           "lobs_affected": [],
-          "page": 8,
+          "page": 1,
           "confidence": 0.8
         },
         {
-          "event_name": "refinery explosion",
+          "event_name": "a refinery explosion",
           "event_year": 2019,
           "event_type": "man_made",
           "net_loss_gbp_m": null,
-          "loss_description": "largest claims in the current year",
+          "loss_description": "a refinery explosion",
           "lobs_affected": [],
-          "page": 8,
+          "page": 1,
           "confidence": 0.8
         }
       ],
-      "standardized_narrative": "The syndicate reported a net release of $41.5 million in prior year claims provisions for 2019. This release was primarily driven by better attritional loss experience across several classes, notably Cargo, Property Lineslips, and Marine Hull, following remediation efforts in 2018. However, there was adverse development in Property.",
+      "standardized_narrative": "The syndicate reported a net release of $41.5m in prior year reserves for 2019, primarily driven by favourable claims development and remediation work in classes such as Cargo, Property Lineslips, and Marine Hull. However, the Property class experienced a strengthening. The report also noted significant current year large losses including political disturbances in Hong Kong and Chile, a shipyard crane collapse, and a refinery explosion.",
       "raw_causal_phrases": [
-        "better attritional loss experience across a number of classes most notable Cargo, Property Lineslips, and Marine Hull, following remediation work undertaken in 2018."
+        "more favourable claims experience",
+        "The improvement in the net claims ratio of 13.4% was primarily due to better attritional loss experience across a number of classes most notable Cargo, Property Lineslips, and Marine Hull, following remediation work undertaken in 2018."
       ],
       "lob_movements": [
         {
@@ -81,14 +84,14 @@
           "confidence": 1.0
         },
         {
-          "line_of_business": "Political Risk",
+          "line_of_business": "Other",
           "direction": "release",
           "amount_gbp_m": -16.3,
           "percentage": null,
           "confidence": 1.0
         },
         {
-          "line_of_business": "Political Violence and War",
+          "line_of_business": "Other",
           "direction": "release",
           "amount_gbp_m": -4.7,
           "percentage": null,
@@ -179,15 +182,15 @@
           "percentage_of_total": 41.8
         }
       ],
-      "gross_premium_page": 7,
+      "gross_premium_page": 16,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "Monetary amounts are reported in USD, the native currency of the report, despite field names ending in '_gbp_m'. The prior year development figure is explicitly stated as 'net provision' in the report, not gross, as a gross breakdown was not provided for this specific movement. [RAG OVERRIDE: Model said PYD=-41.5, RAG triangle computed 20.0. Using RAG value.]",
+      "data_quality_notes": "The prior_year_development_gbp_m is a net figure as no gross figure was explicitly stated or derivable from the claims development triangle for prior years. The gross claims development triangle on page 20 does not show year-on-year development for older underwriting years, as the \"Current estimate\" row simply repeats the last reported development period value for each year. [RAG PYD NOT APPLIED: deterministic figure +20.000m has the opposite sign to both model values [-41.5, -41.5], which agree with each other; model values retained. Sign agreement between the models is not a reconciliation: where they differ in value the cohort and accrual scope of each still has to be settled from the filing (R140).] [CODE OVERRIDE: Model said PYD=-41.5, but code computed -18.5 from triangle (OVERRIDE from agreed triangles). Using code value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "millions",
-        "page": 39,
+        "page": 20,
         "underwriting_years": [
           2011,
           2012,
@@ -302,21 +305,23 @@
         ]
       },
       "source_type": "syndicate",
-      "source_file": "syndicate_reports\\pdfs\\syndicate_1183_2019.pdf",
-      "content_hash": "1c22275e6fe5bb660813a007ac81eeb124378ca76cc365543ec071bb788089bd",
-      "standardized_at": "2026-03-16T09:29:59.846211+00:00",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_1183_2019_llm.pdf",
+      "content_hash": "c033cf7cf6ee12acdc957f3110b511d6d30d49fb86d8f1599334459adbdbfb70",
+      "standardized_at": "2026-09-11T10:20:31.978559+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 16978,
-        "output_tokens": 2285,
-        "total_tokens": 24500,
-        "cost_usd": 0.010806
+        "input_tokens": 12215,
+        "output_tokens": 2587,
+        "total_tokens": 20893,
+        "cost_usd": 0.010132
       },
       "_rag_triangle": {
-        "type": "gross",
+        "type": "net",
         "currency": "USD",
         "units": "millions",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -428,6 +433,17 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "12 months",
+          "24 months",
+          "36 months",
+          "48 months",
+          "60 months",
+          "72 months",
+          "84 months",
+          "96 months",
+          "108 months"
         ],
         "source_page": 39,
         "entity": 1183
@@ -616,11 +632,11 @@
       "opening_reserves_gbp_m": 1532.1,
       "opening_reserves_page": 15,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": 20.0,
-      "prior_year_development_pct": 1.31,
-      "direction": "strengthening",
+      "prior_year_development_gbp_m": -18.5,
+      "prior_year_development_pct": -1.21,
+      "direction": "release",
       "prior_year_movement_page": 27,
-      "prior_year_movement_confidence": 0.5,
+      "prior_year_movement_confidence": 1.0,
       "exact_reserve_text": "There has been a reassessment of the net provision for claims outstanding held at the previous year end. The release in 2019 amounted to $41.5m (2018: $42.8m), attributable to the following classes of business:",
       "primary_causes": [
         "Favorable claims development",
@@ -628,86 +644,66 @@
         "Geopolitical events"
       ],
       "specific_events": [
-        "disturbances in Hong Kong",
-        "disturbances in Chile",
+        "disturbances in Hong Kong and Chile",
         "shipyard crane collapse",
         "explosion at a refinery plant"
       ],
       "specific_years_affected": [
+        2011,
+        2012,
+        2013,
+        2014,
+        2015,
+        2016,
+        2017,
         2018
       ],
-      "prior_year_events": [
-        {
-          "event_name": "Remediation work undertaken in 2018",
-          "event_year": 2018,
-          "impact_description": "Remediation work undertaken in 2018 improved attritional loss experience leading to favourable development in subsequent periods",
-          "lobs_affected": [
-            "Marine",
-            "Property",
-            "Treaty"
-          ],
-          "amount_gbp_m": null,
-          "confidence": 0.6
-        }
-      ],
+      "prior_year_events": [],
       "named_events": [
         {
-          "event_name": "Disturbances in Hong Kong",
-          "event_year": 2019,
-          "event_type": "man_made",
+          "event_name": "disturbances in Hong Kong and Chile",
+          "event_year": null,
+          "event_type": "political",
           "net_loss_gbp_m": null,
-          "loss_description": "Listed as one of the largest claims in the current year",
+          "loss_description": "the largest claims in the current year being the disturbances in Hong Kong and Chile",
           "lobs_affected": [
             "Marine",
             "Property"
           ],
           "page": 4,
-          "confidence": 0.8
+          "confidence": 1.0
         },
         {
-          "event_name": "Disturbances in Chile",
-          "event_year": 2019,
+          "event_name": "shipyard crane collapse",
+          "event_year": null,
           "event_type": "man_made",
           "net_loss_gbp_m": null,
-          "loss_description": "Listed as one of the largest claims in the current year",
-          "lobs_affected": [
-            "Marine",
-            "Property"
-          ],
-          "page": 4,
-          "confidence": 0.8
-        },
-        {
-          "event_name": "Shipyard crane collapse",
-          "event_year": 2019,
-          "event_type": "man_made",
-          "net_loss_gbp_m": null,
-          "loss_description": "Listed as one of the largest claims in the current year",
+          "loss_description": "the largest claims in the current year being ... a shipyard crane collapse",
           "lobs_affected": [
             "Marine"
           ],
           "page": 4,
-          "confidence": 0.8
+          "confidence": 1.0
         },
         {
-          "event_name": "Explosion at a refinery plant",
-          "event_year": 2019,
+          "event_name": "explosion at a refinery plant",
+          "event_year": null,
           "event_type": "man_made",
           "net_loss_gbp_m": null,
-          "loss_description": "Listed as one of the largest claims in the current year",
+          "loss_description": "the largest claims in the current year being ... the explosion at a refinery plant",
           "lobs_affected": [
-            "Energy",
-            "Property"
+            "Property",
+            "Energy"
           ],
           "page": 4,
-          "confidence": 0.8
+          "confidence": 1.0
         }
       ],
-      "standardized_narrative": "The syndicate reported a net prior-year release in 2019 (net release $41.5m). This favourable movement was driven by improved attritional loss experience (notably in Cargo/Property lines) following remediation work in 2018 and a reduction in large loss activity. The report cites the largest current-year claims as disturbances in Hong Kong and Chile, a shipyard crane collapse and an explosion at a refinery plant. A number of classes (notably Marine and Property) contributed to the prior-year movement. The report only publishes the net (after-reinsurance) prior-year release; a gross prior-year movement figure is not explicitly stated in the movement note and therefore is not reported here.",
+      "standardized_narrative": "Syndicate 1183 opened the year with gross claims outstanding of 1,532.1 (USD millions). The syndicate recorded a net release of 41.5 (USD millions) in respect of prior years, largely driven by favourable attritional claims experience across Cargo, Property lineslips and Marine Hull and by a reduction in large losses. Specific large losses cited include disturbances in Hong Kong and Chile, a shipyard crane collapse and an explosion at a refinery plant. A gross movement reconciliation is shown in the technical provisions note, but the explicit quantified prior-year movement is presented on a net (after reinsurance) basis in the movement note and has therefore been used as the primary quantified PYD here.",
       "raw_causal_phrases": [
-        "There has been a reassessment of the net provision for claims outstanding held at the previous year end. The release in 2019 amounted to $41.5m (2018: $42.8m), attributable to the following classes of business:",
         "The improvement in the net claims ratio of 13.4% was primarily due to better attritional loss experience across a number of classes most notable Cargo, Property Lineslips, and Marine Hull, following remediation work undertaken in 2018.",
-        "Large losses decreased by $5.6m, with the largest claims in the current year being the disturbances in Hong Kong and Chile, a shipyard crane collapse and the explosion at a refinery plant."
+        "Large losses decreased by $5.6m, with the largest claims in the current year being the disturbances in Hong Kong and Chile, a shipyard crane collapse and the explosion at a refinery plant.",
+        "There has been a reassessment of the net provision for claims outstanding held at the previous year end. The release in 2019 amounted to $41.5m (2018: $42.8m), attributable to the following classes of business:"
       ],
       "lob_movements": [
         {
@@ -715,21 +711,42 @@
           "direction": "release",
           "amount_gbp_m": -20.3,
           "percentage": null,
-          "confidence": 0.6
+          "confidence": 1.0
+        },
+        {
+          "line_of_business": "Political Risk",
+          "direction": "release",
+          "amount_gbp_m": -16.3,
+          "percentage": null,
+          "confidence": 1.0
+        },
+        {
+          "line_of_business": "Political Violence and War",
+          "direction": "release",
+          "amount_gbp_m": -4.7,
+          "percentage": null,
+          "confidence": 1.0
         },
         {
           "line_of_business": "Property",
           "direction": "strengthening",
           "amount_gbp_m": 6.9,
           "percentage": null,
-          "confidence": 0.6
+          "confidence": 1.0
         },
         {
-          "line_of_business": "Reinsurance - Specialty",
+          "line_of_business": "Speciality",
           "direction": "release",
           "amount_gbp_m": -2.7,
           "percentage": null,
-          "confidence": 0.5
+          "confidence": 1.0
+        },
+        {
+          "line_of_business": "Treaty",
+          "direction": "release",
+          "amount_gbp_m": -4.4,
+          "percentage": null,
+          "confidence": 1.0
         }
       ],
       "gross_premiums_written_gbp_m": 950.5,
@@ -798,7 +815,7 @@
       "gross_premium_page": 3,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "The report explicitly discloses a net prior-year release of $41.5m (note wording states 'net provision'). A GROSS prior-year movement (insurance liabilities column) is not provided in the movement note. The gross claims development triangle is present and has been captured, but extracting a precise aggregate gross prior-year movement from the triangle requires detailed diagonal comparisons and is ambiguous from the scanned image quality. Therefore the gross prior-year development figure is not reported (null). Users should note that amounts shown in the movement note are NET (after reinsurance).",
+      "data_quality_notes": "Opening gross claims outstanding taken from Balance Sheet (gross claims outstanding) - high confidence. The explicit quantified prior year movement is presented in the 'Movement in prior year's provision for claims outstanding' note as a NET release of $41.5m; a GROSS prior-year movement figure was not provided in that note. The Technical Provisions reconciliation shows a gross 'movement in the provision' for claims outstanding of (12.7) but this line includes current year movements and therefore was not used as the prior-year development figure per the extraction rules. Because no gross PYD total was given, the report's net PYD ($41.5m) has been used as a last-resort fallback and is flagged accordingly. [RAG PYD NOT APPLIED: deterministic figure +20.000m has the opposite sign to both model values [-41.5, -41.5], which agree with each other; model values retained. Sign agreement between the models is not a reconciliation: where they differ in value the cohort and accrual scope of each still has to be settled from the filing (R140).] [CODE OVERRIDE: Model said PYD=-41.5, but code computed -18.5 from triangle (OVERRIDE from agreed triangles). Using code value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
@@ -906,33 +923,35 @@
           ],
           [
             535.5,
-            493.6,
-            502.9,
-            592.8,
-            545.6,
-            605.3,
-            796.2,
-            647.5,
-            285.3
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
           ]
         ]
       },
       "source_type": "syndicate",
-      "source_file": "syndicate_reports\\pdfs\\syndicate_1183_2019.pdf",
-      "content_hash": "1c22275e6fe5bb660813a007ac81eeb124378ca76cc365543ec071bb788089bd",
-      "standardized_at": "2026-03-16T09:31:53.056320+00:00",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_1183_2019_llm.pdf",
+      "content_hash": "c033cf7cf6ee12acdc957f3110b511d6d30d49fb86d8f1599334459adbdbfb70",
+      "standardized_at": "2026-09-11T10:26:52.299873+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 46306,
-        "output_tokens": 9314,
-        "total_tokens": 55620,
-        "cost_usd": 0.030204
+        "input_tokens": 25972,
+        "output_tokens": 8269,
+        "total_tokens": 34241,
+        "cost_usd": 0.023031
       },
       "_rag_triangle": {
-        "type": "gross",
+        "type": "net",
         "currency": "USD",
         "units": "millions",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -1044,6 +1063,17 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "12 months",
+          "24 months",
+          "36 months",
+          "48 months",
+          "60 months",
+          "72 months",
+          "84 months",
+          "96 months",
+          "108 months"
         ],
         "source_page": 39,
         "entity": 1183
@@ -1227,12 +1257,12 @@
       }
     }
   },
-  "total_cost_usd": 0.04101,
-  "total_tokens": 80120,
+  "total_cost_usd": 0.033163,
+  "total_tokens": 55134,
   "validation": {
     "passed": true,
-    "total_discrepancies": 28,
-    "within_tolerance": 28,
+    "total_discrepancies": 29,
+    "within_tolerance": 29,
     "hard_failures": 0,
     "hard_failure_details": []
   }

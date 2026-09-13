@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T10:55:06.146108+00:00",
+  "extraction_timestamp": "2026-09-13T03:59:36.776664+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -13,17 +15,15 @@
       "opening_reserves_gbp_m": 226.7,
       "opening_reserves_page": 7,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": 62.2,
-      "prior_year_development_pct": 27.44,
+      "prior_year_development_gbp_m": 0.1,
+      "prior_year_development_pct": 0.04,
       "direction": "strengthening",
-      "prior_year_movement_page": 3,
+      "prior_year_movement_page": 20,
       "prior_year_movement_confidence": 0.8,
       "exact_reserve_text": "The Syndicate saw modest favourable prior year development in 2022, improving the loss ratio by 0.2pps (2021: 1.6pps). Favourable experience from prior year major losses was largely offset by adverse non-catastrophe related development across a handful of classes.",
       "primary_causes": [
         "Favorable claims development",
-        "Large loss development",
-        "Adverse claims development",
-        "Other"
+        "Adverse claims development"
       ],
       "specific_events": [],
       "specific_years_affected": [
@@ -32,39 +32,47 @@
         2019,
         2020
       ],
-      "prior_year_events": [],
+      "prior_year_events": [
+        {
+          "event_name": "COVID-19",
+          "event_year": 2020,
+          "impact_description": "reserves at 31 December 2022 are materially unchanged from those at 31 December 2021.",
+          "lobs_affected": [],
+          "amount_gbp_m": 0.0,
+          "confidence": 1.0
+        }
+      ],
       "named_events": [
         {
           "event_name": "Russia-Ukraine conflict",
           "event_year": 2022,
           "event_type": "geopolitical",
           "net_loss_gbp_m": null,
-          "loss_description": "limited exposure to the Russia-Ukraine conflict within the Casualty Treaty class and whole account quota share with Syndicate 2987, along with potential secondary impacts on classes such as Cyber; direct exposures within the Terrorism, Casualty Treaty, Marine War, Contingency and Political and Credit Risk classes",
+          "loss_description": "cause for uncertainty; Syndicate has analysed its potential exposures across its (re)insurance portfolio as well as the wider financial and operational challenges brought about by the conflict. The Syndicate has limited exposure to the Russia-Ukraine conflict within the Casualty Treaty class and whole account quota share with Syndicate 2987, along with potential secondary impacts on classes such as Cyber.",
           "lobs_affected": [
             "Casualty",
             "Treaty",
             "Cyber",
-            "Terrorism",
+            "Property",
             "Marine",
             "Energy",
-            "Contingency",
             "Professional Lines"
           ],
-          "page": 4,
-          "confidence": 0.8
+          "page": 10,
+          "confidence": 1.0
         },
         {
           "event_name": "COVID-19",
           "event_year": 2020,
           "event_type": "other",
           "net_loss_gbp_m": null,
-          "loss_description": "COVID-19 related reserves at 31 December 2022 are materially unchanged from those at 31 December 2021",
+          "loss_description": "COVID-19 related reserves at 31 December 2022 are materially unchanged from those at 31 December 2021.",
           "lobs_affected": [],
           "page": 10,
-          "confidence": 0.8
+          "confidence": 1.0
         }
       ],
-      "standardized_narrative": "The Syndicate experienced mixed prior year development in 2022, resulting in a slight gross strengthening of GBP 0.1m. This was driven by favourable experience from prior year major losses, which was largely offset by adverse non-catastrophe related development across a handful of classes. The report also noted an overall modest favourable prior year development, improving the loss ratio by 0.2pps.",
+      "standardized_narrative": "The syndicate experienced a modest gross strengthening of GBP 0.1m in prior year reserves for 2022, as calculated from the gross claims development triangle. This was driven by a mix of favourable experience from prior year major losses and adverse non-catastrophe related development across various classes. This contrasts with the narrative which described a \"modest favourable prior year development\" on a net loss ratio basis. COVID-19 related reserves remained unchanged. The Russia-Ukraine conflict and general economic inflation were noted as ongoing geopolitical and economic factors impacting the business.",
       "raw_causal_phrases": [
         "modest favourable prior year development",
         "improving the loss ratio by 0.2pps",
@@ -100,10 +108,10 @@
           "percentage_of_total": 65.5
         }
       ],
-      "gross_premium_page": 2,
+      "gross_premium_page": 18,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The narrative on page 3 states 'modest favourable prior year development', implying a release, but the calculation from the gross claims development triangle on page 20 indicates a slight gross strengthening of GBP 0.1m. The narrative also mentions 'favourable experience from prior year major losses was largely offset by adverse non-catastrophe related development', indicating mixed movements. [RAG OVERRIDE: Model said PYD=0.1, RAG triangle computed 62.2. Using RAG value.]",
+      "data_quality_notes": "The calculated prior year development from the gross claims development triangle (+0.1m strengthening) conflicts with the narrative on page 3 which states 'modest favourable prior year development' and 'improving the loss ratio by 0.2pps' (a net figure implying a release). The gross triangle calculation was prioritized as per instructions.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -170,15 +178,88 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_2988_2022_llm.pdf",
-      "content_hash": "8e6a49fcf0f5b0a974d58fd9c15ff187e2d7d27183015870eaaa751f37e13cf4",
-      "standardized_at": "2026-07-05T13:29:53.659431+00:00",
+      "content_hash": "70442a25acac0664661072df3436f616258565a0a9f5e8fb9d0d8051b15c404d",
+      "standardized_at": "2026-09-11T12:12:00.398064+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 11411,
-        "output_tokens": 1725,
-        "total_tokens": 22131,
-        "cost_usd": 0.007736
+        "input_tokens": 12215,
+        "output_tokens": 1762,
+        "total_tokens": 21817,
+        "cost_usd": 0.00807
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 0.1,
+        "model_value": 0.1,
+        "triangle_type": "gross",
+        "triangle_units": "millions",
+        "triangle_units_evidence": null,
+        "triangle_source_page": null,
+        "note": "confirmed by the model value"
+      },
+      "_rag_triangle": {
+        "type": "gross",
+        "currency": "GBP",
+        "units": "millions",
+        "underwriting_years": [
+          2017,
+          2018,
+          2019,
+          2020,
+          2021,
+          2022
+        ],
+        "development_rows": [
+          [
+            67.4,
+            49.3,
+            30.0,
+            71.4,
+            78.4,
+            88.8
+          ],
+          [
+            101.2,
+            87.7,
+            80.0,
+            129.1,
+            141.8,
+            null
+          ],
+          [
+            106.4,
+            91.7,
+            86.6,
+            128.8,
+            null,
+            null
+          ],
+          [
+            105.9,
+            93.8,
+            86.1,
+            null,
+            null,
+            null
+          ],
+          [
+            104.5,
+            95.1,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            104.1,
+            null,
+            null,
+            null,
+            null,
+            null
+          ]
+        ]
       },
       "_adobe_lob": {
         "gross_premium_mix": [
@@ -253,6 +334,13 @@
           "entity": 2988,
           "backend": "azure",
           "table_kind": "balance_sheet_liabilities"
+        },
+        "movement_semantics": {
+          "row_label": "Claims incurred in relation to prior underwriting years",
+          "row_index": 4,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": false,
+          "column_index": 1
         },
         "gross_prior_year_claims": 62.2,
         "ri_share_prior_year": -1.8,
@@ -350,118 +438,43 @@
       "opening_reserves_gbp_m": 226.7,
       "opening_reserves_page": 19,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": 62.2,
-      "prior_year_development_pct": 27.44,
+      "prior_year_development_gbp_m": 0.1,
+      "prior_year_development_pct": 0.04,
       "direction": "strengthening",
       "prior_year_movement_page": 46,
       "prior_year_movement_confidence": 0.8,
       "exact_reserve_text": "The Syndicate saw modest favourable prior year development in 2022, improving the loss ratio by 0.2pps (2021: 1.6pps). Favourable experience from prior year major losses was largely offset by adverse non-catastrophe related development across a handful of classes.",
       "primary_causes": [
         "Man-made catastrophe / large losses",
-        "Adverse claims development"
+        "Other"
       ],
       "specific_events": [],
-      "specific_years_affected": [],
+      "specific_years_affected": [
+        2017,
+        2018,
+        2019,
+        2020
+      ],
       "prior_year_events": [
         {
-          "event_name": "COVID-19 / pandemic effects",
+          "event_name": "COVID-19 / pandemic",
           "event_year": 2020,
-          "impact_description": "COVID-19 related reserves at 31 December 2022 are materially unchanged from those at 31 December 2021.",
+          "impact_description": "COVID-19 related reserves at 31 December 2022 are materially unchanged from those at 31 December 2021; syndicate has continued a comprehensive reserving approach for COVID-19 related losses.",
           "lobs_affected": [
             "Accident & Health",
-            "Aggregate"
+            "Other"
           ],
           "amount_gbp_m": null,
-          "confidence": 1.0
-        }
-      ],
-      "named_events": [
-        {
-          "event_name": "Russia-Ukraine conflict",
-          "event_year": 2022,
-          "event_type": "political",
-          "net_loss_gbp_m": null,
-          "loss_description": "The Syndicate has limited exposure within the Terrorism, Casualty Treaty, Marine War, Contingency and Political and Credit Risk classes, along with secondary impacts across the Cyber class. The Syndicate's exposures continue to be actively monitored and managed.",
-          "lobs_affected": [
-            "Reinsurance - Casualty",
-            "Marine",
-            "Cyber",
-            "Property",
-            "Accident & Health"
-          ],
-          "page": 27,
           "confidence": 0.8
-        },
-        {
-          "event_name": "COVID-19 / pandemic effects",
-          "event_year": 2020,
-          "event_type": "other",
-          "net_loss_gbp_m": null,
-          "loss_description": "COVID-19 related reserves at 31 December 2022 are materially unchanged from those at 31 December 2021.",
-          "lobs_affected": [
-            "Accident & Health",
-            "Contingency"
-          ],
-          "page": 27,
-          "confidence": 1.0
         }
       ],
-      "standardized_narrative": "Opening gross claims outstanding at 1 January 2022 were GBP 226.7m. Prior year development for 2022 was minimal (approximately a GBP 0.1m net strengthening on a gross basis), with the Syndicate describing modest favourable prior year development overall driven by favourable experience from prior year major losses but largely offset by adverse non-catastrophe related development across several classes. Key drivers cited include prior major loss movements and adverse development in non-catastrophe lines; COVID-19 related reserves are reported as materially unchanged and the Russia-Ukraine conflict is monitored for limited exposure.",
+      "named_events": [],
+      "standardized_narrative": "Syndicate 2988 reported modest favourable prior year development for 2022, driven by favourable experience on prior-year major losses but largely offset by adverse non-catastrophe related development across a handful of classes. The net effect was a small release of approximately GBP 0.4m (around 0.18% of opening gross claims outstanding).",
       "raw_causal_phrases": [
-        "The Syndicate saw modest favourable prior year development in 2022, improving the loss ratio by 0.2pps (2021: 1.6pps).",
+        "modest favourable prior year development in 2022, improving the loss ratio by 0.2pps (2021: 1.6pps).",
         "Favourable experience from prior year major losses was largely offset by adverse non-catastrophe related development across a handful of classes."
       ],
-      "lob_movements": [
-        {
-          "line_of_business": "Property",
-          "direction": "mixed",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.5
-        },
-        {
-          "line_of_business": "Casualty",
-          "direction": "mixed",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.5
-        },
-        {
-          "line_of_business": "Marine",
-          "direction": "mixed",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.5
-        },
-        {
-          "line_of_business": "Reinsurance - Casualty",
-          "direction": "mixed",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.5
-        },
-        {
-          "line_of_business": "Reinsurance - Property",
-          "direction": "mixed",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.5
-        },
-        {
-          "line_of_business": "Accident & Health",
-          "direction": "mixed",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.5
-        },
-        {
-          "line_of_business": "Cyber",
-          "direction": "mixed",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.5
-        }
-      ],
+      "lob_movements": [],
       "gross_premiums_written_gbp_m": 192.8,
       "gross_premium_mix": [
         {
@@ -493,7 +506,7 @@
       "gross_premium_page": 43,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "No explicit gross 'movement in prior year's provision for claims outstanding' note was found. Prior year development was therefore computed from the gross claims development table (claims triangle) as a last-resort source; this yields a very small net gross strengthening (~GBP 0.1m). Narrative elsewhere refers to 'modest favourable prior year development' (a release) which is directionally different from the triangle-derived aggregate by a very small amount; this could be due to differences in which years are included, reinsurance effects, or rounding. Prior-year reserve movement could not be located as a single explicit gross GBP figure in the movement notes, hence the reliance on the triangle (see confidence scores). [RAG OVERRIDE: Model said PYD=0.1, RAG triangle computed 62.2. Using RAG value.]",
+      "data_quality_notes": "Opening gross claims outstanding taken from Statement of Financial Position (Liabilities: Claims outstanding) prior year column. Prior year development calculated from the gross claims development triangle (Claims development table) by excluding the two most recent underwriting years (2022, 2021) and comparing the current estimate to the previous diagonal; this yields a small favourable movement (-GBP 0.4m). No explicit gross prior-year movement GBP m figure was stated in the movement note; narrative only gave pps improvement. No LOB-specific prior-year movement amounts were provided. [RAG OVERRIDE: Model said PYD=-0.4, RAG triangle computed 0.1. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -560,15 +573,88 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_2988_2022_llm.pdf",
-      "content_hash": "8e6a49fcf0f5b0a974d58fd9c15ff187e2d7d27183015870eaaa751f37e13cf4",
-      "standardized_at": "2026-07-05T13:30:55.801220+00:00",
+      "content_hash": "70442a25acac0664661072df3436f616258565a0a9f5e8fb9d0d8051b15c404d",
+      "standardized_at": "2026-09-11T12:14:14.136583+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 29371,
-        "output_tokens": 6618,
-        "total_tokens": 35989,
-        "cost_usd": 0.020579
+        "input_tokens": 30131,
+        "output_tokens": 4849,
+        "total_tokens": 34980,
+        "cost_usd": 0.017231
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 0.1,
+        "model_value": -0.4,
+        "triangle_type": "gross",
+        "triangle_units": "millions",
+        "triangle_units_evidence": null,
+        "triangle_source_page": null,
+        "note": "overrode the model value"
+      },
+      "_rag_triangle": {
+        "type": "gross",
+        "currency": "GBP",
+        "units": "millions",
+        "underwriting_years": [
+          2017,
+          2018,
+          2019,
+          2020,
+          2021,
+          2022
+        ],
+        "development_rows": [
+          [
+            67.4,
+            49.3,
+            30.0,
+            71.4,
+            78.4,
+            88.8
+          ],
+          [
+            101.2,
+            87.7,
+            80.0,
+            129.1,
+            141.8,
+            null
+          ],
+          [
+            106.4,
+            91.7,
+            86.6,
+            128.8,
+            null,
+            null
+          ],
+          [
+            105.9,
+            93.8,
+            86.1,
+            null,
+            null,
+            null
+          ],
+          [
+            104.5,
+            95.1,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            104.1,
+            null,
+            null,
+            null,
+            null,
+            null
+          ]
+        ]
       },
       "_adobe_lob": {
         "gross_premium_mix": [
@@ -643,6 +729,13 @@
           "entity": 2988,
           "backend": "azure",
           "table_kind": "balance_sheet_liabilities"
+        },
+        "movement_semantics": {
+          "row_label": "Claims incurred in relation to prior underwriting years",
+          "row_index": 4,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": false,
+          "column_index": 1
         },
         "gross_prior_year_claims": 62.2,
         "ri_share_prior_year": -1.8,
@@ -735,12 +828,12 @@
       }
     }
   },
-  "total_cost_usd": 0.028315,
-  "total_tokens": 58120,
+  "total_cost_usd": 0.025301,
+  "total_tokens": 56797,
   "validation": {
     "passed": true,
-    "total_discrepancies": 21,
-    "within_tolerance": 21,
+    "total_discrepancies": 17,
+    "within_tolerance": 17,
     "hard_failures": 0,
     "hard_failure_details": []
   }

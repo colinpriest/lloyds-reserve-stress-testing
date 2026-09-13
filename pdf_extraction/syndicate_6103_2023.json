@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T12:05:38.451400+00:00",
+  "extraction_timestamp": "2026-09-13T03:57:44.423464+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -16,26 +18,26 @@
       "prior_year_development_gbp_m": -1.735,
       "prior_year_development_pct": -2.92,
       "direction": "release",
-      "prior_year_movement_page": 23,
-      "prior_year_movement_confidence": 1.0,
+      "prior_year_movement_page": 25,
+      "prior_year_movement_confidence": 0.8,
       "exact_reserve_text": "The movement in the net provisions for claims includes an improvement of GBP 3.4m in respect of reserves set in prior years (2022: deterioration of GBP 3.4m).",
       "primary_causes": [
         "Favorable claims development"
       ],
       "specific_events": [],
       "specific_years_affected": [
-        2020
+        2021
       ],
       "prior_year_events": [
         {
-          "event_name": "RITC 2020 YOA commuted into Syndicate 2791",
-          "event_year": 2020,
-          "impact_description": "Commutation of the 2020 Year of Account into Syndicate 2791 resulted in a gross release of claims outstanding for Syndicate 6103.",
+          "event_name": "Hurricane Ian",
+          "event_year": 2022,
+          "impact_description": "projecting ultimate gross losses of $44.5m",
           "lobs_affected": [
             "Reinsurance - Property"
           ],
-          "amount_gbp_m": -7.172,
-          "confidence": 1.0
+          "amount_gbp_m": null,
+          "confidence": 0.8
         }
       ],
       "named_events": [
@@ -56,29 +58,19 @@
           "event_year": 2023,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "not material",
+          "loss_description": "limited insured values and as such, MAP's and the industry loss is not material.",
           "lobs_affected": [
             "Reinsurance - Property"
           ],
-          "page": 15,
+          "page": 24,
           "confidence": 1.0
         }
       ],
-      "standardized_narrative": "Syndicate 6103 reported a gross prior year reserve release of GBP 7.172 million for the 2023 financial year, primarily driven by the commutation of the 2020 Year of Account into Syndicate 2791. This contributed to an overall net improvement in prior year claims provisions. The syndicate's business is exclusively US property catastrophe reinsurance.",
+      "standardized_narrative": "The syndicate experienced a gross prior year reserve release of GBP 1.735 million, representing a 2.92% reduction in opening gross claims outstanding. This favorable development was primarily identified from the 2021 underwriting year. The report notes a net improvement of GBP 3.4m in prior year provisions. The syndicate's business is predominantly US property catastrophe reinsurance. Named events include Hurricane Ian (2022) with projected ultimate gross losses of $44.5m, and Hurricane Idalia (2023) which had an immaterial impact.",
       "raw_causal_phrases": [
-        "The movement in the net provisions for claims includes an improvement of GBP 3.4m in respect of reserves set in prior years",
-        "RITC 2020 YOA commuted into Syndicate 2791",
-        "overall surplus in ultimate claims of GBP 2.9m"
+        "an improvement of GBP 3.4m in respect of reserves set in prior years"
       ],
-      "lob_movements": [
-        {
-          "line_of_business": "Reinsurance - Property",
-          "direction": "release",
-          "amount_gbp_m": -7.172,
-          "percentage": -12.06,
-          "confidence": 1.0
-        }
-      ],
+      "lob_movements": [],
       "gross_premiums_written_gbp_m": 61.888,
       "gross_premium_mix": [
         {
@@ -90,7 +82,7 @@
       "gross_premium_page": 16,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The `prior_year_development_gbp_m` is based on the gross 'RITC 2020 YOA commuted into Syndicate 2791' figure from the Claims Outstanding note, which is a direct gross movement. The `exact_reserve_text` quotes a net improvement figure of GBP 3.4m, which differs from the gross RITC figure. [RAG OVERRIDE: Model said PYD=-7.172, RAG triangle computed -1.735. Using RAG value.]",
+      "data_quality_notes": "Prior year development amount is gross, calculated from the claims development triangle for the 2021 underwriting year. The narrative text on page 23 refers to a net improvement of GBP 3.4m. Gross premium mix is inferred from narrative descriptions as no segmental analysis table is provided.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -121,20 +113,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_6103_2023_llm.pdf",
-      "content_hash": "31d0b665ee4f5928869139d3fede91bb7ccd7998e21128382015c5cae69e4151",
-      "standardized_at": "2026-07-06T02:14:05.275112+00:00",
+      "content_hash": "0e13213594dfddc81c15fca42fbb110b515e4b8f69b70e2f50f866c0b0f7204c",
+      "standardized_at": "2026-09-11T13:23:58.653007+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 12701,
-        "output_tokens": 1261,
-        "total_tokens": 20595,
-        "cost_usd": 0.006963
+        "input_tokens": 13505,
+        "output_tokens": 1132,
+        "total_tokens": 19064,
+        "cost_usd": 0.006882
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -1.735,
+        "model_value": -1.735,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 58,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2021,
           2022,
@@ -156,6 +160,11 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "12 months",
+          "24 months",
+          "36 months"
         ],
         "source_page": 58,
         "entity": 6103
@@ -306,7 +315,7 @@
       "prior_year_development_gbp_m": -1.735,
       "prior_year_development_pct": -2.92,
       "direction": "release",
-      "prior_year_movement_page": 25,
+      "prior_year_movement_page": 55,
       "prior_year_movement_confidence": 0.8,
       "exact_reserve_text": "The movement in the net provisions for claims includes an improvement of GBP 3.4m in respect of reserves set in prior years (2022: deterioration of GBP 3.4m).",
       "primary_causes": [
@@ -320,14 +329,24 @@
       ],
       "prior_year_events": [
         {
+          "event_name": "RITC 2020 YOA commuted into Syndicate 2791",
+          "event_year": 2020,
+          "impact_description": "Commutation of the 2020 year of account into Syndicate 2791 reduced the syndicate's gross claims outstanding by GBP 7,172k in the year.",
+          "lobs_affected": [
+            "Property"
+          ],
+          "amount_gbp_m": -7.172,
+          "confidence": 1.0
+        },
+        {
           "event_name": "Hurricane Ian",
           "event_year": 2022,
-          "impact_description": "Projected ultimate gross losses of $44.5m for Hurricane Ian, of which $33.2m had been incurred at year end; impacted the 2022 year of account reserves",
+          "impact_description": "Major US Gulf hurricane impacting predominantly Florida; projected ultimate gross losses were reported for 2022 and impacted reserves/claims development for the 2022 year.",
           "lobs_affected": [
             "Property"
           ],
           "amount_gbp_m": null,
-          "confidence": 0.9
+          "confidence": 0.6
         }
       ],
       "named_events": [
@@ -336,38 +355,37 @@
           "event_year": 2022,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "Projecting ultimate gross losses of $44.5m, of which $33.2m had been incurred at year end",
+          "loss_description": "Projected ultimate gross losses of $44.5m for the syndicate's exposure; majority of insured loss in Florida.",
           "lobs_affected": [
             "Property"
           ],
-          "page": 3,
-          "confidence": 0.9
+          "page": 6,
+          "confidence": 0.7
         },
         {
           "event_name": "Hurricane Idalia",
           "event_year": 2023,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "Limited insured values and as such, MAP's and the industry loss is not material",
+          "loss_description": "Made landfall in August 2023 as a category 3 near Keaton Beach, Florida where insured values were limited and the syndicate's and the industry's loss was not material.",
           "lobs_affected": [
             "Property"
           ],
-          "page": 24,
-          "confidence": 0.9
+          "page": 54,
+          "confidence": 0.8
         }
       ],
-      "standardized_narrative": "Gross claims outstanding decreased from GBP 59.471m at the opening of the year to GBP 35.077m at 31 December 2023. Prior-year development from underwriting years at or before 2021 produced a small gross release (approximately GBP 1.735m), driven by favourable claims development and payments, partly influenced by commutation/Reinsurance-to-Close activity and foreign exchange movements. The syndicate writes US property catastrophe reinsurance and the reserve movements relate predominantly to Property catastrophe lines.",
+      "standardized_narrative": "The syndicate's opening gross claims outstanding at 1 January 2023 was GBP 59.471m. Analysis of the claims development triangle shows a modest favourable development on prior underwriting years (primarily 2021) of approximately GBP 1.735m (a ~2.9% release of opening gross claims). The report also notes a net improvement in prior years of GBP 3.4m (net of reinsurance). The movement reflects generally favourable claims development rather than major reserve strengthening, with notable items during the year including commutation/RITC activity and US hurricane activity that primarily impacted recent years.",
       "raw_causal_phrases": [
         "The movement in the net provisions for claims includes an improvement of GBP 3.4m in respect of reserves set in prior years (2022: deterioration of GBP 3.4m).",
-        "In 2023, there has been an overall surplus in ultimate claims of GBP 2.9m (2022: deficit of GBP 1.7m).",
-        "RITC 2020 YOA commuted into Syndicate 2791"
+        "There has been an overall surplus in ultimate claims of GBP 2.9m (2022: deficit of GBP 1.7m)."
       ],
       "lob_movements": [
         {
           "line_of_business": "Property",
           "direction": "release",
           "amount_gbp_m": -1.735,
-          "percentage": -2.92,
+          "percentage": null,
           "confidence": 0.8
         }
       ],
@@ -379,15 +397,15 @@
           "percentage_of_total": 100.0
         }
       ],
-      "gross_premium_page": 41,
-      "gross_premium_confidence": 1.0,
+      "gross_premium_page": 47,
+      "gross_premium_confidence": 0.8,
       "currency": "GBP",
-      "data_quality_notes": "No explicit gross 'movement in prior year's provision' line was presented. Prior-year development (gross) was calculated from the published gross claims development triangle (page 25) giving an approximate gross release of GBP 1.735m. The notes also state a net improvement of GBP 3.4m (net of reinsurance) which differs from the gross triangle-based calculation. RITC commutations and foreign exchange movements materially affect comparisons and may distort the triangle; amounts in the report are presented in GBP '000 and have been converted to millions for this output.",
+      "data_quality_notes": "Prior-year development (gross) was calculated from the gross claims development triangle (converted from GBP '000 to GBP m). The report frequently quotes net (after reinsurance) prior-year movements in narrative; where gross movements were not explicitly stated, the triangle was used. RITC and commutations are present in the movements and can distort simple comparisons. Some narrative figures are net of reinsurance (not used for gross PYD) and some event losses are quoted in USD without direct GBP conversion - these were left as null where GBP quantification was not provided.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
-        "units": "thousands",
-        "page": 25,
+        "units": "millions",
+        "page": 55,
         "underwriting_years": [
           2021,
           2022,
@@ -395,17 +413,17 @@
         ],
         "development_rows": [
           [
-            44808,
-            57366,
-            22126
+            44.808,
+            57.366,
+            22.126
           ],
           [
-            43253,
-            56188,
+            43.253,
+            56.188,
             null
           ],
           [
-            41518,
+            41.518,
             null,
             null
           ]
@@ -413,20 +431,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_6103_2023_llm.pdf",
-      "content_hash": "31d0b665ee4f5928869139d3fede91bb7ccd7998e21128382015c5cae69e4151",
-      "standardized_at": "2026-07-06T02:15:05.403933+00:00",
+      "content_hash": "0e13213594dfddc81c15fca42fbb110b515e4b8f69b70e2f50f866c0b0f7204c",
+      "standardized_at": "2026-09-11T13:26:11.016894+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 25808,
-        "output_tokens": 5721,
-        "total_tokens": 31529,
-        "cost_usd": 0.017894
+        "input_tokens": 26568,
+        "output_tokens": 6505,
+        "total_tokens": 33073,
+        "cost_usd": 0.019652
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -1.735,
+        "model_value": -1.735,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 58,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2021,
           2022,
@@ -448,6 +478,11 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "12 months",
+          "24 months",
+          "36 months"
         ],
         "source_page": 58,
         "entity": 6103
@@ -590,12 +625,12 @@
       }
     }
   },
-  "total_cost_usd": 0.024857,
-  "total_tokens": 52124,
+  "total_cost_usd": 0.026534,
+  "total_tokens": 52137,
   "validation": {
     "passed": true,
-    "total_discrepancies": 19,
-    "within_tolerance": 19,
+    "total_discrepancies": 15,
+    "within_tolerance": 15,
     "hard_failures": 0,
     "hard_failure_details": []
   }

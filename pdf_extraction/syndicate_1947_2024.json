@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T10:00:07.151506+00:00",
+  "extraction_timestamp": "2026-09-13T04:03:31.714882+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -22,27 +24,20 @@
       "primary_causes": [
         "Economic inflation / claims cost inflation",
         "Social inflation / litigation trends",
-        "Reserve methodology change",
-        "Favorable claims development",
-        "Adverse claims development",
-        "Natural catastrophe events"
+        "Other"
       ],
       "specific_events": [],
       "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "The syndicate experienced a gross prior year reserve strengthening of GBP 5.651 million, representing 3.34% of its opening gross claims outstanding. This strengthening is attributed to various factors including the continued heightened inflation environment, social inflation trends, and adjustments from actuarial methodologies and past claims experience. The syndicate also monitors climate change risks which can impact reserving requirements.",
+      "standardized_narrative": "The syndicate experienced a gross prior year reserve strengthening of GBP 5.651 million in 2024, representing 3.34% of its opening gross claims outstanding. This strengthening is attributed to the continued heightened inflation environment, social inflation trends, and the inherent subjectivity and volatility in claims estimation. No specific events or affected prior years were quantified.",
       "raw_causal_phrases": [
-        "subjectivity inherent in estimating the impact of claims events",
-        "statistical techniques of estimation applied by the Syndicate managing agent's actuaries",
-        "projecting from past experience the development of claims over time",
-        "variations in business accepted and the underlying terms and conditions",
+        "subjectivity inherent in estimating the impact of claims events that have occurred but for which the eventual outcome remains uncertain",
+        "high degree of volatility arises from projections",
         "output from rating and other models of business accepted and assessments of underwriting conditions",
-        "robust application of actuarial methodologies",
-        "reassessment of methodologies where appropriate",
-        "continued heightened inflation environment on claims reserves",
+        "continued heightened inflation environment",
         "social inflation trends",
-        "climate change may adversely affect reserving requirements"
+        "climate change"
       ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 56.0,
@@ -71,7 +66,7 @@
       "gross_premium_page": 16,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The prior year development figure is taken directly from Note 17 'Technical provisions' table, 'Change in estimates of prior year provisions' (Gross). A calculation from the gross claims development triangle yields a different figure (GBP 9.412m strengthening), but the direct note is preferred. [RAG OVERRIDE: Model said PYD=5.651, RAG triangle computed 9.412. Using RAG value.]",
+      "data_quality_notes": "Prior year development figure taken from 'Change in estimates of prior year provisions' in Note 17 Technical Provisions table, as it is an explicit gross figure. This differs from the figure derived from the claims development triangle. [RAG OVERRIDE: Model said PYD=5.651, RAG triangle computed 9.412. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -154,20 +149,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_1947_2024_llm.pdf",
-      "content_hash": "c4125ed48961002f0b95541a3619564ae20025f7aa0bd7b018dcdf0b5b2ec35b",
-      "standardized_at": "2026-07-05T22:17:06.049056+00:00",
+      "content_hash": "37e1ff6685216bf4629fc04440ca358865ebdadeb368bc75cd2c2fcfcfda5190",
+      "standardized_at": "2026-09-11T14:34:36.919868+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 11411,
-        "output_tokens": 1235,
-        "total_tokens": 16244,
-        "cost_usd": 0.006511
+        "input_tokens": 12215,
+        "output_tokens": 1277,
+        "total_tokens": 19389,
+        "cost_usd": 0.006857
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 9.412,
+        "model_value": 5.651,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 89,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2018,
           2019,
@@ -242,6 +249,15 @@
             null
           ]
         ],
+        "row_labels": [
+          "claims at the end of the underwriting year",
+          "one year later",
+          "two years later",
+          "three years later",
+          "four years later",
+          "five years later",
+          "six years later"
+        ],
         "source_page": 89,
         "entity": 1947
       },
@@ -305,6 +321,13 @@
           "entity": 1947,
           "backend": "azure",
           "table_kind": "provisions_movement"
+        },
+        "movement_semantics": {
+          "row_label": "Change in estimates of prior year provisions",
+          "row_index": 6,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": true,
+          "column_index": 1
         },
         "gross_prior_year_claims": 5.7,
         "ri_share_prior_year": -0.2,
@@ -454,48 +477,19 @@
       "primary_causes": [
         "Economic inflation / claims cost inflation",
         "Social inflation / litigation trends",
-        "Other"
+        "Adverse claims development"
       ],
       "specific_events": [],
       "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "Gross claims outstanding at 1 January 2024 were GBP 169.218m. During 2024 the Syndicate recorded a gross strengthening of prior year provisions of GBP 5.651m (approximately 3.34% of opening gross reserves). The annual reserve movement is disclosed in the technical provisions reconciliation and the Syndicate cites economic inflation, social inflation/litigation trends and climate-related considerations as factors taken into account when setting reserving assumptions. The report does not attribute the prior year strengthening to any single named event or specific underwriting year.",
+      "standardized_narrative": "The Syndicate's opening gross claims outstanding at 1 January 2024 was GBP 169.218m. During 2024 there was an adverse movement in prior year estimates (gross) of GBP 5.651m (strengthening of reserves), recorded as \"Change in estimates of prior year provisions\". Management commentary indicates consideration of heightened economic inflation and social inflation / litigation trends when setting reserving assumptions, which contributed to the reserve strengthening.",
       "raw_causal_phrases": [
+        "Change in estimates of prior year provisions 5,651 (248) 5,403",
         "Management has considered the effects of the continued heightened inflation environment on claims reserves and has made appropriate allowance in the reserve results.",
-        "Specific considerations were made around current economic circumstances, social inflation trends and the potential impact to business portfolio mix when setting reserving assumptions.",
-        "HMA and the Syndicate are also mindful that there is a risk that climate change may adversely affect reserving requirements and monitors its climate-related exposure closely, assessing current and future climate change risk in a variety of ways, including stress and scenario testing, over short and long term time horizons."
+        "Specific considerations were made around current economic circumstances, social inflation trends and the potential impact to business portfolio mix when setting reserving assumptions."
       ],
-      "lob_movements": [
-        {
-          "line_of_business": "Property",
-          "direction": "strengthening",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.5
-        },
-        {
-          "line_of_business": "Casualty",
-          "direction": "strengthening",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.5
-        },
-        {
-          "line_of_business": "Marine",
-          "direction": "strengthening",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.5
-        },
-        {
-          "line_of_business": "Treaty",
-          "direction": "strengthening",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.5
-        }
-      ],
+      "lob_movements": [],
       "gross_premiums_written_gbp_m": 56.0,
       "gross_premium_mix": [
         {
@@ -522,7 +516,7 @@
       "gross_premium_page": 36,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior year movement (GBP 5,651k) sourced from the 'Claims outstanding' technical provisions reconciliation line 'Change in estimates of prior year provisions' (gross). No standalone explanatory sentence quantifying the gross prior year movement was present - the table row has been quoted verbatim. No breakdown of the prior year movement by line of business is provided in the report, so LOB-level amounts are not available. [RAG OVERRIDE: Model said PYD=5.651, RAG triangle computed 9.412. Using RAG value.]",
+      "data_quality_notes": "Prior year development (gross) taken from Note 17 'Change in estimates of prior year provisions' (gross = GBP 5,651k). Exact reserve text is a table row rather than a descriptive sentence. No LOB-specific prior-year reserve movements are provided. All amounts in the financial statements are presented in GBP 000; converted here to millions. Claims development triangle is available and used as gross source; no explicit named prior-year events quantified against PYD were found. [RAG OVERRIDE: Model said PYD=5.651, RAG triangle computed 9.412. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -605,20 +599,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_1947_2024_llm.pdf",
-      "content_hash": "c4125ed48961002f0b95541a3619564ae20025f7aa0bd7b018dcdf0b5b2ec35b",
-      "standardized_at": "2026-07-05T22:18:04.902154+00:00",
+      "content_hash": "37e1ff6685216bf4629fc04440ca358865ebdadeb368bc75cd2c2fcfcfda5190",
+      "standardized_at": "2026-09-11T14:36:06.519431+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 31020,
-        "output_tokens": 5399,
-        "total_tokens": 36419,
-        "cost_usd": 0.018553
+        "input_tokens": 31780,
+        "output_tokens": 4406,
+        "total_tokens": 36186,
+        "cost_usd": 0.016757
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 9.412,
+        "model_value": 5.651,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 89,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2018,
           2019,
@@ -693,6 +699,15 @@
             null
           ]
         ],
+        "row_labels": [
+          "claims at the end of the underwriting year",
+          "one year later",
+          "two years later",
+          "three years later",
+          "four years later",
+          "five years later",
+          "six years later"
+        ],
         "source_page": 89,
         "entity": 1947
       },
@@ -756,6 +771,13 @@
           "entity": 1947,
           "backend": "azure",
           "table_kind": "provisions_movement"
+        },
+        "movement_semantics": {
+          "row_label": "Change in estimates of prior year provisions",
+          "row_index": 6,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": true,
+          "column_index": 1
         },
         "gross_prior_year_claims": 5.7,
         "ri_share_prior_year": -0.2,
@@ -891,12 +913,12 @@
       }
     }
   },
-  "total_cost_usd": 0.025064,
-  "total_tokens": 52663,
+  "total_cost_usd": 0.023614,
+  "total_tokens": 55575,
   "validation": {
     "passed": true,
-    "total_discrepancies": 24,
-    "within_tolerance": 24,
+    "total_discrepancies": 17,
+    "within_tolerance": 17,
     "hard_failures": 0,
     "hard_failure_details": []
   }

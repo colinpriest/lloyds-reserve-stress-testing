@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T12:04:52.670026+00:00",
+  "extraction_timestamp": "2026-09-13T03:57:40.757855+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -21,6 +23,7 @@
       "exact_reserve_text": "In 2016, there has been an overall surplus in ultimate claims of GBP 0.7m (2015: GBP 0.6m) due primarily to a reduction in claims estimates as uncertainty around catastrophe exposure unwinds. 2014 at 24 months included a reduction in respect of reserves required for Superstorm Sandy.",
       "primary_causes": [
         "Favorable claims development",
+        "IBNR recalibration",
         "Natural catastrophe events"
       ],
       "specific_events": [
@@ -33,7 +36,7 @@
         {
           "event_name": "Superstorm Sandy",
           "event_year": 2012,
-          "impact_description": "reduction in respect of reserves required for Superstorm Sandy",
+          "impact_description": "reduction in reserves required for Superstorm Sandy, contributing to overall surplus in ultimate claims as uncertainty unwinds.",
           "lobs_affected": [
             "Reinsurance - Property"
           ],
@@ -47,57 +50,61 @@
           "event_year": 2014,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "benign loss year, affected only by certain Mid-West tornado activity",
+          "loss_description": "affected 2014 as a benign loss year",
           "lobs_affected": [
             "Reinsurance - Property"
           ],
           "page": 3,
-          "confidence": 0.8
+          "confidence": 0.5
         },
         {
-          "event_name": "Texas tornado activity",
+          "event_name": "Significant tornado activity in Texas",
           "event_year": 2016,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "Significant tornado activity in Texas... has elevated the incurred loss ratio somewhat",
+          "loss_description": "elevated the incurred loss ratio somewhat",
           "lobs_affected": [
             "Reinsurance - Property"
           ],
           "page": 4,
-          "confidence": 0.8
+          "confidence": 0.5
         },
         {
           "event_name": "Hurricane Matthew",
           "event_year": 2016,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "losses from Hurricane Matthew has elevated the incurred loss ratio somewhat",
+          "loss_description": "elevated the incurred loss ratio somewhat",
           "lobs_affected": [
             "Reinsurance - Property"
           ],
           "page": 4,
+          "confidence": 0.5
+        },
+        {
+          "event_name": "Superstorm Sandy",
+          "event_year": 2012,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "reduction in respect of reserves required for Superstorm Sandy for 2014 year of account at 24 months",
+          "lobs_affected": [
+            "Reinsurance - Property"
+          ],
+          "page": 28,
           "confidence": 0.8
         }
       ],
-      "standardized_narrative": "In 2016, Syndicate 6103 reported an overall surplus of GBP 0.7 million in ultimate claims, primarily due to a reduction in claims estimates as uncertainty around catastrophe exposure unwinds. This favorable development included a reduction in reserves for Superstorm Sandy from the 2014 underwriting year.",
+      "standardized_narrative": "Syndicate 6103 reported an overall gross surplus in ultimate claims of GBP 0.7 million for 2016, indicating a release of prior year reserves. This favorable development was primarily attributed to a reduction in claims estimates as uncertainty around catastrophe exposure unwound. Specifically, a reduction in reserves for Superstorm Sandy (2012 event) for the 2014 year of account contributed to this surplus.",
       "raw_causal_phrases": [
         "overall surplus in ultimate claims of GBP 0.7m",
-        "due primarily to a reduction in claims estimates as uncertainty around catastrophe exposure unwinds",
+        "reduction in claims estimates as uncertainty around catastrophe exposure unwinds",
         "2014 at 24 months included a reduction in respect of reserves required for Superstorm Sandy"
       ],
-      "lob_movements": [
-        {
-          "line_of_business": "Reinsurance - Property",
-          "direction": "release",
-          "amount_gbp_m": -0.7,
-          "percentage": null,
-          "confidence": 0.8
-        }
-      ],
+      "lob_movements": [],
       "gross_premiums_written_gbp_m": 4.871,
       "gross_premium_mix": [
         {
-          "line_of_business": "Reinsurance - Property",
+          "line_of_business": "Reinsurance accepted",
           "amount_gbp_m": 4.871,
           "percentage_of_total": 100.0
         }
@@ -105,7 +112,7 @@
       "gross_premium_page": 19,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The claims development triangle on page 28 shows a slight strengthening for the 2014 underwriting year (+GBP 0.014m), which appears to contradict the narrative of an 'overall surplus' and 'reduction in reserves for Superstorm Sandy' for 2014. The narrative statement of GBP 0.7m surplus is taken as the primary prior year development figure.",
+      "data_quality_notes": "The claims development triangle on page 28 shows a slight strengthening for the 2014 underwriting year (+GBP 0.014m), which conflicts with the narrative statement of an 'overall surplus in ultimate claims of GBP 0.7m'. The narrative figure is used as it represents the overall gross prior year development.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -136,15 +143,15 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_6103_2016_llm.pdf",
-      "content_hash": "cd570d955d96e46a54fb2d79df08a0c9526ad85ccc40bf8b409c74d8dc614832",
-      "standardized_at": "2026-07-05T19:13:56.083003+00:00",
+      "content_hash": "15d57a42d6f7e595a180e94130144192c69e338b7ac10c4a64ebc6322a4fb78b",
+      "standardized_at": "2026-09-11T13:29:09.968063+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 13475,
-        "output_tokens": 1353,
-        "total_tokens": 18992,
-        "cost_usd": 0.007425
+        "input_tokens": 14279,
+        "output_tokens": 1432,
+        "total_tokens": 20822,
+        "cost_usd": 0.007864
       },
       "_entity_binding": {
         "requested_syndicate": 6103,
@@ -268,32 +275,44 @@
       "prior_year_development_gbp_m": 0.014,
       "prior_year_development_pct": 1.47,
       "direction": "strengthening",
-      "prior_year_movement_page": 43,
+      "prior_year_movement_page": 44,
       "prior_year_movement_confidence": 0.8,
-      "exact_reserve_text": "In 2016, there has been an overall surplus in ultimate claims of GBP 0.7m (2015: GBP 0.6m) due primarily to a reduction in claims estimates as uncertainty around catastrophe exposure unwinds. 2014 at 24 months included a reduction in respect of reserves required for Superstorm Sandy.\nThe movement in the net provisions for claims includes a release of GBP 0.4m (2015: GBP 0.3m).",
+      "exact_reserve_text": "In 2016, there has been an overall surplus in ultimate claims of GBP 0.7m (2015: GBP 0.6m) due primarily to a reduction in claims estimates as uncertainty around catastrophe exposure unwinds. 2014 at 24 months included a reduction in respect of reserves required for Superstorm Sandy. The movement in the net provisions for claims includes a release of GBP 0.4m (2015: GBP 0.3m).",
       "primary_causes": [
         "Favorable claims development",
         "Natural catastrophe events"
       ],
       "specific_events": [
         "Superstorm Sandy",
+        "Hurricane Matthew",
         "Mid-West tornado activity",
-        "tornado activity in Texas",
-        "Hurricane Matthew"
+        "Tornado activity in Texas"
       ],
       "specific_years_affected": [
-        2014
+        2014,
+        2013,
+        2012
       ],
       "prior_year_events": [
         {
           "event_name": "Superstorm Sandy",
           "event_year": 2012,
-          "impact_description": "Reduction in reserves required for Superstorm Sandy as noted at 24 months for the 2014 underwriting year",
+          "impact_description": "2014 at 24 months included a reduction in respect of reserves required for Superstorm Sandy (favourable development).",
           "lobs_affected": [
-            "Reinsurance - Property"
+            "Property"
           ],
           "amount_gbp_m": null,
           "confidence": 0.8
+        },
+        {
+          "event_name": "RITC commutation of 2013 year of account into Syndicate 2791",
+          "event_year": 2013,
+          "impact_description": "Reinsurance to Close of 2013 year of account commuted into Syndicate 2791, transferring liabilities and removing future reserve uncertainty for those years from Syndicate 6103.",
+          "lobs_affected": [
+            "Treaty"
+          ],
+          "amount_gbp_m": null,
+          "confidence": 0.9
         }
       ],
       "named_events": [
@@ -302,35 +321,11 @@
           "event_year": 2012,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "2014 at 24 months included a reduction in respect of reserves required for Superstorm Sandy",
+          "loss_description": "2014 at 24 months included a reduction in respect of reserves required for Superstorm Sandy.",
           "lobs_affected": [
-            "Reinsurance - Property"
+            "Property"
           ],
-          "page": 43,
-          "confidence": 0.8
-        },
-        {
-          "event_name": "Mid-West tornado activity",
-          "event_year": 2014,
-          "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": null,
-          "loss_description": "2014 was a benign loss year, affected only by certain Mid-West tornado activity",
-          "lobs_affected": [
-            "Reinsurance - Property"
-          ],
-          "page": 5,
-          "confidence": 0.8
-        },
-        {
-          "event_name": "tornado activity in Texas",
-          "event_year": 2016,
-          "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": null,
-          "loss_description": "Significant tornado activity in Texas alongside losses from Hurricane Matthew has elevated the incurred loss ratio somewhat",
-          "lobs_affected": [
-            "Reinsurance - Property"
-          ],
-          "page": 6,
+          "page": 44,
           "confidence": 0.8
         },
         {
@@ -338,49 +333,70 @@
           "event_year": 2016,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "Losses from Hurricane Matthew have elevated the incurred loss ratio somewhat",
+          "loss_description": "Losses from Hurricane Matthew elevated the incurred loss ratio for 2016.",
           "lobs_affected": [
-            "Reinsurance - Property"
+            "Property"
           ],
           "page": 6,
           "confidence": 0.8
+        },
+        {
+          "event_name": "Mid-West tornado activity",
+          "event_year": 2014,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "Mid-West tornado activity impacted 2014 but overall the year was benign.",
+          "lobs_affected": [
+            "Property"
+          ],
+          "page": 5,
+          "confidence": 0.7
+        },
+        {
+          "event_name": "Tornado activity in Texas",
+          "event_year": 2016,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "Significant tornado activity in Texas elevated the incurred loss ratio for 2016.",
+          "lobs_affected": [
+            "Property"
+          ],
+          "page": 6,
+          "confidence": 0.75
         }
       ],
-      "standardized_narrative": "Gross prior-year reserve movement was immaterially adverse: a small gross strengthening of approximately GBP 0.014m driven by a slight upward revision to 2014 ultimates. The syndicate nonetheless reports an overall surplus in ultimate claims (GBP 0.7m) and a net release in the net provisions of GBP 0.4m, reflecting favourable development on catastrophe exposures (including a reduction in reserves related to Superstorm Sandy) after reinsurance and other adjustments.",
+      "standardized_narrative": "The syndicate's prior-year reserves (2014 and earlier) showed a small gross adverse movement (strengthening) of approximately GBP 0.014m driven by a modest upward adjustment to the 2014 ultimate estimate at 36 months versus 24 months. However, across all underwriting years the report states an overall surplus in ultimate claims of GBP 0.7m in 2016, reflecting favourable claims development as uncertainty around catastrophe exposure unwound (including a reduction in reserves for Superstorm Sandy). The syndicate remains concentrated in US property catastrophe business, so movements are driven by property catastrophe development and commutation/RITC activity.",
       "raw_causal_phrases": [
-        "a reduction in claims estimates as uncertainty around catastrophe exposure unwinds",
-        "overall surplus in ultimate claims of GBP 0.7m (2015: GBP 0.6m)",
-        "The movement in the net provisions for claims includes a release of GBP 0.4m (2015: GBP 0.3m)",
-        "2014 at 24 months included a reduction in respect of reserves required for Superstorm Sandy",
-        "Significant tornado activity in Texas alongside losses from Hurricane Matthew has elevated the incurred loss ratio somewhat",
-        "affected only by certain Mid-West tornado activity"
+        "overall surplus in ultimate claims of GBP 0.7m (2015: GBP 0.6m) due primarily to a reduction in claims estimates as uncertainty around catastrophe exposure unwinds.",
+        "2014 at 24 months included a reduction in respect of reserves required for Superstorm Sandy.",
+        "The movement in the net provisions for claims includes a release of GBP 0.4m (2015: GBP 0.3m)."
       ],
       "lob_movements": [
         {
-          "line_of_business": "Reinsurance - Property",
+          "line_of_business": "Property",
           "direction": "strengthening",
           "amount_gbp_m": 0.014,
-          "percentage": null,
+          "percentage": 1.47,
           "confidence": 0.8
         }
       ],
       "gross_premiums_written_gbp_m": 4.871,
       "gross_premium_mix": [
         {
-          "line_of_business": "Reinsurance acceptances",
+          "line_of_business": "reinsurance accepted",
           "amount_gbp_m": 4.871,
           "percentage_of_total": 100.0
         }
       ],
-      "gross_premium_page": 31,
-      "gross_premium_confidence": 1.0,
+      "gross_premium_page": 39,
+      "gross_premium_confidence": 0.8,
       "currency": "GBP",
-      "data_quality_notes": "Prior-year development gross amount was derived from the gross claims development triangle (only 2014 is an older underwriting year) resulting in a very small strengthening (+GBP 0.014m). Narrative statements reference an \"overall surplus in ultimate claims of GBP 0.7m\" and a net release of GBP 0.4m (net of reinsurance), which is inconsistent with the small gross strengthening computed from the triangle. RITC commutations and translation effects may distort comparisons. Gross movement chosen from triangle per instructions; net release figures are reported elsewhere in the notes.",
+      "data_quality_notes": "Prior-year development was derived from the gross claims development triangle (gross figures in the notes). The triangle only contains underwriting years 2014-2016; excluding the two most recent years leaves only 2014 for PYD, producing a small gross strengthening of GBP 0.014m. Narrative and net movement lines elsewhere report net releases (e.g. net release GBP 0.4m and overall surplus GBP 0.7m) - these are net of reinsurance and differ from the gross triangle-derived figure. RITC commutations (2012/2013) are present in the notes and can distort movements; granularity is limited since the report is concentrated in a single class (US property catastrophe) and most balances are held/interacted with Syndicate 2791.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
-        "page": 43,
+        "page": 44,
         "underwriting_years": [
           2014,
           2015,
@@ -406,15 +422,15 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_6103_2016_llm.pdf",
-      "content_hash": "cd570d955d96e46a54fb2d79df08a0c9526ad85ccc40bf8b409c74d8dc614832",
-      "standardized_at": "2026-07-05T19:14:59.530412+00:00",
+      "content_hash": "15d57a42d6f7e595a180e94130144192c69e338b7ac10c4a64ebc6322a4fb78b",
+      "standardized_at": "2026-09-11T13:31:12.132196+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 30385,
-        "output_tokens": 5947,
-        "total_tokens": 36332,
-        "cost_usd": 0.01949
+        "input_tokens": 31145,
+        "output_tokens": 6711,
+        "total_tokens": 37856,
+        "cost_usd": 0.021208
       },
       "_entity_binding": {
         "requested_syndicate": 6103,
@@ -530,12 +546,12 @@
       }
     }
   },
-  "total_cost_usd": 0.026915,
-  "total_tokens": 55324,
+  "total_cost_usd": 0.029072,
+  "total_tokens": 58678,
   "validation": {
     "passed": false,
-    "total_discrepancies": 26,
-    "within_tolerance": 23,
+    "total_discrepancies": 28,
+    "within_tolerance": 25,
     "hard_failures": 3,
     "hard_failure_details": [
       {

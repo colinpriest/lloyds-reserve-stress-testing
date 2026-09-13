@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T10:00:50.365831+00:00",
+  "extraction_timestamp": "2026-09-13T04:03:40.267084+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -20,9 +22,9 @@
       "prior_year_movement_confidence": 1.0,
       "exact_reserve_text": "Change in estimates of prior year provisions (30,298)",
       "primary_causes": [
-        "Other",
         "Geopolitical events",
-        "Adverse claims development"
+        "Adverse claims development",
+        "Favorable claims development"
       ],
       "specific_events": [
         "Ukraine war"
@@ -35,9 +37,13 @@
           "event_name": "Ukraine war",
           "event_year": 2022,
           "impact_description": "negatively impacted by adverse development, resulting in strengthening of specific reserves in relation to Ukraine losses during the calendar year, largely on 2021 year of account, on both gross and net basis.",
-          "lobs_affected": [],
+          "lobs_affected": [
+            "Property",
+            "Marine",
+            "Specialty"
+          ],
           "amount_gbp_m": null,
-          "confidence": 0.8
+          "confidence": 0.5
         }
       ],
       "named_events": [
@@ -49,8 +55,7 @@
           "loss_description": "Gross claims increased due to the exposure to Baltimore Bridge",
           "lobs_affected": [
             "Marine",
-            "Property",
-            "Casualty"
+            "Property"
           ],
           "page": 4,
           "confidence": 0.8
@@ -60,10 +65,9 @@
           "event_year": 2024,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "Gross claims increased due to the exposure to hurricanes Helene",
+          "loss_description": "Gross claims increased due to the exposure to ... hurricanes Helene",
           "lobs_affected": [
-            "Property",
-            "Reinsurance - Property"
+            "Property"
           ],
           "page": 4,
           "confidence": 0.8
@@ -73,10 +77,9 @@
           "event_year": 2024,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "Gross claims increased due to the exposure to hurricanes Milton",
+          "loss_description": "Gross claims increased due to the exposure to ... hurricanes ... Milton",
           "lobs_affected": [
-            "Property",
-            "Reinsurance - Property"
+            "Property"
           ],
           "page": 4,
           "confidence": 0.8
@@ -86,20 +89,20 @@
           "event_year": 2022,
           "event_type": "geopolitical",
           "net_loss_gbp_m": null,
-          "loss_description": "The Syndicate has been negatively impacted by adverse development, resulting in strengthening of specific reserves in relation to Ukraine losses during the calendar year, largely on 2021 year of account, on both gross and net basis. The current estimate of potential losses included within our net reserves for the war in Ukraine for the year ended 31 December 2024 are GBP 16.0m (2023: GBP 12.3m).",
+          "loss_description": "negatively impacted by adverse development, resulting in strengthening of specific reserves in relation to Ukraine losses during the calendar year, largely on 2021 year of account, on both gross and net basis.",
           "lobs_affected": [
             "Property",
             "Marine",
-            "Aviation",
-            "Treaty"
+            "Specialty"
           ],
           "page": 17,
           "confidence": 0.8
         }
       ],
-      "standardized_narrative": "The Syndicate reported a gross prior year reserve release of GBP 30.3 million for 2024. While specific reserves for the 2021 year of account related to the Ukraine war experienced adverse development (strengthening), the overall prior year development was a release, implying favorable development in other areas. The report does not explicitly detail the causes for the overall release.",
+      "standardized_narrative": "The Syndicate reported a gross prior year reserve release of GBP 30.3 million in 2024, representing a 3.3% release of its opening gross claims outstanding. This overall release occurred despite adverse development related to the ongoing Ukraine war, which led to a strengthening of reserves for the 2021 year of account. The overall favorable development implies larger releases from other prior underwriting years or lines of business.",
       "raw_causal_phrases": [
-        "negatively impacted by adverse development, resulting in strengthening of specific reserves in relation to Ukraine losses during the calendar year, largely on 2021 year of account, on both gross and net basis."
+        "negatively impacted by adverse development, resulting in strengthening of specific reserves in relation to Ukraine losses during the calendar year, largely on 2021 year of account, on both gross and net basis.",
+        "improvement in underwriting performance across all YOA"
       ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 229.0,
@@ -133,7 +136,7 @@
       "gross_premium_page": 18,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "There is a discrepancy between the prior year development figure explicitly stated in the 'Technical provisions' note (-30.298m release) and the figure calculated from the Claims Development Triangle (+21.045m strengthening). The explicit note has been prioritized. The overall prior year development is a release, but the Ukraine war is specifically mentioned as an adverse development (strengthening) for the 2021 year of account, indicating mixed movements within the prior year portfolio. The specific causes for the overall release are not detailed.",
+      "data_quality_notes": "The prior year development figure from the 'Change in estimates of prior year provisions' note (-GBP 30.3m release) differs from the calculation based on the gross claims development triangle (+GBP 21.0m strengthening). The explicit note figure is used as the primary source. The impact of the Ukraine war on prior year reserves is described as adverse development (strengthening) for the 2021 year of account, but the specific monetary amount of this strengthening in 2024 is not quantified.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -200,20 +203,28 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_1955_2024_llm.pdf",
-      "content_hash": "568ff811e6ff10e50350b8a0c1d45a12b29ee523bfd606b5bd4aa6c66ec4c5f3",
-      "standardized_at": "2026-07-05T22:36:16.083288+00:00",
+      "content_hash": "04df84b6f62f3d3a3ac30c96fb9b8cc495195cd27a24c84ca819811a87ec3ffc",
+      "standardized_at": "2026-09-11T14:36:53.093020+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 15797,
-        "output_tokens": 2002,
-        "total_tokens": 24607,
-        "cost_usd": 0.009744
+        "input_tokens": 16601,
+        "output_tokens": 1967,
+        "total_tokens": 23461,
+        "cost_usd": 0.009898
+      },
+      "_pyd_route": {
+        "source": "rag_provisions",
+        "value": -30.3,
+        "model_value": -30.298,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2019,
           2020,
@@ -271,6 +282,14 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "at end of underwriting year",
+          "one year later",
+          "two years later",
+          "three years later",
+          "four years later",
+          "five years later"
         ],
         "source_page": 60,
         "entity": 1955
@@ -344,6 +363,13 @@
           "entity": 1955,
           "backend": "azure",
           "table_kind": "provisions_movement"
+        },
+        "movement_semantics": {
+          "row_label": "Change in estimates of prior year provisions",
+          "row_index": 6,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": true,
+          "column_index": 1
         },
         "gross_prior_year_claims": -30.3,
         "ri_share_prior_year": 0.0,
@@ -520,14 +546,14 @@
       "direction": "release",
       "prior_year_movement_page": 61,
       "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "Change in estimates of prior year provisions (30,298) - (30,298) (10,400) - (10,400)",
+      "exact_reserve_text": "Change in estimates of prior year provisions (30,298) - (30,298)",
       "primary_causes": [
         "Favorable claims development",
-        "Reinsurance recoveries",
         "Natural catastrophe events",
         "Man-made catastrophe / large losses",
         "Geopolitical events",
-        "Economic inflation / claims cost inflation"
+        "Adverse claims development",
+        "Reinsurance recoveries"
       ],
       "specific_events": [
         "Baltimore Bridge",
@@ -542,10 +568,9 @@
         {
           "event_name": "War in Ukraine",
           "event_year": 2022,
-          "impact_description": "The Syndicate has been negatively impacted by adverse development, resulting in strengthening of specific reserves in relation to Ukraine losses during the calendar year, largely on 2021 year of account, on both gross and net basis.",
+          "impact_description": "The Syndicate has been negatively impacted by adverse development, resulting in strengthening of specific reserves in relation to Ukraine losses during the calendar year, largely on 2021 year of account, on both gross and net basis; current estimate of potential losses included within net reserves are disclosed (net GBP 16.0m at 31 Dec 2024).",
           "lobs_affected": [
-            "Property",
-            "Casualty"
+            "Reinsurance - Specialty"
           ],
           "amount_gbp_m": null,
           "confidence": 0.8
@@ -554,83 +579,88 @@
       "named_events": [
         {
           "event_name": "Baltimore Bridge",
-          "event_year": null,
+          "event_year": 2024,
           "event_type": "man_made",
           "net_loss_gbp_m": null,
-          "loss_description": "Gross claims increased due to the exposure to Baltimore Bridge.",
+          "loss_description": "Gross claims increased due to the exposure to Baltimore Bridge",
           "lobs_affected": [
-            "Casualty"
+            "Property",
+            "Marine"
           ],
           "page": 8,
-          "confidence": 0.8
+          "confidence": 0.7
         },
         {
           "event_name": "Hurricane Helene",
           "event_year": 2024,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "Gross claims increased due to exposure to hurricanes Helene and Milton; ceded claims largely recoverable resulting in a minimal net impact.",
+          "loss_description": "Gross claims increased due to the exposure to ... hurricanes Helene and Milton",
           "lobs_affected": [
             "Property"
           ],
           "page": 8,
-          "confidence": 0.8
+          "confidence": 0.7
         },
         {
           "event_name": "Hurricane Milton",
           "event_year": 2024,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "Gross claims increased due to exposure to hurricanes Helene and Milton; ceded claims largely recoverable resulting in a minimal net impact.",
+          "loss_description": "Gross claims increased due to the exposure to ... hurricanes Helene and Milton",
           "lobs_affected": [
             "Property"
           ],
           "page": 8,
-          "confidence": 0.8
+          "confidence": 0.7
         },
         {
           "event_name": "War in Ukraine",
           "event_year": 2022,
           "event_type": "political",
           "net_loss_gbp_m": 16.0,
-          "loss_description": "The current estimate of potential losses included within our net reserves for the war in Ukraine for the year ended 31 December 2024 are GBP 16.0m (2023: GBP 12.3m).",
+          "loss_description": "Current estimate of potential losses included within our net reserves for the war in Ukraine for the year ended 31 December 2024 are GBP 16.0m (2023: GBP 12.3m).",
           "lobs_affected": [
-            "Property",
-            "Casualty"
+            "Reinsurance - Specialty"
           ],
-          "page": 17,
-          "confidence": 1.0
+          "page": 53,
+          "confidence": 0.8
         }
       ],
-      "standardized_narrative": "At 1 January 2024 gross claims outstanding were GBP 912.625m. During 2024 the Syndicate recorded a net favourable prior-year movement in gross claims of GBP 30.298m (a c.3.3% release of opening reserves). The release reflects favourable claims development and reinsurance recoveries which outweighed adverse development from named events (including exposure to Baltimore Bridge and hurricanes Helene and Milton) and geopolitical losses related to the war in Ukraine (the latter increased net reserves, largely on the 2021 year of account).",
+      "standardized_narrative": "At 1 January 2024 the syndicate carried gross claims outstanding of GBP 912.625m. During 2024 there was a net favourable prioryear movement in gross claims reserves of GBP 30.298m (a release of ~3.3% of opening reserves), disclosed as \"Change in estimates of prior year provisions (30,298)\". The year saw higher gross claims from specific events (notably Baltimore Bridge and hurricanes Helene and Milton) but much of this was recoverable through reinsurance; conversely there was adverse development related to exposures from the war in Ukraine (noted as affecting the 2021 year of account). Overall the technical provisions movement reported a net gross release, while specific lines (property/marine and reinsurance specialty exposures) experienced mixed adverse development.",
       "raw_causal_phrases": [
-        "Change in estimates of prior year provisions (30,298) - (30,298) (10,400) - (10,400)",
+        "Change in estimates of prior year provisions (30,298) - (30,298)",
         "Gross claims increased due to the exposure to Baltimore Bridge and hurricanes Helene and Milton.",
-        "Ceded claims also reflected these being largely recoverable resulting in a minimal net impact.",
-        "The Syndicate has been negatively impacted by adverse development, resulting in strengthening of specific reserves in relation to Ukraine losses during the calendar year, largely on 2021 year of account, on both gross and net basis.",
-        "The current estimate of potential losses included within our net reserves for the war in Ukraine for the year ended 31 December 2024 are GBP 16.0m (2023: GBP 12.3m)."
+        "The Syndicate has been negatively impacted by adverse development, resulting in strengthening of specific reserves in relation to Ukraine losses during the calendar year, largely on 2021 year of account, on both gross and net basis."
       ],
       "lob_movements": [
         {
           "line_of_business": "Property",
-          "direction": "release",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.6
-        },
-        {
-          "line_of_business": "Casualty",
           "direction": "strengthening",
           "amount_gbp_m": null,
           "percentage": null,
           "confidence": 0.6
         },
         {
-          "line_of_business": "Treaty",
-          "direction": "mixed",
+          "line_of_business": "Marine",
+          "direction": "strengthening",
           "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.2
+          "confidence": 0.6
+        },
+        {
+          "line_of_business": "Reinsurance - Specialty",
+          "direction": "strengthening",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.6
+        },
+        {
+          "line_of_business": "Casualty",
+          "direction": "release",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.4
         }
       ],
       "gross_premiums_written_gbp_m": 229.0,
@@ -664,7 +694,7 @@
       "gross_premium_page": 54,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior year movement taken from Technical Provisions note 'Change in estimates of prior year provisions' (gross) = GBP 30,298k => -30.298m (explicit). Net Ukraine-related figures are quoted in the text (GBP 16.0m net) but gross Ukraine impact not provided. Claims development triangle (gross) is present and consistent; no RITC distortion noted for the movement used. Some LOB-level prior-year movements are not disclosed, therefore per-LOB amounts are null and inferred directions have lower confidence.",
+      "data_quality_notes": "Prior year development taken from 'Change in estimates of prior year provisions' row in the Technical Provisions reconciliation (gross amounts, GBP 000). The report also discloses a net reserve amount for Ukraine (GBP 16.0m net) but no gross Ukraine quantification; named events (Baltimore Bridge, Helene, Milton) are mentioned in narrative as drivers of gross claims but exact gross PYD by event/LOB is not quantified. Page numbers are taken from the report pagination where the items appear. Confidence levels reflect explicit table values (high) vs narrative mentions (moderate).",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -727,24 +757,33 @@
             null,
             null
           ]
-        ]
+        ],
+        "confidence": 1.0
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_1955_2024_llm.pdf",
-      "content_hash": "568ff811e6ff10e50350b8a0c1d45a12b29ee523bfd606b5bd4aa6c66ec4c5f3",
-      "standardized_at": "2026-07-05T22:37:28.293354+00:00",
+      "content_hash": "04df84b6f62f3d3a3ac30c96fb9b8cc495195cd27a24c84ca819811a87ec3ffc",
+      "standardized_at": "2026-09-11T14:40:04.912331+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 36960,
-        "output_tokens": 8024,
-        "total_tokens": 44984,
-        "cost_usd": 0.025288
+        "input_tokens": 37720,
+        "output_tokens": 9331,
+        "total_tokens": 47051,
+        "cost_usd": 0.028092
+      },
+      "_pyd_route": {
+        "source": "rag_provisions",
+        "value": -30.3,
+        "model_value": -30.298,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2019,
           2020,
@@ -802,6 +841,14 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "at end of underwriting year",
+          "one year later",
+          "two years later",
+          "three years later",
+          "four years later",
+          "five years later"
         ],
         "source_page": 60,
         "entity": 1955
@@ -875,6 +922,13 @@
           "entity": 1955,
           "backend": "azure",
           "table_kind": "provisions_movement"
+        },
+        "movement_semantics": {
+          "row_label": "Change in estimates of prior year provisions",
+          "row_index": 6,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": true,
+          "column_index": 1
         },
         "gross_prior_year_claims": -30.3,
         "ri_share_prior_year": 0.0,
@@ -1041,12 +1095,12 @@
       }
     }
   },
-  "total_cost_usd": 0.035032,
-  "total_tokens": 69591,
+  "total_cost_usd": 0.03799,
+  "total_tokens": 70512,
   "validation": {
     "passed": true,
-    "total_discrepancies": 26,
-    "within_tolerance": 26,
+    "total_discrepancies": 21,
+    "within_tolerance": 21,
     "hard_failures": 0,
     "hard_failure_details": []
   }

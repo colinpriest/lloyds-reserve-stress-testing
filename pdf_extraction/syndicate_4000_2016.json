@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-05T20:17:45.206694+00:00",
+  "extraction_timestamp": "2026-09-13T04:01:37.663887+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -11,7 +13,7 @@
       "syndicate": 4000,
       "year": 2016,
       "opening_reserves_gbp_m": 323.422,
-      "opening_reserves_page": 6,
+      "opening_reserves_page": 5,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": 52.527,
       "prior_year_development_pct": 16.24,
@@ -21,18 +23,19 @@
       "exact_reserve_text": "Change in prior year provisions",
       "primary_causes": [
         "Adverse claims development",
-        "IBNR recalibration",
-        "Other"
+        "Favorable claims development",
+        "IBNR recalibration"
       ],
       "specific_events": [],
       "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "The syndicate experienced a gross prior year reserve strengthening of GBP 28.06 million, representing an 8.68% increase relative to opening gross claims outstanding. This adverse development was primarily driven by increases in Accident & Health, Marine aviation and transport, Fire and other damage to property, and Miscellaneous lines, partially offset by releases in Third party liability and Reinsurance. The report notes that claims incurred, net of reinsurance, included adverse prior year development of GBP 11.1 million, indicating that the ultimate claims experience was more adverse than previously assumed.",
+      "standardized_narrative": "The syndicate experienced a gross prior year reserve strengthening of GBP 28.060 million in 2016, representing 8.68% of its opening gross claims outstanding. This adverse development was primarily driven by adverse movements in Accident & Health, Marine, Property, and Miscellaneous lines, partially offset by favourable development in Third party liability and Reinsurance. The report notes that claims incurred, net of reinsurance, included adverse prior year development, indicating a recalibration of IBNR estimates due to inherent uncertainty in the estimation process.",
       "raw_causal_phrases": [
         "adverse prior year development",
-        "uncertainty inherent in the estimation process",
-        "probability and magnitude of future experience being more adverse than assumed"
+        "uncertainty associated with the ultimate claims experience in an underwriting year is greatest when the underwriting year is at an early stage of development",
+        "margin necessary to provide the necessary confidence in the provisions adequacy is relatively at its highest",
+        "uncertainty inherent in the estimation process"
       ],
       "lob_movements": [
         {
@@ -111,10 +114,10 @@
           "percentage_of_total": 25.5
         }
       ],
-      "gross_premium_page": 1,
+      "gross_premium_page": 14,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "LOB movements for prior year development are reported net of reinsurance, as gross breakdown was not provided. [RAG OVERRIDE: Model said PYD=28.06, RAG triangle computed 52.527. Using RAG value.]",
+      "data_quality_notes": "The prior_year_development_gbp_m is the gross figure from the 'Change in prior year provisions' row in the 'Incurred claims outstanding' table on page 17. The narrative on page 15 refers to a net figure. LOB movements are reported net of reinsurance as gross breakdown was not available. [RAG OVERRIDE: Model said PYD=28.06, RAG triangle computed 52.527. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -181,20 +184,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_4000_2016_llm.pdf",
-      "content_hash": "45abaf68068596858308d8444e192be112795e0c19fee7c15e32ac9a93b02326",
-      "standardized_at": "2026-03-18T23:40:57.441721+00:00",
+      "content_hash": "31103577f18b8e5c38fbb8858d8c0e30a361f2f686c5f7cfb875e839971f39aa",
+      "standardized_at": "2026-09-11T12:53:53.561250+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 10637,
-        "output_tokens": 1528,
-        "total_tokens": 14914,
-        "cost_usd": 0.007011
+        "input_tokens": 11441,
+        "output_tokens": 1672,
+        "total_tokens": 18376,
+        "cost_usd": 0.007612
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 52.527,
+        "model_value": 28.06,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 36,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -252,6 +267,14 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At the end of the underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later"
         ],
         "source_page": 36,
         "entity": 4000
@@ -334,6 +357,13 @@
           "entity": 4000,
           "backend": "azure",
           "table_kind": "balance_sheet_liabilities"
+        },
+        "movement_semantics": {
+          "row_label": "Change in prior year provisions",
+          "row_index": 6,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": true,
+          "column_index": 1
         },
         "gross_prior_year_claims": 28.1,
         "opening_gross_claims_outstanding": 323.422
@@ -422,8 +452,8 @@
       "exact_reserve_text": "Claims incurred, net of reinsurance, include adverse prior year development of GBP 11.1m (2015: GBP 5.0m). Prior year claims development is analysed by line of business in the table below.",
       "primary_causes": [
         "Adverse claims development",
-        "Reinsurance recoveries",
-        "Large loss development"
+        "Large loss development",
+        "Reinsurance recoveries"
       ],
       "specific_events": [],
       "specific_years_affected": [
@@ -440,7 +470,7 @@
           "event_year": null,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": 15.572,
-          "loss_description": "Net Event Loss 15,572 (6% of ECA)",
+          "loss_description": "Realistic Disaster Scenario estimated during 2016",
           "lobs_affected": [
             "Property"
           ],
@@ -452,10 +482,10 @@
           "event_year": null,
           "event_type": "man_made",
           "net_loss_gbp_m": 11.51,
-          "loss_description": "Net Event Loss 11,510 (4% of ECA)",
+          "loss_description": "Realistic Disaster Scenario estimated during 2016",
           "lobs_affected": [
-            "Property",
-            "Casualty"
+            "Casualty",
+            "Property"
           ],
           "page": 27,
           "confidence": 0.8
@@ -463,64 +493,65 @@
         {
           "event_name": "Political Risks - South East Asia/China",
           "event_year": null,
-          "event_type": "other",
+          "event_type": "political",
           "net_loss_gbp_m": 22.966,
-          "loss_description": "Net Event Loss 22,966 (9% of ECA)",
+          "loss_description": "Realistic Disaster Scenario estimated during 2016",
           "lobs_affected": [
-            "Property",
-            "Casualty"
+            "Casualty",
+            "Property"
           ],
           "page": 27,
           "confidence": 0.8
         }
       ],
-      "standardized_narrative": "The syndicate recorded a gross strengthening of prior year claims reserves of GBP 28.06m (an increase of c.8.7% versus opening gross reserves of GBP 323.42m). Net of reinsurance this movement was adverse at GBP 11.118m and the managing agent explicitly describes this as adverse prior year development. The largest net adverse contributions came from third party liability lines and movements in reinsurers' share. No single named historic catastrophe is cited as driving the reserve strengthening in the technical provisions note.",
+      "standardized_narrative": "Gross claims outstanding at 1 January 2016 were GBP 323.422m. During 2016 the Syndicate recorded a gross prior-year strengthening of GBP 28.06m (c.8.7% of opening gross reserves), which after reinsurers' share produced a net adverse prior-year development of GBP 11.1m. The movement reflects adverse development in several classes (notably Accident & Health, Fire and Miscellaneous) partly offset by favourable development in Third Party Liability and reinsurance recoveries. No single named prior-year catastrophe is identified as the primary driver in the disclosed movement.",
       "raw_causal_phrases": [
-        "Claims incurred, net of reinsurance, include adverse prior year development of GBP 11.1m (2015: GBP 5.0m).",
-        "Change in prior year provisions 28,060 (16,942) 11,118"
+        "adverse prior year development of GBP 11.1m (2015: GBP 5.0m).",
+        "Change in prior year provisions 28,060 (16,942) 11,118",
+        "Change in prior year provisions"
       ],
       "lob_movements": [
         {
           "line_of_business": "Accident & Health",
-          "direction": "release",
-          "amount_gbp_m": -0.706,
+          "direction": "strengthening",
+          "amount_gbp_m": 0.706,
           "percentage": null,
-          "confidence": 0.8
+          "confidence": 0.5
         },
         {
           "line_of_business": "Marine",
-          "direction": "release",
-          "amount_gbp_m": -0.095,
+          "direction": "strengthening",
+          "amount_gbp_m": 0.095,
           "percentage": null,
-          "confidence": 0.8
+          "confidence": 0.5
         },
         {
           "line_of_business": "Property",
-          "direction": "release",
-          "amount_gbp_m": -1.558,
+          "direction": "strengthening",
+          "amount_gbp_m": 1.558,
           "percentage": null,
-          "confidence": 0.8
+          "confidence": 0.5
         },
         {
           "line_of_business": "Casualty",
-          "direction": "strengthening",
-          "amount_gbp_m": 7.939,
+          "direction": "release",
+          "amount_gbp_m": -7.939,
           "percentage": null,
-          "confidence": 1.0
+          "confidence": 0.5
         },
         {
-          "line_of_business": "Aggregate",
-          "direction": "release",
-          "amount_gbp_m": -0.337,
+          "line_of_business": "Professional Lines",
+          "direction": "strengthening",
+          "amount_gbp_m": 0.337,
           "percentage": null,
-          "confidence": 0.6
+          "confidence": 0.4
         },
         {
           "line_of_business": "Treaty",
-          "direction": "strengthening",
-          "amount_gbp_m": 5.876,
+          "direction": "release",
+          "amount_gbp_m": -5.876,
           "percentage": null,
-          "confidence": 1.0
+          "confidence": 0.5
         }
       ],
       "gross_premiums_written_gbp_m": 365.0,
@@ -556,15 +587,15 @@
           "percentage_of_total": 25.5
         }
       ],
-      "gross_premium_page": 4,
+      "gross_premium_page": 33,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Opening gross claims outstanding taken from the Statement of Financial Position (liabilities) 2015 comparative column (323,422 GBP 000). Prior year development (gross) is taken from Technical Provisions note 'Change in prior year provisions' (28,060 GBP 000). The report also states net adverse prior year development of GBP 11.1m; narrative and P&L prior year lines are net of reinsurance. Lob-specific prior year movements are taken from the 'Prior year reserve development' table in the claims note (these are presented on a net-of-reinsurance P&L basis and parentheses in the source denote adverse movements on the P&L; amounts here have been converted to the sign convention requested). 'Miscellaneous' was mapped to 'Aggregate' and 'Reinsurance' to 'Treaty' for standard LOB mapping - these mappings are assumptions where no direct equivalent exists. Claims development triangle is present and reported in GBP 000 (thousands). [RAG OVERRIDE: Model said PYD=28.06, RAG triangle computed 52.527. Using RAG value.]",
+      "data_quality_notes": "Prior-year development gross figure is taken from Technical Provisions note (Note 17) 'Change in prior year provisions' (gross GBP 28,060k). The short narrative sentence in Note 4 gives the NET prior year adverse movement (GBP 11.1m) - exact_reserve_text is the net narrative. Lob movements listed are drawn from Note 4's prior-year development by LOB but those figures are NET of reinsurance not gross; gross per-LOB breakout for prior-year movements is not provided. 'Miscellaneous' mapping to a standard Lloyd's LOB is uncertain; it was mapped to 'Professional Lines' for reporting purposes. Claims development triangle is present and was captured; no specific historical named loss was identified as the primary driver of the prior-year strengthening in the notes. [RAG OVERRIDE: Model said PYD=28.06, RAG triangle computed 52.527. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
-        "units": "thousands",
-        "page": 35,
+        "units": "millions",
+        "page": 34,
         "underwriting_years": [
           2011,
           2012,
@@ -575,47 +606,47 @@
         ],
         "development_rows": [
           [
-            47475,
-            53154,
-            73788,
-            64276,
-            62579,
-            92752
+            47.475,
+            53.154,
+            73.788,
+            64.276,
+            62.579,
+            92.752
           ],
           [
-            124285,
-            112554,
-            196650,
-            135683,
-            148922,
+            124.285,
+            112.554,
+            196.65,
+            135.683,
+            148.922,
             null
           ],
           [
-            122784,
-            119290,
-            212041,
-            162172,
-            null,
-            null
-          ],
-          [
-            116981,
-            119224,
-            219551,
-            null,
+            122.784,
+            119.29,
+            212.041,
+            162.172,
             null,
             null
           ],
           [
-            112523,
-            138247,
-            null,
+            116.981,
+            119.224,
+            219.551,
             null,
             null,
             null
           ],
           [
-            112028,
+            112.523,
+            138.247,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            112.028,
             null,
             null,
             null,
@@ -626,20 +657,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_4000_2016_llm.pdf",
-      "content_hash": "45abaf68068596858308d8444e192be112795e0c19fee7c15e32ac9a93b02326",
-      "standardized_at": "2026-03-18T23:43:41.689922+00:00",
+      "content_hash": "31103577f18b8e5c38fbb8858d8c0e30a361f2f686c5f7cfb875e839971f39aa",
+      "standardized_at": "2026-09-11T12:56:14.080599+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 22563,
-        "output_tokens": 7892,
-        "total_tokens": 30455,
-        "cost_usd": 0.021425
+        "input_tokens": 23321,
+        "output_tokens": 6877,
+        "total_tokens": 30198,
+        "cost_usd": 0.019584
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 52.527,
+        "model_value": 28.06,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 36,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -697,6 +740,14 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At the end of the underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later"
         ],
         "source_page": 36,
         "entity": 4000
@@ -780,6 +831,13 @@
           "backend": "azure",
           "table_kind": "balance_sheet_liabilities"
         },
+        "movement_semantics": {
+          "row_label": "Change in prior year provisions",
+          "row_index": 6,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": true,
+          "column_index": 1
+        },
         "gross_prior_year_claims": 28.1,
         "opening_gross_claims_outstanding": 323.422
       },
@@ -854,12 +912,12 @@
       }
     }
   },
-  "total_cost_usd": 0.028436,
-  "total_tokens": 45369,
+  "total_cost_usd": 0.027196,
+  "total_tokens": 48574,
   "validation": {
     "passed": true,
-    "total_discrepancies": 34,
-    "within_tolerance": 34,
+    "total_discrepancies": 31,
+    "within_tolerance": 31,
     "hard_failures": 0,
     "hard_failure_details": []
   }

@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T10:04:47.860428+00:00",
+  "extraction_timestamp": "2026-09-13T04:04:22.138112+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -21,17 +23,43 @@
       "exact_reserve_text": "The GAAP calendar year result reflects the application of a prudent reserving policy, the outcome of a full reserving review of the Syndicate 3330 book of business and reserve strengthening in certain classes, in particular non-marine liability construction.",
       "primary_causes": [
         "Reserve methodology change",
-        "Adverse claims development",
-        "Large loss development"
+        "IBNR recalibration",
+        "Adverse claims development"
       ],
       "specific_events": [],
-      "specific_years_affected": [],
-      "prior_year_events": [],
+      "specific_years_affected": [
+        2017,
+        2018
+      ],
+      "prior_year_events": [
+        {
+          "event_name": "Reinsurance to Close (RITC) from Syndicate 1969",
+          "event_year": 2017,
+          "impact_description": "Assumption of liabilities relating to 2017 and prior year of accounts.",
+          "lobs_affected": [
+            "Casualty",
+            "Marine",
+            "Energy"
+          ],
+          "amount_gbp_m": null,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Reinsurance to Close (RITC) from Syndicate 3330",
+          "event_year": 2018,
+          "impact_description": "Assumption of liabilities relating to 2018 year of account, followed by a full reserving review and reserve strengthening in certain classes, particularly non-marine liability construction.",
+          "lobs_affected": [
+            "Casualty"
+          ],
+          "amount_gbp_m": null,
+          "confidence": 0.8
+        }
+      ],
       "named_events": [],
-      "standardized_narrative": "Syndicate 1994, which commenced underwriting in 2021, reported reserve strengthening in its first year of operation. This strengthening relates to liabilities acquired through Reinsurance to Close (RITC) transactions from Syndicate 1969 (2017 & prior years) and Syndicate 3330 (2018 year of account). The strengthening was a result of a prudent reserving policy, a full reserving review of the Syndicate 3330 book, and adverse development in certain classes, particularly non-marine liability construction. The specific amount of strengthening was not quantified in the report.",
+      "standardized_narrative": "Syndicate 1994, being a new syndicate in 2021, had no opening reserves. Its liabilities were assumed via Reinsurance to Close (RITC) from Syndicate 1969 (2017 and prior years) and Syndicate 3330 (2018 year of account). The report indicates reserve strengthening in certain classes, particularly non-marine liability construction, following a prudent reserving policy and a full reserving review of the Syndicate 3330 book of business. No quantified gross prior year development figure is available due to the RITC distorting the claims development triangle.",
       "raw_causal_phrases": [
-        "application of a prudent reserving policy",
-        "outcome of a full reserving review of the Syndicate 3330 book of business",
+        "prudent reserving policy",
+        "full reserving review of the Syndicate 3330 book of business",
         "reserve strengthening in certain classes, in particular non-marine liability construction"
       ],
       "lob_movements": [
@@ -76,10 +104,10 @@
           "percentage_of_total": 20.8
         }
       ],
-      "gross_premium_page": 19,
+      "gross_premium_page": 3,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Syndicate 1994 commenced underwriting in 2021, so it has no prior year development of its own. The reported reserve strengthening relates to acquired liabilities via Reinsurance to Close (RITC) transactions from Syndicate 1969 (2017 & prior years) and Syndicate 3330 (2018 year of account). The amount of strengthening is not quantified. The claims development triangle reflects the inherited business and is distorted by the RITC transactions.",
+      "data_quality_notes": "Syndicate 1994 commenced underwriting in 2021 and assumed liabilities via Reinsurance to Close (RITC) from Syndicate 1969 and Syndicate 3330. The claims development triangle is therefore distorted by the RITC and not used for prior year development calculation. No explicit gross prior year development figure was found, but narrative indicates reserve strengthening. Opening reserves are null as 2021 is the syndicate's first year of account.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -189,20 +217,22 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_1994_2021_llm.pdf",
-      "content_hash": "e715eb511543f1a4d3cddf63ecb5d47b2e1c1eec7c8f8c8baedecf95af8934fa",
-      "standardized_at": "2026-07-05T10:46:51.578346+00:00",
+      "content_hash": "a53975baaf1c953f16912ff4ef44db86cd47b32e3247b8269d7d1d77b20ef9f6",
+      "standardized_at": "2026-09-11T11:18:58.100933+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 10895,
-        "output_tokens": 1645,
-        "total_tokens": 18934,
-        "cost_usd": 0.007381
+        "input_tokens": 11699,
+        "output_tokens": 1893,
+        "total_tokens": 19638,
+        "cost_usd": 0.008242
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "millions",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2012,
           2013,
@@ -304,6 +334,18 @@
             null
           ]
         ],
+        "row_labels": [
+          "At end of underwriting",
+          "one year later",
+          "two years later",
+          "three years later",
+          "four years later",
+          "five years later",
+          "six years later",
+          "seven years later",
+          "eight years later",
+          "nine years later"
+        ],
         "source_page": 40,
         "entity": 1994
       },
@@ -376,6 +418,13 @@
         "unit_source": "header",
         "source_page": 40,
         "entity": 1994,
+        "movement_semantics": {
+          "row_label": "Gross claims outstanding for 2011 and prior years",
+          "row_index": 16,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": false,
+          "column_index": 1
+        },
         "gross_prior_year_claims": 0.9,
         "ri_share_prior_year": 0.0,
         "net_prior_year_claims": 0.0
@@ -447,56 +496,57 @@
       "syndicate": 1994,
       "year": 2021,
       "opening_reserves_gbp_m": null,
-      "opening_reserves_page": null,
+      "opening_reserves_page": 20,
       "opening_reserves_confidence": 0.0,
       "prior_year_development_gbp_m": null,
       "prior_year_development_pct": null,
       "direction": "strengthening",
       "prior_year_movement_page": 3,
       "prior_year_movement_confidence": 0.5,
-      "exact_reserve_text": "The GAAP calendar year result reflects the application of a prudent reserving policy, the outcome of a full reserving review of the Syndicate 3330 book of business and reserve strengthening in certain classes, in particular non-marine liability construction.\nThe syndicate has written a reinsurance to close RITC forthe liabilities relating to the 2017 and prior year of accounts of Syndicate 1969 and the RITC of the 2018 year of account of Syndicate 3330 in its first year of inception.",
+      "exact_reserve_text": "The GAAP calendar year result reflects the application of a prudent reserving policy, the outcome of a full reserving review of the Syndicate 3330 book of business and reserve strengthening in certain classes, in particular non-marine liability construction.",
       "primary_causes": [
         "Reserve methodology change",
-        "IBNR recalibration",
         "Adverse claims development",
-        "Other"
+        "IBNR recalibration"
       ],
       "specific_events": [],
       "specific_years_affected": [
+        2012,
+        2013,
+        2014,
+        2015,
+        2016,
         2017,
         2018
       ],
       "prior_year_events": [
         {
-          "event_name": "Reinsurance to close of Syndicate 1969 (2017 & prior)",
+          "event_name": "Reinsurance to close (RITC) - Syndicate 1969 (2017 & prior)",
           "event_year": 2017,
-          "impact_description": "Reinsurance to close transferred liabilities from Syndicate 1969 (2017 and prior) into Syndicate 1994; RITC and subsequent reserving review contributed to reserve strengthening and distorts year-on-year development comparators.",
+          "impact_description": "RITC transferred liabilities relating to 2017 and prior from Syndicate 1969 into Syndicate 1994, increasing inherited reserves and affecting reserve estimates.",
           "lobs_affected": [
-            "Casualty",
-            "Treaty"
+            "Casualty"
           ],
           "amount_gbp_m": null,
-          "confidence": 1.0
+          "confidence": 0.7
         },
         {
-          "event_name": "Reinsurance to close of Syndicate 3330 (2018)",
+          "event_name": "Reinsurance to close (RITC) - Syndicate 3330 (2018)",
           "event_year": 2018,
-          "impact_description": "RITC of the 2018 year of account of Syndicate 3330 was assumed in the syndicate's first year; the full reserving review of the Syndicate 3330 book resulted in reserve strengthening in certain classes.",
+          "impact_description": "RITC of the 2018 year of account of Syndicate 3330 transferred reserves into Syndicate 1994 in its first year of inception, affecting opening/reserve composition.",
           "lobs_affected": [
-            "Casualty",
-            "Treaty"
+            "Casualty"
           ],
           "amount_gbp_m": null,
-          "confidence": 1.0
+          "confidence": 0.7
         }
       ],
       "named_events": [],
-      "standardized_narrative": "Syndicate 1994's 2021 results reflect the assumption of reinsurance-to-close liabilities (Syndicate 1969: 2017 & prior; Syndicate 3330: 2018) and a full reserving review which led to a prudent reserving stance and reserve strengthening, particularly in non-marine liability (casualty) lines. No explicit gross prior-year movement amount is disclosed; the claims development triangle is present but is materially affected by the RITC transactions which distort direct PYD measurement.",
+      "standardized_narrative": "Syndicate 1994, established in 2021 through RITC transactions, inherited legacy reserves from Syndicate 1969 (2017 & prior) and Syndicate 3330 (2018). Management performed a full reserving review and applied a prudent reserving policy which resulted in reserve strengthening in certain classes - notably non-marine liability (casualty). No explicit gross prior-year movement amount is disclosed; claims development triangle is provided but the RITC transactions and inherited portfolio make direct PYD quantification from the triangle unreliable.",
       "raw_causal_phrases": [
-        "prudent reserving policy",
-        "the outcome of a full reserving review of the Syndicate 3330 book of business",
-        "reserve strengthening in certain classes, in particular non-marine liability construction",
-        "has written a reinsurance to close RITC for the liabilities relating to the 2017 and prior year of accounts of Syndicate 1969 and the RITC of the 2018 year of account of Syndicate 3330"
+        "the outcome of a full reserving review of the Syndicate 3330 book of business and reserve strengthening in certain classes, in particular non-marine liability construction.",
+        "application of a prudent reserving policy",
+        "reserve strengthening in certain classes"
       ],
       "lob_movements": [
         {
@@ -504,49 +554,56 @@
           "direction": "strengthening",
           "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.5
-        },
-        {
-          "line_of_business": "Accident & Health",
-          "direction": "flat",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.0
+          "confidence": 0.7
         },
         {
           "line_of_business": "Property",
           "direction": "flat",
           "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.0
+          "confidence": 0.3
         },
         {
           "line_of_business": "Marine",
           "direction": "flat",
           "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.0
+          "confidence": 0.3
         },
         {
           "line_of_business": "Aviation",
           "direction": "flat",
           "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.0
+          "confidence": 0.3
         },
         {
           "line_of_business": "Motor",
           "direction": "flat",
           "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.0
+          "confidence": 0.3
+        },
+        {
+          "line_of_business": "Accident & Health",
+          "direction": "flat",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.3
+        },
+        {
+          "line_of_business": "Professional Lines",
+          "direction": "flat",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.3
         },
         {
           "line_of_business": "Treaty",
-          "direction": "mixed",
+          "direction": "flat",
           "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.5
+          "confidence": 0.3
         }
       ],
       "gross_premiums_written_gbp_m": 100.5,
@@ -582,15 +639,15 @@
           "percentage_of_total": 20.8
         }
       ],
-      "gross_premium_page": 16,
+      "gross_premium_page": 39,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "No explicit gross prior-year reserve movement figure is disclosed. The syndicate assumed significant RITC balances (Synd 1969 2017&prior and Synd 3330 2018) in its first year; this RITC activity distorts claims development triangle comparisons and makes triangle-based PYD calculations unreliable. Opening (1 Jan 2021) gross claims outstanding is not presented as a prior-year comparative on the balance sheet; therefore opening_reserves is null. The direction (strengthening) is derived from explicit narrative stating reserve strengthening after a reserving review.",
+      "data_quality_notes": "No explicit gross prior-year movement (PYD) figure is disclosed. Syndicate 1994 is a new vehicle that inherited reserves via RITC (Syndicate 1969 2017 & prior; Syndicate 3330 2018), which the report explicitly notes - this RITC makes the claims development triangle and direct PYD calculations unreliable. The report states 'reserve strengthening' but does not quantify gross movement; therefore PYD is not provided. Opening (prior-year) gross claims outstanding at 1-Jan-2021 is not shown as a prior comparative on the balance sheet (only 31-Dec-2021 balances are presented) and is therefore null.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "millions",
-        "page": 18,
+        "page": 38,
         "underwriting_years": [
           2012,
           2013,
@@ -695,20 +752,22 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_1994_2021_llm.pdf",
-      "content_hash": "e715eb511543f1a4d3cddf63ecb5d47b2e1c1eec7c8f8c8baedecf95af8934fa",
-      "standardized_at": "2026-07-05T10:48:54.268523+00:00",
+      "content_hash": "a53975baaf1c953f16912ff4ef44db86cd47b32e3247b8269d7d1d77b20ef9f6",
+      "standardized_at": "2026-09-11T11:21:46.518782+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 17931,
-        "output_tokens": 7944,
-        "total_tokens": 25875,
-        "cost_usd": 0.020371
+        "input_tokens": 18691,
+        "output_tokens": 8170,
+        "total_tokens": 26861,
+        "cost_usd": 0.021013
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "millions",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2012,
           2013,
@@ -810,6 +869,18 @@
             null
           ]
         ],
+        "row_labels": [
+          "At end of underwriting",
+          "one year later",
+          "two years later",
+          "three years later",
+          "four years later",
+          "five years later",
+          "six years later",
+          "seven years later",
+          "eight years later",
+          "nine years later"
+        ],
         "source_page": 40,
         "entity": 1994
       },
@@ -882,6 +953,13 @@
         "unit_source": "header",
         "source_page": 40,
         "entity": 1994,
+        "movement_semantics": {
+          "row_label": "Gross claims outstanding for 2011 and prior years",
+          "row_index": 16,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": false,
+          "column_index": 1
+        },
         "gross_prior_year_claims": 0.9,
         "ri_share_prior_year": 0.0,
         "net_prior_year_claims": 0.0
@@ -950,12 +1028,12 @@
       }
     }
   },
-  "total_cost_usd": 0.027752,
-  "total_tokens": 44809,
+  "total_cost_usd": 0.029255,
+  "total_tokens": 46499,
   "validation": {
     "passed": true,
-    "total_discrepancies": 16,
-    "within_tolerance": 16,
+    "total_discrepancies": 18,
+    "within_tolerance": 18,
     "hard_failures": 0,
     "hard_failure_details": []
   }

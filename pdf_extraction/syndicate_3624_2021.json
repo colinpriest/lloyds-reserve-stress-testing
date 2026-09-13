@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T11:14:15.621764+00:00",
+  "extraction_timestamp": "2026-09-13T03:59:30.839333+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -18,44 +20,53 @@
       "direction": "release",
       "prior_year_movement_page": 17,
       "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "Over/under-provision in respect of prior claims and claim adjustment expenses",
+      "exact_reserve_text": "Over/under-provision in respect of prior claims and claim adjustment expenses (61,357)",
       "primary_causes": [
-        "COVID-19 / pandemic effects",
         "Adverse claims development",
-        "Other"
+        "Reinsurance recoveries"
       ],
       "specific_events": [
-        "COVID-19 pandemic"
+        "Loss Portfolio Transfer (LPT) transactions"
       ],
       "specific_years_affected": [],
       "prior_year_events": [
         {
-          "event_name": "COVID-19 pandemic",
-          "event_year": 2020,
-          "impact_description": "net reserves for COVID-19 decreased from $66.3 million in 2020 to $13.9 million in 2021, indicating a release of reserves.",
+          "event_name": "Loss Portfolio Transfer (LPT) - First Agreement",
+          "event_year": 2021,
+          "impact_description": "Secured coverage for potential adverse development on historical liabilities of $558 million. Resulted in a $25 million excess consideration over liabilities recognized as outward insurance premium in the income statement.",
           "lobs_affected": [],
+          "amount_gbp_m": null,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Loss Portfolio Transfer (LPT) - Second Agreement",
+          "event_year": 2021,
+          "impact_description": "Secured coverage for potential adverse development in respect of insurance liabilities of $79.5 million on healthcare lines. Resulted in a $0.5 million excess consideration over liabilities recognized as outward insurance premium in the income statement.",
+          "lobs_affected": [
+            "Accident & Health"
+          ],
           "amount_gbp_m": null,
           "confidence": 0.8
         }
       ],
       "named_events": [
         {
-          "event_name": "COVID-19 pandemic",
+          "event_name": "Covid-19 pandemic",
           "event_year": 2020,
           "event_type": "other",
           "net_loss_gbp_m": 13.9,
-          "loss_description": "material exposure to losses arising out of the Covid-19 pandemic and currently reserves $13.9 million (2020: $66.3 million) net of reinsurance for these claims.",
+          "loss_description": "Currently reserves $13.9 million (2020: $66.3 million) net of reinsurance for these claims. The ultimate amounts of these claims are subject to a higher-than-normal level of uncertainty.",
           "lobs_affected": [],
           "page": 18,
           "confidence": 0.8
         }
       ],
-      "standardized_narrative": "The syndicate reported an overall gross prior year reserve release of $61.4 million. This was primarily driven by releases related to the COVID-19 pandemic, which saw net reserves decrease from $66.3 million to $13.9 million. However, this was partially offset by strengthening in US cyber and broker general liability business. The syndicate also entered into two Loss Portfolio Transfer (LPT) transactions which resulted in a day one loss, impacting the overall syndicate result.",
+      "standardized_narrative": "The syndicate experienced a gross prior year reserve release of $61.357 million, representing 5.72% of its opening gross claims outstanding. This release occurred despite specific adverse developments mentioned, such as a day one loss of $28.9 million from two Loss Portfolio Transfer (LPT) transactions and further strengthening of US cyber and broker general liability business. The LPTs were entered into to secure coverage for potential adverse development on historical liabilities. The overall release suggests other favourable development not explicitly detailed.",
       "raw_causal_phrases": [
         "Over/under-provision in respect of prior claims and claim adjustment expenses",
-        "strengthening of US cyber and broker general liability business",
-        "two loss portfolio transfer (LPT) transactions being entered into, which gave rise to a day one loss of $28.9 million",
-        "material exposure to losses arising out of the Covid-19 pandemic and currently reserves $13.9 million (2020: $66.3 million) net of reinsurance for these claims."
+        "principally due to two loss portfolio transfer (LPT) transactions being entered into, which gave rise to a day one loss of $28.9 million",
+        "further strengthening of US cyber and broker general liability business",
+        "securing coverage for potential adverse development on historical liabilities for selected lines of business"
       ],
       "lob_movements": [
         {
@@ -67,6 +78,13 @@
         },
         {
           "line_of_business": "Casualty",
+          "direction": "strengthening",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.5
+        },
+        {
+          "line_of_business": "Accident & Health",
           "direction": "strengthening",
           "amount_gbp_m": null,
           "percentage": null,
@@ -116,10 +134,10 @@
           "percentage_of_total": 3.7
         }
       ],
-      "gross_premium_page": 2,
+      "gross_premium_page": 16,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "The overall prior year development is a release, but the narrative mentions specific strengthening in US cyber and broker general liability business. The LPT transactions are described as giving rise to a 'day one loss' which impacts the P&L, rather than being a direct prior year reserve movement. [RAG OVERRIDE: Model said PYD=-61.357, RAG triangle computed -23.921. Using RAG value.]",
+      "data_quality_notes": "The narrative on page 2 describes specific adverse movements (LPT day one loss, US cyber strengthening) that would imply a strengthening in prior year development, yet the Technical Provisions note on page 17 shows an overall gross release. This suggests other unstated favourable development offset the mentioned adverse impacts. The claims development triangle on page 19 is distorted by 'Acquisitions, divestments and transfers' (LPTs) as noted on page 17, making it unreliable for calculating prior year development. [RAG OVERRIDE: Model said PYD=-61.357, RAG triangle computed -23.921. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
@@ -245,25 +263,49 @@
             null,
             null,
             null
+          ],
+          [
+            229598,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
           ]
         ]
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_3624_2021_llm.pdf",
-      "content_hash": "5cb9aaa7e1d65dc1ed9b3c3b44a01f4949d721eb38a0cde4beb0981c47090971",
-      "standardized_at": "2026-07-05T16:05:21.518938+00:00",
+      "content_hash": "97cfee1344b72752ca39cd96cd6ba5133e6a4d96369426a23ebca7471764ffcb",
+      "standardized_at": "2026-09-11T12:33:53.694922+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 10895,
-        "output_tokens": 2167,
-        "total_tokens": 19989,
-        "cost_usd": 0.008686
+        "input_tokens": 11699,
+        "output_tokens": 2535,
+        "total_tokens": 21123,
+        "cost_usd": 0.009847
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -23.921,
+        "model_value": -61.357,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 37,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2012,
           2013,
@@ -398,6 +440,18 @@
             null
           ]
         ],
+        "row_labels": [
+          "At end of",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later",
+          "Seven years later",
+          "Eight years later",
+          "Nine years later"
+        ],
         "source_page": 37,
         "entity": 3624
       },
@@ -488,6 +542,13 @@
         "unit_source": "header",
         "source_page": 34,
         "entity": 3624,
+        "movement_semantics": {
+          "row_label": "Over/under-provision in respect of prior claims and claim adjustment expenses",
+          "row_index": 4,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": false,
+          "column_index": 1
+        },
         "gross_prior_year_claims": -61.4,
         "ri_share_prior_year": 48.5,
         "net_prior_year_claims": -12.8
@@ -561,32 +622,58 @@
       "prior_year_movement_confidence": 1.0,
       "exact_reserve_text": "Over/under-provision in respect of prior claims and claim adjustment expenses (61,357) 48,519 (12,838)",
       "primary_causes": [
-        "Favorable claims development",
+        "Adverse claims development",
         "Reinsurance recoveries",
-        "COVID-19 / pandemic effects",
-        "Other"
+        "Reserve methodology change",
+        "COVID-19 / pandemic effects"
       ],
-      "specific_events": [],
+      "specific_events": [
+        "COVID-19 pandemic"
+      ],
       "specific_years_affected": [],
       "prior_year_events": [
         {
-          "event_name": "COVID-19 pandemic",
-          "event_year": 2020,
-          "impact_description": "Material exposure to losses arising out of the Covid-19 pandemic; the Syndicate currently reserves $13.9 million (2020: $66.3 million) net of reinsurance for these claims (higher-than-normal uncertainty).",
+          "event_name": "Loss portfolio transfer 1",
+          "event_year": 2021,
+          "impact_description": "Secured coverage for potential adverse development on selected historical liabilities of $558m for consideration of $583m; resulted in recognition of a reinsurance asset, funds withheld and a day-one loss/transactional effects on reserves and premium accounting.",
           "lobs_affected": [
-            "Accident & Health",
-            "Casualty"
+            "Treaty"
           ],
           "amount_gbp_m": null,
-          "confidence": 0.5
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Loss portfolio transfer 2",
+          "event_year": 2021,
+          "impact_description": "Secured coverage for potential adverse development in respect of insurance liabilities of $79.5m for consideration of $80m; transactional items recognised with small excess consideration recognised as outward premium.",
+          "lobs_affected": [
+            "Treaty"
+          ],
+          "amount_gbp_m": null,
+          "confidence": 0.8
         }
       ],
-      "named_events": [],
-      "standardized_narrative": "The syndicate recorded a gross prior year release of $61.357m in 2021 (a favourable movement of ~5.7% of opening gross claims outstanding). The movement is recorded in the technical provisions note as an over/under-provision of (61,357) (gross) and is accompanied by increased reinsurers' recoverables. The report also notes reduced COVID-19 reserves (net) and that two loss portfolio transfer (LPT) transactions occurred in the year (which impacted reserves and gave rise to a day-one loss), while certain US casualty and cyber portfolios experienced further strengthening.",
+      "named_events": [
+        {
+          "event_name": "COVID-19 pandemic",
+          "event_year": 2020,
+          "event_type": "other",
+          "net_loss_gbp_m": 13.9,
+          "loss_description": "The Syndicate has material exposure to losses arising out of the Covid-19 pandemic and currently reserves $13.9 million (2020: $66.3 million) net of reinsurance for these claims.",
+          "lobs_affected": [
+            "Casualty",
+            "Professional Lines",
+            "Accident & Health"
+          ],
+          "page": 32,
+          "confidence": 1.0
+        }
+      ],
+      "standardized_narrative": "As at 1 January 2021 gross claims outstanding were $1,072.406m. During 2021 the Syndicate recorded adverse prior year development of $61.357m (approximately 5.7% of opening gross reserves), driven principally by two loss portfolio transfer transactions and further strengthening in US cyber and broker general liability business; Covid-19 exposures reduced materially on a net basis. The movement is recorded in the technical provisions (claims incurred / prior year movement) and is reflected gross of reinsurance in the Insurance Liabilities column.",
       "raw_causal_phrases": [
-        "Over/under-provision in respect of prior claims and claim adjustment expenses (61,357) 48,519 (12,838)",
-        "two loss portfolio transfer (LPT) transactions being entered into, which gave rise to a day one loss of $28.9 million.",
+        "This is principally due to two loss portfolio transfer (LPT) transactions being entered into, which gave rise to a day one loss of $28.9 million.",
         "This is followed by further strengthening of US cyber and broker general liability business and a dampened investments return.",
+        "During the year the Syndicate completed two loss portfolio transfers (LPT) securing coverage for potential adverse development on historical liabilities for selected lines of business. The Syndicate concluded that the LPTs transfer significant risk and accounts for the arrangements by recognising a reinsurance asset, a funds withheld balance in creditors arising out of reinsurance operations, and a net loss at inception in outward reinsurance premium.",
         "The Syndicate has material exposure to losses arising out of the Covid-19 pandemic and currently reserves $13.9 million (2020: $66.3 million) net of reinsurance for these claims."
       ],
       "lob_movements": [
@@ -595,21 +682,21 @@
           "direction": "strengthening",
           "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 1.0
+          "confidence": 0.5
         },
         {
           "line_of_business": "Casualty",
           "direction": "strengthening",
           "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 1.0
+          "confidence": 0.5
         },
         {
-          "line_of_business": "Accident & Health",
-          "direction": "release",
+          "line_of_business": "Treaty",
+          "direction": "strengthening",
           "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.8
+          "confidence": 0.6
         }
       ],
       "gross_premiums_written_gbp_m": 277.6,
@@ -655,10 +742,10 @@
           "percentage_of_total": 3.7
         }
       ],
-      "gross_premium_page": 2,
+      "gross_premium_page": 27,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "All monetary figures taken from the syndicate annual accounts are reported in the syndicate functional/presentational currency (USD). Opening reserves taken from Balance Sheet liabilities 'Claims outstanding' (gross) closing 2020 balance (1,072,406 $000 = 1,072.406m). Prior-year development sourced from Technical Provisions note row 'Over/under-provision in respect of prior claims and claim adjustment expenses' (gross = (61,357) $000 = -61.357m, parentheses indicate a favourable release). COVID-19 reserve amount quoted in the report is net of reinsurance ($13.9m) - no gross COVID-specific figure provided. LPTs materially affect presentation (acquisitions/divestments and transfers line) and may distort simple comparisons; triangle and movement figures were used as presented. LOB mapping for movements is partially inferred from narrative; per-LOB gross PYD amounts are not disclosed. [RAG OVERRIDE: Model said PYD=-61.357, RAG triangle computed -23.921. Using RAG value.]",
+      "data_quality_notes": "Opening gross reserves taken from Balance Sheet (Technical provisions: Claims outstanding). Prior-year development taken from Technical Provisions note row 'Over/under-provision in respect of prior claims and claim adjustment expenses' (Insurance liabilities / gross column). Two LPT transactions during the year materially affected reinsurance assets and funds withheld and may distort simple reserve movement interpretation; LPT amounts are described in note 10 but their split by LOB is not specified. Monetary amounts are reported in the report's native currency (USD) and converted from $000 to millions. No explicit per-LOB prior-year numeric breakdown provided. [RAG OVERRIDE: Model said PYD=61.357, RAG triangle computed -23.921. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
@@ -801,20 +888,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_3624_2021_llm.pdf",
-      "content_hash": "5cb9aaa7e1d65dc1ed9b3c3b44a01f4949d721eb38a0cde4beb0981c47090971",
-      "standardized_at": "2026-07-05T16:07:21.706190+00:00",
+      "content_hash": "97cfee1344b72752ca39cd96cd6ba5133e6a4d96369426a23ebca7471764ffcb",
+      "standardized_at": "2026-09-11T12:35:57.212012+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 26865,
-        "output_tokens": 8282,
-        "total_tokens": 35147,
-        "cost_usd": 0.02328
+        "input_tokens": 27625,
+        "output_tokens": 7000,
+        "total_tokens": 34625,
+        "cost_usd": 0.020906
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -23.921,
+        "model_value": 61.357,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 37,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2012,
           2013,
@@ -949,6 +1048,18 @@
             null
           ]
         ],
+        "row_labels": [
+          "At end of",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later",
+          "Seven years later",
+          "Eight years later",
+          "Nine years later"
+        ],
         "source_page": 37,
         "entity": 3624
       },
@@ -1039,6 +1150,13 @@
         "unit_source": "header",
         "source_page": 34,
         "entity": 3624,
+        "movement_semantics": {
+          "row_label": "Over/under-provision in respect of prior claims and claim adjustment expenses",
+          "row_index": 4,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": false,
+          "column_index": 1
+        },
         "gross_prior_year_claims": -61.4,
         "ri_share_prior_year": 48.5,
         "net_prior_year_claims": -12.8
@@ -1100,12 +1218,12 @@
       }
     }
   },
-  "total_cost_usd": 0.031966,
-  "total_tokens": 55136,
+  "total_cost_usd": 0.030753,
+  "total_tokens": 55748,
   "validation": {
     "passed": true,
-    "total_discrepancies": 21,
-    "within_tolerance": 21,
+    "total_discrepancies": 20,
+    "within_tolerance": 20,
     "hard_failures": 0,
     "hard_failure_details": []
   }

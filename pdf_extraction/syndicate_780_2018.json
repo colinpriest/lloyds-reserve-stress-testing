@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-05T20:44:29.961987+00:00",
+  "extraction_timestamp": "2026-09-13T04:10:47.994458+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -13,64 +15,53 @@
       "opening_reserves_gbp_m": 397.9,
       "opening_reserves_page": 6,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": 35.2,
-      "prior_year_development_pct": 8.85,
-      "direction": "strengthening",
-      "prior_year_movement_page": 14,
-      "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "For the year ended 31 December 2018, improvement in prior years' claims, net of reinstatement premiums and reinsurance recoveries, amounted to $18.0 (2017: $1.5).",
+      "prior_year_development_gbp_m": -21.3,
+      "prior_year_development_pct": -5.35,
+      "direction": "release",
+      "prior_year_movement_page": 2,
+      "prior_year_movement_confidence": 0.8,
+      "exact_reserve_text": "partially offset by prior year's' reserve releases of $20.5 or 11.0 CoR points (2017: $1.5, 0.8 CoR points).",
       "primary_causes": [
-        "Adverse claims development"
+        "Favorable claims development"
       ],
       "specific_events": [],
       "specific_years_affected": [],
-      "prior_year_events": [
-        {
-          "event_name": "Prior year reserve releases",
-          "event_year": 2018,
-          "impact_description": "partially offset by prior year's' reserve releases of $20.5 or 11.0 CoR points",
-          "lobs_affected": [],
-          "amount_gbp_m": -20.5,
-          "confidence": 0.8
-        }
-      ],
+      "prior_year_events": [],
       "named_events": [
         {
-          "event_name": "Hurricanes Florence and Michael",
+          "event_name": "Hurricanes Florence",
           "event_year": 2018,
           "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": 14.7,
-          "loss_description": "major catastrophe losses (Hurricanes Florence and Michael and California Wildfires) of $14.7 and 7.8 CoR points",
+          "net_loss_gbp_m": null,
+          "loss_description": "major catastrophe losses of $14.7",
           "lobs_affected": [],
-          "page": 1,
-          "confidence": 0.9
+          "page": 2,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Hurricanes Michael",
+          "event_year": 2018,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "major catastrophe losses of $14.7",
+          "lobs_affected": [],
+          "page": 2,
+          "confidence": 0.8
         },
         {
           "event_name": "California Wildfires",
           "event_year": 2018,
           "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": 14.7,
-          "loss_description": "major catastrophe losses (Hurricanes Florence and Michael and California Wildfires) of $14.7 and 7.8 CoR points",
+          "net_loss_gbp_m": null,
+          "loss_description": "major catastrophe losses of $14.7",
           "lobs_affected": [],
-          "page": 1,
-          "confidence": 0.9
-        },
-        {
-          "event_name": "Large individual non-catastrophe losses",
-          "event_year": 2018,
-          "event_type": "man_made",
-          "net_loss_gbp_m": 13.5,
-          "loss_description": "$13.5 of large individual non-catastrophe losses (7.2 CoR points)",
-          "lobs_affected": [],
-          "page": 1,
-          "confidence": 0.9
+          "page": 2,
+          "confidence": 0.8
         }
       ],
-      "standardized_narrative": "For the year ended 31 December 2018, Syndicate 780 experienced a gross prior year reserve strengthening of $35.2 million, representing 8.84% of its opening gross claims outstanding. This movement is derived from the detailed claims outstanding reconciliation table. The report's narrative also mentions \"prior year's' reserve releases of $20.5 million\" as an offset to the 2018 underwriting result, creating a discrepancy with the detailed reserve movement. The year was impacted by major catastrophe losses from Hurricanes Florence and Michael and California Wildfires, totaling $14.7 million, and $13.5 million in large individual non-catastrophe losses.",
+      "standardized_narrative": "The syndicate experienced a gross prior year reserve release of $20.5 million, indicating favorable claims development from prior periods. No specific events or lines of business were detailed for these releases.",
       "raw_causal_phrases": [
-        "Movements in provisions - Prior year",
-        "improvement in prior years' claims, net of reinstatement premiums and reinsurance recoveries, amounted to $18.0",
-        "prior year's' reserve releases of $20.5"
+        "prior year's' reserve releases"
       ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 436.3,
@@ -109,7 +100,7 @@
       "gross_premium_page": 12,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "There is a discrepancy between the gross prior year development figure of $35.2 million (strengthening) from the detailed \"Claims outstanding\" table on page 14 and the narrative mention of \"prior year's' reserve releases of $20.5 million\" on page 1. The detailed table figure is used for `prior_year_development_gbp_m`. The narrative on page 14 states \"improvement in prior years' claims, net... amounted to $18.0\", which is a net strengthening, despite the word \"improvement\" typically implying a release.",
+      "data_quality_notes": "Contradiction between narrative statement of gross prior year reserve releases ($20.5m on page 2) and the 'Movements in provisions - Prior year' line in the claims outstanding reconciliation table (which shows a gross strengthening of $35.2m on page 14). The narrative statement is used as it explicitly states 'releases'. The claims outstanding reconciliation table on page 14 also has a narrative stating 'improvement in prior years' claims, net... amounted to $18.0', which contradicts the positive $18.0 net figure in the table for prior year movements (positive implies strengthening, improvement implies release). [RAG OVERRIDE: Model said PYD=-20.5, RAG triangle computed -21.3. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
@@ -144,7 +135,7 @@
             160.1,
             199.5,
             227.0,
-            0.0
+            null
           ],
           [
             182.1,
@@ -153,8 +144,8 @@
             131.1,
             173.5,
             193.8,
-            0.0,
-            0.0
+            null,
+            null
           ],
           [
             204.5,
@@ -162,68 +153,80 @@
             106.2,
             121.0,
             168.6,
-            0.0,
-            0.0,
-            0.0
+            null,
+            null,
+            null
           ],
           [
             263.9,
             120.9,
             101.9,
             122.9,
-            0.0,
-            0.0,
-            0.0,
-            0.0
+            null,
+            null,
+            null,
+            null
           ],
           [
             242.2,
             122.0,
             97.6,
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            0.0
+            null,
+            null,
+            null,
+            null,
+            null
           ],
           [
             240.5,
             120.6,
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            0.0
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
           ],
           [
             233.6,
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            0.0
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
           ]
         ]
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_780_2018_llm.pdf",
-      "content_hash": "f79c6099da7600ca8128597099f19dbc61166867a767a38abc718ba403d88bfd",
-      "standardized_at": "2026-03-19T08:15:36.902994+00:00",
+      "content_hash": "b35ad161f5d1a0f4c72a6a9afd3f115eaab65b55b9678ed12942f84ef6ca7669",
+      "standardized_at": "2026-09-11T13:50:35.661895+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 10894,
-        "output_tokens": 2102,
-        "total_tokens": 19287,
-        "cost_usd": 0.008523
+        "input_tokens": 11698,
+        "output_tokens": 1726,
+        "total_tokens": 19681,
+        "cost_usd": 0.007824
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -21.3,
+        "model_value": -20.5,
+        "triangle_type": "gross",
+        "triangle_units": "millions",
+        "triangle_units_evidence": "default",
+        "triangle_source_page": 31,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "millions",
+        "units_evidence": "default",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -397,6 +400,13 @@
           "entity": 780,
           "backend": "azure",
           "table_kind": "balance_sheet_liabilities"
+        },
+        "movement_semantics": {
+          "row_label": "- Prior year",
+          "row_index": 7,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": false,
+          "column_index": 2
         },
         "gross_prior_year_claims": 35.2,
         "net_prior_year_claims": 35.2,
@@ -477,31 +487,56 @@
       "syndicate": 780,
       "year": 2018,
       "opening_reserves_gbp_m": 397.9,
-      "opening_reserves_page": 15,
-      "opening_reserves_confidence": 0.8,
-      "prior_year_development_gbp_m": 35.2,
-      "prior_year_development_pct": 8.85,
-      "direction": "strengthening",
-      "prior_year_movement_page": 30,
-      "prior_year_movement_confidence": 0.5,
+      "opening_reserves_page": null,
+      "opening_reserves_confidence": 0.0,
+      "prior_year_development_gbp_m": -21.3,
+      "prior_year_development_pct": -5.35,
+      "direction": "release",
+      "prior_year_movement_page": null,
+      "prior_year_movement_confidence": 0.0,
       "exact_reserve_text": "",
-      "primary_causes": [
-        "Favorable claims development",
-        "Reinsurance recoveries"
-      ],
+      "primary_causes": [],
       "specific_events": [],
-      "specific_years_affected": [
-        2011,
-        2012,
-        2013,
-        2014,
-        2015,
-        2016
-      ],
+      "specific_years_affected": [],
       "prior_year_events": [],
-      "named_events": [],
-      "standardized_narrative": "Syndicate 780's gross claims outstanding at the start of the year (comparative column) was 507.0 (USD millions). Over the 2018 year the gross claims outstanding reduced (release) by approximately 46.6 (USD millions), driven primarily by favourable development on older years and reinsurance recoveries, resulting in a lower closing gross claims outstanding at 31 December 2018. The movement appears to be a portfolio-wide favourable run-off rather than a single large adverse development.",
-      "raw_causal_phrases": [],
+      "named_events": [
+        {
+          "event_name": "Hurricane Florence",
+          "event_year": 2018,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "Mentioned among 2018 major catastrophe losses (Florence, Michael, California wildfires)",
+          "lobs_affected": [],
+          "page": 3,
+          "confidence": 0.5
+        },
+        {
+          "event_name": "Hurricane Michael",
+          "event_year": 2018,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "Mentioned among 2018 major catastrophe losses (Florence, Michael, California wildfires)",
+          "lobs_affected": [],
+          "page": 3,
+          "confidence": 0.5
+        },
+        {
+          "event_name": "California wildfires",
+          "event_year": 2018,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "Mentioned among 2018 major catastrophe losses (Florence, Michael, California wildfires)",
+          "lobs_affected": [],
+          "page": 3,
+          "confidence": 0.5
+        }
+      ],
+      "standardized_narrative": "The report images provided were partially legible. The syndicate recorded gross written premiums of 247.4 (native currency) in 2018 and references several 2018 catastrophe events (Hurricane Florence, Hurricane Michael and California wildfires). A clear, extractable gross prioryear reserve movement (the movement in the provision for claims outstanding for years prior to 2018) was not unambiguously identifiable from the supplied images, so no quantified prioryear strengthening or release is reported here. Detailed technical reserves tables and a claims development triangle appear present in the document images but could not be reliably parsed from the scans provided.",
+      "raw_causal_phrases": [
+        "Hurricane Florence",
+        "Hurricane Michael",
+        "California wildfires"
+      ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 436.3,
       "gross_premium_mix": [
@@ -536,43 +571,45 @@
           "percentage_of_total": 56.7
         }
       ],
-      "gross_premium_page": 26,
+      "gross_premium_page": 12,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "Document images were partially rotated and low resolution. Opening gross claims outstanding (prior year comparative) was read from the Statement of Financial Position (Liabilities) and appears as 507.0 (2017 column) with closing 2018 at 460.4 change -46.6. No explicit verbatim sentence quantifying the GROSS prior-year movement was confidently identified; the -46.6 figure is inferred from the change in gross 'Claims outstanding' on the balance sheet (2017 2018). The gross premium mix is approximated as a single 'Reinsurance' line because the segmental table was difficult to read; please treat LOB and PYD items as approximate and verify against the original PDF for audit-grade use. [RAG OVERRIDE: Model said PYD=-46.6, RAG triangle computed 35.2. Using RAG value.] [RAG OVERRIDE: Model said opening_reserves=507.0, balance sheet gives 397.900m. Using RAG value.]",
+      "data_quality_notes": "Document provided as images with low OCR/readability. Key figures requested by the template (gross opening claims outstanding at the start of the year and the gross prior-year development movement) could not be unambiguously located in the scanned pages. A gross written premium total of 247.4 (native currency millions) was readable on the technical account table (page ~12). Claims development triangles and detailed technical reserves reconciliation tables are present in the images but were not legible enough to extract reliable numeric prior-year movement or opening gross claims outstanding. All other numeric fields are left null to avoid guessing. If higher-resolution PDF pages or the original digital report are supplied I can extract the full reserves reconciliation, prior-year development (gross), per-LOB movements and the claims development triangle precisely.",
       "_claims_triangle": {
-        "type": "gross",
+        "type": "none",
         "currency": "USD",
         "units": "millions",
-        "page": 30,
-        "underwriting_years": [
-          2011,
-          2012,
-          2013,
-          2014,
-          2015,
-          2016,
-          2017,
-          2018
-        ],
+        "page": null,
+        "underwriting_years": [],
         "development_rows": []
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_780_2018_llm.pdf",
-      "content_hash": "f79c6099da7600ca8128597099f19dbc61166867a767a38abc718ba403d88bfd",
-      "standardized_at": "2026-03-19T08:18:13.527690+00:00",
+      "content_hash": "b35ad161f5d1a0f4c72a6a9afd3f115eaab65b55b9678ed12942f84ef6ca7669",
+      "standardized_at": "2026-09-11T13:51:45.220636+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 23344,
-        "output_tokens": 7795,
-        "total_tokens": 31139,
-        "cost_usd": 0.021426
+        "input_tokens": 24104,
+        "output_tokens": 3014,
+        "total_tokens": 27118,
+        "cost_usd": 0.012054
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -21.3,
+        "triangle_type": "gross",
+        "triangle_units": "millions",
+        "triangle_units_evidence": "default",
+        "triangle_source_page": 31,
+        "note": "filled a blank model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "millions",
+        "units_evidence": "default",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -747,6 +784,13 @@
           "backend": "azure",
           "table_kind": "balance_sheet_liabilities"
         },
+        "movement_semantics": {
+          "row_label": "- Prior year",
+          "row_index": 7,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": false,
+          "column_index": 2
+        },
         "gross_prior_year_claims": 35.2,
         "net_prior_year_claims": 35.2,
         "opening_gross_claims_outstanding": 397.9
@@ -823,12 +867,12 @@
       }
     }
   },
-  "total_cost_usd": 0.029949,
-  "total_tokens": 50426,
+  "total_cost_usd": 0.019878,
+  "total_tokens": 46799,
   "validation": {
     "passed": true,
-    "total_discrepancies": 22,
-    "within_tolerance": 22,
+    "total_discrepancies": 13,
+    "within_tolerance": 13,
     "hard_failures": 0,
     "hard_failure_details": []
   }

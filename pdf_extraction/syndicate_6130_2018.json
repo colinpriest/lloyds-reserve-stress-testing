@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-05T20:41:05.661404+00:00",
+  "extraction_timestamp": "2026-09-13T04:05:15.762029+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -18,7 +20,7 @@
       "direction": "strengthening",
       "prior_year_movement_page": 8,
       "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "During 2018 the Syndicate strengthened technical reserves by $229k in respect of prior periods (2017: release of $267k) arising predominantly from the Property Division.",
+      "exact_reserve_text": "During 2018 the Syndicate strengthened technical reserves by $229k in respect of prior periods (2017: release of $267k) arising predominantly from the Property Division. The strengthening was due to adverse claims development on prior year losses during 2018.",
       "primary_causes": [
         "Adverse claims development"
       ],
@@ -26,9 +28,8 @@
       "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "In 2018, Syndicate 6130 strengthened its technical reserves by $0.229 million in respect of prior periods. This adverse development was predominantly driven by the Property line of business.",
+      "standardized_narrative": "In 2018, Syndicate 6130 experienced a strengthening of prior year technical reserves by $0.229 million, primarily due to adverse claims development on prior year losses, predominantly affecting the Property Division. This follows a release of $0.267 million in 2017.",
       "raw_causal_phrases": [
-        "strengthened technical reserves by $229k in respect of prior periods",
         "adverse claims development on prior year losses"
       ],
       "lob_movements": [
@@ -37,7 +38,7 @@
           "direction": "strengthening",
           "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.5
+          "confidence": 0.8
         }
       ],
       "gross_premiums_written_gbp_m": 28.437,
@@ -76,51 +77,25 @@
       "gross_premium_page": 7,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "The prior year development for Property is mentioned as 'predominantly' contributing to the overall strengthening but is not quantified separately. [RAG PYD NOT APPLIED: deterministic figure -2.598m has the opposite sign to both model values [0.229, 0.229], which agree with each other; model values retained.] [CODE PYD NOT APPLIED: deterministic figure -2.598m has the opposite sign to both model values [0.229, 0.229], which agree with each other; model values retained.]",
-      "_claims_triangle": {
-        "type": "gross",
-        "currency": "USD",
-        "units": "thousands",
-        "page": 9,
-        "underwriting_years": [
-          2016,
-          2017,
-          2018
-        ],
-        "development_rows": [
-          [
-            1153,
-            4141,
-            4863
-          ],
-          [
-            4892,
-            10553,
-            null
-          ],
-          [
-            2294,
-            null,
-            null
-          ]
-        ]
-      },
+      "data_quality_notes": "The claims development triangle shows a release for the 2016 underwriting year, which contradicts the explicit narrative of a $0.229 million strengthening for prior periods. The explicit narrative figure is used as the primary source for prior year development. The 'Marine' line of business shows a negative gross premium written amount. [RAG PYD NOT APPLIED: deterministic figure -2.598m has the opposite sign to both model values [0.229, 0.229], which agree with each other; model values retained. Sign agreement between the models is not a reconciliation: where they differ in value the cohort and accrual scope of each still has to be settled from the filing (R140).] [CODE PYD NOT APPLIED: deterministic figure -2.598m has the opposite sign to both model values [0.229, 0.229], which agree with each other; model values retained. Sign agreement between the models is not a reconciliation: where they differ in value the cohort and accrual scope of each still has to be settled from the filing (R140).]",
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_6130_2018_llm.pdf",
-      "content_hash": "22fa29f3d373ca67e0b7c4a74a054566274e3ae0599c8d8588c04a9001be7905",
-      "standardized_at": "2026-07-05T21:25:29.916317+00:00",
+      "content_hash": "f73d3b97406c19c14533e533f46dc850521da068c400cb7c2873b32180b123c6",
+      "standardized_at": "2026-09-11T14:13:19.955134+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 8573,
-        "output_tokens": 991,
-        "total_tokens": 12487,
-        "cost_usd": 0.005049
+        "input_tokens": 9377,
+        "output_tokens": 897,
+        "total_tokens": 14091,
+        "cost_usd": 0.005056
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2016,
           2017,
@@ -142,6 +117,11 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of underwriting year",
+          "One year later",
+          "Two years later"
         ],
         "source_page": 23,
         "entity": 6130
@@ -197,7 +177,7 @@
       "opening_reserves_page": 9,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": 0.229,
-      "prior_year_development_pct": 2.55,
+      "prior_year_development_pct": 2.56,
       "direction": "strengthening",
       "prior_year_movement_page": 16,
       "prior_year_movement_confidence": 1.0,
@@ -209,9 +189,9 @@
       "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "At 31 December 2018 the syndicate's opening gross claims outstanding (1 January 2018) was $8.965m. During 2018 the syndicate strengthened prior year reserves by $0.229m (a 2.55% increase relative to opening gross claims outstanding), arising predominantly in the Property division due to adverse development on prior year losses.",
+      "standardized_narrative": "The syndicate strengthened its prior-year claims reserves by $229k (approximately 0.229 million USD), driven predominantly by adverse claims development in the Property division. This movement represents a 2.56% increase versus the opening gross claims outstanding at 1 January 2018. No specific named prior-year catastrophe events are identified in the movement note.",
       "raw_causal_phrases": [
-        "During 2018 the Syndicate strengthened technical reserves by $229k in respect of prior periods (2017: release of $267k) arising predominantly from the Property Division.",
+        "arising predominantly from the Property Division.",
         "The strengthening was due to adverse claims development on prior year losses during 2018."
       ],
       "lob_movements": [
@@ -238,7 +218,7 @@
         {
           "line_of_business": "Political Risks & Political Violence",
           "amount_gbp_m": 20.92,
-          "percentage_of_total": 73.56
+          "percentage_of_total": 73.54
         },
         {
           "line_of_business": "Liability",
@@ -259,7 +239,7 @@
       "gross_premium_page": 15,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "All amounts are taken from the report which presents values in USD $'000. Values in this JSON are converted to millions (divide $'000 by 1,000). Opening reserves taken from Statement of Financial Position 'Claims outstanding' (prior year comparative column 2017 = $8,965k). Prior year movement taken from Note '4. Movement in prior year's provision for claims outstanding' which states a $229k strengthening; the note is presented as a gross amount in narrative and has been used as the gross prior-year development. Segmental premium breakdown used is the 'Reinsurance acceptances' divisional table (Energy, Property, Political Risks & Political Violence, Liability, Marine, Aviation). The Marine entry shows a small negative premium in the table (-$6k) which is included as -0.006m. No specific named catastrophe events are listed in the text. Confidence levels reflect explicit figures (1.0) or inference where allocation to an LOB is described but not quantified (0.5). [RAG PYD NOT APPLIED: deterministic figure -2.598m has the opposite sign to both model values [0.229, 0.229], which agree with each other; model values retained.] [CODE PYD NOT APPLIED: deterministic figure -2.598m has the opposite sign to both model values [0.229, 0.229], which agree with each other; model values retained.]",
+      "data_quality_notes": "Amounts are reported in the report's functional currency (USD) and converted to millions. Opening reserves taken from the Statement of Financial Position (Claims outstanding, prior year column). Prior-year movement is taken from the Movement in prior year's provision note which explicitly states $229k strengthening (assumed gross). The segmental analysis shows a small negative Marine premium (-$6k) which may reflect adjustments/rounding. Claims development triangle is presented in $'000 units (see _claims_triangle). [RAG PYD NOT APPLIED: deterministic figure -2.598m has the opposite sign to both model values [0.229, 0.229], which agree with each other; model values retained. Sign agreement between the models is not a reconciliation: where they differ in value the cohort and accrual scope of each still has to be settled from the filing (R140).] [CODE PYD NOT APPLIED: deterministic figure -2.598m has the opposite sign to both model values [0.229, 0.229], which agree with each other; model values retained. Sign agreement between the models is not a reconciliation: where they differ in value the cohort and accrual scope of each still has to be settled from the filing (R140).]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
@@ -290,20 +270,22 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_6130_2018_llm.pdf",
-      "content_hash": "22fa29f3d373ca67e0b7c4a74a054566274e3ae0599c8d8588c04a9001be7905",
-      "standardized_at": "2026-07-05T21:26:21.213601+00:00",
+      "content_hash": "f73d3b97406c19c14533e533f46dc850521da068c400cb7c2873b32180b123c6",
+      "standardized_at": "2026-09-11T14:14:34.726253+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 14949,
-        "output_tokens": 4709,
-        "total_tokens": 19658,
-        "cost_usd": 0.013155
+        "input_tokens": 15709,
+        "output_tokens": 4028,
+        "total_tokens": 19737,
+        "cost_usd": 0.011983
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2016,
           2017,
@@ -325,6 +307,11 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of underwriting year",
+          "One year later",
+          "Two years later"
         ],
         "source_page": 23,
         "entity": 6130
@@ -374,8 +361,8 @@
       }
     }
   },
-  "total_cost_usd": 0.018204,
-  "total_tokens": 32145,
+  "total_cost_usd": 0.017039,
+  "total_tokens": 33828,
   "validation": {
     "passed": true,
     "total_discrepancies": 11,

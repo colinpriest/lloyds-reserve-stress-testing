@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T11:02:03.103433+00:00",
+  "extraction_timestamp": "2026-09-13T04:02:48.685367+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -13,17 +15,15 @@
       "opening_reserves_gbp_m": 88.129,
       "opening_reserves_page": 5,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": 32.9,
-      "prior_year_development_pct": 37.33,
+      "prior_year_development_gbp_m": 32.945,
+      "prior_year_development_pct": 37.38,
       "direction": "strengthening",
       "prior_year_movement_page": 18,
       "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "Change in prior year provisions: Gross amount 32,945",
+      "exact_reserve_text": "Change in prior year provisions: Gross 32,945",
       "primary_causes": [
-        "Adverse claims development",
-        "Favorable claims development",
-        "Natural catastrophe events",
-        "Man-made catastrophe / large losses"
+        "Large loss development",
+        "Favorable claims development"
       ],
       "specific_events": [
         "Hurricane Sally"
@@ -36,20 +36,26 @@
           "event_name": "Hurricane Sally",
           "event_year": 2020,
           "impact_description": "strengthening on Hurricane Sally",
-          "lobs_affected": [
-            "Property"
-          ],
+          "lobs_affected": [],
           "amount_gbp_m": null,
           "confidence": 0.8
         },
         {
           "event_name": "Prior year losses",
-          "event_year": null,
-          "impact_description": "releases on prior year losses",
+          "event_year": 2020,
+          "impact_description": "releases on prior year losses, from Energy and Cargo classes",
           "lobs_affected": [
             "Energy",
-            "Marine Cargo"
+            "Marine"
           ],
+          "amount_gbp_m": null,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Attritional experience",
+          "event_year": 2020,
+          "impact_description": "favourable attritional experience offsetting large losses for 2020 year of account",
+          "lobs_affected": [],
           "amount_gbp_m": null,
           "confidence": 0.8
         }
@@ -60,11 +66,9 @@
           "event_year": 2021,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "losses from Hurricane Ida",
-          "lobs_affected": [
-            "Property"
-          ],
-          "page": 2,
+          "loss_description": "underwriting result impacted by losses from Hurricane Ida",
+          "lobs_affected": [],
+          "page": 1,
           "confidence": 0.8
         },
         {
@@ -72,11 +76,9 @@
           "event_year": 2021,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "losses from Storm Uri",
-          "lobs_affected": [
-            "Property"
-          ],
-          "page": 2,
+          "loss_description": "underwriting result impacted by losses from Storm Uri",
+          "lobs_affected": [],
+          "page": 1,
           "confidence": 0.8
         },
         {
@@ -84,12 +86,12 @@
           "event_year": 2021,
           "event_type": "man_made",
           "net_loss_gbp_m": null,
-          "loss_description": "several Power and Cargo losses",
+          "loss_description": "underwriting result impacted by several Power and Cargo losses",
           "lobs_affected": [
             "Energy",
-            "Marine Cargo"
+            "Marine"
           ],
-          "page": 2,
+          "page": 1,
           "confidence": 0.8
         },
         {
@@ -98,10 +100,8 @@
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
           "loss_description": "strengthening on Hurricane Sally",
-          "lobs_affected": [
-            "Property"
-          ],
-          "page": 2,
+          "lobs_affected": [],
+          "page": 1,
           "confidence": 0.8
         },
         {
@@ -114,7 +114,7 @@
             "Aviation"
           ],
           "page": 11,
-          "confidence": 1.0
+          "confidence": 0.8
         },
         {
           "event_name": "Marine Collision event",
@@ -126,13 +126,14 @@
             "Marine"
           ],
           "page": 11,
-          "confidence": 1.0
+          "confidence": 0.8
         }
       ],
-      "standardized_narrative": "The syndicate experienced a gross strengthening of prior year reserves by $32.945 million, representing 37.38% of its opening gross claims outstanding. This movement is primarily driven by adverse development, including strengthening on Hurricane Sally from 2020. However, the syndicate also benefited from releases on prior year losses in the Energy and Cargo classes, indicating a mixed development across the portfolio.",
+      "standardized_narrative": "The syndicate experienced an overall gross strengthening of $32.945 million in prior year reserves, representing 37.38% of its opening gross claims outstanding. This was primarily driven by strengthening on Hurricane Sally from the 2020 accident year. However, this was partially offset by releases on other prior year losses, particularly in the Energy and Cargo classes, and favourable attritional experience for the 2020 year of account.",
       "raw_causal_phrases": [
         "strengthening on Hurricane Sally",
-        "releases on prior year losses, from Energy and Cargo classes"
+        "releases on prior year losses, from Energy and Cargo classes",
+        "favourable attritional experience"
       ],
       "lob_movements": [
         {
@@ -143,15 +144,8 @@
           "confidence": 0.5
         },
         {
-          "line_of_business": "Marine Cargo",
+          "line_of_business": "Marine",
           "direction": "release",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.5
-        },
-        {
-          "line_of_business": "Property",
-          "direction": "strengthening",
           "amount_gbp_m": null,
           "percentage": null,
           "confidence": 0.5
@@ -160,66 +154,188 @@
       "gross_premiums_written_gbp_m": 258.391,
       "gross_premium_mix": [
         {
-          "line_of_business": "Marine Cargo",
-          "amount_gbp_m": 43.798,
-          "percentage_of_total": 16.95
-        },
-        {
-          "line_of_business": "Energy",
-          "amount_gbp_m": 19.674,
-          "percentage_of_total": 7.61
-        },
-        {
-          "line_of_business": "Aviation",
-          "amount_gbp_m": 95.88,
-          "percentage_of_total": 37.11
-        },
-        {
-          "line_of_business": "Terrorism",
-          "amount_gbp_m": 8.776,
-          "percentage_of_total": 3.4
-        },
-        {
-          "line_of_business": "Power Utility",
-          "amount_gbp_m": 39.163,
-          "percentage_of_total": 15.16
-        },
-        {
-          "line_of_business": "Marine Hull",
-          "amount_gbp_m": 11.107,
+          "line_of_business": "Accident and health",
+          "amount_gbp_m": 11.104,
           "percentage_of_total": 4.3
         },
         {
-          "line_of_business": "Accident and Health",
-          "amount_gbp_m": 19.47,
-          "percentage_of_total": 7.54
+          "line_of_business": "Marine, aviation and transport",
+          "amount_gbp_m": 73.702,
+          "percentage_of_total": 28.52
         },
         {
-          "line_of_business": "Other*",
-          "amount_gbp_m": 20.523,
-          "percentage_of_total": 7.94
+          "line_of_business": "Fire and other damage to property",
+          "amount_gbp_m": 29.77,
+          "percentage_of_total": 11.52
+        },
+        {
+          "line_of_business": "Reinsurance",
+          "amount_gbp_m": 143.815,
+          "percentage_of_total": 55.66
         }
       ],
-      "gross_premium_page": 1,
+      "gross_premium_page": 11,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "There is a contradiction between the explicit \"Change in prior year provisions\" in Note 19 (showing a gross strengthening of $32.945m) and the narrative on page 2 (\"benefited from releases on prior year losses\") and the \"Profit for the financial year\" for prior accounts on page 1 (showing a profit contribution of $33.208m). The claims development triangle also indicates a strengthening for the 2019 underwriting year. The figure from Note 19 is used as the primary source for prior year development as it directly addresses the \"movement in prior year's provision\" as per instructions.",
+      "data_quality_notes": "The gross claims development triangle could not be used to calculate prior year development directly as the prior year's triangle was not provided for comparison. The 'Change in prior year provisions' note was used instead as the primary source for the gross prior year movement. [RAG PYD NOT APPLIED: deterministic figure -7.748m has the opposite sign to both model values [32.945, 32.945], which agree with each other; model values retained. Sign agreement between the models is not a reconciliation: where they differ in value the cohort and accrual scope of each still has to be settled from the filing (R140).] [CODE PYD NOT APPLIED: deterministic figure -7.748m has the opposite sign to both model values [32.945, 32.945], which agree with each other; model values retained. Sign agreement between the models is not a reconciliation: where they differ in value the cohort and accrual scope of each still has to be settled from the filing (R140).]",
+      "_claims_triangle": {
+        "type": "gross",
+        "currency": "USD",
+        "units": "thousands",
+        "page": 17,
+        "underwriting_years": [
+          2012,
+          2013,
+          2014,
+          2015,
+          2016,
+          2017,
+          2018,
+          2019,
+          2020,
+          2021
+        ],
+        "development_rows": [
+          [
+            11209,
+            16511,
+            16895,
+            13568,
+            14530,
+            15075,
+            20051,
+            25590,
+            27697,
+            35522
+          ],
+          [
+            22964,
+            24540,
+            30263,
+            33244,
+            28493,
+            26854,
+            44938,
+            57851,
+            68868,
+            null
+          ],
+          [
+            21872,
+            25747,
+            27221,
+            34106,
+            26216,
+            31131,
+            44983,
+            54090,
+            null,
+            null
+          ],
+          [
+            21430,
+            27042,
+            24758,
+            32395,
+            23325,
+            31091,
+            44025,
+            null,
+            null,
+            null
+          ],
+          [
+            21091,
+            26876,
+            25613,
+            29505,
+            24492,
+            30619,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            20830,
+            26670,
+            26418,
+            29998,
+            24092,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            20463,
+            24008,
+            25627,
+            29362,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            21037,
+            23368,
+            24620,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            20832,
+            22886,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            20800,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ]
+        ]
+      },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_3010_2021_llm.pdf",
-      "content_hash": "a3f84aaea35c7ddf594cee21dbfec525f819a906f0fc0cb2fa197a7572ab0e15",
-      "standardized_at": "2026-07-05T14:42:10.674631+00:00",
+      "content_hash": "3ee734c73ea2384bd85956c9135b556a2d8da1224379b09402687b4efbcc82bd",
+      "standardized_at": "2026-09-11T12:33:55.972752+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 11153,
-        "output_tokens": 2063,
-        "total_tokens": 20961,
-        "cost_usd": 0.008503
+        "input_tokens": 11957,
+        "output_tokens": 2437,
+        "total_tokens": 19708,
+        "cost_usd": 0.00968
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2012,
           2013,
@@ -354,6 +470,18 @@
             null
           ]
         ],
+        "row_labels": [
+          "At end of the year of account",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later",
+          "Seven years later",
+          "Eight years later",
+          "Nine years later"
+        ],
         "source_page": 38,
         "entity": 3010
       },
@@ -370,6 +498,13 @@
           "entity": 3010,
           "backend": "azure",
           "table_kind": "provisions_movement"
+        },
+        "movement_semantics": {
+          "row_label": "Change in prior year provisions",
+          "row_index": 6,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": false,
+          "column_index": 1
         },
         "gross_prior_year_claims": 32.9,
         "ri_share_prior_year": 13.8,
@@ -453,38 +588,25 @@
       "opening_reserves_gbp_m": 88.129,
       "opening_reserves_page": 14,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": 32.9,
-      "prior_year_development_pct": 37.33,
+      "prior_year_development_gbp_m": 32.945,
+      "prior_year_development_pct": 37.38,
       "direction": "strengthening",
       "prior_year_movement_page": 35,
       "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "The Syndicate also benefited from releases on prior year losses, from Energy and Cargo classes.",
+      "exact_reserve_text": "Change in prior year provisions 32,945 13,819 19,126",
       "primary_causes": [
         "Natural catastrophe events",
         "Man-made catastrophe / large losses",
-        "Favorable claims development",
-        "Reinsurance recoveries"
+        "Adverse claims development"
       ],
       "specific_events": [
         "Hurricane Ida",
         "Storm Uri",
-        "Hurricane Sally"
+        "Hurricane Sally",
+        "Power and Cargo losses"
       ],
       "specific_years_affected": [],
-      "prior_year_events": [
-        {
-          "event_name": "Hurricane Sally",
-          "event_year": 2020,
-          "impact_description": "mentioned as causing strengthening on Hurricane Sally",
-          "lobs_affected": [
-            "Marine",
-            "Aviation",
-            "Property"
-          ],
-          "amount_gbp_m": null,
-          "confidence": 0.5
-        }
-      ],
+      "prior_year_events": [],
       "named_events": [
         {
           "event_name": "Hurricane Ida",
@@ -494,8 +616,7 @@
           "loss_description": "The underwriting result was impacted by losses from Hurricane Ida",
           "lobs_affected": [
             "Marine",
-            "Aviation",
-            "Power Utility"
+            "Aviation"
           ],
           "page": 3,
           "confidence": 0.8
@@ -503,12 +624,12 @@
         {
           "event_name": "Storm Uri",
           "event_year": 2021,
-          "event_type": "natural_catastrophe",
+          "event_type": "man_made",
           "net_loss_gbp_m": null,
           "loss_description": "The underwriting result was impacted by losses from ... Storm Uri",
           "lobs_affected": [
-            "Power Utility",
-            "Property"
+            "Property",
+            "Energy"
           ],
           "page": 3,
           "confidence": 0.8
@@ -518,20 +639,19 @@
           "event_year": 2020,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "coupled with strengthening on Hurricane Sally",
+          "loss_description": "strengthening on Hurricane Sally",
           "lobs_affected": [
             "Marine",
-            "Aviation",
-            "Power Utility"
+            "Aviation"
           ],
           "page": 3,
           "confidence": 0.6
         }
       ],
-      "standardized_narrative": "The Syndicate's gross claims outstanding at 1 January 2021 were 88.129m (USD). During 2021 gross prior-year provisions increased by 32.945m (USD) (a c.37.4% strengthening relative to opening gross reserves). Management commentary notes both releases on prior year losses in Energy and Cargo and, elsewhere, adverse impacts from large 2021 events (Hurricane Ida, Storm Uri) and other power and cargo losses; the authoritative Note 19 movement table shows a gross prior year strengthening of 32.945m (USD) with an increase in reinsurers' recoverables, indicating a net movement of 19.126m (USD).",
+      "standardized_narrative": "Gross claims outstanding at 1 January 2021 were $88.129m (USD). During 2021 gross prior-year provisions increased by $32.945m (USD) (a c.37.4% strengthening of opening reserves). The Managing Agent attributes reserve movements to adverse development primarily driven by large loss activity in 2021 (including Hurricane Ida and Storm Uri) and related Power and Cargo losses, partially offset in places by releases in certain Energy and Cargo accounts at the net level. The reinsurers' share also increased (reinsurance assets movement $13.819m), giving a net increase in liabilities of $19.126m.",
       "raw_causal_phrases": [
-        "The Syndicate also benefited from releases on prior year losses, from Energy and Cargo classes.",
-        "The underwriting result was impacted by losses from Hurricane Ida, Storm Uri, several Power and Cargo losses coupled with strengthening on Hurricane Sally."
+        "The underwriting result was impacted by losses from Hurricane Ida, Storm Uri, several Power and Cargo losses coupled with strengthening on Hurricane Sally.",
+        "The Syndicate also benefited from releases on prior year losses, from Energy and Cargo classes."
       ],
       "lob_movements": [
         {
@@ -543,80 +663,46 @@
         },
         {
           "line_of_business": "Marine",
-          "direction": "mixed",
+          "direction": "release",
           "amount_gbp_m": null,
           "percentage": null,
           "confidence": 0.5
         },
         {
-          "line_of_business": "Aviation",
+          "line_of_business": "Property",
           "direction": "strengthening",
           "amount_gbp_m": null,
           "percentage": null,
           "confidence": 0.5
-        },
-        {
-          "line_of_business": "Accident & Health",
-          "direction": "mixed",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.3
-        },
-        {
-          "line_of_business": "Treaty",
-          "direction": "mixed",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.4
         }
       ],
       "gross_premiums_written_gbp_m": 258.391,
       "gross_premium_mix": [
         {
-          "line_of_business": "Marine Cargo",
-          "amount_gbp_m": 43.798,
-          "percentage_of_total": 16.95
-        },
-        {
-          "line_of_business": "Energy",
-          "amount_gbp_m": 19.674,
-          "percentage_of_total": 7.61
-        },
-        {
-          "line_of_business": "Aviation",
-          "amount_gbp_m": 95.88,
-          "percentage_of_total": 37.11
-        },
-        {
-          "line_of_business": "Terrorism",
-          "amount_gbp_m": 8.776,
-          "percentage_of_total": 3.4
-        },
-        {
-          "line_of_business": "Power Utility",
-          "amount_gbp_m": 39.163,
-          "percentage_of_total": 15.16
-        },
-        {
-          "line_of_business": "Marine Hull",
-          "amount_gbp_m": 11.107,
+          "line_of_business": "Accident and health",
+          "amount_gbp_m": 11.104,
           "percentage_of_total": 4.3
         },
         {
-          "line_of_business": "Accident and Health",
-          "amount_gbp_m": 19.47,
-          "percentage_of_total": 7.53
+          "line_of_business": "Marine, aviation and transport",
+          "amount_gbp_m": 73.702,
+          "percentage_of_total": 28.5
         },
         {
-          "line_of_business": "Other",
-          "amount_gbp_m": 20.523,
-          "percentage_of_total": 7.94
+          "line_of_business": "Fire and other damage to property",
+          "amount_gbp_m": 29.77,
+          "percentage_of_total": 11.5
+        },
+        {
+          "line_of_business": "Reinsurance acceptances",
+          "amount_gbp_m": 143.815,
+          "percentage_of_total": 55.6
         }
       ],
-      "gross_premium_page": 2,
-      "gross_premium_confidence": 0.9,
+      "gross_premium_page": 28,
+      "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "All monetary amounts are reported in the report's functional currency (USD). Opening gross claims outstanding sourced from Balance Sheet (Claims outstanding comparative column). Prior year development (gross) sourced from Note 19 'Change in prior year provisions' (gross = 32,945 $'000). There is an apparent narrative mismatch: management text refers to releases on prior years for Energy and Cargo, while the gross movement table shows a gross strengthening; net movement (after reinsurance) is smaller. Amounts are presented in millions (converted from thousands in the report). Some LOB-specific prior-year movements are described qualitatively only and not quantified.",
+      "data_quality_notes": "All monetary amounts are taken from the statutory annual accounts which are presented in USD. The opening reserves and prior-year movement are taken from the Balance Sheet (Claims outstanding) and Technical Provisions reconciliation (Change in prior year provisions) respectively (gross figures). The exact_reserve_text is a table row extracted verbatim since no single narrative sentence quantifying the gross prior year movement appears. Some narrative references discuss net releases after reinsurance which can appear to conflict with the gross strengthening recorded in the movement table; gross figures from Note 19 were used per the instructions. Lob movement directions are inferred from narrative and are not quantified in the report, so amounts are null and confidence is moderate. [RAG PYD NOT APPLIED: deterministic figure -7.748m has the opposite sign to both model values [32.945, 32.945], which agree with each other; model values retained. Sign agreement between the models is not a reconciliation: where they differ in value the cohort and accrual scope of each still has to be settled from the filing (R140).] [CODE PYD NOT APPLIED: deterministic figure -7.748m has the opposite sign to both model values [32.945, 32.945], which agree with each other; model values retained. Sign agreement between the models is not a reconciliation: where they differ in value the cohort and accrual scope of each still has to be settled from the filing (R140).]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
@@ -759,20 +845,22 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_3010_2021_llm.pdf",
-      "content_hash": "a3f84aaea35c7ddf594cee21dbfec525f819a906f0fc0cb2fa197a7572ab0e15",
-      "standardized_at": "2026-07-05T14:43:08.966770+00:00",
+      "content_hash": "3ee734c73ea2384bd85956c9135b556a2d8da1224379b09402687b4efbcc82bd",
+      "standardized_at": "2026-09-11T12:36:24.394089+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 34809,
-        "output_tokens": 7155,
-        "total_tokens": 41964,
-        "cost_usd": 0.023012
+        "input_tokens": 35569,
+        "output_tokens": 7949,
+        "total_tokens": 43518,
+        "cost_usd": 0.02479
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2012,
           2013,
@@ -907,6 +995,18 @@
             null
           ]
         ],
+        "row_labels": [
+          "At end of the year of account",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later",
+          "Seven years later",
+          "Eight years later",
+          "Nine years later"
+        ],
         "source_page": 38,
         "entity": 3010
       },
@@ -923,6 +1023,13 @@
           "entity": 3010,
           "backend": "azure",
           "table_kind": "provisions_movement"
+        },
+        "movement_semantics": {
+          "row_label": "Change in prior year provisions",
+          "row_index": 6,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": false,
+          "column_index": 1
         },
         "gross_prior_year_claims": 32.9,
         "ri_share_prior_year": 13.8,
@@ -1001,12 +1108,12 @@
       }
     }
   },
-  "total_cost_usd": 0.031515,
-  "total_tokens": 62925,
+  "total_cost_usd": 0.03447,
+  "total_tokens": 63226,
   "validation": {
     "passed": true,
-    "total_discrepancies": 21,
-    "within_tolerance": 21,
+    "total_discrepancies": 26,
+    "within_tolerance": 26,
     "hard_failures": 0,
     "hard_failure_details": []
   }

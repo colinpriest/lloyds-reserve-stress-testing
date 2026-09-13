@@ -1,14 +1,673 @@
 {
-  "extraction_timestamp": "2026-07-06T02:46:55.136793+00:00",
+  "extraction_timestamp": "2026-09-13T04:01:05.332904+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
   "source_file": "syndicate_reports\\pdfs\\syndicate_6117_2021.pdf",
-  "no_triangle_data": true,
-  "excluded": true,
-  "exclusion_reason": "No claims development triangle or reserve movement text found in report - recommend non-inclusion in analysis",
-  "syndicate": 6117,
-  "year": 2021
+  "models": {
+    "gemini-2.5-flash": {
+      "syndicate": 6117,
+      "year": 2021,
+      "opening_reserves_gbp_m": 89.8,
+      "opening_reserves_page": 4,
+      "opening_reserves_confidence": 1.0,
+      "prior_year_development_gbp_m": -14.0,
+      "prior_year_development_pct": -15.59,
+      "direction": "release",
+      "prior_year_movement_page": 12,
+      "prior_year_movement_confidence": 0.8,
+      "exact_reserve_text": "Loss for the closed year of account (0.9) GBP m.\nDuring 2022, the following amounts are proposed to be collected from members. 2019 Year of Account 0.9 GBP m.",
+      "primary_causes": [
+        "Other"
+      ],
+      "specific_events": [],
+      "specific_years_affected": [
+        2019
+      ],
+      "prior_year_events": [],
+      "named_events": [
+        {
+          "event_name": "Ukraine crisis",
+          "event_year": 2022,
+          "event_type": "political",
+          "net_loss_gbp_m": null,
+          "loss_description": "certain underwriting exposures in the region, do not believe there will be a material financial impact to Syndicate 6117",
+          "lobs_affected": [],
+          "page": 12,
+          "confidence": 0.5
+        }
+      ],
+      "standardized_narrative": "The 2019 Year of Account, which closed in 2021 via reinsurance to close, resulted in a net loss of GBP 0.9 million. This loss is proposed to be collected from members, indicating an adverse development or strengthening for that prior year of account. The claims development triangle shows no movement for prior years due to the transfer of liabilities via the RITC process.",
+      "raw_causal_phrases": [
+        "Loss for the closed year of account",
+        "amounts are proposed to be collected from members",
+        "The RITC process means that Insurance, Financial, Credit, Liquidity, Market and Capital risks are transferred to the accepting Syndicate."
+      ],
+      "lob_movements": [],
+      "gross_premiums_written_gbp_m": 84.0,
+      "gross_premium_mix": [
+        {
+          "line_of_business": "Reinsurance acceptances",
+          "amount_gbp_m": 84.0,
+          "percentage_of_total": 100.0
+        }
+      ],
+      "gross_premium_page": 8,
+      "gross_premium_confidence": 1.0,
+      "currency": "GBP",
+      "data_quality_notes": "Prior year development is based on the net loss for the 2019 closed year of account, which was reinsured to close. The claims development triangle shows zero movement for prior years due to the RITC transfer of liabilities. [RAG OVERRIDE: Model said PYD=0.9, RAG triangle computed -14.0. Using RAG value.]",
+      "_claims_triangle": {
+        "type": "gross",
+        "currency": "GBP",
+        "units": "millions",
+        "page": 11,
+        "underwriting_years": [
+          2017,
+          2018,
+          2019,
+          2020,
+          2021
+        ],
+        "development_rows": [
+          [
+            89.0,
+            66.2,
+            59.6,
+            23.9,
+            46.0
+          ],
+          [
+            98.1,
+            74.4,
+            83.2,
+            76.0,
+            null
+          ],
+          [
+            93.9,
+            73.6,
+            75.6,
+            null,
+            null
+          ],
+          [
+            90.2,
+            70.1,
+            null,
+            null,
+            null
+          ],
+          [
+            87.3,
+            null,
+            null,
+            null,
+            null
+          ]
+        ]
+      },
+      "source_type": "syndicate",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_6117_2021_llm.pdf",
+      "content_hash": "25222b0ca7d80f610bdc3bb4ce42c93c1fd17c14713e78c41a780bec0fee24ba",
+      "standardized_at": "2026-09-11T13:44:47.932154+00:00",
+      "standardization_model": "gemini-2.5-flash",
+      "_extraction_meta": {
+        "model": "gemini-2.5-flash",
+        "input_tokens": 12731,
+        "output_tokens": 998,
+        "total_tokens": 21230,
+        "cost_usd": 0.006314
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -14.0,
+        "model_value": 0.9,
+        "triangle_type": "gross",
+        "triangle_units": "millions",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 29,
+        "note": "overrode the model value"
+      },
+      "_rag_triangle": {
+        "type": "gross",
+        "currency": "GBP",
+        "units": "millions",
+        "units_evidence": "header",
+        "cell_binding": "header",
+        "underwriting_years": [
+          2017,
+          2018,
+          2019,
+          2020,
+          2021
+        ],
+        "development_rows": [
+          [
+            89.0,
+            66.2,
+            59.6,
+            23.9,
+            46.0
+          ],
+          [
+            98.1,
+            74.4,
+            83.2,
+            76.0,
+            null
+          ],
+          [
+            93.9,
+            73.6,
+            75.6,
+            null,
+            null
+          ],
+          [
+            90.2,
+            70.1,
+            null,
+            null,
+            null
+          ],
+          [
+            87.3,
+            null,
+            null,
+            null,
+            null
+          ]
+        ],
+        "row_labels": [
+          "At end of underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later"
+        ],
+        "source_page": 29,
+        "entity": 6117
+      },
+      "_entity_binding": {
+        "requested_syndicate": 6117,
+        "entity_pages": {
+          "none": [
+            0
+          ],
+          "6117": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            45,
+            46,
+            47,
+            48
+          ],
+          "1910": [
+            43,
+            44
+          ]
+        },
+        "foreign_tables_skipped": 6,
+        "foreign_pages": [
+          44,
+          45
+        ],
+        "underwriting_year_pages": [
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          48,
+          49
+        ],
+        "underwriting_year_tables_skipped": 5,
+        "document_unit_hint": 1.0
+      }
+    },
+    "gpt-5-mini": {
+      "syndicate": 6117,
+      "year": 2021,
+      "opening_reserves_gbp_m": 80.5,
+      "opening_reserves_page": 19,
+      "opening_reserves_confidence": 1.0,
+      "prior_year_development_gbp_m": -14.0,
+      "prior_year_development_pct": -17.39,
+      "direction": "release",
+      "prior_year_movement_page": 26,
+      "prior_year_movement_confidence": 0.8,
+      "exact_reserve_text": "Adjustments to the amounts of claims provisions established in prior years are reflected in the financial statements for the period in which the adjustments are made.",
+      "primary_causes": [
+        "Favorable claims development",
+        "IBNR recalibration"
+      ],
+      "specific_events": [],
+      "specific_years_affected": [
+        2017,
+        2018,
+        2019
+      ],
+      "prior_year_events": [],
+      "named_events": [
+        {
+          "event_name": "Two events - North East Windstorm",
+          "event_year": null,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": 13.0,
+          "loss_description": null,
+          "lobs_affected": [
+            "Treaty"
+          ],
+          "page": 23,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Florida Windstorm - Miami Dade",
+          "event_year": null,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": 1.7,
+          "loss_description": null,
+          "lobs_affected": [
+            "Treaty"
+          ],
+          "page": 23,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Florida Windstorm - Pinellas",
+          "event_year": null,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": 5.1,
+          "loss_description": null,
+          "lobs_affected": [
+            "Treaty"
+          ],
+          "page": 23,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Gulf of Mexico Windstorm - Major Hurricane landing in Galveston, Texas",
+          "event_year": null,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": 8.2,
+          "loss_description": null,
+          "lobs_affected": [
+            "Treaty"
+          ],
+          "page": 23,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "California Earthquake - San Francisco",
+          "event_year": null,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": 10.7,
+          "loss_description": null,
+          "lobs_affected": [
+            "Treaty"
+          ],
+          "page": 23,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "California Earthquake - Los Angeles",
+          "event_year": null,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": 15.7,
+          "loss_description": null,
+          "lobs_affected": [
+            "Treaty"
+          ],
+          "page": 23,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Japanese Earthquake - based on 1923 Great Kanto Earthquake",
+          "event_year": null,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": 17.6,
+          "loss_description": null,
+          "lobs_affected": [
+            "Treaty"
+          ],
+          "page": 23,
+          "confidence": 0.8
+        }
+      ],
+      "standardized_narrative": "The syndicate opened 2021 with gross claims outstanding of GBP 80.5m. Gross prioryear development during 2021 was a net release of GBP 14.0m (17.4% of opening reserves), driven by favourable claims development and recalibration of IBNR primarily across the 2017-2019 underwriting years. The syndicate's business is written as reinsurance acceptances, and the reserve movement is reflected in the gross claims development triangle.",
+      "raw_causal_phrases": [
+        "Adjustments to the amounts of claims provisions established in prior years are reflected in the financial statements for the period in which the adjustments are made.",
+        "The amount included in respect of IBNR in Syndicate 1910 is based on statistical techniques of estimation applied by external consulting actuaries."
+      ],
+      "lob_movements": [
+        {
+          "line_of_business": "Treaty",
+          "direction": "release",
+          "amount_gbp_m": -14.0,
+          "percentage": -17.4,
+          "confidence": 0.8
+        }
+      ],
+      "gross_premiums_written_gbp_m": 76.1,
+      "gross_premium_mix": [
+        {
+          "line_of_business": "Reinsurance acceptances",
+          "amount_gbp_m": 76.1,
+          "percentage_of_total": 100.0
+        }
+      ],
+      "gross_premium_page": 19,
+      "gross_premium_confidence": 1.0,
+      "currency": "GBP",
+      "data_quality_notes": "Opening reserves taken from Technical Provisions (Balance at 1 January 80.5). Prioryear development computed from the gross claims development triangle (changes on the previous diagonal) summing 2017-2019 columns = -14.0m (release). No explicit single-sentence gross prioryear movement amount is printed; triangle was used as primary source. Named catastrophe figures are hypothetical RDS exposure estimates (reported in the technical note) and not actual loss events. Confidence high for opening reserves and premiums (explicit figures); prior year development confidence moderate-high (0.8) as derived from the printed gross triangle.",
+      "_claims_triangle": {
+        "type": "gross",
+        "currency": "GBP",
+        "units": "millions",
+        "page": 26,
+        "underwriting_years": [
+          2017,
+          2018,
+          2019,
+          2020,
+          2021
+        ],
+        "development_rows": [
+          [
+            89.0,
+            66.2,
+            59.6,
+            23.9,
+            46.0
+          ],
+          [
+            98.1,
+            74.4,
+            83.2,
+            76.0,
+            null
+          ],
+          [
+            93.9,
+            73.6,
+            75.6,
+            null,
+            null
+          ],
+          [
+            90.2,
+            70.1,
+            null,
+            null,
+            null
+          ],
+          [
+            87.3,
+            null,
+            null,
+            null,
+            null
+          ]
+        ]
+      },
+      "source_type": "syndicate",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_6117_2021_llm.pdf",
+      "content_hash": "25222b0ca7d80f610bdc3bb4ce42c93c1fd17c14713e78c41a780bec0fee24ba",
+      "standardized_at": "2026-09-11T13:47:46.158983+00:00",
+      "standardization_model": "gpt-5-mini",
+      "_extraction_meta": {
+        "model": "gpt-5-mini",
+        "input_tokens": 22018,
+        "output_tokens": 7004,
+        "total_tokens": 29022,
+        "cost_usd": 0.019512
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -14.0,
+        "model_value": -14.0,
+        "triangle_type": "gross",
+        "triangle_units": "millions",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 29,
+        "note": "confirmed by the model value"
+      },
+      "_rag_triangle": {
+        "type": "gross",
+        "currency": "GBP",
+        "units": "millions",
+        "units_evidence": "header",
+        "cell_binding": "header",
+        "underwriting_years": [
+          2017,
+          2018,
+          2019,
+          2020,
+          2021
+        ],
+        "development_rows": [
+          [
+            89.0,
+            66.2,
+            59.6,
+            23.9,
+            46.0
+          ],
+          [
+            98.1,
+            74.4,
+            83.2,
+            76.0,
+            null
+          ],
+          [
+            93.9,
+            73.6,
+            75.6,
+            null,
+            null
+          ],
+          [
+            90.2,
+            70.1,
+            null,
+            null,
+            null
+          ],
+          [
+            87.3,
+            null,
+            null,
+            null,
+            null
+          ]
+        ],
+        "row_labels": [
+          "At end of underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later"
+        ],
+        "source_page": 29,
+        "entity": 6117
+      },
+      "_entity_binding": {
+        "requested_syndicate": 6117,
+        "entity_pages": {
+          "none": [
+            0
+          ],
+          "6117": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            45,
+            46,
+            47,
+            48
+          ],
+          "1910": [
+            43,
+            44
+          ]
+        },
+        "foreign_tables_skipped": 6,
+        "foreign_pages": [
+          44,
+          45
+        ],
+        "underwriting_year_pages": [
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          48,
+          49
+        ],
+        "underwriting_year_tables_skipped": 5,
+        "document_unit_hint": 1.0
+      }
+    }
+  },
+  "total_cost_usd": 0.025826,
+  "total_tokens": 50252,
+  "validation": {
+    "passed": false,
+    "total_discrepancies": 22,
+    "within_tolerance": 18,
+    "hard_failures": 4,
+    "hard_failure_details": [
+      {
+        "field": "gross_premium_mix[Reinsurance acceptances].amount_gbp_m",
+        "type": "value_mismatch",
+        "gemini-2.5-flash": 84.0,
+        "gpt-5-mini": 76.1
+      },
+      {
+        "field": "gross_premiums_written_gbp_m",
+        "type": "value_mismatch",
+        "gemini-2.5-flash": 84.0,
+        "gpt-5-mini": 76.1
+      },
+      {
+        "field": "opening_reserves_gbp_m",
+        "type": "value_mismatch",
+        "gemini-2.5-flash": 89.8,
+        "gpt-5-mini": 80.5
+      },
+      {
+        "field": "prior_year_development_pct",
+        "type": "value_mismatch",
+        "gemini-2.5-flash": -15.59,
+        "gpt-5-mini": -17.39
+      }
+    ]
+  }
 }

@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T10:37:44.322744+00:00",
+  "extraction_timestamp": "2026-09-13T04:13:12.064805+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -18,7 +20,7 @@
       "direction": "release",
       "prior_year_movement_page": 12,
       "prior_year_movement_confidence": 0.8,
-      "exact_reserve_text": "Calculated from the gross claims development table by comparing the current estimate for each underwriting year (excluding the two most recent) to its estimate from the previous diagonal.",
+      "exact_reserve_text": null,
       "primary_causes": [
         "Favorable claims development"
       ],
@@ -33,8 +35,13 @@
       ],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "The syndicate experienced a gross prior year reserve release of $73.990 million, representing a 9.8% reduction relative to the opening gross claims outstanding. This favorable development was calculated from the gross claims development table, indicating an overall improvement in the estimated ultimate cost of claims for underwriting years 2016 through 2021.",
-      "raw_causal_phrases": [],
+      "standardized_narrative": "The syndicate experienced a significant gross prior year reserve release of $242.481 million, representing 32.11% of its opening gross claims outstanding. This favorable development is consistent with the reported profit for the 2021 closed year of account ($206.366m) and the overall positive financial performance, reflected in a low combined ratio. The releases were observed across underwriting years 2016 to 2021.",
+      "raw_causal_phrases": [
+        "The Syndicate reported a $311.6m profit for the 2023 financial year",
+        "The calendar year combined ratio was 25.5% (2022: 57.5%)",
+        "Lower ratios represent better performance.",
+        "The Syndicate's underwriting year of account results for the 2021 closed year of account... Result/forecast ($'000) 206,366"
+      ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 432.932,
       "gross_premium_mix": [
@@ -52,7 +59,7 @@
       "gross_premium_page": 16,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "Prior year development was calculated from the gross claims development table as no explicit 'Movement in prior year's provision' note or narrative was found. The 'Movement in provision' in the Technical Provisions note includes both current and prior year movements and was therefore not used. [RAG OVERRIDE: Model said PYD=-73.99, RAG triangle computed -72.99. Using RAG value.] [RAG OPENING NOT APPLIED: table value 834.875 (provisions_movement, page 33, unit source header) disagrees with both model values [755.05, 755.05], which agree with each other; the model value is retained and the table value recorded for audit.]",
+      "data_quality_notes": "Gross prior year development calculated from claims development triangle as no explicit gross figure was provided. The 2021 closed year of account showed a net profit of $206.366m, supporting a release. [RAG OVERRIDE: Model said PYD=-242.481, RAG triangle computed -72.99. Using RAG value.] [RAG OPENING NOT APPLIED: table value 834.875 (provisions_movement, page 33, unit source header) disagrees with both model values [755.05, 755.05], which agree with each other; the model value is retained and the table value recorded for audit.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
@@ -153,20 +160,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_2357_2023_llm.pdf",
-      "content_hash": "584fe101d9f8e6387433c77971e3cb9a5f1955ec2af0bb6d9b9fc588a9ea4ed4",
-      "standardized_at": "2026-07-05T12:39:14.178550+00:00",
+      "content_hash": "7a4e5741596979eaa30c6443f8cea088c1fc81d6d63f79aed45761308bb47832",
+      "standardized_at": "2026-09-11T11:51:23.299847+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 10637,
-        "output_tokens": 1223,
-        "total_tokens": 15297,
-        "cost_usd": 0.006249
+        "input_tokens": 11441,
+        "output_tokens": 1326,
+        "total_tokens": 17377,
+        "cost_usd": 0.006747
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -72.99,
+        "model_value": -242.481,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 26,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2016,
           2017,
@@ -258,6 +277,16 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of first year '",
+          "One year later 0",
+          "Two years later\n0\n0",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later",
+          "Seven years later"
         ],
         "source_page": 26,
         "entity": 2357
@@ -350,43 +379,57 @@
       "prior_year_development_gbp_m": -72.99,
       "prior_year_development_pct": -9.67,
       "direction": "release",
-      "prior_year_movement_page": null,
-      "prior_year_movement_confidence": 0.0,
+      "prior_year_movement_page": 32,
+      "prior_year_movement_confidence": 0.5,
       "exact_reserve_text": "",
       "primary_causes": [
         "Favorable claims development",
-        "IBNR recalibration",
-        "Economic inflation / claims cost inflation"
+        "Reinsurance recoveries",
+        "IBNR recalibration"
       ],
       "specific_events": [],
       "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "Opening gross claims outstanding at 1 January 2023 were $755.05m (per balance sheet). The report does not provide an explicit single-line gross prioryear movement (gross PYD) in the notes; total gross claims outstanding reduced during the year (closing gross claims outstanding $618.18m) and the 'movement in provision' line shows a gross decrease in claims provisions during 2023 of $141.701m (this is a movement in the full year and includes current-year development as well as prioryear runoff). No explicit gross prioryear only movement is disclosed in a single labelled note, so a gross PYD figure could not be reliably extracted from the available disclosures.",
+      "standardized_narrative": "Gross claims outstanding decreased during 2023 from $755.05m at 1 January 2023 to $618.18m at 31 December 2023 (a gross reduction of approximately $136.9m). The managing agent attributes movements to claims development and reinsurance recoveries and notes the inherent estimation uncertainty in IBNR and reserving. No explicit gross prioryear only reestimation amount is stated in the notes.",
       "raw_causal_phrases": [
-        "higher frequency or severity of claims experience (claims risk)",
-        "inadequate or insufficient loss reserving (reserving risk)",
-        "Claims incurred represent the cost of claims and settlement expenses paid during the financial year, together with the movement in provisions for outstanding claims and claims incurred but not reported ('IBNR').",
+        "The estimate of IBNR is subject to a greater degree of uncertainty than reported claims as it is based on statistical techniques of estimation applied by actuaries as outlined below.",
+        "Adjustments to the amounts of claims provisions established in prior years are reflected in the financial statements for the period in which the adjustments are made.",
         "The directors consider that the provisions for gross claims and related reinsurance recoveries are fairly stated on the basis of the information currently available to them."
       ],
-      "lob_movements": [],
+      "lob_movements": [
+        {
+          "line_of_business": "Property",
+          "direction": "release",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.3
+        },
+        {
+          "line_of_business": "Treaty",
+          "direction": "release",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.3
+        }
+      ],
       "gross_premiums_written_gbp_m": 432.932,
       "gross_premium_mix": [
         {
           "line_of_business": "MGA Insurance",
           "amount_gbp_m": 135.0,
-          "percentage_of_total": 31.2
+          "percentage_of_total": 31.22
         },
         {
           "line_of_business": "Reinsurance",
           "amount_gbp_m": 297.932,
-          "percentage_of_total": 68.8
+          "percentage_of_total": 68.78
         }
       ],
-      "gross_premium_page": 16,
+      "gross_premium_page": 30,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "Opening gross claims outstanding taken from Balance Sheet (Claims outstanding, gross) at 1 Jan 2023: $755,050k -> 755.05m USD. The report does not present an explicit labelled 'gross prior-year development' line. The technical reserves reconciliation includes a 'movement in provision' for gross claims of -141,701 ($'000) for 2023, but that movement is the total year movement (combines current-year development and prior-year run-off) and therefore was not used as the authoritative prior-year-only movement per the extraction rules. A gross claims development triangle exists in the notes but its tabular layout in the provided extract made reliable automated diagonal comparison difficult; therefore a gross PYD was not calculated from the triangle. All amounts in this JSON are in the native report currency (USD) and expressed in millions. Prior-year development is returned null due to lack of an explicit gross PYD figure in the disclosed notes or a reliably parseable triangle in the provided pages. [RAG OPENING NOT APPLIED: table value 834.875 (provisions_movement, page 33, unit source header) disagrees with both model values [755.05, 755.05], which agree with each other; the model value is retained and the table value recorded for audit.]",
+      "data_quality_notes": "Gross claims outstanding (opening/closing) taken from Balance Sheet (Claims outstanding, gross) and converted from $'000 to millions. The report does not present an explicit single gross figure labelled 'movement in prior year's provision for claims outstanding' broken out solely for prior years; a gross claims development triangle is present but the PDF table alignment is ragged and mapping previous-diagonal values to individual underwriting years is ambiguous from the extracted text. Therefore prior_year_development_gbp_m is not provided. Overall gross reserve release (opening vs closing) is reported above. If a definitive gross prior-year-only reestimation figure is required, manual inspection of the original formatted triangle/notes is recommended. [RAG OPENING NOT APPLIED: table value 834.875 (provisions_movement, page 33, unit source header) disagrees with both model values [755.05, 755.05], which agree with each other; the model value is retained and the table value recorded for audit.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
@@ -404,14 +447,14 @@
         ],
         "development_rows": [
           [
-            null,
             49792,
             339881,
             521796,
             330937,
             375589,
             501176,
-            261441
+            261441,
+            136218
           ],
           [
             55664,
@@ -487,20 +530,31 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_2357_2023_llm.pdf",
-      "content_hash": "584fe101d9f8e6387433c77971e3cb9a5f1955ec2af0bb6d9b9fc588a9ea4ed4",
-      "standardized_at": "2026-07-05T12:41:36.311837+00:00",
+      "content_hash": "7a4e5741596979eaa30c6443f8cea088c1fc81d6d63f79aed45761308bb47832",
+      "standardized_at": "2026-09-11T11:54:16.484686+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 25600,
-        "output_tokens": 10584,
-        "total_tokens": 36184,
-        "cost_usd": 0.027568
+        "input_tokens": 26360,
+        "output_tokens": 9500,
+        "total_tokens": 35860,
+        "cost_usd": 0.02559
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -72.99,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 26,
+        "note": "filled a blank model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2016,
           2017,
@@ -593,6 +647,16 @@
             null
           ]
         ],
+        "row_labels": [
+          "At end of first year '",
+          "One year later 0",
+          "Two years later\n0\n0",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later",
+          "Seven years later"
+        ],
         "source_page": 26,
         "entity": 2357
       },
@@ -676,12 +740,12 @@
       }
     }
   },
-  "total_cost_usd": 0.033817,
-  "total_tokens": 51481,
+  "total_cost_usd": 0.032337,
+  "total_tokens": 53237,
   "validation": {
     "passed": true,
-    "total_discrepancies": 20,
-    "within_tolerance": 20,
+    "total_discrepancies": 24,
+    "within_tolerance": 24,
     "hard_failures": 0,
     "hard_failure_details": []
   }

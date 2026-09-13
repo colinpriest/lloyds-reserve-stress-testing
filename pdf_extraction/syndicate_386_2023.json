@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-05T20:17:28.712484+00:00",
+  "extraction_timestamp": "2026-09-13T04:00:38.035351+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -11,51 +13,60 @@
       "syndicate": 386,
       "year": 2023,
       "opening_reserves_gbp_m": 1355.6,
-      "opening_reserves_page": 8,
+      "opening_reserves_page": 9,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": 60.4,
       "prior_year_development_pct": 4.46,
       "direction": "strengthening",
       "prior_year_movement_page": 20,
       "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "Claims expense - previous year (Gross 15.5 GBP m). Absent the retrospective reinsurance arrangement, reserve strengthening was required on the older years (2021 and prior) within the International Liability portfolio.",
+      "exact_reserve_text": "Claims expense - previous year",
       "primary_causes": [
         "Adverse claims development",
-        "Economic inflation / claims cost inflation",
-        "IBNR recalibration"
+        "Reinsurance recoveries"
       ],
       "specific_events": [],
       "specific_years_affected": [
-        2021
+        2021,
+        2020,
+        2019,
+        2018,
+        2017,
+        2016,
+        2015,
+        2014,
+        2013
       ],
       "prior_year_events": [
         {
-          "event_name": "Higher loss experience",
-          "event_year": 2021,
-          "impact_description": "Reserve strengthening was required on the older years (2021 and prior) within the International Liability portfolio, and on Professional Indemnity and Irish and Australian & NZ Liability accounts.",
+          "event_name": "Retrospective reinsurance arrangement",
+          "event_year": 2023,
+          "impact_description": "reduced the reported net claims incurred and had a positive impact on the reported profit for the financial year, entered into during the current period to reinsure certain prior year claims liabilities",
           "lobs_affected": [
-            "Professional Lines",
             "Casualty"
           ],
           "amount_gbp_m": null,
           "confidence": 0.8
         }
       ],
-      "named_events": [],
-      "standardized_narrative": "The syndicate experienced a gross reserve strengthening of GBP 15.5 million for prior underwriting years, representing 1.14% of opening gross claims outstanding. This strengthening was primarily driven by higher loss experience on Professional Indemnity and Irish and Australian & NZ Liability accounts for the 2021 and prior underwriting years. The report also notes the ongoing uncertainty regarding claims inflation, which could lead to increased claims reserves.",
+      "named_events": [
+        {
+          "event_name": "War in Gaza",
+          "event_year": 2023,
+          "event_type": "geopolitical",
+          "net_loss_gbp_m": null,
+          "loss_description": "Management continues to monitor the geopolitical environment in which the Syndicate operates, the war in Gaza and any developments that may impact its assessment of potential exposures.",
+          "lobs_affected": [],
+          "page": 15,
+          "confidence": 0.5
+        }
+      ],
+      "standardized_narrative": "The syndicate experienced a gross reserve strengthening of GBP 15.5 million for prior underwriting years (2021 and prior), representing 1.14% of opening gross claims outstanding. This strengthening was primarily driven by underlying adverse claims development within the International Liability portfolio. Additionally, the syndicate entered into a retrospective reinsurance arrangement during the year to reinsure certain prior year claims liabilities, which had a positive impact on the reported profit and reduced net claims incurred, but the gross strengthening was still required. The syndicate is also monitoring the geopolitical impact of the war in Gaza.",
       "raw_causal_phrases": [
         "reserve strengthening was required on the older years (2021 and prior) within the International Liability portfolio",
-        "higher loss experience on Professional Indemnity and have required reserve strengthening on the Irish and Australian & NZ Liability accounts",
-        "inflation remains higher than expected over the coming years, and elevated for longer than expected, or the impact on claims inflation is significantly higher with would lead to increased claims reserves"
+        "Syndicate entered into a transaction to reinsure certain prior year claims liabilities. The transaction had a positive impact on the reported profit for the financial year."
       ],
       "lob_movements": [
-        {
-          "line_of_business": "Professional Lines",
-          "direction": "strengthening",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.5
-        },
         {
           "line_of_business": "Casualty",
           "direction": "strengthening",
@@ -75,7 +86,7 @@
       "gross_premium_page": 17,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The claims development triangle on page 21 does not show year-on-year changes in estimates, but rather the current estimate at each development point, making it unsuitable for direct calculation of prior year development. The 'Claims expense - previous year' from the Technical Provisions note (page 20) is used as the primary source for prior year development. The '2013 and prior' column in the claims development triangle was excluded as per instructions for aggregate columns. [RAG OVERRIDE: Model said PYD=15.5, RAG triangle computed 60.4. Using RAG value.]",
+      "data_quality_notes": "The claims development triangle is distorted by a retrospective reinsurance arrangement for prior year claims liabilities, making it unreliable for calculating prior year development. The prior year development figure is taken from the 'Claims expense - previous year' line in Note 12. [RAG OVERRIDE: Model said PYD=15.5, RAG triangle computed 60.4. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -208,22 +219,33 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_386_2023_llm.pdf",
-      "content_hash": "05a06247bdbf993b02eb6fcbc940073ec64919dead6253f36d2c8ec44875047f",
-      "standardized_at": "2026-03-18T23:25:45.241446+00:00",
+      "content_hash": "5830fd7b5a4f8fbc55d007f41314d51d30c19b742a72d940cb20897e7deeda82",
+      "standardized_at": "2026-09-11T12:46:34.691316+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 16312,
-        "output_tokens": 1735,
-        "total_tokens": 23445,
-        "cost_usd": 0.009231
+        "input_tokens": 17116,
+        "output_tokens": 1759,
+        "total_tokens": 25863,
+        "cost_usd": 0.009532
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 60.4,
+        "model_value": 15.5,
+        "triangle_type": "gross",
+        "triangle_units": "millions",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 45,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "millions",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
-          2013,
           2014,
           2015,
           2016,
@@ -237,7 +259,6 @@
         ],
         "development_rows": [
           [
-            null,
             91.7,
             80.7,
             123.2,
@@ -250,7 +271,6 @@
             116.4
           ],
           [
-            null,
             195.2,
             187.2,
             207.5,
@@ -263,7 +283,6 @@
             null
           ],
           [
-            null,
             225.5,
             187.4,
             217.0,
@@ -276,7 +295,6 @@
             null
           ],
           [
-            null,
             237.0,
             187.4,
             235.7,
@@ -289,7 +307,6 @@
             null
           ],
           [
-            null,
             259.4,
             206.5,
             240.7,
@@ -302,7 +319,6 @@
             null
           ],
           [
-            null,
             267.2,
             199.3,
             238.6,
@@ -315,7 +331,6 @@
             null
           ],
           [
-            null,
             282.8,
             189.1,
             251.1,
@@ -328,7 +343,6 @@
             null
           ],
           [
-            null,
             291.7,
             194.2,
             257.7,
@@ -341,7 +355,6 @@
             null
           ],
           [
-            null,
             299.2,
             194.6,
             null,
@@ -354,7 +367,6 @@
             null
           ],
           [
-            null,
             309.7,
             null,
             null,
@@ -366,6 +378,18 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later",
+          "Seven years later",
+          "Eight years later",
+          "Nine years later"
         ],
         "source_page": 45,
         "entity": 386
@@ -470,6 +494,11 @@
         "foreign_pages": [],
         "underwriting_year_pages": [
           50,
+          51,
+          52,
+          53,
+          54,
+          55,
           56,
           57,
           58,
@@ -480,9 +509,11 @@
           63,
           64,
           65,
-          66
+          66,
+          67,
+          68
         ],
-        "underwriting_year_tables_skipped": 15,
+        "underwriting_year_tables_skipped": 20,
         "document_unit_hint": 1.0
       }
     },
@@ -497,11 +528,11 @@
       "direction": "strengthening",
       "prior_year_movement_page": 40,
       "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "During the current period, the Syndicate entered into a transaction to reinsure certain prior year claims liabilities. The transaction had a positive impact on the reported profit for the financial year. The cost of the retrospective reinsurance arrangement entered in the year has reduced the reported net earned premium. The associated additional reinsurance recoveries have reduced the reported net claims incurred. This accounting treatment has reduced the reported net claims ratio of 50.9% for the year (2022 61.2%). Absent the retrospective reinsurance arrangement, reserve strengthening was required on the older years (2021 and prior) within the International Liability portfolio.",
+      "exact_reserve_text": "During the current period, the Syndicate entered into a transaction to reinsure certain prior year claims liabilities. The transaction had a positive impact on the reported profit for the financial year.",
       "primary_causes": [
         "Reinsurance recoveries",
         "Adverse claims development",
-        "Economic inflation / claims cost inflation"
+        "Reserve methodology change"
       ],
       "specific_events": [],
       "specific_years_affected": [
@@ -509,20 +540,18 @@
       ],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "Gross prior-year reserves showed a net gross strengthening of GBP 15.5m (approximately 1.14% of opening gross claims outstanding), driven by adverse development on older liability years. However, a retrospective reinsurance transaction in the year materially increased reinsurance recoveries, producing a net release on a net-of-reinsurance basis. The prior-year movements primarily affected the International Liability/Casualty portfolio (notably 2021 and prior).",
+      "standardized_narrative": "At 1 January 2023 gross claims outstanding were GBP 1355.6m. During 2023 the gross provision for prior years moved by a net strengthening of GBP 15.5m. The movement was influenced by a retrospective reinsurance transaction in the period (which had a positive impact on reported profit via increased reinsurance recoveries) and by re-estimation on older international liability (casualty) years.",
       "raw_causal_phrases": [
-        "During the current period, the Syndicate entered into a transaction to reinsure certain prior year claims liabilities.",
-        "The transaction had a positive impact on the reported profit for the financial year.",
-        "The cost of the retrospective reinsurance arrangement entered in the year has reduced the reported net earned premium.",
-        "The associated additional reinsurance recoveries have reduced the reported net claims incurred.",
-        "Absent the retrospective reinsurance arrangement, reserve strengthening was required on the older years (2021 and prior) within the International Liability portfolio."
+        "During the current period, the Syndicate entered into a transaction to reinsure certain prior year claims liabilities. The transaction had a positive impact on the reported profit for the financial year.",
+        "Absent the retrospective reinsurance arrangement, reserve strengthening was required on the older years (2021 and prior) within the International Liability portfolio.",
+        "Claims expense - previous year 15.5 (76.9) (61.4)"
       ],
       "lob_movements": [
         {
           "line_of_business": "Casualty",
           "direction": "strengthening",
           "amount_gbp_m": 15.5,
-          "percentage": 1.144,
+          "percentage": null,
           "confidence": 0.8
         }
       ],
@@ -534,10 +563,10 @@
           "percentage_of_total": 100.0
         }
       ],
-      "gross_premium_page": 32,
+      "gross_premium_page": 20,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior year development (15.5) is taken from the Technical Provisions roll-forward 'Claims expense - previous year' (gross) in note 12. Net movement was a release due to large reinsurers' share movement (-76.9) producing a net release of -61.4; both gross and net movements are presented in the notes. The claims development triangle is present and was used to cross-check but RITC and reinsurance transactions can distort comparisons. LOB mapping: regulatory segment shows 'Third party liability' and 'Reinsurance acceptances' - 'Third party liability' mapped to standard 'Casualty'. [RAG OVERRIDE: Model said PYD=15.5, RAG triangle computed 60.4. Using RAG value.]",
+      "data_quality_notes": "Gross opening reserves and gross prior-year movement taken from technical provisions note and balance sheet. The syndicate executed a retrospective reinsurance transaction in 2023 which materially affected reinsurers' recoveries (net movement differs from gross movement). The development triangle was parsed but some cells for the most recent development ages are immature/blank in the source. LOB attribution of prior-year movement is inferred from narrative referencing International Liability; no explicit per-LOB prior year movement table provided. [RAG OVERRIDE: Model said PYD=15.5, RAG triangle computed 60.4. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -552,7 +581,8 @@
           2019,
           2020,
           2021,
-          2022
+          2022,
+          2023
         ],
         "development_rows": [
           [
@@ -564,7 +594,8 @@
             94.1,
             116.2,
             121.1,
-            116.4
+            116.4,
+            null
           ],
           [
             187.2,
@@ -575,6 +606,7 @@
             208.9,
             226.2,
             221.8,
+            null,
             null
           ],
           [
@@ -586,6 +618,7 @@
             224.3,
             236.1,
             null,
+            null,
             null
           ],
           [
@@ -595,6 +628,7 @@
             228.6,
             187.8,
             225.0,
+            null,
             null,
             null,
             null
@@ -608,6 +642,7 @@
             null,
             null,
             null,
+            null,
             null
           ],
           [
@@ -615,6 +650,7 @@
             238.6,
             297.8,
             268.5,
+            null,
             null,
             null,
             null,
@@ -630,11 +666,13 @@
             null,
             null,
             null,
+            null,
             null
           ],
           [
             194.2,
             257.7,
+            null,
             null,
             null,
             null,
@@ -652,9 +690,11 @@
             null,
             null,
             null,
+            null,
             null
           ],
           [
+            null,
             null,
             null,
             null,
@@ -669,22 +709,33 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_386_2023_llm.pdf",
-      "content_hash": "05a06247bdbf993b02eb6fcbc940073ec64919dead6253f36d2c8ec44875047f",
-      "standardized_at": "2026-03-18T23:28:15.799095+00:00",
+      "content_hash": "5830fd7b5a4f8fbc55d007f41314d51d30c19b742a72d940cb20897e7deeda82",
+      "standardized_at": "2026-09-11T12:50:00.884420+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 32018,
-        "output_tokens": 9944,
-        "total_tokens": 41962,
-        "cost_usd": 0.027893
+        "input_tokens": 32614,
+        "output_tokens": 9754,
+        "total_tokens": 42368,
+        "cost_usd": 0.027661
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 60.4,
+        "model_value": 15.5,
+        "triangle_type": "gross",
+        "triangle_units": "millions",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 45,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "millions",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
-          2013,
           2014,
           2015,
           2016,
@@ -698,7 +749,6 @@
         ],
         "development_rows": [
           [
-            null,
             91.7,
             80.7,
             123.2,
@@ -711,7 +761,6 @@
             116.4
           ],
           [
-            null,
             195.2,
             187.2,
             207.5,
@@ -724,7 +773,6 @@
             null
           ],
           [
-            null,
             225.5,
             187.4,
             217.0,
@@ -737,7 +785,6 @@
             null
           ],
           [
-            null,
             237.0,
             187.4,
             235.7,
@@ -750,7 +797,6 @@
             null
           ],
           [
-            null,
             259.4,
             206.5,
             240.7,
@@ -763,7 +809,6 @@
             null
           ],
           [
-            null,
             267.2,
             199.3,
             238.6,
@@ -776,7 +821,6 @@
             null
           ],
           [
-            null,
             282.8,
             189.1,
             251.1,
@@ -789,7 +833,6 @@
             null
           ],
           [
-            null,
             291.7,
             194.2,
             257.7,
@@ -802,7 +845,6 @@
             null
           ],
           [
-            null,
             299.2,
             194.6,
             null,
@@ -815,7 +857,6 @@
             null
           ],
           [
-            null,
             309.7,
             null,
             null,
@@ -827,6 +868,18 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later",
+          "Seven years later",
+          "Eight years later",
+          "Nine years later"
         ],
         "source_page": 45,
         "entity": 386
@@ -931,6 +984,11 @@
         "foreign_pages": [],
         "underwriting_year_pages": [
           50,
+          51,
+          52,
+          53,
+          54,
+          55,
           56,
           57,
           58,
@@ -941,19 +999,21 @@
           63,
           64,
           65,
-          66
+          66,
+          67,
+          68
         ],
-        "underwriting_year_tables_skipped": 15,
+        "underwriting_year_tables_skipped": 20,
         "document_unit_hint": 1.0
       }
     }
   },
-  "total_cost_usd": 0.037124,
-  "total_tokens": 65407,
+  "total_cost_usd": 0.037193,
+  "total_tokens": 68231,
   "validation": {
     "passed": true,
-    "total_discrepancies": 20,
-    "within_tolerance": 20,
+    "total_discrepancies": 24,
+    "within_tolerance": 24,
     "hard_failures": 0,
     "hard_failure_details": []
   }

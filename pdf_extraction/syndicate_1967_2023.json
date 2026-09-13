@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T10:01:38.205610+00:00",
+  "extraction_timestamp": "2026-09-13T04:03:48.612316+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -24,9 +26,18 @@
       ],
       "specific_events": [],
       "specific_years_affected": [],
-      "prior_year_events": [],
+      "prior_year_events": [
+        {
+          "event_name": "Prior accident year development (2022)",
+          "event_year": 2022,
+          "impact_description": "adverse development of claims incurred",
+          "lobs_affected": [],
+          "amount_gbp_m": 1.5,
+          "confidence": 1.0
+        }
+      ],
       "named_events": [],
-      "standardized_narrative": "In 2023, Lloyd's Syndicate 1967 experienced a favourable prior accident year development of claims incurred amounting to $0.1 million. This indicates a release of reserves for prior periods.",
+      "standardized_narrative": "The syndicate experienced a net release of $0.1 million in prior accident year claims development. This follows an adverse development of $1.5 million in the prior year (2022).",
       "raw_causal_phrases": [
         "prior accident year favourable development of claims incurred"
       ],
@@ -94,10 +105,10 @@
           "percentage_of_total": 20.6
         }
       ],
-      "gross_premium_page": 3,
+      "gross_premium_page": 20,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "Prior year development figure is explicitly stated as a gross amount in the narrative. The claims development triangle was not used as a primary source due to the explicit narrative statement. [RAG OVERRIDE: Model said PYD=-0.1, RAG triangle computed -1.0. Using RAG value.]",
+      "data_quality_notes": "The reported prior year development figure is net of reinsurance, as no gross figure was explicitly stated or derivable from the claims development triangles without contradiction. The gross claims development triangle calculation yielded a strengthening of $58.698 million, which contradicts the narrative's net release of $0.1 million. The narrative statement was prioritized as a direct declaration of PYD. [RAG OVERRIDE: Model said PYD=-0.1, RAG triangle computed -1.0. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
@@ -240,20 +251,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_1967_2023_llm.pdf",
-      "content_hash": "7a97d996e4c7755ada52d131f6c4c0c40fcd1ceb504e39a5e5fa5564f3170865",
-      "standardized_at": "2026-07-05T10:08:33.400436+00:00",
+      "content_hash": "efc24ddea416ee5ef2f5679aa2319c5f79d999b476823376f205f14bdb7fcd8e",
+      "standardized_at": "2026-09-11T11:19:30.060632+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 11927,
-        "output_tokens": 1675,
-        "total_tokens": 20769,
-        "cost_usd": 0.007766
+        "input_tokens": 12731,
+        "output_tokens": 2059,
+        "total_tokens": 23082,
+        "cost_usd": 0.008967
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -1.0,
+        "model_value": -0.1,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 36,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2014,
           2015,
@@ -387,6 +410,18 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later",
+          "Seven years later",
+          "Eight years later",
+          "Nine years later"
         ],
         "source_page": 36,
         "entity": 1967
@@ -614,8 +649,8 @@
       "prior_year_development_gbp_m": -1.0,
       "prior_year_development_pct": -0.17,
       "direction": "release",
-      "prior_year_movement_page": 33,
-      "prior_year_movement_confidence": 1.0,
+      "prior_year_movement_page": 32,
+      "prior_year_movement_confidence": 0.8,
       "exact_reserve_text": "In the financial year there was prior accident year favourable development of claims incurred of $0.1 million (2022: $1.5 million adverse).",
       "primary_causes": [
         "Favorable claims development"
@@ -624,11 +659,20 @@
       "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "The Syndicate opened the year with gross claims outstanding of $587.621m (31 Dec 2022). During 2023 there was a small prior-accident-year favourable development, reported as a $0.1m net release of prior year claims. No material named events or per-line gross prior year movements are disclosed; the reported figure is net of reinsurance and a gross prior-year movement was not provided in the notes.",
+      "standardized_narrative": "The Syndicate recorded a small net prior-year reserve release of approximately $1.0m (a ~0.17% reduction on opening gross claims outstanding of $587.6m). This result was derived from aggregate favourable development across older underwriting years as shown in the Syndicate's gross claims development triangle, producing a modest release overall.",
       "raw_causal_phrases": [
-        "prior accident year favourable development of claims incurred of $0.1 million (2022: $1.5 million adverse)."
+        "prior accident year favourable development of claims incurred of $0.1 million (2022: $1.5 million adverse).",
+        "Inflation ... has the potential to impact the Syndicate's results."
       ],
-      "lob_movements": [],
+      "lob_movements": [
+        {
+          "line_of_business": "Aggregate",
+          "direction": "release",
+          "amount_gbp_m": -1.0,
+          "percentage": -0.17,
+          "confidence": 0.8
+        }
+      ],
       "gross_premiums_written_gbp_m": 554.9,
       "gross_premium_mix": [
         {
@@ -692,10 +736,10 @@
           "percentage_of_total": 20.6
         }
       ],
-      "gross_premium_page": 5,
+      "gross_premium_page": 41,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "Amounts in the report are presented in USD (thousands). The requested prior-year reserve movement gross amount was not provided; the report explicitly states a prior-accident-year favourable development of $0.1m (this is a net figure after reinsurance). Per extraction rules, the net figure was used as a fallback. Opening reserves taken from Balance Sheet (gross claims outstanding, prior year column). Gross per-line PYD not available. [RAG OVERRIDE: Model said PYD=-0.1, RAG triangle computed -1.0. Using RAG value.]",
+      "data_quality_notes": "Prior year development derived from the gross claims development triangle (aggregate) because no explicit gross 'movement in prior year's provision' GROSS figure was presented. The report includes a P&L sentence on 'prior accident year favourable development of claims incurred' ($0.1m) which refers to claims incurred rather than a claims outstanding movement; that P&L figure was not used as the primary PYD source. All amounts are in the report's functional currency (USD).",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
@@ -838,20 +882,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_1967_2023_llm.pdf",
-      "content_hash": "7a97d996e4c7755ada52d131f6c4c0c40fcd1ceb504e39a5e5fa5564f3170865",
-      "standardized_at": "2026-07-05T10:09:46.321302+00:00",
+      "content_hash": "efc24ddea416ee5ef2f5679aa2319c5f79d999b476823376f205f14bdb7fcd8e",
+      "standardized_at": "2026-09-11T11:21:56.958388+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 40152,
-        "output_tokens": 5769,
-        "total_tokens": 45921,
-        "cost_usd": 0.021576
+        "input_tokens": 40912,
+        "output_tokens": 6972,
+        "total_tokens": 47884,
+        "cost_usd": 0.024172
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -1.0,
+        "model_value": -1.0,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 36,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2014,
           2015,
@@ -985,6 +1041,18 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later",
+          "Seven years later",
+          "Eight years later",
+          "Nine years later"
         ],
         "source_page": 36,
         "entity": 1967
@@ -1204,12 +1272,12 @@
       }
     }
   },
-  "total_cost_usd": 0.029342,
-  "total_tokens": 66690,
+  "total_cost_usd": 0.033139,
+  "total_tokens": 70966,
   "validation": {
     "passed": true,
-    "total_discrepancies": 7,
-    "within_tolerance": 7,
+    "total_discrepancies": 11,
+    "within_tolerance": 11,
     "hard_failures": 0,
     "hard_failure_details": []
   }

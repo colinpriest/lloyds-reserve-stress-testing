@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-05T20:36:28.618154+00:00",
+  "extraction_timestamp": "2026-09-13T03:57:57.449189+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -18,46 +20,24 @@
       "direction": "release",
       "prior_year_movement_page": 3,
       "prior_year_movement_confidence": 0.8,
-      "exact_reserve_text": "The syndicate also benefitted from prior year releases of $4,102.6k (2013: $5,166.1k). The prior year benefitted from exceptional reserve releases from loss reserves held in relation to the 2011 and 2012 underwriting years. This decrease in prior year releases represents the key driver of the increased claims ratio.",
+      "exact_reserve_text": "The syndicate also benefitted from prior year releases of $4,102.6k (2013: $5,166.1k).",
       "primary_causes": [
-        "Favorable claims development"
+        "Favorable claims development",
+        "IBNR recalibration"
       ],
       "specific_events": [],
       "specific_years_affected": [
         2011,
         2012
       ],
-      "prior_year_events": [
-        {
-          "event_name": "Superstorm Sandy",
-          "event_year": 2012,
-          "impact_description": "Despite the impact of superstorm Sandy in October 2012, the 2012 underwriting year declares a profit of $5,196.3k, representing a return on capacity of 32.8%.",
-          "lobs_affected": [
-            "Reinsurance - Property"
-          ],
-          "amount_gbp_m": null,
-          "confidence": 0.8
-        }
-      ],
+      "prior_year_events": [],
       "named_events": [
         {
           "event_name": "Superstorm Sandy",
           "event_year": 2012,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "Despite the impact of superstorm Sandy in October 2012, the 2012 underwriting year declares a profit of $5,196.3k",
-          "lobs_affected": [
-            "Reinsurance - Property"
-          ],
-          "page": 3,
-          "confidence": 1.0
-        },
-        {
-          "event_name": "Natural catastrophe activity",
-          "event_year": 2014,
-          "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": null,
-          "loss_description": "The level of insured losses incurred due to natural catastrophe activity in 2014 was significantly below the 10 year average.",
+          "loss_description": "impact of superstorm Sandy in October 2012",
           "lobs_affected": [
             "Reinsurance - Property"
           ],
@@ -65,13 +45,11 @@
           "confidence": 0.8
         }
       ],
-      "standardized_narrative": "The syndicate experienced a net prior year release of $4.1 million in 2014, primarily due to favorable claims development on loss reserves held for the 2011 and 2012 underwriting years. Despite the impact of Superstorm Sandy in 2012, the 2012 year of account closed with a profit. The syndicate writes 100% property reinsurance business.",
+      "standardized_narrative": "The syndicate experienced a net release of $4.1026 million from prior year reserves in 2014, representing a 16.35% reduction relative to its opening gross claims outstanding. This favorable development primarily stemmed from exceptional reserve releases related to the 2011 and 2012 underwriting years, contributing to a lower claims ratio. The report also noted that the 2012 underwriting year closed with a profit despite the impact of Superstorm Sandy.",
       "raw_causal_phrases": [
         "benefitted from prior year releases",
         "exceptional reserve releases from loss reserves held in relation to the 2011 and 2012 underwriting years",
-        "decrease in prior year releases",
-        "Despite the impact of superstorm Sandy in October 2012, the 2012 underwriting year declares a profit",
-        "The level of insured losses incurred due to natural catastrophe activity in 2014 was significantly below the 10 year average."
+        "decrease in prior year releases represents the key driver of the increased claims ratio"
       ],
       "lob_movements": [
         {
@@ -85,34 +63,40 @@
       "gross_premiums_written_gbp_m": 28.5573,
       "gross_premium_mix": [
         {
-          "line_of_business": "Property reinsurance business",
+          "line_of_business": "Reinsurance - Property",
           "amount_gbp_m": 28.5573,
           "percentage_of_total": 100.0
         }
       ],
-      "gross_premium_page": 2,
+      "gross_premium_page": 8,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "Prior year development figure is assumed to be net of reinsurance as the report often presents net figures and does not explicitly state 'gross' for this specific narrative.",
+      "data_quality_notes": "The prior year development figure is explicitly stated as 'releases' in the narrative, but it is likely a net figure as it refers to 'syndicate benefitted'. No gross prior year development figure was found in a dedicated note or a standard claims development triangle.",
       "_claims_triangle": {
         "type": "none",
         "currency": null,
         "units": null,
-        "page": null,
+        "page": 10,
         "underwriting_years": [],
         "development_rows": []
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_6107_2014_llm.pdf",
-      "content_hash": "b7840cf74d49460e3a466c8ceb17a85b72996e9bd60c1291bb16c3d9a0e88d8b",
-      "standardized_at": "2026-07-05T19:41:15.753422+00:00",
+      "content_hash": "ca3bfb8d62a2eeebff792bf13e9d37d44601a3e9f32ebcbf96746aa5c15182fa",
+      "standardized_at": "2026-09-11T13:20:51.545596+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 10637,
-        "output_tokens": 1244,
-        "total_tokens": 16314,
-        "cost_usd": 0.006301
+        "input_tokens": 11441,
+        "output_tokens": 908,
+        "total_tokens": 17333,
+        "cost_usd": 0.005702
+      },
+      "_pyd_route": {
+        "source": "rag_general_narrative",
+        "value": -4.103,
+        "model_value": -4.1026,
+        "note": "confirmed by the model value"
       },
       "_entity_binding": {
         "requested_syndicate": 6107,
@@ -157,8 +141,21 @@
         },
         "foreign_tables_skipped": 0,
         "foreign_pages": [],
-        "underwriting_year_pages": [],
-        "underwriting_year_tables_skipped": 0,
+        "underwriting_year_pages": [
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32,
+          33
+        ],
+        "underwriting_year_tables_skipped": 6,
         "document_unit_hint": 0.001
       }
     },
@@ -171,39 +168,37 @@
       "prior_year_development_gbp_m": -4.103,
       "prior_year_development_pct": -16.36,
       "direction": "release",
-      "prior_year_movement_page": 2,
+      "prior_year_movement_page": 3,
       "prior_year_movement_confidence": 0.5,
       "exact_reserve_text": "The syndicate also benefitted from prior year releases of $4,102.6k (2013: $5,166.1k). The prior year benefitted from exceptional reserve releases from loss reserves held in relation to the 2011 and 2012 underwriting years. This decrease in prior year releases represents the key driver of the increased claims ratio.",
       "primary_causes": [
         "Favorable claims development"
       ],
-      "specific_events": [
-        "Superstorm Sandy"
-      ],
+      "specific_events": [],
       "specific_years_affected": [
         2011,
         2012
       ],
       "prior_year_events": [
         {
-          "event_name": "Superstorm Sandy",
-          "event_year": 2012,
-          "impact_description": "Despite the impact of superstorm Sandy in October 2012, the 2012 underwriting year declares a profit of $5,196.3k; Sandy impacted the 2012 year but the year still closed profitably.",
-          "lobs_affected": [
-            "Property"
-          ],
-          "amount_gbp_m": null,
-          "confidence": 0.8
-        },
-        {
-          "event_name": "Reserve releases on 2011 and 2012 underwriting years",
-          "event_year": 2014,
-          "impact_description": "Exceptional reserve releases from loss reserves held in relation to the 2011 and 2012 underwriting years led to prior year releases of $4,102.6k.",
+          "event_name": "Reserve releases relating to underwriting year 2011",
+          "event_year": 2011,
+          "impact_description": "Exceptional reserve releases from loss reserves held in relation to the 2011 underwriting year, contributing to prior year releases.",
           "lobs_affected": [
             "Reinsurance - Property"
           ],
-          "amount_gbp_m": -4.1026,
-          "confidence": 0.8
+          "amount_gbp_m": null,
+          "confidence": 0.5
+        },
+        {
+          "event_name": "Reserve releases relating to underwriting year 2012",
+          "event_year": 2012,
+          "impact_description": "Exceptional reserve releases from loss reserves held in relation to the 2012 underwriting year, contributing to prior year releases.",
+          "lobs_affected": [
+            "Reinsurance - Property"
+          ],
+          "amount_gbp_m": null,
+          "confidence": 0.5
         }
       ],
       "named_events": [
@@ -212,27 +207,27 @@
           "event_year": 2012,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "Despite the impact of superstorm Sandy in October 2012, the 2012 underwriting year declares a profit of $5,196.3k.",
+          "loss_description": "Despite the impact of superstorm Sandy in October 2012, the 2012 underwriting year declares a profit.",
           "lobs_affected": [
-            "Property"
+            "Reinsurance - Property"
           ],
-          "page": 2,
+          "page": 3,
           "confidence": 0.8
         }
       ],
-      "standardized_narrative": "The syndicate recorded prior year releases totaling $4.1026m (reported as prior year releases) driven by exceptional reserve releases relating to 2011 and 2012 underwriting years. These favourable developments (release) were a key driver in the improved technical performance, and primarily affected the syndicate's property reinsurance business.",
+      "standardized_narrative": "Opening gross claims outstanding at 1 January 2014 were $25.076m. The syndicate recorded prior year releases of $4.103m (reported in the managing agent commentary), driven by exceptional reserve releases related to the 2011 and 2012 underwriting years, resulting in a net favourable prior year development (a release) of approximately 16.4% of opening claims reserves. The business is predominately property reinsurance, and these releases supported the reported underwriting performance.",
       "raw_causal_phrases": [
-        "prior year releases of $4,102.6k (2013: $5,166.1k)",
-        "exceptional reserve releases from loss reserves held in relation to the 2011 and 2012 underwriting years",
-        "Despite the impact of superstorm Sandy in October 2012"
+        "prior year releases of $4,102.6k (2013: $5,166.1k).",
+        "exceptional reserve releases from loss reserves held in relation to the 2011 and 2012 underwriting years.",
+        "This decrease in prior year releases represents the key driver of the increased claims ratio."
       ],
       "lob_movements": [
         {
           "line_of_business": "Reinsurance - Property",
           "direction": "release",
           "amount_gbp_m": -4.1026,
-          "percentage": -16.362,
-          "confidence": 0.6
+          "percentage": -16.36,
+          "confidence": 0.5
         }
       ],
       "gross_premiums_written_gbp_m": 28.5573,
@@ -246,32 +241,32 @@
       "gross_premium_page": 9,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "No explicit GROSS movement in prior year's provision (insurance liabilities) was provided. The report gives a prior year release figure ($4,102.6k) in the narrative which appears to be NET prior year releases; this value has been used as fallback and is flagged as net/inferred. The syndicate writes property reinsurance; mapping to 'Reinsurance - Property' is inferred from the text. Page references for narrative items are approximate to the Strategic Report section.",
+      "data_quality_notes": "No explicit GROSS prior-year movement ('movement in prior year's provision for claims outstanding' by insurance liabilities) was presented. The report gives a prior year release amount ($4,102.6k) in the managing agent narrative but does not label it gross vs net; this extraction used that explicit narrative figure as a net fallback (NET of reinsurance possibly). Opening reserves were taken from the balance sheet prior-year comparative (2013) claims outstanding. All source amounts in the report are presented in $'000; values here are converted to millions (divide by 1,000). Confidence for prior-year movement is reduced because the gross (insurance liabilities) movement figure was not available.",
       "_claims_triangle": {
         "type": "none",
         "currency": "USD",
         "units": "thousands",
-        "page": 17,
-        "underwriting_years": [
-          2010,
-          2011,
-          2012,
-          2013,
-          2014
-        ],
+        "page": null,
+        "underwriting_years": [],
         "development_rows": []
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_6107_2014_llm.pdf",
-      "content_hash": "b7840cf74d49460e3a466c8ceb17a85b72996e9bd60c1291bb16c3d9a0e88d8b",
-      "standardized_at": "2026-07-05T19:42:14.027950+00:00",
+      "content_hash": "ca3bfb8d62a2eeebff792bf13e9d37d44601a3e9f32ebcbf96746aa5c15182fa",
+      "standardized_at": "2026-09-11T13:22:14.840464+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 32005,
-        "output_tokens": 5342,
-        "total_tokens": 37347,
-        "cost_usd": 0.018685
+        "input_tokens": 32765,
+        "output_tokens": 5189,
+        "total_tokens": 37954,
+        "cost_usd": 0.018569
+      },
+      "_pyd_route": {
+        "source": "rag_general_narrative",
+        "value": -4.103,
+        "model_value": -4.1026,
+        "note": "confirmed by the model value"
       },
       "_entity_binding": {
         "requested_syndicate": 6107,
@@ -316,14 +311,27 @@
         },
         "foreign_tables_skipped": 0,
         "foreign_pages": [],
-        "underwriting_year_pages": [],
-        "underwriting_year_tables_skipped": 0,
+        "underwriting_year_pages": [
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32,
+          33
+        ],
+        "underwriting_year_tables_skipped": 6,
         "document_unit_hint": 0.001
       }
     }
   },
-  "total_cost_usd": 0.024986,
-  "total_tokens": 53661,
+  "total_cost_usd": 0.024271,
+  "total_tokens": 55287,
   "validation": {
     "passed": true,
     "total_discrepancies": 19,

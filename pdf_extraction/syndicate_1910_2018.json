@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T09:51:05.374288+00:00",
+  "extraction_timestamp": "2026-09-13T04:14:20.620003+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -11,24 +13,44 @@
       "syndicate": 1910,
       "year": 2018,
       "opening_reserves_gbp_m": 322.1,
-      "opening_reserves_page": 10,
+      "opening_reserves_page": 4,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": 1.91,
       "prior_year_development_pct": 0.59,
       "direction": "strengthening",
-      "prior_year_movement_page": 14,
+      "prior_year_movement_page": 17,
       "prior_year_movement_confidence": 0.8,
-      "exact_reserve_text": "In 2018, there has been an overall (deterioration)/improvement of GBP 11.6m (2017: GBP 38.5m).",
+      "exact_reserve_text": "Calculated from the gross claims development table on page 17, summing the changes in current estimates versus previous diagonals for underwriting years 2012 to 2016.",
       "primary_causes": [
-        "Adverse claims development"
+        "Adverse claims development",
+        "IBNR recalibration",
+        "Social inflation / litigation trends",
+        "Economic inflation / claims cost inflation",
+        "Regulatory changes",
+        "Other"
       ],
       "specific_events": [],
-      "specific_years_affected": [],
+      "specific_years_affected": [
+        2012,
+        2013,
+        2014,
+        2015,
+        2016
+      ],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "For the 2018 financial year, Syndicate 1910 reported an overall net deterioration of GBP 11.6 million in its prior year reserves. This strengthening represents 3.6% of the opening gross claims outstanding. The report attributes this to an overall deterioration/improvement, with no specific events or lines of business detailed as primary drivers for this movement. General factors influencing reserve reliability, such as claim inflation, economic conditions, and legal developments, are noted as risks.",
+      "standardized_narrative": "The syndicate experienced a gross prior year reserve strengthening of GBP 1.91 million in 2018, calculated from the claims development triangle. This indicates that prior period reserves were found to be slightly insufficient. The report attributes reserve movements to factors such as future experience being more adverse than assumed, inherent uncertainty in estimation, and potential deviations from past trends. Other contributing factors include once-off occurrences, changes in market factors, public attitude to claiming, economic conditions, judicial decisions, government legislation, variation in interest rates, delays in settlement, and changes in foreign currency rates. The strengthening affected underwriting years 2012 to 2016.",
       "raw_causal_phrases": [
-        "overall (deterioration)/improvement of GBP 11.6m"
+        "future experience being more adverse than assumed",
+        "uncertainty inherent in the estimation process",
+        "past trends may not apply in the future",
+        "once-off occurrence",
+        "changes in market factors such as public attitude to claiming",
+        "economic conditions",
+        "judicial decisions and government legislation",
+        "variation in interest rates",
+        "delays in settlement",
+        "changes in foreign currency rates"
       ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 364.0,
@@ -36,7 +58,7 @@
         {
           "line_of_business": "Fire and other damage to property",
           "amount_gbp_m": 65.7,
-          "percentage_of_total": 18.05
+          "percentage_of_total": 18.1
         },
         {
           "line_of_business": "Other",
@@ -46,18 +68,18 @@
         {
           "line_of_business": "Reinsurance acceptances",
           "amount_gbp_m": 285.2,
-          "percentage_of_total": 78.35
+          "percentage_of_total": 78.4
         }
       ],
-      "gross_premium_page": 9,
+      "gross_premium_page": 10,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior year development figure is net of reinsurance as no gross figure was explicitly stated or calculable from the provided claims development triangle. Gross premium mix uses regulatory segmental analysis categories as no broader divisional breakdown was provided. [RAG OVERRIDE: Model said PYD=11.6, RAG triangle computed 1.91. Using RAG value.]",
+      "data_quality_notes": "Prior year development calculated from gross claims development triangle as no explicit gross prior year movement figure was found. The report mentions an 'overall (deterioration)/improvement of GBP 11.6m' on page 16, but this is likely a net figure.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "millions",
-        "page": 15,
+        "page": 17,
         "underwriting_years": [
           2012,
           2013,
@@ -135,20 +157,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_1910_2018_llm.pdf",
-      "content_hash": "e6e4845c1519759fa02791ca8bd4a8a8c5131d68c87e918ef7c1ecde62ae0205",
-      "standardized_at": "2026-03-17T13:47:05.907815+00:00",
+      "content_hash": "a2ac828e4450b7cfb8f7e759ee078af0f089aa07c087829bde65e494061efe79",
+      "standardized_at": "2026-09-11T11:05:25.030450+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 12462,
-        "output_tokens": 1119,
-        "total_tokens": 18921,
-        "cost_usd": 0.006536
+        "input_tokens": 14537,
+        "output_tokens": 1318,
+        "total_tokens": 21210,
+        "cost_usd": 0.007656
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 1.91,
+        "model_value": 1.91,
+        "triangle_type": "gross",
+        "triangle_units": "millions",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 36,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "millions",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2012,
           2013,
@@ -222,6 +256,15 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later"
         ],
         "source_page": 36,
         "entity": 1910
@@ -373,7 +416,7 @@
       "syndicate": 1910,
       "year": 2018,
       "opening_reserves_gbp_m": 322.1,
-      "opening_reserves_page": 20,
+      "opening_reserves_page": 13,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": 1.91,
       "prior_year_development_pct": 0.59,
@@ -382,11 +425,7 @@
       "prior_year_movement_confidence": 0.8,
       "exact_reserve_text": "In 2018, there has been an overall (deterioration)/improvement of GBP 11.6m (2017: GBP 38.5m).",
       "primary_causes": [
-        "Favorable claims development",
         "Adverse claims development",
-        "Economic inflation / claims cost inflation",
-        "Social inflation / litigation trends",
-        "Court rulings / legal developments",
         "Reinsurance recoveries"
       ],
       "specific_events": [],
@@ -472,53 +511,37 @@
           "confidence": 0.8
         }
       ],
-      "standardized_narrative": "Using the gross claims development triangle, prior-year reserves show a small net strengthening of approximately GBP 1.9m (c.0.6% of opening gross claims outstanding). This net adverse movement reflects increases in the 2015-2016 underwriting years partly offset by favourable development on earlier years. The report cites claims cost inflation, changing market and litigation conditions, and judicial/government developments as key drivers, and reinsurance recoveries as an important offset. The largest portfolio concentration is reinsurance acceptances (treaty business), which represents the majority of gross exposure.",
+      "standardized_narrative": "Syndicate 1910 opened 2018 with gross claims outstanding of GBP 322.1m (1 Jan 2018). Analysis of the gross claims development triangle indicates a small net prior-year strengthening of approximately GBP 1.9m (0.6% of opening reserves), driven by adverse movements in the 2015-2016 underwriting years partially offset by releases in older years. The report does not attribute the movement to a single large named loss; it notes general claims development variability and reinsurance recoveries as factors.",
       "raw_causal_phrases": [
         "In 2018, there has been an overall (deterioration)/improvement of GBP 11.6m (2017: GBP 38.5m).",
-        "the future claims development will follow a similar pattern to past claims development experience",
-        "average claim costs",
-        "claim handling costs",
-        "claim inflation factors",
-        "claim numbers for each underwriting year",
-        "changes in market factors such as public attitude to claiming",
-        "economic conditions",
-        "portfolio mix",
-        "policy conditions",
-        "claims handling procedures",
-        "judicial decisions and government legislation"
+        "The principal assumption underlying the liability estimates is that the future claims development will follow a similar pattern to past claims development experience.",
+        "Modifications to claims provisions established in prior years are shown in the financial statements for the period in which the adjustments are made."
       ],
       "lob_movements": [
         {
-          "line_of_business": "Marine",
-          "direction": "flat",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.0
-        },
-        {
-          "line_of_business": "Aviation",
-          "direction": "flat",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.0
-        },
-        {
           "line_of_business": "Property",
-          "direction": "flat",
+          "direction": "release",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.0
+        },
+        {
+          "line_of_business": "Marine",
+          "direction": "release",
           "amount_gbp_m": null,
           "percentage": null,
           "confidence": 0.0
         },
         {
           "line_of_business": "Casualty",
-          "direction": "flat",
+          "direction": "strengthening",
           "amount_gbp_m": null,
           "percentage": null,
           "confidence": 0.0
         },
         {
           "line_of_business": "Treaty",
-          "direction": "flat",
+          "direction": "strengthening",
           "amount_gbp_m": null,
           "percentage": null,
           "confidence": 0.0
@@ -545,7 +568,7 @@
       "gross_premium_page": 19,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior year development was calculated from the gross claims development triangle (note 20) as no explicit gross 'movement in prior year's provision' line was provided. The triangle was used per the prescribed diagonal method excluding the two most recent underwriting years. The report also contains a narrative 'overall (deterioration)/improvement of GBP 11.6m' which appears to be a different (possibly net) presentation; the triangle-based gross figure (GBP 1.9m strengthening) was used for the 'prior_year_development_gbp_m'. Rounding and a minor typographic '80.01' figure in the triangle were preserved in calculations; small rounding differences may exist.",
+      "data_quality_notes": "Prior-year development was calculated from the gross claims development triangle (pages 31). The report also contains a narrative line stating a GBP 11.6m '(deterioration)/improvement' which is ambiguous as to gross vs net; no explicit gross 'movement in prior years' line was provided. RITC activity and quota-share arrangements (noted elsewhere) may distort comparisons. The triangle values were used to compute PYD (confidence medium-high). LOB-level prior-year movements are not quantified in the report; lob_movements set with null amounts and low confidence.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -584,7 +607,7 @@
             33.3,
             41.4,
             139.4,
-            80.01,
+            80.0,
             null,
             null
           ],
@@ -623,25 +646,47 @@
             null,
             null,
             null
+          ],
+          [
+            57.1,
+            30.0,
+            32.8,
+            143.6,
+            80.0,
+            389.6,
+            321.5
           ]
-        ]
+        ],
+        "type_confidence": 0.8
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_1910_2018_llm.pdf",
-      "content_hash": "e6e4845c1519759fa02791ca8bd4a8a8c5131d68c87e918ef7c1ecde62ae0205",
-      "standardized_at": "2026-03-17T13:48:25.590849+00:00",
+      "content_hash": "a2ac828e4450b7cfb8f7e759ee078af0f089aa07c087829bde65e494061efe79",
+      "standardized_at": "2026-09-11T11:08:25.086953+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 39961,
-        "output_tokens": 7493,
-        "total_tokens": 47454,
-        "cost_usd": 0.024976
+        "input_tokens": 46763,
+        "output_tokens": 7829,
+        "total_tokens": 54592,
+        "cost_usd": 0.027349
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 1.91,
+        "model_value": 1.91,
+        "triangle_type": "gross",
+        "triangle_units": "millions",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 36,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "millions",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2012,
           2013,
@@ -715,6 +760,15 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later"
         ],
         "source_page": 36,
         "entity": 1910
@@ -863,12 +917,12 @@
       }
     }
   },
-  "total_cost_usd": 0.031512,
-  "total_tokens": 66375,
+  "total_cost_usd": 0.035005,
+  "total_tokens": 75802,
   "validation": {
     "passed": true,
-    "total_discrepancies": 31,
-    "within_tolerance": 31,
+    "total_discrepancies": 26,
+    "within_tolerance": 26,
     "hard_failures": 0,
     "hard_failure_details": []
   }

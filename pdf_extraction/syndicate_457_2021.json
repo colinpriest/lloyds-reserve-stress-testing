@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-05T20:29:21.733148+00:00",
+  "extraction_timestamp": "2026-09-13T04:03:45.108528+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -13,8 +15,8 @@
       "opening_reserves_gbp_m": 870.49,
       "opening_reserves_page": 7,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": -68.4,
-      "prior_year_development_pct": -7.86,
+      "prior_year_development_gbp_m": -80.854,
+      "prior_year_development_pct": -9.29,
       "direction": "release",
       "prior_year_movement_page": 18,
       "prior_year_movement_confidence": 1.0,
@@ -31,13 +33,13 @@
           "event_year": 2021,
           "event_type": "political",
           "net_loss_gbp_m": null,
-          "loss_description": "funding requirements maintained to cover the liabilities",
+          "loss_description": "funding requirements maintained to cover the liabilities in respect of the South African riots",
           "lobs_affected": [],
           "page": 15,
           "confidence": 0.8
         }
       ],
-      "standardized_narrative": "The syndicate reported a prior year reserve release of GBP 68.4 million in 2021, representing 7.86% of its opening gross claims outstanding. This favorable development contributed to the overall technical result. The releases were observed across several lines of business, with Marine, Property, Energy, and Aviation showing releases, while Reinsurance and Casualty experienced strengthenings. The report also noted funding requirements for the South African riots in the current year.",
+      "standardized_narrative": "The syndicate reported a significant release of GBP 68.4 million from reserves in respect of prior accident years for 2021, following a GBP 45.0 million release in 2020. This favorable development contributed to the overall net technical result. The releases were observed across several lines of business, including Marine, Property, Energy, and Aviation, while Reinsurance and Casualty showed some strengthening. The report also mentions funding requirements for the South African riots in 2021.",
       "raw_causal_phrases": [
         "releases from reserves in respect of prior accident years"
       ],
@@ -83,20 +85,6 @@
           "amount_gbp_m": 1.598,
           "percentage": null,
           "confidence": 1.0
-        },
-        {
-          "line_of_business": "Motor",
-          "direction": "release",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.5
-        },
-        {
-          "line_of_business": "Life",
-          "direction": "release",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.5
         }
       ],
       "gross_premiums_written_gbp_m": 896.7,
@@ -135,7 +123,7 @@
       "gross_premium_page": 16,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "[RAG PYD NOT APPLIED: deterministic figure +80.854m has the opposite sign to both model values [-68.4, -68.392], which agree with each other; model values retained.] [CODE PYD NOT APPLIED: deterministic figure +80.854m has the opposite sign to both model values [-68.4, -68.392], which agree with each other; model values retained.]",
+      "data_quality_notes": "The prior year development figure of -68.4m is taken from explicit narrative text. A calculation from the gross claims development triangle (Note 17) yields a different result (-163.206m), suggesting other adjustments or presentation differences not captured by the triangle calculation method. [RAG OVERRIDE: Model said PYD=-68.4, RAG triangle computed -80.854. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -155,83 +143,71 @@
         ],
         "development_rows": [
           [
-            -135893,
-            -153572,
-            -147722,
-            -153252,
-            -124736,
-            -164736,
-            -157468,
-            -151917,
-            -195888,
-            -225268
+            -135.893,
+            -153.572,
+            -147.722,
+            -153.252,
+            -124.736,
+            -164.736,
+            -157.468,
+            -151.917,
+            -195.888,
+            -225.268
           ],
           [
-            -278894,
-            -310799,
-            -282753,
-            -286237,
-            -263403,
-            -290171,
-            -343493,
-            -471640,
-            -445118,
+            -278.894,
+            -310.799,
+            -282.753,
+            -286.237,
+            -263.403,
+            -290.171,
+            -343.493,
+            -471.64,
+            -445.118,
             null
           ],
           [
-            -297815,
-            -310622,
-            -276151,
-            -251668,
-            -239256,
-            -263346,
-            -361090,
-            -443486,
-            null,
-            null
-          ],
-          [
-            -291391,
-            -291052,
-            -251319,
-            -227391,
-            -221333,
-            -243831,
-            -337140,
-            null,
+            -297.815,
+            -310.622,
+            -276.151,
+            -251.668,
+            -239.256,
+            -263.346,
+            -361.09,
+            -443.486,
             null,
             null
           ],
           [
-            -293171,
-            -295845,
-            -254393,
-            -224042,
-            -209299,
-            -234499,
-            null,
+            -291.391,
+            -291.052,
+            -251.319,
+            -227.391,
+            -221.333,
+            -243.831,
+            -337.14,
             null,
             null,
             null
           ],
           [
-            -275571,
-            -294571,
-            -250120,
-            -213141,
-            -202476,
-            null,
+            -293.171,
+            -295.845,
+            -254.393,
+            -224.042,
+            -209.299,
+            -234.499,
             null,
             null,
             null,
             null
           ],
           [
-            -271044,
-            -286381,
-            -241534,
-            -207096,
-            null,
+            -275.571,
+            -294.571,
+            -250.12,
+            -213.141,
+            -202.476,
             null,
             null,
             null,
@@ -239,10 +215,10 @@
             null
           ],
           [
-            -269856,
-            -283180,
-            -236224,
-            null,
+            -271.044,
+            -286.381,
+            -241.534,
+            -207.096,
             null,
             null,
             null,
@@ -251,9 +227,9 @@
             null
           ],
           [
-            -265163,
-            -281167,
-            null,
+            -269.856,
+            -283.18,
+            -236.224,
             null,
             null,
             null,
@@ -263,7 +239,19 @@
             null
           ],
           [
-            -265936,
+            -265.163,
+            -281.167,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            -265.936,
             null,
             null,
             null,
@@ -278,20 +266,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_457_2021_llm.pdf",
-      "content_hash": "31347ab5e599317870c9815eea8051ec61b65cd5ac375125ebdef2da5335bd65",
-      "standardized_at": "2026-03-19T03:45:20.557582+00:00",
+      "content_hash": "6c44ab6c9ad56945831ec1713dea8eeb5f76a9a2f7caa156793000fcbfe2c577",
+      "standardized_at": "2026-09-11T13:15:20.287307+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 11152,
-        "output_tokens": 2313,
-        "total_tokens": 18687,
-        "cost_usd": 0.009128
+        "input_tokens": 11956,
+        "output_tokens": 2111,
+        "total_tokens": 20291,
+        "cost_usd": 0.008864
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -80.854,
+        "model_value": -68.4,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 46,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2012,
           2013,
@@ -426,8 +426,21 @@
             null
           ]
         ],
+        "row_labels": [
+          "At end of underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later",
+          "Seven years later",
+          "Eight years later",
+          "Nine years later"
+        ],
         "source_page": 46,
-        "entity": 457
+        "entity": 457,
+        "presentation_sign": "outflow"
       },
       "_adobe_lob": {
         "gross_premium_mix": [
@@ -594,12 +607,12 @@
       "opening_reserves_gbp_m": 870.49,
       "opening_reserves_page": 20,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": -68.392,
-      "prior_year_development_pct": -7.86,
+      "prior_year_development_gbp_m": -80.854,
+      "prior_year_development_pct": -9.29,
       "direction": "release",
       "prior_year_movement_page": 43,
       "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "The 2021 net technical result of GBP 96.9m (2020: (GBP 26.2)m) includes GBP 68.4m (2020: GBP 45.0m) of releases from reserves in respect of prior accident years.",
+      "exact_reserve_text": "The 2021 net technical result of GBP 96.9m (2020: GBP (26.2)m) includes GBP 68.4m (2020: GBP 45.0m) of releases from reserves in respect of prior accident years.",
       "primary_causes": [
         "Favorable claims development"
       ],
@@ -607,10 +620,10 @@
       "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "At 1 January 2021 gross claims outstanding were GBP 870.49m. During 2021 the Syndicate recorded gross prior year releases of GBP 68.392m (favourable development), representing a c.7.9% release relative to opening gross claims outstanding. The releases were reported across several classes (notably Marine, Property and Energy) while certain classes (eg. Reinsurance and Casualty) showed adverse movements. The net technical result statement explicitly attributes GBP 68.4m of releases to prior accident years.",
+      "standardized_narrative": "The syndicate reported gross claims outstanding at the prior-year comparative (opening) of GBP 870.49m and recorded gross prior-year releases of GBP 68.392m in 2021 (a release of c.7.9% of opening gross claims). The releases were reported as coming from prior accident years and were reflected across principal classes (notably Marine, Property and Energy), leading to a favourable impact on the net technical result.",
       "raw_causal_phrases": [
-        "includes GBP 68.4m (2020: GBP 45.0m) of releases from reserves in respect of prior accident years.",
-        "Total prior year releases 68,392"
+        "includes GBP 68.4m (2020: GBP 45.0m) of releases from reserves in respect of prior accident years",
+        "Total prior year releases 68,392 45,010"
       ],
       "lob_movements": [
         {
@@ -635,7 +648,7 @@
           "confidence": 1.0
         },
         {
-          "line_of_business": "Treaty",
+          "line_of_business": "Reinsurance - Specialty",
           "direction": "strengthening",
           "amount_gbp_m": 5.911,
           "percentage": null,
@@ -657,7 +670,7 @@
         },
         {
           "line_of_business": "Motor",
-          "direction": "flat",
+          "direction": null,
           "amount_gbp_m": null,
           "percentage": null,
           "confidence": 0.0
@@ -696,10 +709,10 @@
           "percentage_of_total": 19.3
         }
       ],
-      "gross_premium_page": 36,
+      "gross_premium_page": 4,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Opening gross claims outstanding taken from Balance Sheet liabilities comparative column (2020) on page 20. Prior year movement (gross) taken from Technical Provisions note (page 43) where total prior year releases are itemised (Total prior year releases 68,392). Lob level prior year movement figures are reported in the Technical Provisions note and used to populate lob_movements. A gross claims development triangle is present in the report (pages 44-45) but the development matrix rows were not fully transcribed here; if needed the triangle can be extracted directly from pages 44-45. All monetary figures are presented in the report currency (GBP) and converted from GBP 000 to millions for this JSON. Positive amounts denote strengthening (adverse), negative amounts denote releases (favourable). [RAG PYD NOT APPLIED: deterministic figure +80.854m has the opposite sign to both model values [-68.4, -68.392], which agree with each other; model values retained.] [CODE PYD NOT APPLIED: deterministic figure +80.854m has the opposite sign to both model values [-68.4, -68.392], which agree with each other; model values retained.]",
+      "data_quality_notes": "Opening gross claims outstanding taken from the Balance Sheet liabilities (Claims outstanding) prior-year comparative column (page 20). Prior year movement taken from the Technical Provisions note (Claims outstanding) which shows a gross 'Total prior year releases' of GBP 68,392k (page 43) and the explanatory sentence stating GBP 68.4m releases. Gross premium mix percentages taken from the segmental breakdown (page 4) and applied to the reported total gross written premium (896,699k) to compute amounts. LOB mapping: 'Reinsurance' in the prior-year breakdown was mapped to 'Reinsurance - Specialty' for standardized LOBs. A gross claims development triangle is present in the notes (pages 44-45) but was not fully transcribed here; triangle exists in GBP 000. All monetary amounts in this JSON are in millions. Confidence levels reflect explicit reported figures (1.0) and calculated allocations (0.8). [RAG OVERRIDE: Model said PYD=-68.392, RAG triangle computed -80.854. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -717,25 +730,36 @@
           2020,
           2021
         ],
-        "development_rows": [],
-        "note": "Gross claims development table exists (pages 44-45) but development period rows were not fully transcribed in this extract. The table should be consulted directly for a full triangle if required."
+        "development_rows": []
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_457_2021_llm.pdf",
-      "content_hash": "31347ab5e599317870c9815eea8051ec61b65cd5ac375125ebdef2da5335bd65",
-      "standardized_at": "2026-03-19T03:47:05.755123+00:00",
+      "content_hash": "6c44ab6c9ad56945831ec1713dea8eeb5f76a9a2f7caa156793000fcbfe2c577",
+      "standardized_at": "2026-09-11T13:17:35.846239+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 24277,
-        "output_tokens": 5446,
-        "total_tokens": 29723,
-        "cost_usd": 0.016961
+        "input_tokens": 25037,
+        "output_tokens": 7247,
+        "total_tokens": 32284,
+        "cost_usd": 0.020753
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -80.854,
+        "model_value": -68.392,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 46,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2012,
           2013,
@@ -870,8 +894,21 @@
             null
           ]
         ],
+        "row_labels": [
+          "At end of underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later",
+          "Seven years later",
+          "Eight years later",
+          "Nine years later"
+        ],
         "source_page": 46,
-        "entity": 457
+        "entity": 457,
+        "presentation_sign": "outflow"
       },
       "_adobe_lob": {
         "gross_premium_mix": [
@@ -1033,12 +1070,12 @@
       }
     }
   },
-  "total_cost_usd": 0.026089,
-  "total_tokens": 48410,
+  "total_cost_usd": 0.029617,
+  "total_tokens": 52575,
   "validation": {
     "passed": true,
-    "total_discrepancies": 15,
-    "within_tolerance": 15,
+    "total_discrepancies": 11,
+    "within_tolerance": 11,
     "hard_failures": 0,
     "hard_failure_details": []
   }

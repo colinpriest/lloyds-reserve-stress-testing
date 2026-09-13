@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-05T20:36:35.288388+00:00",
+  "extraction_timestamp": "2026-09-13T03:57:58.153462+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -24,40 +26,43 @@
         "Natural catastrophe events"
       ],
       "specific_events": [],
-      "specific_years_affected": [],
+      "specific_years_affected": [
+        2013,
+        2014
+      ],
       "prior_year_events": [],
       "named_events": [
         {
-          "event_name": "Tianjin port explosions",
+          "event_name": "Chinese port of Tianjin explosions",
           "event_year": 2015,
           "event_type": "man_made",
           "net_loss_gbp_m": null,
-          "loss_description": "largest loss to date on the 2015 underwriting year, well within our catastrophe margin",
+          "loss_description": "well within our catastrophe margin",
           "lobs_affected": [
-            "Property"
+            "Reinsurance - Property"
           ],
           "page": 3,
-          "confidence": 1.0
+          "confidence": 0.8
         }
       ],
-      "standardized_narrative": "Syndicate 6107 reported a prior year release of $4.3 million in 2015, representing 17.12% of its opening gross claims outstanding. This favorable development was primarily attributed to a continued low level of insured natural catastrophe losses in prior years.",
+      "standardized_narrative": "Syndicate 6107 reported a net prior year reserve release of $4.3 million in 2015, primarily due to lower than expected natural catastrophe claims activity and a continued low level of insured natural catastrophe losses in the past two years. This release represents a 17.12% reduction of the opening gross claims outstanding. The syndicate's largest loss for the current year was the Chinese port of Tianjin explosions, which was contained within its catastrophe margin.",
       "raw_causal_phrases": [
-        "benefitted from prior year releases of $4.3m",
-        "reflection of the continued low level of insured natural catastrophe losses incurred in the past 2 years"
+        "benefitted from lower than expected natural catastrophe claims activity",
+        "continued low level of insured natural catastrophe losses incurred in the past 2 years"
       ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 47.1029,
       "gross_premium_mix": [
         {
-          "line_of_business": "Reinsurance - Property",
+          "line_of_business": "property reinsurance business",
           "amount_gbp_m": 47.1029,
           "percentage_of_total": 100.0
         }
       ],
-      "gross_premium_page": 3,
+      "gross_premium_page": 11,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "The prior year development figure of $4.3m is stated as 'prior year releases' in the narrative, but it is not explicitly specified as gross or net of reinsurance. It is assumed to be gross as 'net' is usually specified when applicable.",
+      "data_quality_notes": "Prior year development figure is net of reinsurance as no gross figure was explicitly stated. Gross premium mix is derived from narrative text in the segmental analysis note, as no detailed table was provided.",
       "_claims_triangle": {
         "type": "loss_ratio",
         "currency": "USD",
@@ -124,15 +129,15 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_6107_2015_llm.pdf",
-      "content_hash": "d06404aa665e271cb5932f092237b0329b8de030ca7ea1b0a670708788d62ca8",
-      "standardized_at": "2026-07-05T19:43:32.687087+00:00",
+      "content_hash": "459631c08a55207649dcc6bbeab50c753524764fd5deecf8440d5b1d634bff4f",
+      "standardized_at": "2026-09-11T13:27:11.084376+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 11669,
-        "output_tokens": 1068,
-        "total_tokens": 16878,
-        "cost_usd": 0.006171
+        "input_tokens": 12473,
+        "output_tokens": 1092,
+        "total_tokens": 17617,
+        "cost_usd": 0.006472
       },
       "_entity_binding": {
         "requested_syndicate": 6107,
@@ -185,8 +190,20 @@
         },
         "foreign_tables_skipped": 0,
         "foreign_pages": [],
-        "underwriting_year_pages": [],
-        "underwriting_year_tables_skipped": 0,
+        "underwriting_year_pages": [
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41
+        ],
+        "underwriting_year_tables_skipped": 6,
         "document_unit_hint": 0.001
       }
     },
@@ -197,24 +214,21 @@
       "opening_reserves_page": 11,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": -4.3,
-      "prior_year_development_pct": -17.12,
+      "prior_year_development_pct": -17.1267,
       "direction": "release",
       "prior_year_movement_page": 3,
-      "prior_year_movement_confidence": 1.0,
+      "prior_year_movement_confidence": 0.5,
       "exact_reserve_text": "The syndicate also benefitted from prior year releases of $4.3m (2014: $4.1m), which was a reflection of the continued low level of insured natural catastrophe losses incurred in the past 2 years.",
       "primary_causes": [
         "Natural catastrophe events",
         "Favorable claims development"
       ],
       "specific_events": [],
-      "specific_years_affected": [
-        2013,
-        2014
-      ],
+      "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [
         {
-          "event_name": "Explosions in the Chinese port of Tianjin",
+          "event_name": "explosions in the Chinese port of Tianjin",
           "event_year": 2015,
           "event_type": "man_made",
           "net_loss_gbp_m": null,
@@ -226,17 +240,17 @@
           "confidence": 0.8
         }
       ],
-      "standardized_narrative": "The syndicate opened 2015 with gross claims outstanding of $25.112m. During 2015 the syndicate recorded prior year releases of $4.3m, driven primarily by continued low insured natural catastrophe activity which produced favourable prior-year development. The movement is reported as a release (favourable development) and is described in the managing agent's strategic report.",
+      "standardized_narrative": "Syndicate 6107 recorded an opening (prior-year) gross claims outstanding of 25.1122 million (USD). Management reports prior year releases of $4.3m (USD) which they attribute to continued low insured natural catastrophe activity and favourable claims development, resulting in an overall prior-year release (favourable) of approximately $4.3m. No explicit gross prior-year movement figure was provided, so the reported $4.3m is a net release figure disclosed by management.",
       "raw_causal_phrases": [
         "prior year releases of $4.3m (2014: $4.1m), which was a reflection of the continued low level of insured natural catastrophe losses incurred in the past 2 years.",
-        "Aided by another year of relatively low natural catastrophe activity, syndicate 6107 achieved a claims ratio of 49% (2014: 42%)."
+        "lower than average level of claims notifications"
       ],
       "lob_movements": [
         {
           "line_of_business": "Reinsurance - Property",
           "direction": "release",
           "amount_gbp_m": -4.3,
-          "percentage": -17.12,
+          "percentage": -17.1267,
           "confidence": 0.5
         }
       ],
@@ -251,91 +265,26 @@
       "gross_premium_page": 10,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "Prior-year movement: only a NET prior year release of $4.3m is explicitly stated in the narrative. No GROSS prior-year movement figure was provided in a dedicated 'movement in prior year provision' table; therefore the NET figure from the strategic report narrative was used. Opening gross claims outstanding taken from balance sheet (Claims outstanding, gross) as at 1 January 2015. All amounts are reported in the syndicate's functional currency (USD). The claims development triangle in note 9 provides current gross claims liabilities by underwriting year but lacks full multi-period development rows to compute gross PYD reliably; triangle usage was therefore limited.",
+      "data_quality_notes": "No explicit GROSS prior-year movement (insurance liabilities) is presented in the notes. The report explicitly states a prior year release of $4.3m but this is described in narrative as a net release (after reinsurance). The gross 'movement in provision' shown in the technical provisions relates to total movement (including current year) and cannot be used per the rules. A gross claims development triangle in the technical provisions is present but does not provide prior-period diagonals clearly enough to compute a gross PYD. Therefore the reported prior_year_development_gbp_m uses the management-disclosed net prior year release ($4.3m) as a last-resort fallback. Users should treat the prior-year movement as NET of reinsurance and of lower confidence for gross-reserve analysis.",
       "_claims_triangle": {
-        "type": "gross",
+        "type": "none",
         "currency": "USD",
         "units": "thousands",
-        "page": 23,
-        "underwriting_years": [
-          2010,
-          2011,
-          2012,
-          2013,
-          2014,
-          2015
-        ],
-        "development_rows": [
-          [
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-          ],
-          [
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-          ],
-          [
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-          ],
-          [
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-          ],
-          [
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-          ],
-          [
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-          ],
-          [
-            3351.2,
-            1010.2,
-            1071.6,
-            2663.8,
-            4357.3,
-            22987.1
-          ]
-        ],
-        "confidence": 0.5
+        "page": null,
+        "underwriting_years": [],
+        "development_rows": []
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_6107_2015_llm.pdf",
-      "content_hash": "d06404aa665e271cb5932f092237b0329b8de030ca7ea1b0a670708788d62ca8",
-      "standardized_at": "2026-07-05T19:44:49.114073+00:00",
+      "content_hash": "459631c08a55207649dcc6bbeab50c753524764fd5deecf8440d5b1d634bff4f",
+      "standardized_at": "2026-09-11T13:28:47.251541+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 39553,
-        "output_tokens": 6755,
-        "total_tokens": 46308,
-        "cost_usd": 0.023398
+        "input_tokens": 40313,
+        "output_tokens": 5528,
+        "total_tokens": 45841,
+        "cost_usd": 0.021134
       },
       "_entity_binding": {
         "requested_syndicate": 6107,
@@ -388,18 +337,30 @@
         },
         "foreign_tables_skipped": 0,
         "foreign_pages": [],
-        "underwriting_year_pages": [],
-        "underwriting_year_tables_skipped": 0,
+        "underwriting_year_pages": [
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41
+        ],
+        "underwriting_year_tables_skipped": 6,
         "document_unit_hint": 0.001
       }
     }
   },
-  "total_cost_usd": 0.029569,
-  "total_tokens": 63186,
+  "total_cost_usd": 0.027606,
+  "total_tokens": 63458,
   "validation": {
     "passed": true,
-    "total_discrepancies": 15,
-    "within_tolerance": 15,
+    "total_discrepancies": 14,
+    "within_tolerance": 14,
     "hard_failures": 0,
     "hard_failure_details": []
   }

@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T11:39:17.566809+00:00",
+  "extraction_timestamp": "2026-09-13T03:58:28.021360+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -21,69 +23,72 @@
       "exact_reserve_text": "Change in estimates of prior year provisions (89,063) 27,677 (61,386)",
       "primary_causes": [
         "Favorable claims development",
-        "IBNR recalibration"
+        "Reserve methodology change"
       ],
       "specific_events": [],
       "specific_years_affected": [],
-      "prior_year_events": [],
+      "prior_year_events": [
+        {
+          "event_name": "2022 year of account closure",
+          "event_year": 2022,
+          "impact_description": "Closure of the 2022 year of account with a profit of $225.0m, leading to a distribution to members.",
+          "lobs_affected": [],
+          "amount_gbp_m": -225.0,
+          "confidence": 0.8
+        }
+      ],
       "named_events": [
+        {
+          "event_name": "Hurricane Helene",
+          "event_year": 2024,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "Adding to an above average year of smaller severe convective storm losses.",
+          "lobs_affected": [
+            "Aggregate"
+          ],
+          "page": 2,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Hurricane Milton",
+          "event_year": 2024,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "Adding to an above average year of smaller severe convective storm losses.",
+          "lobs_affected": [
+            "Aggregate"
+          ],
+          "page": 2,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Severe convective storm (SCS) losses",
+          "event_year": 2024,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "Above average year of smaller severe convective storm losses, contributing to a catastrophe net loss ratio of 9.3%.",
+          "lobs_affected": [
+            "Aggregate"
+          ],
+          "page": 2,
+          "confidence": 0.8
+        },
         {
           "event_name": "Baltimore Bridge collapse",
           "event_year": 2024,
           "event_type": "man_made",
           "net_loss_gbp_m": 27.0,
-          "loss_description": "recording a $27m net loss arising from the Baltimore Bridge collapse in March",
-          "lobs_affected": [
-            "Marine"
-          ],
+          "loss_description": "Recording a $27m net loss arising from the Baltimore Bridge collapse in March.",
+          "lobs_affected": [],
           "page": 2,
           "confidence": 1.0
-        },
-        {
-          "event_name": "Hurricanes Helene",
-          "event_year": 2024,
-          "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": null,
-          "loss_description": "Hurricanes Helene and Milton adding to an above average year of smaller severe convective storm ('SCS') losses giving rise to a catastrophe net loss ratio of 9.3%",
-          "lobs_affected": [
-            "Property",
-            "Reinsurance - Property"
-          ],
-          "page": 2,
-          "confidence": 0.8
-        },
-        {
-          "event_name": "Hurricanes Milton",
-          "event_year": 2024,
-          "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": null,
-          "loss_description": "Hurricanes Helene and Milton adding to an above average year of smaller severe convective storm ('SCS') losses giving rise to a catastrophe net loss ratio of 9.3%",
-          "lobs_affected": [
-            "Property",
-            "Reinsurance - Property"
-          ],
-          "page": 2,
-          "confidence": 0.8
-        },
-        {
-          "event_name": "Severe convective storm ('SCS') losses",
-          "event_year": 2024,
-          "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": null,
-          "loss_description": "above average year of smaller severe convective storm ('SCS') losses giving rise to a catastrophe net loss ratio of 9.3%",
-          "lobs_affected": [
-            "Property",
-            "Reinsurance - Property"
-          ],
-          "page": 2,
-          "confidence": 0.8
         }
       ],
-      "standardized_narrative": "The syndicate recorded a gross prior year reserve release of $89.063 million in 2024, representing a 2.81% release of its opening gross claims outstanding. This favourable development is supported by a positive net prior year reserve development of $61m and a downward trend in the non-CAT attritional net claims ratio, indicating increased confidence in claims reserves.",
+      "standardized_narrative": "Syndicate 4444 experienced a gross prior year reserve release of $89.063 million in 2024. This favorable development was driven by increased confidence in total claims reserves through the build of management reserve margins and positive prior year reserve development. The 2022 year of account closed with a profit of $225.0 million, leading to a distribution to members.",
       "raw_causal_phrases": [
         "increased confidence in our total claims reserves through the build of management reserve margins",
-        "positive prior year reserve development",
-        "non-CAT attritional net claims ratio continued to trend down"
+        "evidenced by positive prior year reserve development"
       ],
       "lob_movements": [
         {
@@ -172,7 +177,7 @@
       "gross_premium_page": 16,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "The gross claims development triangle is not used for prior year development calculation due to explicit RITC adjustments and aggregation changes mentioned in the notes, which distort historical comparisons. The prior year development is taken directly from the 'Change in estimates of prior year provisions' line in Note 26. LOB movements are net of reinsurance as gross breakdown is not provided.",
+      "data_quality_notes": "Prior year development for specific lines of business (lob_movements) is reported as NET of reinsurance, as gross breakdown was not available. The claims development triangle on page 13 was not used for prior year development calculation due to potential distortions from RITC adjustments mentioned in Note 25 and 26.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
@@ -192,83 +197,71 @@
         ],
         "development_rows": [
           [
-            379230,
-            385288,
-            736273,
-            458774,
-            488437,
-            578977,
-            619147,
-            631505,
-            452812,
-            859661
+            379230.0,
+            385288.0,
+            736273.0,
+            458774.0,
+            488437.0,
+            578977.0,
+            619147.0,
+            631505.0,
+            452812.0,
+            859661.0
           ],
           [
-            756057,
-            906094,
-            1252829,
-            886537,
-            1319646,
-            1094304,
-            1099538,
-            1094754,
-            955475,
+            756057.0,
+            906094.0,
+            1252829.0,
+            886537.0,
+            1319646.0,
+            1094304.0,
+            1099538.0,
+            1094754.0,
+            955475.0,
             null
           ],
           [
-            887618,
-            1001686,
-            1293045,
-            1107140,
-            1458614,
-            1139887,
-            1110775,
-            1185804,
-            null,
-            null
-          ],
-          [
-            898703,
-            997539,
-            1329863,
-            1089137,
-            1416915,
-            1150582,
-            1115866,
-            null,
+            887618.0,
+            1001686.0,
+            1293045.0,
+            1107140.0,
+            1458614.0,
+            1139887.0,
+            1110775.0,
+            1185804.0,
             null,
             null
           ],
           [
-            897995,
-            1032149,
-            1313998,
-            1109461,
-            1434884,
-            1115347,
-            null,
+            898703.0,
+            997539.0,
+            1329863.0,
+            1089137.0,
+            1416915.0,
+            1150582.0,
+            1115866.0,
             null,
             null,
             null
           ],
           [
-            904716,
-            1038698,
-            1325278,
-            1119964,
-            1492735,
-            null,
+            897995.0,
+            1032149.0,
+            1313998.0,
+            1109461.0,
+            1434884.0,
+            1115347.0,
             null,
             null,
             null,
             null
           ],
           [
-            889083,
-            1048019,
-            1331442,
-            1121303,
-            null,
+            904716.0,
+            1038698.0,
+            1325278.0,
+            1119964.0,
+            1492735.0,
             null,
             null,
             null,
@@ -276,10 +269,10 @@
             null
           ],
           [
-            898276,
-            1051731,
-            1327851,
-            null,
+            889083.0,
+            1048019.0,
+            1331442.0,
+            1121303.0,
             null,
             null,
             null,
@@ -288,9 +281,9 @@
             null
           ],
           [
-            904170,
-            1050466,
-            null,
+            898276.0,
+            1051731.0,
+            1327851.0,
             null,
             null,
             null,
@@ -300,7 +293,19 @@
             null
           ],
           [
-            904220,
+            904170.0,
+            1050466.0,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            904220.0,
             null,
             null,
             null,
@@ -315,20 +320,28 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_4444_2024_llm.pdf",
-      "content_hash": "bf0ea49efa060dc37c7463a4d9dab60939f41c9842808847c52cddc1a77d76a3",
-      "standardized_at": "2026-07-06T00:42:57.143653+00:00",
+      "content_hash": "fe37c64607db63c144dc73f6555a72fbc30417a31786558ed281ff95fd8acbb2",
+      "standardized_at": "2026-09-11T14:20:15.605764+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 11411,
-        "output_tokens": 2825,
-        "total_tokens": 22195,
-        "cost_usd": 0.010486
+        "input_tokens": 12215,
+        "output_tokens": 2950,
+        "total_tokens": 20556,
+        "cost_usd": 0.011039
+      },
+      "_pyd_route": {
+        "source": "rag_provisions",
+        "value": -89.1,
+        "model_value": -89.063,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2015,
           2016,
@@ -463,6 +476,18 @@
             null
           ]
         ],
+        "row_labels": [
+          "At end of underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later",
+          "Seven years later",
+          "Eight years later",
+          "Nine years later"
+        ],
         "source_page": 53,
         "entity": 4444
       },
@@ -535,6 +560,13 @@
         "unit_source": "header",
         "source_page": 99,
         "entity": 4444,
+        "movement_semantics": {
+          "row_label": "Change in estimates of prior year provisions",
+          "row_index": 8,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": true,
+          "column_index": 1
+        },
         "gross_prior_year_claims": -89.1,
         "net_prior_year_claims": -61.4
       },
@@ -668,32 +700,28 @@
       "direction": "release",
       "prior_year_movement_page": 49,
       "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "Importantly, our non-CAT attritional net claims ratio continued to trend down at 42.0% (2023: 42.6%). This is despite recording a $27m net loss arising from the Baltimore Bridge collapse in March and increased confidence in our total claims reserves through the build of management reserve margins during the year and evidenced by positive prior year reserve development of $61m (2023: $14m).\nChange in estimates of prior year provisions (89,063) 27,677 (61,386)",
+      "exact_reserve_text": "This is despite recording a $27m net loss arising from the Baltimore Bridge collapse in March and increased confidence in our total claims reserves through the build of management reserve margins during the year and evidenced by positive prior year reserve development of $61m (2023: $14m).",
       "primary_causes": [
         "Favorable claims development",
-        "Large loss development",
-        "Reinsurance recoveries"
+        "IBNR recalibration",
+        "Reserve methodology change"
       ],
-      "specific_events": [
-        "Baltimore Bridge collapse",
-        "Hurricanes Helene",
-        "Hurricane Milton",
-        "Severe convective storm (SCS) losses"
-      ],
+      "specific_events": [],
       "specific_years_affected": [],
-      "prior_year_events": [
-        {
-          "event_name": "RITC of Syndicate 1861 (accepted by 2021 YOA on 1 Jan 2023)",
-          "event_year": 2020,
-          "impact_description": "Reinsurance to close accepted into 2021 year of account and recorded as a balance sheet transaction; adjusted opening positions presented to reflect the RITC of Syndicate 1861",
-          "lobs_affected": [
-            "Treaty"
-          ],
-          "amount_gbp_m": null,
-          "confidence": 0.8
-        }
-      ],
+      "prior_year_events": [],
       "named_events": [
+        {
+          "event_name": "Hurricanes Helene and Milton",
+          "event_year": 2024,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "Hurricanes Helene and Milton adding to an above average year of smaller severe convective storm ('SCS') losses giving rise to a catastrophe net loss ratio of 9.3% (2023: 5.2%).",
+          "lobs_affected": [
+            "Property"
+          ],
+          "page": 5,
+          "confidence": 0.8
+        },
         {
           "event_name": "Baltimore Bridge collapse",
           "event_year": 2024,
@@ -704,39 +732,28 @@
             "Casualty"
           ],
           "page": 5,
-          "confidence": 1.0
-        },
-        {
-          "event_name": "Hurricane Helene",
-          "event_year": 2024,
-          "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": null,
-          "loss_description": "Hurricanes Helene and Milton adding to an above average year of smaller severe convective storm ('SCS') losses giving rise to a catastrophe net loss ratio of 9.3%",
-          "lobs_affected": [
-            "Property"
-          ],
-          "page": 5,
           "confidence": 0.8
         },
         {
-          "event_name": "Hurricane Milton",
-          "event_year": 2024,
+          "event_name": "Los Angeles Wildfires",
+          "event_year": 2025,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "Hurricanes Helene and Milton adding to an above average year of smaller severe convective storm ('SCS') losses giving rise to a catastrophe net loss ratio of 9.3%",
+          "loss_description": "Early 2025 claims activity arising from the devastating Los Angeles Wildfires will likely offer some resistance against further market softening, particularly in Property Reinsurance.",
           "lobs_affected": [
-            "Property"
+            "Property",
+            "Treaty"
           ],
           "page": 5,
-          "confidence": 0.8
+          "confidence": 0.5
         }
       ],
-      "standardized_narrative": "The Syndicate recorded a gross prior year reserve release of $89.1m in 2024 (equivalent to a net release of $61.4m), representing approximately a 2.8% reduction versus opening gross claims outstanding. The release was driven by favourable run-off across direct lines (notably Marine and Property and reductions in third party liability exposures) which was partly offset by adverse development in reinsurance acceptances and the $27m net loss from the Baltimore Bridge collapse. RITC adjustments from prior years have been reflected in opening positions for prior reporting periods.",
+      "standardized_narrative": "The Syndicate recorded a gross prior-year release: gross claims reserves were reduced by $89.063m (note 26), equating to a net prioryear release of $61.386m after reinsurers' recoveries. This release (2.8% of opening gross claims outstanding) reflects favourable claims development, recalibration of IBNR and the build of management reserve margins (reserve methodology adjustments). The release was observed across the direct insurance book; reinsurance acceptances experienced adverse movements. Report currency and figures are presented in USD.",
       "raw_causal_phrases": [
-        "positive prior year reserve development of $61m (2023: $14m)",
-        "recording a $27m net loss arising from the Baltimore Bridge collapse in March",
-        "A (favourable)/adverse run-off deviation was experienced during the year in respect of the following classes of business.",
-        "Change in estimates of prior year provisions (89,063) 27,677 (61,386)"
+        "increased confidence in our total claims reserves",
+        "build of management reserve margins during the year",
+        "evidenced by positive prior year reserve development of $61m (2023: $14m)",
+        "positive prior year reserve development"
       ],
       "lob_movements": [
         {
@@ -825,7 +842,7 @@
       "gross_premium_page": 40,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "All amounts are reported in the native currency (USD) though some field names use 'gbp_m' per schema. Opening reserves taken from Statement of Financial Position (Claims outstanding) prior-year column. Prior year development (gross) taken from Technical Provisions reconciliation: 'Change in estimates of prior year provisions' (gross = -89,063 thousand USD). The management narrative reports the net prior year release ($61m) which matches the net figure in the reconciliation. Class-level run-off movements in the 'Net claims outstanding' note appear to be net amounts (after reinsurance) and have been used for LOB-specific movements where gross was not provided. RITC entries for earlier years (related to Syndicate 1861) were present and have adjusted opening positions for 2023; this may distort simple year-on-year comparisons if not considered.",
+      "data_quality_notes": "Amounts are presented in the report currency (USD). Opening gross claims outstanding taken from Balance Sheet (Claims outstanding, liabilities) 2023 comparative. Prior year development (gross) taken from Technical Provisions note (Change in estimates of prior year provisions = -89,063 $000). The note also shows net prior-year development of -61,386 $000 (used in narrative elsewhere). Lob_movements values come from Note 9 'Net claims outstanding' (these are net run-off deviations by class). Claims development triangle is present (gross) and an RITC adjustment in 2023 is noted in the technical provisions which can distort development patterns; triangle extraction retained but users should consider RITC impact when analysing vintage movements.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
@@ -968,20 +985,28 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_4444_2024_llm.pdf",
-      "content_hash": "bf0ea49efa060dc37c7463a4d9dab60939f41c9842808847c52cddc1a77d76a3",
-      "standardized_at": "2026-07-06T00:44:56.165764+00:00",
+      "content_hash": "fe37c64607db63c144dc73f6555a72fbc30417a31786558ed281ff95fd8acbb2",
+      "standardized_at": "2026-09-11T14:23:02.266793+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 34160,
-        "output_tokens": 8617,
-        "total_tokens": 42777,
-        "cost_usd": 0.025774
+        "input_tokens": 34920,
+        "output_tokens": 8440,
+        "total_tokens": 43360,
+        "cost_usd": 0.02561
+      },
+      "_pyd_route": {
+        "source": "rag_provisions",
+        "value": -89.1,
+        "model_value": -89.063,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2015,
           2016,
@@ -1116,6 +1141,18 @@
             null
           ]
         ],
+        "row_labels": [
+          "At end of underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later",
+          "Seven years later",
+          "Eight years later",
+          "Nine years later"
+        ],
         "source_page": 53,
         "entity": 4444
       },
@@ -1188,6 +1225,13 @@
         "unit_source": "header",
         "source_page": 99,
         "entity": 4444,
+        "movement_semantics": {
+          "row_label": "Change in estimates of prior year provisions",
+          "row_index": 8,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": true,
+          "column_index": 1
+        },
         "gross_prior_year_claims": -89.1,
         "net_prior_year_claims": -61.4
       },
@@ -1311,12 +1355,12 @@
       }
     }
   },
-  "total_cost_usd": 0.03626,
-  "total_tokens": 64972,
+  "total_cost_usd": 0.036649,
+  "total_tokens": 63916,
   "validation": {
     "passed": true,
-    "total_discrepancies": 29,
-    "within_tolerance": 29,
+    "total_discrepancies": 22,
+    "within_tolerance": 22,
     "hard_failures": 0,
     "hard_failure_details": []
   }

@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T10:56:46.478485+00:00",
+  "extraction_timestamp": "2026-09-13T03:59:44.314437+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -18,10 +20,11 @@
       "direction": "release",
       "prior_year_movement_page": 14,
       "prior_year_movement_confidence": 0.8,
-      "exact_reserve_text": "The result included a release from prior year reserves of GBP 32.4m (2014, GBP 33.6m release). This release is a result of the Markel strategy to reserve prudently, more favourable claims development than originally anticipated and the work of our claims department in dealing with claims in an expeditious manner.",
+      "exact_reserve_text": "The result included a release from prior year reserves of GBP 32.4m (2014, GBP 33.6m release).",
       "primary_causes": [
-        "Favorable claims development",
         "Natural catastrophe events",
+        "Man-made catastrophe / large losses",
+        "Favorable claims development",
         "Other"
       ],
       "specific_events": [],
@@ -30,14 +33,84 @@
         2012,
         2013
       ],
-      "prior_year_events": [],
-      "named_events": [],
-      "standardized_narrative": "The syndicate experienced a gross prior year reserve release of GBP 12.617 million in 2015, representing 1.71% of opening gross claims outstanding. This release was primarily driven by favorable claims development and benign large loss and catastrophe activity, further supported by Markel's prudent reserving strategy and efficient claims handling.",
+      "prior_year_events": [
+        {
+          "event_name": "Natural catastrophe losses",
+          "event_year": 2011,
+          "impact_description": "experienced natural catastrophe losses of GBP 83.2m",
+          "lobs_affected": [
+            "Aggregate"
+          ],
+          "amount_gbp_m": null,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Natural catastrophe losses",
+          "event_year": 2012,
+          "impact_description": "experienced natural catastrophe losses of GBP 83.2m",
+          "lobs_affected": [
+            "Aggregate"
+          ],
+          "amount_gbp_m": null,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Natural catastrophe losses",
+          "event_year": 2013,
+          "impact_description": "experienced natural catastrophe losses of GBP 83.2m",
+          "lobs_affected": [
+            "Aggregate"
+          ],
+          "amount_gbp_m": null,
+          "confidence": 0.8
+        }
+      ],
+      "named_events": [
+        {
+          "event_name": "Natural catastrophe losses",
+          "event_year": 2011,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "experienced natural catastrophe losses of GBP 83.2m",
+          "lobs_affected": [
+            "Aggregate"
+          ],
+          "page": 3,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Natural catastrophe losses",
+          "event_year": 2012,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "experienced natural catastrophe losses of GBP 83.2m",
+          "lobs_affected": [
+            "Aggregate"
+          ],
+          "page": 3,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Natural catastrophe losses",
+          "event_year": 2013,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "experienced natural catastrophe losses of GBP 83.2m",
+          "lobs_affected": [
+            "Aggregate"
+          ],
+          "page": 3,
+          "confidence": 0.8
+        }
+      ],
+      "standardized_narrative": "The syndicate experienced a gross prior year reserve release of GBP 12.617 million in 2015, primarily driven by favorable claims development and benign large loss and catastrophe activity. This aligns with the syndicate's prudent reserving strategy and efficient claims handling. The reported net release was GBP 32.4 million.",
       "raw_causal_phrases": [
         "benign large loss and catastrophe activity",
+        "release from prior year reserves of GBP 32.4m",
         "Markel strategy to reserve prudently",
         "more favourable claims development than originally anticipated",
-        "work of our claims department in dealing with claims in an expeditious manner"
+        "work of our claims department in dealing with claims in an expeditious manner",
+        "The 2011, 2012 and 2013 years experienced natural catastrophe losses of GBP 83.2m."
       ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 429.0,
@@ -76,7 +149,7 @@
       "gross_premium_page": 12,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The narrative on page 2 states a 'release from prior year reserves of GBP 32.4m', which is significantly higher than the calculated gross release of GBP 12.617m derived from the gross claims development triangle on page 14. The narrative figure is likely a net figure or includes other components not reflected in the gross claims development table. The gross figure from the claims development triangle has been used for `prior_year_development_gbp_m` as per instructions.",
+      "data_quality_notes": "The prior_year_development_gbp_m is calculated from the gross claims development triangle. The narrative text on page 2 explicitly states a *net* release of GBP 32.4m, which is significantly different from the gross figure derived from the triangle. The gross figure is preferred as per instructions. The 'All prior years' column in the claims development triangle was excluded from the calculation of prior year development as per instructions.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -129,20 +202,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_3000_2015_llm.pdf",
-      "content_hash": "cbe5902e680a95db6b01139d979f50087776d13f7f8933ad2351131521f88d4e",
-      "standardized_at": "2026-03-18T07:20:13.434239+00:00",
+      "content_hash": "ee3cc8dcfedd47ce18e08c8b49639438fe4aa1ea617538ebdc0390c04cd3daf0",
+      "standardized_at": "2026-09-11T12:13:24.144440+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 9863,
-        "output_tokens": 1283,
-        "total_tokens": 16847,
-        "cost_usd": 0.006166
+        "input_tokens": 10667,
+        "output_tokens": 1896,
+        "total_tokens": 19019,
+        "cost_usd": 0.00794
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -12.617,
+        "model_value": -12.617,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 36,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -186,6 +271,13 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later"
         ],
         "source_page": 36,
         "entity": 3000
@@ -345,22 +437,20 @@
       "prior_year_development_gbp_m": -12.617,
       "prior_year_development_pct": -1.71,
       "direction": "release",
-      "prior_year_movement_page": 2,
+      "prior_year_movement_page": 4,
       "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "The result included a release from prior year reserves of GBP 32.4m (2014, GBP 33.6m release). This release is a result of the Markel strategy to reserve prudently, more favourable claims development than originally anticipated and the work of our claims department in dealing with claims in an expeditious manner.",
+      "exact_reserve_text": "This release is a result of the Markel strategy to reserve prudently, more favourable claims development than originally anticipated and the work of our claims department in dealing with claims in an expeditious manner.",
       "primary_causes": [
-        "Favorable claims development",
-        "Reserve methodology change",
-        "Other"
+        "Favorable claims development"
       ],
       "specific_events": [],
       "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "At 1 January 2015 the Syndicate's gross claims outstanding were GBP 737.531m. During 2015 the Syndicate reports a net release from prior year reserves of GBP 32.4m, driven by more favourable claims development than originally anticipated and the Managing Agent's prudent reserving posture and active claims handling. No gross prior-year movement amount was explicitly disclosed in the technical movement notes, so the quantified prior-year development reported in the narrative is net of reinsurance.",
+      "standardized_narrative": "The syndicate reports a prior-year release of GBP 32.4m in 2015 driven by more favourable than anticipated claims development and prudent reserving practice, supported by active claims management. No explicit gross prior-year movement figure was presented; the disclosed GBP 32.4m figure is reported in the narrative and used here as the quantified prior-year movement (a release).",
       "raw_causal_phrases": [
-        "release from prior year reserves of GBP 32.4m (2014, GBP 33.6m release)",
-        "This release is a result of the Markel strategy to reserve prudently, more favourable claims development than originally anticipated and the work of our claims department in dealing with claims in an expeditious manner."
+        "This release is a result of the Markel strategy to reserve prudently, more favourable claims development than originally anticipated and the work of our claims department in dealing with claims in an expeditious manner.",
+        "benign large loss and catastrophe activity during the year"
       ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 429.0,
@@ -399,7 +489,7 @@
       "gross_premium_page": 28,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior year development gross amount was not presented explicitly in the technical reserves movement note; the report states a prior year release of GBP 32.4m in the Managing Agent narrative (this is presented as a net figure). Therefore prior_year_development_gbp_m uses the NET figure quoted in the narrative and is flagged accordingly. A gross claims development triangle is present but contains an 'All prior years' aggregate column; no explicit gross 'movement in prior years' line was found. [RAG OVERRIDE: Model said PYD=-32.4, RAG triangle computed -12.617. Using RAG value.]",
+      "data_quality_notes": "Prior year movement (release GBP 32.4m) is disclosed in the narrative but not explicitly labelled as a GROSS prior-year movement in the notes. A gross claims development triangle is present (gross), which could be used to compute a gross PYD, but the report's narrative gives a clear 'release from prior year reserves of GBP 32.4m' (used here). Therefore the prior-year movement used is the reported figure from the narrative (likely net/gross not explicitly stated). [RAG OVERRIDE: Model said PYD=-32.4, RAG triangle computed -12.617. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -452,20 +542,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_3000_2015_llm.pdf",
-      "content_hash": "cbe5902e680a95db6b01139d979f50087776d13f7f8933ad2351131521f88d4e",
-      "standardized_at": "2026-03-18T07:20:57.464271+00:00",
+      "content_hash": "ee3cc8dcfedd47ce18e08c8b49639438fe4aa1ea617538ebdc0390c04cd3daf0",
+      "standardized_at": "2026-09-11T12:15:22.010034+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 22594,
-        "output_tokens": 6576,
-        "total_tokens": 29170,
-        "cost_usd": 0.018801
+        "input_tokens": 23349,
+        "output_tokens": 5897,
+        "total_tokens": 29246,
+        "cost_usd": 0.017631
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -12.617,
+        "model_value": -32.4,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 36,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -509,6 +611,13 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later"
         ],
         "source_page": 36,
         "entity": 3000
@@ -660,12 +769,12 @@
       }
     }
   },
-  "total_cost_usd": 0.024967,
-  "total_tokens": 46017,
+  "total_cost_usd": 0.025571,
+  "total_tokens": 48265,
   "validation": {
     "passed": true,
-    "total_discrepancies": 17,
-    "within_tolerance": 17,
+    "total_discrepancies": 23,
+    "within_tolerance": 23,
     "hard_failures": 0,
     "hard_failure_details": []
   }

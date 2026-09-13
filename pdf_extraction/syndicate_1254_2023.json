@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-05T19:29:29.184193+00:00",
+  "extraction_timestamp": "2026-09-13T04:17:08.875581+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -16,25 +18,44 @@
       "prior_year_development_gbp_m": 10.525,
       "prior_year_development_pct": 18.94,
       "direction": "strengthening",
-      "prior_year_movement_page": 13,
+      "prior_year_movement_page": 1,
       "prior_year_movement_confidence": 0.8,
-      "exact_reserve_text": "Net prior year reserves on US casualty business were strengthened during 2023, a common trend seen across the market. A detailed review by line of business has been performed, resulting in an explicit uplift to claims reserves of GBP 2.2m.",
+      "exact_reserve_text": "A detailed review by line of business has been performed, resulting in an explicit uplift to claims reserves of GBP 2.2m.",
       "primary_causes": [
         "Economic inflation / claims cost inflation",
+        "Social inflation / litigation trends",
         "Adverse claims development"
       ],
       "specific_events": [],
-      "specific_years_affected": [
-        2017,
-        2018,
-        2019
+      "specific_years_affected": [],
+      "prior_year_events": [
+        {
+          "event_name": "US casualty business reserve strengthening",
+          "event_year": 2023,
+          "impact_description": "Net prior year reserves on US casualty business were strengthened during 2023, a common trend seen across the market.",
+          "lobs_affected": [
+            "Casualty"
+          ],
+          "amount_gbp_m": null,
+          "confidence": 0.5
+        }
       ],
-      "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "The syndicate experienced a gross prior year reserve strengthening of GBP 10.525m, representing an 18.94% increase relative to opening reserves. This strengthening was primarily driven by adverse claims development across the 2017, 2018, and 2019 underwriting years, and included an explicit uplift of GBP 2.2m to claims reserves following a detailed review by line of business, partly due to economic inflation. Net prior year reserves on US casualty business were also strengthened.",
+      "standardized_narrative": "The syndicate reported a gross prior year strengthening of GBP 2.2 million, representing approximately 4.0% of its opening gross claims outstanding. This strengthening was primarily driven by an explicit uplift to claims reserves following a detailed review by line of business, influenced by elevated levels of economic and social inflation observed in major economies during 2023 and 2022. Additionally, net prior year reserves on US casualty business were strengthened, reflecting a common market trend. The syndicate's claims estimates are sensitive to future inflation, wage inflation indices, life expectancy of claimants, and PPO settlement propensities.",
       "raw_causal_phrases": [
-        "Net prior year reserves on US casualty business were strengthened during 2023, a common trend seen across the market.",
-        "A detailed review by line of business has been performed, resulting in an explicit uplift to claims reserves of GBP 2.2m."
+        "Net prior year reserves on US casualty business were strengthened during 2023",
+        "common trend seen across the market",
+        "elevated levels of inflation",
+        "direct evidence of claims inflation",
+        "explicit uplift to claims reserves of GBP 2.2m",
+        "explicit uplift for inflation based on expectations of both economic and social inflation",
+        "actual rate of claims development and Inflation",
+        "wage inflation, cost of materials, medical inflation, and social inflation",
+        "Current economic inflation is starting to slow down following the high levels in 2022 and 2023",
+        "estimates of future inflation",
+        "wage inflation indices such as ASHE",
+        "estimates of the future life expectancy of claimants",
+        "estimates of the propensity of open claims to settle as a PPO"
       ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 99.4,
@@ -73,79 +94,12 @@
       "gross_premium_page": 15,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The prior year development amount is calculated from the gross claims development triangle. The narrative mentions an explicit uplift of GBP 2.2m to claims reserves, but the triangle indicates a larger total gross strengthening.",
+      "data_quality_notes": "The claims development triangle is distorted by an Inwards RITC transaction in 2022 affecting 2017-2019 years of account, making it unsuitable for calculating prior year development. The prior year development figure of GBP 2.2m is an explicit uplift to claims reserves mentioned in the narrative, but it is not explicitly stated as the total prior year development for the syndicate, nor is it broken down by line of business. It is assumed to be a component of prior year development. [RAG OVERRIDE: Model said PYD=2.2, RAG triangle computed 10.525. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
         "page": 13,
-        "underwriting_years": [
-          2017,
-          2018,
-          2019,
-          2023
-        ],
-        "development_rows": [
-          [
-            33985,
-            37782,
-            36426,
-            72758
-          ],
-          [
-            59052,
-            86013,
-            66717,
-            null
-          ],
-          [
-            59812,
-            91890,
-            67981,
-            null
-          ],
-          [
-            62742,
-            84455,
-            66295,
-            null
-          ],
-          [
-            61216,
-            82754,
-            71502,
-            null
-          ],
-          [
-            61199,
-            87197,
-            null,
-            null
-          ],
-          [
-            62074,
-            null,
-            null,
-            null
-          ]
-        ]
-      },
-      "source_type": "syndicate",
-      "source_file": "pdf_extraction\\llm_slim\\syndicate_1254_2023_llm.pdf",
-      "content_hash": "127941392cc075a250ce5e9d67a4d0c35277f29173b82430d3e9f3ef47330e5b",
-      "standardized_at": "2026-07-05T09:19:43.290955+00:00",
-      "standardization_model": "gemini-2.5-flash",
-      "_extraction_meta": {
-        "model": "gemini-2.5-flash",
-        "input_tokens": 10637,
-        "output_tokens": 1240,
-        "total_tokens": 16624,
-        "cost_usd": 0.006291
-      },
-      "_rag_triangle": {
-        "type": "gross",
-        "currency": "GBP",
-        "units": "thousands",
         "underwriting_years": [
           2023,
           2019,
@@ -194,6 +148,83 @@
             null,
             null,
             62074
+          ]
+        ]
+      },
+      "source_type": "syndicate",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_1254_2023_llm.pdf",
+      "content_hash": "0043d770d7290831dbe973b97db12361aca7761920e825a55977de78ab2f2d54",
+      "standardized_at": "2026-09-11T10:35:06.243918+00:00",
+      "standardization_model": "gemini-2.5-flash",
+      "_extraction_meta": {
+        "model": "gemini-2.5-flash",
+        "input_tokens": 11441,
+        "output_tokens": 1506,
+        "total_tokens": 20510,
+        "cost_usd": 0.007197
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 10.525,
+        "model_value": 2.2,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": null,
+        "triangle_source_page": null,
+        "note": "overrode the model value"
+      },
+      "_rag_triangle": {
+        "type": "gross",
+        "currency": "GBP",
+        "units": "thousands",
+        "underwriting_years": [
+          2017,
+          2018,
+          2019,
+          2023
+        ],
+        "development_rows": [
+          [
+            33985,
+            37782,
+            36426,
+            72758
+          ],
+          [
+            59052,
+            86013,
+            66717,
+            null
+          ],
+          [
+            59812,
+            91890,
+            67981,
+            null
+          ],
+          [
+            62742,
+            84455,
+            66295,
+            null
+          ],
+          [
+            61216,
+            82754,
+            71502,
+            null
+          ],
+          [
+            61199,
+            87197,
+            null,
+            null
+          ],
+          [
+            62074,
+            null,
+            null,
+            null
           ]
         ]
       },
@@ -352,13 +383,13 @@
       "syndicate": 1254,
       "year": 2023,
       "opening_reserves_gbp_m": 55.574,
-      "opening_reserves_page": 4,
+      "opening_reserves_page": 20,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": 10.525,
       "prior_year_development_pct": 18.94,
       "direction": "strengthening",
-      "prior_year_movement_page": 1,
-      "prior_year_movement_confidence": 0.5,
+      "prior_year_movement_page": 41,
+      "prior_year_movement_confidence": 0.8,
       "exact_reserve_text": "Net prior year reserves on US casualty business were strengthened during 2023, a common trend seen across the market.",
       "primary_causes": [
         "Economic inflation / claims cost inflation",
@@ -370,26 +401,27 @@
       "specific_years_affected": [
         2017,
         2018,
-        2019
+        2019,
+        2022
       ],
       "prior_year_events": [
         {
-          "event_name": "Inwards RITC from Syndicate 2689 (2017-2019)",
+          "event_name": "Inwards RITC of Syndicate 2689 liabilities",
           "event_year": 2022,
-          "impact_description": "Inwards RITC executed transferring 2017-2019 liabilities; premium of GBP 75,243k received and liabilities of equivalent value transferred into the Syndicate.",
+          "impact_description": "Inwards RITC transferred the 2017-2019 years' liabilities to the syndicate (premium received deemed fair value), increasing gross claims outstanding by the value of the transferred liabilities.",
           "lobs_affected": [
             "Treaty"
           ],
-          "amount_gbp_m": 75.243,
-          "confidence": 0.9
+          "amount_gbp_m": 75.257,
+          "confidence": 1.0
         }
       ],
       "named_events": [],
-      "standardized_narrative": "Opening gross claims outstanding were GBP 55.574m at 1 Jan 2023 and the Syndicate reports that net prior year reserves on US casualty business were strengthened during 2023. Management carried out a line-by-line review and applied an explicit GBP 2.2m uplift for inflation. A 2022 inwards RITC (Syndicate 2689, 2017-2019) also transferred significant legacy liabilities into the Syndicate in 2022.",
+      "standardized_narrative": "Gross claims outstanding increased from GBP 55.574m at 1 January 2023 to GBP 111.510m at 31 December 2023 (gross increase of GBP 56.161m). The movement reflects acquisition and recognition of long-duration liabilities (including the prior inwards RITC transfers) and reserve strengthening, notably on US casualty business. The syndicate also implemented an explicit uplift to claims reserves to allow for inflationary pressures.",
       "raw_causal_phrases": [
         "Net prior year reserves on US casualty business were strengthened during 2023, a common trend seen across the market.",
-        "A detailed review by line of business has been performed, resulting in an explicit uplift to claims reserves of GBP 2.2m.",
-        "While the Syndicate has seen some direct evidence of claims inflation, there are delays before current levels of inflation affect future claims payments."
+        "resulting in an explicit uplift to claims reserves of GBP 2.2m.",
+        "On 10th February 2022 and with effect from 1st January 2022, an inwards RITC was completed for Syndicate 2689, for 2017, 2018 & 2019 years of account. A premium of GBP 75,243k ($101,578k) was received. The Syndicate's accounting policy is not to recognise RITC premiums through profit or loss, see the reinsurance to close accounting policy."
       ],
       "lob_movements": [
         {
@@ -433,34 +465,15 @@
           "percentage_of_total": 0.0
         }
       ],
-      "gross_premium_page": 15,
+      "gross_premium_page": 37,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "No explicit GROSS prior-year-only reserve movement figure was found in the disclosed notes. The report states that \"Net prior year reserves ... were strengthened\" but gives no gross PYD amount. A 2022 inwards RITC (Syndicate 2689, 2017-2019) materially changed reserve composition and may distort development tables. A claims development triangle exists in the notes but could not be reliably parsed to calculate gross PYD from diagonals; therefore prior_year_development_gbp_m is left null and direction inferred from narrative.",
+      "data_quality_notes": "No explicit gross 'prior year only' reserve movement figure was presented. The reported gross 'change in the provision for claims in the year' (GBP 56,161k) has been used as the prior year development (gross) and may include current-year movements and be affected by the 2022 inwards RITC (which materially increased opening/closing balances). A net prior-year strengthening on US casualty is stated but not quantified on a gross basis. Triangle and movement tables in the accounts appear distorted by RITC entries; therefore the prior year movement figure should be treated as indicative. [RAG OVERRIDE: Model said PYD=56.161, RAG triangle computed 10.525. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
-        "page": 13,
-        "underwriting_years": [],
-        "development_rows": []
-      },
-      "source_type": "syndicate",
-      "source_file": "pdf_extraction\\llm_slim\\syndicate_1254_2023_llm.pdf",
-      "content_hash": "127941392cc075a250ce5e9d67a4d0c35277f29173b82430d3e9f3ef47330e5b",
-      "standardized_at": "2026-07-05T09:21:05.103532+00:00",
-      "standardization_model": "gpt-5-mini",
-      "_extraction_meta": {
-        "model": "gpt-5-mini",
-        "input_tokens": 17325,
-        "output_tokens": 6413,
-        "total_tokens": 23738,
-        "cost_usd": 0.017157
-      },
-      "_rag_triangle": {
-        "type": "gross",
-        "currency": "GBP",
-        "units": "thousands",
+        "page": 31,
         "underwriting_years": [
           2023,
           2019,
@@ -509,6 +522,95 @@
             null,
             null,
             62074
+          ],
+          [
+            4493,
+            54177,
+            68410,
+            54941
+          ],
+          [
+            68265,
+            17325,
+            18787,
+            7133
+          ]
+        ]
+      },
+      "source_type": "syndicate",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_1254_2023_llm.pdf",
+      "content_hash": "0043d770d7290831dbe973b97db12361aca7761920e825a55977de78ab2f2d54",
+      "standardized_at": "2026-09-11T10:37:55.793391+00:00",
+      "standardization_model": "gpt-5-mini",
+      "_extraction_meta": {
+        "model": "gpt-5-mini",
+        "input_tokens": 18085,
+        "output_tokens": 7456,
+        "total_tokens": 25541,
+        "cost_usd": 0.019433
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 10.525,
+        "model_value": 56.161,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": null,
+        "triangle_source_page": null,
+        "note": "overrode the model value"
+      },
+      "_rag_triangle": {
+        "type": "gross",
+        "currency": "GBP",
+        "units": "thousands",
+        "underwriting_years": [
+          2017,
+          2018,
+          2019,
+          2023
+        ],
+        "development_rows": [
+          [
+            33985,
+            37782,
+            36426,
+            72758
+          ],
+          [
+            59052,
+            86013,
+            66717,
+            null
+          ],
+          [
+            59812,
+            91890,
+            67981,
+            null
+          ],
+          [
+            62742,
+            84455,
+            66295,
+            null
+          ],
+          [
+            61216,
+            82754,
+            71502,
+            null
+          ],
+          [
+            61199,
+            87197,
+            null,
+            null
+          ],
+          [
+            62074,
+            null,
+            null,
+            null
           ]
         ]
       },
@@ -664,12 +766,12 @@
       }
     }
   },
-  "total_cost_usd": 0.023448,
-  "total_tokens": 40362,
+  "total_cost_usd": 0.02663,
+  "total_tokens": 46051,
   "validation": {
     "passed": true,
-    "total_discrepancies": 9,
-    "within_tolerance": 9,
+    "total_discrepancies": 28,
+    "within_tolerance": 28,
     "hard_failures": 0,
     "hard_failure_details": []
   }

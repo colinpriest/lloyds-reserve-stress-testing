@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-05T20:44:27.463897+00:00",
+  "extraction_timestamp": "2026-09-13T04:11:17.216243+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -16,30 +18,41 @@
       "prior_year_development_gbp_m": -42.395,
       "prior_year_development_pct": -11.71,
       "direction": "release",
-      "prior_year_movement_page": 1,
-      "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "the loss call on the closed 2016 Year of Account of $8.3 million",
+      "prior_year_movement_page": 9,
+      "prior_year_movement_confidence": 0.8,
+      "exact_reserve_text": "The following table presents the comparison of actual claims incurred to previous estimates for the last 9 years.",
       "primary_causes": [
-        "Adverse claims development"
+        "Favorable claims development",
+        "Adverse claims development",
+        "Other"
       ],
-      "specific_events": [],
+      "specific_events": [
+        "loss call on the closed 2016 Year of Account"
+      ],
       "specific_years_affected": [
-        2016
+        2011,
+        2012,
+        2013,
+        2014,
+        2015,
+        2016,
+        2017
       ],
       "prior_year_events": [
         {
-          "event_name": "2016 Year of Account Closure",
+          "event_name": "2016 Year of Account closure",
           "event_year": 2016,
-          "impact_description": "loss call on the closed 2016 Year of Account, indicating adverse development",
+          "impact_description": "loss call on the closed 2016 Year of Account of $8.3 million",
           "lobs_affected": [],
           "amount_gbp_m": 8.3,
-          "confidence": 1.0
+          "confidence": 0.5
         }
       ],
       "named_events": [],
-      "standardized_narrative": "Syndicate 780 reported a strengthening of $8.3 million in prior year reserves, specifically related to a loss call on the closed 2016 Year of Account. This movement is detailed in the Managing Director's Report. The syndicate's gross premiums written for 2019 totaled $44.044 million, with the largest contributions from Fire and other damage to property, Motor, and Accident and Health. The financial statements are presented in US Dollars.",
+      "standardized_narrative": "Syndicate 780 experienced a gross prior year reserve release of $42.395 million, representing 11.71% of its opening gross reserves. This release was primarily driven by favorable claims development across multiple underwriting years (2011-2017), consistent with the run-off nature of the business. However, a loss call of $8.3 million was made on the closed 2016 Year of Account, indicating some adverse development for that specific year.",
       "raw_causal_phrases": [
-        "loss call on the closed 2016 Year of Account"
+        "loss call on the closed 2016 Year of Account of $8.3 million",
+        "Decreases to the outstanding claims and cash balances predominantly relate to the payment of claims in relation to the run off of the business."
       ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 42.3,
@@ -78,11 +91,11 @@
       "gross_premium_page": 12,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "The report explicitly states a $8.3 million strengthening for the 2016 Year of Account. However, a calculation from the gross claims development triangle (page 9) indicates an overall release of $41.395 million for prior years 2011-2017. The specific narrative statement has been used for prior year development as it is a direct verbatim quote. [RAG OVERRIDE: Model said PYD=8.3, RAG triangle computed -42.395. Using RAG value.]",
+      "data_quality_notes": "Prior year development calculated from gross claims development triangle. The 'loss call on the closed 2016 Year of Account' of $8.3 million mentioned in the Managing Director's Report is noted as a specific event but not included in the overall gross PYD calculation as it is likely a net capital call rather than a gross reserve movement, and the triangle provides a more comprehensive gross view.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
-        "units": "millions",
+        "units": "thousands",
         "page": 9,
         "underwriting_years": [
           2011,
@@ -96,79 +109,69 @@
         ],
         "development_rows": [
           [
-            236.59,
-            108.552,
-            88.505,
-            76.413,
-            75.144,
-            79.369,
-            160.455,
-            104.246
+            236590,
+            108552,
+            88505,
+            76413,
+            75144,
+            79369,
+            160455,
+            104246
           ],
           [
-            268.99,
-            144.497,
-            124.095,
-            132.019,
-            160.107,
-            199.539,
-            266.999,
-            167.279
+            268990,
+            144497,
+            124095,
+            132019,
+            160107,
+            199539,
+            266999,
+            167279
           ],
           [
-            182.101,
-            135.178,
-            115.734,
-            131.117,
-            173.503,
-            193.799,
-            233.093,
+            182101,
+            135178,
+            115734,
+            131117,
+            173503,
+            193799,
+            233093,
             null
           ],
           [
-            204.48,
-            132.267,
-            106.203,
-            120.997,
-            168.599,
-            189.458,
-            null,
-            null
-          ],
-          [
-            263.863,
-            120.942,
-            101.917,
-            122.942,
-            166.986,
-            null,
+            204480,
+            132267,
+            106203,
+            120997,
+            168599,
+            189458,
             null,
             null
           ],
           [
-            242.16,
-            121.957,
-            97.639,
-            121.698,
-            null,
+            263863,
+            120942,
+            101917,
+            122942,
+            166986,
             null,
             null,
             null
           ],
           [
-            240.539,
-            120.586,
-            96.444,
-            null,
+            242160,
+            121957,
+            97639,
+            121698,
             null,
             null,
             null,
             null
           ],
           [
-            233.613,
-            118.268,
-            null,
+            240539,
+            120586,
+            96444,
             null,
             null,
             null,
@@ -176,7 +179,17 @@
             null
           ],
           [
-            235.835,
+            233613,
+            118268,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            235835,
             null,
             null,
             null,
@@ -189,20 +202,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_780_2019_llm.pdf",
-      "content_hash": "66fc0da21622cf3bb34dbd7b2c68a91125fbe02fbb3e980cfe60dc7862e3997c",
-      "standardized_at": "2026-03-19T09:38:07.752344+00:00",
+      "content_hash": "f99aa7995b988e169ad0cc7c6e64c7b4510ecc11c46322521bc0b48e8f79135b",
+      "standardized_at": "2026-09-11T13:54:13.822985+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 9346,
-        "output_tokens": 1685,
-        "total_tokens": 19154,
-        "cost_usd": 0.007016
+        "input_tokens": 10150,
+        "output_tokens": 1762,
+        "total_tokens": 18272,
+        "cost_usd": 0.00745
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -42.395,
+        "model_value": -42.395,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 22,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -304,6 +329,17 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of reporting year",
+          "- One year later",
+          "- Two years later",
+          "- Three years later",
+          "- Four years later",
+          "- Five years later",
+          "- Six years later",
+          "- Seven years later",
+          "- Eight years later"
         ],
         "source_page": 22,
         "entity": 780
@@ -429,27 +465,22 @@
     "gpt-5-mini": {
       "syndicate": 780,
       "year": 2019,
-      "opening_reserves_gbp_m": 362.151,
-      "opening_reserves_page": 4,
-      "opening_reserves_confidence": 0.8,
+      "opening_reserves_gbp_m": null,
+      "opening_reserves_page": null,
+      "opening_reserves_confidence": 0.0,
       "prior_year_development_gbp_m": -42.395,
-      "prior_year_development_pct": -11.71,
+      "prior_year_development_pct": null,
       "direction": "release",
-      "prior_year_movement_page": 4,
-      "prior_year_movement_confidence": 0.5,
-      "exact_reserve_text": "Total outstanding claims, gross of reinsurance, were $250.4 million at 31 December 2019 (2018: $362.2 million).",
-      "primary_causes": [
-        "Favorable claims development"
-      ],
+      "prior_year_movement_page": null,
+      "prior_year_movement_confidence": 0.0,
+      "exact_reserve_text": "",
+      "primary_causes": [],
       "specific_events": [],
       "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "Syndicate 780's gross claims outstanding decreased from $362.2m at 31-Dec-2018 to $250.4m at 31-Dec-2019. The movement reflects a material prior-year release (reported as approximately $83.3m) driven by favourable claims development and claim settlements across the portfolio.",
-      "raw_causal_phrases": [
-        "Total outstanding claims, gross of reinsurance, were $250.4 million at 31 December 2019 (2018: $362.2 million).",
-        "prior year release of $83.3 million"
-      ],
+      "standardized_narrative": "Unable to locate a clear, extractable gross prior-year claims movement or opening gross claims outstanding in the supplied images. The report images provided are rotated and low resolution which prevented reliable extraction of the balance sheet 'Claims outstanding' prior-year (2018) gross figure and the movement-in-prior-years reconciliation note. Gross written premium was readable on the segmental/premium table, but reserves and prior-year movement figures could not be identified with confidence.",
+      "raw_causal_phrases": [],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 42.3,
       "gross_premium_mix": [
@@ -487,41 +518,42 @@
       "gross_premium_page": 26,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "Many figures were taken from narrative and summary tables in scanned pages. Opening gross claims outstanding taken from narrative/technical provisions totals (2018 comparative). Prior year development amount ($83.3m release) inferred from narrative references rather than a clearly labeled gross 'movement in prior year's provision' table; therefore treated as gross but with moderate confidence. Gross premium total taken from segmental/summary premium table (page 26) with moderate confidence. The claims development triangle is present in the report but individual cell values were not reliably OCR-extracted from scanned images; therefore triangle details are not fully captured here. [RAG OVERRIDE: Model said PYD=-83.3, RAG triangle computed -42.395. Using RAG value.]",
+      "data_quality_notes": "Document pages supplied as rotated, low-resolution images. I could not confidently locate the Balance Sheet line 'Claims outstanding' in the LIABILITIES (technical provisions) or a 'Movement in prior year's provision for claims outstanding' gross column. The gross premiums total (247,444 in the report currency $000) was readable on the premiums table (page ~26) and converted to millions (247.444). All reserve-related numeric fields returned as null due to inability to identify an unambiguous GROSS claims outstanding prior-year figure or a gross prior-year movement in the available images. Recommend supplying higher-resolution, correctly-oriented PDF pages for the Balance Sheet (liabilities / technical provisions) and the Technical Reserves movement note to extract prior-year development and opening gross claims outstanding.",
       "_claims_triangle": {
-        "type": "gross",
+        "type": "none",
         "currency": "USD",
         "units": "thousands",
-        "page": 21,
-        "underwriting_years": [
-          2011,
-          2012,
-          2013,
-          2014,
-          2015,
-          2016,
-          2017,
-          2018,
-          2019
-        ],
+        "page": null,
+        "underwriting_years": [],
         "development_rows": []
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_780_2019_llm.pdf",
-      "content_hash": "66fc0da21622cf3bb34dbd7b2c68a91125fbe02fbb3e980cfe60dc7862e3997c",
-      "standardized_at": "2026-03-19T09:39:21.372156+00:00",
+      "content_hash": "f99aa7995b988e169ad0cc7c6e64c7b4510ecc11c46322521bc0b48e8f79135b",
+      "standardized_at": "2026-09-11T13:54:58.366227+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 17746,
-        "output_tokens": 6686,
-        "total_tokens": 24432,
-        "cost_usd": 0.017809
+        "input_tokens": 18506,
+        "output_tokens": 2612,
+        "total_tokens": 21118,
+        "cost_usd": 0.009851
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -42.395,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 22,
+        "note": "filled a blank model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -623,6 +655,17 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of reporting year",
+          "- One year later",
+          "- Two years later",
+          "- Three years later",
+          "- Four years later",
+          "- Five years later",
+          "- Six years later",
+          "- Seven years later",
+          "- Eight years later"
         ],
         "source_page": 22,
         "entity": 780
@@ -746,13 +789,26 @@
       }
     }
   },
-  "total_cost_usd": 0.024825,
-  "total_tokens": 43586,
+  "total_cost_usd": 0.017301,
+  "total_tokens": 39390,
   "validation": {
-    "passed": true,
-    "total_discrepancies": 15,
-    "within_tolerance": 15,
-    "hard_failures": 0,
-    "hard_failure_details": []
+    "passed": false,
+    "total_discrepancies": 24,
+    "within_tolerance": 22,
+    "hard_failures": 2,
+    "hard_failure_details": [
+      {
+        "field": "opening_reserves_gbp_m",
+        "type": "value_mismatch",
+        "gemini-2.5-flash": 362.151,
+        "gpt-5-mini": null
+      },
+      {
+        "field": "prior_year_development_pct",
+        "type": "value_mismatch",
+        "gemini-2.5-flash": -11.71,
+        "gpt-5-mini": null
+      }
+    ]
   }
 }

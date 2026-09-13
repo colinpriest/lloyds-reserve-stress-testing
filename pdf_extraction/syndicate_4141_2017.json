@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T11:24:50.435392+00:00",
+  "extraction_timestamp": "2026-09-13T04:04:05.048969+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -18,26 +20,20 @@
       "direction": "release",
       "prior_year_movement_page": 15,
       "prior_year_movement_confidence": 0.8,
-      "exact_reserve_text": "Net claims incurred include prior year reserve releases totalling GBP 9.3m (2016: GBP 8.3m release).",
+      "exact_reserve_text": "Net claims incurred include prior year reserve releases totalling GBP 9.3m (2016: GBP 8.3m release). The 2016 reserve releases have been restated to be consistent with the 2017 reserve releases which are reported on an accident year basis.",
       "primary_causes": [
-        "Favorable claims development"
+        "Other"
       ],
       "specific_events": [],
-      "specific_years_affected": [
-        2011,
-        2012,
-        2013,
-        2014,
-        2015
-      ],
+      "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [
         {
           "event_name": "Hurricane Irma",
           "event_year": 2017,
           "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": null,
-          "loss_description": "net claims from the 2017 catastrophes",
+          "net_loss_gbp_m": 22.5,
+          "loss_description": "GBP 22.5m net claims from the 2017 catastrophes; Hurricanes Irma, Harvey and Maria.",
           "lobs_affected": [],
           "page": 3,
           "confidence": 0.8
@@ -46,8 +42,8 @@
           "event_name": "Hurricane Harvey",
           "event_year": 2017,
           "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": null,
-          "loss_description": "net claims from the 2017 catastrophes",
+          "net_loss_gbp_m": 22.5,
+          "loss_description": "GBP 22.5m net claims from the 2017 catastrophes; Hurricanes Irma, Harvey and Maria.",
           "lobs_affected": [],
           "page": 3,
           "confidence": 0.8
@@ -56,17 +52,15 @@
           "event_name": "Hurricane Maria",
           "event_year": 2017,
           "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": null,
-          "loss_description": "net claims from the 2017 catastrophes",
+          "net_loss_gbp_m": 22.5,
+          "loss_description": "GBP 22.5m net claims from the 2017 catastrophes; Hurricanes Irma, Harvey and Maria.",
           "lobs_affected": [],
           "page": 3,
           "confidence": 0.8
         }
       ],
-      "standardized_narrative": "The syndicate reported a gross prior year reserve release of GBP 13.375 million for the 2017 financial year, primarily driven by favorable claims development across underwriting years 2011 to 2015. This release helped to mitigate the impact of current year catastrophe events, including Hurricanes Irma, Harvey, and Maria, which contributed to a higher loss ratio in 2017.",
-      "raw_causal_phrases": [
-        "prior year reserve releases"
-      ],
+      "standardized_narrative": "The syndicate experienced a gross prior year reserve strengthening of GBP 5.319 million, calculated from the claims development triangle. This contrasts with the net prior year reserve release of GBP 9.3 million stated in the report's narrative. The report also highlighted significant net claims of GBP 22.5 million from 2017 catastrophes, specifically Hurricanes Irma, Harvey, and Maria.",
+      "raw_causal_phrases": [],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 139.7,
       "gross_premium_mix": [
@@ -104,7 +98,7 @@
       "gross_premium_page": 18,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The prior year development amount is calculated from the gross claims development triangle, as the narrative only provides a net figure.",
+      "data_quality_notes": "The report explicitly states a net prior year reserve release of GBP 9.3m in Note 7 and the Business Review. However, the gross claims development triangle calculation indicates a gross strengthening of GBP 5.319m. The gross figure from the triangle is used as per instructions, noting the discrepancy with the net narrative figure. [RAG OVERRIDE: Model said PYD=5.319, RAG triangle computed -13.375. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -187,20 +181,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_4141_2017_llm.pdf",
-      "content_hash": "80d88d7131066252383a865d2a2a5bd4525bb69ed42a57173fbf3f34a16601c9",
-      "standardized_at": "2026-03-19T00:09:53.006132+00:00",
+      "content_hash": "cfc8924b697adaacbb979d7daa6c39c0ccc510d6fbf8592630f1861949f36f70",
+      "standardized_at": "2026-09-11T12:47:46.366729+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 10895,
-        "output_tokens": 1600,
-        "total_tokens": 16830,
-        "cost_usd": 0.007269
+        "input_tokens": 11699,
+        "output_tokens": 1669,
+        "total_tokens": 17934,
+        "cost_usd": 0.007682
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -13.375,
+        "model_value": 5.319,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 28,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -265,6 +271,14 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "- one year later (*)",
+          "- two years later",
+          "- three years later",
+          "- four years later",
+          "- five years later",
+          "- six years later"
         ],
         "source_page": 28,
         "entity": 4141
@@ -425,27 +439,21 @@
       "syndicate": 4141,
       "year": 2017,
       "opening_reserves_gbp_m": 155.088,
-      "opening_reserves_page": 16,
-      "opening_reserves_confidence": 0.8,
+      "opening_reserves_page": 15,
+      "opening_reserves_confidence": 0.9,
       "prior_year_development_gbp_m": -13.375,
       "prior_year_development_pct": -8.62,
       "direction": "release",
-      "prior_year_movement_page": 5,
-      "prior_year_movement_confidence": 0.5,
-      "exact_reserve_text": "The net provision release which totalled GBP 33.9m (2016: GBP 68.3m).",
-      "primary_causes": [
-        "Favourable claims development"
-      ],
+      "prior_year_movement_page": null,
+      "prior_year_movement_confidence": 0.0,
+      "exact_reserve_text": "",
+      "primary_causes": [],
       "specific_events": [],
       "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "Syndicate 4141 reported an opening gross claims outstanding (claims reserves) of GBP 155.088m (balance sheet 2016 comparative). The report describes a net prior-year reserve release of GBP 33.9m in 2017, driven by favourable claims development across the portfolio. No gross prior-year movement figure was clearly presented in a single, unambiguous 'Insurance liabilities (gross)' movement line in the notes available, so the quantified movement used here is the net (after reinsurance) figure reported in the managing agent's commentary.",
-      "raw_causal_phrases": [
-        "net provision release",
-        "released",
-        "prior year reserve releases"
-      ],
+      "standardized_narrative": "Opening gross claims outstanding at 1 January 2017 (prior year closing claims outstanding) is taken from the balance sheet prior year column. The report does not present a clear, labelled gross \"movement in prior year's provision for claims outstanding\" figure in the notes that is readily extractable from the scanned pages provided. A gross claims development triangle is present in the notes but the individual development cells were not unambiguously machine-extractable from the provided images, so no quantified prior-year development total is reported here.",
+      "raw_causal_phrases": [],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 139.7,
       "gross_premium_mix": [
@@ -480,10 +488,10 @@
           "percentage_of_total": 24.1
         }
       ],
-      "gross_premium_page": 5,
+      "gross_premium_page": 13,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Primary gross prior-year movement (Insurance liabilities/gross) was not unambiguously located in the notes that could be read. The report clearly states a net (after reinsurance) prior year release of GBP 33.9m in the managing agent commentary; no explicit gross (insurance liabilities) movement figure was located in the available notes/printed tables. Opening gross claims outstanding taken from the Balance Sheet (prior-year comparative column). Claims development triangle is present in the report but numeric cells could not be confidently digitised from the provided images. Where gross figures could not be located, a NET figure was used and flagged here. [RAG OVERRIDE: Model said PYD=-33.9, RAG triangle computed -13.375. Using RAG value.]",
+      "data_quality_notes": "Opening reserves taken from Balance Sheet (Claims outstanding 2016 column = GBP 155,088k). Prior-year development (gross) not found in a clearly labelled 'movement in prior year's provision for claims outstanding' note in the scanned images; a gross claims development triangle appears in the notes (approx pages in the high 20s), but the triangle cells could not be reliably transcribed from the images, so prior_year_development_gbp_m is left null. Many notes and tables are present but image resolution/rotation and small fonts prevented safe extraction of per-year movement figures and segmental premium breakdown; users should refer to the original PDF for exact numeric PYD and segmental mix.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -498,79 +506,35 @@
           2016,
           2017
         ],
-        "development_rows": [
-          [
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-          ],
-          [
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-          ],
-          [
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-          ],
-          [
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-          ],
-          [
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-          ],
-          [
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-          ]
-        ]
+        "development_rows": []
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_4141_2017_llm.pdf",
-      "content_hash": "80d88d7131066252383a865d2a2a5bd4525bb69ed42a57173fbf3f34a16601c9",
-      "standardized_at": "2026-03-19T00:11:17.031596+00:00",
+      "content_hash": "cfc8924b697adaacbb979d7daa6c39c0ccc510d6fbf8592630f1861949f36f70",
+      "standardized_at": "2026-09-11T12:49:25.110342+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 23346,
-        "output_tokens": 6175,
-        "total_tokens": 29521,
-        "cost_usd": 0.018187
+        "input_tokens": 24106,
+        "output_tokens": 5325,
+        "total_tokens": 29431,
+        "cost_usd": 0.016677
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -13.375,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 28,
+        "note": "filled a blank model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -635,6 +599,14 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "- one year later (*)",
+          "- two years later",
+          "- three years later",
+          "- four years later",
+          "- five years later",
+          "- six years later"
         ],
         "source_page": 28,
         "entity": 4141
@@ -792,12 +764,12 @@
       }
     }
   },
-  "total_cost_usd": 0.025456,
-  "total_tokens": 46351,
+  "total_cost_usd": 0.024359,
+  "total_tokens": 47365,
   "validation": {
     "passed": true,
-    "total_discrepancies": 18,
-    "within_tolerance": 18,
+    "total_discrepancies": 10,
+    "within_tolerance": 10,
     "hard_failures": 0,
     "hard_failure_details": []
   }

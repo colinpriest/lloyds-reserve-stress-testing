@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-05T20:17:56.631975+00:00",
+  "extraction_timestamp": "2026-09-13T04:01:39.152684+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -25,34 +27,54 @@
         "Other"
       ],
       "specific_events": [],
-      "specific_years_affected": [],
-      "prior_year_events": [],
+      "specific_years_affected": [
+        2017
+      ],
+      "prior_year_events": [
+        {
+          "event_name": "Political Risks & Political Violence",
+          "event_year": 2017,
+          "impact_description": "GBP 28.9m loss, largely as a result of claims activity, both catastrophe events and reserve strengthening",
+          "lobs_affected": [
+            "Reinsurance - Specialty"
+          ],
+          "amount_gbp_m": 28.9,
+          "confidence": 1.0
+        }
+      ],
       "named_events": [
         {
-          "event_name": "2018 hurricanes",
+          "event_name": "2018 hurricanes and wildfires",
           "event_year": 2018,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "marginal, contained within planned loss ratios",
-          "lobs_affected": [],
+          "loss_description": "marginal, being contained within planned loss ratios",
+          "lobs_affected": [
+            "Property"
+          ],
           "page": 1,
           "confidence": 0.8
         },
         {
-          "event_name": "2018 wildfires",
-          "event_year": 2018,
-          "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": null,
-          "loss_description": "marginal, contained within planned loss ratios",
-          "lobs_affected": [],
+          "event_name": "Political Risks & Political Violence",
+          "event_year": 2017,
+          "event_type": "political",
+          "net_loss_gbp_m": 28.9,
+          "loss_description": "GBP 28.9m loss, largely as a result of claims activity, both catastrophe events and reserve strengthening",
+          "lobs_affected": [
+            "Reinsurance - Specialty"
+          ],
           "page": 1,
-          "confidence": 0.8
+          "confidence": 1.0
         }
       ],
-      "standardized_narrative": "The Syndicate experienced a gross prior year reserve strengthening of GBP 17.538 million in 2018, calculated from the claims development triangle. This contrasts with the reported net favourable prior year development of GBP 42.8 million, which was attributed to a benign claims environment, favourable attritional losses, and notable development in Political Risks & Political Violence.",
+      "standardized_narrative": "The Syndicate experienced a gross prior year strengthening of GBP 17.538 million in 2018, as calculated from the gross claims development triangle. This contrasts with narrative text on page 15 which states a net favourable prior year development of GBP 42.8 million, attributed to a benign period for catastrophe events and favourable development on attritional losses. The 2017 Political Risks & Political Violence segment had previously experienced a GBP 28.9 million loss due to claims activity and reserve strengthening.",
       "raw_causal_phrases": [
-        "benign year and an element of favourable prior year development, notably on Political Risks & Political Violence",
-        "decrease in the net loss ratio to 51.8% (2017: 67.2%) reflects a benign period of catastrophe events (compared to 2017 hurricane impact), with an element of favourable prior year development on attritional losses."
+        "benign year",
+        "element of favourable prior year development",
+        "notably on Political Risks & Political Violence (2017: GBP 28.9m loss, largely as a result of claims activity, both catastrophe events and reserve strengthening)",
+        "decrease in the net loss ratio... reflects a benign period of catastrophe events (compared to 2017 hurricane impact)",
+        "element of favourable prior year development on attritional losses"
       ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 423.0,
@@ -91,7 +113,7 @@
       "gross_premium_page": 14,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior year development figure is calculated gross from the claims development triangle, showing a strengthening of GBP 17.538m. This contrasts with the narrative statement on page 15 which reports a net favourable prior year development of GBP 42.8m. The causes mentioned in the narrative (benign year, favourable attritional losses, Political Risks & Political Violence) are associated with the net release, not the gross strengthening. No gross LOB breakdown for prior year development was available.",
+      "data_quality_notes": "Prior year development figure calculated from gross claims development triangle. Narrative text on page 15 states 'favourable prior year development of GBP 42.8m' (net of reinsurance), which contradicts the gross triangle calculation. LOB movements are not provided on a gross basis.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -174,20 +196,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_4000_2018_llm.pdf",
-      "content_hash": "eaef21901eb8252b327fa5647955ddeb835eeec345ed5ae2f585f547010970e0",
-      "standardized_at": "2026-03-18T23:48:08.615935+00:00",
+      "content_hash": "5a2f051a413d667110fae1b75f3ddb71ff83e69a4796ac51c5ece8761d8a1c46",
+      "standardized_at": "2026-09-11T12:58:54.631212+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 10379,
-        "output_tokens": 1653,
-        "total_tokens": 20839,
-        "cost_usd": 0.007246
+        "input_tokens": 11183,
+        "output_tokens": 1820,
+        "total_tokens": 20759,
+        "cost_usd": 0.007905
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 17.538,
+        "model_value": 17.538,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 31,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2012,
           2013,
@@ -261,6 +295,15 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At the end of the underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later"
         ],
         "source_page": 31,
         "entity": 4000
@@ -421,37 +464,39 @@
       "prior_year_movement_confidence": 0.8,
       "exact_reserve_text": "Claims incurred, net of reinsurance, include favourable prior year development of GBP 42.8m (2017 adverse development: GBP 14.5m). Prior year claims development is analysed by line of business in the table below.",
       "primary_causes": [
-        "Favorable claims development",
         "Natural catastrophe events",
-        "Man-made catastrophe / large losses",
+        "Favorable claims development",
+        "Geopolitical events",
         "Reinsurance recoveries"
       ],
       "specific_events": [],
       "specific_years_affected": [
-        2017
+        2012,
+        2013,
+        2014,
+        2015,
+        2016
       ],
       "prior_year_events": [
         {
-          "event_name": "2017 hurricanes / catastrophe impact",
+          "event_name": "2017 hurricane events",
           "event_year": 2017,
-          "impact_description": "Adverse development in 2017 due to hurricane impact contributed to 2017 loss experience and affected reserves.",
+          "impact_description": "Adverse development in 2017 largely as a result of claims activity including catastrophe events and reserve strengthening",
           "lobs_affected": [
-            "Property",
-            "Marine",
-            "Energy"
+            "Property"
           ],
           "amount_gbp_m": null,
           "confidence": 0.6
         },
         {
-          "event_name": "Political Risks & Political Violence",
+          "event_name": "Prior year favourable development on Political Risks & Political Violence",
           "event_year": 2017,
-          "impact_description": "Notable prior year development referenced in the report; contributed materially to 2017 loss.",
+          "impact_description": "An element of favourable prior year development was notably on Political Risks & Political Violence",
           "lobs_affected": [
-            "Reinsurance - Specialty"
+            "Casualty"
           ],
           "amount_gbp_m": null,
-          "confidence": 0.5
+          "confidence": 0.6
         }
       ],
       "named_events": [
@@ -462,74 +507,83 @@
           "net_loss_gbp_m": null,
           "loss_description": "The impact of the 2018 hurricanes and wildfires was marginal, being contained within planned loss ratios.",
           "lobs_affected": [
-            "Property",
-            "Marine",
-            "Energy"
+            "Property"
+          ],
+          "page": 7,
+          "confidence": 1.0
+        },
+        {
+          "event_name": "2017 hurricane impact",
+          "event_year": 2017,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "2017: GBP 28.9m loss, largely as a result of claims activity, both catastrophe events and reserve strengthening.",
+          "lobs_affected": [
+            "Property"
           ],
           "page": 7,
           "confidence": 0.8
         },
         {
-          "event_name": "Political Risks & Political Violence (referenced)",
+          "event_name": "Political Risks & Political Violence (prior years)",
           "event_year": 2017,
           "event_type": "man_made",
           "net_loss_gbp_m": null,
-          "loss_description": "Noted as a material contributor to the 2017 loss and as an area of prior year development.",
+          "loss_description": "Favourable prior year development notably on Political Risks & Political Violence.",
           "lobs_affected": [
-            "Reinsurance - Specialty"
+            "Casualty"
           ],
           "page": 7,
-          "confidence": 0.6
+          "confidence": 0.8
         }
       ],
-      "standardized_narrative": "At 1 January 2018 gross claims outstanding were GBP 523.82m. Analysis of the gross claims development triangle indicates a net gross prior-year strengthening of c. GBP 17.5m (3.35% of opening reserves), driven by adverse movements in several older underwriting years offset in parts by releases in others. The managing agent describes the year as benign overall with favourable net prior-year development (net of reinsurance), notably on Political Risks & Political Violence, and limited impact from the 2018 hurricanes and wildfires. The gross strengthening contrasts with a reported net favourable prior-year development (net of reinsurance), indicating that increased reinsurance recoverables materially offset gross adverse movements.",
+      "standardized_narrative": "At 31 December 2018 the syndicate's opening gross claims outstanding (1 Jan 2018) was GBP 523.82m. Analysis of the gross claims development triangle indicates a net adverse movement on prior years of approximately GBP 17.54m (c.3.35% of opening reserves), driven by increases primarily in the 2016 and earlier underwriting years. This gross deterioration was more than offset on a net basis by favourable prior-year development after reinsurance (the report records net favourable prior year development of GBP 42.8m), reflecting strong reinsurance recoveries and favourable attritional development and limited catastrophe activity in 2018.",
       "raw_causal_phrases": [
-        "favourable prior year development",
-        "benign year",
-        "element of favourable prior year development, notably on Political Risks & Political Violence",
-        "The decrease in the net loss ratio to 51.8% (2017: 67.2%) reflects a benign period of catastrophe events (compared to 2017 hurricane impact), with an element of favourable prior year development on attritional losses",
-        "The impact of the 2018 hurricanes and wildfires was marginal, being contained within planned loss ratios"
+        "benign year and an element of favourable prior year development, notably on Political Risks & Political Violence",
+        "The decrease in the net loss ratio to 51.8% (2017: 67.2%) reflects a benign period of catastrophe events (compared to 2017 hurricane impact), with an element of favourable prior year development on attritional losses.",
+        "Claims incurred, net of reinsurance, include favourable prior year development of GBP 42.8m (2017 adverse development: GBP 14.5m).",
+        "The impact of the 2018 hurricanes and wildfires was marginal, being contained within planned loss ratios."
       ],
       "lob_movements": [
         {
           "line_of_business": "Accident & Health",
-          "direction": "release",
-          "amount_gbp_m": -2.298,
+          "direction": "strengthening",
+          "amount_gbp_m": 2.298,
           "percentage": null,
           "confidence": 0.5
         },
         {
           "line_of_business": "Marine",
-          "direction": "strengthening",
-          "amount_gbp_m": 0.955,
+          "direction": "release",
+          "amount_gbp_m": -0.955,
           "percentage": null,
           "confidence": 0.5
         },
         {
           "line_of_business": "Property",
-          "direction": "strengthening",
-          "amount_gbp_m": 9.356,
+          "direction": "release",
+          "amount_gbp_m": -9.356,
           "percentage": null,
           "confidence": 0.5
         },
         {
           "line_of_business": "Casualty",
-          "direction": "strengthening",
-          "amount_gbp_m": 10.196,
+          "direction": "release",
+          "amount_gbp_m": -10.196,
           "percentage": null,
           "confidence": 0.5
         },
         {
           "line_of_business": "Aggregate",
-          "direction": "strengthening",
-          "amount_gbp_m": 19.222,
+          "direction": "release",
+          "amount_gbp_m": -19.222,
           "percentage": null,
           "confidence": 0.5
         },
         {
           "line_of_business": "Treaty",
-          "direction": "strengthening",
-          "amount_gbp_m": 5.338,
+          "direction": "release",
+          "amount_gbp_m": -5.338,
           "percentage": null,
           "confidence": 0.5
         }
@@ -570,7 +624,7 @@
       "gross_premium_page": 30,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior year development (gross) was calculated from the gross claims development triangle (see note). The report also states a net favourable prior year development of GBP 42.8m (net of reinsurance) in the P&L - this is NET and differs from the gross triangle-derived result, indicating material movements in reinsurer recoverables. Line-by-line prior year movements published in the P&L appear to be NET of reinsurance and have been used for LOB-level movements where no gross breakdown is available. Some event references are not individually named (e.g. '2018 hurricanes and wildfires'), and amounts for specific events are not quantified.",
+      "data_quality_notes": "Gross prior-year development was computed from the gross claims development triangle (gross, GBP '000) because the explicit prior-year movement note in the accounts reports only net (after reinsurance) prior-year development. The triangle is presented in GBP '000 in the note; conversions to millions were applied. LOB-level prior year movements provided in the notes are net of reinsurance; those net amounts were included in lob_movements but flagged with lower confidence. No individual named catastrophe events (by hurricane name) were provided in the text. The triangle appears not to be distorted by RITC entries per the notes available.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -653,20 +707,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_4000_2018_llm.pdf",
-      "content_hash": "eaef21901eb8252b327fa5647955ddeb835eeec345ed5ae2f585f547010970e0",
-      "standardized_at": "2026-03-18T23:50:13.620440+00:00",
+      "content_hash": "5a2f051a413d667110fae1b75f3ddb71ff83e69a4796ac51c5ece8761d8a1c46",
+      "standardized_at": "2026-09-11T13:02:26.621329+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 25313,
-        "output_tokens": 8050,
-        "total_tokens": 33363,
-        "cost_usd": 0.022428
+        "input_tokens": 26070,
+        "output_tokens": 8534,
+        "total_tokens": 34604,
+        "cost_usd": 0.023585
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 17.538,
+        "model_value": 17.538,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 31,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2012,
           2013,
@@ -740,6 +806,15 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At the end of the underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later"
         ],
         "source_page": 31,
         "entity": 4000
@@ -888,12 +963,12 @@
       }
     }
   },
-  "total_cost_usd": 0.029674,
-  "total_tokens": 54202,
+  "total_cost_usd": 0.03149,
+  "total_tokens": 55363,
   "validation": {
     "passed": true,
-    "total_discrepancies": 24,
-    "within_tolerance": 24,
+    "total_discrepancies": 31,
+    "within_tolerance": 31,
     "hard_failures": 0,
     "hard_failure_details": []
   }

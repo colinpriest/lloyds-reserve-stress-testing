@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T10:55:19.958459+00:00",
+  "extraction_timestamp": "2026-09-13T03:59:38.232980+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -16,63 +18,71 @@
       "prior_year_development_gbp_m": -2.854,
       "prior_year_development_pct": -0.82,
       "direction": "release",
-      "prior_year_movement_page": 2,
+      "prior_year_movement_page": 22,
       "prior_year_movement_confidence": 0.8,
-      "exact_reserve_text": "The Syndicate saw favourable prior year development in 2024, improving the loss ratio by 2.7pps (2023: 1.1pps).",
+      "exact_reserve_text": "The Syndicate saw favourable prior year development in 2024, improving the loss ratio by 2.7pps (2023: 1.1pps). Favourable attritional experience emerging from the 2987 whole account quota share, as well as an improvement on the Ukraine and Covid losses, were the main drivers.",
       "primary_causes": [
-        "Favourable claims development",
+        "Favorable claims development",
+        "Reinsurance recoveries",
         "COVID-19 / pandemic effects",
         "Geopolitical events"
       ],
       "specific_events": [
-        "Ukraine",
-        "Covid"
+        "Ukraine losses",
+        "Covid losses"
       ],
       "specific_years_affected": [],
       "prior_year_events": [
         {
-          "event_name": "Ukraine losses",
+          "event_name": "2987 whole account quota share",
           "event_year": null,
-          "impact_description": "improvement on the Ukraine losses",
+          "impact_description": "Favourable attritional experience emerging from the 2987 whole account quota share.",
           "lobs_affected": [],
           "amount_gbp_m": null,
-          "confidence": 0.8
+          "confidence": 0.5
+        },
+        {
+          "event_name": "Ukraine losses",
+          "event_year": null,
+          "impact_description": "Improvement on the Ukraine losses.",
+          "lobs_affected": [],
+          "amount_gbp_m": null,
+          "confidence": 0.5
         },
         {
           "event_name": "Covid losses",
           "event_year": null,
-          "impact_description": "improvement on the Covid losses",
+          "impact_description": "Improvement on the Covid losses.",
           "lobs_affected": [],
           "amount_gbp_m": null,
-          "confidence": 0.8
+          "confidence": 0.5
         }
       ],
       "named_events": [
         {
-          "event_name": "Ukraine",
+          "event_name": "Ukraine losses",
           "event_year": null,
           "event_type": "political",
           "net_loss_gbp_m": null,
-          "loss_description": "improvement on the Ukraine losses",
+          "loss_description": "Improvement on the Ukraine losses, contributing to favourable prior year development.",
           "lobs_affected": [],
           "page": 2,
-          "confidence": 0.8
+          "confidence": 0.5
         },
         {
-          "event_name": "Covid",
+          "event_name": "Covid losses",
           "event_year": null,
           "event_type": "other",
           "net_loss_gbp_m": null,
-          "loss_description": "improvement on the Covid losses",
+          "loss_description": "Improvement on the Covid losses, contributing to favourable prior year development.",
           "lobs_affected": [],
           "page": 2,
-          "confidence": 0.8
+          "confidence": 0.5
         }
       ],
-      "standardized_narrative": "The Syndicate reported favourable prior year development in 2024, leading to an improvement in the loss ratio by 2.7 percentage points. This was primarily driven by favourable attritional experience from the 2987 whole account quota share and an improvement in estimates for Ukraine and Covid losses.",
+      "standardized_narrative": "The Syndicate experienced a favourable prior year development of GBP 1.154 million in 2024, primarily driven by favourable attritional experience from the 2987 whole account quota share, and improvements on both Ukraine and Covid losses. This resulted in a release of reserves.",
       "raw_causal_phrases": [
         "favourable prior year development",
-        "improving the loss ratio by 2.7pps",
         "Favourable attritional experience emerging from the 2987 whole account quota share",
         "improvement on the Ukraine and Covid losses"
       ],
@@ -108,7 +118,7 @@
       "gross_premium_page": 20,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Narrative explicitly states 'favourable prior year development' (release), but calculation from gross claims development triangle (comparing current estimate to previous diagonal for UW years 2017-2022) indicates a strengthening of GBP 4.577m. Prioritizing narrative for direction, amount is null due to this contradiction.",
+      "data_quality_notes": "Prior year development amount calculated from the gross claims development triangle. Narrative confirms favourable direction but does not quantify the gross amount. [RAG OVERRIDE: Model said PYD=-1.154, RAG triangle computed -2.854. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -176,7 +186,7 @@
             null
           ],
           [
-            100740,
+            100032,
             92999,
             86284,
             null,
@@ -186,8 +196,18 @@
             null
           ],
           [
-            100292,
+            100740,
             94354,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            100292,
+            null,
             null,
             null,
             null,
@@ -199,20 +219,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_2988_2024_llm.pdf",
-      "content_hash": "501ead188cdde55866b8302ce72b73dc2496b5648dad6b521aaa4efdd564ac8e",
-      "standardized_at": "2026-07-06T00:02:38.866841+00:00",
+      "content_hash": "5a57cb2eba86e7f78e8d0ea59ba17281cf3498a9f491ac6c58eccc9d8f7f8bad",
+      "standardized_at": "2026-09-11T14:33:30.847600+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 11669,
-        "output_tokens": 1762,
-        "total_tokens": 21279,
-        "cost_usd": 0.007906
+        "input_tokens": 12473,
+        "output_tokens": 1904,
+        "total_tokens": 17904,
+        "cost_usd": 0.008502
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -2.854,
+        "model_value": -1.154,
+        "triangle_type": "gross",
+        "triangle_units": "millions",
+        "triangle_units_evidence": "default",
+        "triangle_source_page": 53,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "millions",
+        "units_evidence": "default",
+        "cell_binding": "header",
         "underwriting_years": [
           2017,
           2018,
@@ -304,6 +336,16 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five Years later",
+          "Six years later",
+          "Seven years later"
         ],
         "source_page": 53,
         "entity": 2988
@@ -479,33 +521,33 @@
       "exact_reserve_text": "The Syndicate saw favourable prior year development in 2024, improving the loss ratio by 2.7pps (2023: 1.1pps). Favourable attritional experience emerging from the 2987 whole account quota share, as well as an improvement on the Ukraine and Covid losses, were the main drivers.",
       "primary_causes": [
         "Favorable claims development",
-        "COVID-19 / pandemic effects",
-        "Geopolitical events"
+        "Geopolitical events",
+        "COVID-19 / pandemic effects"
       ],
       "specific_events": [
-        "Ukraine",
-        "COVID-19"
+        "Ukraine conflict",
+        "COVID-19 pandemic"
       ],
       "specific_years_affected": [],
       "prior_year_events": [
         {
-          "event_name": "Ukraine",
+          "event_name": "Ukraine conflict",
           "event_year": 2022,
-          "impact_description": "Improvement on Ukraine losses contributed to favourable prior year development",
+          "impact_description": "Improvement on Ukraine losses contributed to favourable prior year development (release).",
           "lobs_affected": [
-            "Casualty",
-            "Property"
+            "Property",
+            "Reinsurance - Specialty"
           ],
           "amount_gbp_m": null,
           "confidence": 0.5
         },
         {
-          "event_name": "COVID-19",
+          "event_name": "COVID-19 pandemic",
           "event_year": 2020,
-          "impact_description": "Improvement on Covid losses contributed to favourable prior year development",
+          "impact_description": "Improvement on Covid losses contributed to favourable prior year development (release).",
           "lobs_affected": [
-            "Accident & Health",
-            "Casualty"
+            "Casualty",
+            "Accident & Health"
           ],
           "amount_gbp_m": null,
           "confidence": 0.5
@@ -513,60 +555,39 @@
       ],
       "named_events": [
         {
-          "event_name": "Ukraine",
+          "event_name": "Ukraine conflict",
           "event_year": 2022,
           "event_type": "political",
           "net_loss_gbp_m": null,
-          "loss_description": "Improvement on Ukraine losses noted as a driver of favourable prior year development",
+          "loss_description": "improvement on the Ukraine ... losses",
           "lobs_affected": [
-            "Casualty",
-            "Property"
+            "Property",
+            "Reinsurance - Specialty"
           ],
           "page": 5,
-          "confidence": 0.8
+          "confidence": 0.9
         },
         {
-          "event_name": "COVID-19",
+          "event_name": "COVID-19 pandemic",
           "event_year": 2020,
           "event_type": "other",
           "net_loss_gbp_m": null,
-          "loss_description": "Improvement on Covid losses noted as a driver of favourable prior year development",
+          "loss_description": "improvement on the ... Covid losses",
           "lobs_affected": [
-            "Accident & Health",
-            "Casualty"
+            "Casualty",
+            "Accident & Health"
           ],
           "page": 5,
-          "confidence": 0.8
+          "confidence": 0.9
         }
       ],
-      "standardized_narrative": "Syndicate 2988 reported a small favourable gross prior year development at year-end 2024, approximately GBP 2.9m release, driven by favourable attritional experience (notably from the 2987 whole account quota share) and improvements on Ukraine and COVID-19 related losses. The release represents a modest improvement relative to opening gross reserves of c. GBP 347.9m.",
+      "standardized_narrative": "The syndicate recorded a modest favourable prior year development of approximately GBP 2.85m (gross) in 2024, equating to about a 0.82% release of the opening gross claims outstanding. Management attribute the release primarily to favourable attritional experience from the 2987 whole account quota share and improvements on Ukraine-related and COVID-19 related losses. No explicit gross prior-year movement line item was published; the figure above is calculated from the gross claims development table.",
       "raw_causal_phrases": [
-        "The Syndicate saw favourable prior year development in 2024, improving the loss ratio by 2.7pps (2023: 1.1pps).",
-        "Favourable attritional experience emerging from the 2987 whole account quota share, as well as an improvement on the Ukraine and Covid losses, were the main drivers."
+        "favourable prior year development in 2024, improving the loss ratio by 2.7pps (2023: 1.1pps).",
+        "Favourable attritional experience emerging from the 2987 whole account quota share",
+        "improvement on the Ukraine and Covid losses"
       ],
-      "lob_movements": [
-        {
-          "line_of_business": "Casualty",
-          "direction": "release",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.5
-        },
-        {
-          "line_of_business": "Accident & Health",
-          "direction": "release",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.5
-        },
-        {
-          "line_of_business": "Treaty",
-          "direction": "release",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.4
-        }
-      ],
+      "lob_movements": [],
       "gross_premiums_written_gbp_m": 124.1,
       "gross_premium_mix": [
         {
@@ -598,7 +619,7 @@
       "gross_premium_page": 43,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior year development (gross) was derived from the gross claims development triangle (claims development table) because no explicit gross 'movement in prior year's provision for claims outstanding' note was present. The Managing Agent's narrative states a favourable prior year development but quotes loss ratio improvement and drivers rather than a gross GBP figure. Amounts were extracted from the gross triangle (thousands) and converted to millions. Rounding applied.",
+      "data_quality_notes": "Prior year development (PYD) was calculated from the gross claims development table (claims triangle) on page 51. The report does not provide an explicit gross 'movement in prior year's provision' line; narrative statements reference favourable prior year development but appear to be net of reinsurance. The triangle and financial statements are presented in GBP 000 (thousands); PYD was computed by comparing the current estimate to the previous diagonal for underwriting years up to 2022. No line-by-line LOB gross PYD figures were published; event-to-LOB mappings are inferred and have moderate confidence.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -699,20 +720,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_2988_2024_llm.pdf",
-      "content_hash": "501ead188cdde55866b8302ce72b73dc2496b5648dad6b521aaa4efdd564ac8e",
-      "standardized_at": "2026-07-06T00:03:58.329018+00:00",
+      "content_hash": "5a57cb2eba86e7f78e8d0ea59ba17281cf3498a9f491ac6c58eccc9d8f7f8bad",
+      "standardized_at": "2026-09-11T14:35:18.549447+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 26360,
-        "output_tokens": 6282,
-        "total_tokens": 32642,
-        "cost_usd": 0.019154
+        "input_tokens": 27120,
+        "output_tokens": 6241,
+        "total_tokens": 33361,
+        "cost_usd": 0.019262
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -2.854,
+        "model_value": -2.854,
+        "triangle_type": "gross",
+        "triangle_units": "millions",
+        "triangle_units_evidence": "default",
+        "triangle_source_page": 53,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "millions",
+        "units_evidence": "default",
+        "cell_binding": "header",
         "underwriting_years": [
           2017,
           2018,
@@ -804,6 +837,16 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five Years later",
+          "Six years later",
+          "Seven years later"
         ],
         "source_page": 53,
         "entity": 2988
@@ -966,12 +1009,12 @@
       }
     }
   },
-  "total_cost_usd": 0.02706,
-  "total_tokens": 53921,
+  "total_cost_usd": 0.027764,
+  "total_tokens": 51265,
   "validation": {
     "passed": true,
-    "total_discrepancies": 18,
-    "within_tolerance": 18,
+    "total_discrepancies": 14,
+    "within_tolerance": 14,
     "hard_failures": 0,
     "hard_failure_details": []
   }

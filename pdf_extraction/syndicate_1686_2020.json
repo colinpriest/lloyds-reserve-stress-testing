@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T09:37:10.944208+00:00",
+  "extraction_timestamp": "2026-09-13T04:04:57.025466+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -11,29 +13,21 @@
       "syndicate": 1686,
       "year": 2020,
       "opening_reserves_gbp_m": 727.385,
-      "opening_reserves_page": 19,
+      "opening_reserves_page": 6,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": 54.007,
       "prior_year_development_pct": 7.42,
       "direction": "strengthening",
-      "prior_year_movement_page": 33,
-      "prior_year_movement_confidence": 0.8,
+      "prior_year_movement_page": 14,
+      "prior_year_movement_confidence": 1.0,
       "exact_reserve_text": "Included within net outstanding claims of USD 774.1m (2019: USD 438.1m) is a decrease in outstanding claims relating to 2019 and prior years of account of USD 145.2m (2019: decrease in outstanding claims relating to 2018 and prior years of account USD 77.0m).",
       "primary_causes": [
-        "COVID-19 / pandemic effects",
-        "Natural catastrophe events",
-        "Adverse claims development"
+        "Favorable claims development"
       ],
-      "specific_events": [
-        "North Atlantic hurricane season"
-      ],
+      "specific_events": [],
       "specific_years_affected": [
-        2014,
-        2015,
-        2016,
-        2017,
-        2018,
-        2019
+        2019,
+        2018
       ],
       "prior_year_events": [],
       "named_events": [
@@ -46,8 +40,8 @@
           "lobs_affected": [
             "Property"
           ],
-          "page": 5,
-          "confidence": 1.0
+          "page": 1,
+          "confidence": 0.8
         },
         {
           "event_name": "North Atlantic hurricane season",
@@ -58,14 +52,15 @@
           "lobs_affected": [
             "Property"
           ],
-          "page": 5,
-          "confidence": 1.0
+          "page": 1,
+          "confidence": 0.8
         }
       ],
-      "standardized_narrative": "The syndicate experienced a gross prior year reserve strengthening of USD 53.007 million for underwriting years 2014-2018, calculated from the claims development triangle. This contrasts with a reported net decrease in outstanding claims of USD 145.2 million for 2019 and prior years. The overall 2020 result was adversely impacted by losses from the COVID-19 pandemic, particularly business interruption in the property portfolio, and elevated natural catastrophe losses from the North Atlantic hurricane season.",
+      "standardized_narrative": "The Syndicate reported a net release of USD 145.2 million in outstanding claims relating to 2019 and prior years of account, indicating favorable claims development in its underlying business. This underlying improvement occurred despite significant financial losses from the COVID-19 pandemic and elevated natural catastrophes in the current year, which adversely impacted the overall technical account balance.",
       "raw_causal_phrases": [
-        "losses arising from the COVID-19 pandemic, principally losses arising from business interruption in our property portfolio",
-        "an elevated level of losses resulting from natural catastrophes, principally from the North Atlantic hurricane season"
+        "decrease in outstanding claims relating to 2019 and prior years of account",
+        "underlying results materially improved over the prior year",
+        "excluding the impact of losses arising from COVID-19 and natural catastrophes"
       ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 1256.2,
@@ -121,15 +116,15 @@
           "percentage_of_total": 30.1
         }
       ],
-      "gross_premium_page": 6,
+      "gross_premium_page": 12,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "The prior year development amount is calculated from the gross claims development triangle for underwriting years 2014-2018, resulting in a strengthening. This contrasts with a narrative statement on page 9 indicating a net decrease (release) in outstanding claims for 2019 and prior years. The gross figure from the triangle is prioritized as per instructions. Reinsurance to Close (RITC) for Syndicate 2007 and 6129 into Syndicate 1686's 2019 year of account is mentioned, but the prior year development calculation excludes the 2019 underwriting year, thus avoiding direct distortion from the RITC. [RAG OVERRIDE: Model said PYD=53.007, RAG triangle computed 54.007. Using RAG value.]",
+      "data_quality_notes": "The prior year development figure is reported net of reinsurance in the narrative text. The gross and net claims development triangles show a strengthening for prior years, which contradicts the narrative. This discrepancy is likely due to the Reinsurance to Close (RITC) transaction of Syndicate 2007 and Syndicate 6129 into Syndicate 1686 on 30 December 2020, which distorts the claims development triangle for prior years. Therefore, the explicit net figure from the narrative has been used for prior year development. The 2019 figures were restated due to a reclassification of a Syndicate loan to Lloyd's Central Fund, but this did not impact the 2019 value of the loan. [RAG OVERRIDE: Model said PYD=-145.2, RAG triangle computed 54.007. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "thousands",
-        "page": 33,
+        "page": 17,
         "underwriting_years": [
           2014,
           2015,
@@ -206,21 +201,33 @@
         ]
       },
       "source_type": "syndicate",
-      "source_file": "syndicate_reports\\pdfs\\syndicate_1686_2020.pdf",
-      "content_hash": "32b324b5d75735f29d1673cba5a8e86ee9631ed832441489dc92df1d9460addf",
-      "standardized_at": "2026-03-16T17:20:12.634020+00:00",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_1686_2020_llm.pdf",
+      "content_hash": "53865bb156c729abeb72ab7a09c2bc9f01b6cb7c93598bc89c8e7581ea36dea0",
+      "standardized_at": "2026-09-11T10:46:31.870042+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 16204,
-        "output_tokens": 2032,
-        "total_tokens": 26162,
-        "cost_usd": 0.009941
+        "input_tokens": 11957,
+        "output_tokens": 1962,
+        "total_tokens": 25157,
+        "cost_usd": 0.008492
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 54.007,
+        "model_value": -145.2,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 33,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2014,
           2015,
@@ -294,6 +301,15 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later"
         ],
         "source_page": 33,
         "entity": 1686
@@ -485,28 +501,32 @@
       "syndicate": 1686,
       "year": 2020,
       "opening_reserves_gbp_m": 727.385,
-      "opening_reserves_page": 26,
+      "opening_reserves_page": 7,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": 54.007,
       "prior_year_development_pct": 7.42,
       "direction": "strengthening",
-      "prior_year_movement_page": 33,
-      "prior_year_movement_confidence": 0.8,
+      "prior_year_movement_page": 17,
+      "prior_year_movement_confidence": 0.5,
       "exact_reserve_text": "Included within net outstanding claims of USD 774.1m (2019: USD 438.1m) is a decrease in outstanding claims relating to 2019 and prior years of account of USD 145.2m (2019: decrease in outstanding claims relating to 2018 and prior years of account USD 77.0m).",
       "primary_causes": [
         "Natural catastrophe events",
         "COVID-19 / pandemic effects",
-        "Large loss development",
-        "Adverse claims development"
+        "Reinsurance recoveries",
+        "IBNR recalibration",
+        "Other"
       ],
-      "specific_events": [],
+      "specific_events": [
+        "North Atlantic hurricane season",
+        "COVID-19 pandemic"
+      ],
       "specific_years_affected": [
-        2014,
-        2015,
-        2016,
-        2017,
+        2019,
         2018,
-        2019
+        2017,
+        2016,
+        2015,
+        2014
       ],
       "prior_year_events": [],
       "named_events": [
@@ -515,13 +535,11 @@
           "event_year": 2020,
           "event_type": "other",
           "net_loss_gbp_m": null,
-          "loss_description": "losses arising from the COVID-19 pandemic, principally losses arising from business interruption in our property portfolio",
+          "loss_description": "losses arising from business interruption in our property portfolio",
           "lobs_affected": [
-            "Property",
-            "Accident & Health",
-            "Professional Lines"
+            "Property"
           ],
-          "page": 5,
+          "page": 1,
           "confidence": 0.9
         },
         {
@@ -532,15 +550,16 @@
           "loss_description": "an elevated level of losses resulting from natural catastrophes, principally from the North Atlantic hurricane season",
           "lobs_affected": [
             "Property",
-            "Marine"
+            "Treaty"
           ],
-          "page": 5,
-          "confidence": 0.8
+          "page": 1,
+          "confidence": 0.9
         }
       ],
-      "standardized_narrative": "The syndicate's opening gross claims outstanding at 1 January 2020 was USD 727.385m. Analysis of the gross claims development table indicates an aggregate adverse prior-year development (strengthening) of approximately USD 54.0m (7.4% of opening gross reserves) driven largely by catastrophe and large-loss development. The report cites COVID-19 (notably business interruption in property) and an elevated North Atlantic hurricane season as principal loss drivers, with impacts concentrated in Property and Treaty/Reinsurance-related lines alongside exposures in Marine and Professional Lines. The claims development triangle and accompanying notes should be treated with caution due to portfolio movements and syndicate closure/RITC activity during the period.",
+      "standardized_narrative": "At 31 December 2020 the Syndicate's opening gross claims outstanding at the start of the year was USD 727.385m. Analysis of the gross claims development triangle indicates a net prior-year strengthening of approximately USD 54.0m (7.4% of opening gross claims), predominantly arising from deterioration on older accident years. The report identifies COVID-19 business interruption losses and an elevated North Atlantic hurricane season as primary drivers of adverse results in 2020; the reinsurance-to-close transfers into Syndicate 1686 during the year also materially affect comparability of reserve movements. No single quantified gross prior-year movement by line is disclosed in the notes.",
       "raw_causal_phrases": [
-        "losses arising from the COVID-19 pandemic, principally losses arising from business interruption in our property portfolio, and an elevated level of losses resulting from natural catastrophes, principally from the North Atlantic hurricane season.",
+        "The primary drivers of the adverse result are losses arising from the COVID-19 pandemic, principally losses arising from business interruption in our property portfolio, and an elevated level of losses resulting from natural catastrophes, principally from the North Atlantic hurricane season.",
+        "Following the closure of Syndicate 2007 and Syndicate 6129 effective 31 December 2020, the assets and liabilities of Syndicate 2007 transferred into Syndicate 1686 as part of a planned reinsurance to close transaction.",
         "Included within net outstanding claims of USD 774.1m (2019: USD 438.1m) is a decrease in outstanding claims relating to 2019 and prior years of account of USD 145.2m (2019: decrease in outstanding claims relating to 2018 and prior years of account USD 77.0m)."
       ],
       "lob_movements": [
@@ -549,7 +568,28 @@
           "direction": "strengthening",
           "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.5
+          "confidence": 0.6
+        },
+        {
+          "line_of_business": "Casualty",
+          "direction": "strengthening",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.4
+        },
+        {
+          "line_of_business": "Marine",
+          "direction": "strengthening",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.3
+        },
+        {
+          "line_of_business": "Energy",
+          "direction": "strengthening",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.3
         },
         {
           "line_of_business": "Treaty",
@@ -557,20 +597,6 @@
           "amount_gbp_m": null,
           "percentage": null,
           "confidence": 0.5
-        },
-        {
-          "line_of_business": "Marine",
-          "direction": "strengthening",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.4
-        },
-        {
-          "line_of_business": "Professional Lines",
-          "direction": "strengthening",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.4
         }
       ],
       "gross_premiums_written_gbp_m": 1256.2,
@@ -626,15 +652,15 @@
           "percentage_of_total": 30.1
         }
       ],
-      "gross_premium_page": 6,
+      "gross_premium_page": 2,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "Prior year development figure was calculated from the gross claims development triangle because movement notes quoted net movements. The syndicate undertook RITC and received transferred reserves during the period (closure of Syndicate 2007 and 6129 into 1686), which can distort development patterns. Amounts are in the native currency (USD, thousands reported in source). Triangle-based PYD is an aggregation of column diagonal changes for UW years up to 2018; RITC and transfers may affect reliability.",
+      "data_quality_notes": "Prior-year development (gross) was derived from the published gross cumulative claims development triangle (page 17) by excluding the two most recent underwriting years (2019 and 2020). The year-end 2020 RITC transfers (Syndicate 2007 and 6129) are disclosed in the report and may distort the claims triangle and movement comparability. The report explicitly states a net release (after reinsurance) relating to 2019 and prior years of USD 145.2m, but a gross prior-year movement is not stated; the gross PYD above is triangle-derived and therefore moderate confidence is applied.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "thousands",
-        "page": 33,
+        "page": 17,
         "underwriting_years": [
           2014,
           2015,
@@ -711,21 +737,33 @@
         ]
       },
       "source_type": "syndicate",
-      "source_file": "syndicate_reports\\pdfs\\syndicate_1686_2020.pdf",
-      "content_hash": "32b324b5d75735f29d1673cba5a8e86ee9631ed832441489dc92df1d9460addf",
-      "standardized_at": "2026-03-16T17:22:14.458797+00:00",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_1686_2020_llm.pdf",
+      "content_hash": "53865bb156c729abeb72ab7a09c2bc9f01b6cb7c93598bc89c8e7581ea36dea0",
+      "standardized_at": "2026-09-11T10:50:11.969106+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 30341,
-        "output_tokens": 7484,
-        "total_tokens": 37825,
-        "cost_usd": 0.022553
+        "input_tokens": 20605,
+        "output_tokens": 9292,
+        "total_tokens": 29897,
+        "cost_usd": 0.023735
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 54.007,
+        "model_value": 54.007,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 33,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2014,
           2015,
@@ -799,6 +837,15 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later"
         ],
         "source_page": 33,
         "entity": 1686
@@ -987,12 +1034,12 @@
       }
     }
   },
-  "total_cost_usd": 0.032494,
-  "total_tokens": 63987,
+  "total_cost_usd": 0.032227,
+  "total_tokens": 55054,
   "validation": {
     "passed": true,
-    "total_discrepancies": 10,
-    "within_tolerance": 10,
+    "total_discrepancies": 25,
+    "within_tolerance": 25,
     "hard_failures": 0,
     "hard_failure_details": []
   }

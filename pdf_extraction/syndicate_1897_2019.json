@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-05T19:42:58.447789+00:00",
+  "extraction_timestamp": "2026-09-13T04:12:43.895176+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -11,28 +13,36 @@
       "syndicate": 1897,
       "year": 2019,
       "opening_reserves_gbp_m": 169.32,
-      "opening_reserves_page": 6,
+      "opening_reserves_page": 5,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": 11.964,
       "prior_year_development_pct": 7.07,
       "direction": "strengthening",
-      "prior_year_movement_page": 9,
-      "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "In 2019, there has been an overall deficit of GBP 16m on prior year reserves (2018 deficit of GBP 5.0m).",
+      "prior_year_movement_page": 17,
+      "prior_year_movement_confidence": 0.8,
+      "exact_reserve_text": "In 2019, there has been an overall deficit of GBP 16m on prior year reserves (2018 deficit of GBP 5.0m). The deficit is primarily driven by premium reductions and reserve increases on the marine and energy classes of business.",
       "primary_causes": [
-        "Adverse claims development",
-        "Other"
+        "Adverse claims development"
       ],
       "specific_events": [],
-      "specific_years_affected": [
-        2018
+      "specific_years_affected": [],
+      "prior_year_events": [
+        {
+          "event_name": "RITC of 2016 Property YOA to 2017 YOA",
+          "event_year": 2017,
+          "impact_description": "The 2016 year of account Property class of business was transferred to the 2017 year of account under an RITC agreement. At the same time the cession between Syndicate 1897 and Syndicate 6126 on the 2016 year of account was increased from 85% to 100%. The 2016 year of account for Syndicate 6126 was reinsured to close (RITC) to Syndicate 3268.",
+          "lobs_affected": [
+            "Property"
+          ],
+          "amount_gbp_m": null,
+          "confidence": 1.0
+        }
       ],
-      "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "In 2019, the Syndicate experienced an overall deficit of GBP 16 million on prior year reserves, representing a strengthening of 9.45% of opening gross reserves. This adverse development was primarily driven by premium reductions and reserve increases within the Marine and Energy lines of business.",
+      "standardized_narrative": "In 2019, Syndicate 1897 experienced a net strengthening of GBP 16.0 million on prior year reserves. This adverse development was primarily driven by premium reductions and reserve increases on the Marine and Energy lines of business. The claims development triangle is distorted by a Reinsurance to Close (RITC) agreement for the 2016 Property year of account, making it unreliable for calculating prior year development.",
       "raw_causal_phrases": [
-        "premium reductions",
-        "reserve increases on the marine and energy classes of business"
+        "an overall deficit of GBP 16m on prior year reserves",
+        "deficit is primarily driven by premium reductions and reserve increases on the marine and energy classes of business"
       ],
       "lob_movements": [
         {
@@ -73,15 +83,15 @@
           "percentage_of_total": 0.0
         }
       ],
-      "gross_premium_page": 5,
+      "gross_premium_page": 11,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "No specific named events or quantified line of business movements were provided for the prior year development. The prior year development figure of GBP 16m is explicitly stated as an 'overall deficit on prior year reserves' in the narrative, which is taken as the primary source. A calculation from the gross claims development triangle yields a different figure (+GBP 12.772m), but the narrative statement is considered more direct. [RAG OVERRIDE: Model said PYD=16.0, RAG triangle computed 11.964. Using RAG value.]",
+      "data_quality_notes": "Prior year development is reported net of reinsurance as no gross figure was available due to RITC distortion in the claims development triangle. [RAG OVERRIDE: Model said PYD=16.0, RAG triangle computed 11.964. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
-        "page": 8,
+        "page": 16,
         "underwriting_years": [
           2011,
           2012,
@@ -197,20 +207,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_1897_2019_llm.pdf",
-      "content_hash": "c61d060998623c128b38bd213a9a53dc7440b7598a82bdc3c7133664f02076b4",
-      "standardized_at": "2026-03-17T13:42:23.295077+00:00",
+      "content_hash": "f8f30abcbb9b13139aa013b30de25c0b519f21b6b2a96cb3f1602eba69a3cf65",
+      "standardized_at": "2026-09-11T11:03:09.690000+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 8334,
-        "output_tokens": 1650,
-        "total_tokens": 14245,
-        "cost_usd": 0.006625
+        "input_tokens": 11699,
+        "output_tokens": 1849,
+        "total_tokens": 18980,
+        "cost_usd": 0.008132
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 11.964,
+        "model_value": 16.0,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 38,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -322,6 +344,17 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later",
+          "Seven years later",
+          "Eight years later"
         ],
         "source_page": 38,
         "entity": 1897
@@ -460,7 +493,7 @@
       "syndicate": 1897,
       "year": 2019,
       "opening_reserves_gbp_m": 169.32,
-      "opening_reserves_page": 24,
+      "opening_reserves_page": 15,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": 11.964,
       "prior_year_development_pct": 7.07,
@@ -473,12 +506,27 @@
         "Other"
       ],
       "specific_events": [],
-      "specific_years_affected": [],
-      "prior_year_events": [],
+      "specific_years_affected": [
+        2016,
+        2017,
+        2018
+      ],
+      "prior_year_events": [
+        {
+          "event_name": "RITC: 2016 Property transfer to 2017",
+          "event_year": 2016,
+          "impact_description": "2016 Property class was transferred to the 2017 year of account under an RITC agreement; Syndicate 1897 will still pay claims on behalf of the other syndicate and premium payable by Syndicate 1897 to the other syndicate has not been settled, which affects creditor and claim movements.",
+          "lobs_affected": [
+            "Property"
+          ],
+          "amount_gbp_m": null,
+          "confidence": 0.6
+        }
+      ],
       "named_events": [],
-      "standardized_narrative": "Opening gross claims reserves were GBP 169.32m at 1 January 2019. Analysis of the gross claims development triangle indicates a net prior-year deterioration (strengthening) of approximately GBP 11.964m (gross), driven largely by adverse development in older years, consistent with the Managing Agent's statement of a prior year deficit. The Managing Agent attributes the deficit primarily to premium reductions and reserve increases in the marine and energy classes. No specific named catastrophe events are quantified as drivers of the prior year movement in the report.",
+      "standardized_narrative": "The Syndicate closed 2018 with opening gross claims outstanding of GBP 169.32m. Analysis of the gross claims development triangle shows an adverse prior-year development of approximately GBP 11.96m (about 7.1% of opening reserves), i.e. a strengthening of reserves. Management also notes an overall prior-year deficit of GBP 16m, primarily driven by premium reductions and reserve increases in the marine and energy classes. A 2016->2017 RITC on the Property class is noted and may have influenced movements.",
       "raw_causal_phrases": [
-        "overall deficit of GBP 16m on prior year reserves (2018 deficit of GBP 5.0m).",
+        "In 2019, there has been an overall deficit of GBP 16m on prior year reserves (2018 deficit of GBP 5.0m).",
         "The deficit is primarily driven by premium reductions and reserve increases on the marine and energy classes of business."
       ],
       "lob_movements": [
@@ -523,7 +571,7 @@
       "gross_premium_page": 23,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "No explicit gross 'movement in prior year's provision for claims outstanding' figure was provided in a single-line note. Gross prior year development was calculated from the gross claims development triangle (pages 34-35) by comparing current estimates to the previous diagonal for underwriting years up to 2017 (triangle values are presented in GBP '000). The Managing Agent narrative reports a net prior year deficit of GBP 16.0m (net of reinsurance), which differs from the gross triangle-derived figure above; no gross PYD figure was stated explicitly. Prior-year movements by LOB are not quantified in the notes, only attributed qualitatively to Marine and Energy.",
+      "data_quality_notes": "Prior-year development was calculated from the gross claims development triangle (gross numbers, as presented) on page 35. A narrative in the report states a GBP 16m overall deficit on prior year reserves (page 36) but that figure's gross/net status is not explicit; triangle-based gross PYD = +GBP 11.964m was used per guidance to prefer a gross triangle. There is an RITC (2016 -> 2017 Property) noted in the report which can distort development comparisons; this may affect the triangle accuracy.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -644,20 +692,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_1897_2019_llm.pdf",
-      "content_hash": "c61d060998623c128b38bd213a9a53dc7440b7598a82bdc3c7133664f02076b4",
-      "standardized_at": "2026-03-17T13:43:30.510237+00:00",
+      "content_hash": "f8f30abcbb9b13139aa013b30de25c0b519f21b6b2a96cb3f1602eba69a3cf65",
+      "standardized_at": "2026-09-11T11:06:12.364207+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 12640,
-        "output_tokens": 5516,
-        "total_tokens": 18156,
-        "cost_usd": 0.014192
+        "input_tokens": 18293,
+        "output_tokens": 7728,
+        "total_tokens": 26021,
+        "cost_usd": 0.020029
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 11.964,
+        "model_value": 11.964,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 38,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -769,6 +829,17 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of underwriting year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later",
+          "Seven years later",
+          "Eight years later"
         ],
         "source_page": 38,
         "entity": 1897
@@ -904,12 +975,12 @@
       }
     }
   },
-  "total_cost_usd": 0.020817,
-  "total_tokens": 32401,
+  "total_cost_usd": 0.028161,
+  "total_tokens": 45001,
   "validation": {
     "passed": true,
-    "total_discrepancies": 12,
-    "within_tolerance": 12,
+    "total_discrepancies": 14,
+    "within_tolerance": 14,
     "hard_failures": 0,
     "hard_failure_details": []
   }

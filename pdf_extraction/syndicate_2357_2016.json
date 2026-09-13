@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T10:36:58.283779+00:00",
+  "extraction_timestamp": "2026-09-13T04:13:08.979604+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -10,24 +12,28 @@
     "gemini-2.5-flash": {
       "syndicate": 2357,
       "year": 2016,
-      "opening_reserves_gbp_m": 7.806,
+      "opening_reserves_gbp_m": 0.017,
       "opening_reserves_page": 7,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": 0.0,
       "prior_year_development_pct": 0.0,
       "direction": "flat",
       "prior_year_movement_page": 3,
-      "prior_year_movement_confidence": 1.0,
+      "prior_year_movement_confidence": 0.5,
       "exact_reserve_text": "The return on capacity for the 2014 closed year of account as at 31 December 2016 is shown below together with forecasts for the two open years of account. ... 2014 YOA Closed ... Result/forecast ($'000) 6,805",
-      "primary_causes": [],
+      "primary_causes": [
+        "Favorable claims development"
+      ],
       "specific_events": [],
       "specific_years_affected": [
         2014
       ],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "The syndicate reported a net profit of $6.805 million for the 2014 year of account, which closed in 2016. This indicates a release of reserves for prior underwriting years, though a gross figure is not explicitly provided.",
-      "raw_causal_phrases": [],
+      "standardized_narrative": "The syndicate's 2014 year of account closed with a profit of $6.805 million, indicating a release of reserves for that prior underwriting year due to favorable claims development.",
+      "raw_causal_phrases": [
+        "profit of $6.805m"
+      ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 175.106,
       "gross_premium_mix": [
@@ -52,15 +58,15 @@
           "percentage_of_total": 5.86
         }
       ],
-      "gross_premium_page": 2,
+      "gross_premium_page": 12,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "The prior year development figure of 6.805m USD represents the net profit on the 2014 closed year of account, implying a release of reserves. The 'opening_reserves_gbp_m' field contains the total technical provisions (USD millions) at the start of the year. The claims development table on page 16 is very sparse and does not provide a full development triangle, only specific estimates at certain development points for each underwriting year. [RAG OVERRIDE: Model said PYD=6.805, RAG triangle computed 0.0. Using RAG value.]",
+      "data_quality_notes": "Prior year development is inferred from the 2014 YOA closing profit, not an explicit reserve movement figure. The claims development table is too sparse for prior year development calculation. A portfolio transfer of $6.1m is mentioned in the Technical Provisions note, which could affect total claims outstanding movements but is not explicitly linked to prior year development. [RAG OVERRIDE: Model said PYD=-6.805, RAG triangle computed 0.0. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "thousands",
-        "page": 16,
+        "page": 17,
         "underwriting_years": [
           2013,
           2014,
@@ -72,22 +78,16 @@
             null,
             null,
             17,
-            null
+            49792
           ],
           [
+            null,
             null,
             17,
-            null,
-            null
+            46774
           ],
           [
-            17,
-            46774,
             null,
-            null
-          ],
-          [
-            49792,
             null,
             null,
             null
@@ -96,20 +96,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_2357_2016_llm.pdf",
-      "content_hash": "cb21dc03bab4d5d8942ca35dff59a283b43721b9e116577fff2fe79da8627c77",
-      "standardized_at": "2026-03-18T04:49:23.531732+00:00",
+      "content_hash": "041217ec357ed7dc9f4a67b87cfe007631836ad437f3a84fdd60aa389ff4091a",
+      "standardized_at": "2026-09-11T11:59:32.181095+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 5570,
-        "output_tokens": 902,
-        "total_tokens": 10914,
-        "cost_usd": 0.003926
+        "input_tokens": 11699,
+        "output_tokens": 904,
+        "total_tokens": 17940,
+        "cost_usd": 0.00577
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 0.0,
+        "model_value": -6.805,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 34,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2013,
           2014,
@@ -129,6 +141,10 @@
             17.0,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of underwriting year",
+          "One year later"
         ],
         "source_page": 34,
         "entity": 2357
@@ -225,9 +241,9 @@
     "gpt-5-mini": {
       "syndicate": 2357,
       "year": 2016,
-      "opening_reserves_gbp_m": 23.463,
-      "opening_reserves_page": 11,
-      "opening_reserves_confidence": 1.0,
+      "opening_reserves_gbp_m": null,
+      "opening_reserves_page": null,
+      "opening_reserves_confidence": 0.0,
       "prior_year_development_gbp_m": 0.0,
       "prior_year_development_pct": 0.0,
       "direction": "flat",
@@ -239,26 +255,15 @@
       "specific_years_affected": [],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "Opening gross claims outstanding (closing balance at 31 Dec 2015) is USD 23.463m. The report does not present a clearly labelled gross prior-year reserve movement (gross movement in prior year's provision) in the accessible notes or narrative; therefore no gross prior-year development amount could be extracted. Gross written premium for 2016 was USD 175.106m split between divisional classes shown in the segmental analysis. Technical reserves and movements are presented in the technical provisions note but a definitive gross prior year movement figure was not identifiable from the available pages.",
+      "standardized_narrative": "The report scanned contains detailed financial tables and notes for Syndicate 2357 for year ended 31 December 2016, but the scanned images provided do not allow a reliable extraction of the gross 'claims outstanding' opening balance (prior year comparative) or a definitive gross prior-year reserve movement. Gross written premium is visible in the financial summary (2016 gross written premiums reported as 175,106 in the native currency), however specific gross prior-year reserve movement figures, a movement note showing 'movement in prior year's provision for claims outstanding' in gross terms, or an explicit gross claims development triangle could not be unambiguously read from the scanned pages provided. Accordingly no prior-year development amount or LOB-level reserve movements could be confidently extracted.",
       "raw_causal_phrases": [],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 175.106,
-      "gross_premium_mix": [
-        {
-          "line_of_business": "MGA insurance",
-          "amount_gbp_m": 107.663,
-          "percentage_of_total": 61.5
-        },
-        {
-          "line_of_business": "Reinsurance",
-          "amount_gbp_m": 67.443,
-          "percentage_of_total": 38.5
-        }
-      ],
+      "gross_premium_mix": [],
       "gross_premium_page": 2,
-      "gross_premium_confidence": 1.0,
+      "gross_premium_confidence": 0.8,
       "currency": "USD",
-      "data_quality_notes": "Opening reserves taken from the Statement of Financial Position (Claims outstanding - comparative 31 Dec 2015). Report is denominated in USD. A gross prior-year reserve movement (gross movement in prior year's provision for claims outstanding) could not be clearly located in the accessible notes or narrative; technical provisions tables present movements but were ambiguous in the scanned images. No explicit gross PYD figure found; therefore prior_year_development_gbp_m set to null. Some tables (technical provisions / movement reconciliations) were partially unclear in scans which limited extraction.",
+      "data_quality_notes": "Scanned images are low-resolution/rotated in places making key liability lines hard to read. I could identify the gross written premium (2016 = 175,106 in the report's native $000 unit 175.106 million) but I could not unambiguously locate or read the 'Gross claims outstanding' prior-year comparative (opening reserves) or a clear gross prior-year movement figure. The technical provisions / claims movement table is present but numerals and column alignment are ambiguous in the scans. No reliable gross claims development triangle could be extracted. As required, amounts are left null rather than risk incorrect extraction.",
       "_claims_triangle": {
         "type": "none",
         "currency": "USD",
@@ -269,20 +274,31 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_2357_2016_llm.pdf",
-      "content_hash": "cb21dc03bab4d5d8942ca35dff59a283b43721b9e116577fff2fe79da8627c77",
-      "standardized_at": "2026-03-18T04:50:36.730375+00:00",
+      "content_hash": "041217ec357ed7dc9f4a67b87cfe007631836ad437f3a84fdd60aa389ff4091a",
+      "standardized_at": "2026-09-11T12:00:47.608833+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 22413,
-        "output_tokens": 4142,
-        "total_tokens": 26555,
-        "cost_usd": 0.013887
+        "input_tokens": 24106,
+        "output_tokens": 3201,
+        "total_tokens": 27307,
+        "cost_usd": 0.012428
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 0.0,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 34,
+        "note": "filled a blank model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2013,
           2014,
@@ -302,6 +318,10 @@
             17.0,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of underwriting year",
+          "One year later"
         ],
         "source_page": 34,
         "entity": 2357
@@ -396,20 +416,13 @@
       }
     }
   },
-  "total_cost_usd": 0.017813,
-  "total_tokens": 37469,
+  "total_cost_usd": 0.018198,
+  "total_tokens": 45247,
   "validation": {
-    "passed": false,
-    "total_discrepancies": 14,
-    "within_tolerance": 13,
-    "hard_failures": 1,
-    "hard_failure_details": [
-      {
-        "field": "opening_reserves_gbp_m",
-        "type": "value_mismatch",
-        "gemini-2.5-flash": 7.806,
-        "gpt-5-mini": 23.463
-      }
-    ]
+    "passed": true,
+    "total_discrepancies": 17,
+    "within_tolerance": 17,
+    "hard_failures": 0,
+    "hard_failure_details": []
   }
 }

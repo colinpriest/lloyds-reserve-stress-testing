@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T10:08:49.464163+00:00",
+  "extraction_timestamp": "2026-09-13T04:07:20.238943+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -18,17 +20,19 @@
       "direction": "release",
       "prior_year_movement_page": 9,
       "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "Movements arising from prior year claims (256.3) 118.4 (137.9). The movements arising from prior year claims include the impact of the P&C UK 2019 & Prior YOA RITC as well as other movements in estimates.",
+      "exact_reserve_text": "The movements arising from prior year claims include the impact of the P&C UK 2019 & Prior YOA RITC as well as other movements in estimates.",
       "primary_causes": [
-        "Reinsurance recoveries",
         "COVID-19 / pandemic effects",
+        "Reinsurance recoveries",
         "Economic inflation / claims cost inflation",
-        "Geopolitical events",
         "Other"
       ],
       "specific_events": [
         "P&C UK 2019 & Prior YOA RITC",
+        "COVID-19",
         "Ukraine conflict",
+        "Australian Floods",
+        "Hurricane Ian",
         "Winterstorm Uri",
         "Hurricane Ida"
       ],
@@ -41,37 +45,29 @@
         {
           "event_name": "P&C UK 2019 & Prior YOA RITC",
           "event_year": 2019,
-          "impact_description": "The movements arising from prior year claims include the impact of the P&C UK 2019 & Prior YOA RITC premium paid, which is a transaction that results in a release of liabilities.",
+          "impact_description": "The movements arising from prior year claims include the impact of the P&C UK 2019 & Prior YOA RITC.",
           "lobs_affected": [
             "Motor",
-            "Third Party Liability"
+            "Casualty"
           ],
           "amount_gbp_m": null,
           "confidence": 0.8
         },
         {
-          "event_name": "COVID-19 pandemic effects",
+          "event_name": "COVID-19",
           "event_year": 2020,
-          "impact_description": "The remaining reserves in respect of the Covid claims decreased from GBP 175.8 million in 2021 to GBP 77.2 million in 2022, indicating a release of GBP 98.6 million.",
+          "impact_description": "Reduction in remaining reserves in respect of the Covid claims from GBP 175.8 million in 2021 to GBP 77.2 million in 2022.",
           "lobs_affected": [],
           "amount_gbp_m": -98.6,
+          "confidence": 1.0
+        },
+        {
+          "event_name": "Economic inflation",
+          "event_year": 2022,
+          "impact_description": "Resulted in increased loss estimates for both current and prior year business.",
+          "lobs_affected": [],
+          "amount_gbp_m": null,
           "confidence": 0.8
-        },
-        {
-          "event_name": "Winterstorm Uri",
-          "event_year": 2021,
-          "impact_description": "Predominantly Winterstorm Uri and Hurricane Ida contributed to the 2021 loss ratio (8.7%), implying adverse development for 2021.",
-          "lobs_affected": [],
-          "amount_gbp_m": null,
-          "confidence": 0.5
-        },
-        {
-          "event_name": "Hurricane Ida",
-          "event_year": 2021,
-          "impact_description": "Predominantly Winterstorm Uri and Hurricane Ida contributed to the 2021 loss ratio (8.7%), implying adverse development for 2021.",
-          "lobs_affected": [],
-          "amount_gbp_m": null,
-          "confidence": 0.5
         }
       ],
       "named_events": [
@@ -80,7 +76,7 @@
           "event_year": 2022,
           "event_type": "geopolitical",
           "net_loss_gbp_m": 60.6,
-          "loss_description": "The Syndicate was materially impacted by losses associated with the conflict in Ukraine in 2022 (GBP 60.6 million).",
+          "loss_description": "Syndicate was materially impacted by losses associated with the conflict in Ukraine in 2022 (GBP 60.6 million).",
           "lobs_affected": [],
           "page": 1,
           "confidence": 1.0
@@ -89,28 +85,28 @@
           "event_name": "Australian Floods",
           "event_year": 2022,
           "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": 91.0,
-          "loss_description": "The Syndicate incurred net losses (net of reinstatement premiums) of GBP 91.0 million in 2022, comprising the Australian Floods in Q1 and Hurricane Ian in Q3.",
+          "net_loss_gbp_m": null,
+          "loss_description": "Comprising the Australian Floods in Q1 and Hurricane Ian in Q3, contributing to GBP 91.0 million net losses from natural catastrophe events.",
           "lobs_affected": [],
           "page": 1,
-          "confidence": 1.0
+          "confidence": 0.8
         },
         {
           "event_name": "Hurricane Ian",
           "event_year": 2022,
           "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": 91.0,
-          "loss_description": "The Syndicate incurred net losses (net of reinstatement premiums) of GBP 91.0 million in 2022, comprising the Australian Floods in Q1 and Hurricane Ian in Q3.",
+          "net_loss_gbp_m": null,
+          "loss_description": "Comprising the Australian Floods in Q1 and Hurricane Ian in Q3, contributing to GBP 91.0 million net losses from natural catastrophe events.",
           "lobs_affected": [],
           "page": 1,
-          "confidence": 1.0
+          "confidence": 0.8
         },
         {
           "event_name": "Winterstorm Uri",
           "event_year": 2021,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "Predominantly Winterstorm Uri and Hurricane Ida contributed to the 2021 loss ratio (8.7%).",
+          "loss_description": "Predominantly Winterstorm Uri and Hurricane Ida contributed to 8.7% of the loss ratio in 2021.",
           "lobs_affected": [],
           "page": 1,
           "confidence": 0.8
@@ -120,19 +116,17 @@
           "event_year": 2021,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "Predominantly Winterstorm Uri and Hurricane Ida contributed to the 2021 loss ratio (8.7%).",
+          "loss_description": "Predominantly Winterstorm Uri and Hurricane Ida contributed to 8.7% of the loss ratio in 2021.",
           "lobs_affected": [],
           "page": 1,
           "confidence": 0.8
         }
       ],
-      "standardized_narrative": "The Syndicate reported a gross prior year reserve release of GBP 256.3 million for 2022. This movement includes the impact of the P&C UK 2019 & Prior YOA RITC transaction, which transferred liabilities, and a release of COVID-19 related reserves (decreasing from GBP 175.8 million in 2021 to GBP 77.2 million in 2022). These favourable developments occurred despite pressures from economic inflation, exacerbated by the war in Ukraine, which led to increased loss estimates for both current and prior year business. Prior year events like Winterstorm Uri and Hurricane Ida in 2021 also contributed to the loss ratio.",
+      "standardized_narrative": "The Syndicate reported a gross prior year reserve release of GBP 256.3 million. This movement includes a significant reduction in COVID-19 related reserves by GBP 98.6 million and the impact of the P&C UK 2019 & Prior YOA Reinsurance to Close (RITC) transaction. These favourable developments were partially offset by increased loss estimates for prior year business due to economic inflation.",
       "raw_causal_phrases": [
-        "resulted in increased loss estimates for both our current and prior year business.",
-        "The war in Ukraine added to the pressure that was already building on inflation due to supply chain disruption following the Covid pandemic.",
+        "increased loss estimates for both our current and prior year business",
         "The movements arising from prior year claims include the impact of the P&C UK 2019 & Prior YOA RITC as well as other movements in estimates.",
-        "The economic inflation environment introduces uncertainty into the level of claims payments. This has been subject to extensive analysis in 2022 with explicit provisions held to cover this risk. These provisions are held in addition to those derived using actuarial techniques, which assume a continuation of historical inflation into the future.",
-        "The remaining reserves in respect of the Covid claims were GBP 77.2 million (2021: GBP 175.8 million)"
+        "the remaining reserves in respect of the Covid claims were GBP 77.2 million (2021: GBP 175.8 million)"
       ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 1576.8,
@@ -178,10 +172,10 @@
           "percentage_of_total": 45.1
         }
       ],
-      "gross_premium_page": 2,
+      "gross_premium_page": 8,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The claims development tables are distorted by the impact of the P&C UK 2019 & Prior YOA RITC (page 10). The explicit prior year movement figure of -256.3m from the table on page 9 is used, which includes the RITC impact. The narrative also mentions inflation leading to increased loss estimates, suggesting mixed pressures on prior year reserves.",
+      "data_quality_notes": "The claims development triangle on page 10 is noted as being distorted by the impact of the P&C UK 2019 & Prior YOA RITC, making it unreliable for calculating prior year development directly from the triangle. The explicit 'Movements arising from prior year claims' figure from the technical provisions note was used instead.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -324,20 +318,28 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_2001_2022_llm.pdf",
-      "content_hash": "e731b01a6283261e23e57f020d9a9bed43a007f464f465350d8aa475992b2d8e",
-      "standardized_at": "2026-07-05T10:52:38.363767+00:00",
+      "content_hash": "f8ed2a0f4b52ee806e60d8447aee9617807b3f229652fefa047943111ea0cc60",
+      "standardized_at": "2026-09-11T11:28:37.013383+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 9347,
-        "output_tokens": 3235,
-        "total_tokens": 19148,
-        "cost_usd": 0.010892
+        "input_tokens": 10151,
+        "output_tokens": 2883,
+        "total_tokens": 16861,
+        "cost_usd": 0.010253
+      },
+      "_pyd_route": {
+        "source": "rag_provisions",
+        "value": -256.3,
+        "model_value": -256.3,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "millions",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2013,
           2014,
@@ -472,6 +474,18 @@
             null
           ]
         ],
+        "row_labels": [
+          "At end of first year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later",
+          "Seven years later",
+          "Eight years later",
+          "Nine years later"
+        ],
         "source_page": 52,
         "entity": 2001
       },
@@ -562,6 +576,13 @@
         "unit_source": "header",
         "source_page": 51,
         "entity": 2001,
+        "movement_semantics": {
+          "row_label": "Movements arising from prior year claims",
+          "row_index": 5,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": true,
+          "column_index": 1
+        },
         "gross_prior_year_claims": -256.3,
         "ri_share_prior_year": 118.4,
         "net_prior_year_claims": -137.9
@@ -659,17 +680,15 @@
         "Reinsurance recoveries",
         "Economic inflation / claims cost inflation",
         "Geopolitical events",
-        "Natural catastrophe events",
-        "IBNR recalibration",
-        "COVID-19 / pandemic effects"
+        "Other"
       ],
       "specific_events": [
         "Australian Floods 2022",
         "Hurricane Ian 2022",
-        "Ukraine conflict 2022",
         "Winterstorm Uri 2021",
         "Hurricane Ida 2021",
-        "P&C UK 2019 & Prior YOA RITC"
+        "P&C UK 2019 & Prior YOA RITC",
+        "COVID-19 / pandemic"
       ],
       "specific_years_affected": [
         2019
@@ -678,7 +697,7 @@
         {
           "event_name": "P&C UK 2019 & Prior YOA RITC",
           "event_year": 2019,
-          "impact_description": "Extinguishment/transfer of liabilities via Reinsurance to Close which has distorted development and impacted prior year reserves",
+          "impact_description": "Reinsurance to close (RITC) related to P&C UK 2019 & prior years has impacted prior year claims movements and distorted development tables.",
           "lobs_affected": [
             "Motor",
             "Casualty"
@@ -687,38 +706,14 @@
           "confidence": 0.8
         },
         {
-          "event_name": "Winterstorm Uri",
-          "event_year": 2021,
-          "impact_description": "Contributed to 2021 loss experience referenced as predominant 2021 events",
-          "lobs_affected": [
-            "Property",
-            "Casualty"
-          ],
-          "amount_gbp_m": null,
-          "confidence": 0.8
-        },
-        {
-          "event_name": "Hurricane Ida",
-          "event_year": 2021,
-          "impact_description": "Included in 2021 major events influencing prior loss experience",
-          "lobs_affected": [
-            "Property",
-            "Casualty"
-          ],
-          "amount_gbp_m": null,
-          "confidence": 0.8
-        },
-        {
-          "event_name": "COVID-19 pandemic",
+          "event_name": "COVID-19 / pandemic",
           "event_year": 2020,
-          "impact_description": "Ongoing legislative and legal uncertainty and reinsurance interactions affected reserves; remaining COVID reserves disclosed",
+          "impact_description": "Ongoing COVID-19 claims uncertainty; remaining reserves in respect of Covid claims were reported and reduced year-on-year.",
           "lobs_affected": [
-            "Casualty",
-            "Professional Lines",
             "Accident & Health"
           ],
-          "amount_gbp_m": null,
-          "confidence": 0.7
+          "amount_gbp_m": 77.2,
+          "confidence": 0.6
         }
       ],
       "named_events": [
@@ -727,10 +722,9 @@
           "event_year": 2022,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "Part of net losses in 2022 (net of reinstatement premiums) which together with Hurricane Ian totalled GBP 91.0m",
+          "loss_description": "Part of combined net losses of GBP 91.0m (net of reinstatement premiums) in 2022 comprising the Australian Floods and Hurricane Ian.",
           "lobs_affected": [
-            "Property",
-            "Marine"
+            "Property"
           ],
           "page": 8,
           "confidence": 0.9
@@ -740,7 +734,7 @@
           "event_year": 2022,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "Part of net losses in 2022 (net of reinstatement premiums) which together with Australian Floods totalled GBP 91.0m",
+          "loss_description": "Part of combined net losses of GBP 91.0m (net of reinstatement premiums) in 2022 comprising the Australian Floods and Hurricane Ian; marginally exceeded expectations and contributed 9.7% to the 2022 loss ratio.",
           "lobs_affected": [
             "Property"
           ],
@@ -748,66 +742,78 @@
           "confidence": 0.9
         },
         {
-          "event_name": "Ukraine conflict",
-          "event_year": 2022,
-          "event_type": "political",
-          "net_loss_gbp_m": 60.6,
-          "loss_description": "The Syndicate was materially impacted by losses associated with the conflict in Ukraine in 2022 (GBP 60.6 million)",
-          "lobs_affected": [
-            "Property",
-            "Casualty",
-            "Marine"
-          ],
-          "page": 8,
-          "confidence": 1.0
-        },
-        {
           "event_name": "Winterstorm Uri",
           "event_year": 2021,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "Referenced as a predominant 2021 event impacting loss ratio in 2021",
+          "loss_description": "Referenced as a predominant contributor to the 2021 loss ratio.",
           "lobs_affected": [
             "Property"
           ],
           "page": 8,
-          "confidence": 0.8
+          "confidence": 0.7
         },
         {
           "event_name": "Hurricane Ida",
           "event_year": 2021,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "Referenced as a predominant 2021 event impacting loss ratio in 2021",
+          "loss_description": "Referenced as a predominant contributor to the 2021 loss ratio.",
           "lobs_affected": [
             "Property"
           ],
           "page": 8,
-          "confidence": 0.8
+          "confidence": 0.7
         }
       ],
-      "standardized_narrative": "At 31 December 2022 the Syndicate's gross claims outstanding at the start of the year were GBP 3,048.8m. During 2022 there was a gross prior year release of GBP 256.3m (8.4% of opening gross claims) largely driven by movements including the P&C UK 2019 & Prior year Reinsurance to Close (RITC) and other reserve estimate changes. Reserve setting was also influenced by heightened economic inflation, the war in Ukraine, COVID-19 related uncertainties and development from catastrophe events. The claims development tables are noted to be distorted by the P&C UK 2019 & Prior YOA RITC which affects comparability across some years.",
+      "standardized_narrative": "At 31 December 2022 the Syndicate's gross claims outstanding at the opening of the year were GBP 3,048.8m. During 2022 there was a net prior-year release of GBP 256.3m (c. 8.4% of opening gross reserves). The reported prior-year movement reflects the impact of the P&C UK 2019 & Prior YOA reinsurance-to-close transaction together with other movements in reserve estimates; this release was reported despite management also increasing loss estimates to reflect elevated economic inflation and geopolitical losses (Ukraine). The claims development triangle and notes are distorted by the RITC, and named catastrophe events in 2022 (Australian Floods and Hurricane Ian) materially affected the year's claims experience.",
       "raw_causal_phrases": [
         "The movements arising from prior year claims include the impact of the P&C UK 2019 & Prior YOA RITC as well as other movements in estimates.",
-        "These inflationary pressures have had impacts on both the liabilities and the assets of the Syndicate.",
-        "Inflation ... resulted in increased loss estimates for both our current and prior year business.",
-        "The development tables above are distorted by the impact of the P&C UK 2019 & Prior YOA RITC.",
-        "The Syndicate was materially impacted by losses associated with the conflict in Ukraine in 2022 (GBP 60.6 million)."
+        "Inflation has always been considered in the assessment of the reserves. However, the current excess level and expected extended duration of inflation required consideration within our reserving process and resulted in increased loss estimates for both our current and prior year business.",
+        "The development tables above are distorted by the impact of the P&C UK 2019 & Prior YOA RITC."
       ],
       "lob_movements": [
+        {
+          "line_of_business": "Accident & Health",
+          "direction": "release",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.0
+        },
         {
           "line_of_business": "Motor",
           "direction": "release",
           "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.6
+          "confidence": 0.8
+        },
+        {
+          "line_of_business": "Marine",
+          "direction": "release",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.2
+        },
+        {
+          "line_of_business": "Property",
+          "direction": "release",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.3
         },
         {
           "line_of_business": "Casualty",
           "direction": "release",
           "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.6
+          "confidence": 0.8
+        },
+        {
+          "line_of_business": "Treaty",
+          "direction": "release",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.4
         }
       ],
       "gross_premiums_written_gbp_m": 1576.8,
@@ -856,7 +862,7 @@
       "gross_premium_page": 31,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior year gross movement is sourced from note 11(a) 'Movements arising from prior year claims' (Insurance liabilities column). Claims development triangle and development rows are present but are noted to be distorted by the P&C UK 2019 & Prior YOA RITC which affects comparability. Per-LOB prior year movement amounts are not provided; lob_movements are inferred only where text explicitly links the RITC to particular classes (Motor and Third Party Liability). COVID and inflation impacts are discussed qualitatively; some event-level amounts are only provided as net figures or combined totals.",
+      "data_quality_notes": "Prior year movement (gross -256.3) taken from note 11(a) 'Movements arising from prior year claims' (Insurance liabilities column). The claims development triangle is present but explicitly noted as distorted by the P&C UK 2019 & Prior YOA RITC; this RITC and other RITC/RITC premium items distort comparability. Some LOB-level prior-year movements are not quantified in the notes; per-LOB directions are inferred with low confidence except where RITC explicitly referenced Motor and Third Party Liability. COVID-19 reserve numbers quoted in notes but attribution to strengthening/release not fully quantified; where net-only figures exist they were not used for gross PYD.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -999,20 +1005,28 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_2001_2022_llm.pdf",
-      "content_hash": "e731b01a6283261e23e57f020d9a9bed43a007f464f465350d8aa475992b2d8e",
-      "standardized_at": "2026-07-05T10:54:12.207062+00:00",
+      "content_hash": "f8ed2a0f4b52ee806e60d8447aee9617807b3f229652fefa047943111ea0cc60",
+      "standardized_at": "2026-09-11T11:31:51.542225+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 23197,
-        "output_tokens": 8053,
-        "total_tokens": 31250,
-        "cost_usd": 0.021905
+        "input_tokens": 23957,
+        "output_tokens": 8852,
+        "total_tokens": 32809,
+        "cost_usd": 0.023693
+      },
+      "_pyd_route": {
+        "source": "rag_provisions",
+        "value": -256.3,
+        "model_value": -256.3,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "millions",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2013,
           2014,
@@ -1147,6 +1161,18 @@
             null
           ]
         ],
+        "row_labels": [
+          "At end of first year",
+          "One year later",
+          "Two years later",
+          "Three years later",
+          "Four years later",
+          "Five years later",
+          "Six years later",
+          "Seven years later",
+          "Eight years later",
+          "Nine years later"
+        ],
         "source_page": 52,
         "entity": 2001
       },
@@ -1237,6 +1263,13 @@
         "unit_source": "header",
         "source_page": 51,
         "entity": 2001,
+        "movement_semantics": {
+          "row_label": "Movements arising from prior year claims",
+          "row_index": 5,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": true,
+          "column_index": 1
+        },
         "gross_prior_year_claims": -256.3,
         "ri_share_prior_year": 118.4,
         "net_prior_year_claims": -137.9
@@ -1319,12 +1352,12 @@
       }
     }
   },
-  "total_cost_usd": 0.032797,
-  "total_tokens": 50398,
+  "total_cost_usd": 0.033946,
+  "total_tokens": 49670,
   "validation": {
     "passed": true,
-    "total_discrepancies": 29,
-    "within_tolerance": 29,
+    "total_discrepancies": 26,
+    "within_tolerance": 26,
     "hard_failures": 0,
     "hard_failure_details": []
   }

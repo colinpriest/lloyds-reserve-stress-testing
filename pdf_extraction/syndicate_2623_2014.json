@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-05T20:50:58.277299+00:00",
+  "extraction_timestamp": "2026-09-13T04:19:47.613184+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -13,52 +15,109 @@
       "opening_reserves_gbp_m": 3238.5,
       "opening_reserves_page": 3,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": null,
-      "prior_year_development_pct": null,
+      "prior_year_development_gbp_m": -149.6,
+      "prior_year_development_pct": -4.62,
       "direction": "release",
-      "prior_year_movement_page": null,
-      "prior_year_movement_confidence": 0.0,
-      "exact_reserve_text": null,
-      "primary_causes": [],
+      "prior_year_movement_page": 1,
+      "prior_year_movement_confidence": 1.0,
+      "exact_reserve_text": "During 2014 we were able to release prior year reserves of $149.6m (2013: $215.7m).",
+      "primary_causes": [
+        "Favorable claims development",
+        "Natural catastrophe events"
+      ],
       "specific_events": [],
       "specific_years_affected": [],
       "prior_year_events": [],
-      "named_events": [],
-      "standardized_narrative": "The report does not explicitly state or provide sufficient detail to calculate the prior year reserve development for Syndicate 2623 in 2014.",
-      "raw_causal_phrases": [],
-      "lob_movements": [],
+      "named_events": [
+        {
+          "event_name": "Hurricane Odile",
+          "event_year": 2014,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "small exposure",
+          "lobs_affected": [
+            "Property",
+            "Reinsurance - Property"
+          ],
+          "page": 1,
+          "confidence": 0.8
+        }
+      ],
+      "standardized_narrative": "In 2014, Syndicate 2623 reported a gross prior year reserve release of $149.6 million, representing 4.62% of its opening gross claims outstanding. This favorable development was primarily driven by overall favorable claims development and minimal exposure to natural catastrophe events during the year, although a small exposure to Hurricane Odile was noted on property and reinsurance books. All lines of business experienced releases, including Marine (-$40.2m), Political risks and contingency (-$19.7m), Property (-$36.8m), Reinsurance (-$27.8m), and Specialty lines (-$25.1m).",
+      "raw_causal_phrases": [
+        "claims have developed favourably during 2014",
+        "minimal exposure to natural catastrophes throughout the year",
+        "reduction in reserve releases in 2014 compared to 2013 was driven by the exceptional releases seen in 2013 in the reinsurance and political risks and contingency divisions"
+      ],
+      "lob_movements": [
+        {
+          "line_of_business": "Marine",
+          "direction": "release",
+          "amount_gbp_m": -40.2,
+          "percentage": null,
+          "confidence": 1.0
+        },
+        {
+          "line_of_business": "Casualty",
+          "direction": "release",
+          "amount_gbp_m": -19.7,
+          "percentage": null,
+          "confidence": 1.0
+        },
+        {
+          "line_of_business": "Property",
+          "direction": "release",
+          "amount_gbp_m": -36.8,
+          "percentage": null,
+          "confidence": 1.0
+        },
+        {
+          "line_of_business": "Treaty",
+          "direction": "release",
+          "amount_gbp_m": -27.8,
+          "percentage": null,
+          "confidence": 1.0
+        },
+        {
+          "line_of_business": "Casualty",
+          "direction": "release",
+          "amount_gbp_m": -25.1,
+          "percentage": null,
+          "confidence": 1.0
+        }
+      ],
       "gross_premiums_written_gbp_m": 1702.7,
       "gross_premium_mix": [
         {
-          "line_of_business": "Marine, aviation and transport",
+          "line_of_business": "Marine",
           "amount_gbp_m": 324.7,
-          "percentage_of_total": 19.0
+          "percentage_of_total": 19.07
         },
         {
-          "line_of_business": "Pecuniary loss",
+          "line_of_business": "Political risks & contingency",
           "amount_gbp_m": 120.1,
-          "percentage_of_total": 7.0
+          "percentage_of_total": 7.05
         },
         {
-          "line_of_business": "Fire and other damage to property",
+          "line_of_business": "Property",
           "amount_gbp_m": 339.9,
-          "percentage_of_total": 20.0
+          "percentage_of_total": 19.96
         },
         {
           "line_of_business": "Reinsurance",
           "amount_gbp_m": 200.8,
-          "percentage_of_total": 12.0
+          "percentage_of_total": 11.79
         },
         {
-          "line_of_business": "Third party liability",
+          "line_of_business": "Specialty lines",
           "amount_gbp_m": 717.2,
-          "percentage_of_total": 42.0
+          "percentage_of_total": 42.12
         }
       ],
       "gross_premium_page": 9,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "Prior year development could not be identified or calculated from the provided document. No claims development triangle was available.",
+      "data_quality_notes": "The prior year development figure is taken from a narrative statement on page 1, which is then broken down by LOB in a table. The statement 'release prior year reserves' is assumed to be gross, as no explicit 'net' qualifier is used, and it aligns with the LOB breakdown. No claims development triangle was found in the document.",
       "_claims_triangle": {
         "type": "none",
         "currency": null,
@@ -69,15 +128,15 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_2623_2014_llm.pdf",
-      "content_hash": "ea4c90e34d84b0e374039356d37e152241dd8c26b9dc80441cbbbdc069c0bca5",
-      "standardized_at": "2026-03-18T05:18:31.913823+00:00",
+      "content_hash": "a931c5206db199d99380927eda20e393c552d6c8f1b069b0f339481a5ff7e6e3",
+      "standardized_at": "2026-09-11T11:52:56.451258+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 9089,
-        "output_tokens": 675,
-        "total_tokens": 13235,
-        "cost_usd": 0.004414
+        "input_tokens": 9893,
+        "output_tokens": 1378,
+        "total_tokens": 14996,
+        "cost_usd": 0.006413
       },
       "_adobe_provisions": {
         "opening_provenance": {
@@ -170,59 +229,112 @@
       "opening_reserves_gbp_m": 3238.5,
       "opening_reserves_page": 14,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": -54.6,
-      "prior_year_development_pct": -1.69,
+      "prior_year_development_gbp_m": -149.6,
+      "prior_year_development_pct": -4.62,
       "direction": "release",
-      "prior_year_movement_page": 40,
+      "prior_year_movement_page": 3,
       "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "Gross technical provisions\nAs at 1 January 2014 774.2 3,238.5\nMovement in the provision 42.6 (54.6)\nExchange adjustments (0.1) (67.2)\nAs at 31 December 2014 816.8 3,116.7",
+      "exact_reserve_text": "During 2014 we were able to release prior year reserves of $149.6m (2013: $215.7m). The reduction in reserve releases in 2014 compared to 2013 was driven by the exceptional releases seen in 2013 in the reinsurance and political risks and contingency divisions. These reserve releases are shown by division in the table below:",
       "primary_causes": [
         "Favorable claims development",
-        "Other"
+        "Reinsurance recoveries"
       ],
-      "specific_events": [],
+      "specific_events": [
+        "Hurricane Odile"
+      ],
       "specific_years_affected": [],
       "prior_year_events": [],
-      "named_events": [],
-      "standardized_narrative": "The syndicate's gross claims outstanding reduced from 3,238.5 (yearend 2013) to 3,116.7 at 31 December 2014. The technical provisions note shows a gross movement in the claims provision of -54.6m (a release) during 2014 together with exchange adjustments which further reduced the reported sterlingequivalent balance. This release reflects favourable claims development across prior years rather than material oneoff named events.",
-      "raw_causal_phrases": [
-        "Movement in the provision 42.6 (54.6)",
-        "Exchange adjustments (0.1) (67.2)",
-        "Change in the gross provision for claims 15 54.6 56.2"
+      "named_events": [
+        {
+          "event_name": "Hurricane Odile",
+          "event_year": 2014,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "small exposure to Hurricane Odile seen on the property and reinsurance books",
+          "lobs_affected": [
+            "Property",
+            "Reinsurance - Specialty"
+          ],
+          "page": 3,
+          "confidence": 0.8
+        }
       ],
-      "lob_movements": [],
+      "standardized_narrative": "The syndicate began 2014 with gross claims outstanding of 3,238.5m (USD). During 2014 the syndicate released prior year reserves totalling $149.6m, driven by generally favourable claims development and notable releases in the reinsurance and political risks & contingency divisions. There was minimal natural catastrophe exposure overall, with only a small exposure to Hurricane Odile reported on the property and reinsurance books.",
+      "raw_causal_phrases": [
+        "claims have developed favourably during 2014, with claims notifications at normalised levels.",
+        "There has been minimal exposure to natural catastrophes throughout the year, with a small exposure to Hurricane Odile seen on the property and reinsurance books.",
+        "During 2014 we were able to release prior year reserves of $149.6m (2013: $215.7m).",
+        "The reduction in reserve releases in 2014 compared to 2013 was driven by the exceptional releases seen in 2013 in the reinsurance and political risks and contingency divisions."
+      ],
+      "lob_movements": [
+        {
+          "line_of_business": "Marine",
+          "direction": "release",
+          "amount_gbp_m": -40.2,
+          "percentage": null,
+          "confidence": 1.0
+        },
+        {
+          "line_of_business": "Casualty",
+          "direction": "release",
+          "amount_gbp_m": -19.7,
+          "percentage": null,
+          "confidence": 0.8
+        },
+        {
+          "line_of_business": "Property",
+          "direction": "release",
+          "amount_gbp_m": -36.8,
+          "percentage": null,
+          "confidence": 1.0
+        },
+        {
+          "line_of_business": "Treaty",
+          "direction": "release",
+          "amount_gbp_m": -27.8,
+          "percentage": null,
+          "confidence": 0.9
+        },
+        {
+          "line_of_business": "Reinsurance - Specialty",
+          "direction": "release",
+          "amount_gbp_m": -25.1,
+          "percentage": null,
+          "confidence": 0.9
+        }
+      ],
       "gross_premiums_written_gbp_m": 1702.7,
       "gross_premium_mix": [
         {
           "line_of_business": "Marine",
-          "amount_gbp_m": 323.513,
-          "percentage_of_total": 19.0
+          "amount_gbp_m": 324.7,
+          "percentage_of_total": 19.1
         },
         {
-          "line_of_business": "Political risks and contingency",
-          "amount_gbp_m": 119.189,
-          "percentage_of_total": 7.0
+          "line_of_business": "Political risks & contingency",
+          "amount_gbp_m": 120.1,
+          "percentage_of_total": 7.1
         },
         {
           "line_of_business": "Property",
-          "amount_gbp_m": 340.54,
+          "amount_gbp_m": 339.9,
           "percentage_of_total": 20.0
         },
         {
           "line_of_business": "Reinsurance",
-          "amount_gbp_m": 204.324,
-          "percentage_of_total": 12.0
+          "amount_gbp_m": 200.8,
+          "percentage_of_total": 11.8
         },
         {
           "line_of_business": "Specialty lines",
-          "amount_gbp_m": 715.134,
-          "percentage_of_total": 42.0
+          "amount_gbp_m": 717.2,
+          "percentage_of_total": 42.1
         }
       ],
-      "gross_premium_page": 22,
+      "gross_premium_page": 31,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "Amounts extracted from the statutory financial statements which are denominated in US dollars. Opening gross claims outstanding taken from Balance Sheet (liabilities: claims outstanding) 2013 comparative column. Prior year movement taken from the Technical Provisions reconciliation table (gross 'Movement in the provision' for claims outstanding = (54.6) interpreted as a release of 54.6). No claims development triangle or explicit LOBlevel prior year reserve movements were found. No specific named loss events affecting prior year reserves were identified in the available pages.",
+      "data_quality_notes": "Opening reserves taken from Balance Sheet (Claims outstanding, gross) as at 31 Dec 2013 (prior-year column). Prior-year development taken from the Managing Agent strategic report narrative/table showing 'release prior year reserves of $149.6m' (treated as a gross figure). Technical reserves reconciliation shows a smaller 'movement in the provision' figure for gross claims ((54.6)m) - that line appears to be the total movement during the year including current-year activity and exchange adjustments; the strategic report's division table was used as the primary prior-year movement source. All monetary values are reported in the report's functional currency (USD millions). Mapping of the syndicate divisional labels to standard Lloyd's LOB names was done where unambiguous; mapping for 'Political risks & contingency' to 'Casualty' and 'Reinsurance' to 'Treaty' is judgemental.",
       "_claims_triangle": {
         "type": "none",
         "currency": "USD",
@@ -233,15 +345,15 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_2623_2014_llm.pdf",
-      "content_hash": "ea4c90e34d84b0e374039356d37e152241dd8c26b9dc80441cbbbdc069c0bca5",
-      "standardized_at": "2026-03-18T05:19:09.165426+00:00",
+      "content_hash": "a931c5206db199d99380927eda20e393c552d6c8f1b069b0f339481a5ff7e6e3",
+      "standardized_at": "2026-09-11T11:54:39.860524+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 16815,
-        "output_tokens": 5128,
-        "total_tokens": 21943,
-        "cost_usd": 0.01446
+        "input_tokens": 17575,
+        "output_tokens": 5605,
+        "total_tokens": 23180,
+        "cost_usd": 0.015604
       },
       "_adobe_provisions": {
         "opening_provenance": {
@@ -329,32 +441,13 @@
       }
     }
   },
-  "total_cost_usd": 0.018874,
-  "total_tokens": 35178,
+  "total_cost_usd": 0.022017,
+  "total_tokens": 38176,
   "validation": {
-    "passed": false,
-    "total_discrepancies": 24,
-    "within_tolerance": 21,
-    "hard_failures": 3,
-    "hard_failure_details": [
-      {
-        "field": "gross_premium_mix[Reinsurance].amount_gbp_m",
-        "type": "value_mismatch",
-        "gemini-2.5-flash": 200.8,
-        "gpt-5-mini": 204.324
-      },
-      {
-        "field": "prior_year_development_gbp_m",
-        "type": "value_mismatch",
-        "gemini-2.5-flash": null,
-        "gpt-5-mini": -54.6
-      },
-      {
-        "field": "prior_year_development_pct",
-        "type": "value_mismatch",
-        "gemini-2.5-flash": null,
-        "gpt-5-mini": -1.69
-      }
-    ]
+    "passed": true,
+    "total_discrepancies": 26,
+    "within_tolerance": 26,
+    "hard_failures": 0,
+    "hard_failure_details": []
   }
 }

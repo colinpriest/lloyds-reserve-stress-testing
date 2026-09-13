@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T10:02:13.143486+00:00",
+  "extraction_timestamp": "2026-09-13T04:04:02.142993+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -11,41 +13,72 @@
       "syndicate": 1969,
       "year": 2019,
       "opening_reserves_gbp_m": 568.26,
-      "opening_reserves_page": 11,
+      "opening_reserves_page": 12,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": 39.9,
       "prior_year_development_pct": 7.02,
       "direction": "strengthening",
       "prior_year_movement_page": 30,
-      "prior_year_movement_confidence": 1.0,
+      "prior_year_movement_confidence": 0.8,
       "exact_reserve_text": "Included within net calendar year claims incurred of $177,838,000 (2018: $215,601,000) is a deterioration of $9,070,000 in claims reserves established at the prior year end (2018: deterioration $48,466,000).",
       "primary_causes": [
         "Adverse claims development",
-        "Large loss development"
+        "Large loss development",
+        "IBNR recalibration",
+        "Reserve methodology change"
       ],
       "specific_events": [],
       "specific_years_affected": [
+        2017,
         2018
       ],
       "prior_year_events": [
         {
-          "event_name": "Large loss development",
-          "event_year": 2018,
-          "impact_description": "adverse loss experience in the US Open market sub-class from a number of individual large losses, with an increase in the frequency of claims and a higher percentage of insureds making claims.",
+          "event_name": "Non-Marine Liability prior accident years",
+          "event_year": null,
+          "impact_description": "adverse incurred claims development",
           "lobs_affected": [
             "Casualty"
           ],
+          "amount_gbp_m": null,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Non-Marine Liability specific large claims",
+          "event_year": null,
+          "impact_description": "prior year deterioration",
+          "lobs_affected": [
+            "Casualty"
+          ],
+          "amount_gbp_m": null,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "2018 catastrophe events",
+          "event_year": 2018,
+          "impact_description": "estimates for 2018 catastrophe events have remained stable over the 2019 calendar year",
+          "lobs_affected": [],
           "amount_gbp_m": null,
           "confidence": 0.8
         }
       ],
       "named_events": [
         {
+          "event_name": "smaller and medium-sized events",
+          "event_year": 2019,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "relatively modest level of losses",
+          "lobs_affected": [],
+          "page": 3,
+          "confidence": 0.8
+        },
+        {
           "event_name": "Hurricane Dorian",
           "event_year": 2019,
           "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": 3.0,
-          "loss_description": "affected the Property Direct and Facultative (\"Property D&F\"), Property Binders and Property Treaty classes. Total net cost to Syndicate 1969 was $5.2m for Dorian, Faxai and Hagibis, of which $3.0m was from Property D&F and Property Binders for Hurricane Dorian.",
+          "net_loss_gbp_m": 5.2,
+          "loss_description": "total net cost to Syndicate 1969 of Hurricane Dorian and Typhoons Faxai and Hagibis for the 2019 calendar year was $5.2m, of which $3.0m was from Property D&F and Property Binders for Hurricane Dorian. The remaining $2.2m was for the three events from the 10% net retained share of the Property Treaty class.",
           "lobs_affected": [
             "Property",
             "Treaty"
@@ -57,8 +90,8 @@
           "event_name": "Typhoons Faxai and Hagibis",
           "event_year": 2019,
           "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": 2.2,
-          "loss_description": "further affected the Property Treaty class, 90% of which is ceded to SPA 6133. Total net cost to Syndicate 1969 was $5.2m for Dorian, Faxai and Hagibis, of which $2.2m was for these three events from the 10% net retained share of the Property Treaty class.",
+          "net_loss_gbp_m": 5.2,
+          "loss_description": "total net cost to Syndicate 1969 of Hurricane Dorian and Typhoons Faxai and Hagibis for the 2019 calendar year was $5.2m, of which $3.0m was from Property D&F and Property Binders for Hurricane Dorian. The remaining $2.2m was for the three events from the 10% net retained share of the Property Treaty class.",
           "lobs_affected": [
             "Treaty"
           ],
@@ -70,17 +103,17 @@
           "event_year": 2019,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "losses arising from the Australian bushfires are not expected to be significant for the syndicate.",
+          "loss_description": "not expected to be significant",
           "lobs_affected": [],
           "page": 3,
-          "confidence": 1.0
+          "confidence": 0.8
         },
         {
           "event_name": "Hurricanes Florence and Michael",
           "event_year": 2018,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "affected the 2018 year of account, most notably the Property D&F, Property Binders and Property Treaty classes.",
+          "loss_description": "affected the year of account, most notably the Property D&F, Property Binders and Property Treaty classes.",
           "lobs_affected": [
             "Property",
             "Treaty"
@@ -111,24 +144,41 @@
           ],
           "page": 34,
           "confidence": 0.8
-        }
-      ],
-      "standardized_narrative": "Syndicate 1969 experienced a $9.07 million strengthening of prior year reserves in 2019, representing a 1.6% deterioration relative to opening gross claims outstanding. This adverse development was primarily driven by adverse incurred claims development on prior accident years, specifically in the Non-Marine Liability class, due to large losses, increased frequency of claims, and a higher percentage of insureds making claims in the 2018 year of account.",
-      "raw_causal_phrases": [
-        "deterioration of $9,070,000 in claims reserves established at the prior year end",
-        "adverse incurred claims development on prior accident years in the Non-Marine Liability class",
-        "prior year deterioration on Non-Marine Liability, predominantly on specific large claims",
-        "The 2018 year of account has experienced further adverse loss experience in the US Open market sub-class from a number of individual large losses. We have seen an increase in the frequency of claims and a higher percentage of insureds making claims."
-      ],
-      "lob_movements": [
+        },
         {
-          "line_of_business": "Casualty",
-          "direction": "strengthening",
-          "amount_gbp_m": null,
-          "percentage": null,
+          "event_name": "Hurricanes Harvey, Irma and Maria",
+          "event_year": 2017,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "incurred significant losses from the natural catastrophe events that occurred in 2017",
+          "lobs_affected": [
+            "Property"
+          ],
+          "page": 4,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Mexico earthquakes",
+          "event_year": 2017,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "incurred significant losses from the natural catastrophe events that occurred in 2017",
+          "lobs_affected": [
+            "Property"
+          ],
+          "page": 4,
           "confidence": 0.8
         }
       ],
+      "standardized_narrative": "The syndicate experienced a net strengthening of $9.070 million in prior year claims reserves, representing 1.6% of opening gross reserves. This was primarily driven by adverse incurred claims development on prior accident years in the Non-Marine Liability class, including specific large claims. The syndicate also strengthened IBNR and made reserving methodology changes. Estimates for 2018 catastrophe events remained stable.",
+      "raw_causal_phrases": [
+        "adverse incurred claims development on prior accident years in the Non-Marine Liability class",
+        "prior year deterioration on Non-Marine Liability, predominantly on specific large claims",
+        "strengthened reserves for incurred but not reported claims",
+        "underwriting and reserving actions which we have taken reduce the likelihood of deterioration in future years",
+        "deterioration of $9,070,000 in claims reserves established at the prior year end"
+      ],
+      "lob_movements": [],
       "gross_premiums_written_gbp_m": 522.2,
       "gross_premium_mix": [
         {
@@ -165,11 +215,11 @@
       "gross_premium_page": 28,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "The prior year development figure of $9.07m is taken from an explicit statement in Note 6, which describes it as a 'deterioration'. This figure is prioritized over a calculation from the gross claims development triangle, which yielded a different total, as the note is a direct statement of the adjustment made. [RAG OVERRIDE: Model said PYD=9.07, RAG triangle computed 39.9. Using RAG value.]",
+      "data_quality_notes": "The prior year development figure is explicitly stated but appears to be a net figure, as it's mentioned in the context of \"net calendar year claims incurred\". No gross prior year development figure was explicitly stated or calculable from the provided gross claims development triangle, which shows no movement for prior years. [RAG OVERRIDE: Model said PYD=9.07, RAG triangle computed 39.9. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
-        "units": "thousands",
+        "units": "millions",
         "page": 27,
         "underwriting_years": [
           2011,
@@ -286,20 +336,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_1969_2019_llm.pdf",
-      "content_hash": "b8be89d82e1fd2983c07d48de1065aef402d3861a10855870756047c617f107a",
-      "standardized_at": "2026-07-05T10:22:47.716522+00:00",
+      "content_hash": "70b7cf61c63e60db5bac93ff1bb4b20e71938b48cc8174e569021de30605b8f8",
+      "standardized_at": "2026-09-11T11:14:13.505825+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 19409,
-        "output_tokens": 2696,
-        "total_tokens": 25717,
-        "cost_usd": 0.012563
+        "input_tokens": 20213,
+        "output_tokens": 3117,
+        "total_tokens": 31076,
+        "cost_usd": 0.013856
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 39.9,
+        "model_value": 9.07,
+        "triangle_type": "gross",
+        "triangle_units": "millions",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 46,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "millions",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -412,6 +474,17 @@
             null
           ]
         ],
+        "row_labels": [
+          "At end of underwriting",
+          "one year later",
+          "two years later",
+          "three years later",
+          "four years later",
+          "five years later",
+          "six years later",
+          "seven years later",
+          "eight years later"
+        ],
         "source_page": 46,
         "entity": 1969
       },
@@ -484,6 +557,13 @@
         "unit_source": "header",
         "source_page": 46,
         "entity": 1969,
+        "movement_semantics": {
+          "row_label": "Gross claims outstanding for 2010 and prior years",
+          "row_index": 15,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": false,
+          "column_index": 1
+        },
         "gross_prior_year_claims": 0.7,
         "ri_share_prior_year": 0.0,
         "net_prior_year_claims": 0.0
@@ -622,32 +702,32 @@
       "prior_year_movement_confidence": 0.8,
       "exact_reserve_text": "Included within net calendar year claims incurred of $177,838,000 (2018: $215,601,000) is a deterioration of $9,070,000 in claims reserves established at the prior year end (2018: deterioration $48,466,000).",
       "primary_causes": [
+        "Man-made catastrophe / large losses",
         "Adverse claims development",
-        "Natural catastrophe events",
         "Social inflation / litigation trends",
-        "Large loss development"
+        "IBNR recalibration"
       ],
       "specific_events": [
-        "Hurricane Harvey",
-        "Hurricane Irma",
-        "Hurricane Maria",
-        "Mexico earthquakes (September 2017)",
-        "Hurricane Florence",
-        "Hurricane Michael",
-        "Typhoon Jebi",
-        "Typhoon Trami",
-        "California wildfires"
+        "Hurricanes Harvey, Irma and Maria (2017)",
+        "Mexico earthquakes (2017)",
+        "Hurricanes Florence and Michael (2018)",
+        "Typhoons Jebi and Trami (2018)",
+        "Californian wildfires (2018)",
+        "Hurricane Dorian (2019)",
+        "Typhoon Faxai (2019)",
+        "Typhoon Hagibis (2019)",
+        "Australian bushfires (2019)"
       ],
       "specific_years_affected": [
-        2016,
         2017,
-        2018
+        2018,
+        2016
       ],
       "prior_year_events": [
         {
           "event_name": "Hurricanes Harvey, Irma and Maria",
           "event_year": 2017,
-          "impact_description": "Significant natural catastrophe losses heavily impacted the 2017 account, contributing to adverse reserve development and a loss on the 2017 year of account.",
+          "impact_description": "Large natural catastrophe losses in 2017 heavily impacted the 2017 year of account and contributed to reserve deterioration and a closing loss for the 2017 year.",
           "lobs_affected": [
             "Property"
           ],
@@ -657,7 +737,7 @@
         {
           "event_name": "Mexico earthquakes",
           "event_year": 2017,
-          "impact_description": "Two Mexican earthquakes in September 2017 resulted in further losses to the 2017 year of account.",
+          "impact_description": "Two earthquakes in Mexico in September 2017 contributed to the large losses affecting the 2017 year of account.",
           "lobs_affected": [
             "Property"
           ],
@@ -665,9 +745,9 @@
           "confidence": 0.8
         },
         {
-          "event_name": "Hurricane Florence",
+          "event_name": "Hurricanes Florence and Michael",
           "event_year": 2018,
-          "impact_description": "Affected the 2018 year of account, notably the Property D&F, Property Binders and Property Treaty classes, contributing to loss emergence on prior years.",
+          "impact_description": "Substantial catastrophe events in 2018 that impacted the 2018 year of account, notably affecting Property classes and contributing to reserve movements.",
           "lobs_affected": [
             "Property"
           ],
@@ -675,34 +755,14 @@
           "confidence": 0.8
         },
         {
-          "event_name": "Hurricane Michael",
+          "event_name": "US large liability losses (Open market sub-class)",
           "event_year": 2018,
-          "impact_description": "Affected the 2018 year of account and contributed to prior year loss development in property classes.",
+          "impact_description": "A number of individual large losses in the US Open market sub-class of Non-Marine Liability produced adverse development and strengthened reserves.",
           "lobs_affected": [
-            "Property"
+            "Casualty"
           ],
           "amount_gbp_m": null,
           "confidence": 0.8
-        },
-        {
-          "event_name": "Typhoons Jebi and Trami",
-          "event_year": 2018,
-          "impact_description": "Affected the 2018 year of account (Property Treaty), contributing to loss emergence.",
-          "lobs_affected": [
-            "Property"
-          ],
-          "amount_gbp_m": null,
-          "confidence": 0.7
-        },
-        {
-          "event_name": "California wildfires",
-          "event_year": 2018,
-          "impact_description": "Affected the 2018 year of account and contributed to adverse development in property-related portfolios.",
-          "lobs_affected": [
-            "Property"
-          ],
-          "amount_gbp_m": null,
-          "confidence": 0.7
         }
       ],
       "named_events": [
@@ -710,48 +770,51 @@
           "event_name": "Hurricane Dorian",
           "event_year": 2019,
           "event_type": "natural_catastrophe",
-          "net_loss_gbp_m": 5.2,
-          "loss_description": "The total net cost to Syndicate 1969 of Hurricane Dorian and Typhoons Faxai and Hagibis for the 2019 calendar year was $5.2m, of which $3.0m was from Property D&F and Property Binders for Hurricane Dorian.",
+          "net_loss_gbp_m": null,
+          "loss_description": "Affected Property D&F, Property Binders and Property Treaty classes; part of combined 2019 events with a total net cost to the syndicate of $5.2m.",
           "lobs_affected": [
-            "Property"
+            "Property",
+            "Treaty"
           ],
           "page": 3,
-          "confidence": 1.0
+          "confidence": 0.9
         },
         {
           "event_name": "Typhoon Faxai",
           "event_year": 2019,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "Included in the combined $5.2m net cost for Dorian, Faxai and Hagibis (2019 calendar year).",
+          "loss_description": "One of the 2019 typhoon events; combined (with Dorian and Hagibis) net cost to syndicate was $5.2m.",
           "lobs_affected": [
-            "Property"
+            "Property",
+            "Treaty"
           ],
           "page": 3,
-          "confidence": 0.9
+          "confidence": 0.8
         },
         {
           "event_name": "Typhoon Hagibis",
           "event_year": 2019,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "Included in the combined $5.2m net cost for Dorian, Faxai and Hagibis (2019 calendar year).",
+          "loss_description": "One of the 2019 typhoon events; combined (with Dorian and Faxai) net cost to syndicate was $5.2m.",
           "lobs_affected": [
-            "Property"
+            "Property",
+            "Treaty"
           ],
           "page": 3,
-          "confidence": 0.9
+          "confidence": 0.8
         },
         {
           "event_name": "Hurricanes Harvey, Irma and Maria",
           "event_year": 2017,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "Large natural catastrophe events in 2017 heavily impacted the 2017 account.",
+          "loss_description": "Large 2017 catastrophe events that materially impacted the 2017 year of account and led to significant losses.",
           "lobs_affected": [
             "Property"
           ],
-          "page": 34,
+          "page": 56,
           "confidence": 0.9
         },
         {
@@ -759,11 +822,11 @@
           "event_year": 2017,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "Two earthquakes in Mexico in 2017 resulted in losses to the syndicate.",
+          "loss_description": "Two earthquakes in Mexico in 2017 contributed to the 2017 catastrophe losses.",
           "lobs_affected": [
             "Property"
           ],
-          "page": 34,
+          "page": 56,
           "confidence": 0.8
         },
         {
@@ -771,7 +834,7 @@
           "event_year": 2018,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "Affected 2018 year of account, notably Property classes.",
+          "loss_description": "Affected 2018 underwriting year classes including Property D&F, Property Binders and Property Treaty.",
           "lobs_affected": [
             "Property"
           ],
@@ -783,7 +846,7 @@
           "event_year": 2018,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "Affected 2018 year of account, notably Property classes.",
+          "loss_description": "Affected 2018 underwriting year classes including Property D&F, Property Binders and Property Treaty.",
           "lobs_affected": [
             "Property"
           ],
@@ -795,9 +858,10 @@
           "event_year": 2018,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "Affected 2018 Property Treaty class.",
+          "loss_description": "Affected the 2018 year of account and Property Treaty class.",
           "lobs_affected": [
-            "Property"
+            "Property",
+            "Treaty"
           ],
           "page": 34,
           "confidence": 0.7
@@ -807,7 +871,20 @@
           "event_year": 2018,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "Affected 2018 Property Treaty class.",
+          "loss_description": "Affected the 2018 year of account and Property Treaty class.",
+          "lobs_affected": [
+            "Property",
+            "Treaty"
+          ],
+          "page": 34,
+          "confidence": 0.7
+        },
+        {
+          "event_name": "Californian wildfires",
+          "event_year": 2018,
+          "event_type": "natural_catastrophe",
+          "net_loss_gbp_m": null,
+          "loss_description": "Affected the 2018 year of account and Property Treaty class.",
           "lobs_affected": [
             "Property"
           ],
@@ -815,25 +892,25 @@
           "confidence": 0.7
         },
         {
-          "event_name": "California wildfires",
-          "event_year": 2018,
+          "event_name": "Australian bushfires",
+          "event_year": 2019,
           "event_type": "natural_catastrophe",
           "net_loss_gbp_m": null,
-          "loss_description": "Affected 2018 year of account (Property Treaty).",
+          "loss_description": "Not expected to be significant for the syndicate.",
           "lobs_affected": [
             "Property"
           ],
-          "page": 34,
+          "page": 4,
           "confidence": 0.7
         }
       ],
-      "standardized_narrative": "At 1 January 2019 the syndicate's gross claims outstanding was $568.26m. Analysis of the gross claims development triangle shows net adverse prior-year development of approximately $39.9m (c.7.0% of opening reserves), driven primarily by adverse development in recent years (notably underwriting years 2016 and 2017) related to large losses and liability exposures and the impact of major natural catastrophe events in 2017 and 2018. The report also notes a smaller net deterioration figure disclosed within net claims incurred ($9.07m), which is net of reinsurance. The syndicate highlights specific adverse development in the Non-Marine Liability class and material catastrophe activity in property classes in 2017-2018 as key contributors to the reserve strengthening.",
+      "standardized_narrative": "At 31 December 2019 Syndicate 1969 had opening gross claims outstanding of $568.26m. Analysis of the gross claims development triangle indicates aggregate adverse prior-year development of approximately $39.9m (about 7.0% of opening reserves), driven principally by adverse development in casualty (Non-Marine Liability) from a number of large US losses and a strengthening of IBNR/reserving assumptions. The syndicate's narrative also highlights a net deterioration of $9.07m within calendar year claims incurred (net of reinsurance). A range of named catastrophe events from 2017-2019 (notably the 2017 hurricanes and 2018 US/Asia events) materially influenced reserve setting and remediation actions have been implemented.",
       "raw_causal_phrases": [
-        "Included within net calendar year claims incurred of $177,838,000 (2018: $215,601,000) is a deterioration of $9,070,000 in claims reserves established at the prior year end (2018: deterioration $48,466,000).",
-        "The syndicate's results for the current year have been affected by prior year deterioration on Non-Marine Liability, predominantly on specific large claims.",
-        "under-performing risks in the habitational class that had higher than expected levels of attritional claims.",
-        "a number of individual large losses.",
-        "increase in the frequency of claims and a higher percentage of insureds making claims."
+        "prior year deterioration on Non-Marine Liability, predominantly on specific large claims",
+        "adverse incurred claims development on prior accident years in the Non-Marine Liability class",
+        "deterioration of $9,070,000 in claims reserves established at the prior year end (2018: deterioration $48,466,000)",
+        "We have responded to the development of new claims and previously notified events on our \"watch list\" and strengthened reserves for incurred but not reported claims, where appropriate",
+        "The 2017 year of account has been closed with a loss ... This result reflects the impact of large natural catastrophe events in 2017 and 2018"
       ],
       "lob_movements": [
         {
@@ -841,42 +918,21 @@
           "direction": "strengthening",
           "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.9
+          "confidence": 0.8
         },
         {
           "line_of_business": "Property",
-          "direction": "strengthening",
+          "direction": "mixed",
           "amount_gbp_m": null,
           "percentage": null,
-          "confidence": 0.7
+          "confidence": 0.6
         },
         {
           "line_of_business": "Marine",
-          "direction": "strengthening",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.5
-        },
-        {
-          "line_of_business": "Aviation",
           "direction": "flat",
           "amount_gbp_m": null,
           "percentage": null,
           "confidence": 0.4
-        },
-        {
-          "line_of_business": "Motor",
-          "direction": "flat",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.4
-        },
-        {
-          "line_of_business": "Treaty",
-          "direction": "flat",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.5
         }
       ],
       "gross_premiums_written_gbp_m": 522.2,
@@ -912,10 +968,10 @@
           "percentage_of_total": 36.9
         }
       ],
-      "gross_premium_page": 28,
+      "gross_premium_page": 44,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "Prior-year development (gross) was calculated from the gross claims development triangle (sum of diagonal movements for underwriting years 2011-2017) because the report does not present a single explicit gross 'movement in prior year's provision' figure. The report does state a net deterioration of $9.07m within net calendar year claims incurred (this is net of reinsurance) - the gross PYD calculated from the triangle ( $39.9m) is materially larger. Amounts are reported in the report's native currency (USD). Some per-LOB prior-year movements are described qualitatively only and thus amounts are null where not quantified.",
+      "data_quality_notes": "Prior-year development (gross) was calculated from the gross claims development triangle (cumulative incurred gross claims current diagonals) and excludes the two most recent underwriting years per the methodology. The report also explicitly states a net prior-year deterioration of $9.07m (net of reinsurance); that net figure was NOT used as the primary PYD figure because a gross movement was available only via the triangle. Some LOB-level prior-year movements are described qualitatively only (not quantified), so LOB movement amounts are null where not specified. Page references are taken from the report sections where the items appear.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
@@ -1036,20 +1092,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_1969_2019_llm.pdf",
-      "content_hash": "b8be89d82e1fd2983c07d48de1065aef402d3861a10855870756047c617f107a",
-      "standardized_at": "2026-07-05T10:24:45.294281+00:00",
+      "content_hash": "70b7cf61c63e60db5bac93ff1bb4b20e71938b48cc8174e569021de30605b8f8",
+      "standardized_at": "2026-09-11T11:17:23.828113+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 43322,
-        "output_tokens": 8899,
-        "total_tokens": 52221,
-        "cost_usd": 0.028629
+        "input_tokens": 44082,
+        "output_tokens": 9434,
+        "total_tokens": 53516,
+        "cost_usd": 0.029888
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 39.9,
+        "model_value": 39.9,
+        "triangle_type": "gross",
+        "triangle_units": "millions",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 46,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "USD",
         "units": "millions",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -1162,6 +1230,17 @@
             null
           ]
         ],
+        "row_labels": [
+          "At end of underwriting",
+          "one year later",
+          "two years later",
+          "three years later",
+          "four years later",
+          "five years later",
+          "six years later",
+          "seven years later",
+          "eight years later"
+        ],
         "source_page": 46,
         "entity": 1969
       },
@@ -1234,6 +1313,13 @@
         "unit_source": "header",
         "source_page": 46,
         "entity": 1969,
+        "movement_semantics": {
+          "row_label": "Gross claims outstanding for 2010 and prior years",
+          "row_index": 15,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": false,
+          "column_index": 1
+        },
         "gross_prior_year_claims": 0.7,
         "ri_share_prior_year": 0.0,
         "net_prior_year_claims": 0.0
@@ -1360,12 +1446,12 @@
       }
     }
   },
-  "total_cost_usd": 0.041192,
-  "total_tokens": 77938,
+  "total_cost_usd": 0.043744,
+  "total_tokens": 84592,
   "validation": {
     "passed": true,
-    "total_discrepancies": 30,
-    "within_tolerance": 30,
+    "total_discrepancies": 27,
+    "within_tolerance": 27,
     "hard_failures": 0,
     "hard_failure_details": []
   }

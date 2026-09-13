@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T11:41:00.570849+00:00",
+  "extraction_timestamp": "2026-09-13T03:58:34.305681+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -16,48 +18,35 @@
       "prior_year_development_gbp_m": -1.178,
       "prior_year_development_pct": -49.19,
       "direction": "release",
-      "prior_year_movement_page": 14,
+      "prior_year_movement_page": 15,
       "prior_year_movement_confidence": 0.8,
-      "exact_reserve_text": "The net claims ratio, which includes the impact of movements in the Long-Term Business Provision increased by 2% to 60% for the 2018 calendar year driven by a number of high value claims on a particular binder on the 2017 year of account in the earlier part of the year. In addition, following the decision to cease underwriting, a run-off provision is included within the reserves of the Syndicate. The Syndicate entered into a reinsurance to close transaction with Syndicate 779 covering all of the open years of account of Syndicate 779 (2014, 2015 and 2016) resulting in the cessation of the Syndicate. A premium of GBP 14.8m is receivable, representing the net technical provisions reinsured.",
+      "exact_reserve_text": "The year of account result development table shows a net release of GBP 2,536k for the 2017 year of account and a net strengthening of GBP 611k for the 2016 year of account in 2018.",
       "primary_causes": [
         "Favorable claims development",
-        "Adverse claims development",
-        "Reinsurance recoveries"
+        "Adverse claims development"
       ],
       "specific_events": [],
       "specific_years_affected": [
-        2011,
-        2012,
-        2013,
-        2014,
-        2015,
-        2016,
-        2017
+        2017,
+        2016
       ],
       "prior_year_events": [
         {
           "event_name": "High value claims on a particular binder",
           "event_year": 2017,
-          "impact_description": "adverse development on a particular binder on the 2017 year of account, contributing to an increase in the net claims ratio.",
+          "impact_description": "Driven by a number of high value claims on a particular binder on the 2017 year of account, the net claims ratio increased by 2% to 60% for the 2018 calendar year, indicating adverse development for the 2017 year of account.",
           "lobs_affected": [],
           "amount_gbp_m": null,
-          "confidence": 0.8
-        },
-        {
-          "event_name": "Reinsurance to Close from Syndicate 779",
-          "event_year": 2016,
-          "impact_description": "Syndicate 44 accepted the liabilities of Syndicate 779 for its 2014, 2015, and 2016 years of account, with a premium of GBP 14.8m receivable. The claims development triangle shows releases or no change for these years after the RITC.",
-          "lobs_affected": [],
-          "amount_gbp_m": null,
-          "confidence": 0.8
+          "confidence": 0.5
         }
       ],
       "named_events": [],
-      "standardized_narrative": "The syndicate experienced an overall gross reserve release of GBP 1.178 million for prior underwriting years up to 2016, calculated from the claims development triangle. This includes releases for the 2016 and 2015 underwriting years, and a small strengthening for 2013. The syndicate also accepted a reinsurance to close from Syndicate 779 for its 2014, 2015, and 2016 years of account, which would have impacted the reserves for those years. Separately, the net claims ratio increased due to adverse development from high value claims on a particular binder in the 2017 year of account.",
+      "standardized_narrative": "For the 2018 calendar year, the syndicate experienced a net prior year development of a GBP 1.925m release. This was primarily driven by a net release of GBP 2.536m for the 2017 year of account, partially offset by a net strengthening of GBP 0.611m for the 2016 year of account. The narrative also mentions adverse claims experience and high value claims on a particular binder for the 2017 year of account, which increased the net claims ratio, creating a conflict with the reported net release for that year of account.",
       "raw_causal_phrases": [
         "adverse claims experience",
         "high value claims on a particular binder on the 2017 year of account",
-        "reinsurance to close transaction with Syndicate 779 covering all of the open years of account of Syndicate 779 (2014, 2015 and 2016)"
+        "increase in the acquisition ratio",
+        "moderate movement in the expense ratio"
       ],
       "lob_movements": [],
       "gross_premiums_written_gbp_m": 17.507,
@@ -80,13 +69,13 @@
         {
           "line_of_business": "Group",
           "amount_gbp_m": 1.608,
-          "percentage_of_total": 9.18
+          "percentage_of_total": 9.19
         }
       ],
       "gross_premium_page": 13,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The gross claims development triangle may be affected by the acceptance of a reinsurance to close from Syndicate 779 for the 2014, 2015, and 2016 underwriting years, which could distort the apparent movements for those years. The calculated prior year development from the triangle excludes the 2017 underwriting year, for which the narrative indicates adverse development.",
+      "data_quality_notes": "The prior year development figure is net of reinsurance, as no reliable gross figure could be extracted due to the distortion of the gross claims development triangle by a Reinsurance to Close (RITC) transaction where Syndicate 44 absorbed liabilities from Syndicate 779 for 2014, 2015, and 2016 years of account. There is a conflict between the narrative on page 2, which states that 'high value claims on a particular binder on the 2017 year of account' led to an 'increased' net claims ratio (implying adverse development), and the year of account result development table on page 15, which shows a net release for the 2017 year of account. The opening reserves for percentage calculation are based on 'Claims outstanding' from the Balance Sheet, which may not fully represent the base for the net PYD from the year of account table, leading to a very high percentage. [RAG OVERRIDE: Model said PYD=-1.925, RAG triangle computed -1.178. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -187,20 +176,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_44_2018_llm.pdf",
-      "content_hash": "ac8cd794de584029e2fdff721806e174684d630b9ff976cc890a6abefe14dbbb",
-      "standardized_at": "2026-07-06T00:53:00.677894+00:00",
+      "content_hash": "a5fc163d2a8c72fa56667c6b57b4050ca352dcb1c35df601238b999958ec3339",
+      "standardized_at": "2026-09-11T13:05:57.012078+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 10377,
-        "output_tokens": 1837,
-        "total_tokens": 20933,
-        "cost_usd": 0.007706
+        "input_tokens": 11181,
+        "output_tokens": 1649,
+        "total_tokens": 25258,
+        "cost_usd": 0.007477
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -1.178,
+        "model_value": -1.925,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 36,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -293,6 +294,16 @@
             null
           ]
         ],
+        "row_labels": [
+          "At end of underwriting year",
+          "one year later",
+          "two years later",
+          "three years later",
+          "four years later",
+          "five years later",
+          "six years later",
+          "Seven years later"
+        ],
         "source_page": 36,
         "entity": 44
       },
@@ -309,6 +320,13 @@
           "entity": 44,
           "backend": "azure",
           "table_kind": "balance_sheet_liabilities"
+        },
+        "movement_semantics": {
+          "row_label": "Gross outstanding claims on premium earned to date for 2010 & Prior years",
+          "row_index": 12,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": false,
+          "column_index": 1
         },
         "gross_prior_year_claims": 0.0,
         "ri_share_prior_year": 0.0,
@@ -393,96 +411,71 @@
       "direction": "release",
       "prior_year_movement_page": 34,
       "prior_year_movement_confidence": 0.8,
-      "exact_reserve_text": "The following tables show the estimates of cumulative incurred claims, including both claims notified and IBNR for each successive underwriting year at each reporting date, together with cumulative payments to date, related direct and indirect claims handling costs and, for the latest calendar year, the run-off provision representing management's estimated future developments to be incurred in finalising the Syndicate's liabilities. Balances have been translated at exchange rates prevailing at 31 December 2018 in all cases.",
+      "exact_reserve_text": "The net claims ratio, which includes the impact of movements in the Long-Term Business Provision increased by 2% to 60% for the 2018 calendar year driven by a number of high value claims on a particular binder on the 2017 year of account in the earlier part of the year. In addition, following the decision to cease underwriting, a run-off provision is included within the reserves of the Syndicate.",
       "primary_causes": [
-        "Favorable claims development",
-        "Large loss development",
+        "Man-made catastrophe / large losses",
+        "Adverse claims development",
         "Reserve methodology change"
       ],
       "specific_events": [],
       "specific_years_affected": [
-        2017,
-        2016,
-        2015,
-        2013
+        2017
       ],
       "prior_year_events": [
         {
-          "event_name": "2016 underwriting year development",
-          "event_year": 2016,
-          "impact_description": "Favourable development on older underwriting years resulting in a reduction of the recorded gross ultimate for the 2016 underwriting year.",
+          "event_name": "High value claims on a particular binder",
+          "event_year": 2017,
+          "impact_description": "Adverse claims on a 2017 binder led to higher claims experience and contributed to an increase in the net claims ratio for 2018.",
           "lobs_affected": [
             "Accident & Health"
           ],
-          "amount_gbp_m": -0.961,
-          "confidence": 0.8
-        },
-        {
-          "event_name": "2015 underwriting year development",
-          "event_year": 2015,
-          "impact_description": "Favourable development on the 2015 underwriting year resulting in a reduction in the gross ultimate estimate.",
-          "lobs_affected": [
-            "Accident & Health"
-          ],
-          "amount_gbp_m": -0.222,
-          "confidence": 0.8
-        },
-        {
-          "event_name": "2013 underwriting year development",
-          "event_year": 2013,
-          "impact_description": "Minor adverse development on 2013 (small increase in the gross ultimate estimate).",
-          "lobs_affected": [
-            "Accident & Health"
-          ],
-          "amount_gbp_m": 0.005,
-          "confidence": 0.8
+          "amount_gbp_m": null,
+          "confidence": 0.5
         }
       ],
       "named_events": [],
-      "standardized_narrative": "At 31 December 2018 the syndicate's opening (1 January 2018) gross claims outstanding was GBP 2.395m. Analysis of the gross claims development triangle shows net favourable prior-year development of approximately GBP 1.18m (a release), driven primarily by favourable movements on older underwriting years (notably 2015 and 2016) with a very small adverse movement on 2013. Management commentary notes high value claims on a binder in 2017 and the inclusion of a run-off provision following the decision to cease underwriting; overall the gross reserve movement measured from the development table is a material release versus opening reserves.",
+      "standardized_narrative": "Using the gross claims development table, Syndicate 44 shows net favourable development on underwriting years up to 2016, equivalent to a gross prior-year release of approximately GBP 1.18m (c.49% of the opening gross claims outstanding of GBP 2.395m). This release was partly offset in the year by adverse high-value claims on a 2017 binder and by management adding a run-off provision following the decision to cease underwriting.",
       "raw_causal_phrases": [
-        "driven by a number of high value claims on a particular binder on the 2017 year of account in the earlier part of the year.",
-        "In addition, following the decision to cease underwriting, a run-off provision is included within the reserves of the Syndicate.",
-        "This follows adverse claims experience and an increase in the acquisition ratio along with a moderate movement in the expense ratio.",
-        "A run-off provision has been included within the technical provisions of the Syndicate representing management's best estimate assessment of the expected costs to be incurred in finalising the Syndicate's liabilities.",
-        "In arriving at the level of claims provisions a margin may be applied over and above the actuarial best estimate in line with the Syndicate's Reserving Policy to address the risk of un-modelled claims development."
+        "a number of high value claims on a particular binder on the 2017 year of account in the earlier part of the year",
+        "a run-off provision is included within the reserves of the Syndicate",
+        "adverse claims experience"
       ],
       "lob_movements": [
         {
           "line_of_business": "Accident & Health",
           "direction": "release",
           "amount_gbp_m": -1.178,
-          "percentage": -49.19332210688907,
-          "confidence": 0.8
+          "percentage": -49.2,
+          "confidence": 0.5
         }
       ],
       "gross_premiums_written_gbp_m": 17.507,
       "gross_premium_mix": [
         {
-          "line_of_business": "Scheme",
+          "line_of_business": "Scheme (a)",
           "amount_gbp_m": 2.292,
-          "percentage_of_total": 13.08807918917832
+          "percentage_of_total": 13.1
         },
         {
           "line_of_business": "Binder",
           "amount_gbp_m": 13.364,
-          "percentage_of_total": 76.35063597238162
+          "percentage_of_total": 76.3
         },
         {
           "line_of_business": "Individual",
           "amount_gbp_m": 0.243,
-          "percentage_of_total": 1.3882231221771717
+          "percentage_of_total": 1.4
         },
         {
-          "line_of_business": "Group",
+          "line_of_business": "Group (a)",
           "amount_gbp_m": 1.608,
-          "percentage_of_total": 9.17306171626289
+          "percentage_of_total": 9.2
         }
       ],
       "gross_premium_page": 28,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior year development was not stated as a single gross movement in the notes. A gross claims development triangle (note 20) was used to compute prior year development (method 4 fallback). The calculation excludes the two most recent underwriting years (2017, 2018) per the guidance. The syndicate subsequently accepted a reinsurance-to-close (Syndicate 779 into 2018) in post-period events which may distort future comparisons; RITC activity around the reporting year was identified and may affect comparability but the triangle used is reported at 31-Dec-2018. Values extracted from the triangle were reported in GBP '000 and converted to millions.",
+      "data_quality_notes": "Prior-year movement (gross) was calculated from the gross claims development triangle (note 20). No explicit single-line 'movement in prior year's provision (gross)' figure was provided; the P&L prior-year claims line was disregarded per instructions. A post-balance-sheet reinsurance-to-close of Syndicate 779 into this syndicate was agreed after year end and may distort future comparisons; results here are as at 31 Dec 2018. Triangle and other figures are presented in GBP '000 in the report and were converted to millions.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -583,20 +576,32 @@
       },
       "source_type": "syndicate",
       "source_file": "pdf_extraction\\llm_slim\\syndicate_44_2018_llm.pdf",
-      "content_hash": "ac8cd794de584029e2fdff721806e174684d630b9ff976cc890a6abefe14dbbb",
-      "standardized_at": "2026-07-06T00:55:07.500547+00:00",
+      "content_hash": "a5fc163d2a8c72fa56667c6b57b4050ca352dcb1c35df601238b999958ec3339",
+      "standardized_at": "2026-09-11T13:07:57.566831+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 32117,
-        "output_tokens": 9409,
-        "total_tokens": 41526,
-        "cost_usd": 0.026847
+        "input_tokens": 32877,
+        "output_tokens": 6433,
+        "total_tokens": 39310,
+        "cost_usd": 0.021085
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -1.178,
+        "model_value": -1.178,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 36,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -689,6 +694,16 @@
             null
           ]
         ],
+        "row_labels": [
+          "At end of underwriting year",
+          "one year later",
+          "two years later",
+          "three years later",
+          "four years later",
+          "five years later",
+          "six years later",
+          "Seven years later"
+        ],
         "source_page": 36,
         "entity": 44
       },
@@ -705,6 +720,13 @@
           "entity": 44,
           "backend": "azure",
           "table_kind": "balance_sheet_liabilities"
+        },
+        "movement_semantics": {
+          "row_label": "Gross outstanding claims on premium earned to date for 2010 & Prior years",
+          "row_index": 12,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": false,
+          "column_index": 1
         },
         "gross_prior_year_claims": 0.0,
         "ri_share_prior_year": 0.0,
@@ -779,12 +801,12 @@
       }
     }
   },
-  "total_cost_usd": 0.034553,
-  "total_tokens": 62459,
+  "total_cost_usd": 0.028562,
+  "total_tokens": 64568,
   "validation": {
     "passed": true,
-    "total_discrepancies": 27,
-    "within_tolerance": 27,
+    "total_discrepancies": 23,
+    "within_tolerance": 23,
     "hard_failures": 0,
     "hard_failure_details": []
   }

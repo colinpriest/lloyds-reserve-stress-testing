@@ -1,7 +1,9 @@
 {
-  "extraction_timestamp": "2026-09-09T09:43:48.969761+00:00",
+  "extraction_timestamp": "2026-09-13T04:10:11.010960+00:00",
   "spec": {
-    "prompt_version": "2.10",
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
@@ -11,40 +13,75 @@
       "syndicate": 1861,
       "year": 2015,
       "opening_reserves_gbp_m": 224.779,
-      "opening_reserves_page": 11,
+      "opening_reserves_page": 6,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": -4.908,
       "prior_year_development_pct": -2.18,
       "direction": "release",
-      "prior_year_movement_page": 5,
-      "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "The improvement is driven by benign catastrophe experience, beneficial developments of GBP 9.0m in prior year reserves and favourable loss ratios across the newly re-positioned portfolio. In addition, the resolution of certain legacy issues has had an appreciable favourable impact on incurred claims. Included within net claims incurred of GBP 68.5m (2014: GBP 83.1m) is an improvement of GBP 9.0m (2014: improvement of GBP 6.4m) to claims reserves established at the prior year end principally due to beneficial developments in prior year reserves across the Marine and Transport classes.",
+      "prior_year_movement_page": 14,
+      "prior_year_movement_confidence": 0.8,
+      "exact_reserve_text": "Included within net claims incurred of GBP 68.5m (2014: GBP 83.1m) is an improvement of GBP 9.0m (2014: improvement of GBP 6.4m) to claims reserves established at the prior year end principally due to beneficial developments in prior year reserves across the Marine and Transport classes.",
       "primary_causes": [
-        "Natural catastrophe events",
         "Favorable claims development",
-        "Reserve methodology change",
-        "Other",
+        "Natural catastrophe events",
         "Man-made catastrophe / large losses"
       ],
       "specific_events": [],
-      "specific_years_affected": [
-        2013,
-        2014
+      "specific_years_affected": [],
+      "prior_year_events": [
+        {
+          "event_name": "Favorable claims development",
+          "event_year": 2013,
+          "impact_description": "favourable development of the 2013 underwriting year",
+          "lobs_affected": [],
+          "amount_gbp_m": null,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Favorable claims development",
+          "event_year": 2014,
+          "impact_description": "favourable development of the 2014 underwriting year",
+          "lobs_affected": [],
+          "amount_gbp_m": null,
+          "confidence": 0.8
+        },
+        {
+          "event_name": "Favorable claims development",
+          "event_year": null,
+          "impact_description": "beneficial developments in prior year reserves across the Marine and Transport classes",
+          "lobs_affected": [
+            "Marine",
+            "Aviation"
+          ],
+          "amount_gbp_m": null,
+          "confidence": 0.8
+        }
       ],
-      "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "Syndicate 1861 reported a gross prior year reserve release of GBP 9.0 million in 2015, representing a 4.0% reduction of its opening gross claims outstanding. This favorable development was primarily driven by a benign catastrophe season, lower than expected attritional and large loss activity, and beneficial developments in prior year reserves, particularly across the Marine and Transport classes. The syndicate also benefited from favorable loss ratios due to a re-positioned portfolio and the resolution of certain legacy issues, with specific favorable development noted for the 2013 and 2014 underwriting years.",
+      "standardized_narrative": "The syndicate reported a net prior year reserve release of GBP 9.0 million, representing a 4.0% reduction of opening gross claims outstanding. This favorable development was primarily driven by beneficial developments in prior year reserves, particularly across the Marine and Transport classes, and was supported by a generally benign catastrophe season and lower than expected attritional and large loss activity. The 2013 and 2014 underwriting years continued to develop favorably.",
       "raw_causal_phrases": [
-        "benign catastrophe season",
+        "improvement of GBP 9.0m... to claims reserves established at the prior year end",
+        "beneficial developments in prior year reserves across the Marine and Transport classes",
+        "generally benign catastrophe season",
         "lower than expected attritional and large loss activity",
-        "favourable development of the 2013 & 2014 underwriting years",
-        "beneficial developments of GBP 9.0m in prior year reserves",
-        "favourable loss ratios across the newly re-positioned portfolio",
-        "resolution of certain legacy issues",
-        "portfolio reengineering",
-        "beneficial developments in prior year reserves across the Marine and Transport classes"
+        "favourable development of the 2013 & 2014 underwriting years"
       ],
-      "lob_movements": [],
+      "lob_movements": [
+        {
+          "line_of_business": "Marine",
+          "direction": "release",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.5
+        },
+        {
+          "line_of_business": "Aviation",
+          "direction": "release",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.5
+        }
+      ],
       "gross_premiums_written_gbp_m": 222.0,
       "gross_premium_mix": [
         {
@@ -83,15 +120,15 @@
           "percentage_of_total": 26.8
         }
       ],
-      "gross_premium_page": 20,
+      "gross_premium_page": 14,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The claims development triangle calculation for prior year development yielded a different amount (-GBP 4.908m) than the explicitly stated narrative figure (-GBP 9.0m). The narrative figure was used as it is more direct and specific to 'prior year reserves'. [RAG PYD NOT APPLIED: deterministic figure +12.900m has the opposite sign to both model values [-9.0, -4.908], which agree with each other; model values retained.] [CODE OVERRIDE: Model said PYD=-9.0, but code computed -4.908 from triangle (OVERRIDE from agreed triangles). Using code value.]",
+      "data_quality_notes": "Prior year development figure is net of reinsurance as no gross figure was explicitly stated or calculable from the provided claims development triangle. [RAG OVERRIDE: Model said PYD=-9.0, RAG triangle computed -4.908. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
-        "page": 23,
+        "page": 15,
         "underwriting_years": [
           2011,
           2012,
@@ -138,21 +175,33 @@
         ]
       },
       "source_type": "syndicate",
-      "source_file": "syndicate_reports\\pdfs\\syndicate_1861_2015.pdf",
-      "content_hash": "255294f6516f44699aa792efdef7ae4438288bff945565c1553ee24791e450b0",
-      "standardized_at": "2026-03-17T00:21:20.766231+00:00",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_1861_2015_llm.pdf",
+      "content_hash": "09910c513ddbdb401d6c941770d70015c596cf9561693990bc65ab089820a6e8",
+      "standardized_at": "2026-09-11T10:52:56.527912+00:00",
       "standardization_model": "gemini-2.5-flash",
       "_extraction_meta": {
         "model": "gemini-2.5-flash",
-        "input_tokens": 12592,
-        "output_tokens": 1447,
-        "total_tokens": 20933,
-        "cost_usd": 0.007395
+        "input_tokens": 10925,
+        "output_tokens": 1657,
+        "total_tokens": 20554,
+        "cost_usd": 0.00742
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -4.908,
+        "model_value": -9.0,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 23,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -196,6 +245,13 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of underwriting year",
+          "one year later",
+          "two years later",
+          "three years later",
+          "four years later"
         ],
         "source_page": 23,
         "entity": 1861
@@ -278,6 +334,13 @@
         "unit_source": "header",
         "source_page": 23,
         "entity": 1861,
+        "movement_semantics": {
+          "row_label": "Gross ultimate claims on premium earned to date for 2010 and prior years",
+          "row_index": 9,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": false,
+          "column_index": 1
+        },
         "gross_prior_year_claims": 12.9,
         "ri_share_prior_year": 0.0,
         "net_prior_year_claims": 0.0
@@ -328,17 +391,19 @@
       "syndicate": 1861,
       "year": 2015,
       "opening_reserves_gbp_m": 224.779,
-      "opening_reserves_page": 35,
+      "opening_reserves_page": 6,
       "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": -4.908,
       "prior_year_development_pct": -2.18,
       "direction": "release",
-      "prior_year_movement_page": 43,
+      "prior_year_movement_page": 15,
       "prior_year_movement_confidence": 0.8,
       "exact_reserve_text": "Included within net claims incurred of GBP 68.5m (2014: GBP 83.1m) is an improvement of GBP 9.0m (2014: improvement of GBP 6.4m) to claims reserves established at the prior year end principally due to beneficial developments in prior year reserves across the Marine and Transport classes.",
       "primary_causes": [
         "Favorable claims development",
-        "Natural catastrophe events"
+        "Natural catastrophe events",
+        "Large loss development",
+        "Other"
       ],
       "specific_events": [],
       "specific_years_affected": [
@@ -348,15 +413,24 @@
       ],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "At 31 December 2015 Syndicate 1861 held opening gross claims outstanding of GBP 224.779m. Analysis of the gross claims development triangle shows an aggregate prior-year release of approximately GBP 4.9m (gross), driven by favourable development principally in the older Marine/Transport underwriting years (2011-2013) and aided by a generally benign catastrophe season. The Managing Agent reports a net improvement of GBP 9.0m within net claims incurred (after reinsurance).",
+      "standardized_narrative": "Gross prior-year claims reserves reduced by approximately GBP 4.91m (a ~2.18% release relative to opening gross claims outstanding of GBP 224.78m). This release arises from favourable development across older underwriting years (notably 2011-2013), principally in the Marine/Transport related classes, reflecting a generally benign catastrophe season, lower-than-expected attritional and large loss activity and resolution of certain legacy issues.",
       "raw_causal_phrases": [
-        "improvement of GBP 9.0m (2014: improvement of GBP 6.4m) to claims reserves established at the prior year end",
+        "beneficial developments of GBP 9.0m in prior year reserves",
         "beneficial developments in prior year reserves across the Marine and Transport classes",
-        "a generally benign catastrophe season"
+        "benefitting from a generally benign catastrophe season",
+        "lower than expected attritional and large loss activity",
+        "the resolution of certain legacy issues"
       ],
       "lob_movements": [
         {
           "line_of_business": "Marine",
+          "direction": "release",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.5
+        },
+        {
+          "line_of_business": "Aviation",
           "direction": "release",
           "amount_gbp_m": null,
           "percentage": null,
@@ -401,15 +475,15 @@
           "percentage_of_total": 26.8
         }
       ],
-      "gross_premium_page": 34,
+      "gross_premium_page": 14,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Gross prior-year movement was not stated explicitly as a single gross line in the movement note; a net favourable development of GBP 9.0m (after reinsurance) is reported in narrative. The gross prior-year development figure (-GBP 4.908m) was calculated from the gross claims development triangle (gross basis). Confidence is moderate-high for the triangle calculation (0.8). No RITC distortion was identified in the notes. [RAG PYD NOT APPLIED: deterministic figure +12.900m has the opposite sign to both model values [-9.0, -4.908], which agree with each other; model values retained.]",
+      "data_quality_notes": "Prior-year development (PYD) computed from the gross claims development triangle (note 22). Opening gross claims outstanding taken from balance sheet comparative column. The report also references a net improvement of GBP 9.0m in prior-year reserves within net claims incurred (this is a net figure and not the gross PYD used here). Triangle values are reported in GBP '000; PYD converted to millions for this output. Confidence flagged as calculated (0.8). No Reinsurance-to-Close distortions were identified in the notes.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
-        "page": 43,
+        "page": 15,
         "underwriting_years": [
           2011,
           2012,
@@ -456,21 +530,33 @@
         ]
       },
       "source_type": "syndicate",
-      "source_file": "syndicate_reports\\pdfs\\syndicate_1861_2015.pdf",
-      "content_hash": "255294f6516f44699aa792efdef7ae4438288bff945565c1553ee24791e450b0",
-      "standardized_at": "2026-03-17T00:22:45.552296+00:00",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_1861_2015_llm.pdf",
+      "content_hash": "09910c513ddbdb401d6c941770d70015c596cf9561693990bc65ab089820a6e8",
+      "standardized_at": "2026-09-11T10:55:24.618968+00:00",
       "standardization_model": "gpt-5-mini",
       "_extraction_meta": {
         "model": "gpt-5-mini",
-        "input_tokens": 42761,
-        "output_tokens": 5347,
-        "total_tokens": 48108,
-        "cost_usd": 0.021384
+        "input_tokens": 30818,
+        "output_tokens": 6736,
+        "total_tokens": 37554,
+        "cost_usd": 0.021177
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -4.908,
+        "model_value": -4.908,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 23,
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
         "underwriting_years": [
           2011,
           2012,
@@ -514,6 +600,13 @@
             null,
             null
           ]
+        ],
+        "row_labels": [
+          "At end of underwriting year",
+          "one year later",
+          "two years later",
+          "three years later",
+          "four years later"
         ],
         "source_page": 23,
         "entity": 1861
@@ -596,6 +689,13 @@
         "unit_source": "header",
         "source_page": 23,
         "entity": 1861,
+        "movement_semantics": {
+          "row_label": "Gross ultimate claims on premium earned to date for 2010 and prior years",
+          "row_index": 9,
+          "table_is_movement_note": true,
+          "column_bound_to_report_year": false,
+          "column_index": 1
+        },
         "gross_prior_year_claims": 12.9,
         "ri_share_prior_year": 0.0,
         "net_prior_year_claims": 0.0
@@ -643,12 +743,12 @@
       }
     }
   },
-  "total_cost_usd": 0.028779,
-  "total_tokens": 69041,
+  "total_cost_usd": 0.028597,
+  "total_tokens": 58108,
   "validation": {
     "passed": true,
-    "total_discrepancies": 22,
-    "within_tolerance": 22,
+    "total_discrepancies": 16,
+    "within_tolerance": 16,
     "hard_failures": 0,
     "hard_failure_details": []
   }
