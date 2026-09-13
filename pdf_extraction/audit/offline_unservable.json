@@ -1,13 +1,12 @@
 {
  "purpose": "Reports whose page-level caches are absent or in the superseded format, so an offline replay of the extraction cannot be served from the committed caches. The driver exits non-zero and leaves the committed record untouched; applying a corrected extraction rule to these reports needs fresh paid inference.",
  "recorded": "2026-09-13",
- "round": "round 56, after R193: the offline replay of every data-carrying record at prompt 2.13, from the caches committed at extraction a8fe1f7",
+ "round": "round 56, after R213: the offline replay of every data-carrying record at prompt 2.13, from the committed caches, after 2008/2021's missing page response was made and cached (13 September 2026)",
  "driver": "python test_gemini.py --stems <list> --offline --table-backend azure   (offline implies --batch)",
  "n_attempted": 940,
- "n_unservable": 1,
+ "n_unservable": 0,
  "stems": [
   "syndicate_1100_2024",
-  "syndicate_2008_2021",
   "syndicate_2357_2014",
   "syndicate_2689_2017",
   "syndicate_2689_2018",
@@ -18,9 +17,7 @@
   "syndicate_3268_2018",
   "syndicate_3268_2019"
  ],
- "unservable_in_this_replay": {
-  "syndicate_2008_2021": "RuntimeError: offline mode: gemini-2.5-flash page-triangle extraction of syndicate_2008_2021.pdf p53 would call an external API (cache miss)"
- },
+ "unservable_in_this_replay": {},
  "no_usable_cache_not_attempted": [
   "syndicate_1100_2024",
   "syndicate_2357_2014",
@@ -58,6 +55,11 @@
     "syndicate_623_2016",
     "syndicate_623_2019"
    ]
+  },
+  "round_56_R213": {
+   "attempted": 940,
+   "unservable": 0,
+   "unservable_stems": []
   }
  },
  "round_55_stems_now": {

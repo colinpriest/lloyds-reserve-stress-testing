@@ -1,0 +1,46 @@
+{
+ "purpose": "Development figures that two readings of the filing confirmed where the pipeline's sign veto (R193) refused the deterministic triangle's figure. For these records only, and only for the figure recorded, the deterministic figure is applied over the veto (test_gemini.py, process_one_report; PLAN R213). It is not a list of preferred figures: an entry needs the two readings, the pages and the quote, and the loader of this file refuses one without them.",
+ "recorded": "2026-09-13",
+ "protocol": "the extraction error-rate study, fifth amendment point 2 and seventh amendment point 2 (analysis repository, results/extraction_error_rate/)",
+ "records": [
+  {
+   "stem": "syndicate_3624_2015",
+   "figure_m": 5.025,
+   "currency": "GBP",
+   "pages": [36, 32, 12],
+   "quote": "p36 note 14 'Claims development tables', 'Underwriting year', 'Gross of reinsurance' (GBP000), 'Estimate of cumulative claims': 2010 and prior 'Four years later' 148,309, 'Five years later' 154,246; 2011 'Three years later' 126,703, 'Four years later' 127,719; 2012 'Two years later' 175,814, 'Three years later' 172,840; 2013 'One year later' 160,092, 'Two years later' 161,138. 'Estimated balance to pay' 40,435 | 31,550 | 66,464 | 62,770 | 104,617 | 87,252.",
+   "arithmetic": "Underwriting years to 2013 (report year 2015 less 2), latest less previous diagonal: 2010 and prior +5,937; 2011 +1,016; 2012 -2,974; 2013 +1,046; total +5,025 GBP000 = +5.025m. Without the '2010 and prior' column the sum is -912, the figure the models' own triangles gave. The column follows the calendar staircase (five years later at the end of 2015), and the latest diagonal less cumulative payments ties to 'Estimated balance to pay' (154,246 - 113,811 = 40,435), which totals the balance-sheet claims outstanding of 393,088.",
+   "readings": [
+    "first reading (second sample, batch 2): error; triangle recomputation +5.025m; it records the provisions note's 'Change in prior year provisions (195,404)' as sitting in a roll-forward that adds claims paid, in conflict with the P&L's gross claims paid (164,110)",
+    "second reading (editor, 13 September 2026 12:29): error; filing figure +5.025m from the printed gross triangle over underwriting years to 2013; the provisions note's line is not used"
+   ],
+   "why": "The adopted -0.912m came from the models' triangles, which leave out 'X and prior' columns by instruction. The deterministic triangle reads the column (R209) and gives +5.025m; the veto refused it only because both models read the provisions note's roll-forward line (-195.404), which the filing's own P&L contradicts."
+  },
+  {
+   "stem": "syndicate_1225_2022",
+   "figure_m": 18.6,
+   "currency": "GBP",
+   "pages": [33, 32, 29],
+   "quote": "p33 note 11 'Gross reserves and payments' (GBPm), columns 2017 | 2018 | 2019 | 2020 | 2021 | 2022: 'At end of underwriting year' 147.1 | 142.8 | 177.1 | 201.2 | 227.0 | 242.9; 'One year later' 310.8 | 323.5 | 373.5 | 387.8 | 487.6; 'Two years later' 334.2 | 336.6 | 373.5 | 368.5; 'Three years later' 337.2 | 332.4 | 397.8; 'Four years later' 347.4 | 321.3; 'Five years later' 372.1; 'Cumulative payments' (286.5) | (246.4) | (253.2) | (193.2) | (131.9) | (29.5); 'Estimated balance to pay' 85.6 | 74.9 | 144.6 | 175.3 | 355.7 | 213.4.",
+   "arithmetic": "Underwriting years to 2020 (report year 2022 less 2), latest less previous diagonal: 2017 372.1 - 347.4 = +24.7; 2018 321.3 - 332.4 = -11.1; 2019 397.8 - 373.5 = +24.3; 2020 368.5 - 387.8 = -19.3; total +18.6m. Without the 2017 column the sum is -6.1, the figure the models' own triangles gave. The 2017 column is a single year: its first figure, 147.1, sits beside 142.8 for 2018, and its latest diagonal less cumulative payments ties to its 'Estimated balance to pay' (372.1 - 286.5 = 85.6). The '2017 & Prior' label heads the ultimate-claims tables on p32-33, whose first gross column holds 3,893.2.",
+   "readings": [
+    "first reading (records found in passing, batch 1): error; triangle recomputation +18.6m from the printed gross pure-year table; the adopted -6.1m leaves out the 2017 underwriting year and so has the opposite sign",
+    "second reading (editor, 13 September 2026 21:11): error; filing figure +18.6m from the printed gross table over underwriting years to 2020; note 6's favourable 44.7 (p29) is net"
+   ],
+   "why": "The adopted -6.1m came from the models' triangles, which both begin at 2018: gpt-5-mini's note says it left out a '2017 & Prior' aggregate column, a label this table does not carry. The deterministic triangle reads the 2017 column and gives +18.600m; the veto refused it only because both model values (-1.5, -6.1) were negative."
+  },
+  {
+   "stem": "syndicate_2010_2019",
+   "figure_m": -18.659,
+   "currency": "USD",
+   "pages": [36, 37, 7],
+   "quote": "p36 note 17 'Underwriting Year - Gross' (USD000), latest and previous diagonal by underwriting year: 2010 381,592 and 373,370; 2011 277,841 and 278,081; 2012 160,626 and 161,264; 2013 146,862 and 152,217; 2014 137,290 and 140,123; 2015 107,172 and 109,694; 2016 152,171 and 160,117; 2017 373,413 and 380,760; 'At end of the year of account' 2018 180,141, 2019 136,599; '2009 and prior' prints reserves only. p37 note 18 (Gross | RI | Net): 'Change in prior year provisions 132,679 | 43,402 | 89,277'; 'Expected cost of current year claims 41,649 | 18,132 | 23,517'. p7 (2017, 2018, 2019 accounts): 'Net premiums earned (4,187) 87,820 104,317'; 'Loss ratio (%) 441.8 47.8 86.3'.",
+   "arithmetic": "Underwriting years to 2017 (report year 2019 less 2), latest less previous diagonal: 2010 +8,222; 2011 -240; 2012 -638; 2013 -5,355; 2014 -2,833; 2015 -2,522; 2016 -7,946; 2017 -7,347; total -18,659 USD000 = -18.659m. Note 18's two rows are transposed: the gross 'Change in prior year provisions' 132,679 matches the 2019 year of account's first estimate (136,599) and its 2018 comparative 179,777 matches the 2018 year's (180,141); on the net side the 2019 account gives 86.3% x 104,317 = 90,026 against the line's net 89,277, and the 2017 and 2018 accounts give -18,498 + 41,978 = 23,480 against the 'current year' line's net 23,517.",
+   "readings": [
+    "first sample, first reading: error (scope-recent-years); note 18's gross 'Change in prior year provisions' 132,679 matches the 2019 underwriting year's first estimate (136,599, p36) and its 2018 comparative matches the 2018 year (179,777 against 180,141), so the rows are transposed; the gross triangle over underwriting years to 2017 gives -18.659m",
+    "first sample, second reading (editor, 13 September 2026 13:33): error; the line labelled prior-year holds the current year of account (net check on p7: the 2019 account's 86.3% x 104,317 = 90,026 against the line's net 89,277); filing figure -18.659m from the mature-year gross triangle"
+   ],
+   "why": "The adopted +132.679m is note 18's line labelled 'Change in prior year provisions', which holds the current year of account. Both models read it, so the veto refused the deterministic triangle's -18.659m, the figure two readings of the filing confirm."
+  }
+ ]
+}

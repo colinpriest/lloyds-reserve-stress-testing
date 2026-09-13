@@ -272,6 +272,8 @@ OUTPUT_DIR = Path("pdf_extraction")
 HTML_PDF_CACHE = Path("pdf_extraction/html_converted")
 SPEC_DIR = Path("pdf_extraction/spec")
 AUDIT_DIR = Path("pdf_extraction/audit")
+# development figures two readings of the filing confirmed where the sign veto refused them (R213)
+HAND_CONFIRMED_FIGURES = AUDIT_DIR / "triangle_figures_confirmed_by_hand.json"
 
 GEMINI_MODEL = "gemini-2.5-flash"
 OPENAI_MODEL = "gpt-5-mini"
@@ -5043,6 +5045,44 @@ def _apply_loss_ratio_fallback(result, rag_pyd, model_name):
     return "kept_agreement"
 
 
+def _hand_confirmed_figure(syndicate_num, report_year, path=None):
+    """The development figure two readings of the filing confirmed for this record, or None (PLAN R213).
+
+    pdf_extraction/audit/triangle_figures_confirmed_by_hand.json holds records where the sign veto refused a
+    deterministic figure that an adjudication against the filing then confirmed (3624/2015: its triangle's
+    '2010 and prior' column, which the models' own triangles leave out by instruction). An entry without its two
+    readings, pages, quote or figure is refused: the register is evidence, not a list of preferred figures."""
+    p = Path(path) if path is not None else HAND_CONFIRMED_FIGURES
+    if not p.exists():
+        return None
+    with open(p, encoding="utf-8") as fh:
+        reg = json.load(fh)
+    stem = "syndicate_%d_%d" % (int(syndicate_num), int(report_year))
+    for r in reg.get("records") or []:
+        if r.get("stem") != stem:
+            continue
+        if (len(r.get("readings") or []) < 2 or not r.get("pages") or not str(r.get("quote") or "").strip()
+                or not isinstance(r.get("figure_m"), (int, float))):
+            raise ValueError("%s: a hand-confirmed figure needs two readings, pages, a quote and the figure" % stem)
+        return float(r["figure_m"])
+    return None
+
+
+def _lifted_by_hand_confirmation(rag_pyd, confirmed):
+    """Whether a deterministic figure is the one two readings of the filing confirmed (to half a thousand)."""
+    return confirmed is not None and rag_pyd is not None and abs(float(rag_pyd) - float(confirmed)) < 0.0005
+
+
+def _rag_veto(rag_pyd, model_values, opening, confirmed):
+    """The RAG figure's veto in process_one_report (R213): a figure two readings of the filing confirmed is applied
+    over the sign veto, with the note that says so; every other figure gets _pyd_override_gate's answer, unchanged
+    from R193."""
+    if _lifted_by_hand_confirmation(rag_pyd, confirmed):
+        return True, ("[RAG PYD APPLIED OVER THE SIGN VETO: %+.3fm is the figure two readings of the filing "
+                      "confirmed (triangle_figures_confirmed_by_hand.json, R213).]" % rag_pyd)
+    return _pyd_override_gate(rag_pyd, model_values, opening)
+
+
 def _pyd_override_gate(rag_pyd, model_values, opening):
     """Whether a deterministic development figure may override the model values.
 
@@ -5377,10 +5417,17 @@ def process_one_report(report_path, inception_cache=None):
                   f"— likely misidentified table or net triangle. Discarding RAG PYD.")
 
         if rag_sane and not rag_is_fallback_only:
-            _ok, _why = _pyd_override_gate(
+            # R213: a figure two readings of the filing confirmed is applied over the sign veto, for its record and
+            # that figure only (pdf_extraction/audit/triangle_figures_confirmed_by_hand.json); the gate is R193's
+            _ok, _why = _rag_veto(
                 rag_pyd,
                 [result_gemini.get("prior_year_development_gbp_m"), result_openai.get("prior_year_development_gbp_m")],
-                result_gemini.get("opening_reserves_gbp_m") or result_openai.get("opening_reserves_gbp_m"))
+                result_gemini.get("opening_reserves_gbp_m") or result_openai.get("opening_reserves_gbp_m"),
+                _hand_confirmed_figure(syndicate_num, report_year))
+            if _ok and _why:
+                for result in (result_gemini, result_openai):
+                    result["data_quality_notes"] = (f"{result.get('data_quality_notes', '') or ''} {_why}").strip()
+                print(f"  [RAG] {_why}")
             if not _ok:
                 for result in (result_gemini, result_openai):
                     result["data_quality_notes"] = (f"{result.get('data_quality_notes', '') or ''} {_why}").strip()

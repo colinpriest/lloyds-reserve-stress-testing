@@ -961,3 +961,106 @@ class TestR209_ACohortPrintedByDevelopmentAgeIsNotACalendarColumn:
         assert min(tri.underwriting_years) == anchor + 1, tri.underwriting_years
         pyd, why = tg.compute_pyd_from_triangle(tri.to_dict(), year)
         assert pyd == pytest.approx(figure, abs=0.001), why
+
+
+class TestR213_AFigureTwoReadingsConfirmedLiftsTheVetoForThatRecordOnly:
+    """3624/2015: the deterministic triangle, with its '2010 and prior' column read by R209, gives +5.025m; both
+    models read the provisions note's roll-forward line (-195.404), so the veto refused the triangle and the models'
+    own triangles, which drop 'X and prior' columns by prompt, gave -0.912m. Two readings of the filing confirm
+    +5.025m. R213 lets a register of such confirmations lift the veto for its records and figures only; the gate's
+    rule and signature stay as R193 left them (owner's decision, 13 September 2026). The register also holds
+    1225/2022 (+18.6m: both models' triangles dropped the 2017 column, taken for the '2017 & Prior' column of another
+    table) and 2010/2019 (-18.659m: both models read a transposed note line, +132.679m), each confirmed by two
+    readings under the seventh amendment; the end-to-end test below reads every registered record."""
+
+    ENTRY = {"stem": "syndicate_3624_2015", "figure_m": 5.025, "currency": "GBP", "pages": [36],
+             "quote": "2010 and prior Four years later 148,309 Five years later 154,246",
+             "readings": ["first reading", "second reading"], "why": "the printed gross triangle"}
+
+    def _register(self, tmp_path, records):
+        p = tmp_path / "triangle_figures_confirmed_by_hand.json"
+        p.write_text(json.dumps({"purpose": "test", "records": records}), encoding="utf-8")
+        return p
+
+    def test_a_registered_record_gets_its_confirmed_figure(self, tmp_path):
+        p = self._register(tmp_path, [dict(self.ENTRY)])
+        assert tg._hand_confirmed_figure(3624, 2015, path=p) == pytest.approx(5.025)
+        assert tg._hand_confirmed_figure("3624", "2015", path=p) == pytest.approx(5.025)
+
+    def test_an_unregistered_record_gets_none(self, tmp_path):
+        p = self._register(tmp_path, [dict(self.ENTRY)])
+        assert tg._hand_confirmed_figure(2007, 2015, path=p) is None
+        assert tg._hand_confirmed_figure(3624, 2016, path=p) is None
+
+    def test_a_missing_register_is_no_confirmation(self, tmp_path):
+        assert tg._hand_confirmed_figure(3624, 2015, path=tmp_path / "absent.json") is None
+
+    @pytest.mark.parametrize("drop", ["readings", "pages", "quote", "figure_m"])
+    def test_an_entry_without_its_evidence_is_refused(self, tmp_path, drop):
+        entry = dict(self.ENTRY)
+        entry.pop(drop)
+        p = self._register(tmp_path, [entry])
+        with pytest.raises(ValueError):
+            tg._hand_confirmed_figure(3624, 2015, path=p)
+
+    def test_one_reading_is_not_a_confirmation(self, tmp_path):
+        p = self._register(tmp_path, [dict(self.ENTRY, readings=["first reading"])])
+        with pytest.raises(ValueError):
+            tg._hand_confirmed_figure(3624, 2015, path=p)
+
+    def test_the_veto_lifts_only_for_the_confirmed_figure(self):
+        assert tg._lifted_by_hand_confirmation(5.025, 5.025) is True
+        assert tg._lifted_by_hand_confirmation(5.0254, 5.025) is True
+        assert tg._lifted_by_hand_confirmation(-0.912, 5.025) is False
+        assert tg._lifted_by_hand_confirmation(5.1, 5.025) is False
+        assert tg._lifted_by_hand_confirmation(5.025, None) is False
+
+    def test_the_gate_is_unchanged(self):
+        """R193 stands: the veto still refuses +5.025 against two agreeing model values."""
+        ok, why = tg._pyd_override_gate(5.025, [-195.404, -195.404], 346.998)
+        assert ok is False and "opposite sign" in why
+        params = inspect.signature(tg._pyd_override_gate).parameters
+        assert list(params) == ["rag_pyd", "model_values", "opening"]
+
+    def test_the_rag_veto_applies_a_confirmed_figure_and_otherwise_is_the_gate(self):
+        models, opening = [-195.404, -195.404], 346.998
+        ok, why = tg._rag_veto(5.025, models, opening, 5.025)
+        assert ok is True and "APPLIED OVER THE SIGN VETO" in why and "+5.025m" in why
+        assert tg._rag_veto(5.025, models, opening, None) == tg._pyd_override_gate(5.025, models, opening)
+        assert tg._rag_veto(-0.912, models, opening, 5.025) == tg._pyd_override_gate(-0.912, models, opening)
+        assert tg._rag_veto(74.9, [70.0, 80.0], 1806.7, None) == (True, None)
+
+    def test_process_one_report_passes_the_register_to_the_veto(self):
+        """The call site calls _rag_veto once, with the register's figure for this syndicate-year as its last
+        argument; a call site that dropped the lookup would pass the unit tests and ignore the register."""
+        src = inspect.getsource(tg.process_one_report)
+        assert src.count("_rag_veto(") == 1 and src.count("_hand_confirmed_figure(") == 1
+        call = src[src.index("_rag_veto("):]
+        call = call[:call.index("_hand_confirmed_figure(") + len("_hand_confirmed_figure(syndicate_num, report_year)")]
+        assert call.endswith("_hand_confirmed_figure(syndicate_num, report_year)"), call[-120:]
+        assert len(call) < 600, "the register lookup is not the veto call's argument"
+        assert "_pyd_override_gate(" not in src[src.index("if rag_sane and not rag_is_fallback_only:"):
+                                                src.index("_rag_veto(")], "the gate is called around the new veto"
+
+    def test_each_confirmed_record_carries_its_figure(self):
+        """End to end: the committed record of every registered syndicate-year adopts the confirmed figure, with
+        the note that says the veto was lifted and why. A call site that read the register and ignored it fails."""
+        p = tg.HAND_CONFIRMED_FIGURES
+        if not os.path.exists(str(p)):
+            pytest.skip("no register committed")
+        root = pathlib.Path(tg.__file__).resolve().parent
+        reg = json.load(io.open(str(p), encoding="utf-8"))
+        for r in reg["records"]:
+            rec = json.load(io.open(str(root / "pdf_extraction" / ("%s.json" % r["stem"])), encoding="utf-8"))
+            for name, m in (rec.get("models") or {}).items():
+                assert m.get("prior_year_development_gbp_m") == pytest.approx(r["figure_m"], abs=0.0005), (r["stem"], name)
+                assert "APPLIED OVER THE SIGN VETO" in (m.get("data_quality_notes") or ""), (r["stem"], name)
+
+    def test_the_committed_register_holds_only_confirmed_records(self):
+        p = tg.HAND_CONFIRMED_FIGURES
+        if not os.path.exists(str(p)):
+            pytest.skip("no register committed")
+        reg = json.load(io.open(str(p), encoding="utf-8"))
+        for r in reg["records"]:
+            s, y = r["stem"].replace("syndicate_", "").split("_")
+            assert tg._hand_confirmed_figure(int(s), int(y)) == pytest.approx(r["figure_m"])

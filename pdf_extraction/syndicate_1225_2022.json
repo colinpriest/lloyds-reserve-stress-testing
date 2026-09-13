@@ -1,5 +1,5 @@
 {
-  "extraction_timestamp": "2026-09-13T04:17:06.325942+00:00",
+  "extraction_timestamp": "2026-09-13T11:23:22.488025+00:00",
   "spec": {
     "prompt_version": "2.13",
     "driver_prompt_version": "2.13",
@@ -15,9 +15,9 @@
       "opening_reserves_gbp_m": 932.2,
       "opening_reserves_page": 15,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": -6.1,
-      "prior_year_development_pct": -0.65,
-      "direction": "release",
+      "prior_year_development_gbp_m": 18.6,
+      "prior_year_development_pct": 2.0,
+      "direction": "strengthening",
       "prior_year_movement_page": 16,
       "prior_year_movement_confidence": 0.8,
       "exact_reserve_text": "Favourable movement in technical provisions 44.7",
@@ -80,7 +80,7 @@
       "gross_premium_page": 12,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The prior year development figure is derived from the gross claims development triangle, as the 'Favourable movement in technical provisions' figure in Note 6 is likely net of reinsurance and differs significantly. LOB movements for prior year development are not available on a gross basis. [RAG PYD NOT APPLIED: deterministic figure +18.600m has the opposite sign to both model values [-1.5, -6.1], which agree with each other; model values retained. Sign agreement between the models is not a reconciliation: where they differ in value the cohort and accrual scope of each still has to be settled from the filing (R140).] [CODE OVERRIDE: Model said PYD=-1.5, but code computed -6.1 from triangle (OVERRIDE from agreed triangles). Using code value.]",
+      "data_quality_notes": "The prior year development figure is derived from the gross claims development triangle, as the 'Favourable movement in technical provisions' figure in Note 6 is likely net of reinsurance and differs significantly. LOB movements for prior year development are not available on a gross basis. [RAG PYD APPLIED OVER THE SIGN VETO: +18.600m is the figure two readings of the filing confirmed (triangle_figures_confirmed_by_hand.json, R213).] [RAG OVERRIDE: Model said PYD=-1.5, RAG triangle computed 18.6. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -128,6 +128,13 @@
             null,
             null,
             null
+          ],
+          [
+            null,
+            null,
+            null,
+            null,
+            null
           ]
         ]
       },
@@ -142,6 +149,16 @@
         "output_tokens": 1247,
         "total_tokens": 20893,
         "cost_usd": 0.006395
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 18.6,
+        "model_value": -1.5,
+        "triangle_type": "gross",
+        "triangle_units": "millions",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 33,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
@@ -275,9 +292,9 @@
       "opening_reserves_gbp_m": 932.2,
       "opening_reserves_page": 12,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": -6.1,
-      "prior_year_development_pct": -0.65,
-      "direction": "release",
+      "prior_year_development_gbp_m": 18.6,
+      "prior_year_development_pct": 2.0,
+      "direction": "strengthening",
       "prior_year_movement_page": 29,
       "prior_year_movement_confidence": 0.8,
       "exact_reserve_text": "The estimate for claims at the beginning of the year as compared with net payments and provisions at the end of the year in respect of prior years' claims are as follows:\n...\nFavourable movement in technical provisions 44.7 56.4\nThe movement in estimate of the prior year is driven mainly by favourable loss experience and incurred claims forms a 7% (2021: 10%) component of the 2022 loss ratio of 47% (2021: 46%). The earned loss ratio represents net incurred losses divided by net earned premium.",
@@ -358,7 +375,7 @@
       "gross_premium_page": 19,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Gross prior-year development was derived from the gross claims development tables (triangle). The report also presents a per-class prior year movement table (total favourable movement 44.7m) which is presented net of reinsurance and therefore does not match the gross triangle-derived PYD. The triangle contains a '2017 & Prior' aggregate column which has been excluded per instructions; the triangle-based PYD therefore excludes that aggregated column. Line-of-business mappings are approximate for combined statutory classes (e.g. 'Marine, aviation and transport' mapped to 'Marine'; 'Miscellaneous' mapped to 'Aggregate') and per-class movements taken from the note are net of reinsurance (lower confidence). [RAG PYD NOT APPLIED: deterministic figure +18.600m has the opposite sign to both model values [-1.5, -6.1], which agree with each other; model values retained. Sign agreement between the models is not a reconciliation: where they differ in value the cohort and accrual scope of each still has to be settled from the filing (R140).]",
+      "data_quality_notes": "Gross prior-year development was derived from the gross claims development tables (triangle). The report also presents a per-class prior year movement table (total favourable movement 44.7m) which is presented net of reinsurance and therefore does not match the gross triangle-derived PYD. The triangle contains a '2017 & Prior' aggregate column which has been excluded per instructions; the triangle-based PYD therefore excludes that aggregated column. Line-of-business mappings are approximate for combined statutory classes (e.g. 'Marine, aviation and transport' mapped to 'Marine'; 'Miscellaneous' mapped to 'Aggregate') and per-class movements taken from the note are net of reinsurance (lower confidence). [RAG PYD APPLIED OVER THE SIGN VETO: +18.600m is the figure two readings of the filing confirmed (triangle_figures_confirmed_by_hand.json, R213).] [RAG OVERRIDE: Model said PYD=-6.1, RAG triangle computed 18.6. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -406,6 +423,13 @@
             null,
             null,
             null
+          ],
+          [
+            null,
+            null,
+            null,
+            null,
+            null
           ]
         ]
       },
@@ -420,6 +444,16 @@
         "output_tokens": 7692,
         "total_tokens": 28581,
         "cost_usd": 0.020606
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 18.6,
+        "model_value": -6.1,
+        "triangle_type": "gross",
+        "triangle_units": "millions",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 33,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",

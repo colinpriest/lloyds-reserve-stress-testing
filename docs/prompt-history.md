@@ -19,9 +19,9 @@ The extraction prompt in `test_gemini.py` is at version **2.13**. The versions s
 | 2.9 | 28 |
 | 2.10 | 1,695 |
 | 2.12 | 1,040 |
-| 2.13 | 2,076 |
+| 2.13 | 2,077 |
 
-5,792 cached responses cover 1,012 syndicate-years; the corpus holds 1,065 records. The newest version any cache carries is **2.13**, and 2,076 caches were produced under the current version. 1,055 records were written under the current version 2.13; the other 10 were written under an older version: syndicate_1100_2024 (2.6), syndicate_2357_2014 (2.9), syndicate_2689_2017 (2.10), syndicate_2689_2018 (2.10), syndicate_2786_2016 (2.10), syndicate_2786_2017 (2.10), syndicate_2988_2017 (2.10), syndicate_2988_2018 (2.10), syndicate_3268_2018 (2.10), syndicate_3268_2019 (2.10). Bringing those to the current version needs fresh paid inference.
+5,793 cached responses cover 1,012 syndicate-years; the corpus holds 1,065 records. The newest version any cache carries is **2.13**, and 2,077 caches were produced under the current version. 1,055 records were written under the current version 2.13; the other 10 were written under an older version: syndicate_1100_2024 (2.6), syndicate_2357_2014 (2.9), syndicate_2689_2017 (2.10), syndicate_2689_2018 (2.10), syndicate_2786_2016 (2.10), syndicate_2786_2017 (2.10), syndicate_2988_2017 (2.10), syndicate_2988_2018 (2.10), syndicate_3268_2018 (2.10), syndicate_3268_2019 (2.10). Bringing those to the current version needs fresh paid inference.
 
 ## Which records the changed routes touched
 

@@ -1,5 +1,5 @@
 {
-  "extraction_timestamp": "2026-09-13T03:59:28.235211+00:00",
+  "extraction_timestamp": "2026-09-13T11:04:55.044831+00:00",
   "spec": {
     "prompt_version": "2.13",
     "driver_prompt_version": "2.13",
@@ -15,9 +15,9 @@
       "opening_reserves_gbp_m": 346.998,
       "opening_reserves_page": 7,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": -0.912,
-      "prior_year_development_pct": -0.26,
-      "direction": "release",
+      "prior_year_development_gbp_m": 5.025,
+      "prior_year_development_pct": 1.45,
+      "direction": "strengthening",
       "prior_year_movement_page": 16,
       "prior_year_movement_confidence": 1.0,
       "exact_reserve_text": "Change in prior year provisions (195,404)",
@@ -94,7 +94,7 @@
       "gross_premium_page": 15,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "There is a significant discrepancy between the reported 'Change in prior year provisions' of -GBP 195.404m (a release) and a calculation based on the claims development triangle (page 17) which suggests a strengthening of +GBP 15.665m. The direct accounting entry from the Technical Provisions note (page 16) and the narrative on page 3 (mentioning 'strong performance from 2012 and prior') support the release figure, which has been used as the primary source. [RAG PYD NOT APPLIED: deterministic figure +5.025m has the opposite sign to both model values [-195.404, -195.404], which agree with each other; model values retained. Sign agreement between the models is not a reconciliation: where they differ in value the cohort and accrual scope of each still has to be settled from the filing (R140).] [CODE OVERRIDE: Model said PYD=-195.404, but code computed -0.912 from triangle (OVERRIDE from agreed triangles). Using code value.]",
+      "data_quality_notes": "There is a significant discrepancy between the reported 'Change in prior year provisions' of -GBP 195.404m (a release) and a calculation based on the claims development triangle (page 17) which suggests a strengthening of +GBP 15.665m. The direct accounting entry from the Technical Provisions note (page 16) and the narrative on page 3 (mentioning 'strong performance from 2012 and prior') support the release figure, which has been used as the primary source. [RAG PYD APPLIED OVER THE SIGN VETO: +5.025m is the figure two readings of the filing confirmed (triangle_figures_confirmed_by_hand.json, R213).] [RAG OVERRIDE: Model said PYD=-195.404, RAG triangle computed 5.025. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -142,6 +142,13 @@
             null,
             null,
             null
+          ],
+          [
+            null,
+            null,
+            null,
+            null,
+            null
           ]
         ]
       },
@@ -156,6 +163,16 @@
         "output_tokens": 1415,
         "total_tokens": 16431,
         "cost_usd": 0.006892
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 5.025,
+        "model_value": -195.404,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 36,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
@@ -397,9 +414,9 @@
       "opening_reserves_gbp_m": 346.998,
       "opening_reserves_page": 13,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": -0.912,
-      "prior_year_development_pct": -0.26,
-      "direction": "release",
+      "prior_year_development_gbp_m": 5.025,
+      "prior_year_development_pct": 1.45,
+      "direction": "strengthening",
       "prior_year_movement_page": 29,
       "prior_year_movement_confidence": 1.0,
       "exact_reserve_text": "Change in prior year provisions (195,404) 37,323 (158,081)",
@@ -526,7 +543,7 @@
       "gross_premium_page": 28,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior year development taken directly from the Technical Provisions reconciliation (Change in prior year provisions) gross column. The table prints the movement as (195,404) in GBP 000 which has been converted to -195.404 (millions) and interpreted as a gross release. There is a gross claims development triangle provided (gross amounts) which could be used to cross-check PYD; no explicit textual narrative quantifying gross prior year movement was found. The sign and magnitude are taken as printed in the movement note. If a different interpretation of parentheses in the table were applied, the direction could differ; user attention recommended. [RAG PYD NOT APPLIED: deterministic figure +5.025m has the opposite sign to both model values [-195.404, -195.404], which agree with each other; model values retained. Sign agreement between the models is not a reconciliation: where they differ in value the cohort and accrual scope of each still has to be settled from the filing (R140).] [CODE OVERRIDE: Model said PYD=-195.404, but code computed -0.912 from triangle (OVERRIDE from agreed triangles). Using code value.]",
+      "data_quality_notes": "Prior year development taken directly from the Technical Provisions reconciliation (Change in prior year provisions) gross column. The table prints the movement as (195,404) in GBP 000 which has been converted to -195.404 (millions) and interpreted as a gross release. There is a gross claims development triangle provided (gross amounts) which could be used to cross-check PYD; no explicit textual narrative quantifying gross prior year movement was found. The sign and magnitude are taken as printed in the movement note. If a different interpretation of parentheses in the table were applied, the direction could differ; user attention recommended. [RAG PYD APPLIED OVER THE SIGN VETO: +5.025m is the figure two readings of the filing confirmed (triangle_figures_confirmed_by_hand.json, R213).] [RAG OVERRIDE: Model said PYD=-195.404, RAG triangle computed 5.025. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -574,6 +591,13 @@
             null,
             null,
             null
+          ],
+          [
+            null,
+            null,
+            null,
+            null,
+            null
           ]
         ],
         "confidence": 1.0
@@ -589,6 +613,16 @@
         "output_tokens": 7141,
         "total_tokens": 30732,
         "cost_usd": 0.02018
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 5.025,
+        "model_value": -195.404,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 36,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",

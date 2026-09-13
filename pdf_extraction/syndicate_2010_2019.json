@@ -1,5 +1,5 @@
 {
-  "extraction_timestamp": "2026-09-13T03:57:40.964677+00:00",
+  "extraction_timestamp": "2026-09-13T11:23:23.086068+00:00",
   "spec": {
     "prompt_version": "2.13",
     "driver_prompt_version": "2.13",
@@ -15,9 +15,9 @@
       "opening_reserves_gbp_m": 485.327,
       "opening_reserves_page": 8,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": 132.679,
-      "prior_year_development_pct": 27.34,
-      "direction": "strengthening",
+      "prior_year_development_gbp_m": -18.659,
+      "prior_year_development_pct": -3.84,
+      "direction": "release",
       "prior_year_movement_page": 19,
       "prior_year_movement_confidence": 1.0,
       "exact_reserve_text": "Change in prior year provisions",
@@ -220,7 +220,7 @@
       "gross_premium_page": 17,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "The explicit 'Change in prior year provisions' of $132.679m from Note 18 is used for prior year development. This figure indicates a strengthening, which aligns with narrative mentions of 'loss creep' and 'deterioration' from specific prior year catastrophe events (Irma, Jebi) on page 3. This figure contradicts the calculated PYD from the gross claims triangle (-18.659m release) and a general 'benign' comment on page 2. The direct reconciliation line item in Note 18 is considered the most authoritative source for the overall prior year movement. [RAG PYD NOT APPLIED: deterministic figure -18.659m has the opposite sign to both model values [132.679, 132.679], which agree with each other; model values retained. Sign agreement between the models is not a reconciliation: where they differ in value the cohort and accrual scope of each still has to be settled from the filing (R140).] [CODE PYD NOT APPLIED: deterministic figure -18.659m has the opposite sign to both model values [132.679, 132.679], which agree with each other; model values retained. Sign agreement between the models is not a reconciliation: where they differ in value the cohort and accrual scope of each still has to be settled from the filing (R140).]",
+      "data_quality_notes": "The explicit 'Change in prior year provisions' of $132.679m from Note 18 is used for prior year development. This figure indicates a strengthening, which aligns with narrative mentions of 'loss creep' and 'deterioration' from specific prior year catastrophe events (Irma, Jebi) on page 3. This figure contradicts the calculated PYD from the gross claims triangle (-18.659m release) and a general 'benign' comment on page 2. The direct reconciliation line item in Note 18 is considered the most authoritative source for the overall prior year movement. [RAG PYD APPLIED OVER THE SIGN VETO: -18.659m is the figure two readings of the filing confirmed (triangle_figures_confirmed_by_hand.json, R213).] [RAG OVERRIDE: Model said PYD=132.679, RAG triangle computed -18.659. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
@@ -372,6 +372,16 @@
         "output_tokens": 3253,
         "total_tokens": 28390,
         "cost_usd": 0.012571
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -18.659,
+        "model_value": 132.679,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 36,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
@@ -722,9 +732,9 @@
       "opening_reserves_gbp_m": 485.327,
       "opening_reserves_page": 15,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": 132.679,
-      "prior_year_development_pct": 27.34,
-      "direction": "strengthening",
+      "prior_year_development_gbp_m": -18.659,
+      "prior_year_development_pct": -3.84,
+      "direction": "release",
       "prior_year_movement_page": 33,
       "prior_year_movement_confidence": 1.0,
       "exact_reserve_text": "Change in prior year provisions 132,679 43,402 89,277 179,777 49,101 130,676",
@@ -932,7 +942,7 @@
       "gross_premium_page": 27,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "All monetary amounts in the report are denominated in USD (report's functional currency). Field names containing '_gbp_m' are preserved per schema but amounts are native-currency USD millions. Prior year development sourced from Note 18 'Change in prior year provisions' gross column (explicit gross figure). exact_reserve_text was taken from the Technical Provisions table row (table entry rather than a running sentence). Claims development triangle present (gross) and provided for cross-check; reinsurance-to-close items exist elsewhere in the report but the 'Change in prior year provisions' gross figure was used as the authoritative PYD. No syndicate-level numeric split of the PYD by LOB was provided, so LOB amounts are not quantified. [RAG PYD NOT APPLIED: deterministic figure -18.659m has the opposite sign to both model values [132.679, 132.679], which agree with each other; model values retained. Sign agreement between the models is not a reconciliation: where they differ in value the cohort and accrual scope of each still has to be settled from the filing (R140).] [CODE PYD NOT APPLIED: deterministic figure -18.659m has the opposite sign to both model values [132.679, 132.679], which agree with each other; model values retained. Sign agreement between the models is not a reconciliation: where they differ in value the cohort and accrual scope of each still has to be settled from the filing (R140).]",
+      "data_quality_notes": "All monetary amounts in the report are denominated in USD (report's functional currency). Field names containing '_gbp_m' are preserved per schema but amounts are native-currency USD millions. Prior year development sourced from Note 18 'Change in prior year provisions' gross column (explicit gross figure). exact_reserve_text was taken from the Technical Provisions table row (table entry rather than a running sentence). Claims development triangle present (gross) and provided for cross-check; reinsurance-to-close items exist elsewhere in the report but the 'Change in prior year provisions' gross figure was used as the authoritative PYD. No syndicate-level numeric split of the PYD by LOB was provided, so LOB amounts are not quantified. [RAG PYD APPLIED OVER THE SIGN VETO: -18.659m is the figure two readings of the filing confirmed (triangle_figures_confirmed_by_hand.json, R213).] [RAG OVERRIDE: Model said PYD=132.679, RAG triangle computed -18.659. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
@@ -1084,6 +1094,16 @@
         "output_tokens": 8706,
         "total_tokens": 57249,
         "cost_usd": 0.029548
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -18.659,
+        "model_value": 132.679,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 36,
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
