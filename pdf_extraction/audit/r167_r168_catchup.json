@@ -1,0 +1,127 @@
+{
+ "purpose": "Records the 2.13 re-extraction cannot have applied R167 or R168 to, with the hand adjudication of each basis change. The 14 workers loaded their code at 20:10 on 11 September 2026; R168 landed in test_gemini.py at 21:47 and R167 in table_extraction.py at 22:28, so every record this run produces is parsed by pre-fix code. A catch-up pass re-derives them from the committed caches, which costs nothing.",
+ "recorded": "2026-09-11",
+ "round": "round 56, from the adversarial review of the round-56 repairs",
+ "how_measured": "scratchpad measure_catchup_need.py: for each committed record, the grid is re-parsed out of its committed Azure cache with the current rules and compared against what is stored, restricted to the deterministic _rag_triangle. Read-only: no driver, no API, no record rewritten. The gross/net magnitude comparison below is scratchpad measure_gross_net_pairs.py. Both write their findings beside this file.",
+ "basis_changes_R167": {
+  "what_it_means": "The block's own heading says net where the grid-wide default said gross. A net triangle feeding a gross quantity is the M03 contamination class the external review raised. A net-basis record is excluded from the working sample, so each of these leaves it.",
+  "adjudicated_by_hand_against_the_grid_headings": [
+   {
+    "stem": "syndicate_1110_2015",
+    "was": "gross",
+    "now": "net",
+    "verdict": "correct",
+    "evidence": "captured rows 'After one year' to 'After four years' sit directly under 'Estimate of cumulative net claims incurred'; the only gross word on the grid is 'Gross reserves included in the balance sheet', eleven rows below the captured block"
+   },
+   {
+    "stem": "syndicate_1110_2016",
+    "was": "gross",
+    "now": "net",
+    "verdict": "correct",
+    "evidence": "same grid shape as 1110/2015, same heading, same distant balance-sheet gross line"
+   },
+   {
+    "stem": "syndicate_1183_2019",
+    "was": "gross",
+    "now": "net",
+    "verdict": "correct",
+    "evidence": "captured rows '12 months' to '108 months' sit under 'Net earned ultimate claims'; 'Total gross earned ultimate losses' is a summary row below the captured block"
+   },
+   {
+    "stem": "syndicate_2791_2020",
+    "was": "gross",
+    "now": "net",
+    "verdict": "correct",
+    "evidence": "captured rows sit under 'Estimate of Net Ultimate Claims'; 'Gross claims liabilities' is a summary row below"
+   },
+   {
+    "stem": "syndicate_2791_2021",
+    "was": "gross",
+    "now": "net",
+    "verdict": "correct",
+    "evidence": "same grid shape and heading as 2791/2020"
+   }
+  ],
+  "count": 5
+ },
+ "staircase_limit_changes_R168": {
+  "what_it_means": "The underwriting years are not consecutive, so a column's age read from its position differs from its age read from its own year. A genuine terminal estimate could be nulled as a dash, or a fabricated dash-zero could survive.",
+  "stems": [
+   "syndicate_1110_2020",
+   "syndicate_1110_2021",
+   "syndicate_1110_2022",
+   "syndicate_1110_2023",
+   "syndicate_1110_2024",
+   "syndicate_1206_2019",
+   "syndicate_1861_2022",
+   "syndicate_2008_2021",
+   "syndicate_3500_2018",
+   "syndicate_3500_2019",
+   "syndicate_3500_2022",
+   "syndicate_4242_2020"
+  ],
+  "count": 12,
+  "correction": "the first version of this list carried 15 stems, copied from a measurement that had not yet been restricted to the deterministic _rag_triangle. syndicate_1254_2023, syndicate_1884_2023, syndicate_3500_2021 were model-declared triangles, which R168 does not govern. The same mistake was made in the basis list and corrected there too."
+ },
+ "also_noticed_not_yet_acted_on": [
+  {
+   "stem": "syndicate_1254_2023",
+   "note": "the underwriting years run [2023, 2019, 2018, 2017] -- descending after the first entry, with 2020 to 2022 absent. That is a disordered list, not a gapped ascending one, and no rule in the estimator assumes such an order. It comes from the MODEL's declared triangle: this record has no deterministic _rag_triangle at all, so R168 does not govern it and it is not in the staircase list. Inspect before trusting any figure from it.",
+   "corrected": "first recorded as though the disordered years were in the deterministic triangle; they are the model's own"
+  },
+  {
+   "stem": "syndicate_2791_2020 and syndicate_2791_2021",
+   "note": "the grid carries two blocks, each headed 'Estimate of Net Ultimate Claims', and the parser captured development rows from both into one triangle. The basis is right either way, but whether two blocks should merge is a separate question."
+  }
+ ],
+ "what_happens_next": "After the 2.13 run finishes, the whole corpus is replayed offline from the committed caches so that R167 and R168 apply uniformly, rather than only to the records listed here. These lists are the expected effect, measured before the replay, so that the replay's actual effect can be compared against them instead of taken on trust.",
+ "gross_net_mislabel_not_reached_by_R167": {
+  "what_it_is": "A filing that prints its gross and net triangles with the same underwriting years, units and shape, where neither captured block carries a basis heading. The grid-wide rule then labels them from whatever basis words happen to appear elsewhere on the grid, and can get both backwards. R167 does not reach this: it reads the heading above the captured block, and there is none.",
+  "the_discriminator": "Gross incurred claims cannot be smaller than net incurred claims. Where two triangles share years, units and shape, the one whose cells are smaller in MAGNITUDE is the net one. Magnitude, because a filing may present the triangle as an outflow, and there the gross figure is the more negative one.",
+  "measured": {
+   "records_labelled_gross": 762,
+   "with_a_same_shape_twin": 656,
+   "stored_triangle_smaller_than_its_twin": 2
+  },
+  "records": [
+   {
+    "stem": "syndicate_2015_2023",
+    "stored_first_row": [
+     62479.0,
+     39290.0,
+     36385.0,
+     38027.0
+    ],
+    "twin_first_row": [
+     87854.0,
+     43391.0,
+     40910.0,
+     62064.0
+    ],
+    "ratio": "about 1.41 on the first cell",
+    "verdict": "the stored triangle is the net one, labelled gross",
+    "why_the_labels_are_both_wrong": "table 13 ends with a row labelled 'Net', so the grid-wide rule called the gross table net; table 14 carries no basis word at all, so the same rule defaulted the net table to gross"
+   },
+   {
+    "stem": "syndicate_1882_2016",
+    "stored_first_row": [
+     34712.0,
+     38982.0,
+     29466.0,
+     31806.0
+    ],
+    "twin_first_row": [
+     36622.0,
+     null,
+     null,
+     null
+    ],
+    "ratio": "about 1.18 to 1.42 on the rows below the first",
+    "verdict": "the stored triangle is the net one, labelled gross",
+    "why_the_labels_are_both_wrong": "both tables are headed 'Estimate of ultimates:' and neither declares a basis, so both default to gross and the smaller one was adopted"
+   }
+  ],
+  "what_was_done": "R189: both selectors now apply the magnitude test and relabel the smaller of a same-shape pair as net. Measured after the rule: 2 records of 809 move, which is the figure measured before it was written. Seven tests hold it, including controls for the two false-positive shapes the first measurement produced -- an outflow presentation, where the gross figure is the more negative one, and a pair differing by a factor of twenty.",
+  "first_measurement_was_wrong": "A comparison on signed values reported 23 records. Syndicates 457 and 218 present their triangles as outflows, so their gross figures are the more negative ones and nine correctly-labelled records were called suspect; syndicates 6104 and 557 matched tables differing by a factor of twenty, which is a different quantity rather than a gross/net pair. Recorded because the corrected figure is only meaningful beside it."
+ }
+}

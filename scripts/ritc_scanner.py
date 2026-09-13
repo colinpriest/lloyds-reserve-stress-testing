@@ -103,10 +103,30 @@ INWARD_SETTLED = [
     r"(?:pay|paid|payable|pays)[^.]{0,60}?" + RITC_TERM + r"[^.]{0,40}?premium[^.]{0,40}?to (?:the |this )?syndicates?\s*OWN\b",
     r"(?:pay|paid|payable|pays)[^.]{0,60}?" + RITC_TERM + r"[^.]{0,40}?premium[^.]{0,40}?to (?:the |this )?syndicate\b(?!s?\s*\d)",
     r"\bRITC take[- ]?on\b|\btake[- ]?on (?:balance|reserves)\b|\binwards? RITC\b|\btake[- ]?on balances? of the RITC\b",
+    # business another syndicate WROTE, now carried by this one: "a Loss Portfolio Transfer
+    # of certain classes written by Syndicate 33" (1884/2022); "reinsured a diversified
+    # portfolio of legacy insurance business underwritten by Hiscox Syndicate 3624"
+    # (2008/2021). Settled, so the bare "by syndicate N" cue cannot turn it outward (R194).
+    r"(?:business|class(?:es)?|portfolios?|polic(?:y|ies)|risks|liabilities|reserves|years? of account|book)[^.]{0,80}?(?:under)?written by (?:[A-Za-z&'.]+ ){0,3}syndicates?\s*OTHER\b"
+    # ... unless the list of writers goes on to name this syndicate: "classes of business no
+    # longer written by Syndicates 4444 (2020 & prior years of account) and 1861", in 1861's
+    # own filing, is its outward LPT to RiverStone (R199)
+    r"(?!\s*(?:\([^)]{0,60}\)\s*)?(?:,|and|&)\s*(?:syndicates?\s*)?OWN\b)",
+    # this syndicate accepting the reinsurance to close of a syndicate the filing does not
+    # name: "On 1 January 2019, Syndicate 3500 accepted the reinsurance to close of the
+    # liabilities of another Lloyd's syndicate" (3500/2019). The subject has to be this
+    # syndicate, because the counterparty carries no number to compare with its own (R202).
+    r"(?:\b(?:the|this|our) syndicate\b(?!s?\s*\d)|syndicates?\s*OWN\b)[^.]{0,60}?\baccept(?:ed|s|ing)?\b[^.]{0,40}?"
+    + RITC_TERM +
+    r"[^.]{0,120}?\b(?:another|an?|other|third[- ]party|unrelated|external)\s+(?:Lloyd.?s\s+)?(?:run-?off\s+)?syndicates?\b(?!\s*(?:no\.?\s*)?\d)",
 ]
 # ... or this syndicate's business closing INTO, or assumed BY, another syndicate
 OUTWARD_SETTLED = [
-    r"(?:assumed|accepted|acquired|reinsured|written|reinsured to close) by syndicates?\s*OTHER",
+    # "assumed by" or "reinsured to close by" syndicate N: N took the liabilities. "written
+    # by" syndicate N used to sit here and means the opposite -- N wrote the business the
+    # reporting syndicate is taking on -- which classed 1884/2022's loss portfolio transfer
+    # "of certain classes written by Syndicate 33" as outward (R194).
+    r"(?:assumed|accepted|acquired|reinsured|reinsured to close) by syndicates?\s*OTHER",
     r"(?:closed?|closure|closing|reinsured?|reinsurance|transferr?(?:ed|ing)?|" + RITC_TERM + r")[^.]{0,80}?(?:into|to) (?:the [^.]{0,60}?|an? (?:external )?(?:party|third party)[^.]{0,20}?)?syndicates?\s*OTHER(?![^.]{0,60}?(?:into|to) (?:the |this )?syndicates?\s*OWN)",
     r"premium payable(?! to (?:the |this )?syndicate\b(?!s?\s*\d))",
     r"payable by (?:the )?(?:syndicate|members?)",

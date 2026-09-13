@@ -24,6 +24,7 @@ Changing the prompt wording or bumping PROMPT_VERSION auto-invalidates the cache
 Delete the llm_cache/ directory to force re-extraction from all LLMs.
 """
 
+import contextlib
 import os
 import re
 import sys
@@ -276,7 +277,7 @@ GEMINI_MODEL = "gemini-2.5-flash"
 OPENAI_MODEL = "gpt-5-mini"
 
 # Frozen spec versions -- bump these when spec files change
-PROMPT_VERSION = "2.11"  # 2.11 (round 55, T02): one business-mix hierarchy (the segmental note, else the divisional summary, never merged), the claims-incurred definition corrected, the loss-ratio route requires underwriting-year premiums; every committed response cache was produced under 2.10 or earlier (see docs/prompt-history.md)
+PROMPT_VERSION = "2.13"  # 2.13 (round 56): the mixed-scope rule is about a single all-years reconciliation figure and explicitly NOT about the development triangle, whose recent columns are skipped rather than disqualifying. 2.12 read as "reject the triangle" and moved 21 records onto net narrative figures. 2.12: triangle row labels in printed order, a dash is no data, a superscript marker is not a digit, an outflow triangle grows as its printed value falls. 2.11 (round 55, T02): one business-mix hierarchy, the claims-incurred definition, the loss-ratio route. No committed response cache was produced under 2.11, 2.12 or 2.13 (see docs/prompt-history.md)
 # 2.10: add monoline LOB extraction, direction forced from triangle PYD
 FIELD_DEFINITIONS_VERSION = "1.0"
 TOLERANCE_RULES_VERSION = "1.0"
@@ -360,12 +361,79 @@ def _load_inception_years() -> dict:
     return cache
 
 
+
+
+@contextlib.contextmanager
+def _shared_file_lock(lock_path, timeout_s=120):
+    """Hold an exclusive lock on a shared audit file while it is read and rewritten.
+
+    Round 52 gave the run manifest this treatment because several re-extraction workers
+    may finish at once. Round 56 found two more files written the same way with no lock:
+    the inception-year cache, where a lost update changes which reports are skipped, and
+    the disagreement log. The mechanism is the manifest's, lifted out so there is one of
+    it: an exclusive create, a deadline, and the caller doing an atomic replace."""
+    fd = None
+    deadline = time.time() + timeout_s
+    while fd is None:
+        try:
+            fd = os.open(str(lock_path), os.O_CREAT | os.O_EXCL | os.O_WRONLY)
+        except FileExistsError:
+            if time.time() > deadline:
+                raise RuntimeError("shared file lock %s held for over %d s"
+                                   % (lock_path, timeout_s))
+            time.sleep(0.2)
+    try:
+        yield
+    finally:
+        try:
+            os.close(fd)
+        except OSError:
+            pass
+        try:
+            os.unlink(str(lock_path))
+        except OSError:
+            pass
+
+
+def _read_json_with_retry(path, default):
+    """A concurrent writer may be mid-replace; retry a half-written read briefly."""
+    if not Path(path).exists():
+        return default
+    for attempt in range(20):
+        try:
+            with open(path, "r") as fh:
+                return json.load(fh)
+        except (json.JSONDecodeError, PermissionError):
+            if attempt == 19:
+                raise
+            time.sleep(0.25)
+    return default
+
+
+def _replace_atomically(tmp_path, path):
+    """os.replace fails on Windows while a concurrent reader holds the file open."""
+    for attempt in range(20):
+        try:
+            os.replace(tmp_path, path)
+            return
+        except PermissionError:
+            if attempt == 19:
+                raise
+            time.sleep(0.25)
+
+
 def _save_inception_years(inception: dict) -> None:
-    """Save syndicate inception years to JSON file, preserving _meta and _manual_overrides."""
-    existing = {}
-    if INCEPTION_YEARS_FILE.exists():
-        with open(INCEPTION_YEARS_FILE) as f:
-            existing = json.load(f)
+    """Save syndicate inception years to JSON file, preserving _meta and _manual_overrides.
+
+    Under the lock, because an inception year decides whether a report is skipped as too
+    early: two workers writing at once used to lose one worker's discovery, and the
+    record it would have skipped or kept changed with it (round 56)."""
+    with _shared_file_lock(INCEPTION_YEARS_FILE.with_suffix(".lock")):
+        _save_inception_years_locked(inception)
+
+
+def _save_inception_years_locked(inception: dict) -> None:
+    existing = _read_json_with_retry(INCEPTION_YEARS_FILE, {})
     meta = existing.get("_meta", {
         "description": "First underwriting year for each Lloyd's syndicate. "
                        "Used to skip reports from the first two years of operation "
@@ -798,12 +866,14 @@ Return this JSON structure:
     "page": <page number where found, null if none>,
     "underwriting_years": [<list of ALL individual UW year column headers as integers, e.g. [2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018]. CRITICAL: EXCLUDE any 'X and prior' aggregate column (e.g. '2010 and prior', '2010 & prior'). These aggregate columns do NOT have proper development rows — they must be omitted entirely. Include ALL individual year columns including the most recent>],
     "development_rows": [
-      [<Row 0: 'At end of underwriting year' — one number per UW year column, null if cell is blank>],
-      [<Row 1: 'One year later' — one number per UW year column, null if blank>],
-      [<Row 2: 'Two years later' — one number per UW year column, null if blank>],
-      [<Row 3: 'Three years later' — etc.>],
-      [<...continue for ALL development period rows...>]
+      [<Row 0: the FIRST development period — one number per UW year column, null if the cell is blank, a dash, an en dash, or 'nil'>],
+      [<Row 1: the SECOND development period — one number per UW year column, null if blank or a dash>],
+      [<Row 2: the THIRD development period — etc.>],
+      [<...continue for ALL development period rows, in the order the report prints them...>]
     ]
+    ROW LABELS: report the rows in the order the table prints them, reading each row by ITS OWN label, whatever wording the report uses. The labels vary between syndicates and all of these name the same sequence of development ages: 'At end of underwriting year' / 'One year later' / 'Two years later' ...; 'After 12 months' / 'After 24 months' / 'After 36 months' ...; '12 months later' / '24 months later' ...; 'Year 1' / 'Year 2' .... Row 0 is the FIRST development period the table shows (12 months / end of underwriting year), row 1 the second, and so on. Do NOT assume the 'One year later' wording; do NOT reorder the rows; do NOT put a value in a different column from the one it is printed under.
+    DASHES: a dash ('-', '–', '—') or 'nil' in a development cell means the underwriting year has NOT YET REACHED that development period. It is NOT a zero estimate. Return null for it. Returning 0 there makes the year look as though its claims estimate collapsed to nothing.
+    FOOTNOTE MARKERS: a small raised digit or symbol attached to a number is a footnote reference, not part of the number. '60.2' with a superscript '1' is 60.2, not 60.21. '2017' with a superscript '1' is the year 2017. Strip the marker; keep the number and the decimal places the report actually prints.
     IMPORTANT: Include ONLY the development period rows (At end of UW year, One year later, Two years later, etc.). Do NOT include the 'Current estimate of cumulative claims incurred' summary row — that row just repeats the last value from each column and is NOT a development period. Do NOT include the 'Cumulative payments' or 'Gross outstanding claims provision' rows.
   }}
 }}
@@ -823,6 +893,9 @@ Rules:
   ✗ Closing reserve balances or net technical provisions — balance sheet figures, not movements.
   ✗ Changes in booked ultimates for specific named events — one event's estimate change, not total portfolio PYD.
   ✗ Year-of-account PROFIT/LOSS results — e.g. "a loss to capital providers of £17.7m" — this is the overall underwriting profit/loss, NOT a reserve movement.
+  ✗ A SINGLE figure that lumps the recent underwriting years in with the old ones. Prior year development is the re-estimation of years {report_year - 2} AND OLDER. A note that reconciles "claims outstanding" across ALL underwriting years at once, or a movement dominated by a year still in its first or second development period, is NOT prior year development however large and explicit it is. Reports often say so themselves — "the increase reflects premium earning on the {report_year - 1} year" — and that sentence is a reason to REJECT that figure, not to explain it.
+    THIS DOES NOT APPLY TO THE CLAIMS DEVELOPMENT TRIANGLE. A triangle has one column per underwriting year, so the recent years are simply columns you skip: you exclude {report_year} and {report_year - 1} and sum the rest, exactly as the triangle instructions below say. A triangle is IN scope and is the preferred gross source. Never discard a triangle because it contains recent underwriting years — that is what every triangle looks like.
+    And never prefer a NET narrative figure to a usable GROSS triangle. If the triangle can be read at all, read it. Source 6 (a net figure) is a last resort for a report that has no gross source anywhere, not an escape from a triangle you are unsure about. If you are unsure about the triangle, use it and record the doubt in data_quality_notes.
 - IMPORTANT — prior_year_development_gbp_m — CORRECT SOURCES (use FIRST found, must be GROSS):
   Use the GROSS figure (insurance liabilities), NOT the net figure (after reinsurer's share). When a "Movement in prior year claims" note shows columns for "Insurance liabilities", "Reinsurer's share", and "Net liabilities", use the "Insurance liabilities" column. Example: Insurance liabilities (69.6), Reinsurer's share 29.8, Net (39.8) → use -69.6, NOT -39.8. WARNING: Narrative text often quotes the NET figure (e.g. "net releases of £39.8m"). Always cross-check against the movement note — the GROSS (Insurance liabilities) column is authoritative.
   Source 1: "Movement in prior year's provision for claims outstanding" note (ONLY if it shows GROSS figure).
@@ -844,6 +917,7 @@ Rules:
   4. Sum the differences for all remaining UW years: total_pyd = SUM(current_estimate[uw_year] - previous_estimate[uw_year]) for uw_year <= {report_year - 2}.
   5. A DECREASE in the cumulative estimate = favourable development = release (NEGATIVE sign).
   6. An INCREASE = adverse development = strengthening (POSITIVE sign).
+  7. SIGN OF THE PRINTED TABLE — read this before applying 5 and 6. Some reports print incurred claims as OUTFLOWS, so every cell in the triangle is negative or bracketed, e.g. "(123.0) (274.1) (254.9)". In such a table the ESTIMATE is the magnitude, and it GROWS as the printed number becomes more negative. Example: a year printed as (266.9) one year later and (270.6) two years later has an estimate that rose from 266.9 to 270.6 — that is ADVERSE development of +3.7, a STRENGTHENING, even though the printed value fell. Decide first whether the whole triangle is presented as outflows (every cell non-positive); if it is, compare magnitudes, not printed values. A triangle with a mixture of positive and negative cells is NOT an outflow presentation — leave its signs alone.
   WORKED EXAMPLE: For a report year-end 2022 with this triangle (£m):
     UW Year:            2017    2018    2019    2020    2021    2022
     At end of UW year:  380.9   376.2   177.8   134.0   260.6   489.1
@@ -2143,6 +2217,14 @@ def adobe_extract_pdf(pdf_path, output_dir=ADOBE_OUTPUT_DIR):
     if (report_out / "structuredData.json").exists():
         return report_out
 
+    # This path had no guard of any kind: a cache miss went straight to the service
+    # whenever credentials were present, and they are. Both guards belong here for the
+    # same reason they belong on the other backends -- a corrected model prompt is no
+    # reason to re-bill document extraction (round 56).
+    _offline_guard(f"Adobe PDF Services for {pdf_path.name}")
+    from table_extraction import _table_cache_guard
+    _table_cache_guard(f"Adobe PDF Services for {pdf_path.name}")
+
     if not HAS_ADOBE:
         return None
 
@@ -3185,7 +3267,7 @@ def extract_pyd_from_relevant_pages(pdf_path, report_year):
         'cost': total cost of page-level extractions
     """
     result = {
-        "triangle": None, "pyd": None, "pyd_details": None,
+        "triangle": None, "pyd": None, "pyd_details": None, "pyd_from_triangle": False,
         "reserve_text": "", "method": "none", "cost": 0,
         "adobe_lob": None, "adobe_provisions": None,
         "first_year_syndicate": False,
@@ -3228,6 +3310,7 @@ def extract_pyd_from_relevant_pages(pdf_path, report_year):
                 print(f"  [{backend_name}] Triangle PYD: {pyd:+.3f}m ({extraction.triangle_details})")
                 result["triangle"] = tri_data
                 result["pyd"] = pyd
+                result["pyd_from_triangle"] = True
                 result["pyd_details"] = pyd_details
                 result["method"] = extraction.method
             elif pyd_details and "no usable UW years" in pyd_details:
@@ -3284,6 +3367,21 @@ def extract_pyd_from_relevant_pages(pdf_path, report_year):
     if result["pyd"] is not None and result["method"] in ("azure", "nutrient", "adobe"):
         prov = result.get("adobe_provisions") or {}
         prov_gross = prov.get("gross_prior_year_claims")
+        # A sign disagreement is not evidence that the provisions figure is the
+        # balance-sheet movement: it is equally consistent with the figure not being a
+        # movement at all.  1274/2019's `2010 & prior years` cumulative incurred total
+        # displaced a correct -6.619m on exactly that reasoning.  The parser now says
+        # whether the table is a movement note and whether the column carries the report
+        # year in its own header; without both, the triangle stands (R138).
+        _sem = prov.get("movement_semantics") or {}
+        if prov_gross is not None and not (_sem.get("table_is_movement_note")
+                                           and _sem.get("column_bound_to_report_year")):
+            print(f"  [{backend_name}] Provisions figure ({prov_gross:+.1f}m) is not an "
+                  f"affirmed movement row (movement note="
+                  f"{_sem.get('table_is_movement_note')}, column bound to "
+                  f"{report_year}={_sem.get('column_bound_to_report_year')}, row="
+                  f"{_sem.get('row_label')!r}) — the triangle stands")
+            prov_gross = None
         if prov_gross is not None and prov_gross != 0.0:
             tri_pyd = result["pyd"]
             # Disagree in sign — provisions is authoritative for reserve movement
@@ -3291,6 +3389,7 @@ def extract_pyd_from_relevant_pages(pdf_path, report_year):
                 print(f"  [{backend_name}] Triangle PYD ({tri_pyd:+.3f}m) disagrees in sign "
                       f"with provisions ({prov_gross:+.1f}m) — using provisions")
                 result["pyd"] = prov_gross
+                result["pyd_from_triangle"] = False
                 result["pyd_details"] = (f"provisions overrides triangle (sign disagreement: "
                                          f"triangle={tri_pyd:+.3f}m, provisions={prov_gross:+.1f}m)")
                 result["method"] = "provisions"
@@ -3310,6 +3409,7 @@ def extract_pyd_from_relevant_pages(pdf_path, report_year):
         if override:
             result["first_year_syndicate"] = False
             result["pyd"] = override["pyd"]
+            result["pyd_from_triangle"] = False
             result["pyd_details"] = override["details"]
             result["method"] = "reserves_movement"
             result["opening_reserves_from_movement"] = override["opening_reserves"]
@@ -3359,6 +3459,7 @@ def extract_pyd_from_relevant_pages(pdf_path, report_year):
                     print(f"  [RAG] LLM vision triangle PYD: {pyd:+.3f}m")
                     result["triangle"] = tri_data
                     result["pyd"] = pyd
+                    result["pyd_from_triangle"] = True
                     result["pyd_details"] = details
                     result["method"] = "ocr_vision"
                     break
@@ -3388,6 +3489,7 @@ def extract_pyd_from_relevant_pages(pdf_path, report_year):
             if lr_pyd is not None:
                 print(f"  [RAG] Loss ratio triangle PYD: {lr_pyd:+.3f}m")
                 result["pyd"] = lr_pyd
+                result["pyd_from_triangle"] = False
                 result["pyd_details"] = lr_details
                 result["method"] = "loss_ratio_triangle"
             elif lr_details and "loss ratio triangle found" in lr_details:
@@ -3423,6 +3525,7 @@ def extract_pyd_from_relevant_pages(pdf_path, report_year):
         prov_gross = prov.get("gross_prior_year_claims")
         if prov_gross is not None:
             result["pyd"] = prov_gross
+            result["pyd_from_triangle"] = False
             result["pyd_details"] = "from provisions movement note (table extraction)"
             result["method"] = "provisions"
             print(f"  [RAG] Using provisions PYD as fallback: {prov_gross:+.3f}m")
@@ -3435,6 +3538,7 @@ def extract_pyd_from_relevant_pages(pdf_path, report_year):
             prov_pyd, prov_details = _extract_pyd_from_provisions_text(page_text)
             if prov_pyd is not None:
                 result["pyd"] = prov_pyd
+                result["pyd_from_triangle"] = False
                 result["pyd_details"] = prov_details
                 result["method"] = "provisions_text"
                 print(f"  [RAG] Provisions text PYD: {prov_pyd:+.3f}m ({prov_details})")
@@ -3449,6 +3553,7 @@ def extract_pyd_from_relevant_pages(pdf_path, report_year):
             pl_pyd, pl_details = _parse_pyd_from_pl_narrative(page_text)
             if pl_pyd is not None:
                 result["pyd"] = pl_pyd
+                result["pyd_from_triangle"] = False
                 result["pyd_details"] = pl_details
                 result["method"] = "pl_narrative"
                 print(f"  [RAG] P&L narrative PYD: {pl_pyd:+.3f}m ({pl_details})")
@@ -3463,6 +3568,7 @@ def extract_pyd_from_relevant_pages(pdf_path, report_year):
             yoa_pyd, yoa_details = _parse_pyd_from_yoa_narrative(page_text)
             if yoa_pyd is not None:
                 result["pyd"] = yoa_pyd
+                result["pyd_from_triangle"] = False
                 result["pyd_details"] = yoa_details
                 result["method"] = "yoa_narrative"
                 print(f"  [RAG] YOA narrative PYD: {yoa_pyd:+.3f}m ({yoa_details})")
@@ -3476,6 +3582,7 @@ def extract_pyd_from_relevant_pages(pdf_path, report_year):
             gen_pyd, gen_details = _parse_pyd_from_general_narrative(page_text)
             if gen_pyd is not None:
                 result["pyd"] = gen_pyd
+                result["pyd_from_triangle"] = False
                 result["pyd_details"] = gen_details
                 result["method"] = "general_narrative"
                 print(f"  [RAG] General narrative PYD: {gen_pyd:+.3f}m ({gen_details})")
@@ -3501,6 +3608,55 @@ def extract_pyd_from_relevant_pages(pdf_path, report_year):
 # ---------------------------------------------------------------------------
 
 
+#: A triangle whose staircase is worse than this is not read for a movement. The value
+#: is the one docs/ocr-pipeline.md section 9.6 has always stated; until round 56 nothing
+#: enforced it, and 780/2018 supplied a -225.1m "release" at a score of 0.38.
+MIN_TRIANGLE_STRUCTURE_SCORE = 0.5
+
+
+def _staircase_limit(uw_years, report_year):
+    """The number of development rows each column can hold, by its own age.
+
+    A column's underwriting year fixes how many development periods it can have reached
+    by the report date. Anything past that is not an estimate, whatever the grid says.
+
+    Read from each column's OWN year, not from its position. The positional form
+    (`n - i + extra`) is right only when the years are consecutive, and 14 of the 828
+    stored triangles are not -- 1110/2020 runs [2015, 2016, 2017, 2019, 2020] with 2018
+    missing, where position gives [5,4,3,2,1] and the true ages give [6,5,4,2,1]. Every
+    column older than a gap got the wrong limit, so a genuine terminal zero could be
+    nulled as a dash and a fabricated dash-zero could survive (R168, from the adversarial
+    review of R158)."""
+    n = len(uw_years)
+    try:
+        years = [int(y) for y in uw_years]
+    except (ValueError, TypeError):
+        # a label that is not a year at all: fall back to the positional form rather
+        # than guess, and let the structure score speak for the grid
+        return [n - i for i in range(n)]
+    return [max(0, report_year - y + 1) for y in years]
+
+
+def _null_zeros_beyond_the_staircase(uw_years, rows, report_year, details=None):
+    """A dash read as nil, outside the staircase, is not a zero estimate.
+
+    Returns the rows with those cells set to None. Only an exact zero is touched: a
+    non-zero value out there is a different fault, and the structure score reports it."""
+    limits = _staircase_limit(uw_years, report_year)
+    out = [list(r) for r in rows]
+    killed = 0
+    for col, limit in enumerate(limits):
+        for row_idx in range(limit, len(out)):
+            if col < len(out[row_idx]) and isinstance(out[row_idx][col], (int, float)) \
+                    and out[row_idx][col] == 0:
+                out[row_idx][col] = None
+                killed += 1
+    if killed and details is not None:
+        details.append("  (%d zero cell(s) beyond the staircase read as no data, not nil)"
+                       % killed)
+    return out
+
+
 def _validate_triangle_structure(uw_years, rows, report_year):
     """Check if the triangle has the expected staircase structure.
 
@@ -3523,10 +3679,23 @@ def _validate_triangle_structure(uw_years, rows, report_year):
         max_uw = report_year
     extra_dev_years = max(0, report_year - max_uw)
 
+    # A staircase can have the right shape and the wrong contents.  2003/2015 scored
+    # 1.00 with a fabricated leading row of zeros above cells that had all been shifted
+    # one column: the zeros came from an empty `2010 & Prior` column whose dashes were
+    # read as nil.  No filing estimates zero incurred claims at the end of the
+    # underwriting year for every year at once (R139).
+    first = [v for v in rows[0] if v is not None] if rows else []
+    if first and all(isinstance(v, (int, float)) and v == 0 for v in first):
+        return 0.0
+
+    # The same rule as _staircase_limit: a gapped year list must be scored against the
+    # shape it should have, not the shape a consecutive list would have (R168).
+    limits = _staircase_limit(uw_years, report_year)
     matches = 0
     checks = 0
     for col_idx in range(n_cols):
-        expected_filled = min(n_rows, n_cols - col_idx + extra_dev_years)
+        expected_filled = min(n_rows, limits[col_idx] if col_idx < len(limits)
+                              else n_cols - col_idx + extra_dev_years)
         actual_filled = sum(1 for r in range(n_rows) if rows[r][col_idx] is not None)
         checks += 1
         # Allow ±1 tolerance (for summary rows or slight variations)
@@ -3555,6 +3724,23 @@ def _record_pyd_route(result, source, value, model_value=None, triangle=None, no
     if note:
         route["note"] = note
     result["_pyd_route"] = route
+
+
+def _rag_figure_source(rag_result):
+    """(route source, label, triangle) for the figure the RAG step returned (R208).
+
+    The RAG step returns a figure from a claims triangle, the provisions note, provisions text, the
+    reserves-movement note or a narrative parser, and it keeps whatever triangle it found even when
+    the figure came from elsewhere (the in-RAG sign check; a first-year triangle with no usable
+    years). Only a figure the step computed from its triangle names that triangle: source
+    "rag_triangle", the triangle's keys on the route, and the label "RAG triangle". Any other figure
+    is named by its method and carries no triangle, so neither the loader nor a reader of the log
+    takes it for a triangle's. A result that does not say is not taken for a triangle's.
+    """
+    if rag_result.get("pyd_from_triangle") is True:
+        return "rag_triangle", "RAG triangle", rag_result.get("triangle")
+    method = str(rag_result.get("method") or "unknown")
+    return "rag_" + method, "RAG " + method.replace("_", " "), None
 
 
 def compute_pyd_from_triangle(triangle_data, report_year):
@@ -3743,14 +3929,37 @@ def compute_pyd_from_triangle(triangle_data, report_year):
                     rows = rows[:-1]
                     n_rows -= 1
 
+    # A cell beyond its column's development age cannot hold an estimate, so an exact
+    # zero there is a dash the backend read as nil (R139). This is repaired before the
+    # staircase is scored, because the zeros are what the staircase is being scored on.
+    _pre_details = []
+    rows = _null_zeros_beyond_the_staircase(uw_years, rows, report_year, _pre_details)
+
     # Validate structure — proper triangles have a staircase pattern
     structure_score = _validate_triangle_structure(uw_years, rows, report_year)
+    if structure_score < MIN_TRIANGLE_STRUCTURE_SCORE:
+        return None, ("triangle structure score %.2f below the %.2f the pipeline requires "
+                      "— the grid is not a staircase and its diagonals are not comparable"
+                      % (structure_score, MIN_TRIANGLE_STRUCTURE_SCORE))
 
     # For each column, find the current estimate (last non-null)
     # and the previous diagonal (one row above the current)
-    details = []
+    details = list(_pre_details)
     total_pyd = 0.0
     used_years = 0
+
+    # Accounting presentation, normalised before any difference is taken.  A cumulative
+    # incurred-claims triangle is a stock of claims and cannot be negative; a filing that
+    # prints it in brackets is showing an outflow, not a negative claim.  1618/2023 prints
+    # 2021 as (123.0), (266.9), (270.6): the estimate grew by 3.7m, and differencing the
+    # presented values gave -3.7m, which then lost to two positive model values in the
+    # override gate (review of 11 September 2026, M03).
+    _body = [v for row in rows for v in row if isinstance(v, (int, float))]
+    if _body and all(v <= 0 for v in _body) and any(v < 0 for v in _body):
+        rows = [[(-v if isinstance(v, (int, float)) else v) for v in row] for row in rows]
+        if isinstance(triangle_data, dict):
+            triangle_data["presentation_sign"] = "outflow"
+        details.append("  (presented as outflows — sign normalised before differencing)")
 
     for col_idx, uw_year in enumerate(uw_years):
         try:
@@ -4626,10 +4835,18 @@ def _is_numeric_near(a, b, rel_tol=0.005, abs_tol=0.05):
 
 
 def append_to_disagreement_log(report_stem, hard_failures):
-    """Append hard failure entries to the disagreement log for later manual adjudication."""
+    """Append hard failure entries to the disagreement log for later manual adjudication.
+
+    Under the lock: two workers appending at the same moment each compute the next
+    RUN-nnnn from what they read, so the second write drops the first entry and reuses
+    its id (round 56)."""
     log_path = AUDIT_DIR / "disagreement_log.json"
-    with open(log_path, "r") as f:
-        log = json.load(f)
+    with _shared_file_lock(AUDIT_DIR / "disagreement_log.lock"):
+        _append_to_disagreement_log_locked(log_path, report_stem, hard_failures)
+
+
+def _append_to_disagreement_log_locked(log_path, report_stem, hard_failures):
+    log = _read_json_with_retry(log_path, {"entries": []})
 
     existing_ids = {e["id"] for e in log["entries"]}
     next_num = max(
@@ -4669,8 +4886,10 @@ def append_to_disagreement_log(report_stem, hard_failures):
         log["entries"].append(entry)
         next_num += 1
 
-    with open(log_path, "w") as f:
+    tmp_path = Path(str(log_path) + ".tmp")
+    with open(tmp_path, "w") as f:
         json.dump(sanitize_json_ascii(log), f, indent=2, ensure_ascii=True)
+    _replace_atomically(tmp_path, log_path)
 
 
 def write_run_manifest(run_stats):
@@ -4791,7 +5010,7 @@ def _apply_loss_ratio_fallback(result, rag_pyd, model_name):
             f"managed/group level, not syndicate share. May differ from "
             f"syndicate-level figure.]"
         ).strip()
-        print(f"  [{model_name}] PYD filled from RAG triangle (managed level): "
+        print(f"  [{model_name}] PYD filled from RAG loss ratio triangle (managed level): "
               f"{rag_pyd:+.3f}m")
         return "filled_blank"
 
@@ -4837,6 +5056,15 @@ def _pyd_override_gate(rag_pyd, model_values, opening):
     development path: the RAG triangle, the provisions fallback routed through it, and
     the code recomputation from the models' own triangles (verify_triangles, note
     prefix CODE PYD NOT APPLIED).
+
+    The veto reads the figures, never the triangle's shape. Round 56 briefly exempted a
+    header-bound, gross, well-shaped triangle from (a), on the ground that two models
+    reading one prompt are one opinion counted twice (R164). That was withdrawn (R193):
+    shape says nothing about whether the diagonal is the syndicate's own development, and
+    73 records carried a figure only because of the exemption. Where they were checked the
+    models were right. 3010/2022's provisions note prints a gross change in prior year
+    provisions of 146,569 (GBP000), which both models read; the exempted triangle gave
+    -10.9m.
     """
     vals = [float(v) for v in model_values if isinstance(v, (int, float))]
     if len(vals) < 2 or rag_pyd is None:
@@ -4847,7 +5075,10 @@ def _pyd_override_gate(rag_pyd, model_values, opening):
 
     if sgn(vals[0]) == sgn(vals[1]) != 0 and sgn(rag_pyd) == -sgn(vals[0]):
         return False, ("[RAG PYD NOT APPLIED: deterministic figure %+.3fm has the opposite sign to both "
-                       "model values %s, which agree with each other; model values retained.]"
+                       "model values %s, which agree with each other; model values retained. "
+                       "Sign agreement between the models is not a reconciliation: where they "
+                       "differ in value the cohort and accrual scope of each still has to be "
+                       "settled from the filing (R140).]"
                        % (rag_pyd, vals))
     try:
         op = float(opening) if opening else None
@@ -5097,19 +5328,20 @@ def process_one_report(report_path, inception_cache=None):
     # RAG-lite was already run above (before LLM calls) for early first-year detection.
     # Use the cached result — no need to re-run.
     rag_method = rag_result.get("method", "")
+    rag_source, rag_label, rag_triangle_used = _rag_figure_source(rag_result)
     # Loss ratio triangle PYD is often at managed/group level rather than
     # syndicate level (e.g. Beazley 2623). It fills a narrative blank and otherwise
     # retains the syndicate-level value unless their directions contradict.
     # Net triangles are treated as authoritative — the deterministic PYD
     # computation is more reliable than LLM extraction, even for net
     # triangles (e.g. syndicate 386/2018 where LLMs wildly disagree).
-    rag_tri_type = (rag_result.get("triangle") or {}).get("type", "none")
+    rag_tri_type = (rag_triangle_used or {}).get("type", "none")
     rag_is_fallback_only = (
         rag_method == "loss_ratio_triangle"
     )
 
     if rag_result["pyd"] is not None:
-        # RAG found a valid triangle PYD — use it as ground truth
+        # RAG returned a figure (its triangle's, or its provisions or narrative fallback's) — use it as ground truth
         rag_pyd = rag_result["pyd"]
         rag_details = rag_result["pyd_details"]
 
@@ -5128,20 +5360,20 @@ def process_one_report(report_path, inception_cache=None):
             # Releases can't exceed 100% (reserves can't go negative).
             if rag_pyd_pct < -100:
                 rag_sane = False
-                print(f"  [RAG] Triangle PYD {rag_pyd:+.3f}m ({rag_pyd_pct:.1f}% of opening) "
+                print(f"  [RAG] {rag_label} PYD {rag_pyd:+.3f}m ({rag_pyd_pct:.1f}% of opening) "
                       f"< -100% — likely misidentified table. Discarding RAG PYD.")
             # Strengthenings > 200% are implausible — likely a garbled
             # triangle or bogus "ultimates" values.
             elif rag_pyd_pct > 200:
                 rag_sane = False
-                print(f"  [RAG] Triangle PYD {rag_pyd:+.3f}m ({rag_pyd_pct:.1f}% of opening) "
+                print(f"  [RAG] {rag_label} PYD {rag_pyd:+.3f}m ({rag_pyd_pct:.1f}% of opening) "
                       f"> +200% — likely misidentified table. Discarding RAG PYD.")
         elif abs(rag_pyd) > 0.1:
             # Non-zero PYD but zero opening reserves -- can't have reserve
             # development when there are no reserves.  Likely a net triangle
             # or misidentified table.
             rag_sane = False
-            print(f"  [RAG] Triangle PYD {rag_pyd:+.3f}m but opening reserves = 0 "
+            print(f"  [RAG] {rag_label} PYD {rag_pyd:+.3f}m but opening reserves = 0 "
                   f"— likely misidentified table or net triangle. Discarding RAG PYD.")
 
         if rag_sane and not rag_is_fallback_only:
@@ -5155,7 +5387,7 @@ def process_one_report(report_path, inception_cache=None):
                 print(f"  [RAG] {_why}")
                 rag_sane = False
         if rag_sane:
-            print(f"  [RAG] Triangle PYD: {rag_pyd:+.3f}m")
+            print(f"  [RAG] {rag_label} PYD: {rag_pyd:+.3f}m")
 
             # Apply to both models
             for result, model_name in [
@@ -5176,11 +5408,11 @@ def process_one_report(report_path, inception_cache=None):
                             rag_pyd / _op * 100, 2
                         )
                     result["direction"] = "release" if rag_pyd < 0 else "strengthening" if rag_pyd > 0 else "flat"
-                    _record_pyd_route(result, "rag_triangle", rag_pyd, None,
-                                      rag_result.get("triangle"), "filled a blank model value")
+                    _record_pyd_route(result, rag_source, rag_pyd, None,
+                                      rag_triangle_used, "filled a blank model value")
                     level = " (managed level)" if rag_method == "loss_ratio_triangle" else ""
                     net_note = " (net triangle)" if rag_tri_type == "net" else ""
-                    print(f"  [{model_name}] PYD filled from RAG triangle{level}{net_note}: {rag_pyd:+.3f}m")
+                    print(f"  [{model_name}] PYD filled from {rag_label}{level}{net_note}: {rag_pyd:+.3f}m")
                     if rag_tri_type == "net":
                         old_notes = result.get("data_quality_notes", "") or ""
                         result["data_quality_notes"] = (
@@ -5205,18 +5437,18 @@ def process_one_report(report_path, inception_cache=None):
                                 rag_pyd / _op * 100, 2
                             )
                         result["direction"] = "release" if rag_pyd < 0 else "strengthening" if rag_pyd > 0 else "flat"
-                        _record_pyd_route(result, "rag_triangle", rag_pyd, old_pyd,
-                                          rag_result.get("triangle"),
+                        _record_pyd_route(result, rag_source, rag_pyd, old_pyd,
+                                          rag_triangle_used,
                                           "overrode the model value" if diff >= 0.5 else "confirmed by the model value")
                         if diff >= 0.5:
                             old_notes = result.get("data_quality_notes", "") or ""
                             result["data_quality_notes"] = (
                                 f"{old_notes} [RAG OVERRIDE: Model said PYD={old_pyd}, "
-                                f"RAG triangle computed {rag_pyd}. Using RAG value.]"
+                                f"{rag_label} computed {rag_pyd}. Using RAG value.]"
                             )
-                            print(f"  [{model_name}] PYD overridden by RAG triangle: {old_pyd} -> {rag_pyd:+.3f}m")
+                            print(f"  [{model_name}] PYD overridden by {rag_label}: {old_pyd} -> {rag_pyd:+.3f}m")
                         else:
-                            print(f"  [{model_name}] PYD confirmed by RAG triangle: {model_pyd} -> {rag_pyd:+.3f}m")
+                            print(f"  [{model_name}] PYD confirmed by {rag_label}: {model_pyd} -> {rag_pyd:+.3f}m")
                     except (ValueError, TypeError):
                         pass
 
@@ -5486,6 +5718,20 @@ def process_one_report(report_path, inception_cache=None):
 # ---------------------------------------------------------------------------
 
 if __name__ == "__main__":
+    # A progress message must never be able to end a record. Redirect this driver's
+    # output to a file on Windows and stdout encodes as cp1252, so a single "->" arrow
+    # in a status line raised UnicodeEncodeError and the record it was reporting on was
+    # skipped -- one was lost that way before this was noticed (round 56). The audit
+    # script has done this since round 53; the extraction driver had not.
+    for _stream in (sys.stdout, sys.stderr):
+        try:
+            _stream.reconfigure(encoding="utf-8", errors="replace")
+        except Exception:
+            try:
+                _stream.reconfigure(errors="replace")
+            except Exception:
+                pass
+
     # Guard against non-existent flags that would silently run against ALL reports
     for bad_flag in ("--syndicates", "--years"):
         if bad_flag in sys.argv:
@@ -5532,11 +5778,32 @@ if __name__ == "__main__":
             single_arg = sys.argv[idx + 1]
             break
 
+    # --stems <file>: process exactly the listed reports, re-running each whether or not
+    # its output exists. This is what a parallel worker is given. Without it, every worker
+    # decides what is left to do by scanning the same output directory and they race onto
+    # the same record (round 56).
+    stems_arg = None
+    for idx, arg in enumerate(sys.argv):
+        if arg == "--stems" and idx + 1 < len(sys.argv):
+            raw_stems = io.open(sys.argv[idx + 1], encoding="utf-8").read().strip()
+            try:
+                stems_arg = json.loads(raw_stems)
+            except ValueError:
+                stems_arg = [s.strip() for s in raw_stems.splitlines() if s.strip()]
+            stems_arg = [s for s in stems_arg if s]
+            break
+
     # --offline flag: every LLM, table-backend and inception lookup must be served
     # from the committed caches; a cache miss aborts instead of calling an API
     if "--offline" in sys.argv:
         os.environ["LLOYDS_EXTRACTION_OFFLINE"] = "1"
         print("Offline mode: cache misses are errors; no external API will be called")
+        # A replay that stops to ask a human is not a reproduction path, and the
+        # interactive branch is also where the adjudicator is called.  Offline implies
+        # batch: disagreements are logged and the run continues (R148).
+        if "--batch" not in sys.argv:
+            sys.argv.append("--batch")
+            print("Offline mode implies --batch: disagreements are logged, not adjudicated")
 
     # --clean flag: delete all existing outputs to force re-run under current spec
     if "--clean" in sys.argv:
@@ -5547,7 +5814,16 @@ if __name__ == "__main__":
                 f.unlink()
             print(f"  Deleted. All reports will be re-processed.")
 
-    if single_arg:
+    if stems_arg is not None:
+        wanted = set(stems_arg)
+        to_process = [r for r in reports if r.stem in wanted]
+        missing = sorted(wanted - {r.stem for r in to_process})
+        if missing:
+            print(f"  --stems: {len(missing)} listed report(s) are not in {REPORTS_DIR}: "
+                  f"{missing[:5]}")
+        already_done = set()
+        print(f"Stem list mode: {len(to_process)} report(s) of {len(wanted)} listed")
+    elif single_arg:
         # Filter to just the named report, and remove existing output to force re-run
         to_process = [r for r in reports if r.stem == single_arg]
         if not to_process:
@@ -5661,6 +5937,17 @@ if __name__ == "__main__":
         run_processed += 1
         run_total_cost += output_data["total_cost_usd"]
         run_total_tokens += output_data["total_tokens"]
+
+        # A spend ceiling for the whole run. The cost of a corpus pass is predictable
+        # from the recorded per-record cost, so a run that sails past that estimate is
+        # doing something nobody asked for and should stop while it is cheap to stop.
+        # Records already written stay written; the run simply ends (round 56).
+        _cap = float(os.getenv("LLOYDS_MAX_RUN_COST_USD") or 0)
+        if _cap and run_total_cost > _cap:
+            print(f"\n  *** SPEND CAP REACHED: ${run_total_cost:.2f} of ${_cap:.2f} after "
+                  f"{run_processed} record(s). Stopping. Raise LLOYDS_MAX_RUN_COST_USD "
+                  f"to continue.")
+            break
 
         # Write output JSON
         output_file = OUTPUT_DIR / f"{report_path.stem}.json"

@@ -635,8 +635,26 @@ backends (Azure, Nutrient, Adobe).
 
 1. Scan the first 3 rows for 4-digit years matching
    `\b(19|20)\d{2}\b`.
-2. Exclude cells containing `"prior"` or `"&"` (aggregate columns
-   like "2010 & prior" are not individual UW years).
+2. Exclude cells containing `"prior"` or `"&"` as individual UW years.
+   An aggregated older cohort ("2010 and prior", "2010 &" over
+   "prior", "2010" beside "and prior", "Before" over "2011") is read
+   across its column's first three header rows (R209).  Its column
+   becomes the triangle's oldest column, under the cohort's anchor
+   year, when that anchor is the year before the oldest single year
+   and the column carries development in at least two rows; the
+   triangle records it as `aggregated_cohort`.  The cohort's
+   development belongs to the numerator (underwriting years up to
+   report year minus 2).  A year cell inside the label ("2011" under
+   "Before") is not an underwriting year of its own, and a cohort
+   column with no development (a reserve line, dashes) is dropped.
+   So is a cohort column printed by development age.  A column that
+   runs by calendar year holds at most report year minus anchor
+   plus 1 values (its anchor's staircase limit); an aggregate of
+   several years printed by age runs deeper (4242/2021's
+   "2015 & Prior" reaches "Ten Years Later"), and its last step is
+   not a movement in the report year.  "All prior years", "Earlier"
+   and "YYYY ae" are not read as cohort labels ("2013 ae" binds as
+   the single year 2013).  Section 12.2 describes the layouts.
 3. Sort by year and record column indices.
 4. **Report year label exclusion**: if a year appears in column 0
    of the grid header, equals the `report_year`, and the cell
@@ -1677,7 +1695,20 @@ based on the expected staircase fill pattern:
 - Allow +/- 1 tolerance for edge cases.
 - Return `matches / total_checks`.
 
-Triangles with structure score < 0.5 are rejected.
+Triangles with structure score < 0.5 are rejected. Until round 56 that
+sentence described nothing: `compute_pyd_from_triangle()` computed the
+score, printed it and used the triangle anyway, and 780/2018 supplied a
+-225.1m "release" at a score of 0.38. The threshold now lives in
+`MIN_TRIANGLE_STRUCTURE_SCORE` and the function returns no figure below
+it; `tests/test_round56_rules.py` reads the constant out of the code and
+checks this sentence against it.
+
+The score is taken **after** one repair, not before it. A cell beyond its
+column's development age cannot hold an estimate, so an exact zero there
+is a dash the backend read as nil and is set to no-data
+(`_null_zeros_beyond_the_staircase`). 780/2018's grid carried 22 of them,
+and the diagonal walk had been differencing `0.0` against a real estimate.
+Scoring before the repair would reject the grid instead of reading it.
 
 ### 9.7  Percentage against monetary triangles
 
@@ -2087,8 +2118,8 @@ ranking):
 
 | Step | Source | Applies when | Gross/Net |
 |------|--------|--------------|-----------|
-| 1 | Deterministic *absolute-amount* triangle PYD, from a table bound to the requested syndicate's annual accounts (section 10.8) | A valid triangle was parsed, no gross provisions movement contradicts its sign, and `_pyd_override_gate` does not withhold it (opposite sign to two agreeing model values, or above 50% of opening reserves while both models imply under 10%) | Gross |
-| 1a | Deterministic gross provisions movement | It is available and its sign disagrees with the triangle: provisions override the triangle (section 11.3.1) | Gross |
+| 1 | Deterministic *absolute-amount* triangle PYD, from a table on a page bound to the requested syndicate (section 10.8) | A valid triangle was parsed and neither veto withholds it. **Closed-year exception:** the page may be in the annual accounts *or* in an underwriting-year (closed-year) section — a claims-development triangle there is the same syndicate's triangle and is admitted, while a provisions movement, opening reserve or business mix in that section is not (`_closed_year()`, section 10.8). **Unit veto:** the triangle's own unit evidence decides percentage against monetary before any magnitude test (section 9.7); a percentage triangle takes the loss-ratio route instead. **Conflict veto:** `_pyd_override_gate` withholds a deterministic figure that has the opposite sign to two agreeing model values, or that implies above 50% of opening reserves while both models imply under 10% | Gross |
+| 1a | Deterministic gross provisions movement | Only when the provisions table affirms itself as a movement note *and* the column carries the report year in its own header, and then only where its sign disagrees with the triangle (section 11.3.1). A sign disagreement on its own is not evidence that the figure is a movement: `2010 & prior years` in a development triangle is a cohort's cumulative incurred total and is refused outright | Gross |
 | 2 | LLM-extracted "Movement in prior year's provision" note | No deterministic source of steps 1 and 1a, or the gate withheld one | As stated by the models; gross only where they say so |
 | 3 | LLM-extracted narrative text | As step 2 | As stated by the models; a narrative value declared net, or whose basis the filing does not state, is not admitted to the gross sample |
 | 4 | Deterministic *loss-ratio* triangle PYD | Fills a blank LLM value; overrides a syndicate-specific LLM value only when their directions contradict; never overrides an absolute-amount triangle | Gross |
@@ -2804,31 +2835,42 @@ has only 1.  PYD is computed from UW years 2014--2018 only.
 
 ### 12.2  Aggregate columns ("2013 & prior")
 
-Gap-year syndicates often include an aggregate column (e.g.
-"2013 & prior") that groups all UW years before the triangle's
-individual columns.  This column has **no values in the
-development rows** -- only a value in the summary row
-("Cumulative estimate of gross cumulative claims cost").
+Many triangles print their oldest underwriting years as one
+aggregate column ("2010 and prior", "Before 2011", "Pre-2011").
+The grid parser reads its label across the column's first three
+header rows.  What it does next depends on what the column holds
+(R209):
 
-**Impact on Azure extraction**: Azure Document Intelligence
-correctly detects this column as part of the table grid, but
-when `compute_pyd_from_triangle()` validates the triangle, the
-aggregate column (as column 0) has `col0_filled = 0`, which is
-far below `expected_col0 = min(n_rows, n_cols)`.  This triggers
-the validation failure: `"oldest column has 0 filled rows,
-expected N -- likely shifted/misaligned"`.
+- **Development by calendar year**: one value per calendar year
+  up to the report year, as under 218/2017's "2010" beside
+  "and prior".  The column becomes the triangle's oldest column
+  under its anchor year, and its last step is part of the
+  numerator (underwriting years up to report year minus 2).
+- **No development**: a value only in a summary row, as in
+  1884/2023's "2013 & prior" beside "Cumulative estimate".  The
+  column is dropped.  Before R209 a label split across header
+  cells bound its year to such a column.  "2013" over "&" over
+  "prior" left an empty oldest year.  "Before 2011" took the year
+  2011 from its own column, whose development was then lost as a
+  duplicate (2121/2015, 5151/2015).
+- **Development by age**: 4242/2021's "2015 & Prior" runs to
+  "Ten Years Later" in a 2021 report, falling as fewer of the
+  aggregated years reach each age.  Its last step mixes years at
+  different ages and is not a movement in the report year.  A
+  calendar column holds at most report year minus anchor plus 1
+  values, so a deeper column is dropped.
 
-**Fallback path**: the failed Azure PYD triggers the LLM vision
-fallback.  Gemini receives the triangle page as an image, reads
-the triangle excluding the aggregate column, and computes PYD
-from the diagonal differences.  The resulting PYD is used as the
-RAG triangle value.
-
-This is the expected flow for gap-year syndicates with aggregate
-columns -- the aggregate column is not a real UW year and should
-not be included in PYD computation.  The LLM vision correctly
-handles this by treating the aggregate column as metadata rather
-than a development column.
+Other paths still exclude an aggregate column.  The LLM prompts
+tell the models to: the extraction prompt's `_claims_triangle`,
+the page-triangle vision prompt (`TRIANGLE_EXTRACT_PROMPT`) and
+the adjudicator's prompt.  The Adobe xlsx parser skips one.  These
+paths supply a figure only where the deterministic triangle is
+not used.  In the corpus that happens for 3624/2015 and 2007/2015.
+There a table figure opposite in sign to two agreeing model
+values is not applied.  The triangle cross-check then adopts the
+models' own triangles, which omit the cohort.  A prompt is part
+of every cached response's key, so changing one means
+re-extracting every report.
 
 ---
 
@@ -3353,27 +3395,32 @@ other context).  Previously only the report year was skipped;
 now all bare year labels are skipped, correctly treating them as
 row labels rather than column headers.
 
-### Azure PYD fails on gap-year triangle with aggregate column
+### Aggregate column read as an empty oldest year, or refused
 
-**Symptom**: Azure extracts the triangle table with 8 UW years
-but no `[Azure] Triangle PYD:` line appears in the log.  LLM
-vision fallback produces the PYD instead.
+**Symptom (before R209)**: the stored triangle's oldest year has
+no value in any development row.  Syndicate 1884/2023 stored
+[2013, 2014, 2015, 2016, 2017, 2018, 2022, 2023] with 2013 empty.
 
-**Cause**: the triangle includes an aggregate column ("2013 &
-prior") that has no values in the development rows -- only a
-summary-row total.  Azure detects this as UW year column 0, but
-`compute_pyd_from_triangle()` rejects the triangle because
-`col0_filled = 0` fails the oldest-column fill-count check.
+**Cause**: the label "2013 & prior" runs down its column ("2013"
+over "&" over "prior").  The parser skipped the cells holding "&"
+and "prior", and bound 2013 to a column that prints only a
+summary-row total (810.4, "Cumulative estimate").
 
-**Example**: syndicate 1884/2023 has Azure-detected UW years
-["2013 & prior", 2014, 2015, 2016, 2017, 2018, 2022, 2023].
-The "2013 & prior" column has value 810.4 only in the
-"Cumulative estimate" summary row, not in any development row.
+**Resolution**: R209 reads the label across the header rows and
+drops a cohort column with no development (section 12.2).  The
+figure does not change: the empty column never gave a step.
 
-**Resolution**: this is expected behaviour.  The LLM vision
-fallback correctly reads the triangle from the page image,
-excludes the aggregate column, and computes PYD from UW years
-2014--2018 (excluding the two most recent: 2022 and 2023).
+**Symptom (R209 as first written)**: no `[Azure] Triangle PYD:`
+line, then `[RAG] 1 triangle page(s) found, trying LLM vision...`
+for a report whose table triangle was read before (4242/2021).
+
+**Cause**: an aggregate column printed by development age was
+inserted as the cohort's column.  It runs past its anchor's
+staircase, so `compute_pyd_from_triangle()` refuses the triangle
+("has 11 rows but span is only 2015-2021").
+
+**Resolution**: the depth limit in section 7.1 drops such a
+column, and the table triangle is read again.
 
 ### Row count validation fails for year-gap triangle
 
@@ -3488,10 +3535,35 @@ says -180.2m).
 (percentages like 66.5, 64.6, 63.4) as if they were absolute
 claims amounts in millions.
 
-**Fix**: `compute_pyd_from_triangle()` now checks if all
-non-null values are in the 0--200 range.  If so, the triangle
-is rejected as a loss ratio table.  The loss ratio parser
-(`_extract_pyd_from_loss_ratio_triangle`) handles it separately.
+**Fix**: the decision is made from the triangle's own unit
+evidence first, and only then from magnitude — the full rule is
+section 9.7, and this entry follows it.  A ratio or percent marker
+in the table text makes the triangle a percentage table, which
+takes the loss-ratio route (`_extract_pyd_from_loss_ratio_triangle`)
+and is never read as money.  A thousands or millions marker gives
+that monetary unit with `units_evidence = "header"`, and **an
+evidenced monetary triangle is never rejected on magnitude**.  The
+0--200 test applies only where the unit evidence is `"default"` or
+`"conflict"`, and it is a heuristic with false positives.
+
+Do **not** reject a triangle because its values are small.  A gross
+triangle in millions and the same triangle in thousands must give
+the same movement:
+
+```
+units = "millions",  header "GBP m"      units = "thousands", header "GBP 000"
+  at end of UW year      44.7              at end of UW year      44,700
+  one year later         77.6              one year later         77,600
+  two years later        65.8              two years later        65,800
+  three years later      63.0              three years later      63,000
+  four years later       64.5              four years later       64,500
+  five years later       66.4              five years later       66,400
+  -> movement 66.4 - 64.5 = +1.9m          -> 66,400 - 64,500 = +1,900k = +1.9m
+```
+
+Every value of the left-hand grid lies in 0--200; rejecting it as a
+loss-ratio table is the failure this rule exists to prevent.
+`tests/test_unit_equivalence.py` holds the equivalence.
 
 ### Perplexity returns syndicate number as inception year
 

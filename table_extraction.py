@@ -465,6 +465,27 @@ def locate_table_page(grid: list, page_texts: dict, candidates) -> Optional[int]
     return best_page if best >= max(3, len(tokens) // 2) else None
 
 
+def _table_cache_only() -> bool:
+    """Serve the table backends from the committed caches, but let the models run.
+
+    This is the DEFAULT, and it is lifted only by LLOYDS_ALLOW_TABLE_BACKEND_CALLS=1.
+    A corrected model prompt is a reason to call the models again and no reason at all to
+    call the document-intelligence backend: the two caches are keyed independently, and
+    the model prompt's version is not part of this module's cache key at all. Before round 56 the opposite held --
+    any run that was not offline deleted a cache written under an older code version and
+    re-billed the backend for it, and every committed cache is written under an older
+    one."""
+    return os.getenv("LLOYDS_ALLOW_TABLE_BACKEND_CALLS") != "1"
+
+
+def _table_cache_guard(what: str) -> None:
+    """A table-backend cache miss is an error when the backends are cache-only."""
+    if _table_cache_only():
+        raise RuntimeError(
+            "table backends are cache-only: %s is not in the committed cache. "
+            "Set LLOYDS_ALLOW_TABLE_BACKEND_CALLS=1 to permit a paid backend call." % what)
+
+
 def _offline_guard(what: str) -> None:
     """In offline mode (LLOYDS_EXTRACTION_OFFLINE=1) a cache miss is an error, never
     a paid API call: re-extraction from the committed caches must be reproducible."""
@@ -491,6 +512,15 @@ class TriangleData:
     page: Optional[int] = None      # 0-based page the table was read from
     entity: Optional[int] = None    # syndicate whose section the page belongs to
     units_evidence: str = "default"  # "header" when the unit was read from the table text
+    # How each cell got its (underwriting year, development age): "header" when both
+    # came from the table's own headers and row labels, "positional" when values were
+    # assigned by their order in the page text.  A positional triangle can be shaped
+    # like a triangle and still be wrong, so the loader is told which it has (R139).
+    cell_binding: str = "header"
+    row_labels: list = field(default_factory=list)  # the label each development row came from
+    # an aggregated older cohort read as the triangle's oldest column: its anchor year, the header
+    # label and the grid column (R209)
+    aggregated_cohort: Optional[dict] = None
 
     def to_dict(self) -> dict:
         d = {
@@ -498,9 +528,14 @@ class TriangleData:
             "currency": self.currency,
             "units": self.units,
             "units_evidence": self.units_evidence,
+            "cell_binding": self.cell_binding,
             "underwriting_years": self.underwriting_years,
             "development_rows": self.development_rows,
         }
+        if self.row_labels:
+            d["row_labels"] = list(self.row_labels)
+        if self.aggregated_cohort:
+            d["aggregated_cohort"] = dict(self.aggregated_cohort)
         if self.page is not None:
             d["source_page"] = int(self.page) + 1
         if self.entity is not None:
@@ -545,6 +580,11 @@ class ProvisionsData:
     page: Optional[int] = None
     entity: Optional[int] = None
     opening_provenance: Optional[dict] = None  # OpeningClaims.to_dict()
+    # Why this figure is a prior-year *movement*: the row it came from, whether the
+    # table is a movement note rather than a development triangle, and whether the
+    # column carries the report year in its own header.  A caller must not let this
+    # override a triangle without them (R138).
+    movement_semantics: Optional[dict] = None
 
     def to_dict(self) -> dict:
         d = {}
@@ -556,6 +596,8 @@ class ProvisionsData:
             d["entity"] = self.entity
         if self.opening_provenance is not None:
             d["opening_provenance"] = self.opening_provenance
+        if self.movement_semantics is not None:
+            d["movement_semantics"] = self.movement_semantics
         if self.gross_prior_year_claims is not None:
             d["gross_prior_year_claims"] = self.gross_prior_year_claims
         if self.ri_share_prior_year is not None:
@@ -1394,6 +1436,7 @@ def _parse_triangle_from_text(text: str, report_year: int):
         r"at\s+end", r"at\s+the\s+end", r"end\s+of\s+underwriting",
         r"year\s+later", r"years?\s+later",
         r"after\s+\w+\s+years?",
+        r"after\s+\w+\s+months?",              # "After 12 months" — a label, not a value
         r"\d+\s+months?\s+later",
         r"^\d+\s+months?\b",                    # "12 months", "24 months" (without "later")
         r"^(one|two|three|four|five|six|seven|eight|nine|ten)\b",
@@ -1480,6 +1523,29 @@ def _parse_triangle_from_text(text: str, report_year: int):
     if len(dev_rows) < 2:
         return None, f"only {len(dev_rows)} development rows found in text"
 
+    # This parser assigns values by their order on the page: nothing binds a value to
+    # an underwriting year or a development age.  When the page does not give it a
+    # clean staircase it must decline, not fill the gaps, because a filled gap is
+    # indistinguishable from a real triangle downstream (R139).
+    if idx < len(all_values):
+        return None, (f"{len(all_values) - idx} value(s) left over after the staircase — "
+                      f"the page text does not bind values to years")
+    if dev_rows and all(v == 0.0 for v in dev_rows[0] if v is not None):
+        return None, ("first development row is all zeros — a dash column read as nil, "
+                      "not an estimate at the end of the underwriting year")
+    # A development age that the page prints as a row label must never appear as a
+    # value: that is the 2003/2015 failure, where `After 12 months` supplied a `12`.
+    ages_on_page = set()
+    for line in lines:
+        m = re.match(r'^\s*(?:after\s+)?(\d{1,3})\s+months?\b', line.strip().lower())
+        if m:
+            ages_on_page.add(float(m.group(1)))
+    if ages_on_page:
+        stray = sorted(a for a in ages_on_page if any(v == a for row in dev_rows for v in row))
+        if stray:
+            return None, (f"development age label(s) {stray} appear as values — "
+                          f"the row labels were read as money")
+
     # Detect currency and units
     text_lower = text.lower()
     currency = "USD"
@@ -1500,6 +1566,7 @@ def _parse_triangle_from_text(text: str, report_year: int):
         units_evidence=units_evidence,
         underwriting_years=[int(y) for y in uw_years],
         development_rows=dev_rows,
+        cell_binding="positional",
     )
 
     details = (f"{tri_type} {len(uw_years)} UW years "
@@ -1539,6 +1606,59 @@ def _extract_row_values(row, uw_col_indices, ghost_cols):
 
 # ── Nutrient: parse triangle ─────────────────────────────────────────────
 
+#: an aggregated older cohort named in a triangle's header: '2010 and prior', '2010 & prior',
+#: 'Before 2011', 'pre-2011', 'prior years' (R209)
+_COHORT_HEADER = re.compile(
+    r"\b(?P<through>(?:19|20)\d\d)\s*(?:&|and|\+)\s*(?:prior|before|earlier)\b"
+    r"|\b(?:before|pre|prior\s+to)\s*-?\s*(?P<before>(?:19|20)\d\d)\b"
+    r"|^\s*(?:(?:&|and)\s+)?prior(?:\s+years?)?\b", re.I)
+_BARE_YEAR = re.compile(r"^\s*((?:19|20)\d\d)\s*$")
+_YEAR_CONNECTOR = re.compile(r"\b((?:19|20)\d\d)\s*(?:&|and|\+)\s*$")
+
+
+def _header_cells(grid, col, rows=3):
+    return [str(grid[r][col]).strip() for r in range(min(rows, len(grid)))
+            if col < len(grid[r]) and str(grid[r][col]).strip()]
+
+
+def _aggregated_cohort_columns(grid):
+    """([(column, anchor or None)], label columns) for an aggregated older cohort in the header (R209).
+
+    A triangle may print its oldest underwriting years as one cohort, and the development of that
+    cohort belongs to the numerator (underwriting years up to t-2). Its label can sit in one cell
+    ('2010 and prior'), run down a column ('2010 &' over 'prior'), run across a row ('2010' beside
+    'and prior', the figures under the second cell) or run diagonally ('2010 &' over '2011', beside
+    'prior', the figures under 'prior'). 'Before 2011' names the cohort before 2011. The anchor is
+    the cohort's youngest year where the label gives one. A label column's year cells are not
+    underwriting years: under 'Before', '2011' is part of the label.
+    """
+    ncol = max((len(r) for r in grid[:3]), default=0)
+    texts = [" ".join(_header_cells(grid, c)) for c in range(ncol)]
+    cohorts, labels = [], set()
+    for c in range(1, ncol):
+        m = _COHORT_HEADER.search(texts[c])
+        if not m:
+            continue
+        if m.group("through"):
+            anchor = int(m.group("through"))
+        elif m.group("before"):
+            anchor = int(m.group("before")) - 1
+        else:
+            anchor = None
+            if c > 1 and _BARE_YEAR.match(texts[c - 1]):
+                anchor = int(_BARE_YEAR.match(texts[c - 1]).group(1))
+                labels.add(c - 1)
+            elif c > 1:
+                for cell in _header_cells(grid, c - 1):
+                    mm = _YEAR_CONNECTOR.search(cell)
+                    if mm:
+                        anchor = int(mm.group(1))
+                        break
+        cohorts.append((c, anchor))
+        labels.add(c)
+    return cohorts, labels
+
+
 def _parse_nutrient_triangle(grid: list[list[str]], report_year: int):
     """Parse a Nutrient table grid as a claims development triangle.
 
@@ -1555,8 +1675,12 @@ def _parse_nutrient_triangle(grid: list[list[str]], report_year: int):
     # the cell's value applies to the FIRST year, and the next grid column
     # contains the SECOND year's value.
     _multi_year_cols = {}  # {col_idx: [year1, year2, ...]}
+    # an aggregated older cohort's column and the columns that hold its label (R209)
+    _cohort_cols, _label_cols = _aggregated_cohort_columns(grid)
     for row_idx in range(min(3, len(grid))):
         for col_idx, val in enumerate(grid[row_idx]):
+            if col_idx in _label_cols:
+                continue
             # Match 4-digit years, allowing optional trailing footnote
             # markers (e.g. "20171" where "1" is a superscript reference).
             # Strip the footnote by capturing only the year digits.
@@ -1598,6 +1722,20 @@ def _parse_nutrient_triangle(grid: list[list[str]], report_year: int):
     pairs = sorted(zip(uw_years, uw_col_indices))
     uw_years = [p[0] for p in pairs]
     uw_col_indices = [p[1] for p in pairs]
+
+    # The aggregated older cohort is the column before the oldest single year: its anchor is the
+    # year the label gives, or that year where the label gives none ('prior years') (R209)
+    _cohort = None
+    if uw_years and _cohort_cols:
+        _oldest = min(uw_years)
+        for _col, _anchor in _cohort_cols:
+            _anchor = _anchor if _anchor is not None else _oldest - 1
+            if _anchor == _oldest - 1 and _anchor not in uw_years and _col not in uw_col_indices:
+                uw_years.insert(0, _anchor)
+                uw_col_indices.insert(0, _col)
+                _cohort = {"anchor": _anchor, "label": " ".join(_header_cells(grid, _col)),
+                           "column": _col}
+                break
 
     # ── Ghost-column detection ───────────────────────────────────────
     # Azure sometimes inserts an extra empty column between two UW year
@@ -1655,6 +1793,7 @@ def _parse_nutrient_triangle(grid: list[list[str]], report_year: int):
         r"year\s+later", r"years?\s+later",
         r"^\d+\s+year", r"^(one|two|three|four|five|six|seven|eight|nine|ten)\b",
         r"after\s+\w+\s+years?",               # "After one year", "After two years"
+        r"after\s+\w+\s+months?",              # "After 12 months", "After twelve months"
         r"\d+\s+months?\s+later",               # "12 months later", "24 months later"
         r"^\d+\s+months?\b",                    # "12 months", "24 months" (without "later")
         r"estimate.*end\s+of\s+underwriting",   # "Estimate of cumulative...end of underwriting year"
@@ -1685,6 +1824,8 @@ def _parse_nutrient_triangle(grid: list[list[str]], report_year: int):
     ]
 
     dev_rows = []
+    dev_labels = []  # the row label each development row was bound to (R139 provenance)
+    block_basis = None  # the basis heading that governs the captured block (R167)
     collecting = False  # True once we've started finding dev rows
     # Track rows consumed as continuation of a split label (skip them in main loop)
     consumed_as_continuation = set()
@@ -1702,6 +1843,13 @@ def _parse_nutrient_triangle(grid: list[list[str]], report_year: int):
         # Check for "& prior" aggregate rows — skip them (not a dev period)
         if "prior" in label and ("&" in label or "and" in label):
             continue
+        # A page that prints the gross triangle above the net one announces each block
+        # in its own heading. Round 55 taught the transposed parser to read that
+        # (review B2-05) and left this one on a grid-wide default, which labels a net
+        # block "gross" whenever the word gross appears anywhere on the grid (R167).
+        marker = _basis_marker(label)
+        if marker and not collecting:
+            block_basis = marker
         is_dev_row = any(re.search(p, label) for p in dev_period_patterns)
         if not is_dev_row:
             continue
@@ -1740,11 +1888,30 @@ def _parse_nutrient_triangle(grid: list[list[str]], report_year: int):
                     break
 
         dev_rows.append(values)
+        dev_labels.append((row[0] or "").strip())
 
+    # A cohort column with no development of its own (a reserve line, dashes) is not a column of
+    # the triangle (R209). Nor is one printed by development age. A column that runs by calendar
+    # year holds at most report_year - anchor + 1 values, the staircase limit of its anchor year; an
+    # aggregate of two or more years printed by age runs deeper (4242/2021's "2015 & Prior" reaches
+    # "Ten Years Later"), and its last step is not the cohort's movement in the report year.
+    if _cohort is not None:
+        _k = uw_years.index(_cohort["anchor"])
+        vals = [row[_k] for row in dev_rows if _k < len(row) and row[_k] is not None]
+        _depth = max((i + 1 for i, row in enumerate(dev_rows) if _k < len(row) and row[_k] is not None),
+                     default=0)
+        if len(vals) < 2 or all(v == 0 for v in vals) or _depth > report_year - _cohort["anchor"] + 1:
+            uw_years.pop(_k)
+            uw_col_indices.pop(_k)
+            for row in dev_rows:
+                if _k < len(row):
+                    row.pop(_k)
+            _cohort = None
     # Strip trailing all-null rows (development periods with no data yet,
     # e.g. "After five years" when the triangle only covers 4 UW years)
     while dev_rows and all(v is None for v in dev_rows[-1]):
         dev_rows.pop()
+        dev_labels.pop()
 
     if len(dev_rows) < 2:
         return None, f"only {len(dev_rows)} development rows"
@@ -1760,14 +1927,17 @@ def _parse_nutrient_triangle(grid: list[list[str]], report_year: int):
     # Detect units
     units, units_evidence = _triangle_units(flat, dev_rows)
 
-    # Detect gross vs net
-    tri_type = "gross"
-    if "net" in flat and "gross" not in flat:
-        tri_type = "net"
+    # Detect gross vs net: the captured block's own heading first, the grid-wide text
+    # only when the block carried no heading of its own (R167; round 55, B2-05 did this
+    # for the transposed parser and this one was missed)
+    tri_type = block_basis
+    if tri_type is None:
+        tri_type = "net" if ("net" in flat and "gross" not in flat) else "gross"
 
     tri = TriangleData(
         type=tri_type, currency=currency, units=units, units_evidence=units_evidence,
         underwriting_years=uw_years, development_rows=dev_rows,
+        cell_binding="header", row_labels=dev_labels, aggregated_cohort=_cohort,
     )
     details = f"{len(uw_years)} UW years, {len(dev_rows)} dev rows"
     return tri, details
@@ -2497,7 +2667,113 @@ def _parse_lob_from_text(text: str, report_year: int) -> Optional[LOBData]:
     )
 
 
+
+# ── Superscript footnote markers flattened into numeric cells ───────────────
+
+#: A marker is this much smaller than the number it follows, in points, and its baseline
+#: sits at least this far above it.  Both are generous: on the observed pages the marker
+#: is 5.04pt beside 8.04pt and 3.96pt higher.
+_FOOTNOTE_MIN_SIZE_RATIO = 0.85
+_FOOTNOTE_MIN_RISE_PT = 0.5
+
+
+def footnote_corrections_from_lines(lines) -> dict:
+    """Flattened cell text -> the number without its footnote marker, from typography.
+
+    `lines` is an iterable of span lists, each span a mapping with "text", "size" and
+    "origin". This is the decision itself, with no file reading in it, so it can be
+    exercised against committed typography in a clone that holds no filings (R178).
+    """
+    candidates: dict = {}
+    plain: set = set()
+    for spans in lines:
+        for i, span in enumerate(spans):
+            text = (span.get("text") or "").strip()
+            if not re.fullmatch(r"\(?-?[\d,]*\d(?:\.\d+)?\)?", text):
+                continue
+            plain.add(text)
+            if i + 1 >= len(spans):
+                continue
+            nxt = spans[i + 1]
+            marker = (nxt.get("text") or "").strip()
+            if not re.fullmatch(r"[1-9]\d?|[*\u2020\u2021]", marker):
+                continue
+            size, nsize = span.get("size") or 0.0, nxt.get("size") or 0.0
+            if not size or nsize >= size * _FOOTNOTE_MIN_SIZE_RATIO:
+                continue
+            rise = (span.get("origin") or (0, 0))[1] - (nxt.get("origin") or (0, 0))[1]
+            if rise < _FOOTNOTE_MIN_RISE_PT:
+                continue
+            candidates[text + marker] = text
+    # A form that also occurs as ordinary text is ambiguous, so it is left alone.
+    return {k: v for k, v in candidates.items() if k not in plain}
+
+
+def superscript_footnote_corrections(pdf_path) -> dict:
+    """Flattened cell text -> the number without its footnote marker.
+
+    A table backend reports a cell as text, so `60.2` followed by a superscript `1`
+    arrives as `60.21` and is indistinguishable from a number with two decimals. The
+    page itself still holds the distinction: the marker is set smaller and higher.
+    This reads the document once and returns only the corrections it can prove, and
+    only for forms that appear nowhere in the document as ordinary text.
+    """
+    if fitz is None:
+        return {}
+    try:
+        doc = fitz.open(str(pdf_path))
+    except Exception as exc:  # a missing or unreadable file is not a parse error
+        logger.info("footnote scan skipped for %s: %s", pdf_path, exc)
+        return {}
+    lines = []
+    try:
+        for page in doc:
+            try:
+                d = page.get_text("dict")
+            except Exception:
+                continue
+            for block in d.get("blocks", []):
+                for line in block.get("lines", []):
+                    lines.append(line.get("spans", []))
+    finally:
+        doc.close()
+    return footnote_corrections_from_lines(lines)
+
+
+def apply_footnote_corrections(grid: list, corrections: dict) -> list:
+    """Return `grid` with every proven flattened marker removed from its cells."""
+    if not corrections:
+        return grid
+    out = []
+    for row in grid:
+        new_row = []
+        for cell in row:
+            s = cell.strip() if isinstance(cell, str) else cell
+            new_row.append(corrections.get(s, cell) if isinstance(s, str) else cell)
+        out.append(new_row)
+    return out
+
 # ── Nutrient: parse provisions ────────────────────────────────────────────
+
+#: A movement note reconciles an opening provision to a closing one, so it names the
+#: reconciling items.  A claims development triangle names development ages and nothing
+#: else.  Presence of one of these words is the affirmative evidence that a table is a
+#: movement note; its absence is what stopped 1274/2019's triangle being read as one.
+MOVEMENT_NOTE_WORDS = (
+    "movement", "arising", "brought forward", "carried forward", "opening", "closing",
+    "at 1 january", "as at 1 january", "at 31 december", "as at 31 december",
+    "exchange", "claims paid", "claims incurred", "change in", "provision at",
+    "utilised", "released", "additions", "disposals", "acquired", "transferred",
+)
+
+#: `2010 & prior years`, `2010 and prior`, `prior years` alone: the oldest cohort of a
+#: development triangle.  Its figure is that cohort's cumulative incurred total, so it
+#: is never a prior-year movement (R138).
+COHORT_LABEL = re.compile(
+    r"^\(?\d{4}\)?\s*(?:&|and|\+)\s*prior\b"
+    r"|^prior\s+years?\s*(?:total)?$"
+    r"|^total\s+\d{4}\s*(?:&|and)\s*prior\b")
+
 
 def _parse_nutrient_provisions(grid: list[list[str]], report_year: int,
                                page_text: str = "", doc_unit: Optional[float] = None):
@@ -2517,6 +2793,7 @@ def _parse_nutrient_provisions(grid: list[list[str]], report_year: int,
     # 194,595 where the current-year change was 78,241).  The current-year block is
     # the one whose header carries the report year, else the first gross block.
     gross_col = ri_col = net_col = None
+    own_year = []  # the year each column names in its OWN header cells, or None
     claims_outstanding_col = None
     if grid:
         header_rows = [r for r in grid[:2] if r]
@@ -2524,7 +2801,6 @@ def _parse_nutrient_provisions(grid: list[list[str]], report_year: int,
         col_text = [" ".join(str(r[i]).lower() for r in header_rows if i < len(r)) for i in range(ncol)]
         # the year a column names in its OWN header cells (a label is not carried
         # to unlabelled neighbours: the comparative block often carries no year)
-        own_year = []
         for i in range(ncol):
             m = re.search(r"\b(20\d\d)\b", col_text[i])
             own_year.append(int(m.group(1)) if m else None)
@@ -2567,11 +2843,33 @@ def _parse_nutrient_provisions(grid: list[list[str]], report_year: int,
         else:
             gross_col, ri_col, net_col = 1, 2, 3
 
+    # Is this a movement note at all?  A note that reconciles an opening provision to a
+    # closing one names the reconciling items; a claims development triangle names
+    # development ages.  The answer is recorded rather than enforced here, because the
+    # caller is what must not override a triangle without it (R138).
+    label_column = " ".join(str(r[0]).lower() for r in grid if r)
+    is_movement_note = any(w in label_column for w in MOVEMENT_NOTE_WORDS)
+
     # Find "prior year" row
-    for row in grid:
+    for row_index, row in enumerate(grid):
         label = row[0].lower() if row else ""
+        if COHORT_LABEL.search(label.strip()):
+            # `2010 & prior years` is the oldest cohort of a development triangle, and
+            # its figure is that cohort's cumulative incurred total.  Reading it as a
+            # movement gave 1274/2019 a +602.8m prior-year development against the
+            # triangle's -6.619m (review of 11 September 2026, M01).
+            continue
         if "prior" in label and ("claim" in label or "underwriting" in label or "year" in label):
             result = ProvisionsData()
+            result.movement_semantics = {
+                "row_label": (row[0] or "").strip(),
+                "row_index": row_index,
+                "table_is_movement_note": is_movement_note,
+                "column_bound_to_report_year": bool(
+                    gross_col is not None and gross_col < len(own_year)
+                    and own_year[gross_col] == report_year),
+                "column_index": gross_col,
+            }
             has_data = False
 
             for attr, col in [
@@ -2834,6 +3132,57 @@ def _parse_opening_claims_outstanding(grid: list[list[str]], report_year: int,
 
 # ── Nutrient: main extraction ─────────────────────────────────────────────
 
+#: A gross triangle exceeds its net twin, but not without limit. Outside this band the two
+#: tables are a different quantity -- a syndicate's share against a whole account, say --
+#: rather than the same claims read before and after reinsurance (R189).
+GROSS_NET_RATIO_BAND = (1.02, 3.0)
+
+
+def _same_shape_twin(a, b) -> bool:
+    """True when two triangles could be the gross and the net view of one book."""
+    return (list(a.underwriting_years) == list(b.underwriting_years)
+            and (a.units or "") == (b.units or "")
+            and len(a.development_rows) == len(b.development_rows))
+
+
+def _is_smaller_than(a, b) -> bool:
+    """True when every shared cell of `a` is no larger IN MAGNITUDE than `b`'s, by a ratio
+    reinsurance could explain.
+
+    Magnitude, because a filing may present its triangle as an outflow: syndicates 457 and
+    218 run negative, and there the gross figure is the more negative one."""
+    pairs = [(abs(x), abs(y))
+             for rowa, rowb in zip(a.development_rows, b.development_rows)
+             for x, y in zip(rowa, rowb)
+             if isinstance(x, (int, float)) and isinstance(y, (int, float)) and x]
+    if len(pairs) < 4:
+        return False
+    ratios = [y / x for x, y in pairs]
+    lo, hi = GROSS_NET_RATIO_BAND
+    return (all(r >= 1.0 for r in ratios) and any(r > 1.0 for r in ratios)
+            and lo <= (sum(ratios) / len(ratios)) <= hi
+            and max(ratios) <= hi * 1.5)
+
+
+def relabel_if_smaller_than_its_twin(best, candidates):
+    """(triangle, note). A triangle smaller than a same-shape twin is relabelled net.
+
+    The label is corrected rather than the triangle dropped: the quantity IS a net one, and
+    saying so is what the record needs. A net-basis record then leaves the gross working
+    sample by the standing rule, which is the right outcome for it."""
+    if best is None or (best.type or "").lower() != "gross":
+        return best, None
+    for other in candidates:
+        if other is best or not _same_shape_twin(best, other):
+            continue
+        if _is_smaller_than(best, other):
+            best.type = "net"
+            return best, ("relabelled net: uniformly smaller in magnitude than a same-shape "
+                          "twin on the same filing, and gross incurred claims cannot be "
+                          "smaller than net (R189)")
+    return best, None
+
+
 def _extract_nutrient(pdf_path: Path, report_year: int, cache_dir: Path) -> ExtractionResult:
     """Extract tables using Nutrient.io API with targeted page selection."""
     api_key = os.getenv("NUTRIENT_API_KEY")
@@ -2882,6 +3231,7 @@ def _extract_nutrient(pdf_path: Path, report_year: int, cache_dir: Path) -> Extr
             nutrient_result = json.load(f)
     else:
         _offline_guard(f"Nutrient table extraction for {pdf_path.name}")
+        _table_cache_guard(f"Nutrient table extraction for {pdf_path.name}")
         print(f"  [Nutrient] Sending to API...")
         try:
             nutrient_result = _call_nutrient_api(slim_pdf, api_key)
@@ -2902,6 +3252,7 @@ def _extract_nutrient(pdf_path: Path, report_year: int, cache_dir: Path) -> Extr
 
     best_triangle = None
     best_triangle_details = None
+    triangle_candidates = []     # every parsed triangle, for the R189 twin test
     best_lob = None
     best_lob_count = 0
     best_provisions = None
@@ -2955,6 +3306,10 @@ def _extract_nutrient(pdf_path: Path, report_year: int, cache_dir: Path) -> Extr
             pt = page_texts.get(orig_page, "")
 
             # Try triangle (on triangle-tagged pages)
+            if "claims_triangle" in cats:
+                _cand, _d = _parse_nutrient_triangle(grid, report_year)
+                if isinstance(_cand, TriangleData):
+                    triangle_candidates.append(_cand)
             if "claims_triangle" in cats and best_triangle is None:
                 tri_result, details = _parse_nutrient_triangle(grid, report_year)
                 if tri_result == "new_syndicate":
@@ -3046,6 +3401,11 @@ def _extract_nutrient(pdf_path: Path, report_year: int, cache_dir: Path) -> Extr
                 print(f"  [Nutrient] Text fallback LOB: {len(lob.gross_premium_mix)} classes, "
                       f"GWP={lob.gross_premiums_written_gbp_m}m")
 
+    best_triangle, _twin_note = relabel_if_smaller_than_its_twin(
+        best_triangle, triangle_candidates)
+    if _twin_note:
+        best_triangle_details = " -- ".join(
+            x for x in (best_triangle_details, _twin_note) if x)
     result.triangle = best_triangle
     result.triangle_details = best_triangle_details or result.triangle_details
     result.lob = best_lob
@@ -3388,33 +3748,35 @@ def _extract_azure(pdf_path: Path, report_year: int, cache_dir: Path,
         cached_ver = cached.get("_cache_version") if isinstance(cached, dict) else None
         cached_pages = cached.get("_pages_hash") if isinstance(cached, dict) else None
         cached_batch = cached.get("_batch_mode") if isinstance(cached, dict) else None
-        offline = os.getenv("LLOYDS_EXTRACTION_OFFLINE") == "1"
+        # `offline` here means "the committed cache is what we have": it is also true
+        # when only the table backends are pinned, so that a corrected model prompt can
+        # be re-run without re-billing document intelligence (round 56).
+        offline = _table_cache_only()
+        # A cache file is never deleted. It is a committed, publicly cited artefact, and
+        # a run that unlinks it and then fails has destroyed evidence and produced
+        # nothing; a successful re-extraction overwrites it anyway.
         if not isinstance(cached, dict):
             if offline:
                 # the committed record is never deleted; a legacy list cache carries
                 # no page or category information and cannot be used
-                _offline_guard(f"Azure Document Intelligence for {pdf_path.name} (legacy cache format)")
-            cache_file.unlink()
-            print(f"  [Azure] Cache invalidated (legacy format) — re-extracting")
+                _table_cache_guard(f"Azure Document Intelligence for {pdf_path.name} (legacy cache format)")
+            print(f"  [Azure] Cache not usable (legacy format) — re-extracting")
         elif cached_ver != _CACHE_VERSION and not offline:
-            cache_file.unlink()
-            print(f"  [Azure] Cache invalidated (code changed) — re-extracting")
-        elif cached_pages != pages_hash and os.getenv("LLOYDS_EXTRACTION_OFFLINE") != "1":
-            cache_file.unlink()
-            print(f"  [Azure] Cache invalidated (page set changed) -- re-extracting")
+            print(f"  [Azure] Cache not usable (code changed) — re-extracting")
+        elif cached_pages != pages_hash and not offline:
+            print(f"  [Azure] Cache not usable (page set changed) -- re-extracting")
         elif (cached_batch is not None and cached_batch != batch_mode
-              and os.getenv("LLOYDS_EXTRACTION_OFFLINE") != "1"):
-            cache_file.unlink()
-            print(f"  [Azure] Cache invalidated (batch mode changed: {cached_batch} -> {batch_mode}) -- re-extracting")
+              and not offline):
+            print(f"  [Azure] Cache not usable (batch mode changed: {cached_batch} -> {batch_mode}) -- re-extracting")
         else:
             cache_valid = True
             page_set_current = (cached_pages == pages_hash)
             if cached_ver != _CACHE_VERSION:
-                print(f"  [Azure] Offline: using the committed cache written by code version "
+                print(f"  [Azure] Cache-only: using the committed cache written by code version "
                       f"{cached_ver} (current {_CACHE_VERSION}); its tables are the raw Azure output")
                 page_set_current = False
             if not page_set_current:
-                print(f"  [Azure] Offline: using the committed cache although the relevant "
+                print(f"  [Azure] Cache-only: using the committed cache although the relevant "
                       f"page set changed; table pages located from their own numbers")
             else:
                 print(f"  [Azure] Using cached result")
@@ -3458,7 +3820,13 @@ def _extract_azure(pdf_path: Path, report_year: int, cache_dir: Path,
                 print(f"  [Azure] {remapped} cached table page(s) remapped to the pages actually sent")
 
     if not cache_valid:
+        # Both guards, because they answer different questions. The offline one is about
+        # the whole run; the cache-only one is about this backend specifically, and it is
+        # the one that fires when the models are live and the table grids are pinned.
+        # Without it a record that simply has no cache reaches a paid call: eleven
+        # records in this corpus are in that position (round 56).
         _offline_guard(f"Azure Document Intelligence for {pdf_path.name}")
+        _table_cache_guard(f"Azure Document Intelligence for {pdf_path.name}")
         # only now is a service call required
         endpoint = os.getenv("DOCUMENTINTELLIGENCE_ENDPOINT")
         api_key = os.getenv("DOCUMENTINTELLIGENCE_API_KEY")
@@ -3546,10 +3914,20 @@ def _extract_azure(pdf_path: Path, report_year: int, cache_dir: Path,
         with open(cache_file, "w") as f:
             json.dump(cache_data, f, indent=2, ensure_ascii=True)
 
+    # A footnote marker the backend flattened into a numeric cell is removed before any
+    # grid is parsed, using the page's own typography as the evidence (R141).
+    _footnotes = superscript_footnote_corrections(pdf_path)
+    if _footnotes:
+        logger.info("footnote markers stripped from %d cell form(s): %s",
+                    len(_footnotes), sorted(_footnotes)[:8])
+        all_grids = [(apply_footnote_corrections(grid, _footnotes), orig_page, cats)
+                     for grid, orig_page, cats in all_grids]
+
     # Step 3: Parse tables
     best_triangle = None
     best_triangle_details = None
     best_triangle_score = -1
+    triangle_candidates = []     # every parsed triangle, for the R189 twin test
     best_lob = None
     best_lob_count = 0
     best_provisions = None
@@ -3609,6 +3987,7 @@ def _extract_azure(pdf_path: Path, report_year: int, cache_dir: Path,
                 result.triangle_details = details
             elif isinstance(tri_result, TriangleData):
                 tri_result.page, tri_result.entity = orig_page, ent
+                triangle_candidates.append(tri_result)
                 n_years = len(tri_result.underwriting_years)
                 completeness = _triangle_completeness(tri_result)
                 # Score: prefer gross, then the annual accounts over a closed-year
@@ -3716,6 +4095,11 @@ def _extract_azure(pdf_path: Path, report_year: int, cache_dir: Path,
                 print(f"  [Azure] Text fallback LOB: {len(lob.gross_premium_mix)} classes, "
                       f"GWP={lob.gross_premiums_written_gbp_m}m")
 
+    best_triangle, _twin_note = relabel_if_smaller_than_its_twin(
+        best_triangle, triangle_candidates)
+    if _twin_note:
+        best_triangle_details = " -- ".join(
+            x for x in (best_triangle_details, _twin_note) if x)
     result.triangle = best_triangle
     result.triangle_details = best_triangle_details or result.triangle_details
     result.lob = best_lob

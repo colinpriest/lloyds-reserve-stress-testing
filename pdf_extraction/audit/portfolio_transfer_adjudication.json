@@ -1,0 +1,353 @@
+{
+ "purpose": "The hand adjudication of every record the portfolio-transfer scanner flags, so that the count in the manuscript rests on an inspectable record rather than on the assertion that the flags were checked. Each entry gives the filing's own words, the direction, whether the arrangement is a discrete transaction or a standing one, and what it means for the record's development triangle.",
+ "recorded": "2026-09-11",
+ "round": "round 56 (R166, corrected by R169, R170, R174, R175, R180, R181, R185, R186); updated after R194 and R199-R203, and R198 settled",
+ "scanner": "scripts/portfolio_transfer_scanner.py",
+ "scan_output": "pdf_extraction/portfolio_transfer_scan.json",
+ "corpus": "970 reports scanned, 15 flagged",
+ "why_standing_and_discrete_are_both_flagged": "An adversarial review of 11 September 2026 asked whether four of these (1971/2021-2023, 6133/2021) are a standing annual treaty rather than a one-off transfer, and whether the scanner's own exclusion of ordinary quota share ought to catch them. The distinction is real and is recorded per record below, but it does not change the flag. What the paper needs to know is whether a syndicate's gross development triangle carries movement that is not its own re-estimation of its own older years. A treaty that assumes a prior year's run-off every year contaminates the triangle every year; that it does so on a standing basis makes the contamination more regular, not less real. The exclusion the scanner applies is to quota share of CURRENT business, which is a different thing.",
+ "directions_matter": "An inward transfer adds another syndicate's older liabilities to this triangle, so its diagonal is not this syndicate's own development: 2008/2021's provisions note carries the Hiscox take-on inside 'change in prior year provisions'. What an outward transfer does depends on its form. One that moves the liabilities themselves -- a reinsurance to close out, a Part VII transfer, a novation of the policies -- takes them off the gross triangle. One that is reinsurance -- an outward loss portfolio transfer or quota share -- leaves the gross liabilities with the syndicate, which still owes them, and changes only its net position, so it does not contaminate a gross triangle at all.",
+ "records": [
+  {
+   "stem": "1110_2019",
+   "direction": "inward",
+   "arrangement": "discrete",
+   "verdict": "genuine",
+   "filing_says": "on the 23 December 2019, accepted a loss portfolio transfer (LPT)",
+   "page": 18,
+   "effect": "prior-year liabilities assumed from outside; the 2019 diagonal carries them",
+   "also_accepts_ritc": false
+  },
+  {
+   "stem": "1110_2020",
+   "direction": "inward",
+   "arrangement": "discrete",
+   "verdict": "genuine",
+   "filing_says": "Furthermore, in 2020 the Syndicate also accepted the RITC of 3330, ADC cover on 1458 and an LPT from Syndicates 45 and 386",
+   "page": 22,
+   "effect": "prior-year liabilities assumed from three counterparties. The filing also states the syndicate's principal activity is transacting reinsurance by way of RITC or LPT, so the whole book is transferred business.",
+   "also_accepts_ritc": true,
+   "also_in_this_record": "'Syndicate 1110 has provided an LPT of Financial Institutions, Directors & Officers, Professional Indemnity classes to Syndicate 3334 with a Premium of GBP58.4m received and Technical Provisions of GBP58.8m (including ULAE) transferred.' The scanner calls this outward. It is ambiguous: providing an LPT to a counterparty while receiving the premium is the assuming party's side of the transaction. The record's direction does not rest on it.",
+   "correction": "recorded outward in the first version of this register, on the ambiguous 3334 sentence, with the unambiguous sentence above overlooked (R187)"
+  },
+  {
+   "stem": "1884_2022",
+   "verdict": "genuine",
+   "direction": "inward",
+   "arrangement": "discrete",
+   "page": 4,
+   "quote_source": "text layer",
+   "filing_says": "During 2022, the Syndicate completed a Loss Portfolio Transfer (“LPT”) of certain classes written by Syndicate 33 in the 2018 and prior YOAs.",
+   "effect": "classes Syndicate 33 wrote for the 2018 and prior years of account, taken on by loss portfolio transfer during 2022",
+   "found_by": "R194: the scanner had read 'written by Syndicate 33' as outward",
+   "also_accepts_ritc": false
+  },
+  {
+   "stem": "1884_2023",
+   "verdict": "genuine",
+   "direction": "inward",
+   "arrangement": "discrete",
+   "page": 4,
+   "quote_source": "text layer",
+   "filing_says": "The LPTS cover various classes of business written by Syndicate 33 for the 2019 and prior YOAs.",
+   "context": "The Syndicate has completed two Loss Portfolio Transfers (“LPTs”) with Syndicate 33.",
+   "effect": "a second loss portfolio transfer from Syndicate 33: the 2022 filing reports one, covering 2018 and prior, and this filing two, covering 2019 and prior; the filing does not print the second one's date",
+   "found_by": "R194",
+   "also_accepts_ritc": false
+  },
+  {
+   "stem": "1971_2021",
+   "direction": "both",
+   "arrangement": "standing",
+   "verdict": "genuine",
+   "filing_says": "the 2019 year of account has been reinsured to close into Syndicate 1969 in accordance with the original reinsurance agreement and then ceded back through the quota share contract for the 2020 year of account",
+   "page": 46,
+   "effect": "the syndicate writes no business of its own: it takes 1969's book by quota share under a funds-withheld arrangement, and prior years pass out to 1969 by RITC and back again by quota share. The triangle is 1969's development, not 1971's.",
+   "also_accepts_ritc": false
+  },
+  {
+   "stem": "1971_2022",
+   "direction": "inward",
+   "arrangement": "standing",
+   "verdict": "genuine",
+   "filing_says": "The 2020 year of account accepted an 80% quota share of the run-off of the 2019 year of account Rover class from Syndicate 1969 under the quota share agreement for the 2020 year of account",
+   "page": 64,
+   "effect": "a prior year's run-off assumed into a later year of account, annually",
+   "also_accepts_ritc": false
+  },
+  {
+   "stem": "1971_2023",
+   "direction": "inward",
+   "arrangement": "standing",
+   "verdict": "genuine",
+   "filing_says": "The 2021 year of account accepted 80% and 90% quota shares of the run-off of the 2019 and 2020 years of account respectively for the ibott classes from Syndicate 1969",
+   "page": 65,
+   "effect": "two prior years' run-off assumed into one later year of account",
+   "also_accepts_ritc": false
+  },
+  {
+   "stem": "2008_2021",
+   "verdict": "genuine",
+   "direction": "inward",
+   "arrangement": "discrete",
+   "page": 7,
+   "quote_source": "text layer",
+   "filing_says": "In June 2021, Syndicate 2008 completed a Loss Portfolio Transfer (“LPT”) with Hiscox Ltd (“Hiscox”), pursuant to which the Syndicate has reinsured a diversified portfolio of legacy insurance business underwritten by Hiscox Syndicate 3624",
+   "effect": "Hiscox Syndicate 3624's legacy portfolio taken on in June 2021; the provisions note's gross change in prior year provisions of 383,949 (GBP000) includes the take-on (see triangle_overruled_by_sign_veto.json)",
+   "found_by": "R194: no settled construction matched, so the sentence was not classed inward",
+   "also_accepts_ritc": false
+  },
+  {
+   "stem": "2008_2023",
+   "direction": "inward",
+   "arrangement": "discrete",
+   "verdict": "genuine",
+   "filing_says": "The above movements also include the take-on balances of the RITC with Syndicate 1301 (amounting to GBP235.0m Gross and GBP158.0m Net) and LPT contract with QBE (amounting to GBP319.0m Gross and GBP159.5m Net)",
+   "page": 41,
+   "effect": "named amounts taken on by RITC and by LPT. The filing states the contamination itself: 'The calendar year developments in the tables above include the impact of reserves newly acquired through RITC and LPT transactions.'",
+   "also_accepts_ritc": true,
+   "also_in_this_record": "'Change in prior year provisions also include the take-on balances of the LPT contract with QBE amounting to GBP319.0m and subsequent ceding of 50% of these provisions to Cavello Bay amounting to GBP159.5m.' Half of what was taken on was ceded straight out again, so the net effect on this triangle is smaller than the gross take-on.",
+   "correction": "the first version of this register quoted the syndicate's principal-activity sentence instead of the transaction, and from that extended the finding to every year of syndicate 2008 in the corpus. The other six years (2014, 2015, 2016, 2018, 2019, 2021) carry transfer vocabulary but are not flagged -- the scanner records 'RITC mentioned without a classifiable direction' for each -- and none of them was checked before that claim was written. It is withdrawn: this finding is about 2023 (R187)."
+  },
+  {
+   "stem": "3500_2015",
+   "direction": "inward",
+   "arrangement": "discrete",
+   "verdict": "genuine",
+   "filing_says": "Syndicate 3500 entered into a transaction to accept the novation of the contracts under which the 2001 and prior years of Syndicate 535 and the 1999 and prior years of Syndicate 1204 were previously closed",
+   "page": 5,
+   "effect": "two other syndicates' closed years assumed by novation",
+   "also_accepts_ritc": true
+  },
+  {
+   "stem": "3500_2021",
+   "direction": "inward",
+   "arrangement": "discrete",
+   "verdict": "genuine",
+   "filing_says": "This transaction results in the transfer to Syndicate 3500 of gross and net technical provisions of $78.6 million and $73.2 million, respectively; the loss portfolio transfer reinsurance of the 2019 ...",
+   "page": 5,
+   "effect": "named amounts of assumed technical provisions",
+   "also_accepts_ritc": true
+  },
+  {
+   "stem": "3500_2022",
+   "direction": "inward",
+   "arrangement": "discrete",
+   "verdict": "genuine",
+   "filing_says": "the transfer to Syndicate 3500 of gross and net technical provisions of $2,785 million and $1,906 million respectively, and one loss portfolio transfer reinsurance",
+   "page": 4,
+   "effect": "the largest of the assumptions in this corpus",
+   "also_accepts_ritc": true
+  },
+  {
+   "stem": "3500_2023",
+   "direction": "inward",
+   "arrangement": "discrete",
+   "verdict": "genuine",
+   "filing_says": "in the transfer to Syndicate 3500 of gross and net technical provisions of $430.5 million and $332.0 million, respectively, this replaces a previously recorded loss portfolio transfer",
+   "page": 30,
+   "effect": "a restated assumption replacing an earlier one",
+   "also_accepts_ritc": true
+  },
+  {
+   "stem": "6124_2015",
+   "verdict": "genuine",
+   "direction": "inward",
+   "arrangement": "discrete",
+   "page": 4,
+   "quote_source": "OCR page cache (the filing has no text layer)",
+   "filing_says": "The transaction was executed through a 100% quota share reinsurance agreement with Syndicate 1084 for prior claim liabilities and in-force policies written by Syndicate 1084’s UK division",
+   "context": "Its sole activity was to reinsure the UK division policies originally underwritten by Syndicate 1084 (Reinsured Account) as part of the transfer of Syndicate 1084’s UK division to Markerstudy Limited (Markerstudy)",
+   "effect": "a special purpose syndicate whose sole activity was to reinsure the UK division book Syndicate 1084 wrote, prior claim liabilities included, as part of that division's transfer to Markerstudy; its triangle is that book's development",
+   "found_by": "R194",
+   "also_accepts_ritc": false
+  },
+  {
+   "stem": "6133_2021",
+   "direction": "inward",
+   "arrangement": "standing",
+   "verdict": "genuine",
+   "filing_says": "The 2019 year of account accepted a 90% quota share of the run-off of the 2018 year of account Property Treaty class from Syndicate 1969 under the quota share agreement for the 2019 year of account",
+   "page": 61,
+   "effect": "the same structure as 1971: 1969's business taken by quota share under a funds-withheld arrangement, with prior years' run-off assumed annually",
+   "also_accepts_ritc": false
+  }
+ ],
+ "summary": {
+  "flagged": 15,
+  "inward": 14,
+  "outward": 0,
+  "both": 1,
+  "standing_arrangements": 4,
+  "discrete_transactions": 11,
+  "syndicates_involved": [
+   "1110",
+   "1884",
+   "1971",
+   "2008",
+   "3500",
+   "6124",
+   "6133"
+  ],
+  "false_positives_found_and_removed_this_round": [
+   {
+    "stem": "1971_2019",
+    "why": "the term matched inside the word 'innovation' on the strategy page (R185)"
+   },
+   {
+    "stem": "1971_2020",
+    "why": "the same substring match"
+   },
+   {
+    "stem": "1861_2021",
+    "why": "Canopius's outward LPT to RiverStone; the writer list goes on to name 1861 itself (R199)"
+   },
+   {
+    "stem": "1856_2018",
+    "why": "flagged on a whole-account quota share of Syndicate 1955's current business that the filter had dropped (R200)"
+   },
+   {
+    "stem": "6103_2016",
+    "why": "a quota share of Syndicate 2791's current book, labelled by year of account (R201)"
+   },
+   {
+    "stem": "6103_2017",
+    "why": "a quota share of Syndicate 2791's current book, labelled by year of account (R201)"
+   },
+   {
+    "stem": "6103_2018",
+    "why": "a quota share of Syndicate 2791's current book, labelled by year of account (R201)"
+   },
+   {
+    "stem": "6103_2019",
+    "why": "a quota share of Syndicate 2791's current book, labelled by year of account (R201)"
+   },
+   {
+    "stem": "6103_2020",
+    "why": "a quota share of Syndicate 2791's current book, labelled by year of account (R201)"
+   },
+   {
+    "stem": "6103_2021",
+    "why": "a quota share of Syndicate 2791's current book, labelled by year of account (R201)"
+   },
+   {
+    "stem": "6103_2022",
+    "why": "a quota share of Syndicate 2791's current book, labelled by year of account (R201)"
+   },
+   {
+    "stem": "6103_2023",
+    "why": "a quota share of Syndicate 2791's current book, labelled by year of account (R201)"
+   }
+  ],
+  "also_in_the_ritc_regime": {
+   "count": 6,
+   "stems": [
+    "1110_2020",
+    "2008_2023",
+    "3500_2015",
+    "3500_2021",
+    "3500_2022",
+    "3500_2023"
+   ],
+   "meaning": "these records are themselves the ASSUMING party of a reinsurance to close, so the model's RITC regime already treats their diagonal as carrying assumed business. A record that merely mentions an RITC it ceded is not counted here: 1971/2021 cedes its 2019 year into 1969 and is not in this list."
+  },
+  "transfer_only": [
+   "1110_2019",
+   "1884_2022",
+   "1884_2023",
+   "1971_2021",
+   "1971_2022",
+   "1971_2023",
+   "2008_2021",
+   "3500_2018",
+   "6124_2015",
+   "6133_2021"
+  ],
+  "field_meanings": {
+   "also_accepts_ritc": "true when the syndicate is the party ACCEPTING a reinsurance to close, not merely when its filing mentions one",
+   "direction": "inward adds another syndicate's older liabilities to this triangle; outward removes them; both means the filing shows each in the same year",
+   "arrangement": "discrete is a dated transaction; standing is an arrangement that repeats annually under one agreement"
+  },
+  "found_by_hand": 1,
+  "confirmed_inward_or_both_in_total": 16
+ },
+ "what_this_does_not_settle": [
+  "Nothing in this register is a modelling decision. The one taken on it is recorded in PLAN R195: on 13 September 2026 the owner decided that confirmed inward transfers, flagged or found by hand, are treated like RITC.",
+  "Whether any transfer went undetected is not measured as a rate. R198 read by hand the records whose events name a transfer in a strong-evidence sentence but are not flagged, and six named records; that found 3500/2018, which neither scanner flags. The scanners read the vocabulary they know: adverse development cover and retrospective reinsurance are not transfer terms in it.",
+  "How much of the corpus is affected. This is a count of flagged reports. It is not weighted by the size of the syndicates involved, and no size metric is applied here, so nothing in this file supports a statement that the affected share is large or small."
+ ],
+ "how_the_quotes_were_taken": "Each `filing_says` is trimmed from the sentence the scanner captured from the filing's text layer, and checked against the scanner's own snippet -- not re-read from the page image. So these quotes verify the scanner's reading of the filing, which is a weaker claim than verifying the filing. An OCR misread the scanner made would be reproduced here. Where a direction or an amount turns on the wording, the sentence is quoted in full rather than trimmed.",
+ "directions_matter_correction": "The first version said every outward transfer removes liabilities from the triangle, which is true only of the first kind. Most outward transfers the scanner finds are the second kind (1861/2021 with RiverStone, 1967/2020 ceded to BIC, 2001/2018 purchased), and under the old sentence each would have read as gross contamination.",
+ "updated": "2026-09-13",
+ "found_by_hand": [
+  {
+   "stem": "3500_2018",
+   "verdict": "genuine",
+   "direction": "inward",
+   "arrangement": "discrete",
+   "page": 5,
+   "quote_source": "OCR page cache (the filing's text layer holds 1,495 characters)",
+   "filing_says": "On 30\" November 2018, Syndicate 3500 entered into a loss portfolio transfer reinsurance with Syndicate 2987 for certain lines of discontinued business with underwriting years of 2017 and prior.",
+   "context": "This transaction results in the transfer to Syndicate 3500 of gross and net technical provisions of approximately £560 million and £419 million, respectively.",
+   "ocr_note": "'30\"' is the OCR's reading of the ordinal; the second transfer is dated 21 December 2018 in the same passage",
+   "effect": "two loss portfolio transfers of discontinued business, underwriting years 2017 and prior, on 30 November and 21 December 2018; gross technical provisions of about GBP560m transferred in",
+   "why_no_scanner_flagged_it": "'entered into a loss portfolio transfer reinsurance with Syndicate 2987' names no direction, and the sentence that does ('the transfer to Syndicate 3500 of gross and net technical provisions') carries no transfer term; the RITC scan has no RITC term to find",
+   "found_by": "R198: 3500/2019's filing dates both transfers in 2018",
+   "also_accepts_ritc": false
+  }
+ ],
+ "settled_not_transfers": [
+  {
+   "stem": "1110_2021",
+   "verdict": "not a transfer year",
+   "why": "every transfer the filing describes took effect in 2019 or 2020, and the two it reports for 2022 are post-balance-sheet events",
+   "evidence": [
+    {
+     "filing": "1110_2021",
+     "page": 8,
+     "says": "Syndicate 1110 has provided a LPT of Financial Institutions, Directors & Officers and Professional Indemnity classes to Syndicate 3334."
+    },
+    {
+     "filing": "1110_2019",
+     "page": 7,
+     "says": "On 23 December 2019 Syndicate 1110 entered into a loss portfolio transfer (LPT) reinsurance with Syndicate 3334, managed by Hamilton Underwriting Limited (HUL), for certain lines of discontinued business for underwriting years 2016 to 2018 inclusive."
+    },
+    {
+     "filing": "1110_2021",
+     "page": 9,
+     "says": "At the end of 2020, Syndicate 1110 entered into an LPT reinsurance with QBE Syndicates 45 & 386."
+    },
+    {
+     "filing": "1110_2021",
+     "page": 10,
+     "says": "The Syndicate completed an RITC of Vibe Syndicate 5678 with effect from 1st January 2022, which aligns to the R&Q strategy of consolidating their Lloyd’s platforms into one syndicate."
+    }
+   ]
+  },
+  {
+   "stem": "1110_2023",
+   "verdict": "not a transfer year",
+   "why": "the deals the filing describes were entered into in 2022, a year the RITC scan already flags",
+   "evidence": [
+    {
+     "filing": "1110_2023",
+     "page": 5,
+     "says": "In the prior year two significant deals were entered into, being the RITC of all Syndicate 5678’s open years of account and the adverse development cover of certain years of account of Syndicates 33 and 3624 (“Hiscox ADC”), managed by Hiscox Syndicates Limited."
+    }
+   ]
+  },
+  {
+   "stem": "3500_2019",
+   "verdict": "not a transfer year; an RITC acceptance",
+   "why": "both loss portfolio transfers the filing reports are dated 2018 (recorded under 3500/2018 in found_by_hand); its own year is an acceptance of reinsurance to close from an unnamed syndicate, which the RITC scanner missed until R202",
+   "evidence": [
+    {
+     "filing": "3500_2019",
+     "page": 5,
+     "says": "On 1* January 2019, Syndicate 3500 accepted the reinsurance to close of the liabilities of another Lloyd’s syndicate, a runoff syndicate with underwriting years of 2016 and prior."
+    }
+   ],
+   "quote_source": "OCR page cache"
+  }
+ ]
+}

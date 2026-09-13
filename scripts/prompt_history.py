@@ -56,6 +56,8 @@ def survey():
         if meta.get("syndicate") and meta.get("year"):
             stems.add((int(meta["syndicate"]), int(meta["year"])))
     n_records = 0
+    record_versions = {}
+    served = []
     managed = set()
     lr_mentioned = set()
     lr_approx = set()
@@ -68,7 +70,10 @@ def survey():
             continue
         n_records += 1
         stem = os.path.basename(f)[:-5]
-        for m in (rec.get("models") or {}).values():
+        record_versions[stem] = str((rec.get("spec") or {}).get("prompt_version") or "unversioned")
+        for name, m in (rec.get("models") or {}).items():
+            if isinstance(m.get("_served_from"), dict):
+                served.append((stem, name, str(m["_served_from"].get("prompt_version"))))
             raw_notes = m.get("data_quality_notes") or ""
             notes = raw_notes if isinstance(raw_notes, str) else " ".join(str(x) for x in raw_notes)
             if MANAGED.search(notes):
@@ -79,11 +84,17 @@ def survey():
                     lr_approx.add(stem)
     cur = current_version()
     newest_cached = max(versions, key=_ver) if versions else "none"
+    log = json.load(io.open(os.path.join(ROOT, "pdf_extraction", "spec", "prompt_versions.json"),
+                            encoding="utf-8"))["versions"]
     return {"current_prompt_version": cur, "cache_files": sum(versions.values()),
             "versions": dict(sorted(versions.items(), key=lambda kv: _ver(kv[0]))),
             "newest_cached_version": newest_cached,
             "caches_at_current_version": versions.get(cur, 0),
             "stems_with_a_cache": len(stems), "records": n_records,
+            "records_at_current_version": sum(1 for v in record_versions.values() if v == cur),
+            "records_below_current": sorted((k, v) for k, v in record_versions.items() if v != cur),
+            "records_served_from_another_version": sorted(served),
+            "version_log": [e for e in log if _ver(e.get("version")) >= (2, 11)],
             "records_loss_ratio_fallback_applied": sorted(managed),
             "records_mentioning_a_loss_ratio_table": len(lr_mentioned),
             "records_loss_ratio_with_a_premium_approximation": sorted(lr_approx)}
@@ -97,15 +108,17 @@ def render(s):
     A("> **Generated file — do not edit.** Written by `scripts/prompt_history.py` from the "
       "committed response caches and records.")
     A("")
-    A("The extraction prompt in `test_gemini.py` is at version **%s**. The review of 10 September "
-      "2026 (T02) found three defects in the prompt as it stood at 2.10 and earlier: it asked "
-      "for the regulatory segmental classes, forbade the divisional breakdown and then preferred "
-      "divisional totals; it defined gross claims incurred with premiums earned; and its "
-      "loss-ratio route let total premium stand in for missing underwriting-year premiums. "
-      "Version 2.11 states one business-mix hierarchy (the segmental note; the divisional summary "
-      "only when there is none; never merged), the claims-incurred identity (paid claims plus the "
-      "change in the gross claims provision), and a loss-ratio route that returns null without "
-      "underwriting-year premiums." % s["current_prompt_version"])
+    A("The extraction prompt in `test_gemini.py` is at version **%s**. The versions since the "
+      "review of 10 September 2026, from `pdf_extraction/spec/prompt_versions.json`:"
+      % s["current_prompt_version"])
+    A("")
+    for e in s["version_log"]:
+        # a later correction to an entry is printed with it: 2.13's description still says
+        # the override gate "was fixed", and R193 reverted that fix
+        amended = e.get("amended") or {}
+        A("- **%s** (%s): %s%s" % (e.get("version"), e.get("date"), e.get("description"),
+                                   (" *Amended %s:* %s" % (amended.get("date"), amended.get("note")))
+                                   if amended else ""))
     A("")
     A("## What the committed responses were produced under")
     A("")
@@ -114,12 +127,18 @@ def render(s):
     for v, n in s["versions"].items():
         A("| %s | %s |" % (v, format(n, ",")))
     A("")
+    below = s["records_below_current"]
     A("%s cached responses cover %s syndicate-years; the corpus holds %s records. The newest "
-      "version any cache carries is **%s**; **%d** caches were produced under the current "
-      "version %s. Every committed record therefore rests on responses produced under the "
-      "old prompt rules." % (format(s["cache_files"], ","), format(s["stems_with_a_cache"], ","),
-                             format(s["records"], ","), s["newest_cached_version"],
-                             s["caches_at_current_version"], s["current_prompt_version"]))
+      "version any cache carries is **%s**, and %s caches were produced under the current "
+      "version. %s records were written under the current version %s%s"
+      % (format(s["cache_files"], ","), format(s["stems_with_a_cache"], ","),
+         format(s["records"], ","), s["newest_cached_version"],
+         format(s["caches_at_current_version"], ","),
+         format(s["records_at_current_version"], ","), s["current_prompt_version"],
+         (("; the other %d were written under an older version: %s. Bringing those to the "
+           "current version needs fresh paid inference."
+           % (len(below), ", ".join("%s (%s)" % (k, v) for k, v in below)))
+          if below else ".")))
     A("")
     A("## Which records the changed routes touched")
     A("")
@@ -135,24 +154,32 @@ def render(s):
       "notes, in any context; %d of them carry a note that also mentions an approximation or a "
       "total premium%s, the records where the old fallback could have substituted total "
       "premium for underwriting-year premiums; %d record(s) had the deterministic loss-ratio "
-      "fallback applied at managed or group level%s. A record whose adopted figure rests on "
-      "the loss-ratio route can be regenerated only by fresh model inference under version "
-      "%s, which needs the source reports and paid API access."
+      "fallback applied at managed or group level%s. %s"
       % (s["records_mentioning_a_loss_ratio_table"],
          len(approx),
          (" (%s)" % ", ".join(approx)) if 0 < len(approx) <= 20 else "",
          len(s["records_loss_ratio_fallback_applied"]),
          (" (%s)" % ", ".join(s["records_loss_ratio_fallback_applied"])
           if s["records_loss_ratio_fallback_applied"] else ""),
-         s["current_prompt_version"]))
+         (lambda old: ("Of the records named here, %d were written under a version older than %s (%s)."
+                       % (len(old), s["current_prompt_version"], ", ".join(old))) if old else
+          ("Every record named here was written under the current version %s."
+           % s["current_prompt_version"]))(
+             sorted({k for k, _v in s["records_below_current"]}
+                    & (set(approx) | set(s["records_loss_ratio_fallback_applied"]))))))
     A("")
     A("## Replay")
     A("")
+    served = s["records_served_from_another_version"]
     A("Offline replay (`--offline`) serves a cache miss at the current version from the "
       "committed entry for the same model, syndicate and year at the newest cached version "
-      "(`_llm_cache_by_meta`), and records that version in `_served_from`; so a replayed record "
-      "is reproducible and still carries the old prompt's responses. No record has been "
-      "described as revalidated under version %s." % s["current_prompt_version"])
+      "(`_llm_cache_by_meta`), and records that version in `_served_from`. %s"
+      % (("%d committed model response%s `_served_from`: %s."
+          % (len(served), " carries" if len(served) == 1 else "s carry",
+             ", ".join("%s %s (%s)" % (k, m, v) for k, m, v in served)))
+         if served else
+         "No committed model response carries one, so no committed record rests on a response "
+         "served from another version's cache."))
     A("")
     return "\n".join(L) + "\n"
 

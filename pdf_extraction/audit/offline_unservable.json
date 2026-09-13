@@ -1,11 +1,50 @@
 {
-  "purpose": "Reports whose page-level caches are absent or in the superseded format, so an offline replay of the extraction cannot be served from the committed caches. The driver exits non-zero and leaves the committed record untouched; applying a corrected extraction rule to these reports needs fresh paid inference.",
-  "recorded": "2026-09-10",
-  "round": "round 55 (the external review of 10 September 2026, findings T02 and T03)",
-  "driver": "python test_gemini.py --single <stem> --offline --batch",
-  "n_attempted": 66,
-  "n_unservable": 12,
-  "stems": [
+ "purpose": "Reports whose page-level caches are absent or in the superseded format, so an offline replay of the extraction cannot be served from the committed caches. The driver exits non-zero and leaves the committed record untouched; applying a corrected extraction rule to these reports needs fresh paid inference.",
+ "recorded": "2026-09-13",
+ "round": "round 56, after R193: the offline replay of every data-carrying record at prompt 2.13, from the caches committed at extraction a8fe1f7",
+ "driver": "python test_gemini.py --stems <list> --offline --table-backend azure   (offline implies --batch)",
+ "n_attempted": 940,
+ "n_unservable": 1,
+ "stems": [
+  "syndicate_1100_2024",
+  "syndicate_2008_2021",
+  "syndicate_2357_2014",
+  "syndicate_2689_2017",
+  "syndicate_2689_2018",
+  "syndicate_2786_2016",
+  "syndicate_2786_2017",
+  "syndicate_2988_2017",
+  "syndicate_2988_2018",
+  "syndicate_3268_2018",
+  "syndicate_3268_2019"
+ ],
+ "unservable_in_this_replay": {
+  "syndicate_2008_2021": "RuntimeError: offline mode: gemini-2.5-flash page-triangle extraction of syndicate_2008_2021.pdf p53 would call an external API (cache miss)"
+ },
+ "no_usable_cache_not_attempted": [
+  "syndicate_1100_2024",
+  "syndicate_2357_2014",
+  "syndicate_2689_2017",
+  "syndicate_2689_2018",
+  "syndicate_2786_2016",
+  "syndicate_2786_2017",
+  "syndicate_2988_2017",
+  "syndicate_2988_2018",
+  "syndicate_3268_2018",
+  "syndicate_3268_2019"
+ ],
+ "measurement": {
+  "round_56_R193": {
+   "attempted": 940,
+   "unservable": 1,
+   "unservable_stems": [
+    "syndicate_2008_2021"
+   ]
+  },
+  "round_55": {
+   "attempted": 66,
+   "unservable": 12,
+   "unservable_stems": [
     "syndicate_1301_2016",
     "syndicate_1969_2015",
     "syndicate_2988_2021",
@@ -18,5 +57,22 @@
     "syndicate_6117_2021",
     "syndicate_623_2016",
     "syndicate_623_2019"
-  ]
+   ]
+  }
+ },
+ "round_55_stems_now": {
+  "syndicate_1301_2016": "served in this replay",
+  "syndicate_1969_2015": "served in this replay",
+  "syndicate_2988_2021": "served in this replay",
+  "syndicate_2988_2022": "served in this replay",
+  "syndicate_2988_2023": "served in this replay",
+  "syndicate_6117_2017": "served in this replay",
+  "syndicate_6117_2018": "served in this replay",
+  "syndicate_6117_2019": "served in this replay",
+  "syndicate_6117_2020": "served in this replay",
+  "syndicate_6117_2021": "served in this replay",
+  "syndicate_623_2016": "served in this replay",
+  "syndicate_623_2019": "served in this replay"
+ },
+ "note": "`n_attempted` and `n_unservable` are this replay's, which is what the coverage sentence is computed from. `stems` is every report that cannot be served offline now: this replay's unservable ones, the reports with no usable cache (never attempted), and any round-55 stem this replay did not serve."
 }

@@ -1,0 +1,45 @@
+{
+ "purpose": "Records that the response caches the round-56 corpus was extracted from were not in the repository, and what was done about it. Written before the decision was taken, and updated after.",
+ "recorded": "2026-09-12",
+ "round": "round 56",
+ "status": "resolved: the caches are committed at a8fe1f7 on the owner's instruction",
+
+ "what_was_measured_before": {
+  "how": "git ls-files pdf_extraction/llm_cache against the working directory, with each file's modification date",
+  "cache_files_present": 5792,
+  "tracked_before": 2675,
+  "untracked_before": 3117,
+  "tracked_written_during_round_56": 0,
+  "untracked_size_mb": 21.1,
+  "reading": "Every tracked cache predated this round. Every file the round produced was untracked. The two sets did not overlap."
+ },
+
+ "why_it_mattered": "The manuscript states three reproduction tiers. The second is that a cached replay re-derives the deterministic table extraction and the model reconciliation from the committed response caches, with the source reports but without paid inference. That sentence was true of the corpus at extraction a41394b, whose records were produced under prompt 2.10 and earlier. It was NOT true of the records this round produced: a response cache is keyed on SHA-256 of the model, PROMPT_VERSION, the prompt text, the syndicate and the year, so moving the prompt from 2.10 to 2.13 changed every key and none of the 2,675 committed caches could serve a 2.13 request.",
+
+ "what_was_done": {
+  "commit": "a8fe1f7",
+  "files": 3117,
+  "size_mb": 21.1,
+  "scope": "pdf_extraction/llm_cache only. The extracted records themselves are NOT in that commit: they are still being checked against the effects predicted in r167_r168_catchup.json before the offline catch-up replay runs.",
+  "by_prompt_version": {"2.13": 2076, "2.12": 1040, "not recorded": 1},
+  "why_the_2_12_caches_were_included": "The instruction was to commit the response caches, and narrowing an approved scope on my own judgement is not mine to do. They serve no record -- 2.12 was withdrawn and no record produced under it survives, which tests/test_corpus_is_one_specification.py holds true -- but the version was exercised at cost and prompt_versions.json records it, so the artefacts and the register now agree."
+ },
+
+ "verified_after": {
+  "question": "Can a third party replay each record from what is committed, rather than from this working tree?",
+  "method": "For every record, look for a response cache naming that syndicate, year, model and the record's own prompt version, and require it to be tracked in git. A cache present only in the working tree answers nothing.",
+  "records_examined": 1065,
+  "records_carrying_model_output": 940,
+  "records_carrying_model_output_fully_replayable": 940,
+  "coverage_over_records_that_carry_data": "100%",
+  "records_carrying_no_model_output": 125,
+  "why_those_need_no_cache": "The extraction produced nothing for them -- no model output at all -- so there is no response to cache. They contribute no data to the working sample.",
+  "headline_over_the_whole_corpus": "940 of 1065 (88.3%), where the 125 shortfall is entirely records that carry no data"
+ },
+
+ "still_open": [
+  "The manuscript's replay-coverage sentence is generated from pdf_extraction/audit/offline_unservable.json, which records 66 reports attempted and 12 unservable AT THE SUPERSEDED CORPUS (extraction a41394b, prompt 2.10). That is a different measurement from the one above -- it concerns whether an offline replay can be served end to end, including the table backend -- and it has to be re-measured on the 2.13 corpus before the sentence is published again.",
+  "The source filings are not redistributed with this repository, by the fair-dealing decision. Cached replay therefore still needs the filings; what the commit fixes is that it no longer needs paid inference.",
+  "Three of the working sample's 920 observations correspond to records that now carry no model output. The sample predates this re-extraction and will be rebuilt; these will leave it."
+ ]
+}

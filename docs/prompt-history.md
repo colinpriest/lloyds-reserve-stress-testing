@@ -2,28 +2,34 @@
 
 > **Generated file — do not edit.** Written by `scripts/prompt_history.py` from the committed response caches and records.
 
-The extraction prompt in `test_gemini.py` is at version **2.11**. The review of 10 September 2026 (T02) found three defects in the prompt as it stood at 2.10 and earlier: it asked for the regulatory segmental classes, forbade the divisional breakdown and then preferred divisional totals; it defined gross claims incurred with premiums earned; and its loss-ratio route let total premium stand in for missing underwriting-year premiums. Version 2.11 states one business-mix hierarchy (the segmental note; the divisional summary only when there is none; never merged), the claims-incurred identity (paid claims plus the change in the gross claims provision), and a loss-ratio route that returns null without underwriting-year premiums.
+The extraction prompt in `test_gemini.py` is at version **2.13**. The versions since the review of 10 September 2026, from `pdf_extraction/spec/prompt_versions.json`:
+
+- **2.11** (2026-09-10): One business-mix hierarchy; claims-incurred identity corrected; loss-ratio route requires underwriting-year premiums
+- **2.12** (2026-09-11): Withdrawn. Five corrections to the extraction instructions, run over part of the corpus and superseded by 2.13 in the same round *Amended 2026-09-13:* R164, described here as the fix, was reverted by R193 on 13 September 2026 (owner's decision): the sign veto applies whatever the triangle's shape. 73 records carried a figure only because of R164, and where they were checked the models were right; 3010/2022's provisions note prints 146,569 (GBP000), which both models read, against the triangle's -10.9m. The prompt text of this version is unchanged. Evidence: pdf_extraction/audit/r193_sign_veto_restored.json.
+- **2.13** (2026-09-11): The 2.12 corrections, restated after the override gate was fixed, and validated on known-answer records before any corpus run *Amended 2026-09-13:* R164, described here as the fix, was reverted by R193 on 13 September 2026 (owner's decision): the sign veto applies whatever the triangle's shape. 73 records carried a figure only because of R164, and where they were checked the models were right; 3010/2022's provisions note prints 146,569 (GBP000), which both models read, against the triangle's -10.9m. The prompt text of this version is unchanged. Evidence: pdf_extraction/audit/r193_sign_veto_restored.json.
 
 ## What the committed responses were produced under
 
 | Prompt version | Cached responses |
 |---|---:|
-| unversioned | 76 |
+| unversioned | 77 |
 | 2.6 | 738 |
 | 2.7 | 20 |
 | 2.8 | 118 |
 | 2.9 | 28 |
 | 2.10 | 1,695 |
+| 2.12 | 1,040 |
+| 2.13 | 2,076 |
 
-2,675 cached responses cover 1,006 syndicate-years; the corpus holds 1,065 records. The newest version any cache carries is **2.10**; **0** caches were produced under the current version 2.11. Every committed record therefore rests on responses produced under the old prompt rules.
+5,792 cached responses cover 1,012 syndicate-years; the corpus holds 1,065 records. The newest version any cache carries is **2.13**, and 2,076 caches were produced under the current version. 1,055 records were written under the current version 2.13; the other 10 were written under an older version: syndicate_1100_2024 (2.6), syndicate_2357_2014 (2.9), syndicate_2689_2017 (2.10), syndicate_2689_2018 (2.10), syndicate_2786_2016 (2.10), syndicate_2786_2017 (2.10), syndicate_2988_2017 (2.10), syndicate_2988_2018 (2.10), syndicate_3268_2018 (2.10), syndicate_3268_2019 (2.10). Bringing those to the current version needs fresh paid inference.
 
 ## Which records the changed routes touched
 
 - **Business mix.** Since round 54 the premium mix is read from the annual segmental table by the deterministic pass, and a model's mix is admitted only when its classes reconcile with the record's own premium within 10% (`_parse_nutrient_lob`, the loader's reconciliation in the analysis repository). The prompt's conflicting mix instructions therefore governed only the model's fallback mix.
 - **Claims incurred.** The corrected sentence explains what not to use; it changes no extracted value.
-- **Loss-ratio route.** 32 record(s) mention a loss ratio in a model's data-quality notes, in any context; 0 of them carry a note that also mentions an approximation or a total premium, the records where the old fallback could have substituted total premium for underwriting-year premiums; 8 record(s) had the deterministic loss-ratio fallback applied at managed or group level (syndicate_2623_2016, syndicate_2623_2017, syndicate_2623_2021, syndicate_2623_2022, syndicate_3622_2020, syndicate_3622_2021, syndicate_3622_2022, syndicate_5623_2022). A record whose adopted figure rests on the loss-ratio route can be regenerated only by fresh model inference under version 2.11, which needs the source reports and paid API access.
+- **Loss-ratio route.** 37 record(s) mention a loss ratio in a model's data-quality notes, in any context; 3 of them carry a note that also mentions an approximation or a total premium (syndicate_2010_2014, syndicate_2623_2022, syndicate_2988_2023), the records where the old fallback could have substituted total premium for underwriting-year premiums; 4 record(s) had the deterministic loss-ratio fallback applied at managed or group level (syndicate_3622_2020, syndicate_3622_2021, syndicate_3622_2022, syndicate_6107_2022). Every record named here was written under the current version 2.13.
 
 ## Replay
 
-Offline replay (`--offline`) serves a cache miss at the current version from the committed entry for the same model, syndicate and year at the newest cached version (`_llm_cache_by_meta`), and records that version in `_served_from`; so a replayed record is reproducible and still carries the old prompt's responses. No record has been described as revalidated under version 2.11.
+Offline replay (`--offline`) serves a cache miss at the current version from the committed entry for the same model, syndicate and year at the newest cached version (`_llm_cache_by_meta`), and records that version in `_served_from`. No committed model response carries one, so no committed record rests on a response served from another version's cache.
 

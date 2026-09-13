@@ -301,3 +301,30 @@ class TestEighthPass:
                 "reconciliation of opening and closing provision for claims is as follows: RITC "
                 "adjustment1,2 63,393 14,625", own="1861", year=2020)
         assert e["event_year"] != 2021
+
+
+
+class TestR202_AnAcceptanceFromAnUnnamedSyndicate:
+    """Every settled inward construction ended in a syndicate number, so an acceptance whose
+    counterparty the filing does not name settled nothing (R202)."""
+
+    #: 3500/2019's sentence from its OCR page cache, the OCR's "1*" read as "1".
+    RIVERSTONE = ("On 1 January 2019, Syndicate 3500 accepted the reinsurance to close of the "
+                  "liabilities of another Lloyd\u2019s syndicate, a runoff syndicate with "
+                  "underwriting years of 2016 and prior.")
+
+    def test_3500_2019_is_an_inward_acceptance_of_its_own_year(self):
+        ev = rs.classify_sentence(self.RIVERSTONE, "3500", 2019)
+        assert ev["direction"] == "inward", ev
+        assert ev["event_year"] == 2019, ev
+
+    def test_the_syndicate_by_name_accepting_from_an_unnamed_syndicate(self):
+        s = ("The Syndicate accepted the reinsurance to close of the 2016 and prior years of "
+             "account of a third party syndicate.")
+        assert rs.classify_sentence(s, "1234", 2020)["direction"] == "inward"
+
+    def test_another_syndicate_accepting_is_not_this_one(self):
+        """Control: with no number on the counterparty, only the subject says whose
+        acceptance it is, and here the subject is another syndicate."""
+        s = "Syndicate 1234 accepted the reinsurance to close of another Lloyd's syndicate."
+        assert rs.classify_sentence(s, "5678", 2020)["direction"] != "inward"

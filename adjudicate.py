@@ -688,6 +688,16 @@ def call_adjudicator(pdf_path, prompt, page_hints=None,
     else:
         cache_key = None
 
+    # Offline means offline.  The extraction models are guarded by `_offline_guard` in
+    # test_gemini.py and this call was not, so a cached replay could still buy fresh
+    # adjudication -- and did, once, before this guard existed (R148).
+    if os.getenv("LLOYDS_EXTRACTION_OFFLINE") == "1":
+        raise RuntimeError(
+            "offline mode: adjudication of %s for syndicate %s/%s is not in the committed "
+            "cache and would call an external API. Re-run without --offline to adjudicate "
+            "it, or use --batch to log the disagreement and leave the record unadjudicated."
+            % (field or "<field>", syndicate_num or "?", report_year or "?"))
+
     import anthropic
 
     api_key = os.getenv("ANTHROPIC_API_KEY")
@@ -1276,6 +1286,11 @@ def analyse_patterns():
     print(f"\nGenerating {len(proposals)} prompt fix proposal(s)...\n")
 
     import anthropic
+    if os.getenv("LLOYDS_EXTRACTION_OFFLINE") == "1":
+        raise RuntimeError(
+            "LLOYDS_EXTRACTION_OFFLINE=1: analyse_patterns() would call the Anthropic API. "
+            "This is a diagnostic over the disagreement log, not part of a replay; run it "
+            "without the offline flag if you mean to pay for it (R171).")
     client = anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
 
     current_version = prompt_versions["versions"][-1]["version"]

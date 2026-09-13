@@ -206,6 +206,26 @@
       "date": "2026-09-10",
       "description": "One business-mix hierarchy; claims-incurred identity corrected; loss-ratio route requires underwriting-year premiums",
       "changes": "Review of 10 September 2026 (T02). The prompt asked for regulatory classes, forbade the divisional breakdown and then preferred divisional totals; it defined gross claims incurred with premiums earned; its loss-ratio route let total premium stand in for underwriting-year premiums. Now: the segmental note, else the divisional summary, never merged; claims incurred = claims paid plus the change in the gross claims provision; the loss-ratio route returns null without underwriting-year premiums. No committed response was produced under 2.11; docs/prompt-history.md records what the earlier versions governed."
+    },
+    {
+      "version": "2.12",
+      "date": "2026-09-11",
+      "description": "Withdrawn. Five corrections to the extraction instructions, run over part of the corpus and superseded by 2.13 in the same round",
+      "changes": "Round 56. Five corrections were made to the prompt after the frozen review of 11 September 2026: the basis of the claims triangle, the treatment of a cohort row in a movement note, the development-period vocabulary, the sign convention for an outflow presentation, and the instruction not to read a figure from a narrative when the table states it. The version was then run over roughly 470 records before the four records it had been written for were checked. 21 of those records moved onto net narrative figures. The cause was not in the prompt: the override gate treated two models reading one prompt as two independent opinions, so a shared misreading outranked the deterministic triangle (R164). The prompt was corrected again as 2.13 and the gate was fixed; no record produced under 2.12 is retained. Recorded rather than removed because the version was exercised at cost and a register that omits it is a register that cannot be checked against the spend.",
+      "amended": {
+        "date": "2026-09-13",
+        "note": "R164, described here as the fix, was reverted by R193 on 13 September 2026 (owner's decision): the sign veto applies whatever the triangle's shape. 73 records carried a figure only because of R164, and where they were checked the models were right; 3010/2022's provisions note prints 146,569 (GBP000), which both models read, against the triangle's -10.9m. The prompt text of this version is unchanged. Evidence: pdf_extraction/audit/r193_sign_veto_restored.json."
+      }
+    },
+    {
+      "version": "2.13",
+      "date": "2026-09-11",
+      "description": "The 2.12 corrections, restated after the override gate was fixed, and validated on known-answer records before any corpus run",
+      "changes": "Round 56. Carries the five corrections 2.12 introduced, restated where 2.12's wording had let a narrative figure outrank a table. The process failure that 2.12 exposed is fixed separately: R164 requires two models to disagree independently before they can override a sound deterministic triangle, and R165 requires a prompt change to reproduce the records it was written for before any corpus run begins. This version was checked against those records first.",
+      "amended": {
+        "date": "2026-09-13",
+        "note": "R164, described here as the fix, was reverted by R193 on 13 September 2026 (owner's decision): the sign veto applies whatever the triangle's shape. 73 records carried a figure only because of R164, and where they were checked the models were right; 3010/2022's provisions note prints 146,569 (GBP000), which both models read, against the triangle's -10.9m. The prompt text of this version is unchanged. Evidence: pdf_extraction/audit/r193_sign_veto_restored.json."
+      }
     }
   ]
 }
