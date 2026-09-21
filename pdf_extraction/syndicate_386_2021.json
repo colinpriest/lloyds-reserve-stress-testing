@@ -1,5 +1,5 @@
 {
-  "extraction_timestamp": "2026-09-13T11:05:46.135928+00:00",
+  "extraction_timestamp": "2026-09-21T10:08:30.822850+00:00",
   "spec": {
     "prompt_version": "2.13",
     "driver_prompt_version": "2.13",
@@ -83,18 +83,18 @@
         {
           "line_of_business": "Third party liability",
           "amount_gbp_m": 300.1,
-          "percentage_of_total": 72.78
+          "percentage_of_total": 72.8
         },
         {
           "line_of_business": "Reinsurance acceptances",
           "amount_gbp_m": 112.2,
-          "percentage_of_total": 27.22
+          "percentage_of_total": 27.2
         }
       ],
       "gross_premium_page": 17,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior year development figure calculated from the gross claims development triangle as no explicit gross prior year movement note was found. [RAG OVERRIDE: Model said PYD=-52.9, RAG triangle computed -1.7. Using RAG value.] [LOB NOT APPLIED: deterministic mix has 1 class(es) with premium 300.1 against model totals [412.3, 412.3]; model mix retained.]",
+      "data_quality_notes": "Prior year development figure calculated from the gross claims development triangle as no explicit gross prior year movement note was found. [RAG OVERRIDE: Model said PYD=-52.9, RAG triangle computed -1.7. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -416,14 +416,25 @@
           {
             "line_of_business": "Third party liability",
             "amount_gbp_m": 300.1,
-            "percentage_of_total": 100.0
+            "percentage_of_total": 72.8
+          },
+          {
+            "line_of_business": "Reinsurance acceptances",
+            "amount_gbp_m": 112.2,
+            "percentage_of_total": 27.2
           }
         ],
-        "gross_premiums_written_gbp_m": 300.1,
+        "gross_premiums_written_gbp_m": 412.3,
+        "table_total": 412.3,
+        "class_sum": 412.3,
         "claims_incurred_by_lob": [
           {
             "line_of_business": "Third party liability",
             "amount_gbp_m": -179.3
+          },
+          {
+            "line_of_business": "Reinsurance acceptances",
+            "amount_gbp_m": -61.8
           }
         ],
         "currency": "GBP",
@@ -591,9 +602,9 @@
         }
       ],
       "gross_premium_page": 31,
-      "gross_premium_confidence": 0.9,
+      "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior year development was calculated from the gross claims development triangle (notes). The triangle as printed omits the '2011 and prior' aggregate column from the underwriting_years list per instructions; the narrative also references adverse development in financial lines offset by positive development elsewhere. There was a prior-year restatement noted which 'had an impact on associated claims reserves' which may affect comparatives. Some minor parsing ambiguity existed in the printed triangle rows alignment; the PYD result (zero) is consistent with the triangle diagonal comparison but reported narrative describes offsetting movements across classes. [RAG OVERRIDE: Model said PYD=0.0, RAG triangle computed -1.7. Using RAG value.] [LOB NOT APPLIED: deterministic mix has 1 class(es) with premium 300.1 against model totals [412.3, 412.3]; model mix retained.]",
+      "data_quality_notes": "Prior year development was calculated from the gross claims development triangle (notes). The triangle as printed omits the '2011 and prior' aggregate column from the underwriting_years list per instructions; the narrative also references adverse development in financial lines offset by positive development elsewhere. There was a prior-year restatement noted which 'had an impact on associated claims reserves' which may affect comparatives. Some minor parsing ambiguity existed in the printed triangle rows alignment; the PYD result (zero) is consistent with the triangle diagonal comparison but reported narrative describes offsetting movements across classes. [RAG OVERRIDE: Model said PYD=0.0, RAG triangle computed -1.7. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -917,14 +928,25 @@
           {
             "line_of_business": "Third party liability",
             "amount_gbp_m": 300.1,
-            "percentage_of_total": 100.0
+            "percentage_of_total": 72.8
+          },
+          {
+            "line_of_business": "Reinsurance acceptances",
+            "amount_gbp_m": 112.2,
+            "percentage_of_total": 27.2
           }
         ],
-        "gross_premiums_written_gbp_m": 300.1,
+        "gross_premiums_written_gbp_m": 412.3,
+        "table_total": 412.3,
+        "class_sum": 412.3,
         "claims_incurred_by_lob": [
           {
             "line_of_business": "Third party liability",
             "amount_gbp_m": -179.3
+          },
+          {
+            "line_of_business": "Reinsurance acceptances",
+            "amount_gbp_m": -61.8
           }
         ],
         "currency": "GBP",
@@ -1042,8 +1064,8 @@
   "total_tokens": 72242,
   "validation": {
     "passed": true,
-    "total_discrepancies": 14,
-    "within_tolerance": 14,
+    "total_discrepancies": 11,
+    "within_tolerance": 11,
     "hard_failures": 0,
     "hard_failure_details": []
   }

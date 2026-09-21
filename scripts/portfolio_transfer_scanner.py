@@ -20,6 +20,12 @@ event-year rule, the same boilerplate rejection and the same propagation of an e
 the year it takes effect. Only the vocabulary differs. That way a change to how direction
 or effective year is decided applies to both, and the two scans are comparable.
 
+It reads the same filings as the RITC scan, the HTML ones included (M02). And beyond the
+vocabulary it reads one construction that has no transaction noun at all: another
+syndicate's reserves moved into this one ("... reserves from Syndicate 1955 being
+transferred into the 2016 year of account of Syndicate 1856"), admitted only when a reserve
+noun names what moves (M02).
+
 What it does NOT do: decide anything about the sample. It records events with their
 evidence so the owner can choose -- exclude the affected records, give them an RITC-style
 adjustment, or accept them with a stated limitation. Nothing here changes an adopted
@@ -136,18 +142,56 @@ NOT_A_BOOK = re.compile(
     r"assumes business|cessions? from [^.]{0,40}on the following types of business",
     re.I)
 
+#: Another syndicate's reserves moved in, told with a verb and no transaction noun (M02).
+#: 1856/2018's report: "The increase in the year was due to 15.4% of the 2015 and prior year
+#: of account of reserves from Syndicate 1955 being transferred into the 2016 year of account
+#: of Syndicate 1856." It names no RITC, LPT, portfolio transfer, novation, commutation or
+#: quota share, so no pattern above can capture it, although the classifier reads it right
+#: (inward, 2018, strong). These page searches are the shared scanner's two constructions
+#: that move ANOTHER syndicate's book INTO this one, with any syndicate number and any
+#: whitespace, because the text layer breaks that sentence across lines. Whose book moves
+#: where is then read off the sentence with this syndicate's own number, by
+#: `classify_sentence` and `_moves_reserves_in`.
+TERMLESS_PATTERNS = [("moved_in", c.replace("OTHER", r"\d+").replace("OWN", r"\d+")
+                      .replace(" ", r"\s+")) for c in rs.INTO_THIS_SYNDICATE]
 
-def _is_a_book_transfer(snippet):
+#: On the termless path, what moves has to be named as a stock of claims. A year-of-account
+#: label is not one: 1856/2020 describes a quota share of Syndicate 1955's current business
+#: "for 2018 and prior years of account". Nor is the liability word in a named class ("the
+#: ibott General Liability class written by Syndicate 1969", 1971/2020), which
+#: CLASS_OF_BUSINESS strips first.
+RESERVE_NOUN = re.compile(
+    r"\breserves?\b|\bliabilit(?:y|ies)\b|\b(?:technical|claims?) provisions?\b|"
+    r"\bprovisions? for claims\b|\bclaims outstanding\b|\boutstanding claims\b|"
+    r"\brun(?:-\s?|\s)?off\b", re.I)
+
+
+def _moves_reserves_in(snippet, own):
+    """The termless path (M02): the sentence moves another syndicate's book INTO this one,
+    read with this syndicate's own number, and names what moves as reserves or liabilities.
+    The bare "business ... written by Syndicate N" cue cannot carry it: that is how a quota
+    share of current business reads ("The Whole Account Lloyd's Quota Share consists of
+    business written by Syndicate 1955 on a whole account net basis", 1856/2018)."""
+    if own is None:
+        return False
+    s = re.sub(r"\s+", " ", snippet)
+    if not rs._any(rs.INTO_THIS_SYNDICATE, s, own):
+        return False
+    return bool(RESERVE_NOUN.search(CLASS_OF_BUSINESS.sub(" ", s)))
+
+
+def _is_a_book_transfer(snippet, own=None):
     """Does this sentence move a book of claims?
 
     Checked before anything else, because a novation of an *agreement* carries a
-    self-qualifying word and moves nothing (round 56)."""
+    self-qualifying word and moves nothing (round 56). A sentence with no transfer term
+    moves one only on the termless path, which needs `own`, this syndicate's number (M02)."""
     if NOT_A_BOOK.search(snippet):
         return False
     if SELF_RE.search(snippet):
         return True
     if not TERM_RE.search(snippet):
-        return False
+        return _moves_reserves_in(snippet, own)
     # The liability word has to denote a stock of obligations. Strip the occurrences that
     # are the name of a line of business before asking whether any object survives (R174).
     stripped = CLASS_OF_BUSINESS.sub(" ", snippet)
@@ -199,11 +243,14 @@ def _install():
         _PRISTINE.setdefault(name, value)
         setattr(rs, name, [_retermed(p, original_term, TRANSFER_TERM)
                            if isinstance(p, str) else p for p in value])
-    # Record what these two displace. The loop above captures only lists whose strings
+    # Record what these displace. The loop above captures only lists whose strings
     # embed the term, and SENTENCE_PATTERNS is a list of (class, pattern) tuples, so it
     # was overwritten without ever being captured and `_restore()` could not put it back.
+    # TERMLESS_PATTERNS is such a list too, and embeds no term by definition (M02).
     _PRISTINE.setdefault("SENTENCE_PATTERNS", rs.SENTENCE_PATTERNS)
+    _PRISTINE.setdefault("TERMLESS_PATTERNS", rs.TERMLESS_PATTERNS)
     rs.SENTENCE_PATTERNS = SENTENCE_PATTERNS
+    rs.TERMLESS_PATTERNS = TERMLESS_PATTERNS
     rs.RITC_TERM = TRANSFER_TERM
 
 
@@ -223,7 +270,9 @@ def scan_all(limit=None):
 
 
 def _scan_all_installed(limit=None):
-    reports = sorted(REPORTS_DIR.glob("*.pdf"))
+    # the RITC scan's own list, HTML included: the 2024 filings are HTML and a *.pdf glob
+    # never read them (M02)
+    reports = rs.list_reports(REPORTS_DIR)
     if limit:
         reports = reports[:limit]
     results = {}
@@ -240,7 +289,8 @@ def _scan_all_installed(limit=None):
         # are permissive about counterparties and amounts, and an ordinary current-year
         # quota share must not become a flag.
         before = list(res.get("events") or [])
-        kept = [ev for ev in before if _is_a_book_transfer(ev.get("snippet") or "")]
+        own = key.split("_")[0]
+        kept = [ev for ev in before if _is_a_book_transfer(ev.get("snippet") or "", own)]
         if len(kept) != len(before):
             # Count what was actually dropped (R170).
             res["n_events_dropped_as_current_year"] = len(before) - len(kept)
@@ -283,11 +333,13 @@ def _apply_the_evidence_gate(res, basis):
     number or a money amount. For RITC that is evidence, because the term is itself a
     prior-year term; for "quota share" it is not (R175). A self-qualifying term is evidence
     on its own: nobody novates or commutes next year's premium (R180). The gate reads the
-    events the flag rests on, not every event the report produced (R200)."""
+    events the flag rests on, not every event the report produced (R200). A termless event
+    is evidence as well: the book filter kept it only for another syndicate's reserves moving
+    into this one (M02); without it here the gate would withdraw that flag unseen."""
     if not res.get("transfer_occurred"):
         return
     strong = [ev for ev in basis
-              if (ev.get("pattern_class") or "") in ("prior_scope", "acceptance")
+              if (ev.get("pattern_class") or "") in ("prior_scope", "acceptance", "moved_in")
               or SELF_RE.search(ev.get("snippet") or "")]
     if not strong:
         res["transfer_occurred"] = False
@@ -308,10 +360,19 @@ def _decide_on(res, kept, year, any_mention):
 
     `scan_report` decides on every event it found, and this scanner then drops the ones that
     do not move a book of claims. The flag used to be reset only when nothing survived or
-    nothing strong survived, so it could rest on a dropped event: 1856/2018 was flagged on a
-    whole-account quota share of Syndicate 1955's current business, which the filter dropped
-    (R200). The decision is the RITC scan's own `_decide`, run on what survived."""
-    decided = rs._decide(kept, year, any_mention)
+    nothing strong survived, so it could rest on a dropped event: 1856/2018 was flagged on
+    "The Whole Account Lloyd's Quota Share consists of business written by Syndicate 1955 on
+    a whole account net basis", a sentence about current business, which the filter dropped
+    (R200). The rule holds; the record was misread. Two lines further down the same page
+    says that 15.4% of Syndicate 1955's 2015 and prior reserves were transferred into
+    1856's 2016 year of account: an inward transfer of old reserves, told without a
+    transaction noun, which the termless path now reads (M02).
+
+    The decision is the RITC scan's own `_decide`, run on what survived. With nothing left,
+    the evidence says why: every event was dropped, or `scan_report`'s own reason."""
+    why_none = ("every event found was dropped by the book-transfer filter" if any_mention
+                else res.get("evidence"))
+    decided = rs._decide(kept, year, any_mention, why_none=why_none)
     for field in _DECISION_FIELDS:
         res.pop(field, None)
     decided["transfer_occurred"] = decided.pop("ritc_occurred")
@@ -330,12 +391,13 @@ def main():
     payload["_meta"] = {
         "purpose": ("An inward transfer of prior-year liabilities that is not reinsurance "
                     "to close: a loss portfolio transfer, novation, commutation or a quota "
-                    "share written over prior years. Such a transfer puts another party's "
-                    "claims into the gross development triangle, so the diagonal is not "
-                    "purely this syndicate's own re-estimation."),
-        "sibling": ("Shares ritc_scanner.py's page-text loading, direction and event-year "
-                    "classification, boilerplate rejection and propagation; only the "
-                    "vocabulary differs."),
+                    "share written over prior years, or another syndicate's reserves moved "
+                    "into this one and told without a transaction noun. Such a transfer puts "
+                    "another party's claims into the gross development triangle, so the "
+                    "diagonal is not purely this syndicate's own re-estimation."),
+        "sibling": ("Shares ritc_scanner.py's file list, page-text loading, direction and "
+                    "event-year classification, boilerplate rejection and propagation; only "
+                    "the vocabulary differs."),
         "decides_nothing": ("This flag changes no adopted figure. It exists so the records "
                             "can be excluded, adjusted like RITC, or accepted with a stated "
                             "limitation -- an owner's decision, recorded separately."),

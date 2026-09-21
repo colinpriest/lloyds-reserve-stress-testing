@@ -1,5 +1,5 @@
 {
-  "extraction_timestamp": "2026-09-13T11:05:44.086172+00:00",
+  "extraction_timestamp": "2026-09-21T10:05:18.431871+00:00",
   "spec": {
     "prompt_version": "2.13",
     "driver_prompt_version": "2.13",
@@ -85,33 +85,38 @@
           "confidence": 0.5
         }
       ],
-      "gross_premiums_written_gbp_m": 356.7,
+      "gross_premiums_written_gbp_m": 398.4,
       "gross_premium_mix": [
-        {
-          "line_of_business": "Fire and other damage to property",
-          "amount_gbp_m": 118.1,
-          "percentage_of_total": 33.1
-        },
         {
           "line_of_business": "Marine aviation and transport",
           "amount_gbp_m": 32.2,
-          "percentage_of_total": 9.0
+          "percentage_of_total": 8.08
+        },
+        {
+          "line_of_business": "Fire and other damage to property",
+          "amount_gbp_m": 118.1,
+          "percentage_of_total": 29.64
         },
         {
           "line_of_business": "Third party liability",
           "amount_gbp_m": 199.2,
-          "percentage_of_total": 55.8
+          "percentage_of_total": 50.0
         },
         {
           "line_of_business": "Miscellaneous",
           "amount_gbp_m": 7.2,
-          "percentage_of_total": 2.0
+          "percentage_of_total": 1.81
+        },
+        {
+          "line_of_business": "Reinsurance accepted",
+          "amount_gbp_m": 41.7,
+          "percentage_of_total": 10.47
         }
       ],
       "gross_premium_page": 3,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "Prior year development figure is net of reinsurance as no gross figure was explicitly stated or calculable from the provided claims development triangles.",
+      "data_quality_notes": "Prior year development figure is net of reinsurance as no gross figure was explicitly stated or calculable from the provided claims development triangles. [LOB NOT APPLIED: deterministic mix of 8 class(es) sums to 799.600m, which does not reconcile within 2% with the model totals [398.4, 398.4]; model mix retained.]",
       "_claims_triangle": {
         "type": "loss_ratio",
         "currency": "USD",
@@ -262,35 +267,57 @@
       "_adobe_lob": {
         "gross_premium_mix": [
           {
-            "line_of_business": "Fire and other damage to property",
-            "amount_gbp_m": 118.1,
-            "percentage_of_total": 33.1
-          },
-          {
             "line_of_business": "Marine aviation and transport",
             "amount_gbp_m": 32.2,
-            "percentage_of_total": 9.0
+            "percentage_of_total": 4.0
+          },
+          {
+            "line_of_business": "Fire and other damage to property",
+            "amount_gbp_m": 118.1,
+            "percentage_of_total": 14.8
           },
           {
             "line_of_business": "Third party liability",
             "amount_gbp_m": 199.2,
-            "percentage_of_total": 55.8
+            "percentage_of_total": 24.9
           },
           {
             "line_of_business": "Miscellaneous",
             "amount_gbp_m": 7.2,
-            "percentage_of_total": 2.0
-          }
-        ],
-        "gross_premiums_written_gbp_m": 356.7,
-        "claims_incurred_by_lob": [
+            "percentage_of_total": 0.9
+          },
+          {
+            "line_of_business": "Third party liability",
+            "amount_gbp_m": 43.1,
+            "percentage_of_total": 5.4
+          },
           {
             "line_of_business": "Fire and other damage to property",
-            "amount_gbp_m": -40.5
+            "amount_gbp_m": 0.8,
+            "percentage_of_total": 0.1
           },
           {
             "line_of_business": "Marine aviation and transport",
+            "amount_gbp_m": 0.6,
+            "percentage_of_total": 0.1
+          },
+          {
+            "line_of_business": "Direct and Reinsurance accepted",
+            "amount_gbp_m": 398.4,
+            "percentage_of_total": 49.8
+          }
+        ],
+        "gross_premiums_written_gbp_m": null,
+        "table_total": null,
+        "class_sum": 799.6,
+        "claims_incurred_by_lob": [
+          {
+            "line_of_business": "Marine aviation and transport",
             "amount_gbp_m": -10.6
+          },
+          {
+            "line_of_business": "Fire and other damage to property",
+            "amount_gbp_m": -40.5
           },
           {
             "line_of_business": "Third party liability",
@@ -299,10 +326,28 @@
           {
             "line_of_business": "Miscellaneous",
             "amount_gbp_m": -2.0
+          },
+          {
+            "line_of_business": "Third party liability",
+            "amount_gbp_m": -22.1
+          },
+          {
+            "line_of_business": "Fire and other damage to property",
+            "amount_gbp_m": 0.3
+          },
+          {
+            "line_of_business": "Marine aviation and transport",
+            "amount_gbp_m": -2.1
+          },
+          {
+            "line_of_business": "Direct and Reinsurance accepted",
+            "amount_gbp_m": -174.4
           }
         ],
-        "currency": "GBP",
-        "method": "azure_text_fallback"
+        "currency": "USD",
+        "method": "azure",
+        "source_page": 32,
+        "entity": 3623
       },
       "_adobe_provisions": {
         "opening_provenance": {
@@ -386,6 +431,12 @@
         "source": "azure_table",
         "applied_value_m": 444.2,
         "unit_resolution": "header"
+      },
+      "_pyd_route": {
+        "source": "model_reading",
+        "value": -8.6,
+        "note": "stated in the reserve text",
+        "stated": true
       }
     },
     "gpt-5-mini": {
@@ -490,33 +541,38 @@
           "confidence": 0.4
         }
       ],
-      "gross_premiums_written_gbp_m": 356.7,
+      "gross_premiums_written_gbp_m": 398.4,
       "gross_premium_mix": [
-        {
-          "line_of_business": "Fire and other damage to property",
-          "amount_gbp_m": 118.1,
-          "percentage_of_total": 33.1
-        },
         {
           "line_of_business": "Marine aviation and transport",
           "amount_gbp_m": 32.2,
-          "percentage_of_total": 9.0
+          "percentage_of_total": 8.1
+        },
+        {
+          "line_of_business": "Fire and other damage to property",
+          "amount_gbp_m": 118.1,
+          "percentage_of_total": 29.7
         },
         {
           "line_of_business": "Third party liability",
           "amount_gbp_m": 199.2,
-          "percentage_of_total": 55.8
+          "percentage_of_total": 50.0
         },
         {
           "line_of_business": "Miscellaneous",
           "amount_gbp_m": 7.2,
-          "percentage_of_total": 2.0
+          "percentage_of_total": 1.8
+        },
+        {
+          "line_of_business": "Reinsurance acceptances",
+          "amount_gbp_m": 41.7,
+          "percentage_of_total": 10.5
         }
       ],
       "gross_premium_page": 32,
       "gross_premium_confidence": 1.0,
       "currency": "USD",
-      "data_quality_notes": "No explicit GROSS prior-year reserve movement (insurance liabilities) figure was provided in the technical movement notes. The only explicitly stated prior-year reserve movement is a $8.6m 'prior year reserves releases' figure in the Strategic Report; this narrative figure is likely NET but the report does not state gross vs net. The gross claims development table is present but development cells are given as percentages (not dollar amounts by development period), so it could not be used to compute a gross PYD. LOB movement allocations are inferred (market facilities/personal accident -> Accident & Health / Treaty) and therefore have lower confidence.",
+      "data_quality_notes": "No explicit GROSS prior-year reserve movement (insurance liabilities) figure was provided in the technical movement notes. The only explicitly stated prior-year reserve movement is a $8.6m 'prior year reserves releases' figure in the Strategic Report; this narrative figure is likely NET but the report does not state gross vs net. The gross claims development table is present but development cells are given as percentages (not dollar amounts by development period), so it could not be used to compute a gross PYD. LOB movement allocations are inferred (market facilities/personal accident -> Accident & Health / Treaty) and therefore have lower confidence. [LOB NOT APPLIED: deterministic mix of 8 class(es) sums to 799.600m, which does not reconcile within 2% with the model totals [398.4, 398.4]; model mix retained.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "USD",
@@ -684,35 +740,57 @@
       "_adobe_lob": {
         "gross_premium_mix": [
           {
-            "line_of_business": "Fire and other damage to property",
-            "amount_gbp_m": 118.1,
-            "percentage_of_total": 33.1
-          },
-          {
             "line_of_business": "Marine aviation and transport",
             "amount_gbp_m": 32.2,
-            "percentage_of_total": 9.0
+            "percentage_of_total": 4.0
+          },
+          {
+            "line_of_business": "Fire and other damage to property",
+            "amount_gbp_m": 118.1,
+            "percentage_of_total": 14.8
           },
           {
             "line_of_business": "Third party liability",
             "amount_gbp_m": 199.2,
-            "percentage_of_total": 55.8
+            "percentage_of_total": 24.9
           },
           {
             "line_of_business": "Miscellaneous",
             "amount_gbp_m": 7.2,
-            "percentage_of_total": 2.0
-          }
-        ],
-        "gross_premiums_written_gbp_m": 356.7,
-        "claims_incurred_by_lob": [
+            "percentage_of_total": 0.9
+          },
+          {
+            "line_of_business": "Third party liability",
+            "amount_gbp_m": 43.1,
+            "percentage_of_total": 5.4
+          },
           {
             "line_of_business": "Fire and other damage to property",
-            "amount_gbp_m": -40.5
+            "amount_gbp_m": 0.8,
+            "percentage_of_total": 0.1
           },
           {
             "line_of_business": "Marine aviation and transport",
+            "amount_gbp_m": 0.6,
+            "percentage_of_total": 0.1
+          },
+          {
+            "line_of_business": "Direct and Reinsurance accepted",
+            "amount_gbp_m": 398.4,
+            "percentage_of_total": 49.8
+          }
+        ],
+        "gross_premiums_written_gbp_m": null,
+        "table_total": null,
+        "class_sum": 799.6,
+        "claims_incurred_by_lob": [
+          {
+            "line_of_business": "Marine aviation and transport",
             "amount_gbp_m": -10.6
+          },
+          {
+            "line_of_business": "Fire and other damage to property",
+            "amount_gbp_m": -40.5
           },
           {
             "line_of_business": "Third party liability",
@@ -721,10 +799,28 @@
           {
             "line_of_business": "Miscellaneous",
             "amount_gbp_m": -2.0
+          },
+          {
+            "line_of_business": "Third party liability",
+            "amount_gbp_m": -22.1
+          },
+          {
+            "line_of_business": "Fire and other damage to property",
+            "amount_gbp_m": 0.3
+          },
+          {
+            "line_of_business": "Marine aviation and transport",
+            "amount_gbp_m": -2.1
+          },
+          {
+            "line_of_business": "Direct and Reinsurance accepted",
+            "amount_gbp_m": -174.4
           }
         ],
-        "currency": "GBP",
-        "method": "azure_text_fallback"
+        "currency": "USD",
+        "method": "azure",
+        "source_page": 32,
+        "entity": 3623
       },
       "_adobe_provisions": {
         "opening_provenance": {
@@ -808,6 +904,12 @@
         "source": "azure_table",
         "applied_value_m": 444.2,
         "unit_resolution": "header"
+      },
+      "_pyd_route": {
+        "source": "model_reading",
+        "value": -8.6,
+        "note": "stated in the reserve text",
+        "stated": true
       }
     }
   },
@@ -815,8 +917,8 @@
   "total_tokens": 46080,
   "validation": {
     "passed": true,
-    "total_discrepancies": 15,
-    "within_tolerance": 15,
+    "total_discrepancies": 20,
+    "within_tolerance": 20,
     "hard_failures": 0,
     "hard_failure_details": []
   }

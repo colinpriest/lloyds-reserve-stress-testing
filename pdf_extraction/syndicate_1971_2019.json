@@ -1,264 +1,30 @@
 {
-  "extraction_timestamp": "2026-09-13T10:54:04.892364+00:00",
+  "extraction_timestamp": "2026-09-21T09:08:19.286521+00:00",
   "spec": {
     "prompt_version": "2.13",
-    "driver_prompt_version": "2.13",
-    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
   "source_file": "syndicate_reports\\pdfs\\syndicate_1971_2019.pdf",
-  "models": {
-    "gemini-2.5-flash": {
-      "syndicate": 1971,
-      "year": 2019,
-      "opening_reserves_gbp_m": 0.015,
-      "opening_reserves_page": 16,
-      "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": null,
-      "prior_year_development_pct": null,
-      "direction": "flat",
-      "prior_year_movement_page": 15,
-      "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "This is the first year of trading and therefore there is no historic development.",
-      "primary_causes": [],
-      "specific_events": [],
-      "specific_years_affected": [],
-      "prior_year_events": [],
-      "named_events": [],
-      "standardized_narrative": "Syndicate 1971 commenced underwriting in 2019, its first year of trading. As such, there is no prior year reserve development to report.",
-      "raw_causal_phrases": [],
-      "lob_movements": [],
-      "gross_premiums_written_gbp_m": 84.3,
-      "gross_premium_mix": [
-        {
-          "line_of_business": "Reinsurance",
-          "amount_gbp_m": 84.3,
-          "percentage_of_total": 100.0
-        }
+  "first_year_syndicate": true,
+  "reason": "Syndicate too new - no underwriting year old enough for prior year development in the report's triangles, and no prior-year figure stated in its reserve text",
+  "syndicate": 1971,
+  "year": 2019,
+  "first_year_evidence": {
+    "triangle_underwriting_years": {
+      "rag": [
+        2019
       ],
-      "gross_premium_page": 2,
-      "gross_premium_confidence": 1.0,
-      "currency": "USD",
-      "data_quality_notes": "The syndicate commenced underwriting in 2019, so there is no prior year development. The claims development triangle only shows data for the 2019 underwriting year, reflecting its first year of operation.",
-      "_claims_triangle": {
-        "type": "gross",
-        "currency": "USD",
-        "units": "thousands",
-        "page": 15,
-        "underwriting_years": [
-          2019
-        ],
-        "development_rows": [
-          [
-            28066
-          ]
-        ]
-      },
-      "source_type": "syndicate",
-      "source_file": "pdf_extraction\\llm_slim\\syndicate_1971_2019_llm.pdf",
-      "content_hash": "d816e7bf2b4bce7797ce5d0d5d12b04374c282472f6f8ba3aead62cf09fd3019",
-      "standardized_at": "2026-09-11T11:33:35.844339+00:00",
-      "standardization_model": "gemini-2.5-flash",
-      "_extraction_meta": {
-        "model": "gemini-2.5-flash",
-        "input_tokens": 10925,
-        "output_tokens": 536,
-        "total_tokens": 13087,
-        "cost_usd": 0.004618
-      },
-      "_entity_binding": {
-        "requested_syndicate": 1971,
-        "entity_pages": {
-          "none": [
-            0
-          ],
-          "1971": [
-            1,
-            2,
-            3,
-            4,
-            5,
-            6,
-            7,
-            8,
-            9,
-            10,
-            11,
-            12,
-            13,
-            14,
-            15,
-            16,
-            17,
-            18,
-            19,
-            20,
-            21,
-            22,
-            23,
-            24,
-            25,
-            26,
-            27,
-            28,
-            29,
-            30,
-            31,
-            32,
-            33,
-            34,
-            35,
-            36,
-            37,
-            38
-          ]
-        },
-        "foreign_tables_skipped": 0,
-        "foreign_pages": [],
-        "underwriting_year_pages": [],
-        "underwriting_year_tables_skipped": 0,
-        "document_unit_hint": 0.001
-      }
+      "gemini-2.5-flash": [
+        2019
+      ],
+      "gpt-5-mini": [
+        2019
+      ]
     },
-    "gpt-5-mini": {
-      "syndicate": 1971,
-      "year": 2019,
-      "opening_reserves_gbp_m": 0.0,
-      "opening_reserves_page": 16,
-      "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": null,
-      "prior_year_development_pct": null,
-      "direction": "flat",
-      "prior_year_movement_page": null,
-      "prior_year_movement_confidence": 0.0,
-      "exact_reserve_text": "The adjustment in the current year for the revision to the prior year estimate of the provision for claims outstanding is disclosed in note 6.",
-      "primary_causes": [
-        "IBNR recalibration",
-        "Reserve methodology change",
-        "Other"
-      ],
-      "specific_events": [],
-      "specific_years_affected": [],
-      "prior_year_events": [],
-      "named_events": [],
-      "standardized_narrative": "Syndicate 1971 commenced underwriting in 2019, so opening gross claims reserves at 1 January 2019 were nil. No prior-year reserve movement applies as this is the first underwriting year. During 2019 a gross claims provision was established (closing gross claims outstanding $28.036m) reflecting IBNR and prudential margins due to limited data and the new class of business.",
-      "raw_causal_phrases": [
-        "recognising that this is the first year of underwriting for the syndicate and that a range of uncertainties and outcomes are possible for the result.",
-        "We have therefore made a provision within claims that have been incurred at the reporting date but have not yet been reported (\"IBNR\") in the calendar year to allow for this reserving uncertainty.",
-        "This provision is in excess of our best estimate for claims costs which is in line with our original business plan.",
-        "The syndicate's business is an entirely new class of business with data limitations, longer tailed features and increased inherent uncertainty in the likely quantum and incidence of claims.",
-        "considerable use is made of information obtained in the course of pricing individual risks accepted, experience of analogous business and a prudential margin is added to reflect the risk that the outcome, which will not be known for a considerable period of time, may be worse than expected."
-      ],
-      "lob_movements": [
-        {
-          "line_of_business": "Motor",
-          "direction": "flat",
-          "amount_gbp_m": null,
-          "percentage": null,
-          "confidence": 0.5
-        }
-      ],
-      "gross_premiums_written_gbp_m": 84.253,
-      "gross_premium_mix": [
-        {
-          "line_of_business": "Reinsurance",
-          "amount_gbp_m": 84.253,
-          "percentage_of_total": 100.0
-        }
-      ],
-      "gross_premium_page": 15,
-      "gross_premium_confidence": 1.0,
-      "currency": "USD",
-      "data_quality_notes": "This syndicate began underwriting in 2019 so there are no prior-year (pre-2019) gross claims reserves or quantified prior-year movements. Opening gross claims outstanding at 1 January 2019 is explicitly nil. The Technical Reserves reconciliation shows a movement in gross claims provision during 2019 (gross increase $28.021k) but that is the current-year provision movement and not a prior-year development. Segmental breakdown is limited; the report states all business is reinsurance so 'Reinsurance' is used for gross_premium_mix. All amounts reported in native currency (USD).",
-      "_claims_triangle": {
-        "type": "gross",
-        "currency": "USD",
-        "units": "thousands",
-        "page": 15,
-        "underwriting_years": [
-          2019
-        ],
-        "development_rows": [
-          [
-            28066
-          ]
-        ]
-      },
-      "source_type": "syndicate",
-      "source_file": "pdf_extraction\\llm_slim\\syndicate_1971_2019_llm.pdf",
-      "content_hash": "d816e7bf2b4bce7797ce5d0d5d12b04374c282472f6f8ba3aead62cf09fd3019",
-      "standardized_at": "2026-09-11T11:34:51.952691+00:00",
-      "standardization_model": "gpt-5-mini",
-      "_extraction_meta": {
-        "model": "gpt-5-mini",
-        "input_tokens": 14820,
-        "output_tokens": 4137,
-        "total_tokens": 18957,
-        "cost_usd": 0.011979
-      },
-      "_entity_binding": {
-        "requested_syndicate": 1971,
-        "entity_pages": {
-          "none": [
-            0
-          ],
-          "1971": [
-            1,
-            2,
-            3,
-            4,
-            5,
-            6,
-            7,
-            8,
-            9,
-            10,
-            11,
-            12,
-            13,
-            14,
-            15,
-            16,
-            17,
-            18,
-            19,
-            20,
-            21,
-            22,
-            23,
-            24,
-            25,
-            26,
-            27,
-            28,
-            29,
-            30,
-            31,
-            32,
-            33,
-            34,
-            35,
-            36,
-            37,
-            38
-          ]
-        },
-        "foreign_tables_skipped": 0,
-        "foreign_pages": [],
-        "underwriting_year_pages": [],
-        "underwriting_year_tables_skipped": 0,
-        "document_unit_hint": 0.001
-      }
+    "model_figures_not_stated": {
+      "gemini-2.5-flash": null,
+      "gpt-5-mini": null
     }
-  },
-  "total_cost_usd": 0.016597,
-  "total_tokens": 32044,
-  "validation": {
-    "passed": true,
-    "total_discrepancies": 18,
-    "within_tolerance": 18,
-    "hard_failures": 0,
-    "hard_failure_details": []
   }
 }

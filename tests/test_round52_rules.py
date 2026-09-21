@@ -121,13 +121,21 @@ class TestBusinessMix:
         assert te._is_pl_label("Net premiums written") and te._is_pl_label("Balance on the technical account")
 
     def test_driver_gate_on_the_deterministic_mix(self):
+        """Round 58 (M03): the class sum must reconcile within 2% with a model total for any
+        number of classes; with no model total nothing independent reconciles it."""
         from test_gemini import _lob_override_gate
-        two = {"gross_premium_mix": [{"line_of_business": "Marine"}, {"line_of_business": "Property"}], "gross_premiums_written_gbp_m": 100.0}
-        assert _lob_override_gate(two, [None, None]) == (True, None)
-        one_bad = {"gross_premium_mix": [{"line_of_business": "Third party liability"}], "gross_premiums_written_gbp_m": 4.0}
+        two = {"gross_premium_mix": [{"line_of_business": "Marine", "amount_gbp_m": 40.0},
+                                     {"line_of_business": "Property", "amount_gbp_m": 60.0}],
+               "gross_premiums_written_gbp_m": 100.0}
+        assert _lob_override_gate(two, [100.0, None]) == (True, None)
+        ok, why = _lob_override_gate(two, [None, None])
+        assert not ok and "LOB NOT APPLIED" in why
+        one_bad = {"gross_premium_mix": [{"line_of_business": "Third party liability", "amount_gbp_m": 4.0}],
+                   "gross_premiums_written_gbp_m": 4.0}
         ok, why = _lob_override_gate(one_bad, [1499.6, 1520.0])
         assert not ok and "LOB NOT APPLIED" in why
-        one_spa = {"gross_premium_mix": [{"line_of_business": "Property"}], "gross_premiums_written_gbp_m": 30.4}
+        one_spa = {"gross_premium_mix": [{"line_of_business": "Property", "amount_gbp_m": 30.4}],
+                   "gross_premiums_written_gbp_m": 30.4}
         assert _lob_override_gate(one_spa, [29.9, 31.0])[0]
 
 

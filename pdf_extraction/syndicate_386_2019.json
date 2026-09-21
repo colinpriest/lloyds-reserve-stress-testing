@@ -1,5 +1,5 @@
 {
-  "extraction_timestamp": "2026-09-13T11:00:57.273617+00:00",
+  "extraction_timestamp": "2026-09-21T10:08:20.289011+00:00",
   "spec": {
     "prompt_version": "2.13",
     "driver_prompt_version": "2.13",
@@ -94,18 +94,18 @@
         {
           "line_of_business": "Third party liability",
           "amount_gbp_m": 243.1,
-          "percentage_of_total": 70.18
+          "percentage_of_total": 70.2
         },
         {
           "line_of_business": "Reinsurance acceptances",
           "amount_gbp_m": 103.3,
-          "percentage_of_total": 29.82
+          "percentage_of_total": 29.8
         }
       ],
       "gross_premium_page": 14,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior year development calculated from the gross claims development triangle on page 20. No specific LOB breakdown for prior year development was quantified. [RAG OVERRIDE: Model said PYD=-100.2, RAG triangle computed 93.1. Using RAG value.] [LOB NOT APPLIED: deterministic mix has 1 class(es) with premium 243.1 against model totals [346.4, 346.4]; model mix retained.]",
+      "data_quality_notes": "Prior year development calculated from the gross claims development triangle on page 20. No specific LOB breakdown for prior year development was quantified. [RAG OVERRIDE: Model said PYD=-100.2, RAG triangle computed 93.1. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -383,14 +383,25 @@
           {
             "line_of_business": "Third party liability",
             "amount_gbp_m": 243.1,
-            "percentage_of_total": 100.0
+            "percentage_of_total": 70.2
+          },
+          {
+            "line_of_business": "Reinsurance acceptances",
+            "amount_gbp_m": 103.3,
+            "percentage_of_total": 29.8
           }
         ],
-        "gross_premiums_written_gbp_m": 243.1,
+        "gross_premiums_written_gbp_m": 346.4,
+        "table_total": 346.4,
+        "class_sum": 346.4,
         "claims_incurred_by_lob": [
           {
             "line_of_business": "Third party liability",
             "amount_gbp_m": -232.8
+          },
+          {
+            "line_of_business": "Reinsurance acceptances",
+            "amount_gbp_m": -107.7
           }
         ],
         "currency": "GBP",
@@ -567,7 +578,7 @@
       "gross_premium_page": 27,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Gross prior-year development on a GROSS basis could not be identified as material from the published gross claims development triangle (the diagonals indicate no net change for underwriting years up to 2017). The report does state net adverse prior-year development (after reinsurance) and notes the Ogden rate change; however no explicit gross prior-year movement figure is provided. The claims triangle was used as the primary gross source. Triangle parsing required mapping rows to underwriting years; an aggregate 'X and prior' column was excluded per instructions. [RAG OVERRIDE: Model said PYD=0.0, RAG triangle computed 93.1. Using RAG value.] [LOB NOT APPLIED: deterministic mix has 1 class(es) with premium 243.1 against model totals [346.4, 346.4]; model mix retained.]",
+      "data_quality_notes": "Gross prior-year development on a GROSS basis could not be identified as material from the published gross claims development triangle (the diagonals indicate no net change for underwriting years up to 2017). The report does state net adverse prior-year development (after reinsurance) and notes the Ogden rate change; however no explicit gross prior-year movement figure is provided. The claims triangle was used as the primary gross source. Triangle parsing required mapping rows to underwriting years; an aggregate 'X and prior' column was excluded per instructions. [RAG OVERRIDE: Model said PYD=0.0, RAG triangle computed 93.1. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -845,14 +856,25 @@
           {
             "line_of_business": "Third party liability",
             "amount_gbp_m": 243.1,
-            "percentage_of_total": 100.0
+            "percentage_of_total": 70.2
+          },
+          {
+            "line_of_business": "Reinsurance acceptances",
+            "amount_gbp_m": 103.3,
+            "percentage_of_total": 29.8
           }
         ],
-        "gross_premiums_written_gbp_m": 243.1,
+        "gross_premiums_written_gbp_m": 346.4,
+        "table_total": 346.4,
+        "class_sum": 346.4,
         "claims_incurred_by_lob": [
           {
             "line_of_business": "Third party liability",
             "amount_gbp_m": -232.8
+          },
+          {
+            "line_of_business": "Reinsurance acceptances",
+            "amount_gbp_m": -107.7
           }
         ],
         "currency": "GBP",
@@ -963,8 +985,8 @@
   "total_tokens": 63321,
   "validation": {
     "passed": true,
-    "total_discrepancies": 19,
-    "within_tolerance": 19,
+    "total_discrepancies": 17,
+    "within_tolerance": 17,
     "hard_failures": 0,
     "hard_failure_details": []
   }

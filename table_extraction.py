@@ -545,23 +545,35 @@ class TriangleData:
 
 @dataclass
 class LOBData:
-    """Line of business breakdown from segmental analysis."""
+    """Line of business breakdown from segmental analysis.
+
+    `gross_premiums_written_gbp_m` is the table's own total and is None when the table
+    prints none; it is never the sum of the classes. `table_total` and `class_sum` are
+    carried apart so a reader can reconcile them (round 58, M03). `reconciled_with` is the
+    independently read gross premiums written a text-fallback mix was admitted against."""
     gross_premium_mix: list[dict] = field(default_factory=list)
-    gross_premiums_written_gbp_m: float = 0.0
+    gross_premiums_written_gbp_m: Optional[float] = None
     claims_incurred_by_lob: Optional[list[dict]] = None
     currency: str = "GBP"
     method: str = "nutrient"
     page: Optional[int] = None
     entity: Optional[int] = None
+    table_total: Optional[float] = None
+    class_sum: Optional[float] = None
+    reconciled_with: Optional[dict] = None
 
     def to_dict(self) -> dict:
         d = {
             "gross_premium_mix": self.gross_premium_mix,
             "gross_premiums_written_gbp_m": self.gross_premiums_written_gbp_m,
+            "table_total": self.table_total,
+            "class_sum": self.class_sum,
             "claims_incurred_by_lob": self.claims_incurred_by_lob,
             "currency": self.currency,
             "method": self.method,
         }
+        if self.reconciled_with is not None:
+            d["reconciled_with"] = self.reconciled_with
         if self.page is not None:
             d["source_page"] = int(self.page) + 1
         if self.entity is not None:
@@ -2165,41 +2177,149 @@ _LOB_KEYWORDS = [
     "property catastrophe", "weather", "cyber", "liability",
 ]
 
+# Skipped as headers only when their row carries no amount: a "Reinsurance acceptances"
+# row with a premium is a class (round 58, M03: the rule dropped it from 100 records)
 _SECTION_HEADERS = {
     "direct insurance", "direct insurance:", "direct",
     "reinsurance acceptances", "reinsurance acceptances:",
 }
+# Section labels that name a subtotal when their row carries one ("Direct 542.5")
+_SUBTOTAL_SECTION_LABELS = {"direct", "direct insurance", "direct insurances"}
 _TOTAL_LABELS = {"total", "sub-total", "subtotal", "grand total", "direct insurance"}
 # Any label that begins "Total ..." is a total or subtotal row, whatever follows:
 # "Total direct", "Total direct insurance", "Total Direct and Reinsurance accepted",
 # "Total - Direct", "Total reinsurance accepted" (round 54; 146 donor records carried
 # one of these as a class, and 623/2022's grand total doubled its premium sum).
 _TOTAL_LABEL_RE = re.compile(r"^\s*(?:grand\s+)?(?:sub-?\s?)?total\b", re.I)
+# ... and so is one that ends "... Total": "Direct Total", "Reinsurance Total" (1955/2021,
+# 2012/2014; round 58, when a row the classes above it equal stopped being dropped for that)
+_TRAILING_TOTAL_RE = re.compile(r"\btotal\s*:?\s*$", re.I)
 
 
 def _is_total_label(label_lower: str) -> bool:
-    return label_lower in _TOTAL_LABELS or bool(_TOTAL_LABEL_RE.match(label_lower))
+    return (label_lower in _TOTAL_LABELS or bool(_TOTAL_LABEL_RE.match(label_lower))
+            or bool(_TRAILING_TOTAL_RE.search(label_lower)))
 
 
 def _drop_subtotal_rows(entries: list, tol: float = 0.006) -> tuple:
-    """Remove rows whose amount equals the sum of the rows before them: an unlabelled
-    subtotal ("Direct 542.5" after four direct classes) or a grand total. Returns
-    (kept, dropped)."""
+    """Remove rows whose amount equals the sum of the rows before them, when the row is
+    unlabelled or labelled as a section or a total ("Direct 542.5" after four direct
+    classes). A row labelled as a class is never a subtotal: 3000/2020's Third party
+    liability 167.3 and 2988/2022's 59.4 each came within 0.6% of the classes above them
+    and were dropped before round 58 (M03). Returns (kept, dropped)."""
     kept, dropped, block = [], [], []
     for e in entries:
         v = e["amount_raw"]
+        label = str(e.get("line_of_business") or "").strip().lower().rstrip(":")
+        subtotal_like = not label or label in _SUBTOTAL_SECTION_LABELS or _is_total_label(label)
         cands = []
         if len(block) >= 2:
             cands.append(sum(x["amount_raw"] for x in block))
         if len(kept) >= 2:
             cands.append(sum(x["amount_raw"] for x in kept))
-        if v > 0 and any(abs(v - s) <= max(tol * s, 0.15) for s in cands if s > 0):
+        if subtotal_like and v > 0 and any(abs(v - s) <= max(tol * s, 0.15) for s in cands if s > 0):
             dropped.append(e)
             block = []
             continue
         kept.append(e)
         block.append(e)
     return kept, dropped
+
+
+def _sums_classes_above(amount: float, entries: list) -> bool:
+    """True when ``amount`` equals, within 0.6% (or 0.15), the sum of two or more classes
+    read above it: the amount of a total row, whatever its label says (round 58, M03)."""
+    kept, _ = _drop_subtotal_rows(entries)
+    above = sum(e["amount_raw"] for e in kept)
+    return len(kept) >= 2 and abs(amount - above) <= max(0.006 * above, 0.15)
+
+
+def _year_section_divider(row: list, label: str, report_year: int) -> Optional[int]:
+    """The year a row opens a section for, or None. A first cell that begins with a year
+    other than the report year opens the comparative, whatever follows it: "2023
+    (Restated)", "2023*" and "2023 Fire and damage ..." are not this year's rows (round 58,
+    M03: 1176/2024, 1880/2024 and 510/2024 took their 2023 rows as classes). One that
+    begins with the report year opens this year's section when the row carries no amount,
+    as a bare year always did."""
+    m = re.match(r"^((?:19|20)\d{2})\b", label or "")
+    if not m:
+        return None
+    year = int(m.group(1))
+    if year != report_year:
+        return year
+    if not any(isinstance(_clean_cell(str(c)), (int, float)) for c in row[1:]):
+        return year
+    return None
+
+
+def _admits_premium_grid(grid: list, cats) -> bool:
+    """Whether the Azure path reads a grid for the business mix: a premium_mix grid that is
+    not a provisions table, or one whose header carries gross premiums written whatever
+    else it is tagged. A Lloyd's segmental note with a "Net technical provisions" column
+    is tagged "provisions" too, and in 17 records that tag had removed every premium grid,
+    so a partial page-text fallback took their place (round 58, M03)."""
+    if "premium_mix" not in cats:
+        return False
+    if "provisions" not in cats:
+        return True
+    head = " ".join(" ".join(str(c) for c in r) for r in grid[:3]).lower()
+    return bool(re.search(r"gross\s+(?:premiums?\s+written|written\s+premiums?)", head))
+
+
+# A table row that prints the syndicate's gross premiums written (round 58, M03)
+_GWP_ROW_LABEL = re.compile(
+    r"^\s*(?:total\s+)?gross\s+(?:premiums?\s+written|written\s+premiums?|premium\s+written)\b", re.I)
+
+
+def gross_premiums_written_readings(grids, report_year: int, doc_unit: Optional[float] = None) -> list:
+    """Every gross premiums written figure the tables print for the report year, in
+    millions: a row so labelled (the income statement's, a key-figures table's, the
+    geographical note's total), read in the column whose header carries the report year.
+    The unit comes from the table's header rows, else the document's declaration, else
+    magnitude. `grids` holds (grid, page) pairs. These are readings of the filing made
+    apart from any class table, which is what a mix read from page text is checked
+    against (round 58, M03)."""
+    out = []
+    for grid, page in grids:
+        if not grid or len(grid) < 2:
+            continue
+        year_col = None
+        for r in grid[:3]:
+            for ci, c in enumerate(r):
+                if ci > 0 and re.search(r"\b%d\b" % report_year, str(c or "")):
+                    year_col = ci
+                    break
+            if year_col is not None:
+                break
+        if year_col is None:
+            continue
+        mult, source = _header_unit_multiplier(grid), "header"
+        if mult is None and doc_unit is not None:
+            mult, source = doc_unit, "document"
+        for r in grid:
+            label = str(r[0] or "").strip() if r else ""
+            if not _GWP_ROW_LABEL.match(label) or year_col >= len(r):
+                continue
+            v = _clean_cell(r[year_col])
+            if not isinstance(v, (int, float)) or v == 0:
+                continue
+            m, s = mult, source
+            if m is None:
+                m, s = (0.001, "magnitude") if abs(v) > 10_000 else (1.0, "magnitude")
+            out.append({"value_m": round(abs(v) * m, 6), "label": label[:60],
+                        "page": None if page is None else int(page) + 1, "unit_source": s})
+    return out
+
+
+def reconciling_reading(class_sum: Optional[float], readings: list, tol: float = 0.02) -> Optional[dict]:
+    """The first reading the class sum reconciles with, within `tol` of the reading."""
+    if not class_sum or class_sum <= 0:
+        return None
+    for r in readings:
+        v = r.get("value_m")
+        if v and v > 0 and abs(class_sum - v) <= tol * v:
+            return r
+    return None
 
 # Row labels that should be skipped — not real LOBs.
 # RITC (reinsurance to close) rows inflate the total and are not a line of business.
@@ -2234,12 +2354,13 @@ def _strip_unit_suffix(cell: str) -> str:
     return c.strip(" :")
 
 
-def _parse_transposed_lob(grid, report_year, flat):
+def _parse_transposed_lob(grid, report_year, flat, refusals: Optional[list] = None):
     """A segmental analysis with the classes across the header and the profit-and-loss
     items down the first column (round 52; Beazley 2623/623: "2015 | Marine $m | Political
     risks & contingency $m | Property $m | Reinsurance $m | Specialty lines $m", rows
     "Gross premiums written", "Net premiums written", ...).  The row-wise parser read the
-    rows as classes.  Returns LOBData from the gross-premiums-written row, or None."""
+    rows as classes.  Returns LOBData from the gross-premiums-written row, or None; a row
+    whose classes do not reconcile with its own total is refused (round 58, M03)."""
     if not grid or len(grid) < 2 or len(grid[0]) < 3:
         return None
     gpw_row = None
@@ -2285,30 +2406,39 @@ def _parse_transposed_lob(grid, report_year, flat):
     elif "eur" in flat or chr(8364) in flat:
         currency = "EUR"
     lob_sum = sum(e["amount_raw"] for e in entries)
-    if not total or total > lob_sum * 1.1:
-        total = lob_sum
+    # the total is the table's, never the classes' sum (round 58, M03)
+    if total and abs(lob_sum - total) > 0.02 * total:
+        if refusals is not None:
+            refusals.append("transposed table: classes sum to %g against its own total %g" % (lob_sum, total))
+        return None
+    basis = total or lob_sum
     units_divisor = 1.0
-    if total > 10_000_000:
+    if basis > 10_000_000:
         units_divisor = 1_000_000.0
-    elif total > 10_000:
+    elif basis > 10_000:
         units_divisor = 1_000.0
-    total_m = round(total / units_divisor, 1)
+    table_total = round(total / units_divisor, 6) if total else None
     for e in entries:
         raw = e.pop("amount_raw")
-        e["amount_gbp_m"] = round(raw / units_divisor, 1)
-        e["percentage_of_total"] = round(e["amount_gbp_m"] / total_m * 100, 1) if total_m > 0 else 0
-    return LOBData(gross_premium_mix=entries, gross_premiums_written_gbp_m=total_m,
-                   claims_incurred_by_lob=None, currency=currency, method="nutrient_transposed")
+        # amounts are stored unrounded: rounding to 0.1m zeroed classes under 50k (M03)
+        e["amount_gbp_m"] = round(raw / units_divisor, 6)
+        e["percentage_of_total"] = round(raw / basis * 100, 1) if basis > 0 else 0
+    return LOBData(gross_premium_mix=entries, gross_premiums_written_gbp_m=table_total,
+                   claims_incurred_by_lob=None, currency=currency, method="nutrient_transposed",
+                   table_total=table_total, class_sum=round(lob_sum / units_divisor, 6))
 
 
 def _parse_nutrient_lob(grid: list[list[str]], report_year: int,
-                        page_text: str = ""):
+                        page_text: str = "", refusals: Optional[list] = None):
     """Parse a Nutrient table grid as a segmental analysis / LOB breakdown.
 
     Returns LOBData or None.
     ``page_text`` is the full text of the page containing this table,
     used to detect explicit LOB table signals (e.g. "segmental analysis",
     "class of business") that may appear above the table, not in the grid.
+    ``refusals``, when given, collects the reason a premium table was refused
+    because its classes do not reconcile with its own total, or carry no
+    premium (round 58).
     """
     flat = _grid_text_lower(grid)
     combined = flat + " " + page_text.lower()
@@ -2348,7 +2478,7 @@ def _parse_nutrient_lob(grid: list[list[str]], report_year: int,
         return None
 
     # Transposed layout (classes across the header): parse the premiums row (round 52)
-    transposed = _parse_transposed_lob(grid, report_year, flat)
+    transposed = _parse_transposed_lob(grid, report_year, flat, refusals)
     if transposed is not None:
         return transposed
 
@@ -2394,48 +2524,23 @@ def _parse_nutrient_lob(grid: list[list[str]], report_year: int,
     lob_entries = []
     claims_entries = []
     total_gwp = 0.0
+    # premium on rows kept out of the mix as not a class (RITC), which a total may include
+    excluded_gwp = 0.0
+    # rows read as totals by their amount (unlabelled, or on a profit-and-loss line) because
+    # they equal the classes above them, with the class count at that row
+    totals_by_amount = []
 
     # Track year sections — segmental analysis tables often have both
     # report year (2022) and prior year (2021) rows.  Only collect data
     # from the report year section.
     in_report_year_section = True  # default if no year row seen
     seen_any_year_row = False
+    pending = None  # the previous row when it was labelled and carried no premium
 
     for row in grid[1:]:
-        if not row or not row[0].strip():
+        if not row:
             continue
-        label = row[0].strip()
-        label_lower = label.lower().rstrip(":")
-
-        # Detect year section dividers (bare year in first column, rest empty)
-        if re.match(r'^(19|20)\d{2}$', label):
-            rest_empty = all(not c.strip() for c in row[1:])
-            if rest_empty:
-                seen_any_year_row = True
-                in_report_year_section = (int(label) == report_year)
-                continue
-
-        if seen_any_year_row and not in_report_year_section:
-            continue
-
-        # Skip section headers
-        if label_lower in _SECTION_HEADERS:
-            continue
-
-        # Skip RITC and other non-LOB rows
-        if label_lower in _SKIP_ROW_LABELS:
-            continue
-
-        # Handle totals: any "Total ..." label, and the exact legacy set
-        is_total = _is_total_label(label_lower)
-        if is_total:
-            if gwp_col < len(row):
-                val = _clean_cell(row[gwp_col])
-                if isinstance(val, (int, float)):
-                    # the largest total row is the table's grand total; a
-                    # "Total direct" subtotal must not replace it
-                    total_gwp = max(total_gwp, abs(val))
-            continue
+        label = str(row[0] or "").strip()
 
         # Get GWP value
         gwp_val = None
@@ -2443,6 +2548,75 @@ def _parse_nutrient_lob(grid: list[list[str]], report_year: int,
             val = _clean_cell(row[gwp_col])
             if isinstance(val, (int, float)):
                 gwp_val = abs(val)
+        prev, pending = pending, None
+
+        if not label:
+            # An unlabelled row is the table's total when it equals the classes above
+            # it (1856/2018: 143,968 under "Total Direct" 23,198 and "Reinsurance"
+            # 120,770, where "Total Direct" had been taken for the total), or the premium
+            # of the class whose label sits on the row above (2088/2017; 5886/2024's
+            # "Credit and suretyship" 33,147). Before round 58 both were skipped (M03).
+            if gwp_val is None or (seen_any_year_row and not in_report_year_section):
+                continue
+            if _sums_classes_above(gwp_val, lob_entries):
+                totals_by_amount.append((gwp_val, len(lob_entries)))
+                continue
+            if prev is None:
+                continue
+            if prev.get("total"):
+                total_gwp = max(total_gwp, gwp_val)   # the amount of a total printed above
+                continue
+            if prev["entry"] is not None:
+                prev["entry"]["amount_raw"] = gwp_val
+                continue
+            label = prev["label"]  # a label-only row: these are its amounts
+        elif (prev is not None and prev.get("total") and gwp_val is not None
+              and not any(kw in label.lower() for kw in _LOB_KEYWORDS)):
+            # the rest of a total's label, split onto the next row with the amounts:
+            # "Total Direct" / "Insurance 564,073" (1618/2024) is a total, not a class
+            total_gwp = max(total_gwp, gwp_val)
+            continue
+        label_lower = label.lower().rstrip(":")
+
+        # Detect year section dividers: a bare year, and a first cell that opens
+        # another year's rows ("2023 (Restated)", "2023*"; round 58)
+        divider = _year_section_divider(row, label, report_year)
+        if divider is not None:
+            seen_any_year_row = True
+            in_report_year_section = (divider == report_year)
+            continue
+
+        if seen_any_year_row and not in_report_year_section:
+            continue
+
+        # Skip section headers, but only a row that carries no amount: "Reinsurance
+        # acceptances" with a premium is a class (round 58, M03)
+        if label_lower in _SECTION_HEADERS and not any(
+                isinstance(_clean_cell(c), (int, float)) for c in row[1:]):
+            continue
+
+        # Skip RITC and other non-LOB rows
+        if label_lower in _SKIP_ROW_LABELS:
+            excluded_gwp += gwp_val or 0.0
+            continue
+
+        # Handle totals: any "Total ..." label, and the exact legacy set
+        is_total = _is_total_label(label_lower)
+        if is_total:
+            if gwp_val is not None:
+                # the largest total row is the table's grand total; a
+                # "Total direct" subtotal must not replace it
+                total_gwp = max(total_gwp, gwp_val)
+            else:
+                pending = {"label": label, "entry": None, "total": True}
+            continue
+
+        # A profit-and-loss row carrying the sum of the classes above it is the total,
+        # printed on the result line: 780/2015's "Net technical result" 240,488 under
+        # seven classes summing to it was read as an eighth class (round 58, M03)
+        if gwp_val is not None and _is_pl_label(label) and _sums_classes_above(gwp_val, lob_entries):
+            totals_by_amount.append((gwp_val, len(lob_entries)))
+            continue
 
         # Get claims value
         claims_val = None
@@ -2451,62 +2625,84 @@ def _parse_nutrient_lob(grid: list[list[str]], report_year: int,
             if isinstance(val, (int, float)):
                 claims_val = val
 
+        entry = None
         if gwp_val is not None and gwp_val > 0:
-            lob_entries.append({"line_of_business": label, "amount_raw": gwp_val})
+            entry = {"line_of_business": label, "amount_raw": gwp_val}
+            lob_entries.append(entry)
         elif claims_val is not None:
-            lob_entries.append({"line_of_business": label, "amount_raw": 0.0})
+            entry = {"line_of_business": label, "amount_raw": 0.0}
+            lob_entries.append(entry)
 
         if claims_val is not None:
             claims_entries.append({"line_of_business": label, "amount_raw": claims_val})
+        if gwp_val is None:
+            pending = {"label": label, "entry": entry}
 
     if not lob_entries:
         return None
+
+    # A total read by its amount that no class follows is the table's; one that classes
+    # follow was a subtotal of the rows above it. The largest total is the grand total.
+    for amount, n_above in totals_by_amount:
+        if n_above == len(lob_entries):
+            total_gwp = max(total_gwp, amount)
 
     # A segmental table's row labels are classes; when half or more are profit-and-loss
     # items the table is transposed or is not a segmental analysis at all (round 52)
     if 2 * sum(1 for e in lob_entries if _is_pl_label(e["line_of_business"])) >= len(lob_entries):
         return None
 
-    # An unlabelled subtotal or grand total row is a class to no one (round 54)
+    # A section-labelled subtotal row is a class to no one (round 54)
     lob_entries, subtotal_rows = _drop_subtotal_rows(lob_entries)
     if not lob_entries:
         return None
 
-    # Recalculate total from LOB entries — the "Total" row in the table may
-    # include RITC or other skipped rows, making it larger than the sum of
-    # the LOB entries we actually kept.
-    lob_sum = sum(e["amount_raw"] for e in lob_entries)
-    # ... but classes summing to MORE than the table's own total are double
-    # counted (a subtotal or a comparative column read as a class), and a mix
-    # that does not reconcile with its total is no mix (round 54)
-    if total_gwp > 0 and lob_sum > total_gwp * 1.02:
+    # The classes must reconcile with the table's own total, with or without the rows
+    # kept out as not a class. A total 2% or more away is refused, never replaced by the
+    # classes' sum: before round 58 a total more than 10% above them was overwritten, and
+    # a partial table reached the record looking reconciled (M03). Classes summing to
+    # more than the total are double counted (round 54).
+    class_sum = sum(e["amount_raw"] for e in lob_entries)
+    # classes with claims but no premium are no premium mix: 1322/2024's "Additional
+    # analysis" grid put three zero classes in place of the text's mix (round 58, M03)
+    if class_sum <= 0:
+        if refusals is not None:
+            refusals.append("%d classes carry no premium" % len(lob_entries))
         return None
-    if total_gwp == 0 or total_gwp > lob_sum * 1.1:
-        total_gwp = lob_sum
+    if total_gwp > 0 and not any(abs(s - total_gwp) <= 0.02 * total_gwp
+                                 for s in (class_sum, class_sum + excluded_gwp)):
+        if refusals is not None:
+            refusals.append("%d classes sum to %g against the table's own total %g"
+                            % (len(lob_entries), class_sum, total_gwp))
+        return None
 
+    basis = total_gwp if total_gwp > 0 else class_sum
     units_divisor = 1.0
-    if total_gwp > 10_000_000:
+    if basis > 10_000_000:
         units_divisor = 1_000_000.0
-    elif total_gwp > 10_000:
+    elif basis > 10_000:
         units_divisor = 1_000.0
-
-    total_gwp_m = round(total_gwp / units_divisor, 1) if units_divisor != 1.0 else round(total_gwp, 1)
+    table_total = round(total_gwp / units_divisor, 6) if total_gwp > 0 else None
 
     for e in lob_entries:
         raw = e.pop("amount_raw")
-        e["amount_gbp_m"] = round(raw / units_divisor, 1) if units_divisor != 1.0 else round(raw, 1)
-        e["percentage_of_total"] = round(e["amount_gbp_m"] / total_gwp_m * 100, 1) if total_gwp_m > 0 else 0
+        # stored unrounded: rounding to 0.1m made a 74k class 0.1 and zeroed any
+        # class under 50k (round 58, M03)
+        e["amount_gbp_m"] = round(raw / units_divisor, 6)
+        e["percentage_of_total"] = round(raw / basis * 100, 1) if basis > 0 else 0
 
     for e in claims_entries:
         raw = e.pop("amount_raw")
-        e["amount_gbp_m"] = round(raw / units_divisor, 1) if units_divisor != 1.0 else round(raw, 1)
+        e["amount_gbp_m"] = round(raw / units_divisor, 6)
 
     return LOBData(
         gross_premium_mix=lob_entries,
-        gross_premiums_written_gbp_m=total_gwp_m,
+        gross_premiums_written_gbp_m=table_total,
         claims_incurred_by_lob=claims_entries if claims_entries else None,
         currency=currency,
         method="nutrient",
+        table_total=table_total,
+        class_sum=round(class_sum / units_divisor, 6),
     )
 
 
@@ -2640,30 +2836,32 @@ def _parse_lob_from_text(text: str, report_year: int) -> Optional[LOBData]:
         return None
 
     # Auto-detect units from magnitude
-    total_gwp = sum(e["amount_raw"] for e in lob_entries)
+    class_sum = sum(e["amount_raw"] for e in lob_entries)
     units_divisor = 1.0
-    if total_gwp > 10_000_000:
+    if class_sum > 10_000_000:
         units_divisor = 1_000_000.0
-    elif total_gwp > 10_000:
+    elif class_sum > 10_000:
         units_divisor = 1_000.0
-
-    total_gwp_m = round(total_gwp / units_divisor, 1) if units_divisor != 1.0 else round(total_gwp, 1)
 
     for e in lob_entries:
         raw = e.pop("amount_raw")
-        e["amount_gbp_m"] = round(raw / units_divisor, 1) if units_divisor != 1.0 else round(raw, 1)
-        e["percentage_of_total"] = round(e["amount_gbp_m"] / total_gwp_m * 100, 1) if total_gwp_m > 0 else 0
+        e["amount_gbp_m"] = round(raw / units_divisor, 6)
+        e["percentage_of_total"] = round(raw / class_sum * 100, 1) if class_sum > 0 else 0
 
     for e in claims_entries:
         raw = e.pop("amount_raw")
-        e["amount_gbp_m"] = round(raw / units_divisor, 1) if units_divisor != 1.0 else round(raw, 1)
+        e["amount_gbp_m"] = round(raw / units_divisor, 6)
 
+    # The page text gives classes and no total: the premium written is left unset, never
+    # taken as the classes' sum. 1856/2018's fallback read three of seven classes, and
+    # the sum it wrote as the total made the partial mix look reconciled (round 58, M03).
     return LOBData(
         gross_premium_mix=lob_entries,
-        gross_premiums_written_gbp_m=total_gwp_m,
+        gross_premiums_written_gbp_m=None,
         claims_incurred_by_lob=claims_entries if claims_entries else None,
         currency=currency,
         method="text_fallback",
+        class_sum=round(class_sum / units_divisor, 6),
     )
 
 
@@ -3268,6 +3466,8 @@ def _extract_nutrient(pdf_path: Path, report_year: int, cache_dir: Path) -> Extr
     result.document_unit_hint = doc_unit
     foreign_skipped = []
     uwy_skipped = []
+    annual_grids = []    # (grid, page) of every table in this syndicate's annual accounts
+    lob_refusals = []    # why a premium table was refused (round 58)
 
     def _foreign(page):
         """A table on a companion syndicate's page is never admitted."""
@@ -3327,9 +3527,11 @@ def _extract_nutrient(pdf_path: Path, report_year: int, cache_dir: Path) -> Extr
                         best_triangle_details = details
                         print(f"  [Nutrient] Triangle: {details}")
 
+            if not closed_year:
+                annual_grids.append((grid, orig_page))
             # Try LOB (on premium_mix-tagged pages; never from closed-year accounts)
             if "premium_mix" in cats and not closed_year:
-                lob = _parse_nutrient_lob(grid, report_year, page_text=pt)
+                lob = _parse_nutrient_lob(grid, report_year, page_text=pt, refusals=lob_refusals)
                 if lob:
                     lob.page, lob.entity = orig_page, ent
                 if lob and len(lob.gross_premium_mix) > best_lob_count:
@@ -3384,8 +3586,13 @@ def _extract_nutrient(pdf_path: Path, report_year: int, cache_dir: Path) -> Extr
                     best_triangle_details = f"{details} (from page text)"
                     print(f"  [Nutrient] Text fallback triangle: {details}")
 
-    # Text-based LOB fallback
+    for why in lob_refusals:
+        print(f"  [Nutrient] Premium table refused: {why}")
+
+    # Text-based LOB fallback, adopted only when its classes reconcile within 2% with a
+    # gross premiums written figure a table prints (round 58, M03)
     if best_lob is None:
+        gwp_readings = gross_premiums_written_readings(annual_grids, report_year, doc_unit)
         for page_num in sorted(page_matches):
             if "premium_mix" not in page_matches[page_num] or _foreign(page_num) or _closed_year(page_num):
                 continue
@@ -3395,11 +3602,19 @@ def _extract_nutrient(pdf_path: Path, report_year: int, cache_dir: Path) -> Extr
             lob = _parse_lob_from_text(text, report_year)
             # a single class read from prose is a stray line, not a mix (round 52)
             if lob and len(lob.gross_premium_mix) >= 2 and len(lob.gross_premium_mix) > best_lob_count:
+                reading = reconciling_reading(lob.class_sum, gwp_readings)
+                if reading is None:
+                    print(f"  [Nutrient] Text fallback LOB refused: {len(lob.gross_premium_mix)} classes "
+                          f"sum to {lob.class_sum}m against gross premiums written "
+                          f"{sorted({r['value_m'] for r in gwp_readings}) or 'not read'}")
+                    continue
                 lob.method = "nutrient_text_fallback"
+                lob.reconciled_with = reading
                 best_lob = lob
                 best_lob_count = len(lob.gross_premium_mix)
                 print(f"  [Nutrient] Text fallback LOB: {len(lob.gross_premium_mix)} classes, "
-                      f"GWP={lob.gross_premiums_written_gbp_m}m")
+                      f"sum {lob.class_sum}m, reconciled with {reading['value_m']}m "
+                      f"(page {reading['page']})")
 
     best_triangle, _twin_note = relabel_if_smaller_than_its_twin(
         best_triangle, triangle_candidates)
@@ -3943,6 +4158,8 @@ def _extract_azure(pdf_path: Path, report_year: int, cache_dir: Path,
     result.document_unit_hint = doc_unit
     foreign_skipped = []
     uwy_skipped = []
+    annual_grids = []    # (grid, page) of every table in this syndicate's annual accounts
+    lob_refusals = []    # why a premium table was refused (round 58)
 
     def _foreign(page):
         """A table on a companion syndicate's page is never admitted."""
@@ -4006,8 +4223,9 @@ def _extract_azure(pdf_path: Path, report_year: int, cache_dir: Path,
         if closed_year:
             uwy_skipped.append(orig_page)
             continue
-        if "premium_mix" in cats and "provisions" not in cats:
-            lob = _parse_nutrient_lob(grid, report_year, page_text=pt)
+        annual_grids.append((grid, orig_page))
+        if _admits_premium_grid(grid, cats):
+            lob = _parse_nutrient_lob(grid, report_year, page_text=pt, refusals=lob_refusals)
             if lob:
                 lob.page, lob.entity = orig_page, ent
                 # Score: strongly prefer tables with explicit segmental analysis
@@ -4017,8 +4235,11 @@ def _extract_azure(pdf_path: Path, report_year: int, cache_dir: Path,
                 # Prefer tables with year-section dividers (statutory accounts
                 # format with "2022" / "2021" rows) — these are the canonical
                 # segmental analysis tables and correctly scope to report year.
+                # A divider row is a year and nothing else: "2021", and since round 58
+                # "2023*" and "2023 (Restated)"; a header row repeated inside a grid
+                # ("2024 | Gross written premium ...") is not one.
                 has_year_sections = any(
-                    re.match(r'^(19|20)\d{2}$', row[0].strip())
+                    re.match(r'^(19|20)\d{2}\b', row[0].strip())
                     and all(not c.strip() for c in row[1:])
                     for row in grid[1:] if row and row[0].strip()
                 )
@@ -4077,9 +4298,15 @@ def _extract_azure(pdf_path: Path, report_year: int, cache_dir: Path,
                     best_triangle_details = f"{details} (from page text)"
                     print(f"  [Azure] Text fallback triangle: {details}")
 
+    for why in lob_refusals:
+        print(f"  [Azure] Premium table refused: {why}")
+
     # Step 5: Text-based LOB fallback — if Azure didn't find a LOB table,
-    # try parsing from the raw page text on premium_mix pages
+    # try parsing from the raw page text on premium_mix pages. A mix read from text
+    # is adopted only when its classes reconcile, within 2%, with a gross premiums
+    # written figure a table prints (round 58, M03: 34 records took a partial one)
     if best_lob is None:
+        gwp_readings = gross_premiums_written_readings(annual_grids, report_year, doc_unit)
         for page_num in sorted(page_matches):
             if "premium_mix" not in page_matches[page_num] or _foreign(page_num) or _closed_year(page_num):
                 continue
@@ -4089,11 +4316,19 @@ def _extract_azure(pdf_path: Path, report_year: int, cache_dir: Path,
             lob = _parse_lob_from_text(text, report_year)
             # a single class read from prose is a stray line, not a mix (round 52)
             if lob and len(lob.gross_premium_mix) >= 2 and len(lob.gross_premium_mix) > best_lob_count:
+                reading = reconciling_reading(lob.class_sum, gwp_readings)
+                if reading is None:
+                    print(f"  [Azure] Text fallback LOB refused: {len(lob.gross_premium_mix)} classes "
+                          f"sum to {lob.class_sum}m against gross premiums written "
+                          f"{sorted({r['value_m'] for r in gwp_readings}) or 'not read'}")
+                    continue
                 lob.method = "azure_text_fallback"
+                lob.reconciled_with = reading
                 best_lob = lob
                 best_lob_count = len(lob.gross_premium_mix)
                 print(f"  [Azure] Text fallback LOB: {len(lob.gross_premium_mix)} classes, "
-                      f"GWP={lob.gross_premiums_written_gbp_m}m")
+                      f"sum {lob.class_sum}m, reconciled with {reading['value_m']}m "
+                      f"(page {reading['page']})")
 
     best_triangle, _twin_note = relabel_if_smaller_than_its_twin(
         best_triangle, triangle_candidates)

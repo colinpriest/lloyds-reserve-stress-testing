@@ -85,9 +85,25 @@ SENTENCE_PATTERNS = [
     ("amount", r"[£$€]\s?[\d,]+[^.]{0,150}?" + RITC_TERM),
     ("amount", r"\bRITC\b[^.]{0,100}?[\d,]{4,}"),
 ]
+# Sentence patterns that carry no term, searched on every page. The RITC scan has none: its
+# flag enters the sample directly, so it keeps its own vocabulary. A sibling scan installs
+# its own (portfolio_transfer_scanner: another syndicate's reserves moved in, M02). They read
+# only a sentence that names no transaction: one with the scan's term is the term patterns',
+# one with reinsurance to close is the RITC scan's. RITC_WORDING keeps the RITC term under a
+# name of its own, because the sibling scan repoints RITC_TERM.
+TERMLESS_PATTERNS: List[Tuple[str, str]] = []
+RITC_WORDING = RITC_TERM
 
 # Direction cues, evaluated on the sentence around the match. OWN is replaced by
 # the syndicate's own number; OTHER matches any syndicate number but the own one.
+# Another syndicate's book moving INTO this syndicate or its year of account. Both are
+# settled inward constructions below; named so that a sibling scan can require this
+# construction alone (M02: "... reserves from Syndicate 1955 being transferred into the
+# 2016 year of account of Syndicate 1856", in 1856/2018's report).
+INTO_THIS_SYNDICATE = [
+    r"syndicates?\s*OTHER[^.]{0,120}?(?:into|to) (?:the |its |this )?(?:\d{4} )?(?:underwriting )?year of account of (?:the |host )?syndicates?\s*OWN\b",
+    r"(?:of|from) syndicates?\s*OTHER[^.]{0,80}?(?:transferred|reinsured) (?:in)?to (?:the |this )?syndicates?\s*(?:OWN\b|\b(?!\d))",
+]
 # Constructions that settle the direction on their own: an acceptance OF another
 # syndicate's business, or another syndicate's business closing INTO this one
 INWARD_SETTLED = [
@@ -95,8 +111,7 @@ INWARD_SETTLED = [
     r"transfer(?:red)? to (?:the |this )?syndicates?\s*(?:OWN\b|\b(?!s?\s*\d))[^.]{0,20}?of (?:gross|net|the )?[^.]{0,40}?(?:technical provisions|liabilities|reserves)",
     r"(?:accept(?:ed|s|ing)?|assum(?:e[ds]?|ing)|acquir(?:e[ds]?|ing))[^.]{0,60}?" + RITC_TERM + r"[^.]{0,60}?(?:of|from) syndicates?\s*OTHER",
     r"syndicates?\s*OTHER[^.]{0,120}?" + RITC_TERM + r"[^.]{0,80}?(?:into|to) (?:the |this )?syndicate\b(?!s?\s*\d)",
-    r"syndicates?\s*OTHER[^.]{0,120}?(?:into|to) (?:the |its |this )?(?:\d{4} )?(?:underwriting )?year of account of (?:the |host )?syndicates?\s*OWN\b",
-    r"(?:of|from) syndicates?\s*OTHER[^.]{0,80}?(?:transferred|reinsured) (?:in)?to (?:the |this )?syndicates?\s*(?:OWN\b|\b(?!\d))",
+    *INTO_THIS_SYNDICATE,
     r"(?:reinsured|reinsurance) to close (?:premium )?(?:received|receivable)[^.]{0,60}?(?:from|in respect of|relating to) syndicates?\s*OTHER",
     r"\bwas accepted as an? RITC\b",
     # a premium paid or payable TO this syndicate is a premium it receives
@@ -519,21 +534,38 @@ def scan_report(report_path: Path) -> dict:
     events: List[dict] = []
     any_mention = False
     seen = set()
+    # why a report that mentions the term records no event: 1856/2018's p7 sentence matched
+    # no pattern and was reported as accounting-policy boilerplate (M02)
+    n_unmatched = n_routine = n_boilerplate = 0
     for page_no, text in enumerate(pages, start=1):
-        if not re.search(RITC_TERM, text, re.I):
+        mentioned = bool(re.search(RITC_TERM, text, re.I))
+        termless = [(c, p) for c, p in TERMLESS_PATTERNS if re.search(p, text, re.I)]
+        if not mentioned and not termless:
             continue
-        any_mention = True
+        any_mention = any_mention or mentioned
         is_uw_year_page = (
             (first_uw_page is not None and page_no >= first_uw_page)
             or len(re.findall(r'year of account', text, re.I)) >= 2)
-        for pclass, pattern in SENTENCE_PATTERNS:
+        covered = []
+        for pclass, pattern in (SENTENCE_PATTERNS if mentioned else []) + termless:
             for m in re.finditer(pattern, text, re.I):
                 lo, hi = _sentence_around(text, m.start(), m.end())
+                covered.append((lo, hi))
+                if (pclass, pattern) in termless:
+                    # a line can break inside the term ("a reinsurance \nto close", 435/2019),
+                    # and a sentence that opens the page may have begun on the one before
+                    # ("A reinsurance to close" | "arrangement of Syndicate 2255 ...", 435/2017)
+                    carried = (re.split(r"\.\s", pages[page_no - 2])[-1][-300:]
+                               if lo == 0 and page_no > 1 else "")
+                    if re.search(RITC_TERM + "|" + RITC_WORDING,
+                                 re.sub(r"\s+", " ", carried + " " + text[lo:hi]), re.I):
+                        continue
                 key = (page_no, lo // 40)
                 if key in seen:
                     continue
                 seen.add(key)
                 if is_boilerplate_context(text, m.start()):
+                    n_boilerplate += 1
                     continue
                 sent = text[lo:hi]
                 ev = classify_sentence(sent, own_syndicate, report_year or 0, anchor=m.start() - lo)
@@ -544,6 +576,7 @@ def scan_report(report_path: Path) -> dict:
                                         or (ev["direction"] == "inward"
                                             and not (ev["counterparty"] is not None
                                                      and _any(INWARD_SETTLED, re.sub(r"\s+", " ", sent), own_syndicate)))):
+                    n_routine += 1
                     continue
                 strength = ("strong" if ev["direction"] == "inward"
                             and (ev["dated"] is True or _any(INWARD_SETTLED, re.sub(r"\s+", " ", sent), own_syndicate))
@@ -556,6 +589,9 @@ def scan_report(report_path: Path) -> dict:
                     "section": find_section_heading(text, m.start()) or f'p.{page_no} (heading not identified)',
                 })
                 events.append(ev)
+        n_unmatched += sum(1 for t in re.finditer(RITC_TERM, text, re.I)
+                           if not any(lo <= t.start() < hi for lo, hi in covered)
+                           and not is_boilerplate_context(text, t.start()))
 
     # an undated sentence naming a counterparty inherits the year of a dated
     # event for the same counterparty in this report ("the premium received in
@@ -575,14 +611,25 @@ def scan_report(report_path: Path) -> dict:
         for e in events:
             if not e["dated"] and e["counterparty"] is None and e["direction"] == "inward":
                 e["event_year"], e["dated"] = y0, "inherited"
-    result = _decide(events, report_year, any_mention)
+    why_none = None
+    if not events and any_mention:
+        if n_unmatched:
+            why_none = ('RITC mentioned outside accounting-policy boilerplate in %d place(s) '
+                        'no sentence pattern matched; no event classified' % n_unmatched)
+        elif n_routine:
+            why_none = ('RITC mentioned only in routine year-of-account entries%s; no external '
+                        'acceptance found' % (' and accounting-policy boilerplate' if n_boilerplate else ''))
+    result = _decide(events, report_year, any_mention, why_none=why_none)
     result["events"] = events
     return result
 
 
-def _decide(events: List[dict], year: Optional[int], any_mention: bool, source: Optional[str] = None) -> dict:
+def _decide(events: List[dict], year: Optional[int], any_mention: bool, source: Optional[str] = None,
+            why_none: Optional[str] = None) -> dict:
     """The flag for one syndicate-year from a list of events (its own report's, or
-    every report's for that syndicate): an inward event effective in that year."""
+    every report's for that syndicate): an inward event effective in that year.
+    `why_none` is the caller's reason when there is no event at all; without one, a
+    mention is put down to accounting-policy boilerplate, which the caller has checked."""
     inward = [e for e in events if e["direction"] == "inward" and e["event_year"] == year
               and not e.get("prospective")]
     if inward:
@@ -620,6 +667,8 @@ def _decide(events: List[dict], year: Optional[int], any_mention: bool, source: 
         else:
             evidence = 'RITC mentioned without a classifiable direction (see events)'
         confidence = 'weak' if any(e["direction"] in ("unclear",) for e in events) else 'strong'
+    elif why_none:
+        evidence, confidence = why_none, 'strong'
     elif any_mention:
         evidence, confidence = 'RITC mentioned only in accounting-policy boilerplate', 'strong'
     else:
@@ -632,6 +681,14 @@ def _decide(events: List[dict], year: Optional[int], any_mention: bool, source: 
         'section': 'whole document scan',
         'page': None,
     }
+
+
+def list_reports(report_dir: Path) -> List[Path]:
+    """Every filing in `report_dir`, PDF or HTML, in name order. The RITC scan and the
+    transfer scan both read this list, so neither can skip a format the other reads: the
+    transfer scan globbed *.pdf and never read the 95 HTML filings of 2024 (M02)."""
+    return sorted(p for p in report_dir.iterdir()
+                  if re.match(r'syndicate_\d+_\d{4}\.(pdf|html?)$', p.name, re.I))
 
 
 def propagate(results: Dict[str, dict]) -> int:
@@ -680,9 +737,7 @@ def main() -> int:
         with open(OUTPUT_PATH, 'r', encoding='utf-8') as f:
             results = json.load(f)
 
-    reports = sorted(
-        p for p in PDF_DIR.iterdir()
-        if re.match(r'syndicate_\d+_\d{4}\.(pdf|html?)$', p.name, re.I))
+    reports = list_reports(PDF_DIR)
     if args.single:
         reports = [p for p in reports if args.single in p.name]
         if not reports:

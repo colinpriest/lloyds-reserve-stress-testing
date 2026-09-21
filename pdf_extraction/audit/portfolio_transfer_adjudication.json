@@ -1,7 +1,7 @@
 {
  "purpose": "The hand adjudication of every record the portfolio-transfer scanner flags, so that the count in the manuscript rests on an inspectable record rather than on the assertion that the flags were checked. Each entry gives the filing's own words, the direction, whether the arrangement is a discrete transaction or a standing one, and what it means for the record's development triangle.",
  "recorded": "2026-09-11",
- "round": "round 56 (R166, corrected by R169, R170, R174, R175, R180, R181, R185, R186); updated after R194 and R199-R203, and R198 settled",
+ "round": "round 56 (R166, corrected by R169, R170, R174, R175, R180, R181, R185, R186); updated after R194 and R199-R203, and R198 settled; R221 (frozen review of 21 September 2026, M02) added four rescan flags and 1856/2020",
  "scanner": "scripts/portfolio_transfer_scanner.py",
  "scan_output": "pdf_extraction/portfolio_transfer_scan.json",
  "corpus": "970 reports scanned, 15 flagged",
@@ -31,6 +31,17 @@
    "correction": "recorded outward in the first version of this register, on the ambiguous 3334 sentence, with the unambiguous sentence above overlooked (R187)"
   },
   {
+   "stem": "1856_2018",
+   "direction": "inward",
+   "arrangement": "discrete",
+   "verdict": "genuine",
+   "filing_says": "The increase in the year was due to 15.4% of the 2015 and prior year of account of reserves from Syndicate 1955 being transferred into the 2016 year of account of Syndicate 1856.",
+   "page": 6,
+   "effect": "15.4% of Syndicate 1955's 2015-and-prior reserves taken into the 2016 year of account during 2018, inside the 2016 column's 2018 step (62,161 to 121,799, not restated). No amount is printed; two readings put it at 55-85% of the +59.638m step, about 69% at the centre.",
+   "also_accepts_ritc": false,
+   "found_by": "R221: the transfer scanner's path for a sentence with no transaction noun, after the frozen review of 21 September 2026 (M02); two readings of the 1856, 1955 filings"
+  },
+  {
    "stem": "1884_2022",
    "verdict": "genuine",
    "direction": "inward",
@@ -54,6 +65,17 @@
    "effect": "a second loss portfolio transfer from Syndicate 33: the 2022 filing reports one, covering 2018 and prior, and this filing two, covering 2019 and prior; the filing does not print the second one's date",
    "found_by": "R194",
    "also_accepts_ritc": false
+  },
+  {
+   "stem": "1884_2024",
+   "direction": "inward",
+   "arrangement": "discrete",
+   "verdict": "not a transfer year",
+   "filing_says": "The Syndicate has completed two Loss Portfolio Transfers ('LPTs') with Syndicate 33. The LPTs cover various classes of business written by Syndicate 33 for the 2019 and prior YOAs.",
+   "page": 1,
+   "effect": "none in 2024: the two LPTs are the 2022 and 2023 records, and the filing says there were no new transactions in 2024. Read from the HTML filing, one page.",
+   "also_accepts_ritc": false,
+   "found_by": "R221 rescan (the 2024 HTML filings read for the first time)"
   },
   {
    "stem": "1971_2021",
@@ -84,6 +106,17 @@
    "page": 65,
    "effect": "two prior years' run-off assumed into one later year of account",
    "also_accepts_ritc": false
+  },
+  {
+   "stem": "1971_2024",
+   "direction": "both",
+   "arrangement": "standing",
+   "verdict": "not a transfer year",
+   "filing_says": "The 2022 year of account accepted 80% and 90% quota shares of the run-off of the 2019, 2020 and 2021 years of account respectively for the ibott classes from Syndicate 1969 under the quota share agreement for the 2022 year of account.",
+   "page": 1,
+   "effect": "none in 2024: 1971's own SPA shares of 1969's 2019-2021 years went out by RITC and came back by quota share for the same net $96.288m, on the 2021 year's closure at 31 December 2023; the 2024 accounts book no transfer (two readings).",
+   "also_accepts_ritc": false,
+   "found_by": "R221 rescan (the 2024 HTML filings read for the first time); two readings"
   },
   {
    "stem": "2008_2021",
@@ -150,6 +183,17 @@
    "also_accepts_ritc": true
   },
   {
+   "stem": "4000_2022",
+   "direction": "inward",
+   "arrangement": "discrete",
+   "verdict": "genuine",
+   "filing_says": "The syndicate accepted a reinsurance to close of Syndicate 3334 effective 1 January 2022.",
+   "page": 24,
+   "effect": "Syndicate 3334's 2019 and prior years reinsured to close into Syndicate 4000, effective 1 January 2022 (p5). The scan's event is 4000/2021 p39's subsequent-events note, carried to 2022.",
+   "also_accepts_ritc": true,
+   "found_by": "R221 rescan (the path for a sentence with no transaction noun); the RITC scan already flags it"
+  },
+  {
    "stem": "6124_2015",
    "verdict": "genuine",
    "direction": "inward",
@@ -174,18 +218,20 @@
   }
  ],
  "summary": {
-  "flagged": 15,
-  "inward": 14,
+  "flagged": 19,
+  "inward": 17,
   "outward": 0,
-  "both": 1,
-  "standing_arrangements": 4,
-  "discrete_transactions": 11,
+  "both": 2,
+  "standing_arrangements": 5,
+  "discrete_transactions": 14,
   "syndicates_involved": [
    "1110",
+   "1856",
    "1884",
    "1971",
    "2008",
    "3500",
+   "4000",
    "6124",
    "6133"
   ],
@@ -201,10 +247,6 @@
    {
     "stem": "1861_2021",
     "why": "Canopius's outward LPT to RiverStone; the writer list goes on to name 1861 itself (R199)"
-   },
-   {
-    "stem": "1856_2018",
-    "why": "flagged on a whole-account quota share of Syndicate 1955's current business that the filter had dropped (R200)"
    },
    {
     "stem": "6103_2016",
@@ -240,19 +282,21 @@
    }
   ],
   "also_in_the_ritc_regime": {
-   "count": 6,
+   "count": 7,
    "stems": [
     "1110_2020",
     "2008_2023",
     "3500_2015",
     "3500_2021",
     "3500_2022",
-    "3500_2023"
+    "3500_2023",
+    "4000_2022"
    ],
    "meaning": "these records are themselves the ASSUMING party of a reinsurance to close, so the model's RITC regime already treats their diagonal as carrying assumed business. A record that merely mentions an RITC it ceded is not counted here: 1971/2021 cedes its 2019 year into 1969 and is not in this list."
   },
   "transfer_only": [
    "1110_2019",
+   "1856_2018",
    "1884_2022",
    "1884_2023",
    "1971_2021",
@@ -268,8 +312,18 @@
    "direction": "inward adds another syndicate's older liabilities to this triangle; outward removes them; both means the filing shows each in the same year",
    "arrangement": "discrete is a dated transaction; standing is an arrangement that repeats annually under one agreement"
   },
-  "found_by_hand": 1,
-  "confirmed_inward_or_both_in_total": 16
+  "found_by_hand": 2,
+  "confirmed_inward_or_both_in_total": 18,
+  "withdrawn_by_R221": [
+   {
+    "stem": "1856_2018",
+    "why": "R200 filed it as a quota share of Syndicate 1955's current business; the p6 sentence records 15.4% of 1955's 2015-and-prior reserves transferred into 1856's 2016 year of account, and it is now a genuine record"
+   }
+  ],
+  "not_a_transfer_year": [
+   "1884_2024",
+   "1971_2024"
+  ]
  },
  "what_this_does_not_settle": [
   "Nothing in this register is a modelling decision. The one taken on it is recorded in PLAN R195: on 13 September 2026 the owner decided that confirmed inward transfers, flagged or found by hand, are treated like RITC.",
@@ -278,7 +332,7 @@
  ],
  "how_the_quotes_were_taken": "Each `filing_says` is trimmed from the sentence the scanner captured from the filing's text layer, and checked against the scanner's own snippet -- not re-read from the page image. So these quotes verify the scanner's reading of the filing, which is a weaker claim than verifying the filing. An OCR misread the scanner made would be reproduced here. Where a direction or an amount turns on the wording, the sentence is quoted in full rather than trimmed.",
  "directions_matter_correction": "The first version said every outward transfer removes liabilities from the triangle, which is true only of the first kind. Most outward transfers the scanner finds are the second kind (1861/2021 with RiverStone, 1967/2020 ceded to BIC, 2001/2018 purchased), and under the old sentence each would have read as gross contamination.",
- "updated": "2026-09-13",
+ "updated": "2026-09-21",
  "found_by_hand": [
   {
    "stem": "3500_2018",
@@ -293,6 +347,20 @@
    "effect": "two loss portfolio transfers of discontinued business, underwriting years 2017 and prior, on 30 November and 21 December 2018; gross technical provisions of about GBP560m transferred in",
    "why_no_scanner_flagged_it": "'entered into a loss portfolio transfer reinsurance with Syndicate 2987' names no direction, and the sentence that does ('the transfer to Syndicate 3500 of gross and net technical provisions') carries no transfer term; the RITC scan has no RITC term to find",
    "found_by": "R198: 3500/2019's filing dates both transfers in 2018",
+   "also_accepts_ritc": false
+  },
+  {
+   "stem": "1856_2020",
+   "verdict": "genuine",
+   "direction": "outward",
+   "arrangement": "discrete",
+   "page": 6,
+   "quote_source": "the filing's text layer (PDF page 6, printed page 4; and page 50, printed page 48)",
+   "filing_says": "In addition, a return premium of £49m net was paid to Syndicate 1955 in relation to the commutation of the whole account quota share on the 2017 & prior years of account.",
+   "context": "Further, the Syndicate refunded £49.1m as a result of commuting 2017 and prior years of account back to Syndicate 1955 (p50). Syndicate 1955's 2020 report: the contract 'was commuted on 1 January 2020'.",
+   "effect": "the 2017-and-prior quota share, including the 2015-and-prior reserves taken on in 2018, sent back to Syndicate 1955 effective 1 January 2020: about 76-79% of the record's -62.513m triangle step",
+   "why_no_scanner_flagged_it": "the transfer scan counts inward events only, and this one is outward",
+   "found_by": "R221: the transfer scanner's census of filled blanks; two readings",
    "also_accepts_ritc": false
   }
  ],

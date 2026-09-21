@@ -37,7 +37,6 @@ import logging
 import signal
 import tempfile
 import zipfile
-import requests
 from datetime import datetime, timezone
 from pathlib import Path
 from dotenv import load_dotenv
@@ -463,170 +462,6 @@ def _load_manual_overrides() -> set[int]:
             data = json.load(f)
         return {int(s) for s in data.get("_manual_overrides", [])}
     return set()
-
-
-def _lookup_inception_year_perplexity(syndicate_num: int) -> int | None:
-    _offline_guard(f"Perplexity inception lookup for syndicate {syndicate_num}")
-    """Query Perplexity API for the first underwriting year of a syndicate.
-
-    Returns the year as int, or None if lookup fails.
-    Uses structured JSON output to avoid ambiguous free-text parsing.
-    """
-    api_key = os.getenv("PERPLEXITY_API_KEY")
-    if not api_key:
-        print(f"  WARNING: PERPLEXITY_API_KEY not set - cannot look up inception year for syndicate {syndicate_num}")
-        return None
-
-    query = (
-        f"What year did Lloyd's of London syndicate {syndicate_num} first begin "
-        f"underwriting insurance? I need the first year they wrote any business. "
-        f"Note: the syndicate NUMBER ({syndicate_num}) is NOT necessarily the same "
-        f"as the year it started — many syndicates have numbers that look like years "
-        f"but started in a completely different year."
-    )
-
-    headers = {
-        "Authorization": f"Bearer {api_key}",
-        "Content-Type": "application/json",
-    }
-    payload = {
-        "model": "sonar",
-        "messages": [
-            {
-                "role": "system",
-                "content": (
-                    "You are a research assistant specialising in Lloyd's of London."
-                ),
-            },
-            {"role": "user", "content": query},
-        ],
-        "temperature": 0.1,
-        "response_format": {
-            "type": "json_schema",
-            "json_schema": {
-                "schema": {
-                    "type": "object",
-                    "properties": {
-                        "syndicate_number": {
-                            "type": "integer",
-                            "description": "The syndicate number queried",
-                        },
-                        "first_underwriting_year": {
-                            "type": "integer",
-                            "description": "The first year this syndicate wrote any insurance business",
-                        },
-                        "confidence": {
-                            "type": "string",
-                            "enum": ["high", "medium", "low"],
-                            "description": "Confidence in the answer",
-                        },
-                        "source": {
-                            "type": "string",
-                            "description": "Where this information was found",
-                        },
-                    },
-                    "required": ["syndicate_number", "first_underwriting_year", "confidence", "source"],
-                },
-            },
-        },
-    }
-
-    try:
-        response = requests.post(
-            "https://api.perplexity.ai/chat/completions",
-            headers=headers,
-            json=payload,
-            timeout=30,
-        )
-        response.raise_for_status()
-        result = response.json()
-        answer = result["choices"][0]["message"]["content"].strip()
-
-        # Strip markdown code fences if present
-        if answer.startswith("```"):
-            answer = re.sub(r"^```(?:json)?\s*", "", answer)
-            answer = re.sub(r"\s*```$", "", answer)
-
-        parsed = json.loads(answer)
-        year = parsed["first_underwriting_year"]
-        confidence = parsed.get("confidence", "unknown")
-        source = parsed.get("source", "")
-
-        if not isinstance(year, int) or year < 1688 or year > 2030:
-            print(f"  WARNING: Perplexity returned invalid year {year!r} for syndicate {syndicate_num}. "
-                  f"Full response: {parsed}")
-            return None
-
-        # Reject low-confidence answers
-        if confidence == "low":
-            print(f"  WARNING: Perplexity low-confidence answer for syndicate {syndicate_num}: {year} ({source})")
-            return None
-
-        print(f"  Perplexity: Syndicate {syndicate_num} first underwrote in {year} "
-              f"(confidence={confidence}, source={source!r})")
-        return year
-    except Exception as e:
-        print(f"  WARNING: Perplexity lookup failed for syndicate {syndicate_num}: {e}")
-        return None
-
-
-def _earliest_report_year(syndicate_num: int) -> int | None:
-    """Find the earliest report year we have on disk for a syndicate."""
-    pdf_dir = Path("syndicate_reports/pdfs")
-    if not pdf_dir.exists():
-        return None
-    earliest = None
-    for p in pdf_dir.glob(f"syndicate_{syndicate_num}_*.pdf"):
-        try:
-            year = int(p.stem.split("_")[2])
-            if earliest is None or year < earliest:
-                earliest = year
-        except (IndexError, ValueError):
-            continue
-    return earliest
-
-
-def get_inception_year(syndicate_num: int, inception_cache: dict) -> int | None:
-    """Get the first underwriting year for a syndicate.
-
-    Checks local cache first, then queries Perplexity if missing.
-    Stores result back in cache and saves to disk.
-
-    Sanity check: if Perplexity returns a year later than our earliest
-    report for this syndicate, the answer is clearly wrong — a syndicate
-    can't have reports before it started underwriting. In that case,
-    fall back to earliest_report_year - 2 (conservative estimate).
-    """
-    if syndicate_num in inception_cache:
-        return inception_cache[syndicate_num]
-
-    # Not in cache - query Perplexity
-    year = _lookup_inception_year_perplexity(syndicate_num)
-    if year is not None:
-        earliest_report = _earliest_report_year(syndicate_num)
-        if earliest_report is not None and year > earliest_report:
-            fallback = earliest_report - 2
-            print(f"  WARNING: Perplexity returned inception={year} for syndicate "
-                  f"{syndicate_num}, but we have a report from {earliest_report}. "
-                  f"Using conservative fallback: {fallback}")
-            year = fallback
-        inception_cache[syndicate_num] = year
-        _save_inception_years(inception_cache)
-    return year
-
-
-def is_early_year_syndicate(syndicate_num: int, report_year: int,
-                            inception_cache: dict) -> tuple[bool, int | None]:
-    """Check if a report is from the first two underwriting years of a syndicate.
-
-    Returns (should_skip, inception_year).
-    A report should be skipped when report_year < inception_year + 2,
-    because fewer than 3 development years are available for PYD computation.
-    """
-    inception_year = get_inception_year(syndicate_num, inception_cache)
-    if inception_year is None:
-        return False, None  # Can't determine - don't skip
-    return report_year < inception_year + 2, inception_year
 
 
 def _llm_cache_key(model: str, prompt_text: str, syndicate_num: int,
@@ -3273,6 +3108,8 @@ def extract_pyd_from_relevant_pages(pdf_path, report_year):
         "reserve_text": "", "method": "none", "cost": 0,
         "adobe_lob": None, "adobe_provisions": None,
         "first_year_syndicate": False,
+        # first-year, but with reserve text the models read before the record is written
+        "first_year_reserve_text": False,
         "no_triangle_data": False,
         "relevant_pages": [],
         "rotated_pages": set(),
@@ -3405,6 +3242,7 @@ def extract_pyd_from_relevant_pages(pdf_path, report_year):
     # (e.g. "Prior year movements of £5.8m") even when the triangle is small.
     pages = None
     text_method = None
+    first_year_cleared = False
     if result["first_year_syndicate"]:
         pages, text_method = extract_text_from_pdf(pdf_path)
         override = _extract_pyd_from_reserves_movement(pages, report_year) if pages else None
@@ -3515,6 +3353,7 @@ def extract_pyd_from_relevant_pages(pdf_path, report_year):
             # so the narrative PYD parsers can attempt extraction.
             if result["first_year_syndicate"] and result["pyd"] is None:
                 result["first_year_syndicate"] = False
+                first_year_cleared = True
                 print(f"  [RAG] Reserve text found — clearing first-year flag, will try narrative parsers")
 
     # Step 5: If still no PYD but we have provisions data with gross PYD,
@@ -3589,6 +3428,19 @@ def extract_pyd_from_relevant_pages(pdf_path, report_year):
                 result["method"] = "general_narrative"
                 print(f"  [RAG] General narrative PYD: {gen_pyd:+.3f}m ({gen_details})")
                 break
+
+    # The flag was cleared only so that the parsers could look for a prior-year figure.
+    # When none of them found one the report is first-year again: 1884/2016 (business
+    # from April 2015, triangle 2015-2016) went on to the models this way, and one
+    # model's closing-minus-opening arithmetic became its development (round 58, M01).
+    # The models still read the reserve text before a record is written as first-year:
+    # a disclosure the parsers miss is theirs to find (6130/2017's "$267k of technical
+    # reserves in respect of prior periods"), and process_one_report decides after them.
+    if first_year_cleared and result["pyd"] is None:
+        result["first_year_syndicate"] = True
+        result["first_year_reserve_text"] = True
+        print(f"  [RAG] No prior-year figure in the reserve text — first-year flag set again; "
+              f"the models read the text before the record is written")
 
     # If after all attempts we have no PYD, no triangle, no reserve text,
     # and it's not a first-year syndicate, flag as "no triangle data" —
@@ -4068,8 +3920,12 @@ def compute_pyd_from_triangle(triangle_data, report_year):
     return total_pyd, details_str
 
 
-def _apply_triangle_pyd(result, computed_pyd, model_name, details, reason):
-    """Apply a code-computed PYD value to a result dict, updating direction and notes."""
+def _apply_triangle_pyd(result, computed_pyd, model_name, details, reason, triangle=None):
+    """Apply a code-computed PYD value to a result dict, updating direction and notes.
+
+    The route is recorded whether the value fills a blank or overrides the model's: a
+    fill used to leave neither a route nor a note, so it read as the model's own figure
+    (round 58, M01). `triangle` is the models' triangle the value was computed from."""
     result = dict(result)
     old_pyd = result.get("prior_year_development_gbp_m")
     # Sanity check BEFORE applying: releases can't exceed 100% of opening
@@ -4107,6 +3963,7 @@ def _apply_triangle_pyd(result, computed_pyd, model_name, details, reason):
             f"{old_notes} [CODE OVERRIDE: Model said PYD={old_pyd}, "
             f"but code computed {computed_pyd} from triangle ({reason}). Using code value.]"
         )
+    _record_pyd_route(result, "code_triangle", computed_pyd, old_pyd, triangle, reason)
     msg = (f"  [{model_name}] Triangle verification: {reason} "
            f"(model={old_pyd}, code={computed_pyd})\n{details}")
     return result, msg
@@ -4210,13 +4067,14 @@ def verify_triangles(result_gemini, result_openai, gemini_name, openai_name, rep
                 messages.append(f"  {_why}")
                 return result_gemini, result_openai, messages
             # Apply to both models
-            for result, model_name, details in [
-                (result_gemini, gemini_name, details_g),
-                (result_openai, openai_name, details_o),
+            for result, model_name, details, tri in [
+                (result_gemini, gemini_name, details_g, tri_g),
+                (result_openai, openai_name, details_o, tri_o),
             ]:
                 model_pyd = result.get("prior_year_development_gbp_m")
                 if model_pyd is None:
-                    r, msg = _apply_triangle_pyd(result, agreed_pyd, model_name, details, "FILL from agreed triangles")
+                    r, msg = _apply_triangle_pyd(result, agreed_pyd, model_name, details, "FILL from agreed triangles",
+                                                 tri)
                     if model_name == gemini_name:
                         result_gemini = r
                     else:
@@ -4229,7 +4087,7 @@ def verify_triangles(result_gemini, result_openai, gemini_name, openai_name, rep
                                           f"(model={model_pyd}, code={agreed_pyd})")
                         else:
                             r, msg = _apply_triangle_pyd(result, agreed_pyd, model_name, details,
-                                                        "OVERRIDE from agreed triangles")
+                                                        "OVERRIDE from agreed triangles", tri)
                             if model_name == gemini_name:
                                 result_gemini = r
                             else:
@@ -4243,13 +4101,13 @@ def verify_triangles(result_gemini, result_openai, gemini_name, openai_name, rep
         messages.append(f"  Triangle cross-check: DISAGREE (Gemini={pyd_g} struct={struct_g:.2f}, "
                        f"GPT={pyd_o} struct={struct_o:.2f})")
         if sane_g and not sane_o:
-            best_pyd, best_details, best_name = pyd_g, details_g, "Gemini triangle"
+            best_pyd, best_details, best_name, best_tri = pyd_g, details_g, "Gemini triangle", tri_g
         elif sane_o and not sane_g:
-            best_pyd, best_details, best_name = pyd_o, details_o, "GPT triangle"
+            best_pyd, best_details, best_name, best_tri = pyd_o, details_o, "GPT triangle", tri_o
         elif struct_g > struct_o + 0.1:
-            best_pyd, best_details, best_name = pyd_g, details_g, "Gemini triangle (better structure)"
+            best_pyd, best_details, best_name, best_tri = pyd_g, details_g, "Gemini triangle (better structure)", tri_g
         elif struct_o > struct_g + 0.1:
-            best_pyd, best_details, best_name = pyd_o, details_o, "GPT triangle (better structure)"
+            best_pyd, best_details, best_name, best_tri = pyd_o, details_o, "GPT triangle (better structure)", tri_o
         else:
             # Both have similar structure but disagree — don't trust either
             messages.append("  Triangle cross-check: SKIPPED — triangles disagree and "
@@ -4273,7 +4131,7 @@ def verify_triangles(result_gemini, result_openai, gemini_name, openai_name, rep
             model_pyd = result.get("prior_year_development_gbp_m")
             if model_pyd is None:
                 r, msg = _apply_triangle_pyd(result, best_pyd, model_name, details,
-                                            f"FILL from {best_name}")
+                                            f"FILL from {best_name}", best_tri)
                 if model_name == gemini_name:
                     result_gemini = r
                 else:
@@ -4283,7 +4141,7 @@ def verify_triangles(result_gemini, result_openai, gemini_name, openai_name, rep
                 try:
                     if abs(float(model_pyd) - best_pyd) >= 0.5:
                         r, msg = _apply_triangle_pyd(result, best_pyd, model_name, details,
-                                                    f"OVERRIDE from {best_name}")
+                                                    f"OVERRIDE from {best_name}", best_tri)
                         if model_name == gemini_name:
                             result_gemini = r
                         else:
@@ -4299,6 +4157,7 @@ def verify_triangles(result_gemini, result_openai, gemini_name, openai_name, rep
     single_struct = struct_g if pyd_g is not None else struct_o
     single_sane = sane_g if pyd_g is not None else sane_o
     source_name = gemini_name if pyd_g is not None else openai_name
+    single_tri = tri_g if pyd_g is not None else tri_o
 
     if not single_sane:
         messages.append(f"  [{source_name}] Triangle verification: REJECTED — "
@@ -4325,7 +4184,7 @@ def verify_triangles(result_gemini, result_openai, gemini_name, openai_name, rep
         model_pyd = result.get("prior_year_development_gbp_m")
         if model_pyd is None:
             r, msg = _apply_triangle_pyd(result, single_pyd, model_name, single_details,
-                                        f"FILL from {source_name} triangle")
+                                        f"FILL from {source_name} triangle", single_tri)
             if model_name == gemini_name:
                 result_gemini = r
             else:
@@ -4338,7 +4197,7 @@ def verify_triangles(result_gemini, result_openai, gemini_name, openai_name, rep
                                   f"(model={model_pyd}, code={single_pyd})")
                 elif abs(float(model_pyd) - single_pyd) >= 0.5:
                     r, msg = _apply_triangle_pyd(result, single_pyd, model_name, single_details,
-                                                f"OVERRIDE from {source_name} triangle")
+                                                f"OVERRIDE from {source_name} triangle", single_tri)
                     if model_name == gemini_name:
                         result_gemini = r
                     else:
@@ -5133,27 +4992,26 @@ def _pyd_override_gate(rag_pyd, model_values, opening):
 
 
 def _lob_override_gate(adobe_lob, model_gwps):
-    """Whether a deterministic business mix may replace the models' mix (round 52).
+    """Whether a deterministic business mix may replace the models' mix (rounds 52, 58).
 
-    It may when it has at least two classes, or when its single class carries a premium
-    that agrees with a model-read total within 25%.  A one-class mix that contradicts
-    the models is a stray row or prose line, not a segmental analysis (2623/2015's text
-    fallback gave one class at 4.0m against a 1.5bn book); a one-class mix that
-    matches the models is a monoline special purpose syndicate and is applied.
+    It may when its classes sum, within 2%, to a gross premiums written total one of the
+    models read, whatever the number of classes. A mix and a total from the same parse
+    are one reading, not a reconciliation: 1856/2018's text fallback read three of seven
+    classes (14.2m), the driver wrote their sum over both models' 143.968m, and the
+    check downstream compared the mix with its own sum (round 58, M03). Before round 58
+    the models' totals were consulted only for a one-class mix, within 25% (2623/2015's
+    one class at 4.0m against a 1.5bn book). With no model total there is nothing
+    independent to reconcile with, and the models' mix is kept.
     """
     mix = adobe_lob.get("gross_premium_mix") or []
-    if len(mix) >= 2:
-        return True, None
-    gwp = adobe_lob.get("gross_premiums_written_gbp_m")
+    amounts = [e.get("amount_gbp_m") for e in mix if isinstance(e, dict)]
+    class_sum = sum(float(a) for a in amounts if isinstance(a, (int, float)))
     vals = [float(v) for v in model_gwps if isinstance(v, (int, float)) and v > 0]
-    try:
-        g = float(gwp) if gwp is not None else None
-    except (TypeError, ValueError):
-        g = None
-    if g and any(abs(g - v) / v <= 0.25 for v in vals):
+    if class_sum > 0 and any(abs(class_sum - v) <= 0.02 * v for v in vals):
         return True, None
-    return False, ("[LOB NOT APPLIED: deterministic mix has %d class(es) with premium %s against "
-                   "model totals %s; model mix retained.]" % (len(mix), gwp, vals))
+    return False, ("[LOB NOT APPLIED: deterministic mix of %d class(es) sums to %.3fm, which does not "
+                   "reconcile within 2%% with the model totals %s; model mix retained.]"
+                   % (len(mix), class_sum, vals))
 
 
 def _note_pyd_not_applied(result_gemini, result_openai, why):
@@ -5220,6 +5078,101 @@ def _resolve_rag_opening(rag_opening, provenance, llm_values):
     return None, src, note
 
 
+# An amount printed in reserve text, with the unit printed beside it when there is one
+_TEXT_AMOUNT = re.compile(
+    r"(?P<num>\d{1,3}(?:,\d{3})+(?:\.\d+)?|\d+(?:\.\d+)?)\)?\s*"
+    r"(?P<unit>bn\b|billion|mn\b|million|m\b|k\b|'000|000s|thousand)?", re.I)
+
+
+def _figure_in_text(value, text):
+    """Whether a figure in millions is printed in the text (round 58, M01).
+
+    An amount in the text is scaled by its own unit (bn, m, k, '000); printed bare, it is
+    tried at all three scales. It matches when it equals the figure's magnitude within
+    half the figure's last digit (a tenth at least) or 0.5%. A bare four-digit year is not
+    an amount, and a zero figure is printed when the text says nil or no movement."""
+    if value is None or not text:
+        return False
+    v = abs(float(value))
+    if v == 0:
+        return bool(re.search(r"\bnil\b|\bno\s+(?:prior|movement|development|release|deterioration)",
+                              text, re.I))
+    digits = len(("%.6f" % v).rstrip("0").split(".")[1])
+    tol = max(0.005 * v, 0.5 * 10 ** -max(1, min(digits, 3)))
+    for m in _TEXT_AMOUNT.finditer(text):
+        raw, unit = m.group("num"), (m.group("unit") or "").lower()
+        n = float(raw.replace(",", ""))
+        if unit in ("bn", "billion"):
+            cands = [n * 1000.0]
+        elif unit in ("mn", "million", "m"):
+            cands = [n]
+        elif unit in ("k", "'000", "000s", "thousand"):
+            cands = [n / 1000.0]
+        elif re.fullmatch(r"(?:19|20)\d\d", raw):
+            continue
+        else:
+            cands = [n, n / 1000.0, n / 1e6]
+        if any(abs(c - v) <= tol for c in cands):
+            return True
+    return False
+
+
+def _no_mature_cohort(rag_result, results, report_year):
+    """(young, triangles): whether every triangle the record holds -- the RAG step's and
+    each model's own _claims_triangle -- has no underwriting year old enough for prior
+    year development (u <= t - PYD_EXCLUDED_RECENT_UW_YEARS), with at least one triangle
+    to say so. A report without any triangle is not taken to be young (round 58, M01)."""
+    triangles = {}
+    rag_tri = rag_result.get("triangle")
+    if isinstance(rag_tri, dict) and rag_tri.get("underwriting_years"):
+        triangles["rag"] = list(rag_tri["underwriting_years"])
+    for name, r in results:
+        t = r.get("_claims_triangle")
+        if isinstance(t, dict) and t.get("type") not in (None, "none") and t.get("underwriting_years"):
+            triangles[name] = list(t["underwriting_years"])
+    try:
+        years = [int(y) for ys in triangles.values() for y in ys]
+    except (TypeError, ValueError):
+        return False, triangles
+    young = bool(years) and all(y > report_year - PYD_EXCLUDED_RECENT_UW_YEARS for y in years)
+    return young, triangles
+
+
+def _first_year_record(report_path, syndicate_num, report_year, rag_result, inception_cache,
+                       manual_overrides, reason=None, evidence=None):
+    """The audit-trail record of a report too early for prior year development: no model
+    blocks, and the business mix when the table step found one. `reason` and `evidence`
+    describe a decision taken after the models read the reserve text (round 58, M01)."""
+    # Triangle has <=2 UW years — update inception cache if this is new info
+    if syndicate_num not in inception_cache and syndicate_num not in manual_overrides:
+        # Conservative estimate: first UW year = report_year - 1
+        inception_cache[syndicate_num] = report_year - 1
+        _save_inception_years(inception_cache)
+        print(f"  Inception year for syndicate {syndicate_num} estimated as {report_year - 1} (from triangle)")
+    # Build minimal audit-trail JSON for first-year syndicates
+    first_year_output = {
+        "extraction_timestamp": datetime.now(timezone.utc).isoformat(),
+        "spec": {
+            "prompt_version": PROMPT_VERSION,
+            "field_definitions_version": FIELD_DEFINITIONS_VERSION,
+            "tolerance_rules_version": TOLERANCE_RULES_VERSION,
+        },
+        "source_file": str(report_path),
+        "first_year_syndicate": True,
+        "reason": reason or "Syndicate too new — insufficient underwriting years for prior year development analysis",
+        "syndicate": syndicate_num,
+        "year": report_year,
+    }
+    if evidence:
+        first_year_output["first_year_evidence"] = evidence
+    adobe_lob = rag_result.get("adobe_lob")
+    if adobe_lob:
+        first_year_output["gross_premium_mix"] = adobe_lob["gross_premium_mix"]
+        first_year_output["gross_premiums_written_gbp_m"] = adobe_lob["gross_premiums_written_gbp_m"]
+        first_year_output["currency"] = adobe_lob.get("currency", "GBP")
+    return first_year_output
+
+
 def process_one_report(report_path, inception_cache=None):
     """Process a single report with both models.
 
@@ -5230,13 +5183,6 @@ def process_one_report(report_path, inception_cache=None):
         inception_cache = _load_inception_years()
 
     syndicate_num, report_year = parse_report_filename(report_path)
-
-    # Check inception cache — but don't skip yet.  The cache may be wrong
-    # (e.g. Perplexity returned the wrong year).  We'll validate against
-    # the actual triangle below and correct the cache if needed.
-    inception_skip, inception_year = is_early_year_syndicate(
-        syndicate_num, report_year, inception_cache
-    )
 
     # Convert HTML to PDF if needed
     actual_path = report_path
@@ -5251,55 +5197,17 @@ def process_one_report(report_path, inception_cache=None):
     # before spending money on LLM calls
     rag_result = extract_pyd_from_relevant_pages(actual_path, report_year)
 
-    # Correct inception cache if the triangle contradicts it.
-    # The triangle is ground truth — if the RAG found a valid triangle
-    # with usable UW years, the inception cache was wrong.
-    # BUT: never overwrite manually-verified inception years.
+    # Whether a report is too early for prior year development is decided from its own
+    # triangles and text: here, and again after the models have read the reserve text.
+    # The inception-year check that ran here only ever flagged; its one effect was to
+    # lower the cached year to a triangle's earliest cohort, which moved 1884 from 2015
+    # back to 2012 from a triangle carrying cohorts reinsured to close into it. It was
+    # deleted in round 58 (M01), with the Perplexity lookup that only it called.
     manual_overrides = _load_manual_overrides()
-    if inception_skip and not rag_result.get("first_year_syndicate"):
-        tri = rag_result.get("triangle")
-        uw_years = tri.get("underwriting_years", []) if tri else []
-        if uw_years:
-            tri_inception = min(int(y) for y in uw_years)
-            old_inception = inception_cache.get(syndicate_num)
-            if syndicate_num in manual_overrides:
-                print(f"  [Inception] Triangle shows UW years back to {tri_inception}, "
-                      f"but syndicate {syndicate_num} has manual override ({old_inception}) — keeping manual value, not skipping")
-                inception_skip = False
-            else:
-                print(f"  [Inception] Cache said inception={old_inception} (would skip), "
-                      f"but triangle shows UW years back to {tri_inception} — correcting cache")
-                inception_cache[syndicate_num] = tri_inception
-                _save_inception_years(inception_cache)
-                inception_skip = False
 
-    if rag_result.get("first_year_syndicate"):
-        # Triangle has <=2 UW years — update inception cache if this is new info
-        if syndicate_num not in inception_cache and syndicate_num not in manual_overrides:
-            # Conservative estimate: first UW year = report_year - 1
-            inception_cache[syndicate_num] = report_year - 1
-            _save_inception_years(inception_cache)
-            print(f"  Inception year for syndicate {syndicate_num} estimated as {report_year - 1} (from triangle)")
-        # Build minimal audit-trail JSON for first-year syndicates
-        first_year_output = {
-            "extraction_timestamp": datetime.now(timezone.utc).isoformat(),
-            "spec": {
-                "prompt_version": PROMPT_VERSION,
-                "field_definitions_version": FIELD_DEFINITIONS_VERSION,
-                "tolerance_rules_version": TOLERANCE_RULES_VERSION,
-            },
-            "source_file": str(report_path),
-            "first_year_syndicate": True,
-            "reason": "Syndicate too new — insufficient underwriting years for prior year development analysis",
-            "syndicate": syndicate_num,
-            "year": report_year,
-        }
-        adobe_lob = rag_result.get("adobe_lob")
-        if adobe_lob:
-            first_year_output["gross_premium_mix"] = adobe_lob["gross_premium_mix"]
-            first_year_output["gross_premiums_written_gbp_m"] = adobe_lob["gross_premiums_written_gbp_m"]
-            first_year_output["currency"] = adobe_lob.get("currency", "GBP")
-        return "first_year", first_year_output
+    if rag_result.get("first_year_syndicate") and not rag_result.get("first_year_reserve_text"):
+        return "first_year", _first_year_record(report_path, syndicate_num, report_year, rag_result,
+                                                inception_cache, manual_overrides)
 
     if rag_result.get("no_triangle_data"):
         # No triangle, no reserve text — report has no usable reserve
@@ -5369,6 +5277,7 @@ def process_one_report(report_path, inception_cache=None):
     # Use the cached result — no need to re-run.
     rag_method = rag_result.get("method", "")
     rag_source, rag_label, rag_triangle_used = _rag_figure_source(rag_result)
+    loss_ratio_figures = set()   # blocks whose figure the managed-level loss-ratio step set
     # Loss ratio triangle PYD is often at managed/group level rather than
     # syndicate level (e.g. Beazley 2623). It fills a narrative blank and otherwise
     # retains the syndicate-level value unless their directions contradict.
@@ -5442,7 +5351,9 @@ def process_one_report(report_path, inception_cache=None):
                 (result_openai, OPENAI_MODEL),
             ]:
                 if rag_is_fallback_only:
-                    _apply_loss_ratio_fallback(result, rag_pyd, model_name)
+                    if _apply_loss_ratio_fallback(result, rag_pyd, model_name) in (
+                            "filled_blank", "overrode_contradiction"):
+                        loss_ratio_figures.add(model_name)
                     continue
                 model_pyd = result.get("prior_year_development_gbp_m")
                 if model_pyd is None:
@@ -5504,13 +5415,15 @@ def process_one_report(report_path, inception_cache=None):
             result_gemini["_rag_triangle"] = rag_result["triangle"]
             result_openai["_rag_triangle"] = rag_result["triangle"]
 
-            # Learn inception year from triangle's earliest UW year
-            # Never overwrite manually-verified inception years
+            # Learn inception year from triangle's earliest UW year, for a syndicate the
+            # cache does not know. A known year is never lowered: a later triangle can
+            # carry cohorts reinsured to close into the syndicate, and 1884's took its
+            # year from 2015 back to 2012 (round 58, M01). Never overwrite
+            # manually-verified inception years.
             tri_uw_years = rag_result["triangle"].get("underwriting_years", [])
             if tri_uw_years and syndicate_num not in manual_overrides:
                 tri_inception = min(int(y) for y in tri_uw_years)
-                cached = inception_cache.get(syndicate_num)
-                if cached is None or tri_inception < cached:
+                if inception_cache.get(syndicate_num) is None:
                     inception_cache[syndicate_num] = tri_inception
                     _save_inception_years(inception_cache)
 
@@ -5529,7 +5442,9 @@ def process_one_report(report_path, inception_cache=None):
         for msg in tri_messages:
             print(msg)
 
-    # Apply Adobe LOB breakdown (deterministic override of LLM-extracted LOBs), gated
+    # Apply Adobe LOB breakdown (deterministic override of LLM-extracted LOBs), gated.
+    # The models' own gross premiums written stays on each block; the table's total is
+    # kept under _adobe_lob only, so the record holds two readings to reconcile (round 58)
     adobe_lob = rag_result.get("adobe_lob")
     if adobe_lob:
         _ok, _why = _lob_override_gate(
@@ -5542,7 +5457,6 @@ def process_one_report(report_path, inception_cache=None):
             result["_adobe_lob"] = adobe_lob
             if _ok:
                 result["gross_premium_mix"] = adobe_lob["gross_premium_mix"]
-                result["gross_premiums_written_gbp_m"] = adobe_lob["gross_premiums_written_gbp_m"]
                 result["gross_premium_confidence"] = 1.0
             else:
                 result["data_quality_notes"] = (f"{result.get('data_quality_notes', '') or ''} {_why}").strip()
@@ -5664,7 +5578,35 @@ def process_one_report(report_path, inception_cache=None):
                 f"{old_notes} [NET FALLBACK: No gross PYD available. "
                 f"Using net-of-reinsurance figure ({net_pyd:+.3f}m) from narrative text.]"
             )
+            _record_pyd_route(result, "net_narrative_fallback", net_pyd, None, None,
+                              "parsed from the block's exact_reserve_text")
             print(f"  [{model_name}] PYD filled from narrative net figure: {net_pyd:+.3f}m (net of reinsurance)")
+
+    # No usable cohort and no deterministic figure: a report whose triangles -- the RAG
+    # step's and both models' own -- hold no underwriting year old enough for prior year
+    # development is first-year, unless a model's figure is printed in the reserve text
+    # (round 58, M01). 1884/2016 reached the corpus at +15.044m this way: one model's
+    # closing-minus-opening arithmetic over a 2015-2016 triangle, the other model null.
+    # 6130/2017 is kept: both models read "$267k of technical reserves in respect of
+    # prior periods" from its filing.
+    if rag_result["pyd"] is None:
+        _young, _triangles = _no_mature_cohort(
+            rag_result, [(GEMINI_MODEL, result_gemini), (OPENAI_MODEL, result_openai)], report_year)
+        if _young:
+            _texts = " ".join(str(r.get("exact_reserve_text") or "") for r in (result_gemini, result_openai))
+            _figures = {name: r.get("prior_year_development_gbp_m")
+                        for name, r in ((GEMINI_MODEL, result_gemini), (OPENAI_MODEL, result_openai))}
+            _stated = [name for name, v in _figures.items() if v is not None and _figure_in_text(v, _texts)]
+            if not _stated:
+                print(f"  [RAG] No underwriting year old enough for prior year development in any "
+                      f"triangle {_triangles}, and no model figure {_figures} is printed in the "
+                      f"reserve text -- first-year")
+                return "first_year", _first_year_record(
+                    report_path, syndicate_num, report_year, rag_result, inception_cache, manual_overrides,
+                    reason=("Syndicate too new - no underwriting year old enough for prior year development "
+                            "in the report's triangles, and no prior-year figure stated in its reserve text"),
+                    evidence={"triangle_underwriting_years": _triangles,
+                              "model_figures_not_stated": _figures})
 
     # Zero-opening override: if opening reserves = 0, PYD must be 0 and
     # direction must be flat — the stored zero is the convention for a record with no prior-year reserves, not a finding that nothing developed
@@ -5679,6 +5621,9 @@ def process_one_report(report_path, inception_cache=None):
             result["prior_year_development_gbp_m"] = 0.0
             result["prior_year_development_pct"] = 0.0
             result["direction"] = "flat"
+            if not result.get("_pyd_route"):
+                _record_pyd_route(result, "zero_opening_reserves", 0.0, pyd_val, None,
+                                  "opening reserves are zero in both blocks")
 
     # Force direction from resolved PYD — triangle PYD dominates direction
     for model_name, result in [(GEMINI_MODEL, result_gemini), (OPENAI_MODEL, result_openai)]:
@@ -5690,6 +5635,23 @@ def process_one_report(report_path, inception_cache=None):
                 result["direction"] = expected_dir
                 if current_dir is not None:
                     print(f"  [{model_name}] Direction forced: {current_dir} -> {expected_dir} (PYD={pyd_val:+.3f}m)")
+
+    # A figure no deterministic step set is the model's own reading, and its route says so,
+    # and whether the reserve text prints it ("stated") or the model worked it out
+    # ("derived"). Without it a model reading carried no route at all (round 58, M01).
+    # The managed-level loss-ratio step's figures are the RAG step's and are left as they
+    # were recorded.
+    _texts = " ".join(str(r.get("exact_reserve_text") or "") for r in (result_gemini, result_openai))
+    for model_name, result in [(GEMINI_MODEL, result_gemini), (OPENAI_MODEL, result_openai)]:
+        pyd_val = result.get("prior_year_development_gbp_m")
+        if (not isinstance(pyd_val, (int, float)) or result.get("_pyd_route")
+                or model_name in loss_ratio_figures):
+            continue
+        _stated = _figure_in_text(pyd_val, _texts)
+        _record_pyd_route(result, "model_reading", pyd_val, None, None,
+                          "stated in the reserve text" if _stated
+                          else "derived: not printed in either block's reserve text")
+        result["_pyd_route"]["stated"] = _stated
 
     # Compare
     discrepancies = compare_results(result_gemini, result_openai, GEMINI_MODEL, OPENAI_MODEL)

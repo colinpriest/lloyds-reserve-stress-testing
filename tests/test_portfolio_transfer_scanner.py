@@ -25,13 +25,15 @@ import ritc_scanner as rs                      # noqa: E402
 import portfolio_transfer_scanner as pt        # noqa: E402
 
 #: The shared scanner's attributes `_install()` is allowed to touch.
-SHARED = ("RITC_TERM", "SENTENCE_PATTERNS", "INWARD_SETTLED", "OUTWARD_SETTLED",
-          "INWARD_CUES", "OUTWARD_CUES")
+SHARED = ("RITC_TERM", "SENTENCE_PATTERNS", "TERMLESS_PATTERNS", "INWARD_SETTLED",
+          "OUTWARD_SETTLED", "INWARD_CUES", "OUTWARD_CUES")
 
 
 def _snapshot():
+    # `hasattr`: an older scanner without TERMLESS_PATTERNS still runs this file, so that
+    # the M02 tests below fail on their assertions there rather than in this fixture
     return {n: (list(getattr(rs, n)) if isinstance(getattr(rs, n), list)
-                else getattr(rs, n)) for n in SHARED}
+                else getattr(rs, n)) for n in SHARED if hasattr(rs, n)}
 
 
 @pytest.fixture(autouse=True)
@@ -386,8 +388,13 @@ def _event(direction, year, pclass, snippet, dated=False):
 
 class TestR200_TheFlagRestsOnTheEventsThatSurvive:
 
-    #: 1856/2018's two events, as the scan recorded them.
-    QUOTA_SHARE = ("The Whole Account Lloyd's Quota Share consists of business written by "
+    #: Two of 1856/2018's events as the scan recorded them before R200. The flag rested on the
+    #: first, which describes current business and which the book filter drops, so the flag
+    #: must not survive it. That is the rule tested here, and it holds. The record itself is
+    #: not current business: the same page says that 15.4% of Syndicate 1955's 2015 and prior
+    #: reserves were transferred into 1856's 2016 year of account, an inward transfer told
+    #: without a transaction noun, which TestM02 below reads (M02).
+    QUOTA_SHARE =("The Whole Account Lloyd's Quota Share consists of business written by "
                    "Syndicate 1955 on a whole account net basis.")
     CASH = "This was driven by the receipt of cash from the quota share of the 1955 2015 & Prior RITC."
 
@@ -481,3 +488,222 @@ class TestR203_ALineBreakHyphenDoesNotEndARunOff:
                   "accepted a quota share of the runoff of Syndicate 1234",
                   "accepted a quota share of the prior year claims of Syndicate 1234"):
             assert pt._is_a_book_transfer(s), s
+
+
+def _scan_pages(tmp_path, monkeypatch, pages_by_key):
+    """Run the transfer scanner over constructed page texts, one list of pages per key. Only
+    the text is constructed: `scan_report`, `classify_sentence`, the book filter, the decision,
+    propagation and the evidence gate all run as they do on the corpus."""
+    for key in pages_by_key:
+        (tmp_path / ("syndicate_%s.pdf" % key)).write_bytes(b"")
+    monkeypatch.setattr(pt, "REPORTS_DIR", tmp_path)
+    monkeypatch.setattr(rs, "load_page_texts",
+                        lambda path: pages_by_key[path.stem.replace("syndicate_", "")])
+    try:
+        return pt.scan_all()
+    finally:
+        pt._restore()
+
+
+class TestM02_OldReservesMovedInAreATransfer:
+    """1856/2018: a share of another syndicate's prior-year reserves moved into this syndicate's
+    year of account, told with a verb and no transaction noun. No pattern of either scanner
+    could capture it, although the classifier reads it right (M02).
+
+    Each control scans the old-reserve sentence as well and asserts that it flags: a control
+    that passes because the new path is dead proves nothing."""
+
+    #: 1856/2018 p6 as its text layer gives it, line breaks kept. The first paragraph is the
+    #: current-business quota share that R200's flag once rested on.
+    PAGE6 = ("Whole Account Lloyd’s Quota Share \nThe Whole Account Lloyd’s Quota Share "
+             "consists of business written by Syndicate 1955 on a whole account net basis.  This is "
+             "\nnet of reinsurance spend, claims and expenses.  The percentage of the cession is "
+             "9.72% (2017 15.4%). In 2018 this class \ngenerated gross written premium of "
+             "£66.9m (2016: £34.1m).  The increase in the year was due to 15.4% of the "
+             "2015 and prior \nyear of account of reserves from Syndicate 1955 being transferred "
+             "into the 2016 year of account of Syndicate 1856. \nProperty Insurance \n")
+    MOVED_IN = "being transferred into the 2016 year of account of Syndicate 1856"
+    CURRENT = "consists of business written by Syndicate 1955"
+
+    @staticmethod
+    def _inward(r):
+        return [e for e in r["events"] if e["direction"] == "inward"]
+
+    def test_old_reserves_moved_in_flag_the_report_year(self, tmp_path, monkeypatch):
+        r = _scan_pages(tmp_path, monkeypatch, {"1856_2018": [self.PAGE6]})["1856_2018"]
+        assert r["transfer_occurred"] is True, r
+        assert r["confidence"] == "strong", r
+        ev = self._inward(r)
+        assert len(ev) == 1 and self.MOVED_IN in ev[0]["snippet"], r
+        assert ev[0]["pattern_class"] == "moved_in", ev
+        assert (ev[0]["event_year"], ev[0]["dated"], ev[0]["counterparty"]) == (2018, "yoa", "1955"), ev
+        assert self.MOVED_IN in r["evidence"], r
+
+    def test_the_current_business_quota_share_beside_it_does_not(self, tmp_path, monkeypatch):
+        r = _scan_pages(tmp_path, monkeypatch, {"1856_2018": [self.PAGE6]})["1856_2018"]
+        assert r["transfer_occurred"] is True, r
+        assert not [e for e in r["events"] if self.CURRENT in e["snippet"]], r
+        assert r["n_events_dropped_as_current_year"] == 1, r
+
+    def test_the_ceding_syndicates_own_reserves_going_out_are_not_inward(self, tmp_path, monkeypatch):
+        """Direction control. In Syndicate 1955's report the same words move ITS reserves out,
+        into 1856; beside them, 1955/2018 p5's own account of the cession."""
+        ceded = ("During 2018, in line with the terms of the 2016 YoA QS contract with 1856, the "
+                 "Syndicate ceded 15.4% of its whole\naccount technical reserves, on the 2015 and "
+                 "prior years of account.")
+        out = _scan_pages(tmp_path, monkeypatch,
+                          {"1856_2018": [self.PAGE6], "1955_2018": [self.PAGE6, ceded]})
+        assert out["1856_2018"]["transfer_occurred"] is True, out["1856_2018"]
+        r = out["1955_2018"]
+        assert r["transfer_occurred"] is False, r
+        assert not self._inward(r), r
+
+    def test_1856_2020s_quota_share_labelled_by_years_of_account_stays_unflagged(
+            self, tmp_path, monkeypatch):
+        """1856/2020 p22 as its text layer gives it (the filing prints it in the basis of
+        preparation, which the boilerplate filter skips; here it is classified). "2018 and prior
+        years of account" labels a quota share of 1955's current business, in the year that
+        quota share was commuted; a widening that took the label for a book flagged it."""
+        p22 = ("The Syndicate has a whole account Quota Share contract consisting of \nbusiness "
+               "written by syndicate 1955 on a net basis (Net of reinsurance spend, claims and "
+               "expenses) for 2018 and \nprior years of account. During the year, the syndicate "
+               "commuted the 2017 and prior years whole account Quota \nShare with syndicate 1955 "
+               "resulting in a premium refund of £49m, that has been settled during the year. ")
+        out = _scan_pages(tmp_path, monkeypatch, {"1856_2018": [self.PAGE6], "1856_2020": [p22]})
+        assert out["1856_2018"]["transfer_occurred"] is True, out["1856_2018"]
+        r = out["1856_2020"]
+        assert r["transfer_occurred"] is False, r
+        assert not [e for e in r["events"] if e["pattern_class"] == "moved_in"], r
+
+    def test_1971_2020s_named_class_stays_unflagged(self, tmp_path, monkeypatch):
+        """1971/2020 p6, p7 and p8 as its text layer gives them: a quota share of the current
+        book of named classes of Syndicate 1969. "General Liability class" is a line of
+        business, not a stock of claims. With every event dropped, the evidence says so, rather
+        than blaming accounting-policy boilerplate."""
+        pages = [
+            "For 2020, its business is written by way of a 90% quota share reinsurance of the ibott "
+            "(Insuring Businesses \nof Tomorrow, Today) Rover class and the ibott General Liability "
+            "class written by Syndicate 1969. ",
+            "The syndicate will write a 90% quota share reinsurance of the ibott Rover \nclass and "
+            "ibott General Liability class written by Syndicate 1969. ",
+            "The business is written by Syndicate 1969 then ceded as a 90% quota share to the "
+            "syndicate. "]
+        out = _scan_pages(tmp_path, monkeypatch, {"1856_2018": [self.PAGE6], "1971_2020": pages})
+        assert out["1856_2018"]["transfer_occurred"] is True, out["1856_2018"]
+        r = out["1971_2020"]
+        assert r["transfer_occurred"] is False, r
+        assert r["evidence"] == "every event found was dropped by the book-transfer filter", r
+
+    def test_what_moves_in_has_to_be_named_as_reserves(self, tmp_path, monkeypatch):
+        """The two controls above carry a transfer term, so they never reach the termless path.
+        These do. The construction always names a year of account, the one received into, so a
+        year-of-account word can never be what moves. Capacity and renewal rights move current
+        business, not claims: neither sentence may flag."""
+        moved = ["Capacity of Syndicate 1234 was transferred into the 2016 year of account of "
+                 "Syndicate 5678.",
+                 "The renewal rights to the business of Syndicate 1234 were transferred into the "
+                 "2016 year of account of Syndicate 5678."]
+        out = _scan_pages(tmp_path, monkeypatch, {"1856_2018": [self.PAGE6], "5678_2018": moved})
+        assert out["1856_2018"]["transfer_occurred"] is True, out["1856_2018"]
+        r = out["5678_2018"]
+        assert r["transfer_occurred"] is False, r
+        assert r["n_events_dropped_as_current_year"] == 2, r
+
+    def test_a_named_class_moved_in_is_not_reserves_either(self, tmp_path, monkeypatch):
+        """R174's strip holds on the termless path: "Employers Liability account" names a line
+        of business, and it is the only liability word here."""
+        moved = ["The Employers Liability account of Syndicate 1234 was transferred into the 2016 "
+                 "year of account of Syndicate 5678."]
+        out = _scan_pages(tmp_path, monkeypatch, {"1856_2018": [self.PAGE6], "5678_2018": moved})
+        assert out["1856_2018"]["transfer_occurred"] is True, out["1856_2018"]
+        r = out["5678_2018"]
+        assert r["transfer_occurred"] is False, r
+        assert r["n_events_dropped_as_current_year"] == 1, r
+
+    def test_a_sentence_naming_reinsurance_to_close_is_left_to_the_ritc_scan(
+            self, tmp_path, monkeypatch):
+        """Syndicate 435's take-on of Syndicate 2255 as three of its reports' text layers give
+        it: 2018 p5 whole, 2019 p6 with a line break inside "reinsurance to close", and 2017
+        with the sentence split by the page break after "A reinsurance to close". It names its
+        transaction, so the termless path does not read it: the RITC scan flags 435/2018, and
+        a transfer flag would only repeat that one."""
+        p5_2018 = ("the United Kingdom. A reinsurance to close arrangement\nof Syndicate 2255 was "
+                   "carried out as at 31 December\n2017; its assets and liabilities were transferred "
+                   "to\nSyndicate 435 on 1 January 2018. This transaction\nadded")
+        p6_2019 = ("As noted in the 2018 Annual Report a reinsurance \nto close arrangement of "
+                   "Syndicate 2255 was \ncarried out as at 31 December 2017; its assets \nand "
+                   "liabilities were transferred to Syndicate 435 \non 1 January 2018. This "
+                   "transaction added £83.8m \nto premiums written")
+        p6_2017 = ("principal activity is the transaction of reinsurance\nbusiness in the United "
+                   "Kingdom. A reinsurance to close\nReport of the Directors of the Managing Agent "
+                   "\n31 December 2017\n")
+        p7_2017 = ("4\narrangement of Syndicate 2255 was carried out as at \n31 December 2017; its "
+                   "assets and liabilities were\ntransferred to Syndicate 435 on 1 January 2018. "
+                   "\nThis transaction was subject to careful scrutiny")
+        out = _scan_pages(tmp_path, monkeypatch, {
+            "1856_2018": [self.PAGE6], "435_2017": [p6_2017, p7_2017], "435_2018": [p5_2018],
+            "435_2019": [p6_2019]})
+        assert out["1856_2018"]["transfer_occurred"] is True, out["1856_2018"]
+        for key in ("435_2017", "435_2018", "435_2019"):
+            r = out[key]
+            assert r["transfer_occurred"] is False, (key, r)
+            assert not [e for e in r["events"] if e["pattern_class"] == "moved_in"], (key, r)
+        monkeypatch.setattr(rs, "load_page_texts", lambda path: [p5_2018])
+        assert rs.scan_report(tmp_path / "syndicate_435_2018.pdf")["ritc_occurred"] is True
+
+    def test_a_later_report_telling_it_flags_the_year_it_happened(self, tmp_path, monkeypatch):
+        """Propagation, and the evidence gate after it: the 2018 flag rests on a termless event
+        read from the 2019 report, which the gate has to count as evidence."""
+        later = ("In 2018, 15.4% of the 2015 and prior year of account reserves from Syndicate 1955 "
+                 "were transferred into the 2016 year of account of Syndicate 1856.")
+        out = _scan_pages(tmp_path, monkeypatch,
+                          {"1856_2018": ["Nothing relevant on this page."], "1856_2019": [later]})
+        r = out["1856_2018"]
+        assert r["transfer_occurred"] is True, r
+        assert r["evidence_report"] == "1856_2019", r
+        assert out["1856_2019"]["transfer_occurred"] is False, out["1856_2019"]
+
+    def test_only_the_transfer_scan_carries_the_termless_patterns(self):
+        """The RITC flag enters the sample without hand adjudication, so the RITC scan keeps its
+        own vocabulary and has no termless path. The transfer scan installs its patterns for the
+        scan and takes them out again (R181)."""
+        assert rs.TERMLESS_PATTERNS == []
+        pt._install()
+        assert rs.TERMLESS_PATTERNS is pt.TERMLESS_PATTERNS and pt.TERMLESS_PATTERNS
+        pt._restore()
+        assert rs.TERMLESS_PATTERNS == []
+
+
+class TestM02_TheTransferScanReadsEveryFiling:
+    """The 2024 filings are HTML. The transfer scan globbed *.pdf, so it never read any of the
+    95 (M02). It now reads the RITC scan's file list, through the RITC scan's HTML route."""
+
+    def test_it_lists_what_the_ritc_scan_lists(self, tmp_path, monkeypatch):
+        for name in ("syndicate_1111_2020.pdf", "syndicate_2222_2024.html",
+                     "syndicate_3333_2024.htm", "notes.txt"):
+            (tmp_path / name).write_bytes(b"")
+        monkeypatch.setattr(pt, "REPORTS_DIR", tmp_path)
+        monkeypatch.setattr(rs, "load_page_texts", lambda path: ["Nothing relevant on this page."])
+        try:
+            out = pt.scan_all()
+        finally:
+            pt._restore()
+        assert set(out) == {"1111_2020", "2222_2024", "3333_2024"}, sorted(out)
+        assert set(out) == {p.stem.replace("syndicate_", "") for p in rs.list_reports(tmp_path)}
+
+    def test_an_html_filing_is_read(self, tmp_path, monkeypatch):
+        """No text is patched in: the filing goes through `ritc_scanner.load_page_texts`."""
+        paragraphs = [TestM02_OldReservesMovedInAreATransfer.PAGE6.replace("\n", " ")] + [
+            "Filler paragraph %d says nothing of interest." % i for i in range(12)]
+        (tmp_path / "syndicate_1856_2018.html").write_text(
+            "<html><body>%s</body></html>" % "".join("<p>%s</p>" % s for s in paragraphs),
+            encoding="utf-8")
+        monkeypatch.setattr(pt, "REPORTS_DIR", tmp_path)
+        try:
+            out = pt.scan_all()
+        finally:
+            pt._restore()
+        r = out["1856_2018"]
+        assert r["detection"] == "successful", r
+        assert r["transfer_occurred"] is True, r
+        assert r["page"] == 1 and "being transferred into" in r["evidence"], r

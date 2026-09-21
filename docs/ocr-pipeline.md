@@ -19,13 +19,13 @@ PDF input
   |
   v
 +-----------------------------------------------+
-| Step 0: Inception year check (soft)            |
-|   is_early_year_syndicate()                    |
-|     Lookup syndicate_inception_years.json       |
-|     If missing: query Perplexity API            |
-|     Flag if report_year < inception_year + 2    |
-|     (does NOT skip -- validated by triangle)    |
-|   Cost: $0 (or ~$0.001 per Perplexity call)    |
+| Step 0: First-year check (RAG-lite, no API)   |
+|   extract_pyd_from_relevant_pages()           |
+|     No triangle cohort up to t-2 and no       |
+|     reserve text -> first-year stub           |
+|   Checked again after the models (11.1);      |
+|   the inception-year lookup was removed       |
+|   in round 58                                 |
 +-----------------------------------------------+
   |
   v
@@ -1137,12 +1137,57 @@ mix.  Three further rules follow from the same review:
 * the prose fallback (`_parse_lob_from_text`) must find at least two
   classes -- a single line is a stray sentence, not a mix (2623/2015
   had returned one class at 4.0m for a 1.5bn book);
-* the driver applies a deterministic mix over the models' only when
-  it has two or more classes or its single class agrees with a
-  model-read premium total within 25% (`_lob_override_gate`); a
-  monoline special purpose syndicate passes, a stray row does not,
-  and the refusal is recorded as `[LOB NOT APPLIED]`.  The
-  deterministic table is kept in `_adobe_lob` for audit either way.
+* the driver applied a deterministic mix over the models' when it
+  had two or more classes or its single class agreed with a
+  model-read premium total within 25%.  Round 58 replaced that rule
+  (section 7.7.2).
+
+#### 7.7.2  Partial tables and the reconciliation gate (round 58)
+
+The frozen review of 21 September 2026 (M03) found 1856/2018's mix
+to be three of its seven classes (14.2m of a 143.968m table): the
+text fallback had read part of the segmental note, the driver wrote
+the part's sum over both models' premium totals, and every later
+check compared the mix with its own sum.  A census found 147 such
+partial mixes.  Round 58 changed four things.
+
+* **The gate** (`_lob_override_gate`): a deterministic mix replaces
+  the models' mix only when its classes sum, within 2%, to a gross
+  premiums written total one of the models read, whatever the number
+  of classes.  Otherwise the models' mix is kept and the refusal is
+  recorded as `[LOB NOT APPLIED: ...]`.  With no model total there is
+  nothing to reconcile with, and the models' mix is kept.
+* **Only the mix is applied.**  Each model keeps the premium total it
+  read; the table's printed total (`table_total`) and its class sum
+  (`class_sum`) are kept beside its mix in `_adobe_lob`, whether the
+  mix was applied or not.  The text fallback writes no total, and a
+  text mix is adopted only when its class sum reconciles within 2%
+  with a premium total the filing prints
+  (`gross_premiums_written_readings`, `reconciling_reading`).
+* **The grid's own total.**  An unlabelled row equal to two or more
+  classes above it, with no class after it, is the grand total (the
+  largest such row wins, so "Total Direct" no longer stands for it);
+  so is a profit-and-loss row carrying the class sum
+  (`_sums_classes_above`; 780/2015's "Net technical result" had been
+  read as an eighth class).  A printed total more than 2% from the
+  class sum, with or without the RITC rows, refuses the grid; so do
+  classes that carry no premium.  Only unlabelled, section or total
+  rows are dropped as subtotals (`_drop_subtotal_rows`), a label-only
+  row takes the amounts on the row beneath it, "2023 (Restated)" and
+  "2023*" open the comparative section (`_year_section_divider`), and
+  amounts are stored unrounded.
+* **Tagging.**  A grid tagged both premium mix and provisions is read
+  as a premium grid when its first rows say "gross premiums written"
+  (`_admits_premium_grid`; 1856/2018's note carried a "Net technical
+  provisions" column).
+
+Known limits: the table parser takes its unit from the amounts'
+magnitude, so a small syndicate's £'000 table can read as £m (the
+gate refuses such a table in a model record; first-year stubs have
+no gate); a negative class premium is stored as its absolute value,
+so a table whose signed classes reconcile with its total is refused
+and the models' signed mix kept; and a printed total with a leading
+currency sign ("£ 430,858") is not read as `table_total`.
 
 ### 7.8  Provisions and balance sheet grid parsing
 
@@ -2000,8 +2045,10 @@ hierarchy; every other document defers to it.
    `[CODE PYD NOT APPLIED]`): 1084/2022 and 510/2018 had reached
    the record by that path (+581.7m and +429.3m against two models
    agreeing on a release) once the RAG triangle was blocked.  A
-   deterministic figure therefore never displaces two agreeing
-   model values by any of the three routes.
+   deterministic figure therefore displaces two agreeing model
+   values by none of the three routes, with one exception: a
+   figure two readings of the filing confirmed by hand is applied
+   over this gate (R213; the precedence table below).
 5. Where no absolute-amount triangle yields a PYD, a
    loss-ratio triangle is a conditional deterministic fallback.
    Because it is ordinarily managed- or group-level, it fills an
@@ -2011,6 +2058,23 @@ hierarchy; every other document defers to it.
    It never overrides an absolute-amount triangle.
 6. When no deterministic source is available, the reconciled
    dual-LLM text extraction is used.
+
+**Precedence of the checks on a deterministic development figure.**
+The rows are in the order `process_one_report` applies them to the
+figure from an absolute-amount RAG triangle.  This table is the one
+statement of which figure wins; the README's summary points here.
+
+| Order | Check | Outcome | Note written | Code |
+|---|---|---|---|---|
+| 1 | Sanity: the figure implies more than +200% of opening reserves, or is non-zero against zero opening reserves | discarded; the model values stand | printed | `process_one_report` |
+| 2 | Hand confirmation: the figure equals, to half a thousand, one that two readings of the filing confirmed (`pdf_extraction/audit/triangle_figures_confirmed_by_hand.json`; an entry needs two readings, pages, a quote and the figure, or it is refused) | applied over the check in row 3, for that record and that figure only | `[RAG PYD APPLIED OVER THE SIGN VETO ...]` | `_rag_veto`, `_hand_confirmed_figure` |
+| 3 | Model agreement: both model values agree in sign and the figure has the opposite sign, or the figure implies above 50% of opening while both models imply under 10% | not applied; the model values stand | `[RAG PYD NOT APPLIED ...]` (`[CODE PYD NOT APPLIED ...]` on the code recomputation route) | `_pyd_override_gate` |
+| 4 | Otherwise | the figure replaces both model values, however close they are | the override is logged | `process_one_report` |
+
+The gross claims-provisions comparison (items 2-3 above,
+section 11.3.1) and the loss-ratio fallback (item 5) are separate
+from these rows: a loss-ratio triangle never passes row 4, and it
+never overrides an absolute-amount triangle.
 
 An absolute-amount RAG triangle is computed deterministically
 from the claims development table and takes precedence over an
@@ -2396,9 +2460,9 @@ the Azure run and are not re-fetched.
 #### 10.8.2  Offline re-extraction
 
 `python test_gemini.py --single syndicate_NNNN_YYYY --offline`
-re-runs a record from the committed LLM, table-backend and
-inception caches; any cache miss aborts the run instead of calling
-an external API (`LLOYDS_EXTRACTION_OFFLINE=1`), so a
+re-runs a record from the committed LLM and table-backend
+caches; any cache miss aborts the run instead of calling an
+external API (`LLOYDS_EXTRACTION_OFFLINE=1`), so a
 re-extraction changes only what the parsing rules change.  In
 offline mode a cache whose relevant-page set no longer matches the
 current page classifier is still used, with table pages located
@@ -2471,131 +2535,44 @@ equivalent from the segmental analysis).
 
 ## 11  Report classification
 
-Reports are classified before expensive API calls to save cost.
-Two independent checks run in sequence; the first to match wins.
+Reports are classified before expensive API calls to save cost. A report is first-year when nothing in it shows
+development on mature cohorts or a disclosed prior-year movement. That is decided from the report itself: its
+triangles before the models run (11.2), and its triangles and reserve text after they have (11.1).
 
-### 11.1  Inception year check (Step 0)
+### 11.1  First-year reports (round 58)
 
-**Functions**: `is_early_year_syndicate()`, `get_inception_year()`,
-`_lookup_inception_year_perplexity()` (`test_gemini.py`)
+**Functions**: `_no_mature_cohort()`, `_figure_in_text()`, `_first_year_record()` (`test_gemini.py`)
 
-Before PDF reading, the pipeline checks whether the report falls
-within the syndicate's first two underwriting years.  A syndicate
-needs at least 3 development periods before prior year development
-can be meaningfully separated from current year activity.
+Until round 58 the pipeline also looked up the syndicate's first underwriting year (`is_early_year_syndicate()`,
+the cache below, and a Perplexity query on a cache miss) and flagged a report when
+`report_year < inception_year + 2`. The flag never skipped a report on its own: the triangle check overrode it. Its
+one effect was the cache correction that lowered a cached year to a triangle's earliest cohort, which moved 1884 from
+2015 back to 2012 on a triangle carrying cohorts reinsured to close into it. The check, the lookup and the
+correction were deleted in round 58 (the frozen review of 21 September 2026, M01).
 
-**Decision rule**: flag (but do not skip) when
-`report_year < inception_year + 2`.  The flag is stored in
-`inception_skip` and validated against the actual triangle in
-the RAG extraction step.  If the triangle contradicts the cache
-(i.e. it has UW years older than the cached inception year), the
-cache is corrected and extraction proceeds normally.  This
-prevents incorrect Perplexity lookups from permanently blocking
-reports that have valid triangles.
+**After the models** (`process_one_report()`, after `verify_triangles` and the net narrative fallback), a report is
+written as a first-year stub when all three hold:
 
-**Manual overrides**: syndicates listed in the `_manual_overrides`
-array in the cache file are protected from all automatic updates.
-Neither Perplexity lookups, triangle backfill, nor cache correction
-will overwrite their inception year.  Use this for syndicates where
-the automatically-determined inception year is known to be wrong
-and has been manually corrected.  See "Cache file format" below.
+- the RAG step (triangle, provisions or narrative) returned no development figure;
+- no triangle in the record, the RAG step's or either model's own, holds an underwriting year up to t-2;
+- no model's figure is printed in either block's reserve text (`_figure_in_text()`).
 
-**Inception year lookup** (in priority order):
+The stub carries its reason and the evidence: the triangles' underwriting years and the figures the models gave.
+1884/2016 is written this way: its triangles hold 2015 and 2016 only, one model left the figure blank and the other
+took the 2015 year's closing outstanding less the whole opening outstanding (+15.044m), a figure its filing never
+prints. 6130/2017 is kept: both models read "$267k of technical reserves in respect of prior periods" from its
+filing.
 
-1. **Local cache** -- `pdf_extraction/syndicate_inception_years.json`
-   stores `{"syndicate_number": first_uw_year}` pairs.  Populated
-   from claims development triangles (earliest UW year across all
-   reports for a syndicate).
-2. **Perplexity API** -- if a syndicate is not in the cache, the
-   pipeline queries Perplexity (`sonar` model) with a structured
-   JSON request.  The prompt asks for a JSON object:
-   ```json
-   {
-     "syndicate_number": 2001,
-     "first_underwriting_year": 1997,
-     "confidence": "high",
-     "source": "Lloyd's syndicate directory"
-   }
-   ```
-   The prompt explicitly warns that syndicate numbers are not
-   necessarily the same as inception years.  Validation checks:
-   - **Confidence filter**: answers with `"confidence": "low"` are
-     rejected.  Medium and high confidence answers are accepted.
-   - **Range check**: year must be between 1688 and 2030.
-   - **Sanity check vs reports on disk**: if the returned year is
-     later than the earliest report we have for the syndicate, the
-     answer is clearly wrong (a syndicate can't have reports before
-     it started).  In that case, the pipeline falls back to
-     `earliest_report_year - 2` as a conservative estimate.
-   - **JSON parse fallback**: if Perplexity returns free text
-     instead of JSON, a regex extracts the first 4-digit year.
-   Cost: ~$0.001 per query; each syndicate is queried at most once.
-3. **Triangle detection** -- if the RAG-lite extraction later finds
-   a triangle with <= 2 UW years, the pipeline updates the cache
-   with `inception_year = report_year - 1` as a conservative
-   estimate (for syndicates not already in the cache and not in
-   `_manual_overrides`).
+**The inception cache** (`pdf_extraction/syndicate_inception_years.json`) is kept as a record and no step reads it
+for a decision. Every path that writes it only adds a syndicate it does not know: the start-up backfill in
+`_load_inception_years()` (a stored stub's `inception_year`, or the earliest underwriting year of the stored
+records' triangles), the triangle learner (the triangle's earliest underwriting year) and `_first_year_record()`
+(report_year - 1). None changes a known year, and syndicates in `_manual_overrides` are never changed. The years
+the removed correction lowered stay as it left them (1884: 2012; the syndicate began underwriting in 2015).
 
-**When the inception year is unknown** and Perplexity is
-unavailable (no API key, network error), the check is skipped and
-the report proceeds to normal extraction.
+### 11.2  First-year syndicate (triangle-based detection, before the models)
 
-**Cache file format** (`syndicate_inception_years.json`):
-
-```json
-{
-  "_meta": {
-    "description": "First underwriting year for each syndicate...",
-    "source": "Auto-populated from triangles + Perplexity lookups",
-    "last_updated": "2026-03-17"
-  },
-  "_manual_overrides": [1110, 2001],
-  "1084": 2011,
-  "1110": 2012,
-  "1322": 2022,
-  "1609": 2021,
-  "1991": 2013,
-  "2001": 1993
-}
-```
-
-The `_manual_overrides` array lists syndicate numbers whose inception
-years have been manually verified and must not be changed by any
-automated process.  To protect a syndicate:
-
-1. Correct its inception year value in the JSON file
-2. Add its syndicate number to the `_manual_overrides` array
-
-All automated update paths (`_load_inception_years()` backfill,
-`get_inception_year()` Perplexity lookup, triangle correction in
-`process_single_report()`, and triangle learning) check this list
-before writing.
-
-### 11.2  First-year syndicate (triangle-based detection)
-
-The RAG-lite extraction always runs (regardless of the inception
-year flag) and may detect a triangle with fewer than 3
-underwriting years.  This is a second line of defence for
-syndicates not yet in the inception cache.
-
-**Cache correction**: if the inception cache flagged the report
-for skipping but the RAG extraction finds a triangle with usable
-UW years, the cache is corrected to `min(underwriting_years)` and
-extraction proceeds normally.  Syndicates in `_manual_overrides`
-are never corrected -- extraction still proceeds (the skip flag
-is cleared) but the cached inception year is preserved.
-
-Correction log (normal syndicate):
-```
-[Inception] Cache said inception=2018 (would skip),
-but triangle shows UW years back to 2011 -- correcting cache
-```
-
-Correction log (manual override syndicate):
-```
-[Inception] Triangle shows UW years back to 2011,
-but syndicate 1110 has manual override (2012) -- keeping manual value, not skipping
-```
+The RAG-lite extraction runs first and may detect a triangle with fewer than 3 underwriting years.
 
 The check uses **usable years**, not raw UW year count:
 
@@ -2611,11 +2588,13 @@ The check uses **usable years**, not raw UW year count:
 usable.  The pipeline extracts the triangle (29,267 → 28,431 →
 28,278 in £'000) and computes PYD = −0.153m (a release).
 
-When `first_year_syndicate` is triggered:
+When `first_year_syndicate` is triggered and the reserve-text steps found nothing either (Step 4 cleared the flag
+and Steps 5-5e found no figure, `first_year_reserve_text`), the models still run and the decision is taken after
+them (11.1). Otherwise:
 
-- The inception cache is updated with the estimated inception year
 - LLM extraction is **skipped** (saves API cost)
 - LOB breakdown is still extracted if available
+- The inception cache gains report_year - 1 for a syndicate it does not know
 - Output JSON: `{"first_year_syndicate": true, ...}`
 
 ### 11.3  Provisions PYD fallback
@@ -2878,7 +2857,7 @@ re-extracting every report.
 
 | Cache location                                 | Content                        | Invalidation                            |
 |------------------------------------------------|--------------------------------|-----------------------------------------|
-| `pdf_extraction/syndicate_inception_years.json`| First UW year per syndicate    | Edit file directly; auto-updated by Perplexity lookups. Add syndicate to `_manual_overrides` to prevent auto-updates |
+| `pdf_extraction/syndicate_inception_years.json`| First UW year per syndicate    | A record only: no step reads it for a decision since round 58 (11.1). Learned from triangles; add a syndicate to `_manual_overrides` to protect a verified year |
 | `pdf_extraction/azure_output/`                 | Azure API table grids          | `_CACHE_VERSION`, page set, batch mode  |
 | `pdf_extraction/nutrient_output/`              | Nutrient API responses         | `_CACHE_VERSION` bump                   |
 | `pdf_extraction/adobe_output/`                 | Adobe PDF Extract results      | `_CACHE_VERSION` bump                   |
@@ -2953,10 +2932,8 @@ updated slim PDF containing the Balance Sheet page.
 
 ### 14.2  First-year syndicate
 
-When the triangle-based detection confirms the report is from a
-syndicate with fewer than 3 usable underwriting years (the
-inception year cache alone no longer triggers a skip -- see
-section 11.1):
+Stubs written before round 58 by the inception-year check, which
+was removed then (section 11.1), carry this form:
 
 ```json
 {
@@ -3567,6 +3544,8 @@ loss-ratio table is the failure this rule exists to prevent.
 
 ### Perplexity returns syndicate number as inception year
 
+Historical: the Perplexity inception lookup was removed in round 58 (section 11.1).
+
 **Symptom**: log shows `"WARNING: Perplexity returned syndicate
 number N as inception year -- ignoring"` for syndicates whose
 number coincidentally equals their actual inception year (e.g.
@@ -3744,6 +3723,8 @@ value is used as the PYD with `method: "provisions"`.  See
 section 11.3 for details and RITC caveats.
 
 ### Incorrect inception year causes reports to be skipped
+
+Historical: the inception-year check, its soft flag and its cache correction were removed in round 58 (section 11.1).
 
 **Symptom**: report flagged as `first_year_syndicate` with
 `"reason": "Syndicate N began underwriting in YYYY"`, but the

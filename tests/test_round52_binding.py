@@ -190,7 +190,8 @@ def _filing(stem):
 
 @pytest.mark.parametrize("stem,year,expect", [
     ("syndicate_1416_2024", 2024, {"opening": 46.378, "opening_source": "document", "entity": 1416}),
-    ("syndicate_510_2018", 2018, {"opening": None, "triangle_entity": 510, "lob_gwp": 1376.7}),
+    # the table's own total, stored unrounded since round 58 (it was 1376.7 at 0.1m)
+    ("syndicate_510_2018", 2018, {"opening": None, "triangle_entity": 510, "lob_gwp": 1376.729}),
     ("syndicate_510_2019", 2019, {"opening": None, "triangle_entity": 510}),
     ("syndicate_6104_2016", 2016, {"opening": 13.54, "entity": 6104}),
     ("syndicate_6104_2024", 2024, {"opening": 53.081, "entity": 6104, "triangle_entity": 6104}),
@@ -211,7 +212,7 @@ def test_reference_filings_bind_to_the_requested_syndicate(stem, year, expect, m
     if expect.get("triangle_entity"):
         assert r.triangle is not None and r.triangle.entity == expect["triangle_entity"]
     if expect.get("lob_gwp"):
-        assert r.lob is not None and r.lob.gross_premiums_written_gbp_m == expect["lob_gwp"]
+        assert r.lob is not None and r.lob.gross_premiums_written_gbp_m == pytest.approx(expect["lob_gwp"], abs=5e-4)
     # a companion syndicate's table is never selected
     for obj in (r.triangle, r.lob, r.provisions):
         if obj is not None and getattr(obj, "entity", None) is not None:

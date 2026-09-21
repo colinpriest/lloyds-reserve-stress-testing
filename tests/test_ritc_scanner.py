@@ -328,3 +328,40 @@ class TestR202_AnAcceptanceFromAnUnnamedSyndicate:
         acceptance it is, and here the subject is another syndicate."""
         s = "Syndicate 1234 accepted the reinsurance to close of another Lloyd's syndicate."
         assert rs.classify_sentence(s, "5678", 2020)["direction"] != "inward"
+
+
+class TestM02_TheEvidenceSaysWhyNoEventWasFound:
+    """A report whose RITC mentions gave no event was always put down to accounting-policy
+    boilerplate. 1856/2018's p7, "This was driven by the receipt of cash from the quota share
+    of the 1955 2015 & Prior RITC.", is not boilerplate: no sentence pattern matched it (M02)."""
+
+    #: the accounting policy of TestDecision.test_accounting_policy_boilerplate_is_not_flagged
+    POLICY = ("Accounting policies\nReinsurance to close\nA year of account is normally closed "
+              "by reinsurance into the following year of account. The amount of the RITC "
+              "premium is determined by the managing agent, generally by estimating the cost "
+              "of claims notified but not settled.")
+    BOILERPLATE = "RITC mentioned only in accounting-policy boilerplate"
+
+    def _scan(self, monkeypatch, pages, name):
+        monkeypatch.setattr(rs, "load_page_texts", lambda p: pages)
+        return rs.scan_report(Path(name))
+
+    def test_a_mention_no_pattern_matched_is_not_called_boilerplate(self, monkeypatch):
+        cash = ("Investment return\nThis was driven by the receipt of cash from the quota share of "
+                "the 1955 2015 & Prior RITC.")
+        r = self._scan(monkeypatch, [self.POLICY, cash], "syndicate_1856_2018.pdf")
+        assert r["ritc_occurred"] is False and r["events"] == [], r
+        assert r["evidence"] != self.BOILERPLATE, r
+        assert "no sentence pattern matched" in r["evidence"], r
+        # control: boilerplate alone is still called boilerplate
+        r = self._scan(monkeypatch, [self.POLICY], "syndicate_5151_2018.pdf")
+        assert r["evidence"] == self.BOILERPLATE, r
+
+    def test_a_routine_own_year_closure_is_not_called_boilerplate(self, monkeypatch):
+        """The closed-year accounts' closure of the syndicate's own year is dropped as routine,
+        which is not boilerplate either (1856/2018 p9 is such an entry)."""
+        pages = ["Underwriting year accounts\nThe 2016 year of account was closed at 31 December "
+                 "2018 by reinsurance to close into the 2017 year of account."]
+        r = self._scan(monkeypatch, pages, "syndicate_1856_2018.pdf")
+        assert r["ritc_occurred"] is False and r["events"] == [], r
+        assert "routine year-of-account entries" in r["evidence"], r

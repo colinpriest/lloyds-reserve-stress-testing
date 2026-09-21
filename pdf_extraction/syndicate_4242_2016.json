@@ -1,5 +1,5 @@
 {
-  "extraction_timestamp": "2026-09-13T11:06:46.618509+00:00",
+  "extraction_timestamp": "2026-09-21T10:19:52.468899+00:00",
   "spec": {
     "prompt_version": "2.13",
     "driver_prompt_version": "2.13",
@@ -29,22 +29,22 @@
       "standardized_narrative": "The syndicate experienced a small release of prior year reserves of $0.083 million, representing a 0.68% reduction in opening gross claims outstanding. This movement was calculated from the gross claims development triangle, with individual underwriting years showing mixed development, but a net release overall for years 2014 and prior.",
       "raw_causal_phrases": [],
       "lob_movements": [],
-      "gross_premiums_written_gbp_m": 185.6,
+      "gross_premiums_written_gbp_m": 185.601,
       "gross_premium_mix": [
         {
           "line_of_business": "Fire and other damage to property",
-          "amount_gbp_m": 166.9,
+          "amount_gbp_m": 166.899,
           "percentage_of_total": 89.9
         },
         {
           "line_of_business": "Third-party liability",
-          "amount_gbp_m": 0.6,
+          "amount_gbp_m": 0.625,
           "percentage_of_total": 0.3
         },
         {
           "line_of_business": "Reinsurance accepted",
-          "amount_gbp_m": 18.1,
-          "percentage_of_total": 9.8
+          "amount_gbp_m": 18.077,
+          "percentage_of_total": 9.7
         }
       ],
       "gross_premium_page": 31,
@@ -216,33 +216,35 @@
         "gross_premium_mix": [
           {
             "line_of_business": "Fire and other damage to property",
-            "amount_gbp_m": 166.9,
+            "amount_gbp_m": 166.899,
             "percentage_of_total": 89.9
           },
           {
             "line_of_business": "Third-party liability",
-            "amount_gbp_m": 0.6,
+            "amount_gbp_m": 0.625,
             "percentage_of_total": 0.3
           },
           {
             "line_of_business": "Reinsurance accepted",
-            "amount_gbp_m": 18.1,
-            "percentage_of_total": 9.8
+            "amount_gbp_m": 18.077,
+            "percentage_of_total": 9.7
           }
         ],
-        "gross_premiums_written_gbp_m": 185.6,
+        "gross_premiums_written_gbp_m": 185.601,
+        "table_total": 185.601,
+        "class_sum": 185.601,
         "claims_incurred_by_lob": [
           {
             "line_of_business": "Fire and other damage to property",
-            "amount_gbp_m": -38.8
+            "amount_gbp_m": -38.763
           },
           {
             "line_of_business": "Third-party liability",
-            "amount_gbp_m": -0.7
+            "amount_gbp_m": -0.669
           },
           {
             "line_of_business": "Reinsurance accepted",
-            "amount_gbp_m": -0.7
+            "amount_gbp_m": -0.652
           }
         ],
         "currency": "USD",
@@ -373,22 +375,22 @@
         "released"
       ],
       "lob_movements": [],
-      "gross_premiums_written_gbp_m": 185.6,
+      "gross_premiums_written_gbp_m": null,
       "gross_premium_mix": [
         {
           "line_of_business": "Fire and other damage to property",
-          "amount_gbp_m": 166.9,
+          "amount_gbp_m": 166.899,
           "percentage_of_total": 89.9
         },
         {
           "line_of_business": "Third-party liability",
-          "amount_gbp_m": 0.6,
+          "amount_gbp_m": 0.625,
           "percentage_of_total": 0.3
         },
         {
           "line_of_business": "Reinsurance accepted",
-          "amount_gbp_m": 18.1,
-          "percentage_of_total": 9.8
+          "amount_gbp_m": 18.077,
+          "percentage_of_total": 9.7
         }
       ],
       "gross_premium_page": null,
@@ -503,33 +505,35 @@
         "gross_premium_mix": [
           {
             "line_of_business": "Fire and other damage to property",
-            "amount_gbp_m": 166.9,
+            "amount_gbp_m": 166.899,
             "percentage_of_total": 89.9
           },
           {
             "line_of_business": "Third-party liability",
-            "amount_gbp_m": 0.6,
+            "amount_gbp_m": 0.625,
             "percentage_of_total": 0.3
           },
           {
             "line_of_business": "Reinsurance accepted",
-            "amount_gbp_m": 18.1,
-            "percentage_of_total": 9.8
+            "amount_gbp_m": 18.077,
+            "percentage_of_total": 9.7
           }
         ],
-        "gross_premiums_written_gbp_m": 185.6,
+        "gross_premiums_written_gbp_m": 185.601,
+        "table_total": 185.601,
+        "class_sum": 185.601,
         "claims_incurred_by_lob": [
           {
             "line_of_business": "Fire and other damage to property",
-            "amount_gbp_m": -38.8
+            "amount_gbp_m": -38.763
           },
           {
             "line_of_business": "Third-party liability",
-            "amount_gbp_m": -0.7
+            "amount_gbp_m": -0.669
           },
           {
             "line_of_business": "Reinsurance accepted",
-            "amount_gbp_m": -0.7
+            "amount_gbp_m": -0.652
           }
         ],
         "currency": "USD",
@@ -638,10 +642,17 @@
   "total_cost_usd": 0.017964,
   "total_tokens": 40547,
   "validation": {
-    "passed": true,
-    "total_discrepancies": 10,
+    "passed": false,
+    "total_discrepancies": 11,
     "within_tolerance": 10,
-    "hard_failures": 0,
-    "hard_failure_details": []
+    "hard_failures": 1,
+    "hard_failure_details": [
+      {
+        "field": "gross_premiums_written_gbp_m",
+        "type": "value_mismatch",
+        "gemini-2.5-flash": 185.601,
+        "gpt-5-mini": null
+      }
+    ]
   }
 }
