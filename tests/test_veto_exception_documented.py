@@ -24,7 +24,17 @@ sys.path.insert(0, ROOT)
 
 import test_gemini as tg  # noqa: E402
 
-DOCS = ("README.md", os.path.join("docs", "ocr-pipeline.md"))
+def _docs():
+    """Every current prose document of this repository, not the two the review happened to name: the veto is also
+    described in docs/data-audit-results.md, which a hand-listed pair missed (R222, found by review)."""
+    out = ["README.md"]
+    for name in sorted(os.listdir(os.path.join(ROOT, "docs"))):
+        if name.endswith(".md"):
+            out.append(os.path.join("docs", name))
+    return tuple(out)
+
+
+DOCS = _docs()
 
 #: A block describes the veto if it names the gate, names the veto, or states both of its two conditions.
 DESCRIBES = (re.compile(r"_pyd_override_gate"),

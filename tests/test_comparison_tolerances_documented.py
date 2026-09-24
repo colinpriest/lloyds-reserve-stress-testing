@@ -24,12 +24,28 @@ sys.path.insert(0, ROOT)
 
 import test_gemini as tg  # noqa: E402
 
+#: The two documents that state the policy in full.
 DOCS = ("README.md", os.path.join("docs", "ocr-pipeline.md"))
+
+
+def _all_docs():
+    """Every current prose document, because a stale tolerance can sit anywhere: docs/data-audit-results.md carried
+    the field-by-field table too, and neither the review nor a hand-listed pair of files saw it (R222)."""
+    out = ["README.md"]
+    for name in sorted(os.listdir(os.path.join(ROOT, "docs"))):
+        if name.endswith(".md"):
+            out.append(os.path.join("docs", name))
+    return tuple(out)
+
+
+ALL_DOCS = _all_docs()
 #: The fields check_tolerance exempts by name prefix, which the documents list.
 EXEMPT_PREFIXES = ("named_events", "prior_year_events", "raw_causal_phrases", "specific_events",
                    "specific_years_affected", "lob_movements", "primary_causes")
 OLD_TABLE = (re.compile(r"Within \+/?-? ?1\.0pp"), re.compile(r"Within ±1\.0pp"),
-             re.compile(r"Within \+/- 2\.0m or 5%"), re.compile(r"Within ±2\.0m or ±5%"))
+             re.compile(r"Within \+/- 2\.0m or 5%"), re.compile(r"Within ±2\.0m or ±5%"),
+             re.compile(r"field tolerances ±?2\.0m"), re.compile(r"±5% reserves"),
+             re.compile(r"differ by > ?0\.5pp"))
 
 
 def _flat(path):
@@ -58,7 +74,7 @@ def test_the_documents_list_every_exempt_field_the_code_exempts():
 
 
 def test_no_document_keeps_the_field_by_field_table_the_code_never_applied():
-    for path in DOCS:
+    for path in ALL_DOCS:
         flat = _flat(path)
         for pattern in OLD_TABLE:
             assert not pattern.search(flat), "%s still prints %s" % (path, pattern.pattern)

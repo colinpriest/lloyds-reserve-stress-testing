@@ -83,10 +83,15 @@ equivalent of this table (across all ~180 syndicates) is the `by_syndicate` shee
   contradict → claims-provisions movement note → dual-LLM cross-validated text
   extraction; on every deterministic route the figure is vetoed where the two
   models agree on the opposite sign, or where it exceeds 50% of opening reserves
-  while both model movements are below 10%. The canonical numbered rule is `ocr-pipeline.md` section 10.3. The chosen source for each value
+  while both model movements are below 10%, unless it is the figure two readings of
+  the filing confirmed (`pdf_extraction/audit/triangle_figures_confirmed_by_hand.json`),
+  which is applied over that veto for that record and that figure only. The canonical
+  numbered rule is `ocr-pipeline.md` section 10.3. The chosen source for each value
   is named in the
   coverage table.
-- Dual-LLM validation (Gemini + GPT, field tolerances ±2.0m/±5% PYD, ±5% reserves):
+- Dual-LLM validation (Gemini + GPT; a numeric field is flagged where the two readings
+  differ by more than 0.5% of the larger **and** by more than 0.05 in absolute terms,
+  `check_tolerance` in `test_gemini.py`; see the README for the exempt fields):
   in the two extraction runs covering the 372 newly added reports, 337 passed
   validation and 35 passed with unresolved cross-LLM discrepancies (logged in
   `pdf_extraction/audit/disagreement_log.json`; adjudicate with `adjudicate.py`).
