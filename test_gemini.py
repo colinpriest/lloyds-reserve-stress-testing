@@ -4321,6 +4321,16 @@ def compare_results(a, b, model_a, model_b):
     return discrepancies
 
 
+# The comparison-stage tolerances, named so the documentation can be checked against them and not retyped
+# (frozen review of 24 September 2026, D05: the README and the OCR guide carried a field-by-field table of +-1pp,
+# +-2m/5% and +-5% that no code has applied). A numeric field is a discrepancy only when it fails BOTH.
+COMPARISON_REL_TOL = 0.005
+COMPARISON_ABS_TOL = 0.05
+#: A gross_premium_mix percentage is re-tested on absolute values at this relative tolerance, because a negative
+#: written premium leaves the sign convention ambiguous.
+MIX_PERCENTAGE_REL_TOL = 0.05
+
+
 def check_tolerance(discrepancies, model_a, model_b):
     """Classify discrepancies as tolerated or hard failures. Returns (passed, tolerated, hard_failures)."""
     hard_failures = []
@@ -4335,7 +4345,7 @@ def check_tolerance(discrepancies, model_a, model_b):
                 "specific_events", "specific_years_affected",
                 "lob_movements", "primary_causes",
             ))
-            or _is_numeric_near(d.get(model_a), d.get(model_b), rel_tol=0.005)
+            or _is_numeric_near(d.get(model_a), d.get(model_b), rel_tol=COMPARISON_REL_TOL)
         )
         # For gross_premium_mix percentages, when total GPW is negative the
         # sign convention is ambiguous (e.g. 88% vs -87.43%).  Tolerate if
@@ -4346,7 +4356,7 @@ def check_tolerance(discrepancies, model_a, model_b):
             try:
                 va = abs(float(d.get(model_a)))
                 vb = abs(float(d.get(model_b)))
-                if _is_numeric_near(va, vb, rel_tol=0.05):
+                if _is_numeric_near(va, vb, rel_tol=MIX_PERCENTAGE_REL_TOL):
                     is_tolerated = True
             except (TypeError, ValueError):
                 pass
@@ -4668,7 +4678,7 @@ def _truncate(s, max_len):
     return s[:max_len] + "..." if len(s) > max_len else s
 
 
-def _is_numeric_near(a, b, rel_tol=0.005, abs_tol=0.05):
+def _is_numeric_near(a, b, rel_tol=COMPARISON_REL_TOL, abs_tol=COMPARISON_ABS_TOL):
     """Check if two values are both numeric and within tolerance.
 
     Uses relative tolerance for large values, absolute tolerance for near-zero.

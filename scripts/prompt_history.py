@@ -143,10 +143,14 @@ def render(s):
     A("## Which records the changed routes touched")
     A("")
     A("- **Business mix.** Since round 54 the premium mix is read from the annual segmental "
-      "table by the deterministic pass, and a model's mix is admitted only when its classes "
-      "reconcile with the record's own premium within 10% (`_parse_nutrient_lob`, the loader's "
-      "reconciliation in the analysis repository). The prompt's conflicting mix instructions "
-      "therefore governed only the model's fallback mix.")
+      "table by the deterministic pass. Since round 58 that mix is admitted only when its classes "
+      "sum, within 2%, to a gross premiums written total one of the models read -- an independent "
+      "reading, not the same parse's own sum (`_lob_override_gate`) -- and the analysis loader "
+      "reconciles again, within the larger of 2% and 0.2m, against a total another reader gave "
+      "(`mix_reconciles`). Round 54's check compared the classes with the record's own premium "
+      "within 10%, and the extraction had written that parse's class sum into that total, so a "
+      "partial table reconciled with itself. The prompt's conflicting mix instructions therefore "
+      "governed only the model's fallback mix.")
     A("- **Claims incurred.** The corrected sentence explains what not to use; it changes no "
       "extracted value.")
     approx = s["records_loss_ratio_with_a_premium_approximation"]

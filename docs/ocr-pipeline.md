@@ -1992,16 +1992,20 @@ After deterministic extraction, Gemini and GPT independently
 extract all structured fields from the PDF.  Their outputs are
 compared field-by-field.
 
-### 10.1  Field tolerances
+### 10.1  Comparison tolerances
 
-| Field                           | Tolerance              |
-|---------------------------------|------------------------|
-| `prior_year_development_gbp_m`  | Within +/- 2.0m or 5%  |
-| `opening_reserves_gbp_m`        | Within +/- 5%          |
-| `gross_premiums_written_gbp_m`  | Within +/- 5%          |
-| `prior_year_development_pct`    | Within +/- 1.0pp       |
-| `direction`                     | Exact match            |
-| `gross_premium_mix`             | Fuzzy LOB names, +/- 10% amounts |
+The two readings are then compared field by field. A numeric field is a **discrepancy** when the values
+differ by more than **0.5% of the larger** *and* by more than **0.05** in absolute terms
+(`_is_numeric_near`, from `COMPARISON_REL_TOL` and `COMPARISON_ABS_TOL` in `test_gemini.py`); a missing
+value and zero are the same value. Exempt from it are text differences, any field whose name carries
+`page` or `confidence`, and the list fields `named_events`, `prior_year_events`, `raw_causal_phrases`,
+`specific_events`, `specific_years_affected`, `lob_movements` and `primary_causes`. A `gross_premium_mix`
+percentage that fails is compared again on absolute values within **5%** (`MIX_PERCENTAGE_REL_TOL`),
+because a negative written premium leaves its sign convention ambiguous.
+
+A discrepancy is a comparison-stage flag, not a rejected record: `resolve_computed_fields` settles the
+derived fields next, and what remains is written to the disagreement log and counted in the record's
+`hard_failures`.
 
 ### 10.2  Triangle PYD resolution
 
@@ -2079,7 +2083,7 @@ never overrides an absolute-amount triangle.
 An absolute-amount RAG triangle is computed deterministically
 from the claims development table and takes precedence over an
 LLM-extracted figure **unless a gate rejects it**.  Its authority
-is therefore conditional, on three counts and not one:
+is therefore conditional, on four counts and not one:
 
 * a gross provisions movement whose sign disagrees with the
   triangle overrides the triangle (section 11.3.1);
@@ -2087,6 +2091,11 @@ is therefore conditional, on three counts and not one:
   model values agree in sign with each other and the triangle has
   the opposite sign, or when the triangle implies a movement above
   50% of opening reserves while both model values imply under 10%;
+* that veto is itself lifted where the figure equals, to half a
+  thousand, one two readings of the filing confirmed in
+  `pdf_extraction/audit/triangle_figures_confirmed_by_hand.json`, for that
+  record and that figure only, and the note says so (`_rag_veto`;
+  row 2 of the precedence table in section 10.3);
 * a loss-ratio triangle is a conditional fallback, never an
   override: see the exception below.
 
@@ -2182,7 +2191,7 @@ ranking):
 
 | Step | Source | Applies when | Gross/Net |
 |------|--------|--------------|-----------|
-| 1 | Deterministic *absolute-amount* triangle PYD, from a table on a page bound to the requested syndicate (section 10.8) | A valid triangle was parsed and neither veto withholds it. **Closed-year exception:** the page may be in the annual accounts *or* in an underwriting-year (closed-year) section — a claims-development triangle there is the same syndicate's triangle and is admitted, while a provisions movement, opening reserve or business mix in that section is not (`_closed_year()`, section 10.8). **Unit veto:** the triangle's own unit evidence decides percentage against monetary before any magnitude test (section 9.7); a percentage triangle takes the loss-ratio route instead. **Conflict veto:** `_pyd_override_gate` withholds a deterministic figure that has the opposite sign to two agreeing model values, or that implies above 50% of opening reserves while both models imply under 10% | Gross |
+| 1 | Deterministic *absolute-amount* triangle PYD, from a table on a page bound to the requested syndicate (section 10.8) | A valid triangle was parsed and neither veto withholds it. **Closed-year exception:** the page may be in the annual accounts *or* in an underwriting-year (closed-year) section — a claims-development triangle there is the same syndicate's triangle and is admitted, while a provisions movement, opening reserve or business mix in that section is not (`_closed_year()`, section 10.8). **Unit veto:** the triangle's own unit evidence decides percentage against monetary before any magnitude test (section 9.7); a percentage triangle takes the loss-ratio route instead. **Conflict veto:** `_pyd_override_gate` withholds a deterministic figure that has the opposite sign to two agreeing model values, or that implies above 50% of opening reserves while both models imply under 10%, unless the figure is one two readings of the filing confirmed (`pdf_extraction/audit/triangle_figures_confirmed_by_hand.json`, row 2 of the precedence table in section 10.3), which is applied over that veto | Gross |
 | 1a | Deterministic gross provisions movement | Only when the provisions table affirms itself as a movement note *and* the column carries the report year in its own header, and then only where its sign disagrees with the triangle (section 11.3.1). A sign disagreement on its own is not evidence that the figure is a movement: `2010 & prior years` in a development triangle is a cohort's cumulative incurred total and is refused outright | Gross |
 | 2 | LLM-extracted "Movement in prior year's provision" note | No deterministic source of steps 1 and 1a, or the gate withheld one | As stated by the models; gross only where they say so |
 | 3 | LLM-extracted narrative text | As step 2 | As stated by the models; a narrative value declared net, or whose basis the filing does not state, is not admitted to the gross sample |
@@ -2309,10 +2318,12 @@ This is analogous to the RAG triangle PYD override (section 9)
 -- for opening reserves the deterministic extraction is
 authoritative over LLMs once its unit is evidenced, while for PYD
 that authority is scoped, within the section 10.3 hierarchy, to an
-**absolute-amount** triangle, and it is qualified twice over:
-triangle-versus-provisions, and triangle-versus-model through
+**absolute-amount** triangle, and it is qualified three times
+over: triangle-versus-provisions; triangle-versus-model through
 `_pyd_override_gate`, which withholds the deterministic figure
-against two agreeing model signs or an implausible magnitude.  A
+against two agreeing model signs or an implausible magnitude; and
+the hand confirmation that lifts that veto where the figure is one
+two readings of the filing confirmed (`pdf_extraction/audit/triangle_figures_confirmed_by_hand.json`, section 10.3).  A
 **loss-ratio** triangle is a conditional fallback instead: being
 managed- or group-level it fills a blank narrative value and
 overrides a syndicate-specific one only where the two directions

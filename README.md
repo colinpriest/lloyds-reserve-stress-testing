@@ -340,22 +340,24 @@ After deterministic table extraction, the pipeline runs two independent LLMs on 
 1. **Gemini** (gemini-2.5-flash) — extracts all structured fields
 2. **GPT** (gpt-5-mini) — independently extracts the same fields
 
-The outputs are compared field-by-field with tolerance rules:
+The two readings are then compared field by field. A numeric field is a **discrepancy** when the values
+differ by more than **0.5% of the larger** *and* by more than **0.05** in absolute terms
+(`_is_numeric_near`, from `COMPARISON_REL_TOL` and `COMPARISON_ABS_TOL` in `test_gemini.py`); a missing
+value and zero are the same value. Exempt from it are text differences, any field whose name carries
+`page` or `confidence`, and the list fields `named_events`, `prior_year_events`, `raw_causal_phrases`,
+`specific_events`, `specific_years_affected`, `lob_movements` and `primary_causes`. A `gross_premium_mix`
+percentage that fails is compared again on absolute values within **5%** (`MIX_PERCENTAGE_REL_TOL`),
+because a negative written premium leaves its sign convention ambiguous.
 
-| Field | Tolerance |
-|-------|-----------|
-| `prior_year_development_gbp_m` | Within ±2.0m or ±5% |
-| `opening_reserves_gbp_m` | Within ±5% |
-| `gross_premiums_written_gbp_m` | Within ±5% |
-| `prior_year_development_pct` | Within ±1.0pp |
-| `direction` | Must match exactly |
-| `gross_premium_mix` | LOB names fuzzy-matched, amounts within ±10% |
+A discrepancy is a comparison-stage flag, not a rejected record: `resolve_computed_fields` settles the
+derived fields next, and what remains is written to the disagreement log and counted in the record's
+`hard_failures`.
 
 When a deterministic RAG triangle PYD is available from an **absolute-amount** triangle, it ordinarily takes precedence over both LLMs:
 - First, where the gross provisions movement is also available, the two are sign-compared; on sign disagreement the provisions movement overrides the triangle (canonical hierarchy: `docs/ocr-pipeline.md` section 10.3)
 - If an LLM agrees with the prevailing deterministic value (within ±0.5m), the LLM value is confirmed
 - If an LLM disagrees, the absolute-amount triangle value overrides it and the override is recorded in `data_quality_notes`
-- The override is vetoed (`_pyd_override_gate`, `test_gemini.py`) where the two LLM values agree with each other on the opposite sign to the deterministic figure, or where the deterministic movement exceeds 50% of opening reserves while both LLM movements are below 10%; the models then stand and the note records the rejected figure. The same veto applies on every deterministic route (triangle, provisions fallback and the code recomputation from the models' own triangles)
+- The override is vetoed (`_pyd_override_gate`, `test_gemini.py`) where the two LLM values agree with each other on the opposite sign to the deterministic figure, or where the deterministic movement exceeds 50% of opening reserves while both LLM movements are below 10%; the models then stand and the note records the rejected figure. The same veto applies on every deterministic route (triangle, provisions fallback and the code recomputation from the models' own triangles), and is lifted only where the figure equals, to half a thousand, one two readings of the filing confirmed in `pdf_extraction/audit/triangle_figures_confirmed_by_hand.json` (3 records), which is then applied over it with a note saying so (`_rag_veto`; precedence table in `docs/ocr-pipeline.md` section 10.3)
 
 A **loss-ratio** triangle does not take precedence in the same way. Being ordinarily managed- or group-level, it fills a blank narrative value, and overrides a syndicate-specific narrative value only where the two directions contradict; an agreeing narrative value is retained.
 
@@ -638,7 +640,7 @@ The system identifies these causal categories:
 
 **Triangle PYD disagrees with LLM**
 
-- An absolute-amount RAG triangle PYD is authoritative when available and the provisions-movement sign agrees; on sign disagreement the provisions movement overrides it (`docs/ocr-pipeline.md` section 10.3); and no absolute-amount triangle, provisions or code-recomputed figure replaces two LLM values that agree on the opposite sign, or two movements below 10% of reserves when the deterministic movement exceeds 50% (the model-agreement veto). A loss-ratio triangle instead fills a blank narrative value or overrides a contradicting direction only. Every such replacement is logged
+- An absolute-amount RAG triangle PYD is authoritative when available and the provisions-movement sign agrees; on sign disagreement the provisions movement overrides it (`docs/ocr-pipeline.md` section 10.3); and no absolute-amount triangle, provisions or code-recomputed figure replaces two LLM values that agree on the opposite sign, or two movements below 10% of reserves when the deterministic movement exceeds 50% (the model-agreement veto) -- except a figure two readings of the filing confirmed in `pdf_extraction/audit/triangle_figures_confirmed_by_hand.json`, which is applied over that veto for that record and that figure only. A loss-ratio triangle instead fills a blank narrative value or overrides a contradicting direction only. Every such replacement is logged
 - Check `data_quality_notes` in the output JSON for override details
 - Common causes: LLM reading net instead of gross triangle, or including summary rows
 
