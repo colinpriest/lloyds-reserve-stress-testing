@@ -4330,6 +4330,16 @@ COMPARISON_ABS_TOL = 0.05
 #: written premium leaves the sign convention ambiguous.
 MIX_PERCENTAGE_REL_TOL = 0.05
 
+#: The RAG OPENING RESOLUTION's thresholds. A DIFFERENT STAGE from the model-agreement comparison above, and the
+#: source of most of the confusion the reviews have found in these documents: a table-derived opening reserve is
+#: applied when it agrees with at least one model value within RAG_OPENING_REL_TOL at scale 1 (or with every model
+#: value at x1000 or /1000, the unit having been misread), or when the model values disagree with EACH OTHER by
+#: more than RAG_MODEL_DISAGREEMENT_TOL, in which case the deterministic table breaks the tie. Named so that every
+#: document stating them is checked against the code and not against another document
+#: (frozen review of 25 September 2026, M03).
+RAG_OPENING_REL_TOL = 0.02
+RAG_MODEL_DISAGREEMENT_TOL = 0.05
+
 
 def check_tolerance(discrepancies, model_a, model_b):
     """Classify discrepancies as tolerated or hard failures. Returns (passed, tolerated, hard_failures)."""
@@ -5056,7 +5066,7 @@ def _resolve_rag_opening(rag_opening, provenance, llm_values):
     table = float(rag_opening)
     vals = [float(v) for v in llm_values if isinstance(v, (int, float)) and v > 0]
 
-    def close(a, b, tol=0.02):
+    def close(a, b, tol=RAG_OPENING_REL_TOL):
         return b > 0 and abs(a / b - 1.0) <= tol
 
     if not vals:
@@ -5073,7 +5083,7 @@ def _resolve_rag_opening(rag_opening, provenance, llm_values):
         if all(close(table * factor, v) for v in vals) or all(close(raw * factor, v) for v in vals):
             base = table if all(close(table * factor, v) for v in vals) else raw
             return round(base * factor, 3), label, None
-    models_agree = len(vals) >= 2 and all(close(v, vals[0], 0.05) for v in vals[1:])
+    models_agree = len(vals) >= 2 and all(close(v, vals[0], RAG_MODEL_DISAGREEMENT_TOL) for v in vals[1:])
     if not models_agree:
         # the models disagree with each other: the deterministic figure is the tie-breaker
         if src == "unresolved":

@@ -150,7 +150,9 @@ PDF input
   v
 +-----------------------------------------------+
 | Step 6: Report classification                  |
-|   first_year_syndicate: triangle has <3 UW years |
+|   first_year_syndicate: no usable cohort up to |
+|     t-2; decided BEFORE the models, or after   |
+|     them on the reserve text (see 11.1, 11.2)  |
 |   no_triangle_data: no triangle + no text      |
 |   Normal: full extraction with PYD             |
 +-----------------------------------------------+
@@ -2341,10 +2343,24 @@ contradict.
 **Function**: `resolve_computed_fields()` (`test_gemini.py`)
 
 If the proactive override did not fire (no RAG value was
-available at that stage) and the two LLMs disagree on
-`opening_reserves_gbp_m` beyond the 5% tolerance (a hard
-failure), the pipeline re-checks `opening_gross_claims_outstanding`
-from the provisions dict.
+available at that stage) and the two LLMs' `opening_reserves_gbp_m`
+is a **hard failure** of the comparison stage, the pipeline
+re-checks `opening_gross_claims_outstanding` from the provisions
+dict.
+
+A hard failure is what `check_tolerance()` does not tolerate: for a
+numeric field, values differing by more than `COMPARISON_REL_TOL`
+(0.5%) of the larger **and** by more than `COMPARISON_ABS_TOL`
+(0.05, in the field's own units --- £m for a reserve figure). Both
+must be exceeded, so £100.0m against £100.04m is tolerated on the
+absolute tolerance alone and £100m against £103m is a hard failure.
+The 5% this paragraph used to name was a superseded threshold
+(frozen review of 25 September 2026, M03); the 5% that remains in
+force at step 10.5 is `MIX_PERCENTAGE_REL_TOL`, which is a different
+rule for premium-mix percentages, and the 2% and 5% in §10.5.1 are
+the RAG opening resolution's own two-of-three thresholds
+(`RAG_OPENING_REL_TOL`, `RAG_MODEL_DISAGREEMENT_TOL`). A hard failure
+is logged for adjudication and **excludes no record**: see §10.7.
 
 If available, the RAG value overrides both models and the hard
 failure is reclassified as auto-resolved.  This path handles
@@ -2585,14 +2601,31 @@ the removed correction lowered stay as it left them (1884: 2012; the syndicate b
 
 The RAG-lite extraction runs first and may detect a triangle with fewer than 3 underwriting years.
 
-The check uses **usable years**, not raw UW year count:
+`_parse_nutrient_triangle()` uses **usable years**, not the raw UW year count:
 
-- A UW year is "usable" for PYD if `uw_year <= report_year - 2`
+- A UW year is "usable" for PYD if `uw_year <= report_year - PYD_EXCLUDED_RECENT_UW_YEARS`
   (i.e. there is a previous diagonal to compare against)
 - If the triangle has < 3 UW years **and** no usable years exist
   → `first_year_syndicate = True`
 - If the triangle has < 3 UW years **but** usable years exist
   → the triangle is parsed normally and PYD is computed
+
+**The other two triangle parsers do not make that distinction.**
+`_parse_transposed_triangle()` and
+`_parse_transposed_triangle_from_text()` return `new_syndicate` on
+`len(uw_years) < 3` alone, so a two-column triangle whose earlier
+cohort *is* usable is classified young by them and parsed by the
+nutrient parser. The three are pinned as they stand in
+`tests/test_first_year_documented.py`. No committed record shows a
+misclassification from this --- of the 70 first-year stubs, none
+records a cohort up to `t-2`, though 67 of them carry no triangle
+years to check --- and the flag is not final in any case: §11.1
+decides after the models, over every triangle in the record, on the
+usable-cohort rule. Aligning the two parsers would admit filings the
+corpus does not currently hold, so it is a change to the sample and
+not a documentation repair; it is recorded here and left to the
+author (round 60, found while closing the frozen review of
+25 September 2026, D02).
 
 **Example**: syndicate 2468/2022 has a single-column triangle
 (UW year 2020).  Since 2020 ≤ 2022 − 2 = 2020, the year is
@@ -2766,11 +2799,18 @@ the first two UW years:
 - Common in run-off syndicate reports from years when no
   triangle was published
 
-**Important**: `no_triangle_data` is only used for reports
-outside the first two underwriting years.  Reports in the first
-two years are classified as `first_year_syndicate` instead, even
-if no triangle is found, because the absence of data is expected
-and the reason is known (insufficient underwriting history).
+**Important**: which of the two flags a report gets does not depend
+on the syndicate's age.  The inception-based distinction this
+paragraph used to draw --- reports inside the first two underwriting
+years classified as `first_year_syndicate` even with no triangle ---
+went with the inception lookup in round 58, and nothing reads an
+inception year for a decision now.  A report with **no triangle at
+all** is not taken to be young on that account: `_no_mature_cohort()`
+requires at least one triangle before it can say a record holds no
+usable cohort, so a report without one is classified
+`no_triangle_data` whatever the syndicate's age.  A report *with* a
+triangle whose cohorts all fall after `t-2` is the first-year stub
+(§11.1, §11.2; frozen review of 25 September 2026, D02).
 
 ---
 
@@ -3027,9 +3067,13 @@ statuses based on its structure:
 
 | Status | Condition | Badge colour | Description |
 |--------|-----------|--------------|-------------|
-| **Skipped** | No `models` key (has `first_year_syndicate`, `no_triangle_data`, or `reason`) | Yellow | Report was never sent to LLMs -- auto-detected as first-year syndicate or no-triangle-data via triangle inspection.  No API cost incurred (except table extraction). |
+| **No model block retained** | No `models` key (has `first_year_syndicate`, `no_triangle_data`, or `reason`) | Yellow | The record keeps no model output: it was classified as a first-year stub or as no-triangle-data. This describes the STRUCTURE THAT WAS RETAINED and not whether the models ran. A first-year stub may be written *after* both models have read the reserve text (11.1), in which case their figures are in `first_year_evidence` and the API cost was incurred. |
 | **Excluded** | Has `models` key AND `excluded: true` | Purple | Extraction ran but the report was excluded during adjudication or manual review.  API cost was incurred. |
 | **Extracted** | Has `models` key, no `excluded` flag | Green/Red | Normal extraction result.  Shown as "Reliable" (green) if both PYD and premium mix are present, or "Incomplete" (red) otherwise. |
+
+A status is read off the retained structure, so it cannot be used to infer API usage. A stub that
+carries `first_year_evidence` was decided after the models ran; one without it was skipped before
+them (frozen review of 25 September 2026, D02).
 
 **Console INCOMPLETE warning**: After writing each JSON file,
 `test_gemini.py` checks whether the extraction has both PYD %

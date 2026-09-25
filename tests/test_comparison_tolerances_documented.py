@@ -110,3 +110,85 @@ def test_a_pair_inside_both_tolerances_is_not_flagged():
 def test_a_mix_percentage_is_re_tested_on_absolute_values():
     assert not _flag("gross_premium_mix[0].percentage_of_total", 88.0, -87.43)
     assert _flag("gross_premium_mix[0].percentage_of_total", 88.0, -70.0)
+
+
+# ---------------------------------------------------------- one definition, not several ------
+#: Every module that compares two readings must take the tolerances from the module that applies
+#: them. scripts/build_coverage_status.py did not: it carried "PYD +/-2.0m or +/-5%, opening reserves
+#: +/-5%" as EXECUTED constants and attributed them to the README, so the coverage table's "LLM
+#: cross-validated" provenance label was decided on a rule no stage of the pipeline applies. The
+#: frozen review of 25 September 2026 named two prose sites and not this one, which is why the rule
+#: below is about where a tolerance may be DEFINED rather than about a list of files (round 60).
+TOL_NAME = re.compile(r"^([A-Z_]*(?:REL|ABS)_TOL)\s*=", re.M)
+IMPORTED = re.compile(r"=\s*(COMPARISON_(ABS|REL)_TOL|MIX_PERCENTAGE_REL_TOL|"
+                      r"RAG_(OPENING_REL|MODEL_DISAGREEMENT)_TOL)\s*$")
+
+
+def _py_files():
+    out = []
+    for dirpath, dirnames, filenames in os.walk(ROOT):
+        dirnames[:] = [d for d in dirnames
+                       if d not in ("__pycache__", ".git", ".pytest_cache", "venv", ".venv",
+                                    "syndicate_reports", "pdf_extraction", "node_modules")]
+        for fn in filenames:
+            if fn.endswith(".py"):
+                out.append(os.path.relpath(os.path.join(dirpath, fn), ROOT))
+    return sorted(out)
+
+
+def test_a_comparison_tolerance_is_defined_only_where_it_is_applied():
+    """A tolerance constant is defined in test_gemini.py and nowhere else; every other module imports
+    it. A literal copy is how the coverage table drifted away from the comparator."""
+    offenders = []
+    for rel in _py_files():
+        if rel == "test_gemini.py" or rel.startswith("tests" + os.sep):
+            continue
+        src = io.open(os.path.join(ROOT, rel), encoding="utf-8", errors="replace").read()
+        for m in TOL_NAME.finditer(src):
+            end = src.find("\n", m.start())
+            line = src[m.start():end if end != -1 else len(src)]
+            if IMPORTED.search(line.rstrip()):
+                continue        # an assignment from the imported constant is the repair
+            offenders.append("%s: %s" % (rel, line.strip()))
+    assert not offenders, ("a comparison tolerance is defined outside test_gemini.py:\n"
+                          + "\n".join(offenders))
+
+
+def test_the_coverage_script_takes_its_tolerances_from_the_comparator():
+    rel = os.path.join("scripts", "build_coverage_status.py")
+    src = io.open(os.path.join(ROOT, rel), encoding="utf-8").read()
+    assert "from test_gemini import COMPARISON_ABS_TOL, COMPARISON_REL_TOL" in src, rel
+    for name in ("PYD_ABS_TOL", "PYD_REL_TOL", "RESERVES_ABS_TOL", "RESERVES_REL_TOL"):
+        assert re.search(r"^%s = COMPARISON_(ABS|REL)_TOL$" % name, src, re.M), name
+    # and the opening-reserves call must pass an absolute tolerance, not None
+    assert "values_agree(op_gem, op_gpt, RESERVES_ABS_TOL, RESERVES_REL_TOL)" in src
+    assert "values_agree(pyd_gem, pyd_gpt, PYD_ABS_TOL, PYD_REL_TOL)" in src
+
+
+def test_the_rag_opening_stage_has_its_own_named_thresholds():
+    """The 2% and 5% of the RAG opening resolution are a DIFFERENT stage and are still in force. They
+    are named so a document stating them can be checked against the code, and so that a sweep for the
+    retired comparison-stage numbers cannot quietly rewrite them."""
+    assert tg.RAG_OPENING_REL_TOL == 0.02
+    assert tg.RAG_MODEL_DISAGREEMENT_TOL == 0.05
+    src = io.open(os.path.join(ROOT, "test_gemini.py"), encoding="utf-8").read()
+    body = src[src.index("def _resolve_rag_opening"):]
+    body = body[:body.index("\n\n\n")]
+    assert "tol=RAG_OPENING_REL_TOL" in body
+    assert "RAG_MODEL_DISAGREEMENT_TOL" in body
+    assert "tol=0.02" not in body and ", 0.05)" not in body
+
+
+def test_the_guide_states_the_hard_failure_rule_and_not_the_retired_five_percent():
+    """M03's own site: §10.6.2 called a reserve difference beyond 5% the hard-failure threshold."""
+    flat = _flat(os.path.join("docs", "ocr-pipeline.md"))
+    i = flat.index("Disagreement fallback resolution")
+    section = flat[i:i + 2400]
+    assert "`COMPARISON_REL_TOL`" in section and "`COMPARISON_ABS_TOL`" in section
+    assert "0.5%" in section and "0.05" in section
+    assert "beyond the 5% tolerance" not in section, \
+        "the retired 5% hard-failure threshold is back in 10.6.2"
+    assert re.search(r"excludes no record", section, re.I), \
+        "the section must still say a hard failure excludes no record"
+    assert "MIX_PERCENTAGE_REL_TOL" in section and "RAG_OPENING_REL_TOL" in section, \
+        "the section must distinguish the other stages' own thresholds by name"

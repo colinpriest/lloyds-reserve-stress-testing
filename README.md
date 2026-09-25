@@ -85,7 +85,7 @@ The PDF extraction pipeline (`test_gemini.py` + `table_extraction.py`) uses a la
 │  └── Interactive adjudication for unresolved discrepancies          │
 │                                                                     │
 │  Step 5: Report Classification                                      │
-│  ├── first_year_syndicate: <3 UW years, no PYD possible             │
+│  ├── first_year_syndicate: no usable cohort up to t-2               │
 │  ├── no_triangle_data: no triangle or reserve text found            │
 │  └── Normal: full extraction with cross-validated PYD               │
 │                                                                     │
@@ -318,11 +318,35 @@ The two most recent underwriting years (`report_year` and `report_year - 1`; `PY
 
 ### First-Year Syndicate Detection
 
-Syndicates in their first or second year of operation have fewer than 3 underwriting years in their triangle. These are automatically detected and skipped:
+A report is recorded as a first-year stub when it carries no underwriting cohort old enough for prior
+year development to be separated from current year activity. The rule turns on **usable mature
+cohorts**, not on the raw number of columns in the triangle, and the decision may be taken either
+before or after the models run:
 
-- A triangle with < 3 UW years means premiums are still earning through — prior year development cannot be meaningfully separated from current year activity
-- The pipeline writes a minimal audit JSON with `"first_year_syndicate": true` and skips LLM extraction entirely (saving API costs)
-- LOB breakdown is still extracted if available
+- A cohort is usable for PYD when `uw_year <= report_year - 2`, so that a previous diagonal exists to
+  compare against. A single 2020 cohort in a 2022 report is mature and does produce development; a
+  triangle holding only 2015 and 2016 in a 2016 report does not, however many columns it has.
+- **Before the models** (the deterministic table step): if no triangle in the record holds a usable
+  cohort *and* the reserve-text steps found no figure either, LLM extraction is skipped and the
+  pipeline writes `{"first_year_syndicate": true, ...}` with no `models` block, saving the API cost.
+  LOB breakdown is still extracted if available.
+- **After the models**: where the deterministic step found nothing but the reserve text might, both
+  models run first and the stub is written afterwards — if the RAG step returned no development
+  figure, no triangle in the record holds a cohort up to `t-2`, and neither model's figure is printed
+  in either block's reserve text. The stub then carries its reason and the evidence, the triangles'
+  underwriting years and the figures the models gave, in `first_year_evidence`.
+- So **a record with no `models` key does not mean the models were never called.**
+  `pdf_extraction/syndicate_1884_2016.json` is a stub of the second kind: no `models` block, and a
+  `first_year_evidence` block holding both models' figures. A record's structure says what was
+  retained, not whether the API was used.
+- A report with no triangle at all is not taken to be young on that account.
+- The inception-year lookup that once flagged a report by `report_year < inception_year + 2` was
+  removed in round 58. `pdf_extraction/syndicate_inception_years.json` is kept as a record, and no
+  step reads it for a decision.
+
+`docs/ocr-pipeline.md` §11.1 and §11.2 state the executed conditions function by function;
+`_no_mature_cohort()` and `_first_year_record()` in `test_gemini.py` are the code
+(frozen review of 25 September 2026, D02).
 
 ### No-Triangle-Data Exclusion
 

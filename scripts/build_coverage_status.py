@@ -47,11 +47,22 @@ AZURE_DIR = EXTRACTION_DIR / "azure_output"
 RITC_SCAN_PATH = EXTRACTION_DIR / "ritc_scan.json"
 OUT_DIR = PROJECT_ROOT / "syndicate_reports" / "coverage"
 
-# Tolerances from the extraction spec (README): PYD +/-2.0m or +/-5%,
-# opening reserves +/-5%.
-PYD_ABS_TOL = 2.0
-PYD_REL_TOL = 0.05
-RESERVES_REL_TOL = 0.05
+# The comparison-stage tolerances, imported from the pipeline that applies them rather than retyped.
+# This script carried "PYD +/-2.0m or +/-5%, opening reserves +/-5%" and attributed it to the README,
+# which stated a field-by-field table no code applied; that table was retired and this copy of it
+# outlived it, so the coverage table's "LLM cross-validated" provenance label was being decided on a
+# looser rule than the pipeline's own. Found by this round's sweep rather than by the frozen review of
+# 25 September 2026, whose M03 named two prose sites (round 60).
+#
+# values_agree(a, b, abs_tol, rel_tol) treats values as agreeing when EITHER tolerance is met, which is
+# the complement of the pipeline's rule that a numeric field is a discrepancy only when it fails BOTH.
+sys.path.insert(0, str(PROJECT_ROOT))
+from test_gemini import COMPARISON_ABS_TOL, COMPARISON_REL_TOL  # noqa: E402
+
+PYD_ABS_TOL = COMPARISON_ABS_TOL
+PYD_REL_TOL = COMPARISON_REL_TOL
+RESERVES_ABS_TOL = COMPARISON_ABS_TOL
+RESERVES_REL_TOL = COMPARISON_REL_TOL
 
 logger = logging.getLogger(__name__)
 
@@ -331,7 +342,7 @@ def analyse_extraction(syndicate: int, year: int,
     op_gem = gem.get('opening_reserves_gbp_m')
     op_gpt = gpt.get('opening_reserves_gbp_m')
     op_value = None
-    if values_agree(op_gem, op_gpt, None, RESERVES_REL_TOL):
+    if values_agree(op_gem, op_gpt, RESERVES_ABS_TOL, RESERVES_REL_TOL):
         op_value = op_gem
     elif op_gem is not None and op_gpt is None:
         op_value = op_gem
