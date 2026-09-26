@@ -1282,14 +1282,11 @@ def _parse_transposed_triangle_from_text(text: str, report_year: int):
 
     uw_years = sorted(uw_years)
 
-    # Validate year range
-    if max(uw_years) > report_year:
-        return None, f"max UW year {max(uw_years)} > report year {report_year}"
-    if max(uw_years) < report_year - MAX_UW_YEAR_LAG:
-        return None, f"max UW year {max(uw_years)} too old for report year {report_year}"
-
-    if len(uw_years) < 3:
-        return "new_syndicate", f"{len(uw_years)} UW year(s)"
+    verdict, detail = triangle_admissibility(uw_years, report_year)
+    if verdict == TRIANGLE_REJECT:
+        return None, detail
+    if verdict == TRIANGLE_NEW_SYNDICATE:
+        return "new_syndicate", detail
 
     # Strip Total column: each UW year Y should have at most
     # (report_year - Y + 1) development values. If there's an extra value
@@ -1366,6 +1363,53 @@ def _year_has_prior_context(line: str, year_str: str) -> bool:
 MAX_UW_YEAR_LAG = 5
 PYD_EXCLUDED_RECENT_UW_YEARS = 2
 
+#: The three verdicts a triangle's underwriting years can reach. Named so that every parser
+#: returns for the same reasons and a reader can see which reason applied.
+TRIANGLE_REJECT = "reject"                  # not a usable triangle for this report year
+TRIANGLE_NEW_SYNDICATE = "new_syndicate"    # a triangle, but no cohort old enough for PYD
+TRIANGLE_PARSE = "parse"
+
+
+def triangle_admissibility(uw_years, report_year: int):
+    """What a triangle's underwriting years allow, decided once for every parser.
+
+    Returns (verdict, detail): TRIANGLE_REJECT with a reason, TRIANGLE_NEW_SYNDICATE with the
+    years it saw, or TRIANGLE_PARSE with None.
+
+    The young-syndicate test is the usable cohort, never the number of underwriting-year
+    columns. A cohort is usable when uw_year <= report_year - PYD_EXCLUDED_RECENT_UW_YEARS,
+    because it then has a previous diagonal to compare against and yields a prior-year
+    development figure; a two-column or single-column triangle that holds one is a triangle to
+    parse, not a first-year syndicate. This is the same question, asked the same way, as the
+    decision taken after the models over every triangle in a record
+    (test_gemini._no_mature_cohort), so a parser can no longer disagree with it.
+
+    Until round 61 each parser had its own version. _parse_nutrient_triangle applied this rule;
+    _parse_transposed_triangle, _parse_transposed_triangle_from_text and
+    test_gemini._parse_triangle_xlsx returned on len(uw_years) < 3 alone;
+    _parse_triangle_from_text rejected the page outright on the same count; and
+    _parse_triangle_xlsx additionally cut off at report_year - 2 rather than MAX_UW_YEAR_LAG
+    and read the count before the year range, so a run-off syndicate three to five years past
+    its last underwriting year was a triangle to one parser and not a table to another.
+
+    Three or more distinct underwriting years no later than the report year cannot all fall in
+    the most recent PYD_EXCLUDED_RECENT_UW_YEARS, so for every triangle the nutrient parser
+    used to accept this rule reaches TRIANGLE_PARSE as it did:
+    tests/test_triangle_admissibility.py proves that over the whole enumeration and pins the
+    call sites.
+    """
+    years = sorted({int(y) for y in uw_years})
+    if not years:
+        return TRIANGLE_REJECT, "no underwriting years found"
+    if years[-1] > report_year:
+        return TRIANGLE_REJECT, f"max UW year {years[-1]} > report year {report_year}"
+    if years[-1] < report_year - MAX_UW_YEAR_LAG:
+        return TRIANGLE_REJECT, f"max UW year {years[-1]} too old for report year {report_year}"
+    if years[0] > report_year - PYD_EXCLUDED_RECENT_UW_YEARS:
+        # no cohort has a previous diagonal: the syndicate is too young for PYD
+        return TRIANGLE_NEW_SYNDICATE, f"{len(years)} UW year(s) ({years[0]}-{years[-1]})"
+    return TRIANGLE_PARSE, None
+
 
 def _parse_triangle_from_text(text: str, report_year: int):
     """Parse a claims development triangle from raw page text.
@@ -1433,12 +1477,19 @@ def _parse_triangle_from_text(text: str, report_year: int):
         if result[0] is not None:
             return result
 
-    if not uw_years or len(uw_years) < 3:
+    if not uw_years:
         return None, "no UW year header found in page text"
 
-    # Check max year is within range
-    if max(uw_years) > report_year or max(uw_years) < report_year - MAX_UW_YEAR_LAG:
-        return None, f"max UW year {max(uw_years)} outside range for report year {report_year}"
+    # The same admissibility rule as every other parser. The two call sites act only on a
+    # TriangleData, so a "new_syndicate" from here does not raise the first-year flag by
+    # itself -- the text route has never raised it, and making it do so would change which
+    # records the corpus holds rather than align a rule
+    # (tests/test_triangle_admissibility.py pins both call sites).
+    verdict, detail = triangle_admissibility(uw_years, report_year)
+    if verdict == TRIANGLE_REJECT:
+        return None, detail
+    if verdict == TRIANGLE_NEW_SYNDICATE:
+        return "new_syndicate", detail
 
     n_cols = len(uw_years)
 
@@ -1782,22 +1833,15 @@ def _parse_nutrient_triangle(grid: list[list[str]], report_year: int):
                 logger.info(f"Ghost column detected: UW year {uw_years[yi]} has data at "
                            f"both col {col_idx} and col {ghost_col}")
 
-    # Max UW year must be recent (within 5 years of report year) but need not
-    # equal it — run-off syndicates stop writing new business before the report date.
-    if max(uw_years) > report_year:
-        return None, f"max UW year {max(uw_years)} > report year {report_year}"
-    if max(uw_years) < report_year - MAX_UW_YEAR_LAG:
-        return None, f"max UW year {max(uw_years)} too old for report year {report_year}"
-
-    if len(uw_years) < 3:
-        # Check if any UW year is old enough to have usable PYD
-        # (i.e., at least 2 years before the report year so there's a
-        # previous diagonal to compare against).  Single-column triangles
-        # with enough development rows ARE valid for PYD computation.
-        usable = [y for y in uw_years if y <= report_year - PYD_EXCLUDED_RECENT_UW_YEARS]
-        if not usable:
-            return "new_syndicate", f"{len(uw_years)} UW year(s) ({min(uw_years)}-{max(uw_years)})"
-        # Fall through to parse the triangle normally
+    # The shared rule: a recent enough most recent underwriting year (run-off syndicates stop
+    # writing new business before the report date), and a cohort old enough to have a previous
+    # diagonal. Single-column triangles with enough development rows ARE valid for PYD.
+    verdict, detail = triangle_admissibility(uw_years, report_year)
+    if verdict == TRIANGLE_REJECT:
+        return None, detail
+    if verdict == TRIANGLE_NEW_SYNDICATE:
+        return "new_syndicate", detail
+    # Fall through to parse the triangle normally
 
     # Parse development rows — only keep rows that look like development periods
     dev_period_patterns = [
@@ -2080,14 +2124,11 @@ def _parse_transposed_triangle(grid: list[list[str]], report_year: int):
     if len(uw_years) < 1:
         return None, "no underwriting years found in row labels"
 
-    # Validate year range
-    if max(uw_years) > report_year:
-        return None, f"max UW year {max(uw_years)} > report year {report_year}"
-    if max(uw_years) < report_year - MAX_UW_YEAR_LAG:
-        return None, f"max UW year {max(uw_years)} too old for report year {report_year}"
-
-    if len(uw_years) < 3:
-        return "new_syndicate", f"{len(uw_years)} UW year(s) ({min(uw_years)}-{max(uw_years)})"
+    verdict, detail = triangle_admissibility(uw_years, report_year)
+    if verdict == TRIANGLE_REJECT:
+        return None, detail
+    if verdict == TRIANGLE_NEW_SYNDICATE:
+        return "new_syndicate", detail
 
     # Extract values: each UW year row has values for dev periods 1..N
     # Transpose into standard format: dev_rows[d] = [val_for_year0, val_for_year1, ...]

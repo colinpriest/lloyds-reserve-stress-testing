@@ -245,11 +245,19 @@ def parse_triangle(grid: list[list[str]], report_year: int):
     uw_years = [p[0] for p in pairs]
     uw_col_indices = [p[1] for p in pairs]
 
-    if max(uw_years) != report_year:
-        return None, f"max UW year {max(uw_years)} != report year {report_year}"
+    # The production rule, not a fifth copy of it: this script is read as evidence of what the
+    # pipeline does, so it must reach the pipeline's verdicts (round 61).
+    _root = str(Path(__file__).resolve().parent.parent)
+    if _root not in sys.path:
+        sys.path.insert(0, _root)
+    from table_extraction import (triangle_admissibility, TRIANGLE_REJECT,
+                                  TRIANGLE_NEW_SYNDICATE)
 
-    if len(uw_years) < 3:
-        return "new_syndicate", f"{len(uw_years)} UW year(s)"
+    verdict, detail = triangle_admissibility(uw_years, report_year)
+    if verdict == TRIANGLE_REJECT:
+        return None, detail
+    if verdict == TRIANGLE_NEW_SYNDICATE:
+        return "new_syndicate", detail
 
     dev_period_patterns = [
         r"at\s+end", r"year\s+later", r"years?\s+later",

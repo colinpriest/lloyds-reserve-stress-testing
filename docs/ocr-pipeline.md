@@ -2601,31 +2601,69 @@ the removed correction lowered stay as it left them (1884: 2012; the syndicate b
 
 The RAG-lite extraction runs first and may detect a triangle with fewer than 3 underwriting years.
 
-`_parse_nutrient_triangle()` uses **usable years**, not the raw UW year count:
+Every parser applies one rule, `table_extraction.triangle_admissibility()`, which uses
+**usable cohorts** and never a column count:
 
 - A UW year is "usable" for PYD if `uw_year <= report_year - PYD_EXCLUDED_RECENT_UW_YEARS`
   (i.e. there is a previous diagonal to compare against)
-- If the triangle has < 3 UW years **and** no usable years exist
-  → `first_year_syndicate = True`
-- If the triangle has < 3 UW years **but** usable years exist
+- No usable year in the triangle → `new_syndicate`, and `first_year_syndicate = True`
+- A usable year, however few columns the triangle has
   → the triangle is parsed normally and PYD is computed
+- A most recent UW year after the report year, or more than `MAX_UW_YEAR_LAG` behind it
+  → not this report year's triangle at all
 
-**The other two triangle parsers do not make that distinction.**
-`_parse_transposed_triangle()` and
-`_parse_transposed_triangle_from_text()` return `new_syndicate` on
-`len(uw_years) < 3` alone, so a two-column triangle whose earlier
-cohort *is* usable is classified young by them and parsed by the
-nutrient parser. The three are pinned as they stand in
-`tests/test_first_year_documented.py`. No committed record shows a
-misclassification from this --- of the 70 first-year stubs, none
-records a cohort up to `t-2`, though 67 of them carry no triangle
-years to check --- and the flag is not final in any case: §11.1
-decides after the models, over every triangle in the record, on the
-usable-cohort rule. Aligning the two parsers would admit filings the
-corpus does not currently hold, so it is a change to the sample and
-not a documentation repair; it is recorded here and left to the
-author (round 60, found while closing the frozen review of
-25 September 2026, D02).
+**Until round 61 the five parsers disagreed.** `_parse_nutrient_triangle()` applied the rule above.
+`_parse_transposed_triangle()` and `_parse_transposed_triangle_from_text()` returned `new_syndicate`
+on `len(uw_years) < 3` alone, so a two-column triangle whose earlier cohort *is* usable was
+classified young by them and parsed by the nutrient parser. `_parse_triangle_from_text()` used the
+same count to reject the page outright, with no first-year signal at all. And
+`test_gemini._parse_triangle_xlsx()` used the count, read it *before* validating the year range, cut
+triangles off at `report_year - 2` where the others allow `MAX_UW_YEAR_LAG`, and would not call a
+triangle young unless its most recent UW year equalled the report year. A sixth copy of the rule sat
+in the `tests/test_azure.py` diagnostic. All of them now call the shared function, and
+`tests/test_triangle_admissibility.py` fails if any of them grows a count of its own again --- the
+test tokenises every source in the repository, so a copy in a new file is caught too.
+
+Three or more distinct UW years no later than the report year cannot all fall inside the most recent
+`PYD_EXCLUDED_RECENT_UW_YEARS`, so for every triangle the nutrient parser used to accept the shared
+rule reaches the same verdict; that is enumerated, not argued, in the same test file.
+
+**What the alignment changed on this corpus: nothing that any route reports.** Replayed over the
+caches, filing by filing: the Azure path reports the same triangle for all 1,055 cached filings, and
+the Adobe path for all 55. The page-text parser returns `new_syndicate` for 111 pages it used to
+reject, which raises no flag, because both of its call sites act only on a `TriangleData` --- making
+them act on the string would change which records the corpus holds, and is not part of aligning a
+rule. So no record was re-extracted and no committed figure moved. The flag is not final in any case:
+§11.1 decides after the models, over every triangle in the record, on the same usable-cohort rule.
+
+**Two defects the replay exposed and did not close.** Both are recorded here with the measurement
+that found them, and both are pinned by tests so that a change to either is deliberate.
+
+1. *The categoriser admits tables that are not triangles, and no version of the rule notices.*
+   Syndicate 308's 2018 filing, table 9, is a "Syndicate annual accounting result" table whose
+   columns are three syndicate numbers (510, 557, 308) and whose rows are years of account. The
+   old rule called it a young syndicate; the aligned rule parses it into a candidate. It loses the
+   Azure path's score to the filing's real triangle, which is why the alignment changed nothing,
+   and `tests/test_triangle_admissibility.py` pins that margin. The repair is a staircase test --- a
+   UW year may not carry more than `report_year - y + 1` development values, and 2017 carries three
+   in a 2018 report --- which is a new rule needing its own corpus measurement.
+2. *The Adobe path takes the first parsable fragment, not the best one.* Adobe splits a wide table,
+   so a fragment can be a piece of a triangle: 2987/2021 holds both a 2012-2019 triangle and a
+   2012-2018 piece of it, and the piece computes -255.5m where the full one gives the -88.9m both
+   models read. Scoring the candidates as the Azure path scores its own (gross, then more UW years,
+   then more complete) was tried and reverted: it changes what the route reports for 10 of the 55
+   filings, and in 2987/2020 and 2987/2022 it moves the route's triangle *away* from the models'
+   figure (150.3 → 68.0 and 157.9 → 60.9) while in 1861/2015 it moves towards it. Those three
+   cannot be adjudicated from the caches.
+
+**Ordering.** `_parse_triangle_xlsx()` asks "is this a triangle?" before "is the syndicate young?",
+because it is tried on every fragment Adobe wrote: without that order, 134 fragments carrying one
+stray year in a header read as evidence of a young syndicate. The grid parsers ask in the other
+order, because they only see grids the categoriser tagged `claims_triangle` and a young syndicate's
+triangle can carry fewer than two development rows. Swapping them would re-decide 32 of the 70
+committed first-year stubs (19 keep the flag, 10 never took it from a grid, 9 are inception-based),
+which is a change to the sample; 31 of the 32 have cached model responses, so it is affordable, and
+it is recorded here rather than done (round 61).
 
 **Example**: syndicate 2468/2022 has a single-column triangle
 (UW year 2020).  Since 2020 ≤ 2022 − 2 = 2020, the year is

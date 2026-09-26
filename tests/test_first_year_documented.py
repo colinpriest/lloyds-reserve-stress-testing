@@ -190,29 +190,35 @@ class TestTheClosureExamples:
         young, _t = _no_mature([2015, 2016], [[2014, 2015, 2016]], 2016)
         assert not young, "2014 <= 2016 - 2, so the record holds a usable cohort"
 
-    @pytest.mark.parametrize("parser,checks_usability", [
-        ("_parse_nutrient_triangle", True),
-        ("_parse_transposed_triangle", False),
-        ("_parse_transposed_triangle_from_text", False),
+    @pytest.mark.parametrize("parser", [
+        "_parse_nutrient_triangle",
+        "_parse_transposed_triangle",
+        "_parse_transposed_triangle_from_text",
+        "_parse_triangle_from_text",
     ])
-    def test_which_triangle_parsers_check_usability_is_pinned(self, parser, checks_usability):
-        """The three parsers do not agree, and the guide now says so. Pinned so that a future change
-        to either behaviour is a deliberate one: aligning them would admit filings the corpus does not
-        hold, which is a change to the sample and not a documentation repair
-        (round 60, found while closing D02).
+    def test_every_triangle_parser_reaches_the_shared_rule(self, parser):
+        """Round 61 aligned them. This test held the opposite until then: two of the three parsers
+        the guide named returned on the raw underwriting-year count, and a fourth -- the page-text
+        parser -- rejected the page on it. All of them now call
+        table_extraction.triangle_admissibility, and none keeps a count of its own. The rule's own
+        boundaries, the enumeration that shows it cannot change what the nutrient parser used to
+        accept, and the xlsx parser in test_gemini are in
+        tests/test_triangle_admissibility.py.
         """
         import table_extraction as te
         import inspect
         src = inspect.getsource(getattr(te, parser))
-        body = src[src.index("len(uw_years) < 3"):]
-        window = body[:400]
-        assert ("PYD_EXCLUDED_RECENT_UW_YEARS" in window) == checks_usability, \
-            "%s's usable-cohort behaviour changed; the guide's §11.2 describes the old one" % parser
+        assert "triangle_admissibility(" in src, "%s decides for itself again" % parser
 
-    def test_the_guide_records_that_the_parsers_disagree(self):
+    def test_the_guide_records_that_the_parsers_are_aligned(self):
         flat = _flat(os.path.join("docs", "ocr-pipeline.md"))
         assert "_parse_transposed_triangle()" in flat and "_parse_nutrient_triangle" in flat
-        assert re.search(r"other two triangle parsers do not make that distinction", flat, re.I)
+        # with the parentheses: the test file is called tests/test_triangle_admissibility.py, so
+        # the bare name is matched by a sentence that only cites the test (round 61, mutation 11)
+        assert re.search(r"triangle_admissibility\(\)", flat), \
+            "the guide must name the function the parsers now share"
+        assert not re.search(r"other two triangle parsers do not make that distinction", flat, re.I), \
+            "the guide still describes the divergence round 61 removed"
 
     def test_the_1884_2016_stub_is_the_post_model_kind(self):
         """The record the dashboard claim falsified: no models block, both models' figures kept."""

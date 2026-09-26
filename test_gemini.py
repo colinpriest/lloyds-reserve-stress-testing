@@ -114,6 +114,8 @@ from adjudicate import (
 )
 from table_extraction import extract_tables, TableBackend, _extract_pages_to_pdf
 from table_extraction import MAX_UW_YEAR_LAG, PYD_EXCLUDED_RECENT_UW_YEARS
+from table_extraction import (triangle_admissibility, TRIANGLE_REJECT,
+                              TRIANGLE_NEW_SYNDICATE)
 
 load_dotenv()
 
@@ -2169,7 +2171,18 @@ def find_triangle_in_adobe_output(adobe_dir, report_year):
     if not candidate_xlsx:
         return None, "no table xlsx files on claims development pages"
 
-    # Try each candidate xlsx — look for triangle structure
+    # Try each candidate xlsx — look for triangle structure.
+    #
+    # The FIRST parsable fragment wins, as it always has. Scoring them the way the Azure path
+    # scores its own candidates (gross, then more underwriting years, then more complete) changes
+    # what this route reports for 10 of the 55 filings with Adobe output, and in 2987/2020 and
+    # 2987/2022 it moves the route's triangle away from the figure both extraction models read
+    # (150.3 -> 68.0 and 157.9 -> 60.9) while in 1861/2015 it moves towards it. Adobe splits a
+    # wide table across fragments, so this route can still read a piece of a triangle rather than
+    # the whole of one -- 2987/2021 holds both a 2012-2019 triangle and a 2012-2018 piece of it.
+    # That is a real defect and it is recorded in docs/ocr-pipeline.md, but it is a question about
+    # which candidate to adopt, not about the admissibility rule this round aligned, and the three
+    # filings above cannot be adjudicated from the caches (round 61).
     new_syndicate_details = None
     for page, xlsx_rel in candidate_xlsx:
         xlsx_path = adobe_dir / xlsx_rel
@@ -2181,7 +2194,7 @@ def find_triangle_in_adobe_output(adobe_dir, report_year):
             continue
         tri_data, details = result
         if tri_data == "new_syndicate":
-            # Triangle exists but too few UW years — remember this
+            # a triangle with no cohort old enough for prior-year development — remember this
             new_syndicate_details = details
             continue
         return tri_data, details
@@ -2232,14 +2245,18 @@ def _parse_triangle_xlsx(xlsx_path, report_year):
             uw_years.append(year)
             uw_col_indices.append(i)
 
-    if len(uw_years) < 3:
-        # Check if this looks like a new syndicate triangle (has years but too few)
-        if len(uw_years) >= 1 and max(uw_years) == report_year:
-            return "new_syndicate", f"{len(uw_years)} UW year(s) ({min(uw_years)}-{report_year})"
-        return None
-
-    # Max UW year must be recent but need not equal report year (run-off syndicates)
-    if max(uw_years) > report_year or max(uw_years) < report_year - 2:
+    # The shared rule, so that the Adobe route reads the same triangles as the table and text
+    # routes. It used to test the raw column count first, require the most recent underwriting
+    # year to equal the report year before it would call a triangle young at all, and cut off
+    # at report_year - 2 where every other parser allows MAX_UW_YEAR_LAG.
+    #
+    # Only the reject branch is acted on here. This function is tried on every candidate xlsx
+    # Adobe wrote, most of which are not triangles at all, so "the syndicate is too young" may
+    # not be said until the development rows below prove the table is a triangle: on the 55
+    # filings with Adobe output, 134 fragments carrying one stray year in a header would
+    # otherwise be read as evidence of a young syndicate (round 61).
+    verdict, detail = triangle_admissibility(uw_years, report_year)
+    if verdict == TRIANGLE_REJECT:
         return None
 
     # Parse development rows — only keep rows with development period labels
@@ -2290,6 +2307,10 @@ def _parse_triangle_xlsx(xlsx_path, report_year):
 
     if len(dev_rows) < 2:
         return None
+
+    # Two or more development rows: this is a triangle, so the age verdict can be trusted.
+    if verdict == TRIANGLE_NEW_SYNDICATE:
+        return "new_syndicate", detail
 
     # Detect currency and units from header row(s)
     # Scan ALL cells in the header row AND a possible second row (some tables
