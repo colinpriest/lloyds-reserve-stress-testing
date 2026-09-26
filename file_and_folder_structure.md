@@ -26,7 +26,7 @@ lloyds_reserve_stress_testing/
 │
 ├── docs/                                   # Documentation and validation files
 │   ├── data-construction.md                # Data construction methodology
-│   ├── data-audit-results.md               # Data audit summary
+│   ├── data-audit-results.md               # Historical July 2026 audit snapshot
 │   ├── exposure-adjustment.md              # Exposure adjustment documentation
 │   ├── llm-prompt-development.md           # LLM prompt development notes
 │   ├── ocr-pipeline.md                     # OCR pipeline documentation

@@ -428,9 +428,9 @@ def _replace_atomically(tmp_path, path):
 def _save_inception_years(inception: dict) -> None:
     """Save syndicate inception years to JSON file, preserving _meta and _manual_overrides.
 
-    Under the lock, because an inception year decides whether a report is skipped as too
-    early: two workers writing at once used to lose one worker's discovery, and the
-    record it would have skipped or kept changed with it (round 56)."""
+    Under the lock because this historical provenance registry is still updated from
+    triangles. Inception age no longer decides whether a report is skipped; eligibility
+    is decided from the report's mature cohorts and stated development figures."""
     with _shared_file_lock(INCEPTION_YEARS_FILE.with_suffix(".lock")):
         _save_inception_years_locked(inception)
 
@@ -438,9 +438,8 @@ def _save_inception_years(inception: dict) -> None:
 def _save_inception_years_locked(inception: dict) -> None:
     existing = _read_json_with_retry(INCEPTION_YEARS_FILE, {})
     meta = existing.get("_meta", {
-        "description": "First underwriting year for each Lloyd's syndicate. "
-                       "Used to skip reports from the first two years of operation "
-                       "where prior year development cannot be meaningfully computed.",
+        "description": "Historical first-underwriting-year registry. Retained for provenance only; "
+                       "not used to decide report eligibility or first-year stubs.",
         "source": "Auto-populated from claims development triangles in extraction JSONs. "
                   "Unknown syndicates are looked up via Perplexity API.",
         "last_updated": datetime.now().strftime("%Y-%m-%d"),
@@ -5200,7 +5199,8 @@ def _first_year_record(report_path, syndicate_num, report_year, rag_result, ince
         },
         "source_file": str(report_path),
         "first_year_syndicate": True,
-        "reason": reason or "Syndicate too new — insufficient underwriting years for prior year development analysis",
+        "reason": reason or ("No underwriting year old enough for prior year development in the report's "
+                             "triangles, and no prior-year figure stated in its reserve text"),
         "syndicate": syndicate_num,
         "year": report_year,
     }
@@ -5644,8 +5644,8 @@ def process_one_report(report_path, inception_cache=None):
                       f"reserve text -- first-year")
                 return "first_year", _first_year_record(
                     report_path, syndicate_num, report_year, rag_result, inception_cache, manual_overrides,
-                    reason=("Syndicate too new - no underwriting year old enough for prior year development "
-                            "in the report's triangles, and no prior-year figure stated in its reserve text"),
+                    reason=("No underwriting year old enough for prior year development in the report's "
+                            "triangles, and no prior-year figure stated in its reserve text"),
                     evidence={"triangle_underwriting_years": _triangles,
                               "model_figures_not_stated": _figures})
 

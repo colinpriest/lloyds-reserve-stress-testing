@@ -33,9 +33,11 @@ The three datasets an analysis project needs, and where to find them:
 The syndicate-year denominator is `syndicate_reports/Lloyds_syndicates_2014_2024.xlsx`
 (1,125 rows in the broader year-of-account candidate list with report URLs; this is
 NOT the active-market denominator, which is the 1,040 SFCR count the spreadsheet's own
-note directs use of). A written summary of the audit is in
-[docs/data-audit-results.md](docs/data-audit-results.md). To rebuild the coverage outputs
-after new downloads or extractions, run `python scripts/build_coverage_status.py`.
+note directs use of). The current written summary is the generated
+[coverage report](syndicate_reports/coverage/coverage_report.md), backed by the
+companion JSON and workbook. `docs/data-audit-results.md` is an explicitly historical
+July 2026 snapshot. To rebuild the current coverage outputs after new downloads or
+extractions, run `python scripts/build_coverage_status.py`.
 
 ## Architecture
 

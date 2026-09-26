@@ -1,6 +1,14 @@
 # Data Audit Results — Syndicate-Year Coverage
 
-Audit date: 2026-07-06
+> **Status: historical snapshot (6 July 2026).**
+> The totals and RITC scan below were not regenerated after later extraction and
+> classification changes. Do not use this page as the current construction record.
+> Current machine-generated counts, populations and provenance are in
+> `syndicate_reports/coverage/coverage_report.md` and its companion
+> `coverage_status.json` / `.xlsx`; rebuild them with
+> `python scripts/build_coverage_status.py`.
+
+Audit date: 2026-07-06 (historical; superseded by the generated coverage report)
 Retrieval denominator: `syndicate_reports/Lloyds_syndicates_2014_2024.xlsx` (1,125 rows, 2014–2024). This is the broader **year-of-account candidate list**, not the active-market denominator: the spreadsheet's own note directs use of the SFCR count, **1,040** active syndicate-years. The coverage percentages below are against the 1,125 candidate rows.
 Machine-readable detail: `syndicate_reports/coverage/coverage_status.xlsx` / `.json`
 Rebuild with: `python scripts/build_coverage_status.py`

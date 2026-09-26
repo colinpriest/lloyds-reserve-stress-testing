@@ -264,7 +264,8 @@ def analyse_extraction(syndicate: int, year: int,
 
     # ---- special classifications -------------------------------------
     if data.get('first_year_syndicate'):
-        reason = 'first/second-year syndicate: no prior year development possible'
+        reason = ('no eligible mature cohort in the report triangles and no stated '
+                  'prior-year development figure')
         out['exclusion_class'] = 'first_year_syndicate'
         out['pyd_failure_reason'] = reason
         out['opening_failure_reason'] = reason
@@ -273,7 +274,7 @@ def analyse_extraction(syndicate: int, year: int,
             out.update(_lob_from_mix(mix, syndicate, year, rpt, locator,
                                      deterministic=False))
         else:
-            out['lob_failure_reason'] = 'no LOB mix in first-year audit JSON'
+            out['lob_failure_reason'] = 'no LOB mix in no-mature-cohort audit JSON'
         return out
     if data.get('no_triangle_data') or data.get('excluded'):
         reason = data.get('exclusion_reason',
@@ -548,7 +549,7 @@ def main() -> int:
         ('Less: report unavailable (not published / download failed)', -n_unavailable, total - n_unavailable),
         ('Reports downloaded', None, n_downloaded),
         ('Less: not yet through extraction pipeline', -n_not_extracted, n_downloaded - n_not_extracted),
-        ('Less: first/second-year syndicate (no PYD possible)', -n_first_year,
+        ('Less: no eligible mature cohort and no stated development figure', -n_first_year,
          n_downloaded - n_not_extracted - n_first_year),
         ('Less: no triangle or reserve text in report', -n_no_triangle,
          n_downloaded - n_not_extracted - n_first_year - n_no_triangle),
@@ -576,6 +577,12 @@ def main() -> int:
         waterfall_df.to_excel(xw, sheet_name='reconciliation', index=False)
 
     # ---- markdown summary ----------------------------------------------------
+    md_by_year = by_year.rename(columns={
+        'first_year_excl': 'no_mature_cohort_excl',
+    })
+    md_by_synd = by_synd.rename(columns={
+        'first_year_excl': 'no_mature_cohort_excl',
+    })
     lines = [
         "# Syndicate-Year Coverage Report",
         f"Generated: {datetime.now(timezone.utc).isoformat()}",
@@ -592,18 +599,18 @@ def main() -> int:
         "",
         "## By year (candidate-list rows vs full success)",
         "",
-        by_year.to_markdown(index=False),
+        md_by_year.to_markdown(index=False),
         "",
         "## Failure-mode counts by year",
         "",
-        by_year[['year', 'report_unavailable', 'fail_pyd', 'fail_lob',
-                 'fail_opening', 'first_year_excl', 'no_triangle_excl']]
+        md_by_year[['year', 'report_unavailable', 'fail_pyd', 'fail_lob',
+                    'fail_opening', 'no_mature_cohort_excl', 'no_triangle_excl']]
         .to_markdown(index=False),
         "",
         "## By syndicate (top 40 by active years)",
         "",
-        by_synd.sort_values(['candidate_syndicate_years', 'full_success'],
-                            ascending=False).head(40).to_markdown(index=False),
+        md_by_synd.sort_values(['candidate_syndicate_years', 'full_success'],
+                               ascending=False).head(40).to_markdown(index=False),
         "",
         f"(Full by-syndicate table: coverage_status.xlsx, 'by_syndicate' sheet — "
         f"{len(by_synd)} syndicates)",

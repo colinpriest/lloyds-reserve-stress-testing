@@ -2271,14 +2271,16 @@ The pipeline applies RAG-extracted opening reserves at **two
 stages**: proactively before cross-validation, and as a fallback
 during disagreement resolution.
 
-#### 10.6.1  Proactive RAG override (both models)
+#### 10.6.1  Proactive conditional RAG resolution (both models)
 
 After LLM extraction completes, the pipeline checks whether
 `_adobe_provisions` contains an `opening_gross_claims_outstanding`
 value (from sections 7.8.2 or 7.8.3).
 
-If available, the RAG value overrides both models **when its unit
-is resolved from report evidence** (round 52, review finding M01):
+If available, the RAG value is considered only after its unit is
+resolved. Evidenced units are necessary but not sufficient: the
+two-of-three decision in step 2 determines whether it is applied
+(round 52, review finding M01):
 
 1. The table parser scales the figure from the table's header
    rows, then the page text, then the document's unit declaration
@@ -2316,12 +2318,14 @@ document declaration on the accounting-policies page the value
 resolves to 46.378; without it the models' agreement would have
 decided; with neither, nothing would have been overridden.
 
-This is analogous to the RAG triangle PYD override (section 9)
--- for opening reserves the deterministic extraction is
-authoritative over LLMs once its unit is evidenced, while for PYD
-that authority is scoped, within the section 10.3 hierarchy, to an
-**absolute-amount** triangle, and it is qualified three times
-over: triangle-versus-provisions; triangle-versus-model through
+Opening-reserve resolution is conditional, not deterministic-table
+authority. An explicit-unit table value of 200 against two agreeing
+model values of 100 and 100 is recorded but not applied: agreement at
+scale 1, compatible unit rescaling, or model disagreement is still
+required. For PYD, deterministic authority is scoped, within the
+section 10.3 hierarchy, to an **absolute-amount** triangle, and it is
+qualified three times over: triangle-versus-provisions;
+triangle-versus-model through
 `_pyd_override_gate`, which withholds the deterministic figure
 against two agreeing model signs or an implausible magnitude; and
 the hand confirmation that lifts that veto where the figure is one
@@ -2362,10 +2366,13 @@ the RAG opening resolution's own two-of-three thresholds
 (`RAG_OPENING_REL_TOL`, `RAG_MODEL_DISAGREEMENT_TOL`). A hard failure
 is logged for adjudication and **excludes no record**: see §10.7.
 
-If available, the RAG value overrides both models and the hard
-failure is reclassified as auto-resolved.  This path handles
-cases where the RAG value was injected late (e.g. from a
-reserves movement note for RITC syndicates).
+If available, the RAG value is sent through the same two-of-three
+rule in section 10.6.1. It overrides both models and the hard failure
+is reclassified as auto-resolved only when that rule applies it; two
+agreeing models retain their value against a contradictory table at
+every compatible scale. This path handles cases where the RAG value
+was injected late (e.g. from a reserves movement note for RITC
+syndicates).
 
 #### 10.6.3  Rationale and common LLM errors
 
@@ -2848,8 +2855,8 @@ confirmed the same value.
 ### 11.4  No-triangle-data exclusion
 
 Reports where no claims triangle, no provisions PYD, and no
-reserve movement text can be found **and** the report is not in
-the first two UW years:
+reserve movement text can be found are classified separately from
+the eligible-cohort rule:
 
 - `no_triangle_data = True`, `excluded = True`
 - LLM extraction is **skipped**
@@ -3055,12 +3062,14 @@ was removed then (section 11.1), carry this form:
 }
 ```
 
-When detected by the triangle check (no usable UW years for PYD):
+For a current stub, the report contains one or more triangles but no
+underwriting year at or before $t-2$, and no prior-year figure is
+stated in the reserve text:
 
 ```json
 {
   "first_year_syndicate": true,
-  "reason": "Syndicate too new -- insufficient underwriting years for prior year development analysis",
+  "reason": "No underwriting year old enough for prior year development in the report's triangles, and no prior-year figure stated in its reserve text",
   "syndicate": 1322,
   "year": 2023,
   "gross_premium_mix": ["...if available..."]
