@@ -2644,9 +2644,22 @@ that found them, and both are pinned by tests so that a change to either is deli
    columns are three syndicate numbers (510, 557, 308) and whose rows are years of account. The
    old rule called it a young syndicate; the aligned rule parses it into a candidate. It loses the
    Azure path's score to the filing's real triangle, which is why the alignment changed nothing,
-   and `tests/test_triangle_admissibility.py` pins that margin. The repair is a staircase test --- a
-   UW year may not carry more than `report_year - y + 1` development values, and 2017 carries three
-   in a 2018 report --- which is a new rule needing its own corpus measurement.
+   and `tests/test_triangle_admissibility.py` pins that margin.
+
+   A staircase test was the obvious repair and does not work. Built and measured three ways, at the
+   level that decides what a route reports: as a veto on an absolute height (a cohort may not carry
+   more than `report_year - y + 1` development values) it refuses a correct triangle in 30 Azure
+   filings and 9 Adobe ones, 2088/2015's 0.465m among them, which is both models' figure exactly; as
+   a veto on the steps (a newer cohort must show strictly fewer values, which survives extra summary
+   rows where the height does not) it changes 38 Azure, 4 Adobe and 66 text filings, because real
+   triangles break strict decrease often enough through missing cells, merged rows and "& prior"
+   aggregates; weighted above the other scoring terms it changes 16 filings, and in eight of those
+   the incumbent triangle agreed with both models to the digit (1955/2019's 44.2m, 2012/2016's
+   9.38m, 318/2020's -13.0m) while the step-clean grid it promotes does not, so a well-shaped table
+   is not the same thing as the right table; and as a tie-break below every other term it changes
+   nothing at all. It is therefore not in the code. What would identify 308/2018's table is its
+   header -- columns labelled with syndicate numbers rather than development periods -- which is a
+   question for the categoriser, not for a shape test (round 61).
 2. *The Adobe path takes the first parsable fragment, not the best one.* Adobe splits a wide table,
    so a fragment can be a piece of a triangle: 2987/2021 holds both a 2012-2019 triangle and a
    2012-2018 piece of it, and the piece computes -255.5m where the full one gives the -88.9m both

@@ -310,10 +310,16 @@ class TestThroughTheParsers:
         admissibility rule says so: the old one called it a young syndicate and raised the
         first-year flag, the aligned one parses it into a candidate. It loses the Azure path's
         score to the filing's real triangle -- which is why aligning the rule changed nothing any
-        route reported, for all 1,055 cached filings -- and this test records the margin. A
-        staircase test (a UW year may not carry more than report_year - y + 1 development values;
-        2017 carries three in a 2018 report) would reject it outright, and is the repair, but it
-        is a new rule with its own corpus measurement rather than part of this alignment."""
+        route reported, for all 1,055 cached filings -- and this test records the margin.
+
+        A staircase test would reject it and is NOT the repair. Built and measured three ways in
+        round 61: as a veto it refuses a correct triangle in 30 to 39 filings, including ones whose
+        figure both models reproduce exactly (2088/2015's 0.465m); weighted above the other scoring
+        terms it changes 16 filings, and in eight of those the incumbent agreed with both models to
+        the digit (1955/2019's 44.2m, 2012/2016's 9.38m, 318/2020's -13.0m) while the step-clean
+        grid it promotes does not; as a tie-break below every other term it changes nothing. A
+        well-shaped table is not the same thing as the right table. What identifies this grid is its
+        header -- columns labelled with syndicate numbers -- which is the categoriser's business."""
         res, details = te._parse_transposed_triangle(GRID_308_2018_TABLE_9, 2018)
         assert isinstance(res, te.TriangleData), details
         years = sorted(int(y) for y in res.underwriting_years)
