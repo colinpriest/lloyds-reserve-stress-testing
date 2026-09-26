@@ -2673,10 +2673,17 @@ that found them, and both are pinned by tests so that a change to either is deli
 because it is tried on every fragment Adobe wrote: without that order, 134 fragments carrying one
 stray year in a header read as evidence of a young syndicate. The grid parsers ask in the other
 order, because they only see grids the categoriser tagged `claims_triangle` and a young syndicate's
-triangle can carry fewer than two development rows. Swapping them would re-decide 32 of the 70
-committed first-year stubs (19 keep the flag, 10 never took it from a grid, 9 are inception-based),
-which is a change to the sample; 31 of the 32 have cached model responses, so it is affordable, and
-it is recorded here rather than done (round 61).
+triangle can carry fewer than two development rows.
+
+Swapping them was measured at the level that decides, and it is not worth doing. The table route's
+first-year flag would drop for 132 filings and be raised for none, so the direction is uniformly
+towards better-founded reasons; but 96 of those 132 already hold a figure from another route, so
+nothing about them changes. The 31 that are committed first-year stubs would be re-decided, and for
+30 of them the outcome cannot be predicted from the caches at all: their committed model responses
+carry no triangle, so the post-model rule would not call them young and the reserve-text steps would
+decide instead. Each would have to be read individually and the model refitted, and no committed
+figure is demonstrably wrong today. So the order stands as it is, with this measurement as the
+reason (round 61).
 
 **Example**: syndicate 2468/2022 has a single-column triangle
 (UW year 2020).  Since 2020 ≤ 2022 − 2 = 2020, the year is
