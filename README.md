@@ -271,7 +271,7 @@ The triangle is the primary source of truth for prior year development. The extr
 
 Extracted triangles undergo structural validation before PYD computation:
 
-- **UW year range**: the most recent underwriting year must satisfy `report_year - 5 <= max_uw_year <= report_year` (`MAX_UW_YEAR_LAG = 5` in `table_extraction.py`; run-off syndicates stop writing before the report date). The Excel-triangle parser (`_parse_triangle_xlsx`) applies its own stricter two-year window.
+- **UW year range**: the most recent underwriting year must satisfy `report_year - 5 <= max_uw_year <= report_year` (`MAX_UW_YEAR_LAG = 5` in `table_extraction.py`; run-off syndicates stop writing before the report date). The Excel-triangle parser (`_parse_triangle_xlsx`) uses this same common admissibility rule, so three- to five-year run-off gaps are permitted.
 - **Row/column ratio**: Number of development rows must be consistent with number of UW year columns, accounting for extra development rows in run-off triangles
 - **Column fill pattern**: Oldest column must have the most non-null values (upper-left triangle shape)
 - **Gross vs net**: Gross triangles are preferred; net-only triangles are used as fallback

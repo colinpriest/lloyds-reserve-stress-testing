@@ -51,3 +51,25 @@ def test_no_unqualified_never_remains_in_the_hierarchy():
         assert "exception" in m.group(0) or "confirmed" in m.group(0), m.group(0)
     flat_readme = " ".join(io.open(os.path.join(ROOT, "README.md"), encoding="utf-8").read().split())
     assert "triangle_figures_confirmed_by_hand.json" in flat_readme
+
+
+def test_resolved_table_value_does_not_override_two_agreeing_model_values():
+    value, label, note = tg._resolve_rag_opening(
+        200.0,
+        {"unit_source": "header", "raw_value": 200.0, "page": 1},
+        [100.0, 100.0],
+    )
+    assert value is None and label == "header"
+    assert "NOT APPLIED" in note and "model value is retained" in note
+
+
+def test_reserve_overview_exposes_the_conditional_and_no_override_branches():
+    doc = _doc()
+    flow = doc[doc.index("Step 5: Dual-LLM"):doc.index("Step 6: Report classification")]
+    assert "apply only under the" in flow
+    assert "otherwise retain model values" in flow
+    summary = doc[doc.index("**Priority chain**"):doc.index("**Why pl_account")]
+    assert "only when the agreement, resolved-unit, or tie-break rule" in summary
+    assert "no-override branch" in summary
+    assert "both models, always" not in doc
+    assert "applied proactively to both LLMs" not in doc

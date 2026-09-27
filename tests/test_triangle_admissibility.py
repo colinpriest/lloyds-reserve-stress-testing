@@ -7,8 +7,8 @@ development, and they did not agree:
   * ``_parse_transposed_triangle``          ``len(uw_years) < 3`` alone
   * ``_parse_transposed_triangle_from_text````len(uw_years) < 3`` alone
   * ``_parse_triangle_from_text``           the same count, but it rejected the page outright
-  * ``test_gemini._parse_triangle_xlsx``    the same count, plus its own ``report_year - 2``
-                                            staleness cut and the count read before the year range
+  * ``test_gemini._parse_triangle_xlsx``    the same count, formerly with its own
+                                            ``report_year - 2`` staleness cut
 
 All five now call ``table_extraction.triangle_admissibility``. These tests hold the rule to its
 boundaries, prove it cannot change what the nutrient parser used to accept, pin every parser to it,

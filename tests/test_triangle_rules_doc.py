@@ -33,6 +33,9 @@ def test_the_readme_states_the_uw_year_window():
     assert "report_year - %d <= max_uw_year <= report_year" % lag in readme
     assert "within %d years of `report_year`" % lag in readme
     assert "within 2 years of the report year" not in readme
+    assert "`_parse_triangle_xlsx`) uses this same common admissibility rule" in readme
+    assert "three- to five-year run-off gaps are permitted" in readme
+    assert "own stricter two-year window" not in readme
 
 
 def test_the_readme_states_the_excluded_recent_years():

@@ -140,8 +140,11 @@ PDF input
 |   verify_triangles() resolves disagreements    |
 |   Triangle PYD prevails (see 10.3 sign rule)   |
 |     (loss ratio uses conditional fallback)     |
-|   RAG balance sheet opening overrides reserves |
-|     (proactive: both models, always)           |
+|   RAG balance-sheet opening is considered      |
+|     for both models; apply only under the       |
+|     agreement/unit/tie-break rule (section     |
+|     10.6), otherwise retain model values and   |
+|     record the conflict                         |
 |   Net-of-reinsurance PYD fallback if null      |
 |   Zero-opening override (PYD=0 if opening=0)  |
 |   Direction forced from resolved PYD sign      |
@@ -1388,8 +1391,11 @@ in this order:
    Position liabilities)
 3. Reserves movement note opening (RITC syndicates)
 
-The first non-null result is used.  Downstream, the RAG value
-is applied proactively to both LLMs (section 10.6).
+The first non-null result is considered downstream for both LLMs.  It is applied
+only when the agreement, resolved-unit, or tie-break rule in section 10.6 permits
+the override.  Otherwise the model values are retained and the conflicting table
+amount is recorded for audit.  For example, a resolved table value of 200 against
+agreeing model values 100 and 100 follows this no-override branch.
 
 **Why pl_account tables are included in step 2**: scanned PDFs
 sometimes cause the page classifier to assign `pl_account`
