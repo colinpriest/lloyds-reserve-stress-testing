@@ -6,27 +6,129 @@
     "tolerance_rules_version": "1.0"
   },
   "source_file": "syndicate_reports\\pdfs\\syndicate_1840_2022.pdf",
-  "first_year_syndicate": true,
-  "reason": "Syndicate too new - insufficient underwriting years for prior year development analysis",
   "syndicate": 1840,
   "year": 2022,
-  "gross_premium_mix": [
-    {
-      "line_of_business": "Fire and other",
-      "amount_gbp_m": 3375.0,
-      "percentage_of_total": 91.8
-    },
-    {
-      "line_of_business": "damage to property Third party liability",
-      "amount_gbp_m": 301.0,
-      "percentage_of_total": 8.2
-    },
-    {
-      "line_of_business": "Reinsurance",
-      "amount_gbp_m": 0.0,
-      "percentage_of_total": 0.0
+  "models": {
+    "source-page-audit": {
+      "syndicate": 1840,
+      "year": 2022,
+      "opening_reserves_gbp_m": 0.279,
+      "opening_reserves_page": 38,
+      "opening_reserves_confidence": 1.0,
+      "prior_year_development_gbp_m": 0.0,
+      "prior_year_development_pct": 0.0,
+      "direction": "neutral",
+      "prior_year_movement_page": 39,
+      "prior_year_movement_confidence": 1.0,
+      "exact_reserve_text": "Gross claims outstanding balance at 1 January 2022: GBP 279,000.",
+      "primary_causes": [],
+      "specific_events": [],
+      "specific_years_affected": [2020],
+      "prior_year_events": [],
+      "named_events": [],
+      "standardized_narrative": "The gross UW2020 mature cohort reports nil at both one year after and two years after, so its mature-cohort movement is zero against opening gross claims outstanding of GBP 0.279 million.",
+      "raw_causal_phrases": [],
+      "lob_movements": [],
+      "gross_premiums_written_gbp_m": 3.676,
+      "gross_premium_mix": [
+        {
+          "line_of_business": "Fire and other damage to property",
+          "amount_gbp_m": 3.375,
+          "percentage_of_total": 91.8
+        },
+        {
+          "line_of_business": "Third party liability",
+          "amount_gbp_m": 0.301,
+          "percentage_of_total": 8.2
+        },
+        {
+          "line_of_business": "Reinsurance",
+          "amount_gbp_m": 0.0,
+          "percentage_of_total": 0.0
+        }
+      ],
+      "gross_premium_page": 33,
+      "gross_premium_confidence": 1.0,
+      "currency": "GBP",
+      "_adobe_lob": {
+        "gross_premium_mix": [
+          {
+            "line_of_business": "Fire and other damage to property",
+            "amount_gbp_m": 3.375,
+            "percentage_of_total": 91.8
+          },
+          {
+            "line_of_business": "Third party liability",
+            "amount_gbp_m": 0.301,
+            "percentage_of_total": 8.2
+          },
+          {
+            "line_of_business": "Reinsurance",
+            "amount_gbp_m": 0.0,
+            "percentage_of_total": 0.0
+          }
+        ],
+        "gross_premiums_written_gbp_m": 3.676,
+        "table_total": 3.676,
+        "class_sum": 3.676,
+        "currency": "GBP",
+        "method": "source-page-audit",
+        "source_page": 33,
+        "entity": 1840
+      },
+      "data_quality_notes": "Source-page audit: printed dashes in the mature UW2020 column are reported nil values, not unread cells. [RAG OVERRIDE: Model said PYD=0.000m but RAG triangle computed +0.000m]",
+      "_claims_triangle": {
+        "type": "gross",
+        "currency": "GBP",
+        "units": "thousands",
+        "page": 39,
+        "underwriting_years": [2020, 2021, 2022],
+        "development_rows": [
+          [18.0, 2364.0, 190.0],
+          [0.0, 3407.0, null],
+          [0.0, null, null]
+        ]
+      },
+      "_rag_triangle": {
+        "type": "gross",
+        "currency": "GBP",
+        "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "source-page-audit",
+        "underwriting_years": [2020, 2021, 2022],
+        "development_rows": [
+          [18.0, 2364.0, 190.0],
+          [0.0, 3407.0, null],
+          [0.0, null, null]
+        ],
+        "row_labels": [
+          "At end of underwriting year",
+          "One year after",
+          "Two years after"
+        ],
+        "source_page": 39,
+        "entity": 1840
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 0.0,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_source_page": 39,
+        "note": "source-page audit retained the printed nil mature-cohort outcome"
+      }
     }
-  ],
-  "gross_premiums_written_gbp_m": 3676.0,
-  "currency": "GBP"
+  },
+  "validation": {
+    "passed": true,
+    "total_discrepancies": 0,
+    "within_tolerance": 0,
+    "hard_failures": 0,
+    "hard_failure_details": [],
+    "method": "source-page-audit"
+  },
+  "structural_eligibility_audit": {
+    "decision": "eligible_observed_zero",
+    "ledger": "pdf_extraction/audit/structural_eligibility_audit.json"
+  }
 }

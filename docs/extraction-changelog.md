@@ -4,7 +4,7 @@
 
 Round 55 (the external review of 10 September 2026) corrected two extraction rules and re-extracted the records they touch, offline from the committed response and table caches. The rules were: the percentage-against-monetary decision, which now rests on the table's own unit evidence before any magnitude heuristic (finding T03); and the transposed-grid parser, which now captures one basis block of a page that prints a gross and a net triangle under one header, and labels it by that block's own heading. The route by which each record's development figure was adopted is now recorded on the record (`_pyd_route`) instead of being inferred from a sentence in its notes.
 
-**1055 record(s) differ from `7334497`.** The adopted figure moves in 212 of them.
+**1055 record(s) differ from `7334497`.** The adopted figure moves in 213 of them.
 
 | Record | Development, before | after | Route, before | after | Fields that differ |
 |---|---:|---:|---|---|---|
@@ -209,7 +209,7 @@ Round 55 (the external review of 10 September 2026) corrected two extraction rul
 | `syndicate_1796_2024` | 1.8 | 1.824 | model | model_reading (?) | prior_year_development_gbp_m, prior_year_development_pct, gross_premiums_written_gbp_m, gross_premium_mix, claims_triangle, rag_triangle, adobe_lob, adobe_provisions, data_quality_notes |
 | `syndicate_1840_2020` | None | None | model | model | provenance only |
 | `syndicate_1840_2021` | None | None | model | model | provenance only |
-| `syndicate_1840_2022` | None | None | model | model | provenance only |
+| `syndicate_1840_2022` | None | 0.0 | model | rag_triangle (gross) | prior_year_development_gbp_m, prior_year_development_pct, opening_reserves_gbp_m, gross_premiums_written_gbp_m, gross_premium_mix, claims_triangle, rag_triangle, adobe_lob, data_quality_notes, currency, direction |
 | `syndicate_1840_2023` | 0.095 | 0.095 | deterministic override (note) | rag_triangle (gross) | gross_premiums_written_gbp_m, gross_premium_mix, claims_triangle, rag_triangle, adobe_lob, data_quality_notes |
 | `syndicate_1840_2024` | 0.05 | 0.05 | model | rag_triangle (gross) | prior_year_development_pct, opening_reserves_gbp_m, gross_premiums_written_gbp_m, gross_premium_mix, claims_triangle, rag_triangle, adobe_lob, adobe_provisions, data_quality_notes |
 | `syndicate_1856_2017` | None | None | model | model | provenance only |

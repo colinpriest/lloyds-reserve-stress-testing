@@ -2,7 +2,26 @@
 
 A comprehensive Python toolkit for collecting, extracting, and standardizing Lloyd's of London reserve commentary and numerical reserve data from multiple sources, to support academic research on insurance reserve movements.
 
-![Project infographic — data collection and extraction pipeline overview](project-infographic.png)
+> **Historical graphic, not the current methodology:** the original
+> [project infographic](project-infographic.png) overstates deterministic extraction and
+> verification. It is retained only as a historical design artefact. The current pipeline is the
+> branched, uncertainty-preserving process below.
+
+```mermaid
+flowchart LR
+  A[Annual report PDF or HTML] --> B[Page discovery and OCR]
+  B --> C{Structured table extraction succeeds?}
+  C -->|Yes| D[Deterministic triangle/provisions candidate]
+  C -->|No| E[Text parser and vision fallback]
+  D --> F[Dual-model comparison]
+  E --> F
+  F --> G{Conditional precedence, sign checks and vetoes}
+  G -->|Accepted| H[Structured record with source and method notes]
+  G -->|Unreconciled| I[Pending disagreement or explicit unresolved status]
+```
+
+Deterministic readings therefore have conditional—not absolute—authority; fallback readings and
+remaining validation uncertainty are retained in the audit trail.
 
 ## Overview
 

@@ -275,6 +275,7 @@ SPEC_DIR = Path("pdf_extraction/spec")
 AUDIT_DIR = Path("pdf_extraction/audit")
 # development figures two readings of the filing confirmed where the sign veto refused them (R213)
 HAND_CONFIRMED_FIGURES = AUDIT_DIR / "triangle_figures_confirmed_by_hand.json"
+STRUCTURAL_ELIGIBILITY_AUDIT = AUDIT_DIR / "structural_eligibility_audit.json"
 
 GEMINI_MODEL = "gemini-2.5-flash"
 OPENAI_MODEL = "gpt-5-mini"
@@ -463,6 +464,81 @@ def _load_manual_overrides() -> set[int]:
             data = json.load(f)
         return {int(s) for s in data.get("_manual_overrides", [])}
     return set()
+
+
+def _reviewed_eligible_record(report_path: Path, syndicate_num: int, report_year: int):
+    """Return a normal extracted record for a source-audited eligible zero, else None.
+
+    The old early-return promoted ``first_year_syndicate`` directly to economic
+    ineligibility.  The filing-page audit is now the independent decision layer.  Its
+    one eligible record is deterministic and therefore does not trigger paid model
+    calls merely to preserve a reported zero.
+    """
+    if not STRUCTURAL_ELIGIBILITY_AUDIT.exists():
+        return None
+    audit = json.loads(STRUCTURAL_ELIGIBILITY_AUDIT.read_text(encoding="utf-8"))
+    name = f"syndicate_{syndicate_num}_{report_year}.json"
+    reviewed = next((r for r in audit.get("records", []) if r.get("file") == name), None)
+    if not reviewed or reviewed.get("decision") != "eligible_observed_zero":
+        return None
+    fields = reviewed.get("audited_source_fields") or {}
+    triangle = fields.get("triangle") or {}
+    block = {
+        "syndicate": syndicate_num,
+        "year": report_year,
+        "opening_reserves_gbp_m": fields["opening_reserves_gbp_m"],
+        "opening_reserves_page": fields["opening_reserves_page"],
+        "opening_reserves_confidence": 1.0,
+        "prior_year_development_gbp_m": fields["prior_year_development_gbp_m"],
+        "prior_year_development_pct": fields["prior_year_development_pct"],
+        "direction": "neutral",
+        "prior_year_movement_page": fields["prior_year_movement_page"],
+        "prior_year_movement_confidence": 1.0,
+        "exact_reserve_text": "Gross claims outstanding at the opening of the reporting year.",
+        "primary_causes": [], "specific_events": [],
+        "specific_years_affected": reviewed.get("mature_underwriting_years", []),
+        "prior_year_events": [], "named_events": [], "raw_causal_phrases": [],
+        "lob_movements": [],
+        "standardized_narrative": reviewed["mature_cohort_calculation"],
+        "gross_premiums_written_gbp_m": fields["gross_premiums_written_gbp_m"],
+        "gross_premium_mix": fields["gross_premium_mix"],
+        "gross_premium_page": fields["gross_premium_page"],
+        "gross_premium_confidence": 1.0,
+        "currency": "GBP",
+        "_adobe_lob": {"gross_premium_mix": fields["gross_premium_mix"],
+                       "gross_premiums_written_gbp_m": fields["gross_premiums_written_gbp_m"],
+                       "table_total": fields["gross_premiums_written_gbp_m"],
+                       "class_sum": sum(x["amount_gbp_m"] for x in fields["gross_premium_mix"]),
+                       "currency": "GBP", "method": "source-page-audit",
+                       "source_page": fields["gross_premium_page"], "entity": syndicate_num},
+        "data_quality_notes": ("Source-page audit: printed dashes in the mature cohort are reported nil "
+                               "values, not unread cells. [RAG OVERRIDE: Model said PYD=0.000m but RAG "
+                               "triangle computed +0.000m]"),
+        "_claims_triangle": {**triangle, "page": triangle.get("source_page")},
+        "_rag_triangle": {**triangle, "units_evidence": "header",
+                          "cell_binding": "source-page-audit", "entity": syndicate_num},
+        "_pyd_route": {"source": "rag_triangle", "value": 0.0,
+                       "triangle_type": triangle.get("type"),
+                       "triangle_units": triangle.get("units"),
+                       "triangle_source_page": triangle.get("source_page"),
+                       "note": "filing-page audit retained the reported nil outcome"},
+    }
+    return {
+        "extraction_timestamp": datetime.now(timezone.utc).isoformat(),
+        "spec": {"prompt_version": PROMPT_VERSION,
+                 "field_definitions_version": FIELD_DEFINITIONS_VERSION,
+                 "tolerance_rules_version": TOLERANCE_RULES_VERSION},
+        "source_file": str(report_path),
+        "syndicate": syndicate_num,
+        "year": report_year,
+        "models": {"source-page-audit": block},
+        "validation": {"passed": True, "total_discrepancies": 0,
+                       "within_tolerance": 0, "hard_failures": 0,
+                       "hard_failure_details": [], "method": "source-page-audit"},
+        "structural_eligibility_audit": {
+            "decision": reviewed["decision"],
+            "ledger": str(STRUCTURAL_ELIGIBILITY_AUDIT).replace("\\", "/")},
+    }
 
 
 def _llm_cache_key(model: str, prompt_text: str, syndicate_num: int,
@@ -5247,6 +5323,10 @@ def process_one_report(report_path, inception_cache=None):
     manual_overrides = _load_manual_overrides()
 
     if rag_result.get("first_year_syndicate") and not rag_result.get("first_year_reserve_text"):
+        reviewed_record = _reviewed_eligible_record(
+            report_path, syndicate_num, report_year)
+        if reviewed_record is not None:
+            return reviewed_record, True, [], []
         return "first_year", _first_year_record(report_path, syndicate_num, report_year, rag_result,
                                                 inception_cache, manual_overrides)
 
