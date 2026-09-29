@@ -73,6 +73,20 @@ def test_sign_override_a_zero_provisions_figure_overrides_nothing(rag):
     assert r["pyd"] == pytest.approx(3.0) and r["pyd_from_triangle"] is True
 
 
+@pytest.mark.parametrize("zero", [0.0, -0.0])
+def test_sign_override_zero_is_no_sign_for_the_sign_test_itself(rag, zero):
+    """Verification review of round 62: a `prov_gross != 0.0` clause in front of the sign test made
+    it impossible to tell whether the sign test itself refuses a zero -- 2014/2019 and 4242/2015 store
+    -0.0 on an affirmed prior-year line, 1884/2024 0.0. The clause could not change an outcome and is
+    gone; this holds the sign test to strict signs, for a triangle of either sign."""
+    assert rag(_prov(zero))["pyd"] == pytest.approx(3.0)
+    down = te.TriangleData(type="gross", currency="GBP", units="millions", units_evidence="header",
+                           underwriting_years=[2018, 2019, 2020],
+                           development_rows=[[90.0, 60.0, 30.0], [100.0, 70.0, None], [97.0, None, None]])
+    r = rag(_prov(zero), triangle=down)
+    assert r["pyd"] == pytest.approx(-3.0) and r["pyd_from_triangle"] is True
+
+
 def test_sign_override_an_agreeing_sign_leaves_the_triangle(rag):
     r = rag(_prov(+9.0))
     assert r["pyd"] == pytest.approx(3.0) and r["method"] == "azure"
@@ -207,3 +221,48 @@ def test_an_all_dash_mature_column_counts_as_no_claims_activity():
     pyd, details = tg.compute_pyd_from_triangle(_tri(rows, years=(2017, 2018, 2019, 2020), units="millions"), 2020)
     assert pyd == pytest.approx(5.0), details
     assert "2017: all-zero column (no claims activity), PYD=0" in details
+
+
+def test_an_all_dash_mature_column_at_the_youngest_usable_age_is_a_nil_year():
+    """Verification review of round 62, U19-g2: the test above puts the all-dash column at age 4
+    (UW2017, t=2020), so counting such a column only from age 4 went unseen. 5183/2024 is the case
+    that decides it: its one mature cohort, UW2022 at t=2024 (age 3, u = t-2), prints dashes
+    throughout (filing page 47; a year of account with no claims). Counted as a nil year the record
+    carries 0.0; skipped, compute_pyd_from_triangle would find no usable year, and the table step
+    would take the report for a first-year stub."""
+    rows = [[None, 101, 273], [None, 379, None], [None, None, None], [None, None, None]]
+    pyd, details = tg.compute_pyd_from_triangle(_tri(rows, years=(2022, 2023, 2024)), 2024)
+    assert pyd == 0.0, details
+    assert "2022: all-zero column (no claims activity), PYD=0" in details
+    # the committed record, from the same page's cached triangle
+    rec = json.loads((ROOT / "pdf_extraction" / "syndicate_5183_2024.json").read_text(encoding="utf-8"))
+    for block in rec["models"].values():
+        tri = block["_rag_triangle"]
+        assert tri["underwriting_years"] == [2022, 2023, 2024]
+        assert all(row[0] is None for row in tri["development_rows"])
+        assert block["_pyd_route"]["source"] == "rag_triangle" and block["prior_year_development_gbp_m"] == 0.0
+        assert tg.compute_pyd_from_triangle(copy.deepcopy(tri), 2024)[0] == 0.0
+
+
+@pytest.mark.parametrize("age, counted", [(1, False), (2, True)])
+def test_an_all_dash_column_in_its_first_period_is_not_a_nil_year(monkeypatch, age, counted):
+    """The `expected_dev_periods >= 2` test in compute_pyd_from_triangle, which the verifier found
+    dead. Measured over the corpus's 9,586 triangles (cached Azure grids, cached model responses and
+    the committed records' triangles): 295 all-dash usable columns reach it, every one three to
+    eleven periods old, because with PYD_EXCLUDED_RECENT_UW_YEARS = 2 no younger column gets that
+    far. It decides what a lowered exclusion would admit: a column in its first period has had no
+    time to show nil claims and is skipped, while one in its second is a nil year. Held here with the
+    exclusion at 0, on both sides of the boundary."""
+    monkeypatch.setattr(tg, "PYD_EXCLUDED_RECENT_UW_YEARS", 0)
+    if age == 1:        # UW2022 at t=2022 is all dashes
+        rows = [[100.0, 50.0, None], [110.0, 55.0, None], [115.0, None, None]]
+    else:               # UW2021 at t=2022 is all dashes
+        rows = [[100.0, None, 60.0], [110.0, None, None], [115.0, None, None]]
+    dashed = 2023 - age
+    pyd, details = tg.compute_pyd_from_triangle(_tri(rows, years=(2020, 2021, 2022), units="millions"), 2022)
+    if counted:
+        assert "%d: all-zero column (no claims activity), PYD=0" % dashed in details, details
+    else:
+        assert "%d: skipped (no current estimate)" % dashed in details, details
+    assert pyd == pytest.approx(5.0 if counted else 10.0), details
+    assert "(2 UW years)" in details, details

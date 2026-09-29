@@ -3431,7 +3431,12 @@ def extract_pyd_from_relevant_pages(pdf_path, report_year):
                   f"{report_year}={_sem.get('column_bound_to_report_year')}, row="
                   f"{_sem.get('row_label')!r}) — the triangle stands")
             prov_gross = None
-        if prov_gross is not None and prov_gross != 0.0:
+        # A zero figure never overrides: the sign test below needs a strictly opposite sign, so
+        # 0.0 and -0.0 (the parser reads one or the other from the affirmed prior-year lines of
+        # 1884/2024, 2014/2019 and 4242/2015) leave the triangle standing. The `!= 0.0` clause
+        # that used to say so here could not change an outcome, and a test could not hold it
+        # (verification review of round 62).
+        if prov_gross is not None:
             tri_pyd = result["pyd"]
             # Disagree in sign — provisions is authoritative for reserve movement
             if (tri_pyd > 0 and prov_gross < 0) or (tri_pyd < 0 and prov_gross > 0):
@@ -4098,6 +4103,11 @@ def compute_pyd_from_triangle(triangle_data, report_year):
             # All-None column for an old enough UW year means zero claims
             # activity (dashes in the triangle = no claims, not missing data).
             # PYD contribution is 0 — count the year as used.
+            # With PYD_EXCLUDED_RECENT_UW_YEARS = 2 every column that gets here is at least three
+            # periods old (5183/2024's UW2022 at t=2024 is the youngest), so the test below decides
+            # nothing today: it decides what a lowered exclusion would admit, where a column in its
+            # first period has had no time to show nil claims. tests/test_precedence_branches.py
+            # holds both sides of it (verification review of round 62).
             expected_dev_periods = report_year - uw_year + 1
             if expected_dev_periods >= 2:
                 details.append(f"  {uw_year}: all-zero column (no claims activity), PYD=0")
