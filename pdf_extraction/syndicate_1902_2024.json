@@ -1,14 +1,530 @@
 {
-  "extraction_timestamp": "2026-09-11T14:20:58.281700+00:00",
+  "extraction_timestamp": "2026-09-29T03:40:06.416075+00:00",
   "spec": {
     "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
   "source_file": "syndicate_reports\\pdfs\\syndicate_1902_2024.html",
-  "no_triangle_data": true,
-  "excluded": true,
-  "exclusion_reason": "No claims development triangle or reserve movement text found in report - recommend non-inclusion in analysis",
-  "syndicate": 1902,
-  "year": 2024
+  "models": {
+    "gemini-2.5-flash": {
+      "syndicate": 1902,
+      "year": 2024,
+      "opening_reserves_gbp_m": 22.206,
+      "opening_reserves_page": 5,
+      "opening_reserves_confidence": 1.0,
+      "prior_year_development_gbp_m": 0.645,
+      "prior_year_development_pct": 2.9,
+      "direction": "strengthening",
+      "prior_year_movement_page": 21,
+      "prior_year_movement_confidence": 0.8,
+      "exact_reserve_text": "The gross claims development table on page 21 indicates a strengthening for the 2022 underwriting year, with the estimate of cumulative gross claims incurred increasing from 15,355 to 16,000.",
+      "primary_causes": [
+        "Adverse claims development",
+        "IBNR recalibration"
+      ],
+      "specific_events": [],
+      "specific_years_affected": [
+        2022
+      ],
+      "prior_year_events": [],
+      "named_events": [],
+      "standardized_narrative": "The syndicate experienced a strengthening of prior year reserves amounting to GBP 0.645 million, primarily attributable to adverse claims development and IBNR recalibration for the 2022 underwriting year, as derived from the gross claims development triangle. No specific named events or detailed causal factors were disclosed.",
+      "raw_causal_phrases": [
+        "uncertainty inherent in the claims estimation process",
+        "large catastrophe claims"
+      ],
+      "lob_movements": [],
+      "gross_premiums_written_gbp_m": 58.243,
+      "gross_premium_mix": [
+        {
+          "line_of_business": "Fire and other damage to property",
+          "amount_gbp_m": 0.003,
+          "percentage_of_total": 0.0
+        },
+        {
+          "line_of_business": "Third party liability",
+          "amount_gbp_m": 44.445,
+          "percentage_of_total": 76.3
+        },
+        {
+          "line_of_business": "Reinsurance",
+          "amount_gbp_m": 13.704,
+          "percentage_of_total": 23.5
+        },
+        {
+          "line_of_business": "Energy",
+          "amount_gbp_m": 0.091,
+          "percentage_of_total": 0.2
+        }
+      ],
+      "gross_premium_page": 14,
+      "gross_premium_confidence": 1.0,
+      "currency": "GBP",
+      "data_quality_notes": "The 'Change in estimates of prior year provisions' line in the Technical Provisions note (page 17) was blank. Prior year development was calculated from the gross claims development triangle (page 21) for the 2022 underwriting year, as per instructions for when direct movement notes are unavailable. The gross and net triangles showed conflicting directions for the 2022 YOA, but the gross triangle was prioritized.",
+      "_claims_triangle": {
+        "type": "gross",
+        "currency": "GBP",
+        "units": "thousands",
+        "page": 21,
+        "underwriting_years": [
+          2022,
+          2023,
+          2024
+        ],
+        "development_rows": [
+          [
+            4522,
+            6890,
+            7475
+          ],
+          [
+            15355,
+            22459,
+            null
+          ],
+          [
+            16000,
+            null,
+            null
+          ]
+        ]
+      },
+      "source_type": "syndicate",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_1902_2024_llm.pdf",
+      "content_hash": "4caaccb6ded9a84e628a6f5938f1f5cb74d2e14c5e03f769ed10ea976d1c9912",
+      "standardized_at": "2026-09-29T03:39:27.946255+00:00",
+      "standardization_model": "gemini-2.5-flash",
+      "_extraction_meta": {
+        "model": "gemini-2.5-flash",
+        "input_tokens": 13247,
+        "output_tokens": 944,
+        "total_tokens": 22355,
+        "cost_usd": 0.006334
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 0.645,
+        "model_value": 0.645,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": null,
+        "triangle_source_page": null,
+        "note": "confirmed by the model value"
+      },
+      "_rag_triangle": {
+        "type": "gross",
+        "currency": "GBP",
+        "units": "thousands",
+        "underwriting_years": [
+          2022,
+          2023,
+          2024
+        ],
+        "development_rows": [
+          [
+            4522,
+            6890,
+            7475
+          ],
+          [
+            15355,
+            22459,
+            null
+          ],
+          [
+            16000,
+            null,
+            null
+          ]
+        ]
+      },
+      "_adobe_lob": {
+        "gross_premium_mix": [
+          {
+            "line_of_business": "Fire and other damage to property",
+            "amount_gbp_m": 0.003,
+            "percentage_of_total": 0.0
+          },
+          {
+            "line_of_business": "Third party liability",
+            "amount_gbp_m": 44.445,
+            "percentage_of_total": 76.3
+          },
+          {
+            "line_of_business": "Reinsurance",
+            "amount_gbp_m": 13.704,
+            "percentage_of_total": 23.5
+          },
+          {
+            "line_of_business": "Energy",
+            "amount_gbp_m": 0.091,
+            "percentage_of_total": 0.2
+          }
+        ],
+        "gross_premiums_written_gbp_m": null,
+        "table_total": null,
+        "class_sum": 58.243,
+        "claims_incurred_by_lob": [
+          {
+            "line_of_business": "Fire and other damage to property",
+            "amount_gbp_m": -0.001
+          },
+          {
+            "line_of_business": "Third party liability",
+            "amount_gbp_m": -21.884
+          },
+          {
+            "line_of_business": "Reinsurance",
+            "amount_gbp_m": -1.685
+          },
+          {
+            "line_of_business": "Energy",
+            "amount_gbp_m": -0.026
+          }
+        ],
+        "currency": "GBP",
+        "method": "azure_text_fallback",
+        "reconciled_with": {
+          "value_m": 58.243,
+          "label": "Gross premiums written",
+          "page": 5,
+          "unit_source": "header"
+        }
+      },
+      "_entity_binding": {
+        "requested_syndicate": 1902,
+        "entity_pages": {
+          "none": [
+            0
+          ],
+          "1902": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48,
+            49,
+            50,
+            51,
+            52,
+            53,
+            54,
+            55,
+            56
+          ]
+        },
+        "foreign_tables_skipped": 0,
+        "foreign_pages": [],
+        "underwriting_year_pages": [],
+        "underwriting_year_tables_skipped": 0,
+        "document_unit_hint": 0.001
+      }
+    },
+    "gpt-5-mini": {
+      "syndicate": 1902,
+      "year": 2024,
+      "opening_reserves_gbp_m": 22.206,
+      "opening_reserves_page": 17,
+      "opening_reserves_confidence": 1.0,
+      "prior_year_development_gbp_m": 0.645,
+      "prior_year_development_pct": 2.9,
+      "direction": "strengthening",
+      "prior_year_movement_page": 31,
+      "prior_year_movement_confidence": 1.0,
+      "exact_reserve_text": "Change in estimates of prior year provisions - - -",
+      "primary_causes": [],
+      "specific_events": [],
+      "specific_years_affected": [],
+      "prior_year_events": [],
+      "named_events": [],
+      "standardized_narrative": "The Syndicate opened 2024 with gross claims outstanding of GBP 22.206m. The technical provisions reconciliation shows no change in estimates of prior year provisions for 2024 (gross prior year movement nil). The large increase in gross claims outstanding to GBP 44.678m at year end is driven by current year expected cost of claims and foreign exchange movements rather than a reestimation of prior years.",
+      "raw_causal_phrases": [
+        "Change in estimates of prior year provisions - - -"
+      ],
+      "lob_movements": [],
+      "gross_premiums_written_gbp_m": 58.243,
+      "gross_premium_mix": [
+        {
+          "line_of_business": "Fire and other damage to property",
+          "amount_gbp_m": 0.003,
+          "percentage_of_total": 0.0
+        },
+        {
+          "line_of_business": "Third party liability",
+          "amount_gbp_m": 44.445,
+          "percentage_of_total": 76.3
+        },
+        {
+          "line_of_business": "Reinsurance",
+          "amount_gbp_m": 13.704,
+          "percentage_of_total": 23.5
+        },
+        {
+          "line_of_business": "Energy",
+          "amount_gbp_m": 0.091,
+          "percentage_of_total": 0.2
+        }
+      ],
+      "gross_premium_page": 2,
+      "gross_premium_confidence": 1.0,
+      "currency": "GBP",
+      "data_quality_notes": "Prior year movement (gross) taken from Technical Provisions reconciliation table row 'Change in estimates of prior year provisions' which shows no movement (interpreted as zero). A gross claims development table is present (gross triangle) that suggests a small adverse movement on the 2022 column (+0.645m) when comparing diagonals; however the movement row in the main reconciliation is blank/zero and that reconciliation was used as the primary source per instructions. No explicit narrative sentence quantifying a gross prior-year strengthening or release was found. No line-by-line prior-year reserve movement by LOB is disclosed. [RAG OVERRIDE: Model said PYD=0.0, RAG triangle computed 0.645. Using RAG value.]",
+      "_claims_triangle": {
+        "type": "gross",
+        "currency": "GBP",
+        "units": "thousands",
+        "page": 44,
+        "underwriting_years": [
+          2022,
+          2023,
+          2024
+        ],
+        "development_rows": [
+          [
+            4522,
+            6890,
+            7475
+          ],
+          [
+            15355,
+            22459,
+            null
+          ],
+          [
+            16000,
+            null,
+            null
+          ]
+        ]
+      },
+      "source_type": "syndicate",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_1902_2024_llm.pdf",
+      "content_hash": "4caaccb6ded9a84e628a6f5938f1f5cb74d2e14c5e03f769ed10ea976d1c9912",
+      "standardized_at": "2026-09-29T03:40:06.413479+00:00",
+      "standardization_model": "gpt-5-mini",
+      "_extraction_meta": {
+        "model": "gpt-5-mini",
+        "input_tokens": 19738,
+        "output_tokens": 3547,
+        "total_tokens": 23285,
+        "cost_usd": 0.012028
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 0.645,
+        "model_value": 0.0,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": null,
+        "triangle_source_page": null,
+        "note": "overrode the model value"
+      },
+      "_rag_triangle": {
+        "type": "gross",
+        "currency": "GBP",
+        "units": "thousands",
+        "underwriting_years": [
+          2022,
+          2023,
+          2024
+        ],
+        "development_rows": [
+          [
+            4522,
+            6890,
+            7475
+          ],
+          [
+            15355,
+            22459,
+            null
+          ],
+          [
+            16000,
+            null,
+            null
+          ]
+        ]
+      },
+      "_adobe_lob": {
+        "gross_premium_mix": [
+          {
+            "line_of_business": "Fire and other damage to property",
+            "amount_gbp_m": 0.003,
+            "percentage_of_total": 0.0
+          },
+          {
+            "line_of_business": "Third party liability",
+            "amount_gbp_m": 44.445,
+            "percentage_of_total": 76.3
+          },
+          {
+            "line_of_business": "Reinsurance",
+            "amount_gbp_m": 13.704,
+            "percentage_of_total": 23.5
+          },
+          {
+            "line_of_business": "Energy",
+            "amount_gbp_m": 0.091,
+            "percentage_of_total": 0.2
+          }
+        ],
+        "gross_premiums_written_gbp_m": null,
+        "table_total": null,
+        "class_sum": 58.243,
+        "claims_incurred_by_lob": [
+          {
+            "line_of_business": "Fire and other damage to property",
+            "amount_gbp_m": -0.001
+          },
+          {
+            "line_of_business": "Third party liability",
+            "amount_gbp_m": -21.884
+          },
+          {
+            "line_of_business": "Reinsurance",
+            "amount_gbp_m": -1.685
+          },
+          {
+            "line_of_business": "Energy",
+            "amount_gbp_m": -0.026
+          }
+        ],
+        "currency": "GBP",
+        "method": "azure_text_fallback",
+        "reconciled_with": {
+          "value_m": 58.243,
+          "label": "Gross premiums written",
+          "page": 5,
+          "unit_source": "header"
+        }
+      },
+      "_entity_binding": {
+        "requested_syndicate": 1902,
+        "entity_pages": {
+          "none": [
+            0
+          ],
+          "1902": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48,
+            49,
+            50,
+            51,
+            52,
+            53,
+            54,
+            55,
+            56
+          ]
+        },
+        "foreign_tables_skipped": 0,
+        "foreign_pages": [],
+        "underwriting_year_pages": [],
+        "underwriting_year_tables_skipped": 0,
+        "document_unit_hint": 0.001
+      }
+    }
+  },
+  "total_cost_usd": 0.018362,
+  "total_tokens": 45640,
+  "validation": {
+    "passed": true,
+    "total_discrepancies": 13,
+    "within_tolerance": 13,
+    "hard_failures": 0,
+    "hard_failure_details": []
+  }
 }

@@ -1,14 +1,420 @@
 {
-  "extraction_timestamp": "2026-09-11T14:38:54.638160+00:00",
+  "extraction_timestamp": "2026-09-29T03:50:59.730279+00:00",
   "spec": {
     "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
   "source_file": "syndicate_reports\\pdfs\\syndicate_5183_2024.html",
-  "no_triangle_data": true,
-  "excluded": true,
-  "exclusion_reason": "No claims development triangle or reserve movement text found in report - recommend non-inclusion in analysis",
-  "syndicate": 5183,
-  "year": 2024
+  "models": {
+    "gemini-2.5-flash": {
+      "syndicate": 5183,
+      "year": 2024,
+      "opening_reserves_gbp_m": 0.1,
+      "opening_reserves_page": 6,
+      "opening_reserves_confidence": 1.0,
+      "prior_year_development_gbp_m": 0.0,
+      "prior_year_development_pct": 0.0,
+      "direction": "flat",
+      "prior_year_movement_page": 18,
+      "prior_year_movement_confidence": 1.0,
+      "exact_reserve_text": "The 'Change in estimates of prior year provisions' line in the 2024 Claims outstanding reconciliation table on page 18 is blank, indicating no material aggregate prior year reserve movement.",
+      "primary_causes": [],
+      "specific_events": [],
+      "specific_years_affected": [],
+      "prior_year_events": [],
+      "named_events": [],
+      "standardized_narrative": "The syndicate reported no material aggregate prior year reserve development for the year ended 31 December 2024, as indicated by a blank entry for 'Change in estimates of prior year provisions' in the technical provisions note. While the 2022 underwriting year closed with a loss of $0.595 million, this was presented as a final year-of-account result rather than an explicit aggregate prior year reserve movement in the current period's financial statements.",
+      "raw_causal_phrases": [],
+      "lob_movements": [],
+      "gross_premiums_written_gbp_m": -0.633,
+      "gross_premium_mix": [
+        {
+          "line_of_business": "Fire and other damage to property",
+          "amount_gbp_m": 0.011,
+          "percentage_of_total": -1.74
+        },
+        {
+          "line_of_business": "Third party liability",
+          "amount_gbp_m": -0.014,
+          "percentage_of_total": 2.21
+        },
+        {
+          "line_of_business": "Pecuniary Loss",
+          "amount_gbp_m": 0.038,
+          "percentage_of_total": -6.0
+        },
+        {
+          "line_of_business": "Reinsurance acceptances",
+          "amount_gbp_m": -0.668,
+          "percentage_of_total": 105.53
+        }
+      ],
+      "gross_premium_page": 15,
+      "gross_premium_confidence": 1.0,
+      "currency": "USD",
+      "data_quality_notes": "The 'Change in estimates of prior year provisions' line in the Technical Provisions note (page 18) is blank, indicating no material aggregate prior year development was reported. The claims development table on page 22 is not a standard triangle and does not provide cumulative incurred claims by development period.",
+      "_claims_triangle": {
+        "type": "none",
+        "currency": null,
+        "units": null,
+        "page": null,
+        "underwriting_years": [],
+        "development_rows": []
+      },
+      "source_type": "syndicate",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_5183_2024_llm.pdf",
+      "content_hash": "115e6d31c4de14e8462755dafa9417602eef35afb970b99485c39491c9411ecf",
+      "standardized_at": "2026-09-29T03:50:23.133844+00:00",
+      "standardization_model": "gemini-2.5-flash",
+      "_extraction_meta": {
+        "model": "gemini-2.5-flash",
+        "input_tokens": 13505,
+        "output_tokens": 779,
+        "total_tokens": 22103,
+        "cost_usd": 0.005999
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 0.0,
+        "model_value": 0.0,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": null,
+        "triangle_source_page": null,
+        "note": "confirmed by the model value"
+      },
+      "_rag_triangle": {
+        "type": "gross",
+        "currency": "USD",
+        "units": "thousands",
+        "underwriting_years": [
+          2022,
+          2023,
+          2024
+        ],
+        "development_rows": [
+          [
+            null,
+            101,
+            273
+          ],
+          [
+            null,
+            379,
+            null
+          ]
+        ]
+      },
+      "_entity_binding": {
+        "requested_syndicate": 5183,
+        "entity_pages": {
+          "none": [
+            0
+          ],
+          "5183": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48,
+            49,
+            50,
+            51,
+            52,
+            53,
+            54,
+            55,
+            56
+          ]
+        },
+        "foreign_tables_skipped": 0,
+        "foreign_pages": [],
+        "underwriting_year_pages": [],
+        "underwriting_year_tables_skipped": 0,
+        "document_unit_hint": 0.001
+      }
+    },
+    "gpt-5-mini": {
+      "syndicate": 5183,
+      "year": 2024,
+      "opening_reserves_gbp_m": 0.1,
+      "opening_reserves_page": 17,
+      "opening_reserves_confidence": 1.0,
+      "prior_year_development_gbp_m": 0.0,
+      "prior_year_development_pct": 0.0,
+      "direction": "flat",
+      "prior_year_movement_page": 31,
+      "prior_year_movement_confidence": 1.0,
+      "exact_reserve_text": "Change in estimates of prior year provisions - - -",
+      "primary_causes": [],
+      "specific_events": [],
+      "specific_years_affected": [],
+      "prior_year_events": [],
+      "named_events": [],
+      "standardized_narrative": "Opening gross claims outstanding at 1 January 2024 was $100,000 (0.1 million USD). The technical provisions reconciliation shows no change in estimates of prior year provisions during 2024 (zero movement), so prior year development is flat (no release or strengthening). The overall claims outstanding increased in 2024 due to current year claims activity, but prior-year estimates remained unchanged.",
+      "raw_causal_phrases": [
+        "Change in estimates of prior year provisions - - -"
+      ],
+      "lob_movements": [
+        {
+          "line_of_business": "Property",
+          "direction": "flat",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.5
+        },
+        {
+          "line_of_business": "Casualty",
+          "direction": "flat",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.5
+        },
+        {
+          "line_of_business": "Professional Lines",
+          "direction": "flat",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.5
+        },
+        {
+          "line_of_business": "Treaty",
+          "direction": "flat",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.5
+        }
+      ],
+      "gross_premiums_written_gbp_m": -0.633,
+      "gross_premium_mix": [
+        {
+          "line_of_business": "Fire and other damage to property",
+          "amount_gbp_m": 0.011,
+          "percentage_of_total": -1.7378969761474918
+        },
+        {
+          "line_of_business": "Third party liability",
+          "amount_gbp_m": -0.014,
+          "percentage_of_total": 2.212332015810276
+        },
+        {
+          "line_of_business": "Pecuniary Loss",
+          "amount_gbp_m": 0.038,
+          "percentage_of_total": -6.003167460313371
+        },
+        {
+          "line_of_business": "Reinsurance acceptances",
+          "amount_gbp_m": -0.668,
+          "percentage_of_total": 105.52873242065058
+        }
+      ],
+      "gross_premium_page": 28,
+      "gross_premium_confidence": 1.0,
+      "currency": "USD",
+      "data_quality_notes": "Amounts extracted from Syndicate financial statements presented in $'000. Opening gross claims outstanding taken from Statement of Financial Position (prior-year comparative column). Prior year development taken from Technical Provisions reconciliation table where 'Change in estimates of prior year provisions' is shown as nil/'-' (interpreted as zero movement). Claims development triangle is sparse for older years (2022+), with many development cells not yet reached; no named catastrophe events or textual prior-year reserve movement narrative found. All amounts are reported in the native currency (USD) and converted to millions (numeric).",
+      "_claims_triangle": {
+        "type": "gross",
+        "currency": "USD",
+        "units": "thousands",
+        "page": 44,
+        "underwriting_years": [
+          2022,
+          2023,
+          2024
+        ],
+        "development_rows": [
+          [
+            null,
+            101,
+            273
+          ],
+          [
+            null,
+            379,
+            null
+          ],
+          [
+            null,
+            null,
+            null
+          ],
+          [
+            null,
+            null,
+            null
+          ]
+        ]
+      },
+      "source_type": "syndicate",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_5183_2024_llm.pdf",
+      "content_hash": "115e6d31c4de14e8462755dafa9417602eef35afb970b99485c39491c9411ecf",
+      "standardized_at": "2026-09-29T03:50:59.728286+00:00",
+      "standardization_model": "gpt-5-mini",
+      "_extraction_meta": {
+        "model": "gpt-5-mini",
+        "input_tokens": 18033,
+        "output_tokens": 4281,
+        "total_tokens": 22314,
+        "cost_usd": 0.01307
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 0.0,
+        "model_value": 0.0,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": null,
+        "triangle_source_page": null,
+        "note": "confirmed by the model value"
+      },
+      "_rag_triangle": {
+        "type": "gross",
+        "currency": "USD",
+        "units": "thousands",
+        "underwriting_years": [
+          2022,
+          2023,
+          2024
+        ],
+        "development_rows": [
+          [
+            null,
+            101,
+            273
+          ],
+          [
+            null,
+            379,
+            null
+          ]
+        ]
+      },
+      "_entity_binding": {
+        "requested_syndicate": 5183,
+        "entity_pages": {
+          "none": [
+            0
+          ],
+          "5183": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48,
+            49,
+            50,
+            51,
+            52,
+            53,
+            54,
+            55,
+            56
+          ]
+        },
+        "foreign_tables_skipped": 0,
+        "foreign_pages": [],
+        "underwriting_year_pages": [],
+        "underwriting_year_tables_skipped": 0,
+        "document_unit_hint": 0.001
+      }
+    }
+  },
+  "total_cost_usd": 0.019069,
+  "total_tokens": 44417,
+  "validation": {
+    "passed": true,
+    "total_discrepancies": 11,
+    "within_tolerance": 11,
+    "hard_failures": 0,
+    "hard_failure_details": []
+  }
 }

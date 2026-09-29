@@ -1,14 +1,446 @@
 {
-  "extraction_timestamp": "2026-09-11T14:29:22.369832+00:00",
+  "extraction_timestamp": "2026-09-29T03:47:33.768972+00:00",
   "spec": {
     "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
   "source_file": "syndicate_reports\\pdfs\\syndicate_2880_2024.html",
-  "no_triangle_data": true,
-  "excluded": true,
-  "exclusion_reason": "No claims development triangle or reserve movement text found in report - recommend non-inclusion in analysis",
-  "syndicate": 2880,
-  "year": 2024
+  "models": {
+    "gemini-2.5-flash": {
+      "syndicate": 2880,
+      "year": 2024,
+      "opening_reserves_gbp_m": 22.331,
+      "opening_reserves_page": 6,
+      "opening_reserves_confidence": 1.0,
+      "prior_year_development_gbp_m": -3.42,
+      "prior_year_development_pct": -15.32,
+      "direction": "release",
+      "prior_year_movement_page": 17,
+      "prior_year_movement_confidence": 1.0,
+      "exact_reserve_text": "Change in estimates of prior year provisions (4,736)",
+      "primary_causes": [
+        "Favorable claims development"
+      ],
+      "specific_events": [],
+      "specific_years_affected": [],
+      "prior_year_events": [],
+      "named_events": [],
+      "standardized_narrative": "The syndicate reported a gross prior year reserve release of $4.736 million in 2024, representing a 21.21% reduction of its opening gross claims outstanding. This release is primarily attributed to favorable claims development, though specific events or years affected were not detailed.",
+      "raw_causal_phrases": [],
+      "lob_movements": [],
+      "gross_premiums_written_gbp_m": 61.821,
+      "gross_premium_mix": [
+        {
+          "line_of_business": "Fire and other damage to property",
+          "amount_gbp_m": 39.676,
+          "percentage_of_total": 64.18
+        },
+        {
+          "line_of_business": "Marine",
+          "amount_gbp_m": 14.166,
+          "percentage_of_total": 22.91
+        },
+        {
+          "line_of_business": "Reinsurance acceptances",
+          "amount_gbp_m": 7.979,
+          "percentage_of_total": 12.91
+        }
+      ],
+      "gross_premium_page": 14,
+      "gross_premium_confidence": 1.0,
+      "currency": "USD",
+      "data_quality_notes": "Prior year development figure from Note 5 'Technical provisions' table. No specific causal phrases for the release were found in the narrative. [RAG OVERRIDE: Model said PYD=-4.736, RAG triangle computed -3.42. Using RAG value.]",
+      "_claims_triangle": {
+        "type": "gross",
+        "currency": "USD",
+        "units": "thousands",
+        "page": 21,
+        "underwriting_years": [
+          2022,
+          2023,
+          2024
+        ],
+        "development_rows": [
+          [
+            10020,
+            11592,
+            17141
+          ],
+          [
+            11960,
+            22756,
+            null
+          ],
+          [
+            8540,
+            null,
+            null
+          ]
+        ]
+      },
+      "source_type": "syndicate",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_2880_2024_llm.pdf",
+      "content_hash": "35f7f8f628dafd31474f10047e3bb51654812ac76ce704d3995bf507cd33a8e0",
+      "standardized_at": "2026-09-29T03:46:47.270479+00:00",
+      "standardization_model": "gemini-2.5-flash",
+      "_extraction_meta": {
+        "model": "gemini-2.5-flash",
+        "input_tokens": 13247,
+        "output_tokens": 754,
+        "total_tokens": 18112,
+        "cost_usd": 0.005859
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -3.42,
+        "model_value": -4.736,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": null,
+        "triangle_source_page": null,
+        "note": "overrode the model value"
+      },
+      "_rag_triangle": {
+        "type": "gross",
+        "currency": "USD",
+        "units": "thousands",
+        "underwriting_years": [
+          2022,
+          2023,
+          2024
+        ],
+        "development_rows": [
+          [
+            10020,
+            11592,
+            17141
+          ],
+          [
+            11960,
+            22756,
+            null
+          ],
+          [
+            8540,
+            null,
+            null
+          ]
+        ]
+      },
+      "_entity_binding": {
+        "requested_syndicate": 2880,
+        "entity_pages": {
+          "none": [
+            0
+          ],
+          "2880": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48,
+            49,
+            50,
+            51,
+            52,
+            53,
+            54
+          ]
+        },
+        "foreign_tables_skipped": 0,
+        "foreign_pages": [],
+        "underwriting_year_pages": [],
+        "underwriting_year_tables_skipped": 0,
+        "document_unit_hint": 0.001
+      }
+    },
+    "gpt-5-mini": {
+      "syndicate": 2880,
+      "year": 2024,
+      "opening_reserves_gbp_m": 22.331,
+      "opening_reserves_page": 16,
+      "opening_reserves_confidence": 1.0,
+      "prior_year_development_gbp_m": -3.42,
+      "prior_year_development_pct": -15.32,
+      "direction": "release",
+      "prior_year_movement_page": 30,
+      "prior_year_movement_confidence": 1.0,
+      "exact_reserve_text": "Change in estimates of prior year provisions (4,736) 2,291 (2,445)",
+      "primary_causes": [
+        "Favorable claims development"
+      ],
+      "specific_events": [],
+      "specific_years_affected": [],
+      "prior_year_events": [],
+      "named_events": [],
+      "standardized_narrative": "The Syndicate's technical provisions show a gross reduction in prior year estimates of $4.736m (a c.21.2% release versus opening gross claims outstanding of $22.331m). This movement is reported in the Technical Provisions note as a change in estimates of prior year provisions and is presented as a favourable movement in reserves.",
+      "raw_causal_phrases": [
+        "Change in estimates of prior year provisions (4,736) 2,291 (2,445)",
+        "Reserve adequacy is monitored through quarterly review by the Asta Actuarial team and the Management Committee."
+      ],
+      "lob_movements": [
+        {
+          "line_of_business": "Property",
+          "direction": "release",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.0
+        },
+        {
+          "line_of_business": "Marine",
+          "direction": "release",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.0
+        },
+        {
+          "line_of_business": "Energy",
+          "direction": "release",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.0
+        },
+        {
+          "line_of_business": "Treaty",
+          "direction": "release",
+          "amount_gbp_m": null,
+          "percentage": null,
+          "confidence": 0.0
+        }
+      ],
+      "gross_premiums_written_gbp_m": 61.821,
+      "gross_premium_mix": [
+        {
+          "line_of_business": "Fire and other damage to property",
+          "amount_gbp_m": 39.676,
+          "percentage_of_total": 64.18
+        },
+        {
+          "line_of_business": "Marine",
+          "amount_gbp_m": 14.166,
+          "percentage_of_total": 22.91
+        },
+        {
+          "line_of_business": "Reinsurance Accepted",
+          "amount_gbp_m": 7.979,
+          "percentage_of_total": 12.9
+        },
+        {
+          "line_of_business": "Transport",
+          "amount_gbp_m": 0.0,
+          "percentage_of_total": 0.0
+        },
+        {
+          "line_of_business": "Energy - Non Marine",
+          "amount_gbp_m": 0.0,
+          "percentage_of_total": 0.0
+        }
+      ],
+      "gross_premium_page": 2,
+      "gross_premium_confidence": 1.0,
+      "currency": "USD",
+      "data_quality_notes": "Prior year movement taken directly from Technical Provisions note row 'Change in estimates of prior year provisions'. Amounts in report are presented in $'000; values here converted to millions (no currency conversion). No narrative explanation attributing the prior year change to specific underwriting classes or named events was provided. A gross claims development table is present but its formatting in the PDF is fragmented; triangle extracted as-is for cross-checking. [RAG OVERRIDE: Model said PYD=-4.736, RAG triangle computed -3.42. Using RAG value.]",
+      "_claims_triangle": {
+        "type": "gross",
+        "currency": "USD",
+        "units": "thousands",
+        "page": 43,
+        "underwriting_years": [
+          2022,
+          2023,
+          2024
+        ],
+        "development_rows": [
+          [
+            10020,
+            11592,
+            17141
+          ],
+          [
+            11960,
+            22756,
+            null
+          ],
+          [
+            8540,
+            null,
+            null
+          ]
+        ]
+      },
+      "source_type": "syndicate",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_2880_2024_llm.pdf",
+      "content_hash": "35f7f8f628dafd31474f10047e3bb51654812ac76ce704d3995bf507cd33a8e0",
+      "standardized_at": "2026-09-29T03:47:33.766973+00:00",
+      "standardization_model": "gpt-5-mini",
+      "_extraction_meta": {
+        "model": "gpt-5-mini",
+        "input_tokens": 19111,
+        "output_tokens": 4820,
+        "total_tokens": 23931,
+        "cost_usd": 0.014418
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -3.42,
+        "model_value": -4.736,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": null,
+        "triangle_source_page": null,
+        "note": "overrode the model value"
+      },
+      "_rag_triangle": {
+        "type": "gross",
+        "currency": "USD",
+        "units": "thousands",
+        "underwriting_years": [
+          2022,
+          2023,
+          2024
+        ],
+        "development_rows": [
+          [
+            10020,
+            11592,
+            17141
+          ],
+          [
+            11960,
+            22756,
+            null
+          ],
+          [
+            8540,
+            null,
+            null
+          ]
+        ]
+      },
+      "_entity_binding": {
+        "requested_syndicate": 2880,
+        "entity_pages": {
+          "none": [
+            0
+          ],
+          "2880": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48,
+            49,
+            50,
+            51,
+            52,
+            53,
+            54
+          ]
+        },
+        "foreign_tables_skipped": 0,
+        "foreign_pages": [],
+        "underwriting_year_pages": [],
+        "underwriting_year_tables_skipped": 0,
+        "document_unit_hint": 0.001
+      }
+    }
+  },
+  "total_cost_usd": 0.020277,
+  "total_tokens": 42043,
+  "validation": {
+    "passed": true,
+    "total_discrepancies": 10,
+    "within_tolerance": 10,
+    "hard_failures": 0,
+    "hard_failure_details": []
+  }
 }

@@ -1,14 +1,671 @@
 {
-  "extraction_timestamp": "2026-09-11T14:22:13.578520+00:00",
+  "extraction_timestamp": "2026-09-29T03:46:01.307412+00:00",
   "spec": {
     "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
   "source_file": "syndicate_reports\\pdfs\\syndicate_2689_2024.html",
-  "no_triangle_data": true,
-  "excluded": true,
-  "exclusion_reason": "No claims development triangle or reserve movement text found in report - recommend non-inclusion in analysis",
-  "syndicate": 2689,
-  "year": 2024
+  "models": {
+    "gemini-2.5-flash": {
+      "syndicate": 2689,
+      "year": 2024,
+      "opening_reserves_gbp_m": 131.452,
+      "opening_reserves_page": 6,
+      "opening_reserves_confidence": 1.0,
+      "prior_year_development_gbp_m": 23.605,
+      "prior_year_development_pct": 17.96,
+      "direction": "strengthening",
+      "prior_year_movement_page": 15,
+      "prior_year_movement_confidence": 1.0,
+      "exact_reserve_text": "Change in estimates of prior year provisions",
+      "primary_causes": [
+        "Economic inflation / claims cost inflation",
+        "Regulatory changes",
+        "Court rulings / legal developments",
+        "Other"
+      ],
+      "specific_events": [],
+      "specific_years_affected": [],
+      "prior_year_events": [
+        {
+          "event_name": "2022 Year of Account Closure",
+          "event_year": 2022,
+          "impact_description": "The 2022 underwriting year closed with a profit of $763k, indicating a net release of reserves for that year.",
+          "lobs_affected": [],
+          "amount_gbp_m": -0.763,
+          "confidence": 0.8
+        }
+      ],
+      "named_events": [],
+      "standardized_narrative": "The syndicate experienced a slight strengthening of its gross claims reserves from prior underwriting years, amounting to $0.477 million in 2024. This adjustment reflects changes in estimates for claims provisions established in previous periods. General factors influencing reserve estimates include claim inflation, market conditions, and legal/regulatory developments. The 2022 year of account closed with a net profit of $0.763 million, indicating a release for that specific prior year.",
+      "raw_causal_phrases": [
+        "claim inflation factors",
+        "once-off occurrence",
+        "changes in market factors",
+        "economic conditions",
+        "portfolio mix",
+        "policy conditions",
+        "claims handling procedures",
+        "judicial decisions and government legislation"
+      ],
+      "lob_movements": [],
+      "gross_premiums_written_gbp_m": 101.148,
+      "gross_premium_mix": [
+        {
+          "line_of_business": "Fire and other damage to property",
+          "amount_gbp_m": 4.193,
+          "percentage_of_total": 4.1
+        },
+        {
+          "line_of_business": "Third party liability",
+          "amount_gbp_m": 4.606,
+          "percentage_of_total": 4.6
+        },
+        {
+          "line_of_business": "Pecuniary loss",
+          "amount_gbp_m": 0.891,
+          "percentage_of_total": 0.9
+        },
+        {
+          "line_of_business": "Reinsurance",
+          "amount_gbp_m": 91.491,
+          "percentage_of_total": 90.4
+        },
+        {
+          "line_of_business": "Energy",
+          "amount_gbp_m": 0.002,
+          "percentage_of_total": 0.0
+        }
+      ],
+      "gross_premium_page": 13,
+      "gross_premium_confidence": 1.0,
+      "currency": "USD",
+      "data_quality_notes": "The prior year development figure is taken from the explicit 'Change in estimates of prior year provisions' line item in the Technical Provisions note, which is considered more direct than an inferred calculation from the claims development triangle. The claims development triangle shows a significantly larger positive movement for prior years, but the explicit line item is preferred. The 'Forecast result' for the 2022 YOA indicates a net release for that specific year, but the overall gross PYD is a strengthening. [RAG OVERRIDE: Model said PYD=0.477, RAG triangle computed 23.605. Using RAG value.]",
+      "_claims_triangle": {
+        "type": "gross",
+        "currency": "USD",
+        "units": "thousands",
+        "page": 20,
+        "underwriting_years": [
+          2020,
+          2021,
+          2022,
+          2023,
+          2024
+        ],
+        "development_rows": [
+          [
+            42664.0,
+            50266.0,
+            33141.0,
+            21288.0,
+            28924.0
+          ],
+          [
+            92739.0,
+            95732.0,
+            63284.0,
+            25078.0,
+            null
+          ],
+          [
+            122683.0,
+            133704.0,
+            84351.0,
+            null,
+            null
+          ],
+          [
+            125588.0,
+            133736.0,
+            null,
+            null,
+            null
+          ],
+          [
+            128094.0,
+            null,
+            null,
+            null,
+            null
+          ]
+        ]
+      },
+      "source_type": "syndicate",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_2689_2024_llm.pdf",
+      "content_hash": "30cf17e6af3b5ab891c53336afe5a10919fae8e2d046e1827da25891d32a0f60",
+      "standardized_at": "2026-09-29T03:45:22.030841+00:00",
+      "standardization_model": "gemini-2.5-flash",
+      "_extraction_meta": {
+        "model": "gemini-2.5-flash",
+        "input_tokens": 12731,
+        "output_tokens": 1553,
+        "total_tokens": 21366,
+        "cost_usd": 0.007702
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 23.605,
+        "model_value": 0.477,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": null,
+        "triangle_source_page": null,
+        "note": "overrode the model value"
+      },
+      "_rag_triangle": {
+        "type": "gross",
+        "currency": "USD",
+        "units": "thousands",
+        "underwriting_years": [
+          2020,
+          2021,
+          2022,
+          2023,
+          2024
+        ],
+        "development_rows": [
+          [
+            42664,
+            50266,
+            33141,
+            21288,
+            28924
+          ],
+          [
+            92739,
+            95732,
+            63284,
+            25078,
+            null
+          ],
+          [
+            122683,
+            133704,
+            84351,
+            null,
+            null
+          ],
+          [
+            125588,
+            133736,
+            null,
+            null,
+            null
+          ],
+          [
+            128094,
+            null,
+            null,
+            null,
+            null
+          ]
+        ]
+      },
+      "_adobe_lob": {
+        "gross_premium_mix": [
+          {
+            "line_of_business": "Fire and other damage to property",
+            "amount_gbp_m": 4.193,
+            "percentage_of_total": 4.1
+          },
+          {
+            "line_of_business": "Third party liability",
+            "amount_gbp_m": 4.606,
+            "percentage_of_total": 4.6
+          },
+          {
+            "line_of_business": "Pecuniary loss",
+            "amount_gbp_m": 0.891,
+            "percentage_of_total": 0.9
+          },
+          {
+            "line_of_business": "Reinsurance",
+            "amount_gbp_m": 91.491,
+            "percentage_of_total": 90.4
+          },
+          {
+            "line_of_business": "Energy",
+            "amount_gbp_m": 0.002,
+            "percentage_of_total": 0.0
+          }
+        ],
+        "gross_premiums_written_gbp_m": null,
+        "table_total": null,
+        "class_sum": 101.183,
+        "claims_incurred_by_lob": [
+          {
+            "line_of_business": "Fire and other damage to property",
+            "amount_gbp_m": -0.015
+          },
+          {
+            "line_of_business": "Third party liability",
+            "amount_gbp_m": -1.003
+          },
+          {
+            "line_of_business": "Pecuniary loss",
+            "amount_gbp_m": -0.019
+          },
+          {
+            "line_of_business": "Reinsurance",
+            "amount_gbp_m": -35.367
+          },
+          {
+            "line_of_business": "Energy",
+            "amount_gbp_m": 0.034
+          }
+        ],
+        "currency": "USD",
+        "method": "azure_text_fallback",
+        "reconciled_with": {
+          "value_m": 101.148,
+          "label": "Gross premiums written",
+          "page": 7,
+          "unit_source": "header"
+        }
+      },
+      "_entity_binding": {
+        "requested_syndicate": 2689,
+        "entity_pages": {
+          "none": [
+            0
+          ],
+          "2689": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48,
+            49,
+            50,
+            51,
+            52,
+            53,
+            54,
+            55,
+            56
+          ]
+        },
+        "foreign_tables_skipped": 0,
+        "foreign_pages": [],
+        "underwriting_year_pages": [],
+        "underwriting_year_tables_skipped": 0,
+        "document_unit_hint": 0.001
+      }
+    },
+    "gpt-5-mini": {
+      "syndicate": 2689,
+      "year": 2024,
+      "opening_reserves_gbp_m": 131.452,
+      "opening_reserves_page": 18,
+      "opening_reserves_confidence": 1.0,
+      "prior_year_development_gbp_m": 23.605,
+      "prior_year_development_pct": 17.96,
+      "direction": "strengthening",
+      "prior_year_movement_page": 31,
+      "prior_year_movement_confidence": 1.0,
+      "exact_reserve_text": "Change in estimates of prior year provisions 477 - 477",
+      "primary_causes": [
+        "Adverse claims development"
+      ],
+      "specific_events": [],
+      "specific_years_affected": [],
+      "prior_year_events": [],
+      "named_events": [],
+      "standardized_narrative": "The Syndicate recorded a small gross strengthening in prior year claims reserves of 0.477 (thousand USD) (0.477 million USD), equivalent to c.0.36% of the opening gross claims outstanding. The movement is disclosed in the technical provisions note as \"Change in estimates of prior year provisions\" and no specific events or detailed causal narrative are provided.",
+      "raw_causal_phrases": [
+        "Change in estimates of prior year provisions"
+      ],
+      "lob_movements": [
+        {
+          "line_of_business": "Aggregate",
+          "direction": "strengthening",
+          "amount_gbp_m": 0.477,
+          "percentage": null,
+          "confidence": 1.0
+        }
+      ],
+      "gross_premiums_written_gbp_m": 101.148,
+      "gross_premium_mix": [
+        {
+          "line_of_business": "Fire and other damage to property",
+          "amount_gbp_m": 4.193,
+          "percentage_of_total": 4.1
+        },
+        {
+          "line_of_business": "Third party liability",
+          "amount_gbp_m": 4.606,
+          "percentage_of_total": 4.6
+        },
+        {
+          "line_of_business": "Pecuniary loss",
+          "amount_gbp_m": 0.891,
+          "percentage_of_total": 0.9
+        },
+        {
+          "line_of_business": "Reinsurance",
+          "amount_gbp_m": 91.491,
+          "percentage_of_total": 90.4
+        },
+        {
+          "line_of_business": "Energy",
+          "amount_gbp_m": 0.002,
+          "percentage_of_total": 0.0
+        }
+      ],
+      "gross_premium_page": 2,
+      "gross_premium_confidence": 1.0,
+      "currency": "USD",
+      "data_quality_notes": "Opening gross claims outstanding taken from Statement of Financial Position liabilities (Claims outstanding) prior-year column. Prior year development taken from Technical provisions note (Change in estimates of prior year provisions = 477 $'000). No narrative explanation or LOB split for the prior year movement was provided. All amounts in the report are presented in USD thousands and have been converted to millions in this output. A gross claims development triangle is present in the report and was cross-checked. [RAG OVERRIDE: Model said PYD=0.477, RAG triangle computed 23.605. Using RAG value.]",
+      "_claims_triangle": {
+        "type": "gross",
+        "currency": "USD",
+        "units": "thousands",
+        "page": 44,
+        "underwriting_years": [
+          2020,
+          2021,
+          2022,
+          2023,
+          2024
+        ],
+        "development_rows": [
+          [
+            42664,
+            50266,
+            33141,
+            21288,
+            28924
+          ],
+          [
+            92739,
+            95732,
+            63284,
+            25078,
+            null
+          ],
+          [
+            122683,
+            133704,
+            84351,
+            null,
+            null
+          ],
+          [
+            125588,
+            133736,
+            null,
+            null,
+            null
+          ],
+          [
+            128094,
+            null,
+            null,
+            null,
+            null
+          ]
+        ]
+      },
+      "source_type": "syndicate",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_2689_2024_llm.pdf",
+      "content_hash": "30cf17e6af3b5ab891c53336afe5a10919fae8e2d046e1827da25891d32a0f60",
+      "standardized_at": "2026-09-29T03:46:01.304905+00:00",
+      "standardization_model": "gpt-5-mini",
+      "_extraction_meta": {
+        "model": "gpt-5-mini",
+        "input_tokens": 18469,
+        "output_tokens": 4561,
+        "total_tokens": 23030,
+        "cost_usd": 0.013739
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": 23.605,
+        "model_value": 0.477,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": null,
+        "triangle_source_page": null,
+        "note": "overrode the model value"
+      },
+      "_rag_triangle": {
+        "type": "gross",
+        "currency": "USD",
+        "units": "thousands",
+        "underwriting_years": [
+          2020,
+          2021,
+          2022,
+          2023,
+          2024
+        ],
+        "development_rows": [
+          [
+            42664,
+            50266,
+            33141,
+            21288,
+            28924
+          ],
+          [
+            92739,
+            95732,
+            63284,
+            25078,
+            null
+          ],
+          [
+            122683,
+            133704,
+            84351,
+            null,
+            null
+          ],
+          [
+            125588,
+            133736,
+            null,
+            null,
+            null
+          ],
+          [
+            128094,
+            null,
+            null,
+            null,
+            null
+          ]
+        ]
+      },
+      "_adobe_lob": {
+        "gross_premium_mix": [
+          {
+            "line_of_business": "Fire and other damage to property",
+            "amount_gbp_m": 4.193,
+            "percentage_of_total": 4.1
+          },
+          {
+            "line_of_business": "Third party liability",
+            "amount_gbp_m": 4.606,
+            "percentage_of_total": 4.6
+          },
+          {
+            "line_of_business": "Pecuniary loss",
+            "amount_gbp_m": 0.891,
+            "percentage_of_total": 0.9
+          },
+          {
+            "line_of_business": "Reinsurance",
+            "amount_gbp_m": 91.491,
+            "percentage_of_total": 90.4
+          },
+          {
+            "line_of_business": "Energy",
+            "amount_gbp_m": 0.002,
+            "percentage_of_total": 0.0
+          }
+        ],
+        "gross_premiums_written_gbp_m": null,
+        "table_total": null,
+        "class_sum": 101.183,
+        "claims_incurred_by_lob": [
+          {
+            "line_of_business": "Fire and other damage to property",
+            "amount_gbp_m": -0.015
+          },
+          {
+            "line_of_business": "Third party liability",
+            "amount_gbp_m": -1.003
+          },
+          {
+            "line_of_business": "Pecuniary loss",
+            "amount_gbp_m": -0.019
+          },
+          {
+            "line_of_business": "Reinsurance",
+            "amount_gbp_m": -35.367
+          },
+          {
+            "line_of_business": "Energy",
+            "amount_gbp_m": 0.034
+          }
+        ],
+        "currency": "USD",
+        "method": "azure_text_fallback",
+        "reconciled_with": {
+          "value_m": 101.148,
+          "label": "Gross premiums written",
+          "page": 7,
+          "unit_source": "header"
+        }
+      },
+      "_entity_binding": {
+        "requested_syndicate": 2689,
+        "entity_pages": {
+          "none": [
+            0
+          ],
+          "2689": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48,
+            49,
+            50,
+            51,
+            52,
+            53,
+            54,
+            55,
+            56
+          ]
+        },
+        "foreign_tables_skipped": 0,
+        "foreign_pages": [],
+        "underwriting_year_pages": [],
+        "underwriting_year_tables_skipped": 0,
+        "document_unit_hint": 0.001
+      }
+    }
+  },
+  "total_cost_usd": 0.021441,
+  "total_tokens": 44396,
+  "validation": {
+    "passed": true,
+    "total_discrepancies": 22,
+    "within_tolerance": 22,
+    "hard_failures": 0,
+    "hard_failure_details": []
+  }
 }

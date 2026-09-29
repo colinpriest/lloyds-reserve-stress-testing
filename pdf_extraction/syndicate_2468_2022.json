@@ -1,14 +1,481 @@
 {
-  "extraction_timestamp": "2026-09-21T11:37:34.435454+00:00",
+  "extraction_timestamp": "2026-09-29T03:28:45.914839+00:00",
   "spec": {
     "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
     "field_definitions_version": "1.0",
     "tolerance_rules_version": "1.0"
   },
   "source_file": "syndicate_reports\\pdfs\\syndicate_2468_2022.pdf",
-  "no_triangle_data": true,
-  "excluded": true,
-  "exclusion_reason": "No claims development triangle or reserve movement text found in report - recommend non-inclusion in analysis",
-  "syndicate": 2468,
-  "year": 2022
+  "models": {
+    "gemini-2.5-flash": {
+      "syndicate": 2468,
+      "year": 2022,
+      "opening_reserves_gbp_m": 312.493,
+      "opening_reserves_page": 3,
+      "opening_reserves_confidence": 1.0,
+      "prior_year_development_gbp_m": -0.153,
+      "prior_year_development_pct": -0.05,
+      "direction": "release",
+      "prior_year_movement_page": 12,
+      "prior_year_movement_confidence": 1.0,
+      "exact_reserve_text": "Change in estimates of technical provisions, including foreign exchange (1,104)",
+      "primary_causes": [
+        "Favorable claims development"
+      ],
+      "specific_events": [],
+      "specific_years_affected": [],
+      "prior_year_events": [
+        {
+          "event_name": "Reinsurance to Close (RITC) of 2019 and prior years of account",
+          "event_year": 2022,
+          "impact_description": "Transfer of liabilities for 2019 and prior years of account to Syndicate 3500",
+          "lobs_affected": [],
+          "amount_gbp_m": -295.729,
+          "confidence": 1.0
+        }
+      ],
+      "named_events": [
+        {
+          "event_name": "Reinsurance to Close (RITC) of 2019 and prior years of account",
+          "event_year": 2022,
+          "event_type": "other",
+          "net_loss_gbp_m": null,
+          "loss_description": "Transfer of liabilities for 2019 and prior years of account to Syndicate 3500",
+          "lobs_affected": [],
+          "page": 1,
+          "confidence": 1.0
+        }
+      ],
+      "standardized_narrative": "Syndicate 2468 reported a prior year reserve release of GBP 1.104 million, primarily attributed to favorable claims development. This movement is distinct from the significant transfer of GBP 295.729 million in gross liabilities for the 2019 and prior years of account to Syndicate 3500, which occurred as part of a Reinsurance to Close (RITC) transaction effective January 1, 2022. No specific events or lines of business were detailed as causes for the reserve release.",
+      "raw_causal_phrases": [
+        "claims experience develops",
+        "current facts available",
+        "prevailing legal environment",
+        "subjected to continual review"
+      ],
+      "lob_movements": [],
+      "gross_premiums_written_gbp_m": 0.0,
+      "gross_premium_mix": [
+        {
+          "line_of_business": "Accident and health",
+          "amount_gbp_m": 0.0,
+          "percentage_of_total": 0.0
+        },
+        {
+          "line_of_business": "Motor",
+          "amount_gbp_m": 0.0,
+          "percentage_of_total": 0.0
+        },
+        {
+          "line_of_business": "Marine, aviation and transport",
+          "amount_gbp_m": 0.0,
+          "percentage_of_total": 0.0
+        },
+        {
+          "line_of_business": "Credit and surety",
+          "amount_gbp_m": 0.0,
+          "percentage_of_total": 0.0
+        },
+        {
+          "line_of_business": "Fire and other damage to property",
+          "amount_gbp_m": 0.0,
+          "percentage_of_total": 0.0
+        },
+        {
+          "line_of_business": "Third party liability",
+          "amount_gbp_m": 0.0,
+          "percentage_of_total": 0.0
+        },
+        {
+          "line_of_business": "Reinsurance acceptances",
+          "amount_gbp_m": 0.0,
+          "percentage_of_total": 0.0
+        }
+      ],
+      "gross_premium_page": 11,
+      "gross_premium_confidence": 0.5,
+      "currency": "GBP",
+      "data_quality_notes": "The 'Gross premiums written' total in the Segmental Analysis (Page 11) is GBP 0, consistent with the Profit and Loss Account. However, the individual lines of business in the Segmental Analysis for 2022 sum to GBP 194, creating an internal inconsistency in the report. The gross_premium_mix reflects the explicit total of GBP 0 by setting individual LOB amounts to zero. The 'Premiums written in the year' in the Unearned Premium note (Page 12) is also contradictory, showing (GBP 194) GBP '000. [RAG OVERRIDE: Model said PYD=-1.104, RAG triangle computed -0.153. Using RAG value.]",
+      "_claims_triangle": {
+        "type": "gross",
+        "currency": "GBP",
+        "units": "thousands",
+        "page": 9,
+        "underwriting_years": [
+          2020
+        ],
+        "development_rows": [
+          [
+            29267
+          ],
+          [
+            28431
+          ],
+          [
+            28278
+          ],
+          [
+            null
+          ],
+          [
+            null
+          ],
+          [
+            null
+          ]
+        ]
+      },
+      "source_type": "syndicate",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_2468_2022_llm.pdf",
+      "content_hash": "e581e7fed5fb4ee15eaef35e1847a375384eef4b1cf528f223da611dcf1347da",
+      "standardized_at": "2026-09-29T03:27:47.516257+00:00",
+      "standardization_model": "gemini-2.5-flash",
+      "_extraction_meta": {
+        "model": "gemini-2.5-flash",
+        "input_tokens": 9893,
+        "output_tokens": 1340,
+        "total_tokens": 18987,
+        "cost_usd": 0.006318
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -0.153,
+        "model_value": -1.104,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 22,
+        "note": "overrode the model value"
+      },
+      "_rag_triangle": {
+        "type": "gross",
+        "currency": "GBP",
+        "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
+        "underwriting_years": [
+          2020
+        ],
+        "development_rows": [
+          [
+            29267.0
+          ],
+          [
+            28431.0
+          ],
+          [
+            28278.0
+          ]
+        ],
+        "row_labels": [
+          "At the end of the first year",
+          "- One year later",
+          "- Two years later"
+        ],
+        "source_page": 22,
+        "entity": 2468
+      },
+      "_entity_binding": {
+        "requested_syndicate": 2468,
+        "entity_pages": {
+          "2468": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34
+          ]
+        },
+        "foreign_tables_skipped": 0,
+        "foreign_pages": [],
+        "underwriting_year_pages": [],
+        "underwriting_year_tables_skipped": 0,
+        "document_unit_hint": 0.001
+      }
+    },
+    "gpt-5-mini": {
+      "syndicate": 2468,
+      "year": 2022,
+      "opening_reserves_gbp_m": 312.493,
+      "opening_reserves_page": 12,
+      "opening_reserves_confidence": 1.0,
+      "prior_year_development_gbp_m": -0.153,
+      "prior_year_development_pct": -0.05,
+      "direction": "release",
+      "prior_year_movement_page": 27,
+      "prior_year_movement_confidence": 1.0,
+      "exact_reserve_text": "The change in the provisions for claims outstanding during the year was as follows:\n\nClaims outstanding at 1 January 312,493 (94,563) 217,930\nChange in estimates of technical provisions, including foreign exchange (1,104) 1,275 (217,839)\n2019 & Prior transfer to 3500 (295,729) 77,719 (218,010)\nPaid claims (4,460) 4,369 (91)\nClaims outstanding at 31 December GBP 11,200 GBP (11,200) GBP -",
+      "primary_causes": [
+        "Favorable claims development",
+        "Reinsurance recoveries"
+      ],
+      "specific_events": [],
+      "specific_years_affected": [
+        2019,
+        2020
+      ],
+      "prior_year_events": [
+        {
+          "event_name": "2019 & Prior transfer to 3500 (Reinsurance to Close)",
+          "event_year": 2022,
+          "impact_description": "Large reduction in gross claims outstanding due to the reinsurance to close transfer of 2019 & prior years to Syndicate 3500.",
+          "lobs_affected": [
+            "Property",
+            "Casualty",
+            "Marine",
+            "Treaty"
+          ],
+          "amount_gbp_m": -295.729,
+          "confidence": 1.0
+        }
+      ],
+      "named_events": [],
+      "standardized_narrative": "Opening gross claims outstanding at 1 January 2022 were GBP 312.493m. During 2022 gross claims outstanding reduced materially to GBP 11.200m at year end. The movement was driven primarily by a large reinsurance-to-close transfer of 2019 & prior years to Syndicate 3500 (gross release of GBP 295.729m) together with a small favourable change in estimates of GBP 1.104m (release). Paid claims during the year totalled GBP 4.460m. The net effect was a substantial release of prior year reserves largely due to the RITC together with modest favourable claims development.",
+      "raw_causal_phrases": [
+        "The change in the provisions for claims outstanding during the year was as follows:",
+        "Change in estimates of technical provisions, including foreign exchange",
+        "2019 & Prior transfer to 3500",
+        "The reduction in Financial Investments and Cash and Gross Technical provisions during 2022, primarily reflects the impact of the successful reinsurance to close of the 2019 year of account and the continued run-off of Syndicate 2468 through 2022.",
+        "Whilst the board of directors of the Managing Agent (\"the Board\") believes that the provisions for outstanding claims and related reinsurance recoveries including bad debt provisions are fairly stated, these estimates inevitably contain inherent uncertainties"
+      ],
+      "lob_movements": [
+        {
+          "line_of_business": "Property",
+          "direction": "release",
+          "amount_gbp_m": -51.078,
+          "percentage": null,
+          "confidence": 1.0
+        },
+        {
+          "line_of_business": "Casualty",
+          "direction": "release",
+          "amount_gbp_m": -154.473,
+          "percentage": null,
+          "confidence": 1.0
+        },
+        {
+          "line_of_business": "Marine",
+          "direction": "release",
+          "amount_gbp_m": -28.897,
+          "percentage": null,
+          "confidence": 1.0
+        },
+        {
+          "line_of_business": "Accident & Health",
+          "direction": "release",
+          "amount_gbp_m": -4.943,
+          "percentage": null,
+          "confidence": 0.9
+        },
+        {
+          "line_of_business": "Reinsurance - Property",
+          "direction": "release",
+          "amount_gbp_m": -18.174,
+          "percentage": null,
+          "confidence": 1.0
+        },
+        {
+          "line_of_business": "Reinsurance - Specialty",
+          "direction": "release",
+          "amount_gbp_m": -38.078,
+          "percentage": null,
+          "confidence": 0.5
+        }
+      ],
+      "gross_premiums_written_gbp_m": 0.0,
+      "gross_premium_mix": [
+        {
+          "line_of_business": "Marine, aviation and transport",
+          "amount_gbp_m": 0.0,
+          "percentage_of_total": null
+        },
+        {
+          "line_of_business": "Fire and other damage to property",
+          "amount_gbp_m": 0.0,
+          "percentage_of_total": null
+        },
+        {
+          "line_of_business": "Third party liability",
+          "amount_gbp_m": 0.0,
+          "percentage_of_total": null
+        },
+        {
+          "line_of_business": "Reinsurance acceptances",
+          "amount_gbp_m": 0.0,
+          "percentage_of_total": null
+        }
+      ],
+      "gross_premium_page": 26,
+      "gross_premium_confidence": 0.8,
+      "currency": "GBP",
+      "data_quality_notes": "Primary gross opening reserve sourced from Balance Sheet (explicit). Prior-year reserve movement: the 'Change in estimates of technical provisions' line was used (-GBP 1.104m) as the prior-year re-estimation (release). A very large additional movement arose from a 2019 & prior reinsurance-to-close transfer out (GBP 295.729m) which dominates the movement but is a transfer rather than pure re-estimation; both items are recorded in the technical provisions reconciliation. Some LOB mappings required judgement (e.g. Credit & suretyship mapped to Reinsurance - Specialty). Gross premiums written for 2022 are effectively nil in the statutory segmental table, so mix percentages are not calculable. [RAG OVERRIDE: Model said PYD=-1.104, RAG triangle computed -0.153. Using RAG value.]",
+      "_claims_triangle": {
+        "type": "gross",
+        "currency": "GBP",
+        "units": "thousands",
+        "page": 22,
+        "underwriting_years": [
+          2020
+        ],
+        "development_rows": [
+          [
+            29267
+          ],
+          [
+            28431
+          ],
+          [
+            28278
+          ],
+          [
+            null
+          ],
+          [
+            null
+          ],
+          [
+            null
+          ]
+        ]
+      },
+      "source_type": "syndicate",
+      "source_file": "pdf_extraction\\llm_slim\\syndicate_2468_2022_llm.pdf",
+      "content_hash": "e581e7fed5fb4ee15eaef35e1847a375384eef4b1cf528f223da611dcf1347da",
+      "standardized_at": "2026-09-29T03:28:45.911838+00:00",
+      "standardization_model": "gpt-5-mini",
+      "_extraction_meta": {
+        "model": "gpt-5-mini",
+        "input_tokens": 15228,
+        "output_tokens": 7269,
+        "total_tokens": 22497,
+        "cost_usd": 0.018345
+      },
+      "_pyd_route": {
+        "source": "rag_triangle",
+        "value": -0.153,
+        "model_value": -1.104,
+        "triangle_type": "gross",
+        "triangle_units": "thousands",
+        "triangle_units_evidence": "header",
+        "triangle_source_page": 22,
+        "note": "overrode the model value"
+      },
+      "_rag_triangle": {
+        "type": "gross",
+        "currency": "GBP",
+        "units": "thousands",
+        "units_evidence": "header",
+        "cell_binding": "header",
+        "underwriting_years": [
+          2020
+        ],
+        "development_rows": [
+          [
+            29267.0
+          ],
+          [
+            28431.0
+          ],
+          [
+            28278.0
+          ]
+        ],
+        "row_labels": [
+          "At the end of the first year",
+          "- One year later",
+          "- Two years later"
+        ],
+        "source_page": 22,
+        "entity": 2468
+      },
+      "_entity_binding": {
+        "requested_syndicate": 2468,
+        "entity_pages": {
+          "2468": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34
+          ]
+        },
+        "foreign_tables_skipped": 0,
+        "foreign_pages": [],
+        "underwriting_year_pages": [],
+        "underwriting_year_tables_skipped": 0,
+        "document_unit_hint": 0.001
+      }
+    }
+  },
+  "total_cost_usd": 0.024663,
+  "total_tokens": 41484,
+  "validation": {
+    "passed": true,
+    "total_discrepancies": 31,
+    "within_tolerance": 31,
+    "hard_failures": 0,
+    "hard_failure_details": []
+  }
 }

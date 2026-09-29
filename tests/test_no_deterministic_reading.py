@@ -102,8 +102,9 @@ def test_every_committed_unread_record_is_restated_or_listed_for_a_new_extractio
         assert d.get("exclusion_reason") == tg.NO_DETERMINISTIC_READING_REASON, path.name
         assert not ABSENCE.search(json.dumps(d)), path.name
         restated.append(path.stem)
-    # round 62: 45 restated, 13 waiting for the models (the list shrinks as they are extracted)
-    assert restated and len(restated) + len(waiting) <= 58
+    # round 62: the 13 waiting records were extracted again with the models on 29 September 2026
+    # (12 now carry a figure, 1985/2024 became a first-year stub), so 45 are restated and none waits
+    assert len(restated) == 45 and not waiting, (len(restated), waiting)
 
 
 def test_the_restatement_is_complete_and_changes_nothing_else():
@@ -132,7 +133,8 @@ def test_every_committed_first_year_stub_carries_the_current_reason_and_models_r
             # the inception-year rule's stubs: decided by the filing-page audit, and saying so
             assert audited[path.name]["decision"] == "structural_ineligible_no_mature_cohort", path.name
             assert "structural_eligibility_audit.json" in d["reason"], path.name
-    assert n == 69
+    # 69 before round 62's re-extraction; 1985/2024's triangle holds 2023-2024 only (filing p50)
+    assert n == 70
 
 
 def test_the_stub_restatement_is_complete():
