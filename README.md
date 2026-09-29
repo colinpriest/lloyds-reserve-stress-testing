@@ -98,7 +98,7 @@ The PDF extraction pipeline (`test_gemini.py` + `table_extraction.py`) uses a la
 │  Step 4: LLM Extraction (Gemini + GPT)                              │
 │  ├── Independent extraction of all reserve fields                   │
 │  ├── Field-by-field comparison with tolerance rules                 │
-│  ├── Absolute-amount triangle PYD authoritative (sign rule 10.3)    │
+│  ├── Triangle PYD prevails, subject to sign check and veto (10.3)   │
 │  ├── Loss-ratio: fills blanks; overrides only on direction clash    │
 │  └── Interactive adjudication for unresolved discrepancies          │
 │                                                                     │
@@ -114,7 +114,7 @@ The PDF extraction pipeline (`test_gemini.py` + `table_extraction.py`) uses a la
 
 **Key design decisions:**
 
-- **Deterministic-first**: Claims development triangles are extracted by table parsing APIs (not LLMs), then PYD is computed in Python. This eliminates LLM arithmetic errors.
+- **Deterministic-first**: claims development triangles are read, where the pipeline can, from the table backend's grids (Azure Document Intelligence by default) or from the page text, and the development figure is computed from the triangle in Python, not by a model's arithmetic. The triangle is not always read without a model: when the table step and the text parser find none, a model reads the triangle page as an image (the page-vision step), and the code also recomputes the figure from the two models' own triangles (section 10.3).
 - **LLM as fallback**: When table extraction fails, LLM vision can read triangles from page images, or LLM text extraction reads PYD from reserve narrative text.
 - **Dual-LLM verification**: Two independent LLMs (Gemini and GPT) extract the same fields. Disagreements trigger adjudication, either automated (Claude verification) or human review.
 - **RAG triangle authority (qualified)**: When a valid *absolute-amount* triangle is extracted deterministically, its computed PYD ordinarily overrides any LLM-extracted value -- unless the gross provisions movement disagrees with it in sign, in which case provisions is authoritative, with the override recorded in the audit trail. A *loss-ratio* triangle is a conditional fallback instead: ordinarily managed- or group-level, it fills a blank narrative value and overrides a syndicate-specific one only where their directions contradict. The full numbered hierarchy is canonical in `docs/ocr-pipeline.md` section 10.3.
@@ -277,7 +277,7 @@ Only pages matching relevant tags are sent to the API backend, reducing cost by 
 
 ### Claims Development Triangle Extraction
 
-The triangle is the primary source of truth for prior year development. The extraction follows this priority chain:
+A triangle's diagonal is the first deterministic source of prior year development; whether its figure is adopted is decided by the precedence and vetoes of `docs/ocr-pipeline.md` section 10.3 (a provisions movement that disagrees in sign, two agreeing model signs, a movement far larger than both models read). The extraction reads a triangle by this priority chain:
 
 1. **API table detection** — Azure/Nutrient/Adobe detects table structure from the PDF
 2. **Text-based parsing** — Fallback when API doesn't detect the table; parses raw page text from PyMuPDF, handling both inline and columnar layouts
@@ -411,10 +411,10 @@ derived fields next, and what remains is written to the disagreement log and cou
 `hard_failures`.
 
 When a deterministic RAG triangle PYD is available from an **absolute-amount** triangle, it ordinarily takes precedence over both LLMs:
-- First, where the gross provisions movement is also available, the two are sign-compared; on sign disagreement the provisions movement overrides the triangle (canonical hierarchy: `docs/ocr-pipeline.md` section 10.3)
+- First, where the triangle came from a table backend (Azure, Nutrient or Adobe) and a gross provisions movement is also available, the two are sign-compared. The provisions figure overrides the triangle only when all three hold: the table is an affirmed movement note, its column carries the report year in its own header (R138), and the figure is not zero; and then only on a sign disagreement. A provisions figure that is not an affirmed, report-year-bound movement row leaves the triangle standing (canonical hierarchy: `docs/ocr-pipeline.md` section 10.3)
 - If an LLM agrees with the prevailing deterministic value (within ±0.5m), the LLM value is confirmed
 - If an LLM disagrees, the absolute-amount triangle value overrides it and the override is recorded in `data_quality_notes`
-- The override is vetoed (`_pyd_override_gate`, `test_gemini.py`) where the two LLM values agree with each other on the opposite sign to the deterministic figure, or where the deterministic movement exceeds 50% of opening reserves while both LLM movements are below 10%; the models then stand and the note records the rejected figure. The same veto applies on every deterministic route (triangle, provisions fallback and the code recomputation from the models' own triangles), and is lifted only where the figure equals, to half a thousand, one two readings of the filing confirmed in `pdf_extraction/audit/triangle_figures_confirmed_by_hand.json` (3 records), which is then applied over it with a note saying so (`_rag_veto`; precedence table in `docs/ocr-pipeline.md` section 10.3)
+- The override is vetoed (`_pyd_override_gate`, `test_gemini.py`) where the two LLM values agree with each other on the opposite sign to the deterministic figure, or where the deterministic movement exceeds 50% of opening reserves while both LLM movements are below 10%; the models then stand and the note records the rejected figure. The same veto applies on every deterministic route (triangle, provisions fallback and the code recomputation from the models' own triangles), and is lifted only where the figure equals, to within half a thousand, a figure that two readings of the filing confirmed and that is registered in `pdf_extraction/audit/triangle_figures_confirmed_by_hand.json` (3 records); the figure is then applied over the veto with a note saying so (`_rag_veto`; precedence table in `docs/ocr-pipeline.md` section 10.3)
 
 A **loss-ratio** triangle does not take precedence in the same way. Being ordinarily managed- or group-level, it fills a blank narrative value, and overrides a syndicate-specific narrative value only where the two directions contradict; an agreeing narrative value is retained.
 
@@ -817,7 +817,20 @@ pytest -q
 
 collects the offline suites (the novelty/unit tests under
 `scripts/stress_test/novelty/tests/` and the scripts under `tests/`) as pinned by
-`pytest.ini`. The integration scripts in `tests/` skip cleanly when their optional
-SDKs, API credentials or source PDFs are absent -- they exercise paid extraction
-services and are also runnable directly (`python tests/test_azure.py <pdf>`). No
-paid service is contacted by the default command.
+`pytest.ini`, and runs them from the repository root wherever it is started
+(`conftest.py`). A test may skip only for a reason declared in `conftest.py`'s
+`SKIP_BUDGET` -- an optional SDK that is not installed, a source filing that is not
+committed, the paid test's opt-in -- and any other skip fails the run.
+
+The one test that can call the paid model APIs, `tests/test_single_report.py::test_single_report_extraction`,
+is marked `paid_api` and runs only with `LLOYDS_ALLOW_PAID_API=1`; without that opt-in it
+skips, whatever keys the environment or `.env` holds, so the default command contacts no
+paid service. `pytest -m "not paid_api"` deselects it outright. The replays in the suite
+run offline from the committed caches. The Azure and Nutrient scripts in `tests/` hold no
+test functions; they are runnable directly (`python tests/test_azure.py <pdf>`) and call
+the paid services when run that way.
+
+`python scripts/record_tests.py` runs the suite offline and writes `tests-run-report.json`
+(commit, dirty flag, collected, passed, failed, skipped with reasons); the manuscript's
+count is generated from that record, and `tests/test_tests_run_report.py` fails when it is
+dirty, not green or no longer the size of the suite.
