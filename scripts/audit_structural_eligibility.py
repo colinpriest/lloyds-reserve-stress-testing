@@ -42,6 +42,7 @@ TRIANGLE_TERMS = re.compile(r"claims development(?: table| tables)?|underwriting
 
 
 LEDGER = RECORD_DIR / "audit" / "structural_eligibility_audit.json"
+TRANSCRIPTION = RECORD_DIR / "audit" / "structural_eligibility_transcription.json"
 
 
 def structural_records() -> list[tuple[Path, dict]]:
@@ -64,9 +65,12 @@ def structural_records() -> list[tuple[Path, dict]]:
     return records
 
 
-def expected_count() -> int:
-    """The number of records the ledger reviewed (70), which the selection must reproduce."""
-    return json.loads(LEDGER.read_text(encoding="utf-8"))["counts"]["reviewed"] if LEDGER.exists() else 70
+def expected_names() -> set:
+    """The records whose filing pages have been transcribed, which the selection must reproduce by
+    name. A record that becomes a stub is added to the audit by transcribing its pages first: the
+    re-extraction of 29 September 2026 made 1985/2024 one (its triangle holds UW2023-2024 only), and
+    the audit went from 70 records to 71. Before that this compared a count with the ledger's."""
+    return set(json.loads(TRANSCRIPTION.read_text(encoding="utf-8"))["records"])
 
 
 def source_path(record: dict) -> Path:
@@ -205,8 +209,10 @@ def main() -> None:
     # This audit is cache-only and must not invoke page-image model inference.
     pipeline.HAS_PDF2IMAGE = False
     rows = structural_records()
-    if len(rows) != expected_count():
-        raise SystemExit(f"expected {expected_count()} committed records under audit, found {len(rows)}")
+    names, expected = {path.name for path, _ in rows}, expected_names()
+    if names != expected:
+        raise SystemExit("the committed records under audit are not the transcribed ones: "
+                         f"not transcribed {sorted(names - expected)}, not selected {sorted(expected - names)}")
     existing = {}
     if args.evidence_only:
         if not args.output.exists():

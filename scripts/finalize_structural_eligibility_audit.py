@@ -1,4 +1,7 @@
-"""Write the reviewed economic-eligibility audit for all 70 pre-model stubs.
+"""Write the reviewed economic-eligibility audit for every pre-model stub and the one it retained.
+
+71 records since round 62: the 70 committed first-year stubs, 1985/2024 among them since its
+re-extraction of 29 September 2026 found UW2023-2024 only, and 1840/2022, retained as an observed zero.
 
 The underwriting-year lists below are transcribed from the filing pages captured by
 ``audit_structural_eligibility.py``.  They are deliberately separate from the old
@@ -64,6 +67,7 @@ REVIEWED_UW_YEARS = {
     "syndicate_1971_2020.json": [2019, 2020],
     "syndicate_1980_2019.json": [2018, 2019],
     "syndicate_1985_2023.json": [2023],
+    "syndicate_1985_2024.json": [2023, 2024],
     "syndicate_1988_2022.json": [2021, 2022],
     "syndicate_2019_2020.json": [2020],
     "syndicate_2019_2021.json": [2020, 2021],
@@ -278,7 +282,7 @@ def main() -> None:
     candidates = json.loads(CANDIDATES.read_text(encoding="utf-8"))["records"]
     transcription = json.loads(TRANSCRIPTION.read_text(encoding="utf-8"))["records"]
     names = {record["file"] for record in candidates}
-    if len(candidates) != 70 or names != set(REVIEWED_UW_YEARS) or set(transcription) != names:
+    if len(candidates) != len(REVIEWED_UW_YEARS) or names != set(REVIEWED_UW_YEARS) or set(transcription) != names:
         missing = sorted((names ^ set(REVIEWED_UW_YEARS)) | (names ^ set(transcription)))
         raise SystemExit(f"review inventory mismatch: n={len(candidates)}, symmetric_difference={missing}")
     records = [build_record(record, transcription[record["file"]]) for record in candidates]

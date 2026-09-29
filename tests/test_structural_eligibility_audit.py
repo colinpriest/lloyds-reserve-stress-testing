@@ -1,9 +1,11 @@
 """The filing-page audit separates economic eligibility from extraction skips.
 
 Round 62 (review of 29 September 2026, M-10, E-1, E-2 and test upgrade 5): the ledger is recomputed
-here for all 70 records -- the usable cohort from the transcribed years, the decision from it, the
+here for all 71 records -- the usable cohort from the transcribed years, the decision from it, the
 opening with its currency against the filing page, and the year headers against the page the ledger
-cites -- and the one retained eligible record is held to the generator that writes it.
+cites -- and the one retained eligible record is held to the generator that writes it. The ledger
+must also cover every committed stub by name: 1985/2024 became one when it was extracted again on
+29 September 2026, and nothing had said the audit did not cover it.
 """
 import json
 import sys
@@ -30,14 +32,24 @@ def _records():
 def test_all_pre_model_stubs_have_source_reviewed_decisions():
     audit = _audit()
     assert audit["counts"] == {
-        "reviewed": 70,
-        "structural_ineligible": 69,
+        "reviewed": 71,
+        "structural_ineligible": 70,
         "eligible_observed_zero": 1,
         "eligibility_unresolved": 0,
     }
-    assert len(audit["records"]) == 70
+    assert len(audit["records"]) == 71
     assert all((r["source_page"] or r["source_file"].endswith((".html", ".htm")))
                and r["source_sha256"] for r in audit["records"])
+
+
+def test_the_audit_covers_every_committed_stub_by_name():
+    """The records the audit script selects -- every committed first-year stub, and the stub it
+    retained -- are the ledger's and the transcription's, name for name."""
+    import audit_structural_eligibility as sel
+    selected = {path.name for path, _ in sel.structural_records()}
+    tr = json.loads((AUDIT / "structural_eligibility_transcription.json").read_text(encoding="utf-8"))["records"]
+    assert selected == set(_records()) == set(tr) == sel.expected_names()
+    assert "syndicate_1985_2024.json" in selected
 
 
 def test_the_decision_is_recomputed_from_the_years_for_every_record():
@@ -64,12 +76,16 @@ def test_every_record_has_its_opening_read_from_the_filing_with_its_currency():
             continue
         assert r["opening_gross_reserve_currency"] in ("GBP", "USD", "EUR", "CAD"), name
         assert r["opening_gross_reserve_page"] and r["opening_gross_reserve_quote"], name
-    assert sum(r["opening_gross_reserve_gbp_m"] is not None for r in recs.values()) == 67
+    assert sum(r["opening_gross_reserve_gbp_m"] is not None for r in recs.values()) == 68
     # the two the review found: a closing balance recorded as the opening
     assert recs["syndicate_2019_2020.json"]["opening_gross_reserve_gbp_m"] == 0.0
     assert recs["syndicate_2019_2021.json"]["opening_gross_reserve_gbp_m"] == pytest.approx(278.4)
     assert recs["syndicate_2019_2021.json"]["opening_gross_reserve_currency"] == "USD"
     assert recs["syndicate_1980_2019.json"]["opening_gross_reserve_currency"] == "USD"
+    # added in round 62, when its re-extraction made it a stub: note 5's 18,356 USD000 (filing page 36)
+    assert recs["syndicate_1985_2024.json"]["opening_gross_reserve_gbp_m"] == pytest.approx(18.356)
+    assert recs["syndicate_1985_2024.json"]["opening_gross_reserve_currency"] == "USD"
+    assert recs["syndicate_1985_2024.json"]["opening_gross_reserve_page"] == 36
 
 
 def test_the_ledger_is_the_transcription():

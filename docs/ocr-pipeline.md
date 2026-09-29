@@ -2756,19 +2756,21 @@ reason (round 61).
 
 Those counts are the round-61 corpus's (26 September 2026) and were not measured again. Since then
 every first-year stub has been read against its filing pages
-(`pdf_extraction/audit/structural_eligibility_audit.json`, 70 records): 69 hold no cohort up to
+(`pdf_extraction/audit/structural_eligibility_audit.json`, 71 records): 70 hold no cohort up to
 `t-2`, and 1840/2022's printed nil was retained as an eligible zero. The committed stubs' exclusion
-therefore rests on that audit, not on this flag, and the corpus now holds 69 stubs, not the 70 the
-measurement saw.
+therefore rests on that audit, not on this flag. The corpus holds 70 stubs: 69 of the 70 the
+measurement saw, and 1985/2024, which became a stub when it was extracted again on 29 September 2026
+(its tables hold UW2023 and UW2024 only). The audit's script refuses to run when a committed stub has
+not been transcribed, and `tests/test_structural_eligibility_audit.py` fails in that case too.
 
 **Example**: syndicate 2468/2022 has a single-column triangle
 (UW year 2020).  Since 2020 ≤ 2022 − 2 = 2020, the year is
 usable.  The pipeline extracts the triangle (29,267 → 28,431 →
 28,278 in £'000) and, from round 62, computes PYD = −0.153m (a
 release).  The record committed in round 56 was written before
-that, by the rule that refused the triangle, and says it has no
-triangle; it keeps that decision until it is extracted again
-with the models.
+that, by the rule that refused the triangle, and said it had no
+triangle; it was extracted again with the models on 29 September
+2026 and now carries −0.153m from the triangle.
 
 When `first_year_syndicate` is triggered and the reserve-text steps found nothing either (Step 4 cleared the flag
 and Steps 5-5e found no figure, `first_year_reserve_text`), the models still run and the decision is taken after
@@ -2996,7 +2998,8 @@ one scorer into today's code reproduces both records exactly.  The
 catch-up that followed re-derived the records that carried a stored
 RAG triangle, and these two carried none, so nothing re-derived them;
 round 221 found that they no longer reproduced and left them.  They
-need the models to be decided again.
+were extracted again with the models on 29 September 2026 and now
+carry +9.1m and −1.384m from their triangles.
 
 What let them sit is the scope of the check, not the rule: a replay
 measured on the records a rule still touches cannot see the records
