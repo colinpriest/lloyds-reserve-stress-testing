@@ -96,6 +96,11 @@ def main():
         "python": platform.python_version(),
         "platform": platform.platform(),
         "collected": n_collected,
+        # a module skipped whole at collection (tests/test_adobe.py's importorskip) is a skipped
+        # outcome of the run but not a collected item, so the outcomes exceed the items by exactly
+        # those skips
+        "collection_skipped": (counts["passed"] + counts["failed"] + counts["errors"]
+                               + counts["skipped"] - n_collected),
         "passed": counts["passed"],
         "failed": counts["failed"],
         "errors": counts["errors"],

@@ -42,7 +42,12 @@ def test_the_suite_record_is_clean_green_and_current():
     assert rec["worktree_dirty_src"] is False, rec.get("worktree_dirty_paths")
     assert {"commit", "passed", "skipped", "failed", "collected", "skipped_reasons"} <= set(rec)
     assert rec["failed"] == 0 and rec["errors"] == 0 and rec["exit_code"] == 0, rec["summary_line"]
-    assert rec["passed"] + rec["skipped"] == rec["collected"], rec
+    # a module skipped whole at collection is a skipped outcome but not a collected item; the record
+    # names how many, and a fresh collection must account for exactly that many
+    cs = rec["collection_skipped"]
+    assert 0 <= cs <= rec["skipped"], rec
+    outcomes = rec["passed"] + rec["failed"] + rec["errors"] + rec["skipped"]
+    assert outcomes - _collected_now() == cs, (outcomes, cs)
     assert sum(rec["skipped_reasons"].values()) == rec["skipped"]
     for where, n in rec["skipped_reasons"].items():
         assert conftest.declared(where.split(": ", 1)[1]), where
