@@ -2,10 +2,7 @@
 
 A comprehensive Python toolkit for collecting, extracting, and standardizing Lloyd's of London reserve commentary and numerical reserve data from multiple sources, to support academic research on insurance reserve movements.
 
-> **Historical graphic, not the current methodology:** the original
-> [project infographic](project-infographic.png) overstates deterministic extraction and
-> verification. It is retained only as a historical design artefact. The current pipeline is the
-> branched, uncertainty-preserving process below.
+The pipeline is the branched, uncertainty-preserving process below.
 
 ```mermaid
 flowchart LR
