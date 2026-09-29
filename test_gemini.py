@@ -3607,16 +3607,57 @@ def _null_zeros_beyond_the_staircase(uw_years, rows, report_year, details=None):
     return out
 
 
+def _single_cohort_staircase(uw_year, rows, report_year):
+    """The staircase score of a one-column triangle: 1.0 or 0.0 (round 62, MAT-2).
+
+    One column is a staircase of one step, so it is scored on its own staircase, not by
+    comparison with columns it does not have. It scores 1.0 when all of these hold:
+
+    * its underwriting year is a usable cohort, u <= report_year - PYD_EXCLUDED_RECENT_UW_YEARS;
+    * it carries at least two filled development rows;
+    * its last filled row sits exactly at the column's own age (depth == report_year - u + 1,
+      the limit `_staircase_limit` gives it), so the latest estimate is the report-year
+      diagonal and not an earlier one or a summary row printed below it;
+    * the row above that is filled, so a previous diagonal exists to difference against.
+
+    Anything else scores 0.0, as every one-column grid did from round 56 to round 61: the
+    `n_cols < 2` clause dates from March, and b72a995f made the score binding. That refused
+    2468/2022 (UW2020 at t=2022: 29,267 -> 28,431 -> 28,278 GBP000, -0.153m) and 2255/2015
+    (UW2011 at t=2015, 330,725 - 347,848 = -17.123m), and wrote both as having no triangle.
+    The rule the threshold was built for is a multi-column one -- 780/2018's eight-column grid
+    at 0.38 -- and is unchanged. Measured on the committed caches over all 1,065 filings, the
+    RAG step changes for these two filings and no other; the corpus holds no other one-column
+    table triangle, and `depth <= age` in place of `depth == age` changes nothing on it.
+    """
+    try:
+        uw = int(uw_year)
+    except (TypeError, ValueError):
+        return 0.0
+    if uw > report_year - PYD_EXCLUDED_RECENT_UW_YEARS:
+        return 0.0
+    column = [(r[0] if isinstance(r, (list, tuple)) and r else None) for r in rows]
+    filled = [i for i, v in enumerate(column) if v is not None]
+    if len(filled) < 2:
+        return 0.0
+    depth = filled[-1] + 1
+    if depth != report_year - uw + 1:
+        return 0.0
+    if column[depth - 2] is None:
+        return 0.0
+    return 1.0
+
+
 def _validate_triangle_structure(uw_years, rows, report_year):
     """Check if the triangle has the expected staircase structure.
 
     In a proper triangle, UW year columns should have development periods
     that form a staircase: the oldest UW year has the most rows filled,
     and each newer year has one fewer row. Returns a score 0.0-1.0.
+    A one-column triangle is scored on its own staircase (`_single_cohort_staircase`).
     """
     n_cols = len(uw_years)
     n_rows = len(rows)
-    if n_cols < 2 or n_rows < 2:
+    if n_cols < 1 or n_rows < 2:
         return 0.0
 
     # Expected pattern: column 0 (oldest) should have most non-nulls,
@@ -3637,6 +3678,9 @@ def _validate_triangle_structure(uw_years, rows, report_year):
     first = [v for v in rows[0] if v is not None] if rows else []
     if first and all(isinstance(v, (int, float)) and v == 0 for v in first):
         return 0.0
+
+    if n_cols == 1:
+        return _single_cohort_staircase(uw_years[0], rows, report_year)
 
     # The same rule as _staircase_limit: a gapped year list must be scored against the
     # shape it should have, not the shape a consecutive list would have (R168).

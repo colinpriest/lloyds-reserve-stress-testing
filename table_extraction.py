@@ -1677,6 +1677,16 @@ _COHORT_HEADER = re.compile(
     r"|^\s*(?:(?:&|and)\s+)?prior(?:\s+years?)?\b", re.I)
 _BARE_YEAR = re.compile(r"^\s*((?:19|20)\d\d)\s*$")
 _YEAR_CONNECTOR = re.compile(r"\b((?:19|20)\d\d)\s*(?:&|and|\+)\s*$")
+#: A year that completes a printed date ("as at 31 December 2018") dates the table; it is not a
+#: cohort. Azure merged 3330/2018's net-table title "Net claims development as at 31 December 2018"
+#: into the first cohort's header cell ("December 2018\n2011"), the cell was read as two cohorts,
+#: and every column of the table shifted by one: 2011 and 2012 both took the 2012 column and 2018
+#: took 2011's. With more filled cells than the gross table, the misread grid then won the page
+#: (+0.208m, where the filing's gross development is -1.384m) (round 62).
+_DATE_YEAR = re.compile(
+    r"\b(?:\d{1,2}(?:st|nd|rd|th)?\s+)?(?:jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|june?|july?"
+    r"|aug(?:ust)?|sep(?:t(?:ember)?)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?)\.?,?\s+(?:19|20)\d\d\b",
+    re.I)
 
 
 def _header_cells(grid, col, rows=3):
@@ -1748,6 +1758,15 @@ def _parse_nutrient_triangle(grid: list[list[str]], report_year: int):
             # markers (e.g. "20171" where "1" is a superscript reference).
             # Strip the footnote by capturing only the year digits.
             matches = re.findall(r'\b((?:19|20)\d{2})(?:\d(?!\d)|\b)', val)
+            if col_idx > 0 and len(matches) == 2:
+                # a data column's cell holding its cohort and a printed date: the date's
+                # year is the title's, not a second cohort (_DATE_YEAR). Only a data
+                # column: in the label column the first year of a merged header row stands
+                # in for the label column itself (609/2018, 5820/2019), and the offsets
+                # below depend on it.
+                undated = re.findall(r'\b((?:19|20)\d{2})(?:\d(?!\d)|\b)', _DATE_YEAR.sub(" ", val))
+                if len(undated) == 1:
+                    matches = undated
             if not matches:
                 continue
             if "prior" in val.lower() or "&" in val:

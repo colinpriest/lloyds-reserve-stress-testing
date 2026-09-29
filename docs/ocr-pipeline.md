@@ -661,6 +661,22 @@ backends (Azure, Nutrient, Adobe).
    and "YYYY ae" are not read as cohort labels ("2013 ae" binds as
    the single year 2013).  Section 12.2 describes the layouts.
 3. Sort by year and record column indices.
+   **A date's year in a data column's header cell is not a cohort**
+   (round 62, `_DATE_YEAR`). When a data column's cell holds exactly
+   two years and one of them completes a printed date ("31 December
+   2018"), the date is the title's and the other year is the column's
+   cohort. Azure merged 3330/2018's net-table title "Net claims
+   development as at 31 December 2018" into its first cohort's cell
+   ("December 2018\n2011"); read as two cohorts, the cell shifted every
+   column of the table by one, and the misread grid, which carried more
+   filled cells than the gross table beside it, won the page: +0.208m,
+   twice UW2012's net step, where the filing's gross development is
+   -1.384m. The rule is limited to data columns because in the label
+   column the first year of a merged header row stands in for the label
+   column itself and the offsets depend on it (609/2018's whole header
+   in one cell; 5820/2019's "At 31 December 2019 2017 Year of Account").
+   Over all 23,175 cached Azure grids it changes the parse of that one
+   grid (`tests/test_header_date_years.py`).
 4. **Report year label exclusion**: if a year appears in column 0
    of the grid header, equals the `report_year`, and the cell
    contains only that year string (no other context), it is
@@ -676,7 +692,8 @@ backends (Azure, Nutrient, Adobe).
    usable years exist, return `"new_syndicate"`.  If usable years
    exist (e.g. syndicate 2468/2022 with UW year 2020), the triangle
    is parsed normally — single-column triangles are valid when the
-   year has enough development history.
+   year has enough development history, and from round 62 the PYD
+   step reads them too (section 9.6).
 7. If **no** UW years are found in headers, fall through to the
    transposed triangle parser (section 7.6).
 
@@ -1763,6 +1780,34 @@ is a dash the backend read as nil and is set to no-data
 and the diagonal walk had been differencing `0.0` against a real estimate.
 Scoring before the repair would reject the grid instead of reading it.
 
+**A one-column triangle is scored on its own staircase** (round 62,
+`_single_cohort_staircase`). The column-by-column comparison above has
+nothing to compare one column with, and the function used to return 0.0
+for any grid with fewer than two columns. That clause dates from March;
+it cost nothing until round 56 made the score binding, and from then on
+every one-column triangle was refused however complete it was. The corpus
+holds two, and both were written as reports with no triangle, with
+neither model run: 2468/2022 (UW2020: 29,267, 28,431, 28,278 in £'000,
+-0.153m) and 2255/2015 (UW2011, 330,725 - 347,848 = -17.123m). A single
+column now scores 1.0 when all four hold, and 0.0 otherwise:
+
+- its underwriting year is a usable cohort, `u <= t - PYD_EXCLUDED_RECENT_UW_YEARS`;
+- it has at least two filled development rows;
+- its last filled row sits exactly at the column's own age,
+  `depth == t - u + 1` (the limit `_staircase_limit` gives it), so the
+  latest value is the report-year diagonal and not an earlier estimate or
+  a summary row printed below the column;
+- the row above that is filled, so a previous diagonal exists.
+
+Measured on the committed caches over all 1,065 filings, with only this
+function swapped: the RAG step reports a different outcome for those two
+filings and no other, `depth <= t - u + 1` in place of equality changes
+nothing, and of the models' own 1,596 triangles two change -- 5820/2019,
+where the RAG figure is applied first, and 1206/2019, where the code
+figure (+7.824m) meets the same sign veto as the RAG figure did and the
+adopted figure stays as it is. `tests/test_single_cohort_triangles.py`
+holds each condition.
+
 ### 9.7  Percentage against monetary triangles
 
 **Function**: `compute_pyd_from_triangle()`, unit check;
@@ -2621,7 +2666,10 @@ Every parser applies one rule, `table_extraction.triangle_admissibility()`, whic
   (i.e. there is a previous diagonal to compare against)
 - No usable year in the triangle → `new_syndicate`, and `first_year_syndicate = True`
 - A usable year, however few columns the triangle has
-  → the triangle is parsed normally and PYD is computed
+  → the triangle is parsed normally and PYD is computed. That is true of
+  the PYD step only from round 62: until then `compute_pyd_from_triangle()`
+  scored every one-column triangle 0.00 and refused it after the parser had
+  admitted it (§9.6)
 - A most recent UW year after the report year, or more than `MAX_UW_YEAR_LAG` behind it
   → not this report year's triangle at all
 
@@ -2648,6 +2696,14 @@ reject, which raises no flag, because both of its call sites act only on a `Tria
 them act on the string would change which records the corpus holds, and is not part of aligning a
 rule. So no record was re-extracted and no committed figure moved. The flag is not final in any case:
 §11.1 decides after the models, over every triangle in the record, on the same usable-cohort rule.
+
+That measurement stopped at the parser's verdict, and so did the tests written with it, which is
+why it missed what the next step did (review of 29 September 2026, MAT-2). The two one-column
+triangles the parsers admit, 2468/2022 and 2255/2015, then met the structure score in
+`compute_pyd_from_triangle()`, scored 0.00 and yielded no figure, so both records were written as
+having no triangle and neither model was run. Round 62 scores a one-column triangle on its own
+staircase (§9.6); `tests/test_single_cohort_triangles.py` goes through the PYD step and the RAG
+step, not only the parser.
 
 **Two defects the replay exposed and did not close.** Both are recorded here with the measurement
 that found them, and both are pinned by tests so that a change to either is deliberate.
@@ -2701,7 +2757,11 @@ reason (round 61).
 **Example**: syndicate 2468/2022 has a single-column triangle
 (UW year 2020).  Since 2020 ≤ 2022 − 2 = 2020, the year is
 usable.  The pipeline extracts the triangle (29,267 → 28,431 →
-28,278 in £'000) and computes PYD = −0.153m (a release).
+28,278 in £'000) and, from round 62, computes PYD = −0.153m (a
+release).  The record committed in round 56 was written before
+that, by the rule that refused the triangle, and says it has no
+triangle; it keeps that decision until it is extracted again
+with the models.
 
 When `first_year_syndicate` is triggered and the reserve-text steps found nothing either (Step 4 cleared the flag
 and Steps 5-5e found no figure, `first_year_reserve_text`), the models still run and the decision is taken after
@@ -2882,6 +2942,26 @@ usable cohort, so a report without one is classified
 `no_triangle_data` whatever the syndicate's age.  A report *with* a
 triangle whose cohorts all fall after `t-2` is the first-year stub
 (§11.1, §11.2; frozen review of 25 September 2026, D02).
+
+**Two records the current code would not write** (review of 29
+September 2026, R7-02).  1884/2022 and 3330/2018 are committed as
+no-triangle records, yet the table step on their committed caches
+reads a triangle in both: 1884/2022 gives +9.1m, and 3330/2018 gives
+-1.384m from round 62 (+0.208m before, from a misread net table,
+§7.1).  Both were written on 11 September 2026 by the round-56 run,
+whose workers loaded their code at 20:10, before R168 -- the staircase
+limit read from each column's own year -- landed at 21:47
+(`pdf_extraction/audit/r167_r168_catchup.json`).  Both triangles skip
+underwriting years ([2013-2018, 2022]; [2011, 2012, 2018]).  The
+positional staircase scored them 0.14 and 0.00 against the 0.50 that
+the same round had just made binding, so the table triangle and (for
+1884/2022) the page-vision triangle were refused, and with no reserve
+text the records were written as having no triangle.  Swapping that
+one scorer into today's code reproduces both records exactly.  The
+catch-up that followed re-derived the records that carried a stored
+RAG triangle, and these two carried none, so nothing re-derived them;
+round 221 found that they no longer reproduced and left them.  They
+need the models to be decided again.
 
 ---
 
