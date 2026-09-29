@@ -53,6 +53,26 @@ def test_no_unqualified_never_remains_in_the_hierarchy():
     assert "triangle_figures_confirmed_by_hand.json" in flat_readme
 
 
+#: a README statement that the provisions movement overrides, or is authoritative over, a triangle
+SIGN_OVERRIDE = re.compile(r"provisions[^.;]{0,100}?\b(overrides?|is authoritative|wins)\b|"
+                           r"sign disagreement the provisions movement overrides", re.I)
+
+
+def test_every_readme_statement_of_the_sign_override_states_its_conditions():
+    """Verification review of round 62, N-V-E-5: round 62 gave the sign-override bullet the R138
+    conditions -- an affirmed movement note, a column bound to the report year, a non-zero figure --
+    but the troubleshooting entry (and the summary bullet on triangle authority) still said a
+    provisions movement of the other sign overrides the triangle, full stop, so a reader would expect
+    an unbound provisions figure to override. Every README line that states the override carries the
+    conditions (R138, or the affirmed movement row bound to the report year)."""
+    readme = io.open(os.path.join(ROOT, "README.md"), encoding="utf-8").read()
+    stating = [line for line in readme.splitlines() if SIGN_OVERRIDE.search(" ".join(line.split()))]
+    assert len(stating) >= 3, stating      # the summary, the hierarchy bullet, troubleshooting
+    for line in stating:
+        flat = " ".join(line.split())
+        assert "R138" in flat and re.search(r"affirmed movement (note|row)", flat), flat[:200]
+
+
 def test_resolved_table_value_does_not_override_two_agreeing_model_values():
     value, label, note = tg._resolve_rag_opening(
         200.0,
