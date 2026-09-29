@@ -234,12 +234,42 @@ def sanitize_json_ascii(obj):
         return obj
 
 
-# Pricing per 1M tokens (USD)
+# Pricing per 1M tokens (USD). Typed in with the pipeline in 02e160d4 (12 March 2026); that commit
+# records no source for the rates, and they have not been checked against the providers' price
+# lists since. Gemini 2.5 returns its thinking tokens apart from the response
+# (usage_metadata.thoughts_token_count) and bills them as output tokens, so they are priced at the
+# output rate below (_gemini_cost_usd); no separate rate is kept for them.
 PRICING = {
     "gemini-2.5-flash": {"input": 0.30, "output": 2.50},
     "gemini-3-flash":   {"input": 0.50, "output": 3.00},
     "gpt-5-mini":       {"input": 0.25, "output": 2.00},
 }
+
+
+def _gemini_cost_usd(usage, model):
+    """(cost in USD, thinking tokens) of one Gemini response, from its usage metadata: the prompt at
+    the input rate, and the response and the thinking tokens at the output rate, as Gemini 2.5 bills
+    them.
+
+    Until 30 September 2026 (round 62, second cycle) the thinking tokens were left out, so every
+    Gemini cost recorded before then -- a model block's _extraction_meta.cost_usd, a record's
+    total_cost_usd, the run manifest's totals -- runs low, and the spend cap read the same totals.
+    For the re-extraction of 29 September 2026, pdf_extraction/audit/redecision_pending.json
+    (extracted.cost) counts the tokens that were left out."""
+    thinking = getattr(usage, "thoughts_token_count", None) or 0
+    rates = PRICING[model]
+    cost = (usage.prompt_token_count * rates["input"]
+            + (usage.candidates_token_count + thinking) * rates["output"]) / 1_000_000
+    return cost, thinking
+
+
+def _spend_cap_reached(run_total_cost):
+    """(cap, reached): the run's spend ceiling LLOYDS_MAX_RUN_COST_USD (0 or unset: none), and whether
+    the run's recorded cost has passed it. The recorded cost is the records' total_cost_usd, so from
+    30 September 2026 the cap counts Gemini's thinking tokens (_gemini_cost_usd)."""
+    cap = float(os.getenv("LLOYDS_MAX_RUN_COST_USD") or 0)
+    return cap, bool(cap and run_total_cost > cap)
+
 
 # Standard Lloyd's LOBs (from config.py)
 LLOYDS_LOBS = [
@@ -2087,18 +2117,20 @@ def extract_with_gemini(report_path, file_bytes, content_hash, syndicate_num, re
     output_tokens = usage.candidates_token_count
     total_tokens = usage.total_token_count
 
-    prices = PRICING[model]
-    cost = input_tokens * prices["input"] / 1_000_000 + output_tokens * prices["output"] / 1_000_000
+    # the thinking tokens are billed as output; until 30 September 2026 this cost left them out
+    cost, thinking_tokens = _gemini_cost_usd(usage, model)
 
     data["_extraction_meta"] = {
         "model": model,
         "input_tokens": input_tokens,
         "output_tokens": output_tokens,
+        "thinking_tokens": thinking_tokens,
         "total_tokens": total_tokens,
         "cost_usd": round(cost, 6),
     }
 
-    print(f"  [{model}] Done. {input_tokens:,} in / {output_tokens:,} out. ${cost:.6f}")
+    print(f"  [{model}] Done. {input_tokens:,} in / {output_tokens:,} out / {thinking_tokens:,} thinking. "
+          f"${cost:.6f}")
     _llm_cache_save(cache_key, data, model=model,
                     syndicate_num=syndicate_num, report_year=report_year)
     return data
@@ -6248,8 +6280,8 @@ if __name__ == "__main__":
         # from the recorded per-record cost, so a run that sails past that estimate is
         # doing something nobody asked for and should stop while it is cheap to stop.
         # Records already written stay written; the run simply ends (round 56).
-        _cap = float(os.getenv("LLOYDS_MAX_RUN_COST_USD") or 0)
-        if _cap and run_total_cost > _cap:
+        _cap, _cap_reached = _spend_cap_reached(run_total_cost)
+        if _cap_reached:
             print(f"\n  *** SPEND CAP REACHED: ${run_total_cost:.2f} of ${_cap:.2f} after "
                   f"{run_processed} record(s). Stopping. Raise LLOYDS_MAX_RUN_COST_USD "
                   f"to continue.")

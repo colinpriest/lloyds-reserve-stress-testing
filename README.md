@@ -637,6 +637,19 @@ The pipeline maintains complete audit trails at every stage:
 6. **Rejection log**: Reports rejected during adjudication in `pdf_extraction/audit/rejection_log.json`
 7. **Run manifest**: Per-run statistics (processed/passed/failed/skipped counts, cost, tokens) in `pdf_extraction/audit/run_manifest.json`
 
+**What a recorded cost counts.** A cost is the provider's token counts priced by `PRICING` in
+`test_gemini.py`, a table typed in with the pipeline in 02e160d4 (12 March 2026) with no source
+recorded. A Gemini response is priced as its prompt at the input rate and its response and thinking
+tokens at the output rate (`_gemini_cost_usd`; Gemini 2.5 bills thinking tokens as output), and the
+run's spend cap `LLOYDS_MAX_RUN_COST_USD` reads the same recorded totals (`_spend_cap_reached`).
+**Costs recorded before 30 September 2026, when `_gemini_cost_usd` came in, leave out Gemini's
+thinking tokens**: every model block's `_extraction_meta.cost_usd`, every record's `total_cost_usd`
+and the run manifest's totals, and a record written later from a response cached before then keeps
+that response's cost. No recorded cost includes the page-vision calls, whose cost is computed but not
+recorded, and that formula still leaves the thinking tokens out. For the re-extraction of
+29 September 2026, the `extracted.cost` block of `pdf_extraction/audit/redecision_pending.json`
+counts both: the thinking tokens its twelve Gemini responses recorded, and its page-vision calls.
+
 For market commentary, full extracted text is stored in `market_commentary/full_text/` with SHA-256 content hashes in `audit_manifest.json`.
 
 ## Source Categories (Market Commentary)
