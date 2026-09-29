@@ -115,6 +115,27 @@ def test_a_models_own_one_column_triangle_is_computed_too():
         assert r["_pyd_route"]["source"] == "code_triangle"
 
 
+def test_1206_2019s_one_column_triangle_is_read_and_the_sign_veto_refuses_it():
+    """Verification review of round 62, test gap: 1206/2019 is the one committed record whose
+    route the one-column rule reaches in verify_triangles, and the test above uses a synthetic
+    triangle. GPT's triangle there is one column (UW2017 at t=2019: 60,720, 126,128, 133,952 in
+    GBP000); the rule now reads it, +7.824m at a structure score of 1.00, and the model-agreement
+    sign veto refuses it, both models having read -1.0m from the reserve text, as it refused the RAG
+    figure. A fresh run of verify_triangles on the committed blocks must keep -1.0m in both."""
+    import json
+    rec = json.loads((ROOT / "pdf_extraction" / "syndicate_1206_2019.json").read_text(encoding="utf-8"))
+    g, o = copy.deepcopy(rec["models"]["gemini-2.5-flash"]), copy.deepcopy(rec["models"]["gpt-5-mini"])
+    assert g["_claims_triangle"]["type"] == "none" and o["_claims_triangle"]["underwriting_years"] == [2017]
+    pyd, details = tg.compute_pyd_from_triangle(copy.deepcopy(o["_claims_triangle"]), 2019)
+    assert pyd == pytest.approx(7.824) and "Structure score: 1.00" in details, details
+    rg, ro, msgs = tg.verify_triangles(g, o, "gemini-2.5-flash", "gpt-5-mini", 2019)
+    assert any("PYD=7.824" in m for m in msgs), msgs
+    assert any("CODE PYD NOT APPLIED" in m and "opposite sign to both model values" in m for m in msgs), msgs
+    for committed, fresh in ((rec["models"]["gemini-2.5-flash"], rg), (rec["models"]["gpt-5-mini"], ro)):
+        assert committed["prior_year_development_gbp_m"] == fresh["prior_year_development_gbp_m"] == -1.0
+        assert fresh["_pyd_route"] == committed["_pyd_route"]
+
+
 # ------------------------------------------------------------ each condition of the rule
 
 ROWS_2468 = [[29267.0], [28431.0], [28278.0]]
