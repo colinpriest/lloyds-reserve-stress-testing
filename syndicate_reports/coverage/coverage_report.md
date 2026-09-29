@@ -1,5 +1,5 @@
 # Syndicate-Year Coverage Report
-Generated: 2026-09-26T08:12:33.220304+00:00
+Generated: 2026-09-29T02:13:06.628447+00:00
 
 ## Global reconciliation
 
@@ -9,9 +9,9 @@ Generated: 2026-09-26T08:12:33.220304+00:00
 | Less: report unavailable (not published / download failed) | -93 | 1032 |
 | Reports downloaded |  | 1032 |
 | Less: not yet through extraction pipeline | 0 | 1032 |
-| Less: no eligible mature cohort and no stated development figure | -69 | 963 |
-| Less: no triangle or reserve text in report | -55 | 908 |
-| Less: other field failures (PYD/LoB/opening not all extracted) | -62 | 846 |
+| Less: no eligible mature cohort and no stated development figure | -68 | 964 |
+| Less: no deterministic reading (models not run) | -55 | 909 |
+| Less: other field failures (PYD/LoB/opening not all extracted) | -63 | 846 |
 | Fully successful syndicate-years (a+b+c+d) |  | 846 |
 
 ## By year (candidate-list rows vs full success)
@@ -26,7 +26,7 @@ Generated: 2026-09-26T08:12:33.220304+00:00
 |   2019 |                         105 |           95 |                   10 |       85 |       89 |           86 |             84 |         10 |          6 |              9 |                       7 |                  1 |               4 |
 |   2020 |                          98 |           87 |                   11 |       79 |       83 |           81 |             78 |          8 |          4 |              6 |                       5 |                  0 |               2 |
 |   2021 |                          92 |           88 |                    4 |       78 |       85 |           78 |             76 |         10 |          3 |             10 |                       5 |                  2 |               5 |
-|   2022 |                          93 |           89 |                    4 |       76 |       85 |           77 |             76 |         13 |          4 |             12 |                       9 |                  2 |               7 |
+|   2022 |                          93 |           89 |                    4 |       76 |       84 |           77 |             76 |         13 |          5 |             12 |                       8 |                  2 |               7 |
 |   2023 |                          95 |           91 |                    4 |       80 |       87 |           79 |             79 |         11 |          4 |             12 |                       9 |                  2 |               6 |
 |   2024 |                          95 |           91 |                    4 |       76 |       79 |           76 |             75 |         15 |         12 |             15 |                       3 |                 11 |               0 |
 
@@ -42,7 +42,7 @@ Generated: 2026-09-26T08:12:33.220304+00:00
 |   2019 |                   10 |         10 |          6 |              9 |                       7 |                  1 |
 |   2020 |                   11 |          8 |          4 |              6 |                       5 |                  0 |
 |   2021 |                    4 |         10 |          3 |             10 |                       5 |                  2 |
-|   2022 |                    4 |         13 |          4 |             12 |                       9 |                  2 |
+|   2022 |                    4 |         13 |          5 |             12 |                       8 |                  2 |
 |   2023 |                    4 |         11 |          4 |             12 |                       9 |                  2 |
 |   2024 |                    4 |         15 |         12 |             15 |                       3 |                 11 |
 

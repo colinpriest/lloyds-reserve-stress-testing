@@ -278,6 +278,23 @@ AUDIT_DIR = Path("pdf_extraction/audit")
 HAND_CONFIRMED_FIGURES = AUDIT_DIR / "triangle_figures_confirmed_by_hand.json"
 STRUCTURAL_ELIGIBILITY_AUDIT = AUDIT_DIR / "structural_eligibility_audit.json"
 
+#: The status of a report the deterministic step could not read, and the reason the record gives
+#: (round 62). Until round 62 the reason read "No claims development triangle or reserve movement
+#: text found in report", a statement about the filing that the code only knew about its parsers:
+#: 2468/2022 and 2255/2015 print one-column triangles the structure check refused, and ten 2024
+#: HTML filings print full tables their conversion to PDF had lost (review of 29 September 2026,
+#: MAT-2). The record key `no_triangle_data` is historical and is kept for its readers; it means
+#: this status and nothing more.
+NO_DETERMINISTIC_READING = "no_deterministic_reading"
+NO_DETERMINISTIC_READING_REASON = (
+    "No deterministic reading: the table, page-text and narrative parsers found no prior-year "
+    "figure, no reserve-movement text and no loss-ratio triangle they could use. This describes "
+    "the parsers, not the filing, which may still print a claims development table they could not "
+    "read. The models were not run, so no figure was obtained and the report is not in the analysis.")
+#: The reason a first-year stub gives, as `_first_year_record` writes it
+FIRST_YEAR_REASON = ("No underwriting year old enough for prior year development in the report's "
+                     "triangles, and no prior-year figure stated in its reserve text")
+
 GEMINI_MODEL = "gemini-2.5-flash"
 OPENAI_MODEL = "gpt-5-mini"
 
@@ -3623,10 +3640,12 @@ def extract_pyd_from_relevant_pages(pdf_path, report_year):
         print(f"  [RAG] No prior-year figure in the reserve text — first-year flag set again; "
               f"the models read the text before the record is written")
 
-    # If after all attempts we have no PYD, no triangle, no reserve text,
-    # and it's not a first-year syndicate, flag as "no triangle data" —
-    # this report has no usable reserve development information and should
-    # be excluded from downstream analysis.
+    # If after all attempts the step has no figure, no reserve text and no
+    # loss-ratio grid, and did not find a first-year triangle, the report is
+    # flagged "no_triangle_data": the deterministic step read nothing it could
+    # use. That is a fact about the parsers, not about the filing -- a table
+    # they refuse or cannot see is still printed (round 62, MAT-2) -- and
+    # process_one_report writes the record without running the models.
     # Exception: if a loss ratio triangle was found, the report has useful
     # data that LLMs can use to extract PYD from narrative text.
     if (result["pyd"] is None
@@ -5384,10 +5403,12 @@ def _no_mature_cohort(rag_result, results, report_year):
 
 
 def _first_year_record(report_path, syndicate_num, report_year, rag_result, inception_cache,
-                       manual_overrides, reason=None, evidence=None):
+                       manual_overrides, reason=None, evidence=None, models_run=False):
     """The audit-trail record of a report too early for prior year development: no model
     blocks, and the business mix when the table step found one. `reason` and `evidence`
-    describe a decision taken after the models read the reserve text (round 58, M01)."""
+    describe a decision taken after the models read the reserve text (round 58, M01).
+    `models_run` says which of the two it is: a stub written before the models carries no model
+    block because none was run, one written after them because none was retained (round 62)."""
     # Triangle has <=2 UW years — update inception cache if this is new info
     if syndicate_num not in inception_cache and syndicate_num not in manual_overrides:
         # Conservative estimate: first UW year = report_year - 1
@@ -5404,8 +5425,8 @@ def _first_year_record(report_path, syndicate_num, report_year, rag_result, ince
         },
         "source_file": str(report_path),
         "first_year_syndicate": True,
-        "reason": reason or ("No underwriting year old enough for prior year development in the report's "
-                             "triangles, and no prior-year figure stated in its reserve text"),
+        "reason": reason or FIRST_YEAR_REASON,
+        "models_run": bool(models_run),
         "syndicate": syndicate_num,
         "year": report_year,
     }
@@ -5460,8 +5481,9 @@ def process_one_report(report_path, inception_cache=None):
                                                 inception_cache, manual_overrides)
 
     if rag_result.get("no_triangle_data"):
-        # No triangle, no reserve text — report has no usable reserve
-        # development data.  Skip expensive LLM calls and recommend exclusion.
+        # The deterministic step read nothing it could use: no figure, no reserve text and no
+        # loss-ratio grid. That describes the parsers, not the filing, and the models are not run
+        # on it; the record says both (round 62, MAT-2). `no_triangle_data` is the historical key.
         no_data_output = {
             "extraction_timestamp": datetime.now(timezone.utc).isoformat(),
             "spec": {
@@ -5472,7 +5494,9 @@ def process_one_report(report_path, inception_cache=None):
             "source_file": str(report_path),
             "no_triangle_data": True,
             "excluded": True,
-            "exclusion_reason": "No claims development triangle or reserve movement text found in report — recommend non-inclusion in analysis",
+            "status": NO_DETERMINISTIC_READING,
+            "models_run": False,
+            "exclusion_reason": NO_DETERMINISTIC_READING_REASON,
             "syndicate": syndicate_num,
             "year": report_year,
         }
@@ -5853,10 +5877,10 @@ def process_one_report(report_path, inception_cache=None):
                       f"reserve text -- first-year")
                 return "first_year", _first_year_record(
                     report_path, syndicate_num, report_year, rag_result, inception_cache, manual_overrides,
-                    reason=("No underwriting year old enough for prior year development in the report's "
-                            "triangles, and no prior-year figure stated in its reserve text"),
+                    reason=FIRST_YEAR_REASON,
                     evidence={"triangle_underwriting_years": _triangles,
-                              "model_figures_not_stated": _figures})
+                              "model_figures_not_stated": _figures},
+                    models_run=True)
 
     # Zero-opening override: if opening reserves = 0, PYD must be 0 and
     # direction must be flat — the stored zero is the convention for a record with no prior-year reserves, not a finding that nothing developed
@@ -6154,14 +6178,15 @@ if __name__ == "__main__":
                 run_skipped_first_year += 1
                 continue
             if isinstance(result, tuple) and len(result) == 2 and result[0] == "no_triangle_data":
-                # No triangle or reserve text — write audit JSON and skip LLM calls
+                # No deterministic reading -- write the audit JSON; the models were not run
                 no_data = result[1]
                 output_file = OUTPUT_DIR / f"{report_path.stem}.json"
                 with open(output_file, "w") as f:
                     json.dump(sanitize_json_ascii(no_data), f, indent=2, ensure_ascii=True)
-                print(f"  SKIP: No claims development triangle or reserve text in report")
+                print(f"  SKIP: no deterministic reading (no figure, reserve text or loss-ratio grid "
+                      f"the parsers could use); the models were not run")
                 print(f"  Audit JSON written: {output_file.name}")
-                print(f"  >> RESULT: Recommend non-inclusion in analysis (no usable reserve data)")
+                print(f"  >> RESULT: not in the analysis: no figure was obtained")
                 run_skipped_no_data += 1
                 continue
             output_data, passed, discrepancies, hard_failures = result

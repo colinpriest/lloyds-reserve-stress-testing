@@ -104,7 +104,7 @@ The PDF extraction pipeline (`test_gemini.py` + `table_extraction.py`) uses a la
 │                                                                     │
 │  Step 5: Report Classification                                      │
 │  ├── first_year_syndicate: no usable cohort up to t-2               │
-│  ├── no_triangle_data: no triangle or reserve text found            │
+│  ├── no_triangle_data: no deterministic reading; models not run     │
 │  └── Normal: full extraction with cross-validated PYD               │
 │                                                                     │
 │  Output: pdf_extraction/syndicate_NNNN_YYYY.json                    │
@@ -356,7 +356,8 @@ before or after the models run:
 - So **a record with no `models` key does not mean the models were never called.**
   `pdf_extraction/syndicate_1884_2016.json` is a stub of the second kind: no `models` block, and a
   `first_year_evidence` block holding both models' figures. A record's structure says what was
-  retained, not whether the API was used.
+  retained, not whether the API was used; since round 62 its `models_run` field says which
+  (`false` before the models, `true` after them).
 - A report with no triangle at all is not taken to be young on that account.
 - The inception-year lookup that once flagged a report by `report_year < inception_year + 2` was
   removed in round 58. `pdf_extraction/syndicate_inception_years.json` is kept as a record, and no
@@ -366,14 +367,25 @@ before or after the models run:
 `_no_mature_cohort()` and `_first_year_record()` in `test_gemini.py` are the code
 (frozen review of 25 September 2026, D02).
 
-### No-Triangle-Data Exclusion
+### No Deterministic Reading (`no_triangle_data`)
 
-Reports where no claims triangle and no reserve movement text can be found are flagged with `"no_triangle_data": true` and recommended for non-inclusion in downstream analysis:
+When the deterministic step reads nothing it can use -- no development figure from a triangle,
+the provisions note or a narrative parser, no reserve-movement text and no loss-ratio grid -- the
+record is written without running the models:
 
-- The pipeline writes an exclusion JSON with `"excluded": true` and `"exclusion_reason"`
-- LLM extraction is skipped (saving API costs)
-- LOB breakdown is still extracted if available
-- This commonly occurs in run-off syndicate reports from years when no triangle was published
+- it carries `"no_triangle_data": true` (the historical key, kept for its readers), `"excluded": true`,
+  `"status": "no_deterministic_reading"`, `"models_run": false` and an `exclusion_reason` that says so;
+- the LOB breakdown is kept when the table step found one;
+- no figure is obtained, so the report is not in the analysis.
+
+The status describes the parsers, not the filing. Until round 62 the reason read "No claims
+development triangle or reserve movement text found in report", and it was not true of every
+record written that way: 2468/2022 and 2255/2015 print one-column triangles the structure check
+refused (`docs/ocr-pipeline.md` §9.6), 1884/2022 and 3330/2018 were written by a staircase rule
+superseded the same day (§11.4), and ten 2024 HTML filings print claims development tables that
+their conversion to PDF had lost (§13.1). The thirteen records the current code reads, or takes to
+the page-vision step, are listed for a new extraction with the models (§11.4); the others carry the
+restated status and reason (`scripts/restate_record_status.py`).
 
 ### Dual-LLM Extraction and Cross-Validation
 
@@ -466,12 +478,14 @@ For first-year syndicates:
 }
 ```
 
-For reports with no usable data:
+For reports the deterministic step could not read (the models were not run):
 ```json
 {
   "no_triangle_data": true,
   "excluded": true,
-  "exclusion_reason": "No claims development triangle or reserve movement text found in report -- recommend non-inclusion in analysis",
+  "status": "no_deterministic_reading",
+  "models_run": false,
+  "exclusion_reason": "No deterministic reading: the table, page-text and narrative parsers found no prior-year figure, no reserve-movement text and no loss-ratio triangle they could use. This describes the parsers, not the filing, which may still print a claims development table they could not read. The models were not run, so no figure was obtained and the report is not in the analysis.",
   "syndicate": 1110,
   "year": 2019
 }

@@ -2754,6 +2754,13 @@ decide instead. Each would have to be read individually and the model refitted, 
 figure is demonstrably wrong today. So the order stands as it is, with this measurement as the
 reason (round 61).
 
+Those counts are the round-61 corpus's (26 September 2026) and were not measured again. Since then
+every first-year stub has been read against its filing pages
+(`pdf_extraction/audit/structural_eligibility_audit.json`, 70 records): 69 hold no cohort up to
+`t-2`, and 1840/2022's printed nil was retained as an eligible zero. The committed stubs' exclusion
+therefore rests on that audit, not on this flag, and the corpus now holds 69 stubs, not the 70 the
+measurement saw.
+
 **Example**: syndicate 2468/2022 has a single-column triangle
 (UW year 2020).  Since 2020 ≤ 2022 − 2 = 2020, the year is
 usable.  The pipeline extracts the triangle (29,267 → 28,431 →
@@ -2918,17 +2925,45 @@ extracted from "release of £4.7m of prior year reserves" via
 `method: "general_narrative"`.  Both LLMs independently
 confirmed the same value.
 
-### 11.4  No-triangle-data exclusion
+### 11.4  No deterministic reading (`no_triangle_data`)
 
-Reports where no claims triangle, no provisions PYD, and no
-reserve movement text can be found are classified separately from
-the eligible-cohort rule:
+When the RAG step returns no development figure (no triangle figure,
+no provisions or narrative figure), no reserve-movement text and no
+loss-ratio grid, and did not find a first-year triangle, the report is
+classified separately from the eligible-cohort rule:
 
-- `no_triangle_data = True`, `excluded = True`
-- LLM extraction is **skipped**
-- Recommended for non-inclusion in downstream analysis
-- Common in run-off syndicate reports from years when no
-  triangle was published
+- `no_triangle_data = True` (the historical key), `excluded = True`,
+  `status = "no_deterministic_reading"`, `models_run = False`, and
+  `exclusion_reason` = `NO_DETERMINISTIC_READING_REASON`
+  (`test_gemini.py`)
+- the models are **not run** (`process_one_report()` returns before the
+  slim PDF is built)
+- no figure is obtained, so the report is not in the analysis
+
+**This is a statement about the parsers, not about the filing.** Until
+round 62 the reason read "No claims development triangle or reserve
+movement text found in report", and this section said the case was
+"common in run-off syndicate reports from years when no triangle was
+published". The review of 29 September 2026 (MAT-2) read the filings
+and found claims development tables in filings written this way. The
+round-62 measurement (the RAG step replayed on the committed caches,
+every filing) finds thirteen that the current code reads, or takes to
+the page-vision step:
+
+- 2468/2022 and 2255/2015, one-column triangles the structure check
+  refused (§9.6);
+- 1884/2022 and 3330/2018, written by a superseded staircase rule
+  (below);
+- nine 2024 HTML filings whose conversion to PDF had kept text on its
+  first eight to twelve pages only (§13.1): 4747/2024's triangle is read
+  from the page text, and 1902, 1985, 1988, 2525, 2689, 2880, 3456 and
+  5183/2024 reach the page-vision step. 1922/2024's conversion lost its
+  notes too, but its table holds a single 2024 cohort and the parsers
+  still do not read it.
+
+Those thirteen are listed for a new extraction with the models; every
+other record written this way carries the restated status and reason
+(`scripts/restate_record_status.py`), and says the models were not run.
 
 **Important**: which of the two flags a report gets does not depend
 on the syndicate's age.  The inception-based distinction this
@@ -3210,17 +3245,25 @@ Reports reclassified by the retrospective correction script also
 include a `reclassified_from` field indicating the previous status
 (`"no_triangle_data"` or `"normal_extraction"`).
 
-### 14.3  No-triangle-data exclusion
+### 14.3  No deterministic reading (`no_triangle_data`)
 
 ```json
 {
   "no_triangle_data": true,
   "excluded": true,
-  "exclusion_reason": "No claims development triangle or reserve movement text found",
+  "status": "no_deterministic_reading",
+  "models_run": false,
+  "exclusion_reason": "No deterministic reading: the table, page-text and narrative parsers found no prior-year figure, no reserve-movement text and no loss-ratio triangle they could use. This describes the parsers, not the filing, which may still print a claims development table they could not read. The models were not run, so no figure was obtained and the report is not in the analysis.",
   "syndicate": 1110,
   "year": 2019
 }
 ```
+
+Records written before round 62 said "No claims development triangle
+or reserve movement text found in report"; those not listed for a new
+extraction were restated to the form above by
+`scripts/restate_record_status.py`, which changes no other field
+(§11.4).
 
 ### 14.4  Excluded after extraction
 
@@ -3270,7 +3313,9 @@ statuses based on its structure:
 
 A status is read off the retained structure, so it cannot be used to infer API usage. A stub that
 carries `first_year_evidence` was decided after the models ran; one without it was skipped before
-them (frozen review of 25 September 2026, D02).
+them (frozen review of 25 September 2026, D02). Since round 62 every record without a model block
+also says so in a field: `models_run` is `false` for a no-deterministic-reading record and a stub
+written before the models, and `true` for a stub written after them.
 
 **Console INCOMPLETE warning**: After writing each JSON file,
 `test_gemini.py` checks whether the extraction has both PYD %
@@ -3282,8 +3327,8 @@ will show, without needing to open `progress_report.html`.
 **Note**: reports with both `no_triangle_data: true` and
 `excluded: true` but **no** `models` key are classified as
 Skipped, not Excluded.  The `excluded` flag on these files is a
-legacy artefact from the no-triangle-data detection path --
-the report was never sent to LLMs.
+legacy artefact from the no-deterministic-reading path --
+the report was never sent to LLMs (`models_run: false`).
 
 ### 15.2  Dashboard cards
 

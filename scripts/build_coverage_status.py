@@ -278,7 +278,8 @@ def analyse_extraction(syndicate: int, year: int,
         return out
     if data.get('no_triangle_data') or data.get('excluded'):
         reason = data.get('exclusion_reason',
-                          'no claims triangle or reserve movement text found')
+                          'no deterministic reading: the parsers found no figure or reserve text '
+                          'they could use, and the models were not run')
         out['exclusion_class'] = 'no_triangle_data'
         out['pyd_failure_reason'] = reason
         out['opening_failure_reason'] = reason
@@ -551,7 +552,7 @@ def main() -> int:
         ('Less: not yet through extraction pipeline', -n_not_extracted, n_downloaded - n_not_extracted),
         ('Less: no eligible mature cohort and no stated development figure', -n_first_year,
          n_downloaded - n_not_extracted - n_first_year),
-        ('Less: no triangle or reserve text in report', -n_no_triangle,
+        ('Less: no deterministic reading (models not run)', -n_no_triangle,
          n_downloaded - n_not_extracted - n_first_year - n_no_triangle),
         ('Less: other field failures (PYD/LoB/opening not all extracted)',
          -(n_downloaded - n_not_extracted - n_first_year - n_no_triangle - n_full),
