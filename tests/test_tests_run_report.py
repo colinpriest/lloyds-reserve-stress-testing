@@ -54,3 +54,27 @@ def test_the_suite_record_is_clean_green_and_current():
     subprocess.run(["git", "-C", str(ROOT), "cat-file", "-e", rec["commit"] + "^{commit}"], check=True)
     assert _collected_now() == rec["collected"], (
         "the suite has changed size since the record was written: run python scripts/record_tests.py")
+
+
+#: what the manuscript's gate counts as a test file (paper/audit_numbers.py, upstream_test_record);
+#: test_gemini.py matches it too, so a change to the pipeline also makes the record stale
+TEST_FILE = re.compile(r"(^|/)tests?/|test_[^/]*\.py$|_test\.py$|conftest\.py$")
+
+
+def test_no_test_file_changed_since_the_suite_record_was_made():
+    """Verification review of round 62, test gap: the test above checks that the record's commit
+    exists and that the suite still has its size, so a test edited after the record -- same count,
+    different assertions -- passed it. The manuscript's gate checks what this one now does: the
+    record's commit is an ancestor of HEAD, and no test file differs between that commit and the
+    tree that is running, committed or not."""
+    if os.environ.get("LLOYDS_RECORDING_SUITE") == "1":
+        pytest.skip(WRITING)
+    rec = json.loads(RECORD.read_text(encoding="utf-8"))
+    anc = subprocess.run(["git", "-C", str(ROOT), "merge-base", "--is-ancestor", rec["commit"], "HEAD"],
+                         capture_output=True)
+    assert anc.returncode == 0, "the suite was recorded at %s, which is not an ancestor of HEAD" % rec["commit"]
+    changed = subprocess.run(["git", "-C", str(ROOT), "diff", "--name-only", rec["commit"]],
+                             capture_output=True, text=True, check=True).stdout.split()
+    stale = [f for f in changed if TEST_FILE.search(f)]
+    assert not stale, ("test file(s) changed after the suite was recorded at %s: %s; run "
+                       "python scripts/record_tests.py on a clean tree" % (rec["commit"][:12], stale[:5]))
