@@ -1801,12 +1801,21 @@ column now scores 1.0 when all four hold, and 0.0 otherwise:
 
 Measured on the committed caches over all 1,065 filings, with only this
 function swapped: the RAG step reports a different outcome for those two
-filings and no other, `depth <= t - u + 1` in place of equality changes
-nothing, and of the models' own 1,596 triangles two change -- 5820/2019,
+filings and no other, and `depth <= t - u + 1` in place of equality
+changes nothing.  The models' own triangles are each model block's
+`_claims_triangle` in the committed records, and
+`scripts/count_model_triangles.py` counts them.  In the records before
+round 62 (11b1bc36), 1,596 blocks carry a claims triangle, 1,547 of them
+with development rows and three with one column (GPT's, for 1206/2019,
+1980/2018 and 5820/2019), and the figure changes for two -- 5820/2019,
 where the RAG figure is applied first, and 1206/2019, where the code
 figure (+7.824m) meets the same sign veto as the RAG figure did and the
-adopted figure stays as it is. `tests/test_single_cohort_triangles.py`
-holds each condition.
+adopted figure stays as it is.  In the records
+now, 1,570 hold development rows and seven have one column: those three,
+and both models' triangles of 2468/2022 and 2255/2015, extracted again on
+29 September 2026, whose figures (-0.153m, -17.123m) are the RAG step's.
+`tests/test_single_cohort_triangles.py` holds each condition and these
+counts.
 
 ### 9.7  Percentage against monetary triangles
 

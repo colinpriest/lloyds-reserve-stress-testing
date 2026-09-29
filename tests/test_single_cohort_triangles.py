@@ -182,3 +182,35 @@ def test_the_multi_column_threshold_is_unchanged():
     # and a genuine staircase still scores one
     stair = [[100.0, 110.0, 120.0], [101.0, 111.0, None], [102.0, None, None]]
     assert tg._validate_triangle_structure([2016, 2017, 2018], stair, 2018) == 1.0
+
+
+NUMBER_WORDS = {2: "two", 3: "three", 4: "four", 5: "five", 6: "six", 7: "seven", 8: "eight"}
+
+
+def test_the_documented_counts_of_the_models_triangles_are_the_scripts():
+    """Verification review of round 62, item 5: docs 9.6 said "of the models' own 1,596 triangles
+    two change", counted by a script that was never committed, and a recount of the same records
+    found 1,547. Both were right about different things: 1,596 model blocks carry a claims triangle,
+    1,547 of them with development rows. scripts/count_model_triangles.py counts both, in the
+    records before round 62 (11b1bc36, read from git) and in the records now, and measures the
+    one-column rule on them; the section's numbers and names are its output."""
+    sys.path.insert(0, str(ROOT / "scripts"))
+    import count_model_triangles as cmt
+    doc = (ROOT / "docs" / "ocr-pipeline.md").read_text(encoding="utf-8").replace("\r\n", "\n")
+    section = " ".join(doc[doc.index("\n### 9.6 "):doc.index("\n### 9.7 ")].split())
+    then, now = cmt.count(cmt.records_at("11b1bc36")), cmt.count(cmt.records_in_tree())
+    assert ("%s blocks carry a claims triangle, %s of them with development rows and %s with one column"
+            % (format(then["claims_triangles"], ","), format(then["claims_triangles_with_development_rows"], ","),
+               NUMBER_WORDS[len(then["one_column"])])) in section
+    changed = sorted({r["record"] for r in then["figure_changed_by_the_one_column_rule"]})
+    assert changed == ["syndicate_1206_2019", "syndicate_5820_2019"]
+    assert "the figure changes for %s" % NUMBER_WORDS[len(changed)] in section
+    for stem in [s.split()[0] for s in then["one_column"]]:
+        assert "%s/%s" % tuple(stem.split("_")[1:]) in section, stem
+    assert ("%s hold development rows and %s have one column"
+            % (format(now["claims_triangles_with_development_rows"], ","), NUMBER_WORDS[len(now["one_column"])])
+            ) in section
+    new = sorted({s.split()[0] for s in now["one_column"]} - {s.split()[0] for s in then["one_column"]})
+    assert new == ["syndicate_2255_2015", "syndicate_2468_2022"]
+    for stem in new:
+        assert "%s/%s" % tuple(stem.split("_")[1:]) in section, stem
