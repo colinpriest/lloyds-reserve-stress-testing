@@ -2998,6 +2998,22 @@ RAG triangle, and these two carried none, so nothing re-derived them;
 round 221 found that they no longer reproduced and left them.  They
 need the models to be decided again.
 
+What let them sit is the scope of the check, not the rule: a replay
+measured on the records a rule still touches cannot see the records
+an earlier version of it emptied.  `scripts/replay_corpus_check.py`
+now replays the deterministic step for every committed record -- stubs
+and unread records included -- on its own caches and compares the
+class, the RAG figure and route, and the stored triangle; the records
+waiting for the models (`pdf_extraction/audit/redecision_pending.json`)
+and those without a table cache (`offline_unservable.json`) are the
+only declared exceptions, and a declaration that no longer differs is
+reported as stale.  The full run is recorded, with hashes of the code
+it ran and of the record content it compared, in
+`pdf_extraction/audit/corpus_replay_check.json`, and
+`tests/test_corpus_replay.py` fails when the pipeline code or a
+record changes without a new full run, and replays a subset in the
+default suite.
+
 ---
 
 ## 12  Run-off syndicate handling
