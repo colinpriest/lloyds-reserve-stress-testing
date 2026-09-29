@@ -114,6 +114,33 @@ def test_the_restatement_is_complete_and_changes_nothing_else():
     assert "0 to restate" in r.stdout, r.stdout
 
 
+def test_every_committed_first_year_stub_carries_the_current_reason_and_models_run():
+    """The stubs carried three generations of wording, ten of them the inception-year rule's, which
+    round 58 removed (review of 29 September 2026, E-3). Each now says why it is a stub and whether
+    the models ran."""
+    audited = {r["file"]: r for r in json.loads(
+        (ROOT / "pdf_extraction" / "audit" / "structural_eligibility_audit.json").read_text(encoding="utf-8"))["records"]}
+    n = 0
+    for path, d in _committed():
+        if "models" in d or not d.get("first_year_syndicate"):
+            continue
+        n += 1
+        assert d["models_run"] is bool(d.get("first_year_evidence")), path.name
+        assert "Syndicate too new" not in d["reason"], path.name
+        assert "within the first two underwriting years" not in d["reason"], path.name
+        if d["reason"] != tg.FIRST_YEAR_REASON:
+            # the inception-year rule's stubs: decided by the filing-page audit, and saying so
+            assert audited[path.name]["decision"] == "structural_ineligible_no_mature_cohort", path.name
+            assert "structural_eligibility_audit.json" in d["reason"], path.name
+    assert n == 69
+
+
+def test_the_stub_restatement_is_complete():
+    r = subprocess.run([sys.executable, str(ROOT / "scripts" / "restate_record_status.py"), "--first-year",
+                        "--check"], capture_output=True, text=True, cwd=str(ROOT))
+    assert r.returncode == 0 and "0 to restate" in r.stdout, r.stdout + r.stderr
+
+
 def test_the_pending_list_is_what_the_committed_records_are_waiting_for():
     reg = json.loads((ROOT / "pdf_extraction" / "audit" / "redecision_pending.json").read_text(encoding="utf-8"))
     stems = [r["stem"] for r in reg["records"]]

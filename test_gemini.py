@@ -501,45 +501,57 @@ def _reviewed_eligible_record(report_path: Path, syndicate_num: int, report_year
         return None
     fields = reviewed.get("audited_source_fields") or {}
     triangle = fields.get("triangle") or {}
+    currency = triangle.get("currency") or "GBP"
+    pyd = fields["prior_year_development_gbp_m"]
+    opening = fields["opening_reserves_gbp_m"]
+    mature = reviewed.get("mature_underwriting_years", [])
+    # Every figure below is the audit's reading of the filing pages; no model was run, so the block
+    # carries no model confidences and the record no model-agreement validation (round 62: the
+    # committed record had said "[RAG OVERRIDE: Model said PYD=0.000m ...]" and passed=True).
     block = {
         "syndicate": syndicate_num,
         "year": report_year,
-        "opening_reserves_gbp_m": fields["opening_reserves_gbp_m"],
+        "opening_reserves_gbp_m": opening,
         "opening_reserves_page": fields["opening_reserves_page"],
-        "opening_reserves_confidence": 1.0,
-        "prior_year_development_gbp_m": fields["prior_year_development_gbp_m"],
+        "prior_year_development_gbp_m": pyd,
         "prior_year_development_pct": fields["prior_year_development_pct"],
-        "direction": "neutral",
+        "direction": _pyd_direction(pyd),
         "prior_year_movement_page": fields["prior_year_movement_page"],
-        "prior_year_movement_confidence": 1.0,
-        "exact_reserve_text": "Gross claims outstanding at the opening of the reporting year.",
+        "exact_reserve_text": ("Gross claims outstanding at 1 January %d: %s %s thousand (filing page %s)."
+                               % (report_year, currency, format(round(opening * 1000), ","),
+                                  fields["opening_reserves_page"])),
         "primary_causes": [], "specific_events": [],
-        "specific_years_affected": reviewed.get("mature_underwriting_years", []),
+        "specific_years_affected": mature,
         "prior_year_events": [], "named_events": [], "raw_causal_phrases": [],
         "lob_movements": [],
-        "standardized_narrative": reviewed["mature_cohort_calculation"],
+        "standardized_narrative": ("The gross claims development table on filing page %s holds one cohort up "
+                                   "to t-2 (UW%s); its printed dashes are reported nil values, so its movement "
+                                   "in %d is %s: %s. Opening gross claims outstanding: %s %.3f million."
+                                   % (fields["prior_year_movement_page"], ", UW".join(str(y) for y in mature),
+                                      report_year, "nil" if pyd == 0 else "%+.3fm" % pyd,
+                                      reviewed["mature_cohort_calculation"], currency, opening)),
         "gross_premiums_written_gbp_m": fields["gross_premiums_written_gbp_m"],
         "gross_premium_mix": fields["gross_premium_mix"],
         "gross_premium_page": fields["gross_premium_page"],
-        "gross_premium_confidence": 1.0,
-        "currency": "GBP",
+        "currency": currency,
         "_adobe_lob": {"gross_premium_mix": fields["gross_premium_mix"],
                        "gross_premiums_written_gbp_m": fields["gross_premiums_written_gbp_m"],
                        "table_total": fields["gross_premiums_written_gbp_m"],
                        "class_sum": sum(x["amount_gbp_m"] for x in fields["gross_premium_mix"]),
-                       "currency": "GBP", "method": "source-page-audit",
+                       "currency": currency, "method": "source-page-audit",
                        "source_page": fields["gross_premium_page"], "entity": syndicate_num},
-        "data_quality_notes": ("Source-page audit: printed dashes in the mature cohort are reported nil "
-                               "values, not unread cells. [RAG OVERRIDE: Model said PYD=0.000m but RAG "
-                               "triangle computed +0.000m]"),
+        "data_quality_notes": ("Source-page audit (%s): no model was run, and every figure in this block is "
+                               "the audit's reading of the filing pages. The printed dashes in the mature "
+                               "cohort are reported nil values, not unread cells."
+                               % str(STRUCTURAL_ELIGIBILITY_AUDIT).replace("\\", "/")),
         "_claims_triangle": {**triangle, "page": triangle.get("source_page")},
         "_rag_triangle": {**triangle, "units_evidence": "header",
                           "cell_binding": "source-page-audit", "entity": syndicate_num},
-        "_pyd_route": {"source": "rag_triangle", "value": 0.0,
+        "_pyd_route": {"source": "rag_triangle", "value": pyd,
                        "triangle_type": triangle.get("type"),
                        "triangle_units": triangle.get("units"),
                        "triangle_source_page": triangle.get("source_page"),
-                       "note": "filing-page audit retained the reported nil outcome"},
+                       "note": "filing-page audit retained the reported nil outcome; no model was run"},
     }
     return {
         "extraction_timestamp": datetime.now(timezone.utc).isoformat(),
@@ -549,10 +561,10 @@ def _reviewed_eligible_record(report_path: Path, syndicate_num: int, report_year
         "source_file": str(report_path),
         "syndicate": syndicate_num,
         "year": report_year,
+        "models_run": False,
         "models": {"source-page-audit": block},
-        "validation": {"passed": True, "total_discrepancies": 0,
-                       "within_tolerance": 0, "hard_failures": 0,
-                       "hard_failure_details": [], "method": "source-page-audit"},
+        "validation": {"method": "source-page-audit", "models_run": False,
+                       "note": "no model readings to compare: the figures are the filing-page audit's"},
         "structural_eligibility_audit": {
             "decision": reviewed["decision"],
             "ledger": str(STRUCTURAL_ELIGIBILITY_AUDIT).replace("\\", "/")},

@@ -90,18 +90,24 @@ def restated_no_reading(data: dict) -> dict:
     return out
 
 
+#: the reason a stub the inception-year rule wrote is restated with
+AUDITED_INCEPTION_STUB_REASON = (
+    "No underwriting year old enough for prior year development (u <= t-2) in the filing's "
+    "claims development table, as read on its pages in "
+    "pdf_extraction/audit/structural_eligibility_audit.json. The record was written by the "
+    "inception-year rule removed in round 58; the table step has no cache for this filing, "
+    "and neither it nor the models has read its reserve text.")
+
+
 def first_year_reason(data: dict, audited: dict, name: str) -> str:
-    if INCEPTION_RULE_WORDING not in str(data.get("reason") or ""):
+    reason = str(data.get("reason") or "")
+    if INCEPTION_RULE_WORDING not in reason and reason != AUDITED_INCEPTION_STUB_REASON:
         return tg.FIRST_YEAR_REASON
     decision = (audited.get(name) or {}).get("decision")
     if decision != "structural_ineligible_no_mature_cohort":
         raise SystemExit("%s: written by the inception-year rule and not decided by the filing-page audit"
                          % name)
-    return ("No underwriting year old enough for prior year development (u <= t-2) in the filing's "
-            "claims development table, as read on its pages in "
-            "pdf_extraction/audit/structural_eligibility_audit.json. The record was written by the "
-            "inception-year rule removed in round 58; the table step has no cache for this filing, "
-            "and neither it nor the models has read its reserve text.")
+    return AUDITED_INCEPTION_STUB_REASON
 
 
 def restated_first_year(data: dict, audited: dict, name: str) -> dict:

@@ -3214,7 +3214,11 @@ page. `tests/test_html_conversion.py` holds the check.
 ### 14.2  First-year syndicate
 
 Stubs written before round 58 by the inception-year check, which
-was removed then (section 11.1), carry this form:
+was removed then (section 11.1), carried this form until round 62,
+when `scripts/restate_record_status.py --first-year` restated them:
+none of the ten has a table cache, so their reason now names the
+filing-page audit that decided them
+(`pdf_extraction/audit/structural_eligibility_audit.json`):
 
 ```json
 {
@@ -3235,6 +3239,7 @@ stated in the reserve text:
 {
   "first_year_syndicate": true,
   "reason": "No underwriting year old enough for prior year development in the report's triangles, and no prior-year figure stated in its reserve text",
+  "models_run": false,
   "syndicate": 1322,
   "year": 2023,
   "gross_premium_mix": ["...if available..."]

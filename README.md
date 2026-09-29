@@ -361,7 +361,10 @@ before or after the models run:
 - A report with no triangle at all is not taken to be young on that account.
 - The inception-year lookup that once flagged a report by `report_year < inception_year + 2` was
   removed in round 58. `pdf_extraction/syndicate_inception_years.json` is kept as a record, and no
-  step reads it for a decision.
+  step reads it for a decision. Ten committed stubs were written by that rule and still carried its
+  wording until round 62; they have no table cache, so the pipeline cannot replay them, and their
+  exclusion rests on the filing-page audit (`pdf_extraction/audit/structural_eligibility_audit.json`),
+  which their restated reason names (`scripts/restate_record_status.py --first-year`).
 
 `docs/ocr-pipeline.md` §11.1 and §11.2 state the executed conditions function by function;
 `_no_mature_cohort()` and `_first_year_record()` in `test_gemini.py` are the code
@@ -471,7 +474,8 @@ For first-year syndicates:
 ```json
 {
   "first_year_syndicate": true,
-  "reason": "Syndicate too new -- insufficient underwriting years for prior year development analysis",
+  "reason": "No underwriting year old enough for prior year development in the report's triangles, and no prior-year figure stated in its reserve text",
+  "models_run": false,
   "syndicate": 1322,
   "year": 2023,
   "gross_premium_mix": ["...if available..."]

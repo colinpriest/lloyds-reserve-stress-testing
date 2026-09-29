@@ -1,5 +1,5 @@
 {
-  "extraction_timestamp": "2026-09-11T10:59:18.728216+00:00",
+  "extraction_timestamp": "2026-09-29T03:04:07.320074+00:00",
   "spec": {
     "prompt_version": "2.13",
     "field_definitions_version": "1.0",
@@ -8,27 +8,28 @@
   "source_file": "syndicate_reports\\pdfs\\syndicate_1840_2022.pdf",
   "syndicate": 1840,
   "year": 2022,
+  "models_run": false,
   "models": {
     "source-page-audit": {
       "syndicate": 1840,
       "year": 2022,
       "opening_reserves_gbp_m": 0.279,
       "opening_reserves_page": 38,
-      "opening_reserves_confidence": 1.0,
       "prior_year_development_gbp_m": 0.0,
       "prior_year_development_pct": 0.0,
-      "direction": "neutral",
+      "direction": "flat",
       "prior_year_movement_page": 39,
-      "prior_year_movement_confidence": 1.0,
-      "exact_reserve_text": "Gross claims outstanding balance at 1 January 2022: GBP 279,000.",
+      "exact_reserve_text": "Gross claims outstanding at 1 January 2022: GBP 279 thousand (filing page 38).",
       "primary_causes": [],
       "specific_events": [],
-      "specific_years_affected": [2020],
+      "specific_years_affected": [
+        2020
+      ],
       "prior_year_events": [],
       "named_events": [],
-      "standardized_narrative": "The gross UW2020 mature cohort reports nil at both one year after and two years after, so its mature-cohort movement is zero against opening gross claims outstanding of GBP 0.279 million.",
       "raw_causal_phrases": [],
       "lob_movements": [],
+      "standardized_narrative": "The gross claims development table on filing page 39 holds one cohort up to t-2 (UW2020); its printed dashes are reported nil values, so its movement in 2022 is nil: UW2020: two-years-after 0 minus one-year-after 0 = 0.000 GBP m. Opening gross claims outstanding: GBP 0.279 million.",
       "gross_premiums_written_gbp_m": 3.676,
       "gross_premium_mix": [
         {
@@ -48,7 +49,6 @@
         }
       ],
       "gross_premium_page": 33,
-      "gross_premium_confidence": 1.0,
       "currency": "GBP",
       "_adobe_lob": {
         "gross_premium_mix": [
@@ -76,37 +76,75 @@
         "source_page": 33,
         "entity": 1840
       },
-      "data_quality_notes": "Source-page audit: printed dashes in the mature UW2020 column are reported nil values, not unread cells. [RAG OVERRIDE: Model said PYD=0.000m but RAG triangle computed +0.000m]",
+      "data_quality_notes": "Source-page audit (pdf_extraction/audit/structural_eligibility_audit.json): no model was run, and every figure in this block is the audit's reading of the filing pages. The printed dashes in the mature cohort are reported nil values, not unread cells.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
-        "page": 39,
-        "underwriting_years": [2020, 2021, 2022],
+        "source_page": 39,
+        "underwriting_years": [
+          2020,
+          2021,
+          2022
+        ],
         "development_rows": [
-          [18.0, 2364.0, 190.0],
-          [0.0, 3407.0, null],
-          [0.0, null, null]
-        ]
-      },
-      "_rag_triangle": {
-        "type": "gross",
-        "currency": "GBP",
-        "units": "thousands",
-        "units_evidence": "header",
-        "cell_binding": "source-page-audit",
-        "underwriting_years": [2020, 2021, 2022],
-        "development_rows": [
-          [18.0, 2364.0, 190.0],
-          [0.0, 3407.0, null],
-          [0.0, null, null]
+          [
+            18.0,
+            2364.0,
+            190.0
+          ],
+          [
+            0.0,
+            3407.0,
+            null
+          ],
+          [
+            0.0,
+            null,
+            null
+          ]
         ],
         "row_labels": [
           "At end of underwriting year",
           "One year after",
           "Two years after"
         ],
+        "page": 39
+      },
+      "_rag_triangle": {
+        "type": "gross",
+        "currency": "GBP",
+        "units": "thousands",
         "source_page": 39,
+        "underwriting_years": [
+          2020,
+          2021,
+          2022
+        ],
+        "development_rows": [
+          [
+            18.0,
+            2364.0,
+            190.0
+          ],
+          [
+            0.0,
+            3407.0,
+            null
+          ],
+          [
+            0.0,
+            null,
+            null
+          ]
+        ],
+        "row_labels": [
+          "At end of underwriting year",
+          "One year after",
+          "Two years after"
+        ],
+        "units_evidence": "header",
+        "cell_binding": "source-page-audit",
         "entity": 1840
       },
       "_pyd_route": {
@@ -115,17 +153,14 @@
         "triangle_type": "gross",
         "triangle_units": "thousands",
         "triangle_source_page": 39,
-        "note": "source-page audit retained the printed nil mature-cohort outcome"
+        "note": "filing-page audit retained the reported nil outcome; no model was run"
       }
     }
   },
   "validation": {
-    "passed": true,
-    "total_discrepancies": 0,
-    "within_tolerance": 0,
-    "hard_failures": 0,
-    "hard_failure_details": [],
-    "method": "source-page-audit"
+    "method": "source-page-audit",
+    "models_run": false,
+    "note": "no model readings to compare: the figures are the filing-page audit's"
   },
   "structural_eligibility_audit": {
     "decision": "eligible_observed_zero",

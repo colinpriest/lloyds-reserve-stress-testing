@@ -1,5 +1,5 @@
 # Syndicate-Year Coverage Report
-Generated: 2026-09-29T02:13:06.628447+00:00
+Generated: 2026-09-29T03:08:17.172498+00:00
 
 ## Global reconciliation
 

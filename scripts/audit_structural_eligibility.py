@@ -41,17 +41,32 @@ INCEPTION_TERMS = re.compile(
 TRIANGLE_TERMS = re.compile(r"claims development(?: table| tables)?|underwriting year", re.I)
 
 
+LEDGER = RECORD_DIR / "audit" / "structural_eligibility_audit.json"
+
+
 def structural_records() -> list[tuple[Path, dict]]:
-    """Return the committed first-year stubs, which are the records under audit."""
+    """Return the records under audit: the committed first-year stubs, and the stubs the audit has
+    since decided eligible, which are written from the ledger and are no longer stubs (1840/2022,
+    whose printed nil was retained in 11b1bc36). Before round 62 only the stubs were selected, so
+    once 1840/2022 was retained the script found 69 and refused to run on the committed corpus."""
+    audited = set()
+    if LEDGER.exists():
+        audited = {r["file"] for r in json.loads(LEDGER.read_text(encoding="utf-8"))["records"]
+                   if r.get("decision") == "eligible_observed_zero"}
     records = []
     for path in sorted(RECORD_DIR.glob("syndicate_*_*.json")):
         try:
             record = json.loads(path.read_text(encoding="utf-8"))
         except (UnicodeDecodeError, json.JSONDecodeError):
             continue
-        if record.get("first_year_syndicate") is True:
+        if record.get("first_year_syndicate") is True or path.name in audited:
             records.append((path, record))
     return records
+
+
+def expected_count() -> int:
+    """The number of records the ledger reviewed (70), which the selection must reproduce."""
+    return json.loads(LEDGER.read_text(encoding="utf-8"))["counts"]["reviewed"] if LEDGER.exists() else 70
 
 
 def source_path(record: dict) -> Path:
@@ -140,7 +155,9 @@ def inspect_record(record_path: Path, record: dict) -> dict:
     try:
         rag = pipeline.extract_pyd_from_relevant_pages(source, year)
     except RuntimeError as exc:
-        if "table backends are cache-only" not in str(exc):
+        # a table-cache miss: refused in cache-only mode, and in offline mode as a call it would make
+        if "table backends are cache-only" not in str(exc) and not (
+                "offline mode" in str(exc) and "Document Intelligence" in str(exc)):
             raise
         result["candidate_status"] = "manual_review_no_table_cache"
         result["table_cache_error"] = str(exc)
@@ -188,8 +205,8 @@ def main() -> None:
     # This audit is cache-only and must not invoke page-image model inference.
     pipeline.HAS_PDF2IMAGE = False
     rows = structural_records()
-    if len(rows) != 70:
-        raise SystemExit(f"expected 70 committed structural stubs, found {len(rows)}")
+    if len(rows) != expected_count():
+        raise SystemExit(f"expected {expected_count()} committed records under audit, found {len(rows)}")
     existing = {}
     if args.evidence_only:
         if not args.output.exists():

@@ -271,8 +271,7 @@ def analyse_extraction(syndicate: int, year: int,
         out['opening_failure_reason'] = reason
         mix = data.get('gross_premium_mix')
         if mix:
-            out.update(_lob_from_mix(mix, syndicate, year, rpt, locator,
-                                     deterministic=False))
+            out.update(_unreconciled_table_mix(mix))
         else:
             out['lob_failure_reason'] = 'no LOB mix in no-mature-cohort audit JSON'
         return out
@@ -285,8 +284,7 @@ def analyse_extraction(syndicate: int, year: int,
         out['opening_failure_reason'] = reason
         mix = data.get('gross_premium_mix')
         if mix:
-            out.update(_lob_from_mix(mix, syndicate, year, rpt, locator,
-                                     deterministic=False))
+            out.update(_unreconciled_table_mix(mix))
         else:
             out['lob_failure_reason'] = 'no LOB mix available (report excluded)'
         return out
@@ -380,6 +378,27 @@ def analyse_extraction(syndicate: int, year: int,
         else:
             out['lob_failure_reason'] = 'no segmental analysis table or LLM LOB mix found'
     return out
+
+
+def _unreconciled_table_mix(mix: list) -> dict:
+    """The business mix of a record without model blocks (a first-year stub, or a report with no
+    deterministic reading): the table step's reading, never reconciled with a premium total a model
+    read, so its amounts' unit is not verified. Round 62 (review of 29 September 2026, R7-09): the
+    stubs' amounts include thousands in a millions field (1840/2021's 3,878 is GBP 3.9m) and US
+    dollars, and this table republished them as GBP millions labelled "LLM text extraction". The
+    classes and their shares are kept; the amounts are not."""
+    if not isinstance(mix, list) or not mix:
+        return {'lob_status': 'failed', 'lob_failure_reason': 'empty LOB mix'}
+    return {
+        'lob_status': 'successful',
+        'lob_mix': [{'line_of_business': e.get('line_of_business'),
+                     'percentage_of_total': e.get('percentage_of_total')}
+                    for e in mix if isinstance(e, dict)],
+        'lob_n': len(mix),
+        'lob_source': ('table step reading of a record without model blocks: shares only, the '
+                       'amounts are not reconciled with a model total and their unit is not verified'),
+        'lob_failure_reason': None,
+    }
 
 
 def _lob_from_mix(mix: list, syndicate: int, year: int, rpt: Optional[Path],
