@@ -7,7 +7,9 @@ cites -- and the one retained eligible record is held to the generator that writ
 must also cover every committed stub by name: 1985/2024 became one when it was extracted again on
 29 September 2026, and nothing had said the audit did not cover it.
 """
+import functools
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -99,9 +101,121 @@ def test_the_ledger_is_the_transcription():
         assert r["source_page"] == page + 1, name
 
 
-def _page_texts(r):
+@functools.lru_cache(maxsize=None)
+def _texts_of(source_file):
     import finalize_structural_eligibility_audit as fin
-    return fin.page_texts(ROOT / r["source_file"])
+    return tuple(fin.page_texts(ROOT / source_file))
+
+
+def _page_texts(r):
+    return list(_texts_of(r["source_file"]))
+
+
+def _present():
+    present = [r for r in _records().values() if (ROOT / r["source_file"]).exists()]
+    if not present:
+        pytest.skip("source filings not present in this checkout")
+    return present
+
+
+#: a currency marker, by the currency it names ("C$" is removed from the dollar count below)
+CURRENCY_MARKERS = {
+    "GBP": re.compile(r"£|\bGBP\b|\bsterling\b|\bpounds?\b", re.I),
+    "USD": re.compile(r"(?<![A-Za-z])(US)?\$|\bUSD\b|\bUS dollars?\b|\bdollars?\b", re.I),
+    "EUR": re.compile(r"€|\bEUR\b|\beuros?\b", re.I),
+    "CAD": re.compile(r"\bC\$|\bCAD\b|\bCanadian dollars?\b", re.I),
+}
+#: where a filing declares the currency its accounts are in
+CURRENCY_DECLARATION = re.compile(r"(presentation(al)? currency|functional currency|reporting currency|"
+                                  r"presented in|are stated in|expressed in|reported in)[^.]{0,120}", re.I)
+
+
+def _currency_markers(text):
+    flat = " ".join(text.split())
+    found = {c: len(p.findall(flat)) for c, p in CURRENCY_MARKERS.items()}
+    found["USD"] = max(0, found["USD"] - found["CAD"])
+    return {c: n for c, n in found.items() if n}
+
+
+def _declared_currencies(texts):
+    out = set()
+    for text in texts:
+        for m in CURRENCY_DECLARATION.finditer(" ".join(text.split())):
+            out |= {c for c, p in CURRENCY_MARKERS.items() if p.search(m.group(0))}
+    return out
+
+
+def test_each_opening_currency_is_the_one_its_filing_prints():
+    """Verification review of round 62, test gap U5-4: the currency was checked only for membership
+    of {GBP, USD, EUR, CAD} and pinned for three records, so a wrong currency on any other record
+    passed. Now the opening's currency must be the one its page prints most often; a page that prints
+    no currency marker defers to the currency the filing declares its accounts in; and a page that
+    prints another currency is accepted only where the transcription records the conflict and the
+    declaration agrees with the ledger (5183/2023: note 4 headed GBP'000 in USD accounts). Measured on
+    the committed ledger: 66 openings by their page, 1100/2024 by its declaration (Euro accounts),
+    5183/2023 by its recorded conflict."""
+    how = {}
+    for r in _present():
+        if r["opening_gross_reserve_gbp_m"] is None:
+            continue
+        cur, texts = r["opening_gross_reserve_currency"], _page_texts(r)
+        page = _currency_markers(texts[r["opening_gross_reserve_page"] - 1])
+        if page and max(page, key=page.get) == cur:
+            how[r["file"]] = "page"
+        elif not page:
+            assert cur in _declared_currencies(texts), (r["file"], cur, "no marker on the page")
+            how[r["file"]] = "declaration"
+        else:
+            assert "currency conflict" in str(r.get("transcription_notes")).lower(), (r["file"], cur, page)
+            assert cur in _declared_currencies(texts), (r["file"], cur, page)
+            how[r["file"]] = "recorded conflict"
+    if len(how) == 68:      # every filing present: the measured split holds
+        assert sorted(k for k, v in how.items() if v != "page") == [
+            "syndicate_1100_2024.json", "syndicate_5183_2023.json"], how
+
+
+#: a development-row label of a claims development table
+DEVELOPMENT_LABEL = re.compile(
+    r"at (the )?end of (the )?(first |pure )?(underwriting|reporting|accident|financial)? ?year|"
+    r"\b(one|two|three|1|2|3) years? later\b|\bafter (one|two|1|2) years?\b|\b12 months\b|"
+    r"development (year|period)", re.I)
+
+
+def _years_as_a_header(flat, years, span=160):
+    """The years printed as a header row: in ascending or descending order, each within `span`
+    characters of the one before."""
+    for order in (sorted(years), sorted(years, reverse=True)):
+        ys = [str(y) for y in order]
+        for m in re.finditer(re.escape(ys[0]), flat):
+            pos, ok = m.end(), True
+            for y in ys[1:]:
+                n = flat.find(y, pos, pos + span)
+                if n < 0:
+                    ok = False
+                    break
+                pos = n + len(y)
+            if ok:
+                return True
+    return False
+
+
+def test_the_cited_page_is_the_page_that_holds_the_triangle():
+    """Verification review of round 62, test gap U5-5: source_page passed if every underwriting year
+    occurred anywhere on the page, which the old ledger's pages -- the ones R7 found were not the
+    triangle page -- did for 67 of 68 records. The cited page must now print a development-row label
+    and the years as a header row. Measured: every record of the committed ledger with a triangle page
+    passes, and of the old ledger's (11b1bc36) pages only the 16 it shares with this one do. A record
+    whose filing prints no triangle (2357/2014) cites the page that prints its years instead."""
+    tr = json.loads((AUDIT / "structural_eligibility_transcription.json").read_text(encoding="utf-8"))["records"]
+    checked = 0
+    for r in _present():
+        if tr[r["file"]]["triangle_page_index"] is None:
+            continue
+        flat = " ".join(_page_texts(r)[r["source_page"] - 1].split())
+        assert DEVELOPMENT_LABEL.search(flat), (r["file"], r["source_page"], "no development-row label")
+        assert _years_as_a_header(flat, r["underwriting_years"]), (r["file"], r["source_page"], "no year header")
+        checked += 1
+    assert checked >= 1
 
 
 def test_each_cited_page_prints_what_the_ledger_says():
