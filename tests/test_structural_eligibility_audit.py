@@ -258,15 +258,32 @@ def test_mature_nil_cohort_with_positive_reserve_is_an_observed_zero():
     assert block["_rag_triangle"]["development_rows"][2][0] == 0.0
 
 
+def _separator_agnostic(obj):
+    """The record with every `source_file` path written with forward slashes: the generator writes
+    str(Path), which is `syndicate_reports\\pdfs\\...` on Windows and `syndicate_reports/pdfs/...`
+    elsewhere."""
+    if isinstance(obj, dict):
+        return {k: (v.replace("\\", "/") if k == "source_file" and isinstance(v, str) else _separator_agnostic(v))
+                for k, v in obj.items()}
+    if isinstance(obj, list):
+        return [_separator_agnostic(v) for v in obj]
+    return obj
+
+
 def test_the_retained_record_is_its_generators_output_and_claims_no_model_work():
     """E-1: the committed 1840/2022 record differed from its generator and said "[RAG OVERRIDE: Model
-    said PYD=0.000m ...]" with model confidences of 1.0 and passed validation, though no model ran."""
+    said PYD=0.000m ...]" with model confidences of 1.0 and passed validation, though no model ran.
+    The comparison is separator-agnostic (verification review of round 62): the committed record was
+    written on Windows, and the generator's output is compared as a Windows and as a POSIX machine
+    would produce it."""
+    from pathlib import PurePosixPath, PureWindowsPath
     committed = json.loads((ROOT / "pdf_extraction" / "syndicate_1840_2022.json").read_text(encoding="utf-8"))
-    generated = json.loads(json.dumps(pipeline.sanitize_json_ascii(pipeline._reviewed_eligible_record(
-        pipeline.REPORTS_DIR / "syndicate_1840_2022.pdf", 1840, 2022))))
-    for d in (committed, generated):
-        d.pop("extraction_timestamp")
-    assert committed == generated
+    committed.pop("extraction_timestamp")
+    for flavour in (PureWindowsPath, PurePosixPath):
+        generated = json.loads(json.dumps(pipeline.sanitize_json_ascii(pipeline._reviewed_eligible_record(
+            flavour("syndicate_reports", "pdfs", "syndicate_1840_2022.pdf"), 1840, 2022))))
+        generated.pop("extraction_timestamp")
+        assert _separator_agnostic(committed) == _separator_agnostic(generated), flavour.__name__
     block = committed["models"]["source-page-audit"]
     assert committed["models_run"] is False and committed["validation"]["models_run"] is False
     assert "passed" not in committed["validation"]
