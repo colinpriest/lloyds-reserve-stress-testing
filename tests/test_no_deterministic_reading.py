@@ -157,3 +157,52 @@ def test_the_pending_list_is_what_the_committed_records_are_waiting_for():
         else:
             assert "models" in d, r["stem"]
         assert r["current_code_offline"], r["stem"]
+
+
+def test_the_register_says_what_the_re_extraction_cost_counts():
+    """Verification review of round 62, N-V-E-1: the register said "the whole run cost $0.2732". That
+    figure is the sum of the records' total_cost_usd, which process_one_report sets to the two
+    whole-document calls; the run's page-vision calls cache no token usage and reach no total, and the
+    Gemini price formula leaves out the thinking tokens. Every number the register states is recomputed
+    here from the records and from the llm_cache entries the run wrote on its date, and a cost the cache
+    does not record must read "not recorded", never an estimate."""
+    ext = json.loads((ROOT / "pdf_extraction" / "audit" / "redecision_pending.json").read_text(
+        encoding="utf-8"))["extracted"]
+    cost = ext["cost"]
+    assert not re.search(r"whole run cost", ext["note"], re.I)
+    stems = [r["stem"] for r in ext["records"]]
+    records = dict((p.stem, d) for p, d in _committed())
+    metas = [b["_extraction_meta"] for s in stems for b in (records[s].get("models") or {}).values()
+             if b.get("_extraction_meta")]
+    figure = round(sum(records[s].get("total_cost_usd") or 0.0 for s in stems), 4)
+    assert figure == round(sum(m["cost_usd"] for m in metas), 4) == cost["whole_document_cost_usd"]
+    assert cost["whole_document_calls"] == len(metas)
+    assert "$%.4f" % figure in ext["note"] and "whole-document calls only" in ext["note"]
+    gemini = [m for m in metas if m["model"].startswith("gemini")]
+    assert cost["gemini_tokens_not_priced"] == sum(
+        m["total_tokens"] - m["input_tokens"] - m["output_tokens"] for m in gemini)
+    # what the run wrote to the cache on its date: its whole-document responses are the records' own,
+    # and its page-level responses are its page-vision calls
+    wanted = {(int(s.split("_")[1]), int(s.split("_")[2])): s for s in stems}
+    documents, pages, usage = [], [], []
+    for path in (ROOT / "pdf_extraction" / "llm_cache").glob("*.json"):
+        d = json.loads(path.read_bytes())
+        meta = d.get("_cache_meta") or {}
+        stem = wanted.get((meta.get("syndicate"), meta.get("year")))
+        if stem is None or not str(meta.get("cached_at", "")).startswith(ext["on"]):
+            continue
+        data = d.get("data") if isinstance(d.get("data"), dict) else {}
+        if meta.get("page") is None:
+            documents.append(data.get("_extraction_meta"))
+        else:
+            pages.append({"stem": stem, "page": meta["page"], "model": meta["model"]})
+            if data.get("_extraction_meta"):
+                usage.append(data["_extraction_meta"]["cost_usd"])
+    canon = lambda rows: sorted(json.dumps(r, sort_keys=True) for r in rows)  # noqa: E731
+    assert canon(documents) == canon(metas)
+    assert canon(pages) == canon(cost["page_vision_calls"]) and pages
+    assert "(%d cached responses)" % len(pages) in ext["note"]
+    if usage:      # a page-level response that records its usage is costed from it
+        assert cost["page_vision_cost_usd"] == round(sum(usage), 4)
+    else:
+        assert cost["page_vision_cost_usd"] == "not recorded"

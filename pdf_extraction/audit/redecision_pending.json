@@ -18,7 +18,58 @@
  ],
  "extracted": {
   "on": "2026-09-29",
-  "note": "the 13 records extracted again one at a time with the models (prompt 2.13, --batch, Azure cache only, no table-backend call); the whole run cost $0.2732. Each was read against its filing page afterwards.",
+  "note": "the 13 records extracted again one at a time with the models (prompt 2.13, --batch, Azure cache only, no table-backend call); each was read against its filing page afterwards. The $0.2732 (the sum of the records' total_cost_usd) is the price of the run's 24 whole-document calls only: it leaves out the Gemini thinking tokens those calls recorded and the run's page-vision calls (8 cached responses), whose cost was not recorded (see cost).",
+  "cost": {
+   "whole_document_cost_usd": 0.2732,
+   "whole_document_calls": 24,
+   "counts": "the 24 whole-document calls, gemini-2.5-flash and gpt-5-mini for each of the 12 records that reached the models (1985/2024 became a first-year stub before them): the sum of those records' total_cost_usd, each the sum of its two responses' cost_usd, which test_gemini prices from PRICING and the input and output token counts the response recorded. It is the price table's figure, not a provider's bill.",
+   "gemini_tokens_not_priced": 76473,
+   "gemini_tokens_not_priced_note": "the 12 gemini-2.5-flash whole-document responses record 76,473 tokens in total_tokens beyond their input and output counts (the model's thinking tokens); the price formula prices the input and output counts only, so these tokens are not in the $0.2732. The gpt-5-mini responses record no such difference.",
+   "page_vision_calls": [
+    {
+     "stem": "syndicate_1902_2024",
+     "page": 47,
+     "model": "gemini-2.5-flash"
+    },
+    {
+     "stem": "syndicate_1985_2024",
+     "page": 50,
+     "model": "gemini-2.5-flash"
+    },
+    {
+     "stem": "syndicate_1988_2024",
+     "page": 52,
+     "model": "gemini-2.5-flash"
+    },
+    {
+     "stem": "syndicate_2525_2024",
+     "page": 48,
+     "model": "gemini-2.5-flash"
+    },
+    {
+     "stem": "syndicate_2689_2024",
+     "page": 47,
+     "model": "gemini-2.5-flash"
+    },
+    {
+     "stem": "syndicate_2880_2024",
+     "page": 46,
+     "model": "gemini-2.5-flash"
+    },
+    {
+     "stem": "syndicate_3456_2024",
+     "page": 49,
+     "model": "gemini-2.5-flash"
+    },
+    {
+     "stem": "syndicate_5183_2024",
+     "page": 47,
+     "model": "gemini-2.5-flash"
+    }
+   ],
+   "page_vision_cost_usd": "not recorded",
+   "page_vision_note": "the run's page-image calls to gemini-2.5-flash, known from their responses: the 8 page-level llm_cache entries written for these records on 2026-09-29 (pages numbered from 1). A response that fails to parse is not cached, so a call retried after one would not show here. The page-level cache keeps the triangle only, not the token usage, and the page-vision cost reaches neither a record's total_cost_usd nor the run total, so the cost of these calls was not recorded. 1985/2024 made no whole-document call, and its stub records no cost."
+  },
   "records": [
    {
     "stem": "syndicate_2468_2022",
