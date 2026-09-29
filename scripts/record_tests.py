@@ -87,8 +87,10 @@ def main():
         "purpose": ("The extraction suite's result at a commit, written by scripts/record_tests.py; the "
                     "manuscript's checklist count is generated from it and not typed."),
         "commit": head,
-        "dirty": bool(dirty),
-        "dirty_paths": dirty[:50],
+        # the key the manuscript's gate reads (paper/audit_numbers.py, upstream_test_record): a record
+        # of a run on a changed or untracked file is not evidence for the commit it names
+        "worktree_dirty_src": bool(dirty),
+        "worktree_dirty_paths": dirty[:50],
         "recorded_at_utc": datetime.datetime.now(datetime.timezone.utc).replace(microsecond=0).isoformat(),
         "command": "python " + command + "   (from the repository root; LLOYDS_EXTRACTION_OFFLINE=1)",
         "python": platform.python_version(),
@@ -103,7 +105,7 @@ def main():
         "summary_line": summary,
     }
     RECORD.write_text(json.dumps(record, indent=1) + "\n", encoding="utf-8", newline="\n")
-    print(json.dumps({k: record[k] for k in ("commit", "dirty", "collected", "passed", "failed",
+    print(json.dumps({k: record[k] for k in ("commit", "worktree_dirty_src", "collected", "passed", "failed",
                                               "errors", "skipped")}))
     return 0 if code == 0 and not dirty else 1
 
