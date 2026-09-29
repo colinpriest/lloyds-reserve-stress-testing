@@ -98,7 +98,7 @@ The PDF extraction pipeline (`test_gemini.py` + `table_extraction.py`) uses a la
 │  Step 4: LLM Extraction (Gemini + GPT)                              │
 │  ├── Independent extraction of all reserve fields                   │
 │  ├── Field-by-field comparison with tolerance rules                 │
-│  ├── Triangle PYD prevails, subject to sign check and veto (10.3)   │
+│  ├── Absolute-amount triangle PYD, unless sign rule 10.3 or a veto  │
 │  ├── Loss-ratio: fills blanks; overrides only on direction clash    │
 │  └── Interactive adjudication for unresolved discrepancies          │
 │                                                                     │
