@@ -16,7 +16,8 @@ record's deterministic content:
   * a stored RAG triangle must be the replay's (underwriting years).
 Declared exceptions: the records in pdf_extraction/audit/redecision_pending.json, which the current
 code decides differently and which wait for the models, and those in offline_unservable.json, which
-have no table cache. A declared record that now matches is reported too (the declaration is stale).
+have no usable table cache. A declared record that now matches is reported too (the declaration is
+stale).
 
 Separately, every unread record's cached table grids are parsed: none may hold a gross triangle with
 a usable cohort that yields a figure, unless the record is declared.

@@ -206,3 +206,34 @@ def test_the_register_says_what_the_re_extraction_cost_counts():
         assert cost["page_vision_cost_usd"] == round(sum(usage), 4)
     else:
         assert cost["page_vision_cost_usd"] == "not recorded"
+
+
+def test_an_audited_stub_says_its_table_step_has_no_usable_cache_and_has_none():
+    """Verification review of round 62, N-V-E-2: the ten stubs the inception-year rule wrote said "the
+    table step has no cache for this filing", which 1100/2024 contradicts: its Azure cache exists, in
+    the superseded list format the table step refuses (table_extraction: a cache that is not a dict is
+    not usable). Each now says "no usable cache"; none has an Azure cache the table step can use; the
+    committed full replay could not serve any of them from a table cache; and the documents that
+    describe them say the same."""
+    replayed = {d["stem"]: " ".join(d["differs"]) for d in json.loads(
+        (ROOT / "pdf_extraction" / "audit" / "corpus_replay_check.json").read_text(
+            encoding="utf-8"))["declared_mismatches"]}
+    reason = restate.AUDITED_INCEPTION_STUB_REASON
+    assert "no usable cache" in reason and not re.search(r"has no (table )?cache", reason)
+    audited = []
+    for path, d in _committed():
+        if "models" in d or not d.get("first_year_syndicate") or d["reason"] == tg.FIRST_YEAR_REASON:
+            continue
+        audited.append(path.stem)
+        assert d["reason"] == reason, path.name
+        cache = ROOT / "pdf_extraction" / "azure_output" / (path.stem + "_azure.json")
+        usable = cache.exists() and isinstance(json.loads(cache.read_text(encoding="utf-8")), dict)
+        assert not usable, "%s has a usable Azure cache, and its reason says it has none" % path.name
+        assert ("replay error" in replayed.get(path.stem, "")
+                and "Azure Document Intelligence" in replayed[path.stem]), path.stem
+    assert len(audited) == 10, audited
+    stale = re.compile(r"(has|have) no (table )?cache|none of the ten has a table cache|"
+                       r"without a table cache", re.I)
+    for doc in ("README.md", "docs/ocr-pipeline.md", "scripts/replay_corpus_check.py"):
+        hit = stale.search((ROOT / doc).read_text(encoding="utf-8"))
+        assert hit is None, (doc, hit and hit.group(0))

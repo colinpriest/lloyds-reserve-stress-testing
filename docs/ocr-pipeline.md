@@ -3008,7 +3008,7 @@ now replays the deterministic step for every committed record -- stubs
 and unread records included -- on its own caches and compares the
 class, the RAG figure and route, and the stored triangle; the records
 waiting for the models (`pdf_extraction/audit/redecision_pending.json`)
-and those without a table cache (`offline_unservable.json`) are the
+and those without a usable table cache (`offline_unservable.json`) are the
 only declared exceptions, and a declaration that no longer differs is
 reported as stale.  The full run is recorded, with hashes of the code
 it ran and of the record content it compared, in
@@ -3235,9 +3235,10 @@ page. `tests/test_html_conversion.py` holds the check.
 Stubs written before round 58 by the inception-year check, which
 was removed then (section 11.1), carried this form until round 62,
 when `scripts/restate_record_status.py --first-year` restated them:
-none of the ten has a table cache, so their reason now names the
-filing-page audit that decided them
-(`pdf_extraction/audit/structural_eligibility_audit.json`):
+none of the ten has a usable table cache (nine have no Azure cache,
+and 1100/2024's is in the superseded list format the table step
+refuses), so their reason now names the filing-page audit that
+decided them (`pdf_extraction/audit/structural_eligibility_audit.json`):
 
 ```json
 {

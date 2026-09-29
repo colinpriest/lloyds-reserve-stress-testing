@@ -362,7 +362,8 @@ before or after the models run:
 - The inception-year lookup that once flagged a report by `report_year < inception_year + 2` was
   removed in round 58. `pdf_extraction/syndicate_inception_years.json` is kept as a record, and no
   step reads it for a decision. Ten committed stubs were written by that rule and still carried its
-  wording until round 62; they have no table cache, so the pipeline cannot replay them, and their
+  wording until round 62; they have no usable table cache (nine have no Azure cache, and 1100/2024's
+  is in the superseded list format the table step refuses), so the pipeline cannot replay them, and their
   exclusion rests on the filing-page audit (`pdf_extraction/audit/structural_eligibility_audit.json`),
   which their restated reason names (`scripts/restate_record_status.py --first-year`).
 

@@ -10,8 +10,10 @@ Round 62 (review of 29 September 2026, MAT-2). Two kinds of record carry no `mod
 * **First-year stubs.** Their reasons were written by three generations of the rule, among them the
   inception-year rule removed in round 58. They are restated with FIRST_YEAR_REASON and the
   `models_run` flag (true only where the stub carries `first_year_evidence`, the models having run).
-  A stub the inception-year rule wrote was never read by the table step -- there is no table cache to
-  read it from -- and its reason says so and names the filing-page audit that decided it instead.
+  A stub the inception-year rule wrote was never read by the table step -- there is no usable table
+  cache to read it from: nine of the ten have no Azure cache, and 1100/2024's is in the superseded list
+  format the table step refuses -- and its reason says so and names the filing-page audit that decided
+  it instead.
 
 A record listed in `pdf_extraction/audit/redecision_pending.json` is to be extracted again with the
 models, and is left exactly as it is.
@@ -90,18 +92,30 @@ def restated_no_reading(data: dict) -> dict:
     return out
 
 
-#: the reason a stub the inception-year rule wrote is restated with
+#: the reason a stub the inception-year rule wrote is restated with. "No usable cache": nine of the
+#: ten have no Azure cache, and 1100/2024's is in the superseded list format, which the table step
+#: refuses (table_extraction: a cache that is not a dict is not usable).
 AUDITED_INCEPTION_STUB_REASON = (
     "No underwriting year old enough for prior year development (u <= t-2) in the filing's "
     "claims development table, as read on its pages in "
     "pdf_extraction/audit/structural_eligibility_audit.json. The record was written by the "
-    "inception-year rule removed in round 58; the table step has no cache for this filing, "
+    "inception-year rule removed in round 58; the table step has no usable cache for this filing, "
     "and neither it nor the models has read its reserve text.")
+#: the earlier wordings of that reason, restated to the current one. Round 62 wrote "has no cache",
+#: which was not true of 1100/2024 (verification review of round 62, N-V-E-2).
+PREVIOUS_AUDITED_INCEPTION_STUB_REASONS = (
+    "No underwriting year old enough for prior year development (u <= t-2) in the filing's "
+    "claims development table, as read on its pages in "
+    "pdf_extraction/audit/structural_eligibility_audit.json. The record was written by the "
+    "inception-year rule removed in round 58; the table step has no cache for this filing, "
+    "and neither it nor the models has read its reserve text.",
+)
 
 
 def first_year_reason(data: dict, audited: dict, name: str) -> str:
     reason = str(data.get("reason") or "")
-    if INCEPTION_RULE_WORDING not in reason and reason != AUDITED_INCEPTION_STUB_REASON:
+    if (INCEPTION_RULE_WORDING not in reason and reason != AUDITED_INCEPTION_STUB_REASON
+            and reason not in PREVIOUS_AUDITED_INCEPTION_STUB_REASONS):
         return tg.FIRST_YEAR_REASON
     decision = (audited.get(name) or {}).get("decision")
     if decision != "structural_ineligible_no_mature_cohort":
