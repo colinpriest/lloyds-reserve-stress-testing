@@ -1,5 +1,5 @@
 # Syndicate-Year Coverage Report
-Generated: 2026-09-29T03:08:17.172498+00:00
+Generated: 2026-09-29T22:10:57.606447+00:00
 
 ## Global reconciliation
 
@@ -9,42 +9,42 @@ Generated: 2026-09-29T03:08:17.172498+00:00
 | Less: report unavailable (not published / download failed) | -93 | 1032 |
 | Reports downloaded |  | 1032 |
 | Less: not yet through extraction pipeline | 0 | 1032 |
-| Less: no eligible mature cohort and no stated development figure | -68 | 964 |
-| Less: no deterministic reading (models not run) | -55 | 909 |
-| Less: other field failures (PYD/LoB/opening not all extracted) | -63 | 846 |
-| Fully successful syndicate-years (a+b+c+d) |  | 846 |
+| Less: no eligible mature cohort and no stated development figure | -69 | 963 |
+| Less: no deterministic reading (models not run) | -44 | 919 |
+| Less: other field failures (PYD/LoB/opening not all extracted) | -63 | 856 |
+| Fully successful syndicate-years (a+b+c+d) |  | 856 |
 
 ## By year (candidate-list rows vs full success)
 
 |   year |   candidate_syndicate_years |   downloaded |   report_unavailable |   pyd_ok |   lob_ok |   opening_ok |   full_success |   fail_pyd |   fail_lob |   fail_opening |   no_mature_cohort_excl |   no_triangle_excl |   ritc_occurred |
 |-------:|----------------------------:|-------------:|---------------------:|---------:|---------:|-------------:|---------------:|-----------:|-----------:|---------------:|------------------------:|-------------------:|----------------:|
 |   2014 |                         105 |           94 |                   11 |       51 |       84 |           66 |             51 |         43 |         10 |             28 |                       1 |                 24 |               6 |
-|   2015 |                         110 |          101 |                    9 |       88 |       95 |           88 |             87 |         13 |          6 |             13 |                       8 |                  4 |               3 |
+|   2015 |                         110 |          101 |                    9 |       89 |       96 |           89 |             88 |         12 |          5 |             12 |                       8 |                  3 |               3 |
 |   2016 |                         112 |           97 |                   15 |       84 |       92 |           81 |             78 |         13 |          5 |             16 |                       8 |                  2 |               3 |
 |   2017 |                         108 |           96 |                   12 |       85 |       90 |           85 |             82 |         11 |          6 |             11 |                       7 |                  1 |               3 |
-|   2018 |                         112 |          103 |                    9 |       86 |       95 |           84 |             80 |         17 |          8 |             19 |                       7 |                  6 |               7 |
+|   2018 |                         112 |          103 |                    9 |       87 |       95 |           85 |             81 |         16 |          8 |             18 |                       7 |                  5 |               7 |
 |   2019 |                         105 |           95 |                   10 |       85 |       89 |           86 |             84 |         10 |          6 |              9 |                       7 |                  1 |               4 |
 |   2020 |                          98 |           87 |                   11 |       79 |       83 |           81 |             78 |          8 |          4 |              6 |                       5 |                  0 |               2 |
 |   2021 |                          92 |           88 |                    4 |       78 |       85 |           78 |             76 |         10 |          3 |             10 |                       5 |                  2 |               5 |
 |   2022 |                          93 |           89 |                    4 |       76 |       84 |           77 |             76 |         13 |          5 |             12 |                       8 |                  2 |               7 |
 |   2023 |                          95 |           91 |                    4 |       80 |       87 |           79 |             79 |         11 |          4 |             12 |                       9 |                  2 |               6 |
-|   2024 |                          95 |           91 |                    4 |       76 |       79 |           76 |             75 |         15 |         12 |             15 |                       3 |                 11 |               0 |
+|   2024 |                          95 |           91 |                    4 |       84 |       88 |           84 |             83 |          7 |          3 |              7 |                       4 |                  2 |               0 |
 
 ## Failure-mode counts by year
 
 |   year |   report_unavailable |   fail_pyd |   fail_lob |   fail_opening |   no_mature_cohort_excl |   no_triangle_excl |
 |-------:|---------------------:|-----------:|-----------:|---------------:|------------------------:|-------------------:|
 |   2014 |                   11 |         43 |         10 |             28 |                       1 |                 24 |
-|   2015 |                    9 |         13 |          6 |             13 |                       8 |                  4 |
+|   2015 |                    9 |         12 |          5 |             12 |                       8 |                  3 |
 |   2016 |                   15 |         13 |          5 |             16 |                       8 |                  2 |
 |   2017 |                   12 |         11 |          6 |             11 |                       7 |                  1 |
-|   2018 |                    9 |         17 |          8 |             19 |                       7 |                  6 |
+|   2018 |                    9 |         16 |          8 |             18 |                       7 |                  5 |
 |   2019 |                   10 |         10 |          6 |              9 |                       7 |                  1 |
 |   2020 |                   11 |          8 |          4 |              6 |                       5 |                  0 |
 |   2021 |                    4 |         10 |          3 |             10 |                       5 |                  2 |
 |   2022 |                    4 |         13 |          5 |             12 |                       8 |                  2 |
 |   2023 |                    4 |         11 |          4 |             12 |                       9 |                  2 |
-|   2024 |                    4 |         15 |         12 |             15 |                       3 |                 11 |
+|   2024 |                    4 |          7 |          3 |              7 |                       4 |                  2 |
 
 ## By syndicate (top 40 by active years)
 
@@ -82,6 +82,7 @@ Generated: 2026-09-29T03:08:17.172498+00:00
 |        2001 |                          11 |           11 |                    0 |       11 |       11 |           10 |             10 |          0 |          0 |              1 |                       0 |                  0 |               0 |
 |        2232 |                          11 |           11 |                    0 |       10 |       11 |           10 |             10 |          1 |          0 |              1 |                       0 |                  1 |               0 |
 |        2357 |                          11 |           11 |                    0 |       10 |       10 |           10 |             10 |          1 |          1 |              1 |                       1 |                  0 |               0 |
+|        2525 |                          11 |           11 |                    0 |       10 |       11 |           10 |             10 |          1 |          0 |              1 |                       0 |                  0 |               0 |
 |        2623 |                          11 |           11 |                    0 |       10 |       11 |           11 |             10 |          1 |          0 |              0 |                       0 |                  0 |               0 |
 |        2791 |                          11 |           10 |                    1 |       10 |       10 |           10 |             10 |          0 |          0 |              0 |                       0 |                  0 |               9 |
 |        2987 |                          11 |           11 |                    0 |       10 |       11 |           10 |             10 |          1 |          0 |              1 |                       0 |                  1 |               0 |
@@ -89,6 +90,5 @@ Generated: 2026-09-29T03:08:17.172498+00:00
 |        3010 |                          11 |           11 |                    0 |       10 |       11 |           11 |             10 |          1 |          0 |              0 |                       0 |                  0 |               0 |
 |        3624 |                          11 |           11 |                    0 |       10 |       11 |           10 |             10 |          1 |          0 |              1 |                       0 |                  1 |               0 |
 |        4000 |                          11 |           11 |                    0 |       10 |       11 |           11 |             10 |          1 |          0 |              0 |                       0 |                  0 |               1 |
-|        4020 |                          11 |           11 |                    0 |       10 |       10 |           10 |             10 |          1 |          1 |              1 |                       0 |                  1 |               0 |
 
 (Full by-syndicate table: coverage_status.xlsx, 'by_syndicate' sheet — 163 syndicates)
