@@ -20,7 +20,11 @@ have no usable table cache. A declared record that now matches is reported too (
 stale).
 
 Separately, every unread record's cached table grids are parsed: none may hold a gross triangle with
-a usable cohort that yields a figure, unless the record is declared.
+a usable cohort that yields a figure, unless the record is declared. A grid the structure score
+refuses yields no figure, so that check cannot see it; the unread records whose gross grids with a
+usable cohort are all refused by the structure score are reported (not failed) in
+`unread_records_whose_gross_grids_the_structure_score_refuses`, and docs/ocr-pipeline.md 11.4 names
+each and says why it stays unread (verification review of round 62, N-V-E-4).
 
     python scripts/replay_corpus_check.py [--workers N] [--stems a,b,...] [--write]
 
@@ -39,6 +43,7 @@ import hashlib
 import io
 import json
 import os
+import re
 import sys
 from multiprocessing import Pool
 from pathlib import Path
@@ -191,9 +196,10 @@ def records_hash(records: dict) -> str:
     return hashlib.sha256(blob.encode("utf-8")).hexdigest()
 
 
-def usable_gross_grids(stem: str) -> list:
-    """Cached table grids of a filing that parse as a gross triangle with a usable cohort and yield a
-    figure: what an unread record must not hold."""
+def _gross_grids_with_a_usable_cohort(stem: str) -> list:
+    """Every cached table grid of a filing that parses as a gross triangle holding a usable cohort
+    (u <= t-2), with what compute_pyd_from_triangle makes of it: (table index, years, figure or
+    None, details)."""
     if _tg is None:
         _init()
     tg, te = _tg, _te
@@ -203,7 +209,7 @@ def usable_gross_grids(stem: str) -> list:
     year = int(stem.split("_")[2])
     data = json.loads(cache.read_text(encoding="utf-8"))
     tables = data.get("tables") if isinstance(data, dict) else data
-    found = []
+    out = []
     for i, t in enumerate(tables or []):
         grid = t.get("grid") if isinstance(t, dict) else None
         if not isinstance(grid, list):
@@ -213,10 +219,37 @@ def usable_gross_grids(stem: str) -> list:
             continue
         if not any(int(y) <= year - te.PYD_EXCLUDED_RECENT_UW_YEARS for y in res.underwriting_years):
             continue
-        pyd, _ = tg.compute_pyd_from_triangle(res.to_dict(), year)
-        if pyd is not None:
-            found.append({"table": i, "years": [int(y) for y in res.underwriting_years], "pyd": pyd})
-    return found
+        pyd, details = tg.compute_pyd_from_triangle(res.to_dict(), year)
+        out.append((i, [int(y) for y in res.underwriting_years], pyd, str(details or "")))
+    return out
+
+
+def usable_gross_grids(stem: str) -> list:
+    """Cached table grids of a filing that parse as a gross triangle with a usable cohort and yield a
+    figure: what an unread record must not hold."""
+    return [{"table": i, "years": years, "pyd": pyd}
+            for i, years, pyd, _ in _gross_grids_with_a_usable_cohort(stem) if pyd is not None]
+
+
+#: how compute_pyd_from_triangle words a refusal by the structure score
+STRUCTURE_REFUSAL = re.compile(r"^triangle structure score (\d+\.\d+) below")
+
+
+def structure_refused_gross_grids(stem: str) -> list:
+    """The filing's cached gross grids with a usable cohort, when every one of them is refused by the
+    structure score (and there is at least one); otherwise []. The checks above see only grids that
+    yield a figure, so a grid the scorer refuses was invisible to them -- the failure mode of MAT-2,
+    where the one-column rule refused 2468/2022 and 2255/2015 (verification review of round 62,
+    N-V-E-4). Reported, not failed: such a filing stays unread while the multi-column rule is
+    unchanged, and docs/ocr-pipeline.md 11.4 names each one and says why."""
+    grids = _gross_grids_with_a_usable_cohort(stem)
+    refused = []
+    for i, years, pyd, details in grids:
+        m = STRUCTURE_REFUSAL.match(details)
+        if pyd is not None or not m:
+            return []
+        refused.append({"table": i, "years": years, "structure_score": float(m.group(1))})
+    return refused
 
 
 def check(stems=None, workers=1) -> dict:
@@ -241,17 +274,21 @@ def check(stems=None, workers=1) -> dict:
                 stale.append(s)
         elif diffs:
             undeclared.append({"stem": s, "differs": diffs})
-    grids = []
+    grids, refused = [], []
     for s in stems:
         if committed_class(records[s]) == "unread" and s not in pending:
             g = usable_gross_grids(s)
             if g:
                 grids.append({"stem": s, "grids": g})
+            r = structure_refused_gross_grids(s)
+            if r:
+                refused.append({"stem": s, "grids": r})
     return {"n_records": len(records), "n_replayed": len(stems), "records_sha256": records_hash(records),
             "by_class": dict(sorted(by_class.items())),
             "undeclared_mismatches": undeclared, "stale_declarations": stale,
             "declared_mismatches": declared_seen,
-            "unread_records_with_a_usable_gross_grid": grids}
+            "unread_records_with_a_usable_gross_grid": grids,
+            "unread_records_whose_gross_grids_the_structure_score_refuses": refused}
 
 
 def main() -> int:
@@ -273,7 +310,8 @@ def main() -> int:
         **result,
     }
     print(json.dumps({k: report[k] for k in ("n_records", "n_replayed", "by_class")}, indent=1))
-    for key in ("undeclared_mismatches", "stale_declarations", "unread_records_with_a_usable_gross_grid"):
+    for key in ("undeclared_mismatches", "stale_declarations", "unread_records_with_a_usable_gross_grid",
+                "unread_records_whose_gross_grids_the_structure_score_refuses"):
         print("%s: %d" % (key, len(report[key])))
         for row in report[key][:40]:
             print("   ", row)

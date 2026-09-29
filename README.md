@@ -388,8 +388,9 @@ record written that way: 2468/2022 and 2255/2015 print one-column triangles the 
 refused (`docs/ocr-pipeline.md` §9.6), 1884/2022 and 3330/2018 were written by a staircase rule
 superseded the same day (§11.4), and ten 2024 HTML filings print claims development tables that
 their conversion to PDF had lost (§13.1). The thirteen records the current code reads, or takes to
-the page-vision step, are listed for a new extraction with the models (§11.4); the others carry the
-restated status and reason (`scripts/restate_record_status.py`).
+the page-vision step, were extracted again with the models on 29 September 2026 (§11.4); the others
+carry the restated status and reason (`scripts/restate_record_status.py`). Five of those still print
+a table the parsers do not read, and §11.4 names them and says why each stays unread.
 
 ### Dual-LLM Extraction and Cross-Validation
 

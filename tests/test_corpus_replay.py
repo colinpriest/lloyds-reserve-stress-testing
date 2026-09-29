@@ -90,6 +90,41 @@ def test_no_unread_record_holds_a_usable_gross_triangle_in_its_cache():
     assert found == []
 
 
+def _section(number: str) -> str:
+    text = (ROOT / "docs" / "ocr-pipeline.md").read_text(encoding="utf-8").replace("\r\n", "\n")
+    start = text.index("\n### %s " % number)
+    return text[start:text.index("\n## ", start + 1)]
+
+
+def test_the_unread_filings_whose_gross_grids_the_structure_score_refuses_are_reported_and_named():
+    """Verification review of round 62, N-V-E-4. The check above sees only grids that yield a figure,
+    so a grid the structure score refuses -- the MAT-2 failure mode -- is invisible to it: 3500/2015
+    holds a gross five-cohort triangle the multi-column rule scores 0.00, and it passed every clause.
+    The replay now reports the unread filings whose gross grids with a usable cohort are all refused
+    by the structure score. Committed caches only: the committed full run's list is the one the caches
+    give, 3500/2015's grid is found (the positive control), and docs 11.4 names every filing listed and
+    the four other unread filings it says print a table the parsers do not read, none of which holds a
+    grid either check can see."""
+    control = rcc.structure_refused_gross_grids("syndicate_3500_2015")
+    assert control == [{"table": 3, "years": [2006, 2007, 2008, 2009, 2010], "structure_score": 0.0}], control
+    pending, _ = rcc.declared()
+    found = []
+    for stem, d in sorted(rcc.committed_records().items()):
+        if rcc.committed_class(d) == "unread" and stem not in pending:
+            g = rcc.structure_refused_gross_grids(stem)
+            if g:
+                found.append({"stem": stem, "grids": g})
+    assert _report()["unread_records_whose_gross_grids_the_structure_score_refuses"] == found
+    section = _section("11.4")
+    others = ["syndicate_3622_2018", "syndicate_1699_2022", "syndicate_1975_2019", "syndicate_1922_2024"]
+    for stem in [r["stem"] for r in found] + others:
+        assert "%s/%s" % tuple(stem.split("_")[1:]) in section, stem
+    records = rcc.committed_records()
+    for stem in others:
+        assert rcc.committed_class(records[stem]) == "unread", stem
+        assert rcc.structure_refused_gross_grids(stem) == [] and rcc.usable_gross_grids(stem) == [], stem
+
+
 def test_the_one_column_triangle_of_2468_2022_is_read_and_its_record_accounted_for():
     """The current code reads 2468/2022's one-column triangle (-0.153m, from the Azure grid). Its
     committed record is either declared as waiting for the models, and then still differs from the

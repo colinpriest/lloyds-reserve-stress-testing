@@ -2963,9 +2963,12 @@ the page-vision step:
   notes too, but its table holds a single 2024 cohort and the parsers
   still do not read it.
 
-Those thirteen are listed for a new extraction with the models; every
-other record written this way carries the restated status and reason
-(`scripts/restate_record_status.py`), and says the models were not run.
+Those thirteen were extracted again with the models on 29 September
+2026 (`pdf_extraction/audit/redecision_pending.json`, `extracted`);
+every other record written this way carries the restated status and
+reason (`scripts/restate_record_status.py`), and says the models were
+not run.  Five of these still print a table the parsers do not read
+(below).
 
 **Important**: which of the two flags a report gets does not depend
 on the syndicate's age.  The inception-based distinction this
@@ -3016,6 +3019,40 @@ it ran and of the record content it compared, in
 `tests/test_corpus_replay.py` fails when the pipeline code or a
 record changes without a new full run, and replays a subset in the
 default suite.
+
+**Unread filings that print a table the parsers do not read**
+(verification review of round 62, N-V-E-4).  Five of the 45 records
+with no deterministic reading print a claims development table.  Their
+committed caches and filing pages say why each stays unread:
+
+- 3500/2015: its Azure cache holds a gross triangle of five cohorts
+  (2006-2010, £000) whose first estimates sit three to five years
+  into development (2006 and 2010 are blank), so the multi-column
+  staircase rule scores the grid 0.00 and refuses it.  It is the one
+  unread filing whose cached gross grids with a usable cohort are all
+  refused by the structure score, and the replay check reports it
+  (`unread_records_whose_gross_grids_the_structure_score_refuses` in
+  `corpus_replay_check.json`).  It stays unread because the
+  multi-column rule is unchanged: it is the rule the 0.50 threshold was
+  built for (780/2018, §9.6).  A rule that scored such a grid on its
+  own staircase is UNTESTED until it is measured on fixed inputs over
+  the whole corpus, as the one-column rule was.
+- 3622/2018: its cache holds gross and net grids of loss ratios by
+  development period (2009-2018) at the managing agent's managed
+  level, with the syndicate's share shown for the liabilities only.
+  `compute_pyd_from_triangle` refuses them as percentages before any
+  structure score, and the page-text loss-ratio parser reads the
+  latest year of the printed header as 2011 and returns nothing.  A
+  change to either is UNTESTED.
+- 1699/2022, 1975/2019 and 1922/2024: their caches hold no triangle
+  grid, and the filings print young tables only: a single 2022 cohort
+  (1699/2022), cohorts 2018 and 2019 (1975/2019), and a single 2024
+  cohort of $26k (1922/2024).  None holds a cohort up to t-2, so a
+  parser that read one could make it a first-year stub (§11.2), never
+  give it a figure.
+
+`tests/test_corpus_replay.py` holds the reported list to the committed
+caches and requires this section to name every filing on it.
 
 ---
 
