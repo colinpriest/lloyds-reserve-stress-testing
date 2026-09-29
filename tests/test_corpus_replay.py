@@ -53,8 +53,39 @@ def _report():
 
 
 #: where the replay enters test_gemini.py: replay_corpus_check.replay() calls the first two, and its
-#: grid checks call the third
+#: grid checks call the third. The names table_extraction.py imports from test_gemini.py are entry
+#: points too (_replay_entry_points): its Adobe backend calls four of them.
 REPLAY_ENTRY_POINTS = ("extract_pyd_from_relevant_pages", "convert_html_to_pdf", "compute_pyd_from_triangle")
+#: calls that look a name up at run time; one in code the replay runs, or at module level, makes every
+#: definition reachable, since the trace cannot tell which it finds
+RUN_TIME_LOOKUPS = {"globals", "locals", "vars", "eval", "exec", "__import__", "import_module"}
+#: the getattr family: followed when the name is a literal, a run-time lookup when it is not
+ATTRIBUTE_LOOKUPS = {"getattr", "hasattr", "setattr", "delattr"}
+#: besides test_gemini.py and table_extraction.py, the code the replay runs: the driver itself. Every
+#: repository module test_gemini.py imports (adjudicate.py, at module level) is added by
+#: _modules_the_replay_imports. These must be as they were at the commit that wrote the report.
+REPLAY_DRIVER = "scripts/replay_corpus_check.py"
+
+
+def _replay_entry_points():
+    te_tree = ast.parse((ROOT / "table_extraction.py").read_text(encoding="utf-8"))
+    imported = {a.name for n in ast.walk(te_tree) if isinstance(n, ast.ImportFrom) and n.module == "test_gemini"
+                for a in n.names}
+    return tuple(REPLAY_ENTRY_POINTS) + tuple(sorted(imported))
+
+
+def _modules_the_replay_imports():
+    """The repository modules test_gemini.py imports anywhere (module level or inside a function),
+    other than itself and table_extraction.py, whose own checks are above: their module-level code
+    runs when the replay imports test_gemini, and their functions may be called from it."""
+    tree = ast.parse((ROOT / "test_gemini.py").read_text(encoding="utf-8"))
+    names = set()
+    for n in ast.walk(tree):
+        if isinstance(n, ast.ImportFrom) and n.module and not n.level:
+            names.add(n.module.split(".")[0])
+        elif isinstance(n, ast.Import):
+            names |= {a.name.split(".")[0] for a in n.names}
+    return sorted("%s.py" % m for m in names - {"test_gemini", "table_extraction"} if (ROOT / ("%s.py" % m)).exists())
 
 
 def _replayed_version(name, digest):
@@ -71,16 +102,37 @@ def _replayed_version(name, digest):
 
 
 def _names(node):
+    """Every name the node mentions: bare names, attribute names (a method reached through an object
+    is followed by its name), and string constants (getattr(obj, "name"), a table keyed by name)."""
     return ({n.id for n in ast.walk(node) if isinstance(n, ast.Name)}
-            | {n.attr for n in ast.walk(node) if isinstance(n, ast.Attribute)})
+            | {n.attr for n in ast.walk(node) if isinstance(n, ast.Attribute)}
+            | {n.value for n in ast.walk(node) if isinstance(n, ast.Constant) and isinstance(n.value, str)})
+
+
+def _looks_up_at_run_time(node):
+    for n in ast.walk(node):
+        if isinstance(n, ast.Call):
+            f = n.func
+            called = f.id if isinstance(f, ast.Name) else (f.attr if isinstance(f, ast.Attribute) else None)
+            if called in RUN_TIME_LOOKUPS:
+                return True
+            if called in ATTRIBUTE_LOOKUPS and not (len(n.args) >= 2 and isinstance(n.args[1], ast.Constant)):
+                return True
+        if isinstance(n, ast.Attribute) and n.attr == "modules" and isinstance(n.value, ast.Name) and n.value.id == "sys":
+            return True
+    return False
 
 
 def changes_the_replay_can_reach(old_src, new_src, entry_points=REPLAY_ENTRY_POINTS):
     """What differs between two versions of a module in code the replay could run: a changed
     module-level statement (the `__main__` block aside, which an import does not run), or a changed,
-    added or removed function or class that the entry points reach. Reach is followed by name over
-    both versions -- every name a reached definition mentions, and every name a module-level
-    statement mentions -- so it can only over-reach. Comments are not code: they are not compared."""
+    added or removed function or class that the replay reaches. Reach starts from the entry points,
+    every name a module-level statement mentions (a dispatch table, a list of callables, a default)
+    and every decorated definition (a decorator can register what nothing names), and follows, over
+    both versions, every name a reached definition mentions -- its decorators and defaults included,
+    attribute names, and string constants -- so it can only over-reach. A run-time lookup the trace
+    cannot follow, in reached code or at module level, makes every definition reachable. Comments are
+    not code: they are not compared."""
     def split(src):
         defs, stmts = {}, []
         for node in ast.parse(src).body:
@@ -93,7 +145,9 @@ def changes_the_replay_can_reach(old_src, new_src, entry_points=REPLAY_ENTRY_POI
     changed = []
     if [ast.dump(s) for s in old_stmts] != [ast.dump(s) for s in new_stmts]:
         changed.append("a module-level statement")
-    reached, todo = set(), list(entry_points) + [n for s in old_stmts + new_stmts for n in _names(s)]
+    decorated = [name for defs in (old_defs, new_defs) for name, d in defs.items() if d.decorator_list]
+    reached = set()
+    todo = list(entry_points) + decorated + [n for s in old_stmts + new_stmts for n in _names(s)]
     while todo:
         name = todo.pop()
         if name in reached or (name not in old_defs and name not in new_defs):
@@ -102,6 +156,11 @@ def changes_the_replay_can_reach(old_src, new_src, entry_points=REPLAY_ENTRY_POI
         for d in (old_defs.get(name), new_defs.get(name)):
             if d is not None:
                 todo.extend(_names(d))
+    looked_up = [s for s in old_stmts + new_stmts if _looks_up_at_run_time(s)] + [
+        name for name in reached for d in (old_defs.get(name), new_defs.get(name))
+        if d is not None and _looks_up_at_run_time(d)]
+    if looked_up:
+        reached = set(old_defs) | set(new_defs)
     for name in sorted(reached):
         if name not in old_defs or name not in new_defs or ast.dump(old_defs[name]) != ast.dump(new_defs[name]):
             changed.append(name)
@@ -124,6 +183,42 @@ def test_a_change_the_replay_cannot_run_is_told_from_one_it_can():
     assert same(old, old.replace("def helper", "def helped"), ("entry",)) == ["helper"]
 
 
+def test_the_trace_follows_every_route_by_which_the_replay_reaches_code():
+    """The routes other than a bare name in a reached function (the coordinator's condition on the
+    rule, 30 September 2026): each changes a definition reached only that way, and each is caught."""
+    same = changes_the_replay_can_reach
+    base = "def entry(x):\n    return x\n\ndef untouched(x):\n    return x\n"
+    # a dispatch table, a list of callables and a default argument at module level
+    table = base + "def handler(x):\n    return x + 1\n\nHANDLERS = {'h': handler}\n"
+    assert same(table, table.replace("return x + 1", "return x + 2"), ("entry",)) == ["handler"]
+    callables = base + "def step(x):\n    return x + 1\n\nSTEPS = [step]\n"
+    assert same(callables, callables.replace("return x + 1", "return x + 2"), ("entry",)) == ["step"]
+    default = base + "def fallback(x):\n    return x + 1\n\ndef uses(x, f=fallback):\n    return f(x)\n\nUSE = uses\n"
+    assert same(default, default.replace("return x + 1", "return x + 2"), ("entry",)) == ["fallback"]
+    # a literal name looked up at run time: followed
+    literal = ("def entry(obj):\n    return getattr(obj, 'target')()\n\n"
+               "def target():\n    return 1\n")
+    assert same(literal, literal.replace("return 1", "return 2"), ("entry",)) == ["target"]
+    # a name computed at run time: every definition is reachable
+    for lookup in ("globals()[name]()", "getattr(module, name)()", "vars(module)[name]()",
+                   "importlib.import_module(name).run()", "sys.modules[name].run()", "eval(name)()"):
+        dyn = ("def entry(name, module=None):\n    return %s\n\ndef anything():\n    return 1\n" % lookup)
+        assert same(dyn, dyn.replace("return 1", "return 2"), ("entry",)) == ["anything"], lookup
+    # a method reached through an object
+    method = ("class Box:\n    def open(self):\n        return 1\n\n"
+              "def entry():\n    return Box().open()\n")
+    assert same(method, method.replace("return 1", "return 2"), ("entry",)) == ["Box"]
+    # a decorator: what it registers is reachable though nothing names it
+    registered = ("REGISTRY = {}\n\ndef register(f):\n    REGISTRY[f.__name__] = f\n    return f\n\n"
+                  "def entry(key):\n    return REGISTRY[key]()\n\n@register\ndef plugin():\n    return 1\n")
+    assert same(registered, registered.replace("return 1", "return 2"), ("entry",)) == ["plugin"]
+    # a function another replayed module imports: reached only as an entry point
+    assert same(base, base.replace("def untouched(x):\n    return x", "def untouched(x):\n    return -x"),
+                ("entry",)) == []
+    assert same(base, base.replace("def untouched(x):\n    return x", "def untouched(x):\n    return -x"),
+                ("entry", "untouched")) == ["untouched"]
+
+
 def test_the_committed_full_replay_is_of_this_code_and_found_nothing_undeclared():
     assert rcc.REPORT.exists(), "run: python scripts/replay_corpus_check.py --workers 14 --write"
     rep = _report()
@@ -139,10 +234,22 @@ def test_the_committed_full_replay_is_of_this_code_and_found_nothing_undeclared(
             "%s changed after the full replay: run scripts/replay_corpus_check.py --write again" % name)
         replayed = _replayed_version(name, digest)
         assert replayed is not None, "the code the full replay ran is in no commit: run the replay again"
-        reached = changes_the_replay_can_reach(replayed, (ROOT / name).read_text(encoding="utf-8"))
+        reached = changes_the_replay_can_reach(replayed, (ROOT / name).read_text(encoding="utf-8"),
+                                               _replay_entry_points())
         assert reached == [], (
             "test_gemini.py changed after the full replay in code the replay runs (%s): run "
             "scripts/replay_corpus_check.py --write again" % ", ".join(reached))
+    # the rest of the code the replay runs -- the repository modules test_gemini.py imports, and the
+    # driver -- is as it was at the commit that wrote the report
+    wrote = subprocess.run(["git", "-C", str(ROOT), "log", "-1", "--format=%H", "--",
+                            "pdf_extraction/audit/corpus_replay_check.json"],
+                           capture_output=True, text=True, check=True).stdout.strip()
+    others = _modules_the_replay_imports() + [REPLAY_DRIVER]
+    assert "adjudicate.py" in others
+    moved = subprocess.run(["git", "-C", str(ROOT), "diff", "--name-only", wrote, "--"] + others,
+                           capture_output=True, text=True, check=True).stdout.split()
+    assert moved == [], ("%s changed after the full replay: run scripts/replay_corpus_check.py --write again"
+                         % ", ".join(moved))
     records = rcc.committed_records()
     assert rep["records_sha256"] == rcc.records_hash(records), (
         "a committed record changed after the full replay: run scripts/replay_corpus_check.py --write again")

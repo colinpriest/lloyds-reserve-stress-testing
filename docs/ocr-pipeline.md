@@ -3025,17 +3025,28 @@ only declared exceptions, and a declaration that no longer differs is
 reported as stale.  The full run is recorded, with hashes of the code
 it ran and of the record content it compared, in
 `pdf_extraction/audit/corpus_replay_check.json`, and
-`tests/test_corpus_replay.py` fails when a record, `table_extraction.py`
-or code in `test_gemini.py` that the replay runs changes without a new
-full run, and replays a subset in the default suite.  "Code the replay
-runs" is read from the code: every function and class reached by name
-from the replay's entry points (`extract_pyd_from_relevant_pages`,
-`convert_html_to_pdf`, `compute_pyd_from_triangle`), and every
-module-level statement, compared as syntax with the version the run
-hashed, which is found in git by its hash.  A change confined to the
-model calls, their cost accounting or the driver leaves the run
-standing (round 62, second cycle: Gemini's thinking tokens priced in
-`extract_with_gemini`).
+`tests/test_corpus_replay.py` fails when a record, `table_extraction.py`,
+the driver `scripts/replay_corpus_check.py`, a repository module
+`test_gemini.py` imports (`adjudicate.py`), or code in `test_gemini.py`
+that the replay runs changes without a new full run, and replays a
+subset in the default suite.  "Code the replay runs" is read from the
+code and compared as syntax with the version the run hashed, which is
+found in git by its hash: every module-level statement, and every
+function and class the trace reaches.  The trace starts from the
+replay's entry points (`extract_pyd_from_relevant_pages`,
+`convert_html_to_pdf`, `compute_pyd_from_triangle`, and the four
+functions `table_extraction.py` imports from `test_gemini.py` for its
+Adobe backend), every name a module-level statement mentions and every
+decorated definition, and follows every name a reached definition
+mentions -- its decorators and defaults, attribute names and string
+constants included -- so it over-reaches rather than misses.  A lookup
+it cannot follow (`globals()`, `vars()`, `eval`, `importlib`,
+`sys.modules`, or `getattr` with a computed name) in reached code or at
+module level makes every definition reachable; the current code has
+none.  A change confined to the model calls, their cost accounting or
+the extraction run's own `__main__` block in `test_gemini.py` leaves the
+run standing (round 62, second cycle: Gemini's thinking tokens priced
+in `extract_with_gemini`).
 
 **Unread filings that print a table the parsers do not read**
 (verification review of round 62, N-V-E-4).  Five of the 45 records
