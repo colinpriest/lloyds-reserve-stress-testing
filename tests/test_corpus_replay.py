@@ -6,9 +6,10 @@ followed a rule change covered only the records that still carried a triangle. T
 corpus to an offline replay of the deterministic step (scripts/replay_corpus_check.py):
 
   * the committed full run (pdf_extraction/audit/corpus_replay_check.json) is of the current code and
-    records -- its hashes are this tree's test_gemini.py and table_extraction.py and the content the
-    check compared in every committed record -- and found no undeclared mismatch, no stale
-    declaration and no unread record holding a usable gross triangle;
+    records -- its hashes are this tree's table_extraction.py, and test_gemini.py or a version of it
+    that differs only in code the replay cannot run, and the content the check compared in every
+    committed record -- and found no undeclared mismatch, no stale declaration and no unread record
+    holding a usable gross triangle;
   * a documented subset (SUBSET below) is replayed here, in the default suite (the full corpus takes
     about a quarter of an hour on 14 workers, so it is the script's job, not the suite's);
   * no unread record's cached grids hold a gross triangle with a usable cohort that yields a figure,
@@ -17,7 +18,10 @@ corpus to an offline replay of the deterministic step (scripts/replay_corpus_che
 Run:  python -m pytest tests/test_corpus_replay.py -q
       python scripts/replay_corpus_check.py --workers 14 --write      (the full run)
 """
+import ast
+import hashlib
 import json
+import subprocess
 import sys
 from pathlib import Path
 
@@ -48,11 +52,97 @@ def _report():
     return json.loads(rcc.REPORT.read_text(encoding="utf-8"))
 
 
+#: where the replay enters test_gemini.py: replay_corpus_check.replay() calls the first two, and its
+#: grid checks call the third
+REPLAY_ENTRY_POINTS = ("extract_pyd_from_relevant_pages", "convert_html_to_pdf", "compute_pyd_from_triangle")
+
+
+def _replayed_version(name, digest):
+    """`name` as the full run hashed it: the committed version whose LF-normalised sha256 is
+    `digest`, read from git; None if no commit holds it."""
+    commits = subprocess.run(["git", "-C", str(ROOT), "log", "--format=%H", "--", name],
+                             capture_output=True, text=True, check=True).stdout.split()
+    for commit in commits:
+        blob = subprocess.run(["git", "-C", str(ROOT), "show", "%s:%s" % (commit, name)],
+                              capture_output=True, check=True).stdout.replace(b"\r\n", b"\n")
+        if hashlib.sha256(blob).hexdigest() == digest:
+            return blob.decode("utf-8")
+    return None
+
+
+def _names(node):
+    return ({n.id for n in ast.walk(node) if isinstance(n, ast.Name)}
+            | {n.attr for n in ast.walk(node) if isinstance(n, ast.Attribute)})
+
+
+def changes_the_replay_can_reach(old_src, new_src, entry_points=REPLAY_ENTRY_POINTS):
+    """What differs between two versions of a module in code the replay could run: a changed
+    module-level statement (the `__main__` block aside, which an import does not run), or a changed,
+    added or removed function or class that the entry points reach. Reach is followed by name over
+    both versions -- every name a reached definition mentions, and every name a module-level
+    statement mentions -- so it can only over-reach. Comments are not code: they are not compared."""
+    def split(src):
+        defs, stmts = {}, []
+        for node in ast.parse(src).body:
+            if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
+                defs[node.name] = node
+            elif not (isinstance(node, ast.If) and "__main__" in ast.dump(node.test)):
+                stmts.append(node)
+        return defs, stmts
+    (old_defs, old_stmts), (new_defs, new_stmts) = split(old_src), split(new_src)
+    changed = []
+    if [ast.dump(s) for s in old_stmts] != [ast.dump(s) for s in new_stmts]:
+        changed.append("a module-level statement")
+    reached, todo = set(), list(entry_points) + [n for s in old_stmts + new_stmts for n in _names(s)]
+    while todo:
+        name = todo.pop()
+        if name in reached or (name not in old_defs and name not in new_defs):
+            continue
+        reached.add(name)
+        for d in (old_defs.get(name), new_defs.get(name)):
+            if d is not None:
+                todo.extend(_names(d))
+    for name in sorted(reached):
+        if name not in old_defs or name not in new_defs or ast.dump(old_defs[name]) != ast.dump(new_defs[name]):
+            changed.append(name)
+    return changed
+
+
+def test_a_change_the_replay_cannot_run_is_told_from_one_it_can():
+    """The rule the next test applies to test_gemini.py, on small modules whose answer is known."""
+    old = ("RATE = 2\n\ndef entry(x):\n    return helper(x) * RATE\n\ndef helper(x):\n    return x + 1\n\n"
+           "def live_call(x):\n    return x * 3\n\nif __name__ == '__main__':\n    live_call(1)\n")
+    same = changes_the_replay_can_reach
+    assert same(old, old.replace("return x * 3", "return x * 4"), ("entry",)) == []
+    assert same(old, old + "\ndef new_cost(x):\n    return x\n", ("entry",)) == []
+    assert same(old, old + "# a comment\n", ("entry",)) == []
+    assert same(old, old.replace("live_call(1)", "live_call(2)"), ("entry",)) == []
+    assert same(old, old.replace("return x + 1", "return x + 2"), ("entry",)) == ["helper"]
+    assert same(old, old.replace("RATE = 2", "RATE = 3"), ("entry",)) == ["a module-level statement"]
+    assert same(old, old.replace("return helper(x) * RATE", "return new(x)") + "\ndef new(x):\n    return x\n",
+                ("entry",)) == ["entry", "new"]
+    assert same(old, old.replace("def helper", "def helped"), ("entry",)) == ["helper"]
+
+
 def test_the_committed_full_replay_is_of_this_code_and_found_nothing_undeclared():
     assert rcc.REPORT.exists(), "run: python scripts/replay_corpus_check.py --workers 14 --write"
     rep = _report()
-    assert rep["code_sha256_lf"] == rcc.code_hashes(), (
-        "the pipeline code changed after the full replay: run scripts/replay_corpus_check.py --write again")
+    hashes = rcc.code_hashes()
+    for name, digest in sorted(rep["code_sha256_lf"].items()):
+        if hashes[name] == digest:
+            continue
+        # table_extraction.py is the deterministic step throughout, so any change to it needs a new
+        # run. test_gemini.py also holds the model calls, their cost accounting and the driver, which
+        # the replay never runs: a change confined to those does not change what it decided (round 62,
+        # second cycle: Gemini's thinking tokens priced in extract_with_gemini).
+        assert name == "test_gemini.py", (
+            "%s changed after the full replay: run scripts/replay_corpus_check.py --write again" % name)
+        replayed = _replayed_version(name, digest)
+        assert replayed is not None, "the code the full replay ran is in no commit: run the replay again"
+        reached = changes_the_replay_can_reach(replayed, (ROOT / name).read_text(encoding="utf-8"))
+        assert reached == [], (
+            "test_gemini.py changed after the full replay in code the replay runs (%s): run "
+            "scripts/replay_corpus_check.py --write again" % ", ".join(reached))
     records = rcc.committed_records()
     assert rep["records_sha256"] == rcc.records_hash(records), (
         "a committed record changed after the full replay: run scripts/replay_corpus_check.py --write again")
