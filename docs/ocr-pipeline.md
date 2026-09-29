@@ -3093,6 +3093,50 @@ needing a `_CACHE_VERSION` bump.
 This forces LLM re-extraction so Gemini and GPT receive the
 updated slim PDF containing the Balance Sheet page.
 
+### 13.1  HTML filings: the converted PDF (round 62)
+
+The 95 filings for 2024 are HTML. `convert_html_to_pdf()` prints each
+to `pdf_extraction/html_converted/` with Playwright, and every later
+step reads that PDF: the page classifier reads its text, the table
+backend and the models read its pages. The converted PDFs are not
+committed (`*.pdf` is ignored), so each machine makes its own.
+
+**What went wrong.** 53 of the filings are pdf2htmlEX documents, which
+carry a subset web font for every few pages. Chromium loads a web font
+when it first needs it, and a print taken as soon as the page had
+loaded drew no text on pages whose font was not yet in. The corpus was
+converted under two environments: 59 files were printed by Chromium 130
+and 36 by Chromium 145 (each PDF's producer field says which; on the
+extraction machine those are the builds of Playwright 1.48, installed
+for the system Python, and 1.58, the repository's `.conda`
+environment). Of the 59, ten kept text on their first
+eight to twelve pages only -- 1902, 1922, 1985, 1988, 2525, 2689, 2880,
+3456, 4747 and 5183/2024, every one of them then written as having no
+triangle -- and eighteen more lost whole pages or 1-15% of their
+characters (4242/2024 lost its claims development table's labels, and
+1416/2024's and 2988/2024's balance-sheet tables their thousands
+markers, which is why round 52 had to resolve their units from the
+document declaration or the models). None of the 36 lost anything.
+
+**What the converter does now.** It fetches nothing the filing
+references, loads every font the document declares before printing,
+and refuses a conversion, new or cached, that carries less text than
+the filing (`conversion_lost_text()`): fewer PDF pages with text than
+page containers with text, or under `MIN_CONVERTED_TEXT_SHARE` (0.99)
+of the characters. Every conversion made this way carries at least
+0.9985 of its filing's page text; the 28 that failed were replaced on
+the extraction machine (the Chromium-130 files are kept aside).
+
+**What that changes**, measured by replaying the RAG step on the
+committed caches with the new conversions: 4747/2024's triangle is read
+from the page text (-11.116m); eight of the ten reach the page-vision
+step on the newly visible triangle page, for which no response is
+cached; 1922/2024 prints a single 2024 cohort and is still not read;
+4242/2024 (a models record) reaches the page-vision step too. Every
+other HTML record's RAG outcome is unchanged, and 1416/2024 and
+2988/2024 keep their opening figures with the unit now read from the
+page. `tests/test_html_conversion.py` holds the check.
+
 ---
 
 ## 14  Output format

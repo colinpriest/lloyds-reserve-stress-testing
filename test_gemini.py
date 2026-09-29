@@ -25,6 +25,7 @@ Delete the llm_cache/ directory to force re-extraction from all LLMs.
 """
 
 import contextlib
+import html as html_lib
 import os
 import re
 import sys
@@ -665,22 +666,106 @@ def _llm_cache_save(cache_key: str, data, *, model: str = "",
         json.dump(envelope, f, indent=2, ensure_ascii=True)
 
 
+#: Load every web font the document declares before the page is printed (round 62). A pdf2htmlEX
+#: filing carries a subset font for every few pages, and Chromium loads a web font when it first
+#: needs one: printed as soon as the page had loaded, a page whose font was not yet in came out with
+#: no text drawn at all. Ten 2024 conversions made under Playwright 1.48 (Chromium 130) kept text on
+#: their first eight to twelve pages only, and every note after that -- the claims development
+#: tables included -- was lost; eighteen more lost whole pages or 1-15% of their characters. Under
+#: Playwright 1.58 (Chromium 145) the same files convert whole, with or without the fonts loaded.
+_LOAD_ALL_FONTS = """async () => {
+    await Promise.all([...document.fonts].map(f => f.load().catch(() => null)));
+    await document.fonts.ready;
+    return [...document.fonts].filter(f => f.status !== 'loaded').length;
+}"""
+_PF_PAGE = re.compile(r'<div id="pf[0-9a-f]+"')
+_HTML_TAG = re.compile(r"<[^>]+>")
+#: The share of a pdf2htmlEX filing's page text a converted PDF must carry. Every conversion made
+#: with the fonts loaded carries 0.9985 or more; the lossy ones range from 0.165 to 0.989.
+MIN_CONVERTED_TEXT_SHARE = 0.99
+
+
+def _nonspace(text):
+    return len("".join(text.split()))
+
+
+def html_page_text(html_path):
+    """(page containers, containers carrying text, characters of text) of a pdf2htmlEX filing, read
+    from its source and not counting white space; (0, 0, 0) for HTML of any other kind."""
+    raw = Path(html_path).read_text(encoding="utf-8", errors="replace")
+    starts = [m.start() for m in _PF_PAGE.finditer(raw)]
+    with_text = chars = 0
+    for i, start in enumerate(starts):
+        chunk = raw[start:starts[i + 1] if i + 1 < len(starts) else len(raw)]
+        # entities unescaped first: a page of spacers is a run of &#160;, which is not text
+        n = _nonspace(html_lib.unescape(_HTML_TAG.sub("", chunk)))
+        chars += n
+        with_text += 1 if n else 0
+    return len(starts), with_text, chars
+
+
+def conversion_lost_text(html_path, pdf_path):
+    """None when a converted PDF carries its filing's text, else why not (round 62).
+
+    A pdf2htmlEX filing prints one page per page container, and a page may run onto a second PDF
+    page, so the PDF must carry text on at least as many pages as the filing has containers with
+    text, and at least MIN_CONVERTED_TEXT_SHARE of the characters. Of the 95 committed-run
+    conversions 28 fail, all made under Chromium 130; every conversion made with the fonts loaded
+    passes. HTML without page containers is not checked."""
+    n_pages, n_text, n_chars = html_page_text(html_path)
+    if not n_pages or fitz is None:
+        return None
+    doc = fitz.open(str(pdf_path))
+    try:
+        texts = [pg.get_text() for pg in doc]
+    finally:
+        doc.close()
+    pdf_pages = sum(1 for t in texts if t.strip())
+    pdf_chars = sum(_nonspace(t) for t in texts)
+    if pdf_pages < n_text:
+        return ("the PDF has text on %d page(s), the filing on %d of its %d page containers"
+                % (pdf_pages, n_text, n_pages))
+    if n_chars and pdf_chars < MIN_CONVERTED_TEXT_SHARE * n_chars:
+        return ("the PDF carries %.1f%% of the filing's page text (%d of %d characters)"
+                % (100.0 * pdf_chars / n_chars, pdf_chars, n_chars))
+    return None
+
+
 def convert_html_to_pdf(html_path):
-    """Convert HTML file to PDF using Playwright. Returns path to cached PDF."""
+    """Convert HTML file to PDF using Playwright. Returns path to cached PDF.
+
+    Nothing the filing references is fetched, every web font is loaded before printing, and a
+    conversion that lost the filing's text is refused, cached or new (round 62): the pipeline
+    classifies pages from the PDF's text, so a lost page is a lost note, and before round 62 a
+    lost claims development table was recorded as no triangle."""
     HTML_PDF_CACHE.mkdir(parents=True, exist_ok=True)
     pdf_path = HTML_PDF_CACHE / f"{html_path.stem}.pdf"
     if pdf_path.exists():
+        lost = conversion_lost_text(html_path, pdf_path)
+        if lost:
+            raise RuntimeError(f"the cached conversion {pdf_path} lost text ({lost}); delete it so "
+                               f"that {html_path.name} is converted again")
         print(f"  Using cached PDF: {pdf_path.name}")
         return pdf_path
 
     print(f"  Converting {html_path.name} to PDF via Playwright...")
     from playwright.sync_api import sync_playwright
+    part = pdf_path.with_suffix(".part.pdf")
     with sync_playwright() as p:
         browser = p.chromium.launch()
         page = browser.new_page()
+        page.route("**/*", lambda route: route.continue_()
+                   if route.request.url.startswith(("file:", "data:", "blob:")) else route.abort())
         page.goto(f"file:///{html_path.resolve().as_posix()}")
-        page.pdf(path=str(pdf_path), format="A4", print_background=True)
+        not_loaded = page.evaluate(_LOAD_ALL_FONTS)
+        page.pdf(path=str(part), format="A4", print_background=True)
         browser.close()
+    lost = conversion_lost_text(html_path, part)
+    if lost:
+        part.unlink()
+        raise RuntimeError(f"converting {html_path.name} lost text ({lost}; {not_loaded} font(s) "
+                           f"not loaded); nothing cached")
+    os.replace(part, pdf_path)
     print(f"  Converted: {pdf_path.name} ({pdf_path.stat().st_size / 1024:.0f} KB)")
     return pdf_path
 

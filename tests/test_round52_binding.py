@@ -189,7 +189,11 @@ def _filing(stem):
 
 
 @pytest.mark.parametrize("stem,year,expect", [
-    ("syndicate_1416_2024", 2024, {"opening": 46.378, "opening_source": "document", "entity": 1416}),
+    # The balance-sheet table's thousands marker was lost by the Chromium-130 conversion, not by the
+    # filing: converted with its fonts loaded (round 62) the page prints it, and the unit is read
+    # from the page. The same figure either way; the document-declaration path is held by
+    # test_1416_2024_cached_table_needs_the_document_declaration on the round-52 page texts.
+    ("syndicate_1416_2024", 2024, {"opening": 46.378, "opening_source": "page", "entity": 1416}),
     # the table's own total, stored unrounded since round 58 (it was 1376.7 at 0.1m)
     ("syndicate_510_2018", 2018, {"opening": None, "triangle_entity": 510, "lob_gwp": 1376.729}),
     ("syndicate_510_2019", 2019, {"opening": None, "triangle_entity": 510}),
