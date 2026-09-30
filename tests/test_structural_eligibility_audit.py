@@ -400,6 +400,35 @@ def test_the_two_careful_reads_are_first_year_filings_that_print_no_older_cohort
         assert phrase.split()[-1] in r["review_note"] and "Read with care" in r["review_note"], name
 
 
+def test_the_docs_say_which_of_the_24_print_a_development_table_and_which_print_none():
+    """Ten of the 24 restated filings print a young development table and 14 print none (the ledger's
+    transcription: a development table is printed where it cites a page for one). docs/ocr-pipeline.md named the
+    21 that were not on the earlier list as printing no table at all, which was false of seven of them
+    (fourth cycle of round 62). The docs' lists are the transcription's."""
+    restated = _restated()
+    transcription = json.loads((AUDIT / "structural_eligibility_transcription.json").read_text(encoding="utf-8"))["records"]
+
+    def stems(names):
+        return {n[len("syndicate_"):-len(".json")].replace("_", "/") for n in names}
+
+    with_table = stems(n for n in restated if transcription[n]["triangle_page_index"] is not None)
+    without = stems(n for n in restated if transcription[n]["triangle_page_index"] is None)
+    assert (len(with_table), len(without)) == (10, 14)
+    text = " ".join((ROOT / "docs" / "ocr-pipeline.md").read_text(encoding="utf-8").split())
+
+    def names(listed):
+        return set(re.findall(r"\b\d{3,4}/\d{4}\b", listed))
+
+    # 11.2: the ten, and that the other 14 print none
+    m = re.search(r"Ten of the 24 print a young development table \(([^)]*)\); the other 14 print none\.", text)
+    assert m and names(m.group(1)) == with_table
+    # 11.4: of the 21 that were not on the earlier list (1699/2022, 1975/2019, 1922/2024), seven print one and 14 print none
+    earlier = {"1699/2022", "1975/2019", "1922/2024"}
+    m = re.search(r"seven print young development tables too \(([^)]*)\) and 14 print no table \(([^)]*)\)", text)
+    assert m and names(m.group(1)) == with_table - earlier and names(m.group(2)) == without
+    assert "print no table at all" not in text
+
+
 def test_each_restated_record_prints_what_the_ledger_quotes():
     """Every start statement, the opening line and the table heading of the 24 is printed on the page it
     cites, in the file whose hash the ledger holds (verbatim, white space aside; ' ... ' marks words left

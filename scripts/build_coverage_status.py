@@ -59,6 +59,23 @@ OUT_DIR = PROJECT_ROOT / "syndicate_reports" / "coverage"
 sys.path.insert(0, str(PROJECT_ROOT))
 from test_gemini import COMPARISON_ABS_TOL, COMPARISON_REL_TOL  # noqa: E402
 
+sys.path.insert(0, str(PROJECT_ROOT / "scripts"))
+from restate_record_status import AUDITED_UNREAD_STUB_REASON  # noqa: E402
+
+#: The row text of a first-year stub the pipeline wrote. Its rule (docs/ocr-pipeline.md 11.1) writes a stub only when the
+#: triangles, the reserve text and both models show no development figure, so "no stated prior-year development figure"
+#: is something the pipeline tested.
+FIRST_YEAR_ROW_REASON = ('no eligible mature cohort in the report triangles and no stated '
+                         'prior-year development figure')
+#: The row text of a first-year stub the structural audit restated from an unread record (third cycle of round 62; 24 of
+#: them). What the audit read is the filing's start statement, its claims development table and its opening balance, so
+#: that is what the text claims; whether the filing states a prior-year development figure was not tested (fourth cycle
+#: of round 62: the row text had said no stated figure, which nobody had looked for).
+AUDITED_UNREAD_ROW_REASON = ('no eligible mature cohort: the filing states that the syndicate began in the report year '
+                             'or the year before and prints no older underwriting year (read on its pages by the '
+                             'structural audit); the parsers found no development figure, the models were not run and '
+                             'the audit did not look for a stated one')
+
 PYD_ABS_TOL = COMPARISON_ABS_TOL
 PYD_REL_TOL = COMPARISON_REL_TOL
 RESERVES_ABS_TOL = COMPARISON_ABS_TOL
@@ -264,8 +281,8 @@ def analyse_extraction(syndicate: int, year: int,
 
     # ---- special classifications -------------------------------------
     if data.get('first_year_syndicate'):
-        reason = ('no eligible mature cohort in the report triangles and no stated '
-                  'prior-year development figure')
+        reason = (AUDITED_UNREAD_ROW_REASON if data.get('reason') == AUDITED_UNREAD_STUB_REASON
+                  else FIRST_YEAR_ROW_REASON)
         out['exclusion_class'] = 'first_year_syndicate'
         out['pyd_failure_reason'] = reason
         out['opening_failure_reason'] = reason
@@ -558,6 +575,8 @@ def main() -> int:
     n_unavailable = total - n_downloaded
     dl = detail[detail['download_status'] == 'report downloaded']
     n_first_year = int((dl['exclusion_class'] == 'first_year_syndicate').sum())
+    n_audited = int(((dl['exclusion_class'] == 'first_year_syndicate')
+                     & (dl['pyd_failure_reason'] == AUDITED_UNREAD_ROW_REASON)).sum())
     n_no_triangle = int((dl['exclusion_class'] == 'no_triangle_data').sum())
     n_not_extracted = int((~dl['extraction_file_exists']).sum())
     analysable = dl[dl['exclusion_class'].isna() & dl['extraction_file_exists']]
@@ -569,8 +588,11 @@ def main() -> int:
         ('Less: report unavailable (not published / download failed)', -n_unavailable, total - n_unavailable),
         ('Reports downloaded', None, n_downloaded),
         ('Less: not yet through extraction pipeline', -n_not_extracted, n_downloaded - n_not_extracted),
-        ('Less: no eligible mature cohort and no stated development figure', -n_first_year,
-         n_downloaded - n_not_extracted - n_first_year),
+        ('Less: no eligible mature cohort and no stated development figure (first-year stubs the pipeline wrote)',
+         -(n_first_year - n_audited), n_downloaded - n_not_extracted - (n_first_year - n_audited)),
+        ('Less: no eligible mature cohort, read on the filing pages by the structural audit (unread filings '
+         'restated as first-year stubs; a stated development figure was not sought)',
+         -n_audited, n_downloaded - n_not_extracted - n_first_year),
         ('Less: no deterministic reading (models not run)', -n_no_triangle,
          n_downloaded - n_not_extracted - n_first_year - n_no_triangle),
         ('Less: other field failures (PYD/LoB/opening not all extracted)',

@@ -1,5 +1,5 @@
 # Syndicate-Year Coverage Report
-Generated: 2026-09-30T12:40:05.368181+00:00
+Generated: 2026-09-30T23:48:28.490218+00:00
 
 ## Global reconciliation
 
@@ -9,7 +9,8 @@ Generated: 2026-09-30T12:40:05.368181+00:00
 | Less: report unavailable (not published / download failed) | -93 | 1032 |
 | Reports downloaded |  | 1032 |
 | Less: not yet through extraction pipeline | 0 | 1032 |
-| Less: no eligible mature cohort and no stated development figure | -93 | 939 |
+| Less: no eligible mature cohort and no stated development figure (first-year stubs the pipeline wrote) | -69 | 963 |
+| Less: no eligible mature cohort, read on the filing pages by the structural audit (unread filings restated as first-year stubs; a stated development figure was not sought) | -24 | 939 |
 | Less: no deterministic reading (models not run) | -20 | 919 |
 | Less: other field failures (PYD/LoB/opening not all extracted) | -63 | 856 |
 | Fully successful syndicate-years (a+b+c+d) |  | 856 |

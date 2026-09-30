@@ -2789,6 +2789,11 @@ expects exactly that (11.4).
   1922/2024, 1947/2018, 1975/2018, 2014/2014, 3902/2017, 4321/2022, 5623/2018, 6050/2015, 6117/2014,
   6119/2014, 6125/2016 and 6134/2018.
 - Began in the year before (6): 1975/2019, 1991/2014, 4321/2023, 6050/2016, 6113/2014 and 6115/2014.
+- Ten of the 24 print a young development table (1609/2021, 1699/2022, 1796/2021, 1922/2024, 1975/2019,
+  3902/2017, 4321/2022, 4321/2023, 5623/2018 and 6050/2016); the other 14 print none. The audit read each
+  filing's start statement, its development table where it prints one, and its opening balance. It did
+  not look for a stated prior-year development figure: the parsers found none and the models were not
+  run. The coverage report's row text for the 24 says that, and no longer says there is none.
 - Two were read with care. 2014/2014 says the syndicate has "its origins in Special Purpose Syndicate
   6110", and 3902/2017 that it replaced "the Incidental Syndicate that previously operated within
   Syndicate 4020". Neither filing prints an older cohort: 2014/2014 has no comparative column and no
@@ -3120,7 +3125,11 @@ cohorts 2018 and 2019 (1975/2019), and a single 2024 cohort of $26k
 (1922/2024).  None holds a cohort up to t-2, and each states that the
 syndicate began in the report year or the year before, so on 30 September
 2026 they became audited first-year stubs (§11.2), with 21 other unread
-records that print no table at all.
+records. Of those 21, seven print young development tables too (1609/2021,
+1796/2021, 3902/2017, 4321/2022, 4321/2023, 5623/2018 and 6050/2016) and 14
+print no table (1347/2023, 1686/2014, 1729/2014, 1947/2018, 1975/2018,
+1991/2014, 2014/2014, 6050/2015, 6113/2014, 6115/2014, 6117/2014, 6119/2014,
+6125/2016 and 6134/2018).
 
 `tests/test_corpus_replay.py` holds the reported list to the committed
 caches and requires this section to name every filing on it, and the three

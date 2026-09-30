@@ -17,7 +17,9 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
+import build_coverage_status as bcs  # noqa: E402
 import replay_corpus_check as rcc  # noqa: E402
+import restate_record_status as restate  # noqa: E402
 
 COVERAGE = ROOT / "syndicate_reports" / "coverage" / "coverage_status.json"
 #: the coverage row's exclusion_class for each record class (scripts/build_coverage_status.py)
@@ -46,3 +48,53 @@ def test_every_coverage_row_is_classed_as_its_record_is():
     # every class the corpus holds is exercised by the table
     assert (seen.get("unread") and seen.get("models") and seen.get("stub_before_models")
             and seen.get("audited_unread_stub")), seen
+
+
+def _stub_rows():
+    """(row, expected text, stem, restated by the audit) for every coverage row of a first-year stub. A stub the
+    pipeline wrote says no eligible mature cohort and no stated prior-year development figure, which its rule tested;
+    one the structural audit restated from an unread record says only what the audit read."""
+    records = rcc.committed_records()
+    for row in json.loads(COVERAGE.read_text(encoding="utf-8"))["rows"]:
+        stem = "syndicate_%s_%s" % (row["syndicate"], row["year"])
+        d = records.get(stem)
+        if d is not None and row["exclusion_class"] == "first_year_syndicate":
+            audited = d.get("reason") == restate.AUDITED_UNREAD_STUB_REASON
+            yield row, (bcs.AUDITED_UNREAD_ROW_REASON if audited else bcs.FIRST_YEAR_ROW_REASON), stem, audited
+
+
+def test_a_stub_row_says_what_was_read_and_no_more_and_the_builder_writes_the_same():
+    """Fourth cycle of round 62: the row text of the 24 unread filings the audit restated said "no stated prior-year
+    development figure", which the audit had not looked for (it read the start statement, the development table and the
+    opening balance; the parsers found no figure and the models were not run). The committed row is the builder's own
+    output for its record, so a change to the text or to the rule that chooses it without a rebuild fails here."""
+    counts = {True: 0, False: 0}
+    for row, expected, stem, audited in _stub_rows():
+        counts[audited] += 1
+        assert row["pyd_failure_reason"] == expected and row["opening_failure_reason"] == expected, stem
+        fresh = bcs.analyse_extraction(int(row["syndicate"]), int(row["year"]), None, None)   # a stub returns before any page is read
+        assert fresh["pyd_failure_reason"] == expected and fresh["opening_failure_reason"] == expected, stem
+        assert fresh["exclusion_class"] == "first_year_syndicate", stem
+    assert counts == {True: 24, False: 69}, counts
+    assert "no stated" not in bcs.AUDITED_UNREAD_ROW_REASON
+    assert "did not look for a stated one" in bcs.AUDITED_UNREAD_ROW_REASON
+    assert "no stated prior-year development figure" in bcs.FIRST_YEAR_ROW_REASON
+
+
+def test_the_report_waterfall_keeps_the_24_apart_from_the_stubs_the_pipeline_wrote():
+    lines = (ROOT / "syndicate_reports" / "coverage" / "coverage_report.md").read_text(encoding="utf-8").splitlines()
+
+    def cells(prefix):
+        (line,) = [l for l in lines if l.startswith("| " + prefix)]
+        label, change, running = [c.strip() for c in line.strip().strip("|").split("|")]
+        return label, int(change), int(running)
+
+    before = cells("Less: not yet through extraction pipeline")
+    pipeline = cells("Less: no eligible mature cohort and no stated development figure")
+    audited = cells("Less: no eligible mature cohort, read on the filing pages")
+    n = {True: 0, False: 0}
+    for _, _, _, is_audited in _stub_rows():
+        n[is_audited] += 1
+    assert (pipeline[1], audited[1]) == (-n[False], -n[True]) == (-69, -24)
+    assert pipeline[2] == before[2] + pipeline[1] and audited[2] == pipeline[2] + audited[1]
+    assert "not sought" in audited[0] and "structural audit" in audited[0]
