@@ -1,11 +1,16 @@
 """The filing-page audit separates economic eligibility from extraction skips.
 
 Round 62 (review of 29 September 2026, M-10, E-1, E-2 and test upgrade 5): the ledger is recomputed
-here for all 71 records -- the usable cohort from the transcribed years, the decision from it, the
+here for all 95 records -- the usable cohort from the transcribed years, the decision from it, the
 opening with its currency against the filing page, and the year headers against the page the ledger
 cites -- and the one retained eligible record is held to the generator that writes it. The ledger
 must also cover every committed stub by name: 1985/2024 became one when it was extracted again on
 29 September 2026, and nothing had said the audit did not cover it.
+
+Third cycle (30 September 2026, D2): 24 records the pipeline had written as having no deterministic
+reading state in their filings that the syndicate began underwriting in the report year or the year
+before. They are in the ledger with the filing's own words (`start_statements`), each held here to
+the page it cites in the file the ledger hashed, and a record with no printed opening must declare why.
 """
 import functools
 import json
@@ -34,24 +39,29 @@ def _records():
 def test_all_pre_model_stubs_have_source_reviewed_decisions():
     audit = _audit()
     assert audit["counts"] == {
-        "reviewed": 71,
-        "structural_ineligible": 70,
+        "reviewed": 95,
+        "structural_ineligible": 94,
         "eligible_observed_zero": 1,
         "eligibility_unresolved": 0,
     }
-    assert len(audit["records"]) == 71
+    assert len(audit["records"]) == 95
     assert all((r["source_page"] or r["source_file"].endswith((".html", ".htm")))
                and r["source_sha256"] for r in audit["records"])
 
 
 def test_the_audit_covers_every_committed_stub_by_name():
-    """The records the audit script selects -- every committed first-year stub, and the stub it
-    retained -- are the ledger's and the transcription's, name for name."""
+    """The records the audit script selects -- every committed first-year stub, and every record the
+    audit has transcribed (the stub it retained, the unread records it restated) -- are the ledger's and
+    the transcription's, name for name: a stub the audit has not transcribed, or a transcribed record
+    with no committed file, would make the two differ."""
     import audit_structural_eligibility as sel
     selected = {path.name for path, _ in sel.structural_records()}
     tr = json.loads((AUDIT / "structural_eligibility_transcription.json").read_text(encoding="utf-8"))["records"]
     assert selected == set(_records()) == set(tr) == sel.expected_names()
-    assert "syndicate_1985_2024.json" in selected
+    assert "syndicate_1985_2024.json" in selected and len(selected) == 95
+    # every committed stub is audited: the selection's stubs are all in the ledger
+    stubs = {path.name for path, rec in sel.structural_records() if rec.get("first_year_syndicate") is True}
+    assert len(stubs) == 94 and stubs <= set(_records())
 
 
 def test_the_decision_is_recomputed_from_the_years_for_every_record():
@@ -66,6 +76,21 @@ def test_the_decision_is_recomputed_from_the_years_for_every_record():
             assert r["economic_eligibility"] == "ineligible", name
 
 
+#: the records whose filings print no opening gross claims outstanding: three from before the third
+#: cycle, and seven of the 24 unread records the audit restated (their syndicates began in the report
+#: year, and their balance sheets carry one column)
+NO_OPENING = {
+    "syndicate_1492_2015.json", "syndicate_1618_2021.json", "syndicate_2357_2014.json",
+    "syndicate_1686_2014.json", "syndicate_1729_2014.json", "syndicate_1975_2018.json", "syndicate_2014_2014.json",
+    "syndicate_3902_2017.json", "syndicate_6117_2014.json", "syndicate_6119_2014.json",
+}
+FIRST_YEAR_NO_OPENING = "first_year_filing_prints_no_opening"
+#: the one record whose filing prints no claims outstanding balance at all (note 4: no claims were
+#: notified), so it has no opening although its syndicate began a year before the report year: named
+#: here with its reason, and accepted only as that
+NO_BALANCE_PRINTED = {"syndicate_2357_2014.json": "filing_prints_no_claims_outstanding_balance"}
+
+
 def test_every_record_has_its_opening_read_from_the_filing_with_its_currency():
     """16 of 70 records had an opening, two of them the closing balance and nine US dollars in a
     field read as GBP (M-10). Now every record states what the filing prints, or that it prints none."""
@@ -78,7 +103,8 @@ def test_every_record_has_its_opening_read_from_the_filing_with_its_currency():
             continue
         assert r["opening_gross_reserve_currency"] in ("GBP", "USD", "EUR", "CAD"), name
         assert r["opening_gross_reserve_page"] and r["opening_gross_reserve_quote"], name
-    assert sum(r["opening_gross_reserve_gbp_m"] is not None for r in recs.values()) == 68
+    assert {n for n, r in recs.items() if r["opening_gross_reserve_gbp_m"] is None} == NO_OPENING
+    assert len(recs) - len(NO_OPENING) == 85       # 68 before the third cycle, and 17 of the 24 restated records
     # the two the review found: a closing balance recorded as the opening
     assert recs["syndicate_2019_2020.json"]["opening_gross_reserve_gbp_m"] == 0.0
     assert recs["syndicate_2019_2021.json"]["opening_gross_reserve_gbp_m"] == pytest.approx(278.4)
@@ -90,6 +116,28 @@ def test_every_record_has_its_opening_read_from_the_filing_with_its_currency():
     assert recs["syndicate_1985_2024.json"]["opening_gross_reserve_page"] == 36
 
 
+def test_a_missing_opening_is_a_declared_exemption_of_a_first_year_filing():
+    """Third cycle of round 62 (FIX3, E2): a record whose filing prints no opening says why, and the
+    reason is accepted only where it can be true. A syndicate that began in the report year has no
+    claims outstanding at 1 January to print; the one record that does not fit (2357/2014, which began
+    a year earlier but prints no claims balance at all) is named with its own reason. A record with a
+    printed opening declares nothing."""
+    recs = _records()
+    assert {n for n, r in recs.items() if r["opening_gross_reserve_gbp_m"] is None} == NO_OPENING
+    for name, r in recs.items():
+        declared = r.get("opening_gross_reserve_exemption")
+        if name not in NO_OPENING:
+            assert declared is None, name
+            continue
+        if name in NO_BALANCE_PRINTED:
+            assert declared == NO_BALANCE_PRINTED[name], name
+            assert r["triangle_basis"] == "no claims development table printed", name
+            assert r["inception_year"] == r["report_year"] - 1, name
+        else:
+            assert declared == FIRST_YEAR_NO_OPENING, name
+            assert r["inception_year"] == r["report_year"], name     # a first-year filing
+
+
 def test_the_ledger_is_the_transcription():
     tr = json.loads((AUDIT / "structural_eligibility_transcription.json").read_text(encoding="utf-8"))["records"]
     for name, r in _records().items():
@@ -99,6 +147,9 @@ def test_the_ledger_is_the_transcription():
         assert r["triangle_basis"] == t["basis"], name
         page = t["triangle_page_index"] if t["triangle_page_index"] is not None else t["years_page_index"]
         assert r["source_page"] == page + 1, name
+        assert r.get("opening_gross_reserve_exemption") == t.get("opening_exemption"), name
+        assert [(s["page"], s["page_printed"], s["quote"]) for s in r.get("start_statements") or []] == [
+            (s["page_index"] + 1, s["page_printed"], s["quote"]) for s in t.get("start_statements") or []], name
 
 
 @functools.lru_cache(maxsize=None)
@@ -151,9 +202,10 @@ def test_each_opening_currency_is_the_one_its_filing_prints():
     passed. Now the opening's currency must be the one its page prints most often; a page that prints
     no currency marker defers to the currency the filing declares its accounts in; and a page that
     prints another currency is accepted only where the transcription records the conflict and the
-    declaration agrees with the ledger (5183/2023: note 4 headed GBP'000 in USD accounts). Measured on
-    the committed ledger: 66 openings by their page, 1100/2024 by its declaration (Euro accounts),
-    5183/2023 by its recorded conflict."""
+    declaration agrees with the ledger (5183/2023: note 4 headed GBP'000 in USD accounts; 6050/2015: the
+    page also prints note 8's directors' remuneration in pounds). Measured on the committed ledger: 82 of
+    its 85 openings by their page, 1100/2024 by its declaration (Euro accounts), and 5183/2023 and
+    6050/2015 by their recorded conflicts."""
     how = {}
     for r in _present():
         if r["opening_gross_reserve_gbp_m"] is None:
@@ -169,14 +221,18 @@ def test_each_opening_currency_is_the_one_its_filing_prints():
             assert "currency conflict" in str(r.get("transcription_notes")).lower(), (r["file"], cur, page)
             assert cur in _declared_currencies(texts), (r["file"], cur, page)
             how[r["file"]] = "recorded conflict"
-    if len(how) == 68:      # every filing present: the measured split holds
+    if len(how) == 85:      # every filing present: the measured split holds
         assert sorted(k for k, v in how.items() if v != "page") == [
-            "syndicate_1100_2024.json", "syndicate_5183_2023.json"], how
+            "syndicate_1100_2024.json", "syndicate_5183_2023.json", "syndicate_6050_2015.json"], how
 
 
-#: a development-row label of a claims development table
+#: a development-row label of a claims development table. "At end of reporting period" (1796/2021) and
+#: "1 year" (3902/2017, whose table has one column at one year of development) joined the list in the
+#: third cycle; with both, the measurement in the test below is unchanged (70 of 71 then, and the same
+#: 16 of the old ledger's pages).
 DEVELOPMENT_LABEL = re.compile(
     r"at (the )?end of (the )?(first |pure )?(underwriting|reporting|accident|financial)? ?year|"
+    r"at (the )?end of (the )?reporting period|\b1 year\b|"
     r"\b(one|two|three|1|2|3) years? later\b|\bafter (one|two|1|2) years?\b|\b12 months\b|"
     r"development (year|period)", re.I)
 
@@ -290,3 +346,117 @@ def test_the_retained_record_is_its_generators_output_and_claims_no_model_work()
     assert not [k for k in block if k.endswith("_confidence")]
     assert "RAG OVERRIDE" not in block["data_quality_notes"] and "Model said" not in block["data_quality_notes"]
     assert block["direction"] == "flat"
+
+
+# ---------------------------------------------------------------------------------------------------------------
+# Third cycle of round 62 (30 September 2026, D2): the unread records the audit restated as first-year stubs
+# ---------------------------------------------------------------------------------------------------------------
+
+#: what a start statement says: that the syndicate began, was established or approved to start, or is in
+#: its first or second year
+STARTED = re.compile(r"commenc|began|establish|incept|first (year|underwriting|financial)|second year|"
+                     r"approved by lloyd|start underwriting|launched", re.I)
+
+
+def _restated():
+    import finalize_structural_eligibility_audit as fin
+    return {n: r for n, r in _records().items() if r["extraction_status"] == fin.UNREAD_RECORD_CONFIRMED}
+
+
+def test_the_unread_records_the_audit_restated_state_when_the_syndicate_began():
+    """24 records were written as having no deterministic reading; their filings state that the syndicate
+    began in the report year (18) or the year before (6), so no underwriting year up to t-2 can exist.
+    Each is in the ledger with the filing's own words, and nothing else in the ledger carries them."""
+    recs, restated = _records(), _restated()
+    assert len(restated) == 24
+    assert sum(r["inception_year"] == r["report_year"] for r in restated.values()) == 18
+    assert sum(r["inception_year"] == r["report_year"] - 1 for r in restated.values()) == 6
+    for name, r in restated.items():
+        t = r["report_year"]
+        assert r["decision"] == "structural_ineligible_no_mature_cohort" and r["mature_underwriting_years"] == [], name
+        assert r["underwriting_years"] in ([t], [t - 1, t]), name
+        assert r["start_statements"], name
+        for s in r["start_statements"]:
+            assert s["page"] >= 1 and s["page_printed"] and s["quote"].strip(), (name, s)
+        # at least one statement says that the syndicate began (the others may support it: a reporting period
+        # that opens after 1 January, no comparative year)
+        assert any(STARTED.search(s["quote"]) for s in r["start_statements"]), name
+        # a statement about a start in the year before the report says so on the page the record cites
+        assert any(str(r["inception_year"]) in s["quote"] or r["inception_year"] == t for s in r["start_statements"]), name
+    assert all("start_statements" not in r for n, r in recs.items() if n not in restated)
+
+
+def test_the_two_careful_reads_are_first_year_filings_that_print_no_older_cohort():
+    """2014/2014 has 'origins in Special Purpose Syndicate 6110' and 3902/2017 replaced 'the Incidental
+    Syndicate'; either could have printed the older syndicate's cohorts. The ledger says what each
+    filing does say, and the note explains why neither prints one."""
+    restated = _restated()
+    for name, phrase, years in (("syndicate_2014_2014.json", "Special Purpose Syndicate 6110", [2014]),
+                                ("syndicate_3902_2017.json", "Incidental Syndicate", [2017])):
+        r = restated[name]
+        assert r["underwriting_years"] == years, name
+        assert any(phrase in s["quote"] for s in r["start_statements"]), name
+        assert r["review_note"], name
+        assert phrase.split()[-1] in r["review_note"] and "Read with care" in r["review_note"], name
+
+
+def test_each_restated_record_prints_what_the_ledger_quotes():
+    """Every start statement, the opening line and the table heading of the 24 is printed on the page it
+    cites, in the file whose hash the ledger holds (verbatim, white space aside; ' ... ' marks words left
+    out). Needs the filings, which are not committed."""
+    import hashlib
+    import finalize_structural_eligibility_audit as fin
+    checked = 0
+    for r in _present():
+        if r["extraction_status"] != fin.UNREAD_RECORD_CONFIRMED:
+            continue
+        assert hashlib.sha256((ROOT / r["source_file"]).read_bytes()).hexdigest() == r["source_sha256"], r["file"]
+        texts = _page_texts(r)
+        for s in r["start_statements"]:
+            assert fin.quote_on_page(s["quote"], texts[s["page"] - 1]), (r["file"], s["page"], s["quote"])
+        assert fin.quote_on_page(r["opening_gross_reserve_quote"], texts[r["opening_gross_reserve_page"] - 1]), r["file"]
+        if r["triangle_basis"] != "no claims development table printed":
+            assert fin.quote_on_page(r["triangle_basis_quote"], texts[r["source_page"] - 1]), r["file"]
+        checked += 1
+    if not checked:
+        pytest.skip("source filings not present in this checkout")
+
+
+def _year_run(flat, length=3, span=40):
+    """Consecutive calendar years, ascending or descending, each within `span` characters of the one before:
+    the header of a claims development table that prints `length` cohorts."""
+    years = [(m.start(), int(m.group())) for m in re.finditer(r"\b(?:19|20)\d\d\b", flat)]
+    for i in range(len(years) - length + 1):
+        window = years[i:i + length]
+        ys = [y for _, y in window]
+        near = all(window[k + 1][0] - window[k][0] <= span for k in range(length - 1))
+        if near and (ys == list(range(ys[0], ys[0] + length)) or ys == list(range(ys[0], ys[0] - length, -1))):
+            return ys
+    return None
+
+
+def _development_header_run(text):
+    """Three or more consecutive years in a header on a page that prints a development-row label: what a
+    claims development table with an older cohort looks like."""
+    flat = " ".join(text.split())
+    return _year_run(flat) if DEVELOPMENT_LABEL.search(flat) else None
+
+
+def test_no_restated_filing_prints_a_cohort_older_than_the_ledger_says():
+    """The claim behind the decision, tested on every page of the 24 filings: none prints three or more
+    consecutive years in a header on a page with a development-row label, so no development table holds
+    a cohort the ledger does not list (six of the 24 print two cohorts, the syndicate's two years). A page
+    that lists the directors' shareholdings for 2015, 2016 and 2017 (3902/2017) is no such table. The
+    control is a filing that does print them: 1840/2022's table has UW2020-2022."""
+    import finalize_structural_eligibility_audit as fin
+    control = ROOT / "syndicate_reports" / "pdfs" / "syndicate_1840_2022.pdf"
+    present = _present()
+    assert control.exists(), "the control filing is missing"
+    found = [_development_header_run(t) for t in fin.page_texts(control)]
+    assert any(run and sorted(run) == [2020, 2021, 2022] for run in found), "the check cannot find a three-cohort header"
+    for r in present:
+        if r["extraction_status"] != fin.UNREAD_RECORD_CONFIRMED:
+            continue
+        for page, text in enumerate(_page_texts(r), 1):
+            run = _development_header_run(text)
+            assert run is None, (r["file"], page, run)

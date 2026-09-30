@@ -358,7 +358,12 @@ before or after the models run:
   `first_year_evidence` block holding both models' figures. A record's structure says what was
   retained, not whether the API was used; since round 62 its `models_run` field says which
   (`false` before the models, `true` after them).
-- A report with no triangle at all is not taken to be young on that account.
+- A report with no triangle at all is not taken to be young on that account. A filing that states the
+  syndicate began in the report year or the year before is young whatever the parsers read, but that
+  is the filing-page audit's decision, not this function's: 24 records the pipeline writes as unread
+  were restated as first-year stubs on that ground on 30 September 2026
+  (`scripts/restate_record_status.py --audited-unread`; `docs/ocr-pipeline.md` §11.2), each with the
+  filing's own words, page and file hash in `pdf_extraction/audit/structural_eligibility_audit.json`.
 - The inception-year lookup that once flagged a report by `report_year < inception_year + 2` was
   removed in round 58. `pdf_extraction/syndicate_inception_years.json` is kept as a record, and no
   step reads it for a decision. Ten committed stubs were written by that rule and still carried its
@@ -389,8 +394,11 @@ refused (`docs/ocr-pipeline.md` §9.6), 1884/2022 and 3330/2018 were written by 
 superseded the same day (§11.4), and ten 2024 HTML filings print claims development tables that
 their conversion to PDF had lost (§13.1). The thirteen records the current code reads, or takes to
 the page-vision step, were extracted again with the models on 29 September 2026 (§11.4); the others
-carry the restated status and reason (`scripts/restate_record_status.py`). Five of those still print
-a table the parsers do not read, and §11.4 names them and says why each stays unread.
+carry the restated status and reason (`scripts/restate_record_status.py`). Of the 45 that were left,
+24 state in their filings that the syndicate began in the report year or the year before, and the
+filing-page audit restated them as first-year stubs on 30 September 2026 (§11.2); 21 remain unread,
+and two of them still print a table the parsers do not read (§11.4 names them and says why each stays
+unread).
 
 ### Dual-LLM Extraction and Cross-Validation
 

@@ -1,7 +1,15 @@
-"""Write the reviewed economic-eligibility audit for every pre-model stub and the one it retained.
+"""Write the reviewed economic-eligibility audit for every pre-model stub, the one it retained and the
+unread records it restated.
 
-71 records since round 62: the 70 committed first-year stubs, 1985/2024 among them since its
-re-extraction of 29 September 2026 found UW2023-2024 only, and 1840/2022, retained as an observed zero.
+95 records since the third cycle of round 62 (30 September 2026): the 70 first-year stubs committed
+before it, 1985/2024 among them since its re-extraction of 29 September 2026 found UW2023-2024 only;
+1840/2022, retained as an observed zero; and 24 records the pipeline had written as having no
+deterministic reading (its parsers found no figure and the models were not run) whose filings state
+that the syndicate began underwriting in the report year (18) or the year before (6), so that no
+underwriting year up to t-2 can exist (the author's decision D2, 30 September 2026). Those 24 are read
+from their filing pages like the rest and restated as first-year stubs by
+``restate_record_status.py --audited-unread``; their ledger records carry ``start_statements``, the
+filing's own words on when the syndicate began, each checked to be printed on the page it cites.
 
 The underwriting-year lists below are transcribed from the filing pages captured by
 ``audit_structural_eligibility.py``.  They are deliberately separate from the old
@@ -35,6 +43,10 @@ TRANSCRIPTION = AUDIT_DIR / "structural_eligibility_transcription.json"
 OUT_JSON = AUDIT_DIR / "structural_eligibility_audit.json"
 OUT_CSV = AUDIT_DIR / "structural_eligibility_audit.csv"
 HEADING_WORDS = ("underwriting year", "year of account", "pure underwriting", "estimate of")
+#: the ledger's extraction_status of an unread record the audit restated as a first-year stub
+UNREAD_RECORD_CONFIRMED = "unread_record_confirmed_structural_by_source_page_audit"
+#: the declared reason a record has no opening: the syndicate began in the report year, so none exists to print
+FIRST_YEAR_NO_OPENING = "first_year_filing_prints_no_opening"
 
 # Filing-page transcription.  Template columns that contain only dashes are not
 # underwriting cohorts; 2358/2022 is the one filing that prints legacy year headings
@@ -43,14 +55,20 @@ REVIEWED_UW_YEARS = {
     "syndicate_1100_2024.json": [2024],
     "syndicate_1322_2023.json": [2023],
     "syndicate_1322_2024.json": [2023, 2024],
+    "syndicate_1347_2023.json": [2023],
     "syndicate_1416_2022.json": [2021, 2022],
     "syndicate_1492_2015.json": [2015],
     "syndicate_1492_2016.json": [2015, 2016],
+    "syndicate_1609_2021.json": [2021],
     "syndicate_1609_2022.json": [2021, 2022],
     "syndicate_1618_2021.json": [2021],
     "syndicate_1618_2022.json": [2021, 2022],
+    "syndicate_1686_2014.json": [2014],
     "syndicate_1686_2015.json": [2014, 2015],
+    "syndicate_1699_2022.json": [2022],
     "syndicate_1699_2023.json": [2022, 2023],
+    "syndicate_1729_2014.json": [2014],
+    "syndicate_1796_2021.json": [2021],
     "syndicate_1796_2022.json": [2021, 2022],
     "syndicate_1840_2020.json": [2020],
     "syndicate_1840_2021.json": [2020, 2021],
@@ -62,13 +80,19 @@ REVIEWED_UW_YEARS = {
     "syndicate_1892_2020.json": [2019, 2020],
     "syndicate_1902_2022.json": [2022],
     "syndicate_1902_2023.json": [2022, 2023],
+    "syndicate_1922_2024.json": [2024],
     "syndicate_1925_2024.json": [2024],
+    "syndicate_1947_2018.json": [2018],
     "syndicate_1971_2019.json": [2019],
     "syndicate_1971_2020.json": [2019, 2020],
+    "syndicate_1975_2018.json": [2018],
+    "syndicate_1975_2019.json": [2018, 2019],
     "syndicate_1980_2019.json": [2018, 2019],
     "syndicate_1985_2023.json": [2023],
     "syndicate_1985_2024.json": [2023, 2024],
     "syndicate_1988_2022.json": [2021, 2022],
+    "syndicate_1991_2014.json": [2013, 2014],
+    "syndicate_2014_2014.json": [2014],
     "syndicate_2019_2020.json": [2020],
     "syndicate_2019_2021.json": [2020, 2021],
     "syndicate_2024_2024.json": [2024],
@@ -88,11 +112,21 @@ REVIEWED_UW_YEARS = {
     "syndicate_3268_2018.json": [2018],
     "syndicate_3268_2019.json": [2018, 2019],
     "syndicate_3456_2023.json": [2022, 2023],
+    "syndicate_3902_2017.json": [2017],
+    "syndicate_4321_2022.json": [2022],
+    "syndicate_4321_2023.json": [2022, 2023],
     "syndicate_4747_2021.json": [2020, 2021],
     "syndicate_5183_2023.json": [2022, 2023],
+    "syndicate_5623_2018.json": [2018],
     "syndicate_5623_2019.json": [2018, 2019],
     "syndicate_5886_2017.json": [2017],
     "syndicate_5886_2018.json": [2017, 2018],
+    "syndicate_6050_2015.json": [2015],
+    "syndicate_6050_2016.json": [2015, 2016],
+    "syndicate_6113_2014.json": [2013, 2014],
+    "syndicate_6115_2014.json": [2013, 2014],
+    "syndicate_6117_2014.json": [2014],
+    "syndicate_6119_2014.json": [2014],
     "syndicate_6119_2015.json": [2014, 2015],
     "syndicate_6120_2015.json": [2015],
     "syndicate_6121_2015.json": [2015],
@@ -100,6 +134,7 @@ REVIEWED_UW_YEARS = {
     "syndicate_6123_2015.json": [2015],
     "syndicate_6123_2016.json": [2015, 2016],
     "syndicate_6124_2015.json": [2015],
+    "syndicate_6125_2016.json": [2016],
     "syndicate_6126_2016.json": [2016],
     "syndicate_6126_2017.json": [2016, 2017],
     "syndicate_6129_2016.json": [2016],
@@ -110,6 +145,7 @@ REVIEWED_UW_YEARS = {
     "syndicate_6132_2018.json": [2018],
     "syndicate_6132_2019.json": [2018, 2019],
     "syndicate_6133_2018.json": [2018],
+    "syndicate_6134_2018.json": [2018],
     "syndicate_6136_2023.json": [2023],
 }
 
@@ -139,6 +175,20 @@ def _flat(text: str) -> str:
     return " ".join(text.split())
 
 
+def quote_on_page(quote: str, page_text: str) -> bool:
+    """Whether `quote` is printed on the page: white space collapsed, a ' ... ' standing for words left
+    out, every fragment present and in order. A start statement, the opening line and the table heading
+    of an unread record the audit restated are held to it; nothing else in the ledger is."""
+    flat, at = _flat(page_text), 0
+    for fragment in quote.split(" ... "):
+        fragment = _flat(fragment)
+        found = flat.find(fragment, at) if fragment else -1
+        if found < 0:
+            return False
+        at = found + len(fragment)
+    return True
+
+
 def page_evidence(text: str) -> str:
     """The page's text from the table's heading on, so the stored excerpt shows the year headers."""
     flat = _flat(text)
@@ -165,7 +215,27 @@ def transcribed_facts(name: str, tr: dict, years: list[int], texts: list[str]) -
         if str(value).strip("()").strip() not in _flat(texts[tr["opening_page_index"]]):
             raise ValueError(f"{name}: page {tr['opening_page_index'] + 1} does not print {value!r}")
     opening_page = tr.get("opening_page_index")
+    exemption = tr.get("opening_exemption")
+    if tr.get("opening_m") is None and not exemption:
+        raise ValueError(f"{name}: no opening is printed and no exemption is declared")
+    if tr.get("opening_m") is not None and exemption:
+        raise ValueError(f"{name}: an opening is printed and an exemption is declared")
+    starts = None
+    if tr.get("start_statements"):
+        # an unread record the audit restated: what the filing says about when the syndicate began, the
+        # opening line and the table heading are each checked to be printed on the page they cite
+        starts = []
+        for s in tr["start_statements"]:
+            if not quote_on_page(s["quote"], texts[s["page_index"]]):
+                raise ValueError(f"{name}: page {s['page_index'] + 1} does not print the start statement {s['quote']!r}")
+            starts.append({"page": s["page_index"] + 1, "page_printed": s["page_printed"], "quote": s["quote"]})
+        if opening_page is not None and not quote_on_page(tr["opening_quote"], texts[opening_page]):
+            raise ValueError(f"{name}: page {opening_page + 1} does not print the opening line {tr['opening_quote']!r}")
+        if tr.get("triangle_page_index") is not None and not quote_on_page(tr["basis_quote"], texts[tr["triangle_page_index"]]):
+            raise ValueError(f"{name}: page {tr['triangle_page_index'] + 1} does not print the table heading")
     return {
+        "start_statements": starts,
+        "opening_gross_reserve_exemption": exemption,
         "source_page": page + 1,
         "source_page_printed": printed,
         "source_evidence": page_evidence(texts[page]),
@@ -210,6 +280,14 @@ def build_record(candidate: dict, tr: dict) -> dict:
         nil_status = "not_applicable_no_mature_cohort"
         calculation = f"no underwriting year u <= {year - 2}; reviewed years are {years}"
         extraction_status = "pre_model_stub_confirmed_structural_by_source_page_audit"
+        if facts["start_statements"]:
+            # an unread record: the filing says when the syndicate began, and no year before t-1 is printed
+            if min(years) not in (year, year - 1) or max(years) != year:
+                raise ValueError(f"{name}: a syndicate that began in {min(years)} is not a first-year filing of {year}")
+            extraction_status = UNREAD_RECORD_CONFIRMED
+
+    if facts["opening_gross_reserve_exemption"] == FIRST_YEAR_NO_OPENING and min(years) != year:
+        raise ValueError(f"{name}: the first-year exemption is declared for a syndicate that began in {min(years)}, not {year}")
 
     note = None
     if name == "syndicate_2358_2022.json":
@@ -219,6 +297,16 @@ def build_record(candidate: dict, tr: dict) -> dict:
         note = ("The filing prints no claims development table and no claims outstanding balance: note 4 "
                 "says no claims were notified. It trades in 2013 and 2014 only (page 5), so no cohort up "
                 "to 2012 exists.")
+    if name == "syndicate_2014_2014.json":
+        note = ("Read with care: the filing says the syndicate has 'its origins in Special Purpose Syndicate 6110', and also "
+                "that it 'commenced underwriting at Lloyd's on 1 January 2014' and that 2014 is 'Syndicate 2014's first "
+                "underwriting year'. It prints no older cohort: no comparative column, no claims development table, and "
+                "members' balances that open at nil.")
+    if name == "syndicate_3902_2017.json":
+        note = ("Read with care: the filing says the syndicate began underwriting on the 2017 YOA, 'replacing the Incidental "
+                "Syndicate that previously operated within Syndicate 4020'. Its loss development table holds a single 2017 "
+                "column and reconciles to the balance sheet's gross claims liabilities (30,259), so no older cohort is in "
+                "this syndicate's accounts.")
 
     record = {
         "file": name,
@@ -231,6 +319,7 @@ def build_record(candidate: dict, tr: dict) -> dict:
         "source_evidence": facts["source_evidence"],
         "inception_year": min(years),
         "underwriting_years": years,
+        **({"start_statements": facts["start_statements"]} if facts["start_statements"] else {}),
         "triangle_basis": facts["triangle_basis"],
         "triangle_basis_quote": facts["triangle_basis_quote"],
         "mature_underwriting_years": mature,
@@ -244,6 +333,8 @@ def build_record(candidate: dict, tr: dict) -> dict:
         "opening_gross_reserve_page_printed": facts["opening_gross_reserve_page_printed"],
         "opening_gross_reserve_quote": facts["opening_gross_reserve_quote"],
         "opening_reserve_status": facts["opening_reserve_status"],
+        **({"opening_gross_reserve_exemption": facts["opening_gross_reserve_exemption"]}
+           if facts["opening_gross_reserve_exemption"] else {}),
         "economic_eligibility": eligibility,
         "decision": decision,
         "extraction_status": extraction_status,
@@ -293,8 +384,9 @@ def main() -> None:
         "eligibility_unresolved": sum(r["economic_eligibility"] == "unresolved" for r in records),
     }
     OUT_JSON.write_text(json.dumps({
-        "definition": ("Filing-page audit of every record formerly classified from the extraction skip flag. "
-                       "Economic eligibility is decided independently of extraction success."),
+        "definition": ("Filing-page audit of every record formerly classified from the extraction skip flag, and of the "
+                       "unread records whose filings state that the syndicate began underwriting in the report year or "
+                       "the year before. Economic eligibility is decided independently of extraction success."),
         "mature_cohort_rule": "u <= report_year - 2",
         "counts": counts,
         "records": records,
@@ -309,6 +401,8 @@ def main() -> None:
                    "mature_underwriting_years": ";".join(map(str, record["mature_underwriting_years"]))}
             if row.get("audited_source_fields") is not None:
                 row["audited_source_fields"] = json.dumps(row["audited_source_fields"], sort_keys=True)
+            if row.get("start_statements") is not None:
+                row["start_statements"] = json.dumps(row["start_statements"], sort_keys=True)
             writer.writerow(row)
     print(json.dumps(counts, sort_keys=True))
 

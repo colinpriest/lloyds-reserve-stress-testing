@@ -41,19 +41,19 @@ INCEPTION_TERMS = re.compile(
 TRIANGLE_TERMS = re.compile(r"claims development(?: table| tables)?|underwriting year", re.I)
 
 
-LEDGER = RECORD_DIR / "audit" / "structural_eligibility_audit.json"
 TRANSCRIPTION = RECORD_DIR / "audit" / "structural_eligibility_transcription.json"
 
 
 def structural_records() -> list[tuple[Path, dict]]:
-    """Return the records under audit: the committed first-year stubs, and the stubs the audit has
-    since decided eligible, which are written from the ledger and are no longer stubs (1840/2022,
-    whose printed nil was retained in 11b1bc36). Before round 62 only the stubs were selected, so
-    once 1840/2022 was retained the script found 69 and refused to run on the committed corpus."""
-    audited = set()
-    if LEDGER.exists():
-        audited = {r["file"] for r in json.loads(LEDGER.read_text(encoding="utf-8"))["records"]
-                   if r.get("decision") == "eligible_observed_zero"}
+    """Return the records under audit: the committed first-year stubs, and every record the audit has
+    transcribed. The second set matters twice. A stub the audit has decided eligible is written from
+    the ledger and is no longer a stub (1840/2022, whose printed nil was retained in 11b1bc36): before
+    round 62 only the stubs were selected, so once 1840/2022 was retained the script found 69 and
+    refused to run on the committed corpus. And an unread record the audit restates as a stub (third
+    cycle of round 62: 24 records whose filings state that the syndicate began in the report year or
+    the year before) is transcribed before it is restated, so it must be selectable while it is still
+    written as having no deterministic reading."""
+    audited = expected_names()
     records = []
     for path in sorted(RECORD_DIR.glob("syndicate_*_*.json")):
         try:
@@ -66,10 +66,12 @@ def structural_records() -> list[tuple[Path, dict]]:
 
 
 def expected_names() -> set:
-    """The records whose filing pages have been transcribed, which the selection must reproduce by
-    name. A record that becomes a stub is added to the audit by transcribing its pages first: the
-    re-extraction of 29 September 2026 made 1985/2024 one (its triangle holds UW2023-2024 only), and
-    the audit went from 70 records to 71. Before that this compared a count with the ledger's."""
+    """The records whose filing pages have been transcribed: the selection is the committed stubs
+    and these, and it must reproduce them by name, so a stub that has not been transcribed, or a
+    transcribed record with no committed file, stops the script. A record is added to the audit by
+    transcribing its pages first: the re-extraction of 29 September 2026 made 1985/2024 a stub (its
+    triangle holds UW2023-2024 only), and the audit went from 70 records to 71; the 24 unread records
+    of the third cycle took it to 95. Before that this compared a count with the ledger's."""
     return set(json.loads(TRANSCRIPTION.read_text(encoding="utf-8"))["records"])
 
 
@@ -231,8 +233,8 @@ def main() -> None:
         args.output.parent.mkdir(parents=True, exist_ok=True)
         args.output.write_text(json.dumps({
             "definition": (
-                "Source-evidence candidates for all committed first-year stubs; "
-                "statuses are triage labels, not inferential eligibility decisions."
+                "Source-evidence candidates for all committed first-year stubs and the unread records the audit "
+                "restated; statuses are triage labels, not inferential eligibility decisions."
             ),
             "n_records": len(candidates),
             "records": candidates,
@@ -240,8 +242,8 @@ def main() -> None:
 
     payload = {
         "definition": (
-            "Source-evidence candidates for all committed first-year stubs; statuses are "
-            "triage labels, not inferential eligibility decisions."
+            "Source-evidence candidates for all committed first-year stubs and the unread records the audit "
+            "restated; statuses are triage labels, not inferential eligibility decisions."
         ),
         "n_records": len(candidates),
         "records": candidates,

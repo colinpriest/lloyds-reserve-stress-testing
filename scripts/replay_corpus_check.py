@@ -11,7 +11,11 @@ For each committed record the RAG step (test_gemini.extract_pyd_from_relevant_pa
 offline (LLOYDS_EXTRACTION_OFFLINE=1: a cache miss is an error, never a call) and compared with the
 record's deterministic content:
   * its class: an unread record must replay unread; a stub written before the models must replay as
-    first-year; every other record must reach the models;
+    first-year; every other record must reach the models. A stub the filing-page audit made of an
+    unread record (third cycle of round 62: 24 filings that state the syndicate began in the report
+    year or the year before) is decided by the audit, not by the parsers, and must still replay
+    unread -- a parser that came to read one would show as a mismatch, and the audit's decision would
+    have to be looked at again;
   * a figure the record took from the RAG step (route rag_*) must be the replay's figure and route;
   * a stored RAG triangle must be the replay's (underwriting years).
 Declared exceptions: the records in pdf_extraction/audit/redecision_pending.json, which the current
@@ -19,12 +23,13 @@ code decides differently and which wait for the models, and those in offline_uns
 have no usable table cache. A declared record that now matches is reported too (the declaration is
 stale).
 
-Separately, every unread record's cached table grids are parsed: none may hold a gross triangle with
-a usable cohort that yields a figure, unless the record is declared. A grid the structure score
-refuses yields no figure, so that check cannot see it; the unread records whose gross grids with a
-usable cohort are all refused by the structure score are reported (not failed) in
-`unread_records_whose_gross_grids_the_structure_score_refuses`, and docs/ocr-pipeline.md 11.4 names
-each and says why it stays unread (verification review of round 62, N-V-E-4).
+Separately, every unread record's cached table grids are parsed, and so are those of the unread records
+the audit restated as stubs: none may hold a gross triangle with a usable cohort that yields a figure,
+unless the record is declared. A grid the structure score refuses yields no figure, so that check
+cannot see it; the unread records whose gross grids with a usable cohort are all refused by the
+structure score are reported (not failed) in `unread_records_whose_gross_grids_the_structure_score_refuses`,
+and docs/ocr-pipeline.md 11.4 names each and says why it stays unread (verification review of round 62,
+N-V-E-4).
 
     python scripts/replay_corpus_check.py [--workers N] [--stems a,b,...] [--write]
 
@@ -39,6 +44,7 @@ from __future__ import annotations
 import argparse
 import contextlib
 import datetime
+import functools
 import hashlib
 import io
 import json
@@ -49,6 +55,9 @@ from multiprocessing import Pool
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "scripts"))
+from finalize_structural_eligibility_audit import UNREAD_RECORD_CONFIRMED  # noqa: E402
+
 REPORT = ROOT / "pdf_extraction" / "audit" / "corpus_replay_check.json"
 PENDING = ROOT / "pdf_extraction" / "audit" / "redecision_pending.json"
 UNSERVABLE = ROOT / "pdf_extraction" / "audit" / "offline_unservable.json"
@@ -124,10 +133,22 @@ def replay(stem: str) -> dict:
             "triangle_years": [int(y) for y in (tri.get("underwriting_years") or [])]}
 
 
+@functools.lru_cache(maxsize=1)
+def _ledger_status() -> dict:
+    """The filing-page audit's extraction_status of each record it decides, by record file name."""
+    path = ROOT / "pdf_extraction" / "audit" / "structural_eligibility_audit.json"
+    if not path.exists():
+        return {}
+    return {r["file"]: r.get("extraction_status")
+            for r in json.loads(path.read_text(encoding="utf-8"))["records"]}
+
+
 def committed_class(d: dict) -> str:
     if d.get("no_triangle_data"):
         return "unread"
     if d.get("first_year_syndicate") and "models" not in d:
+        if _ledger_status().get("syndicate_%s_%s.json" % (d.get("syndicate"), d.get("year"))) == UNREAD_RECORD_CONFIRMED:
+            return "audited_unread_stub"
         return "stub_after_models" if d.get("first_year_evidence") else "stub_before_models"
     if "source-page-audit" in (d.get("models") or {}):
         return "reviewed_audit"
@@ -146,7 +167,9 @@ def replay_class(x: dict) -> str:
 
 EXPECTED = {"unread": {"unread"}, "stub_before_models": {"stub_before_models"},
             "stub_after_models": {"models"}, "models": {"models"},
-            "reviewed_audit": {"stub_before_models"}}
+            "reviewed_audit": {"stub_before_models"}, "audited_unread_stub": {"unread"}}
+#: the classes decided without a reading: their cached table grids must hold no usable gross triangle
+UNREAD_CLASSES = ("unread", "audited_unread_stub")
 
 
 def compare(d: dict, x: dict) -> list:
@@ -276,7 +299,7 @@ def check(stems=None, workers=1) -> dict:
             undeclared.append({"stem": s, "differs": diffs})
     grids, refused = [], []
     for s in stems:
-        if committed_class(records[s]) == "unread" and s not in pending:
+        if committed_class(records[s]) in UNREAD_CLASSES and s not in pending:
             g = usable_gross_grids(s)
             if g:
                 grids.append({"stem": s, "grids": g})

@@ -1,6 +1,6 @@
 {
- "purpose": "The per-filing facts the structural-eligibility ledger records, transcribed from the filing pages in round 62 (review of 29 September 2026, M-10): the page that prints the claims development table's year headers, the basis as printed, and the opening gross claims outstanding at 1 January of the report year as printed, with its unit, currency, page and the printed line. Pages are 0-based indices into the filing (the converted PDF for an HTML filing); page_printed is the number printed on the page. opening_m is the opening in millions of its own currency. null means the fact is not printed, and opening_source or notes say where the filing was searched.",
- "transcribed": "2026-09-29, from the filings' text layers, the committed OCR page cache and page images; every value was checked to be printed on the page cited",
+ "purpose": "The per-filing facts the structural-eligibility ledger records, transcribed from the filing pages in round 62 (review of 29 September 2026, M-10): the page that prints the claims development table's year headers, the basis as printed, and the opening gross claims outstanding at 1 January of the report year as printed, with its unit, currency, page and the printed line. Pages are 0-based indices into the filing (the converted PDF for an HTML filing); page_printed is the number printed on the page. opening_m is the opening in millions of its own currency. null means the fact is not printed, and opening_source or notes say where the filing was searched. Since 2026-09-30 (round 62, third cycle, D2) it also holds the unread records the audit restated as first-year stubs: each carries start_statements (page_index, page_printed, quote: what the filing says about when the syndicate began underwriting), and a null opening carries opening_exemption, the declared reason no opening is printed.",
+ "transcribed": "2026-09-29, from the filings' text layers, the committed OCR page cache and page images; every value was checked to be printed on the page cited; 24 records added on 2026-09-30 from the filings' text layers, the committed OCR page cache (four image-only filings, checked on the rendered pages) and page images; every quote was extracted from the page it cites",
  "records": {
   "syndicate_1100_2024.json": {
    "report_year": 2024,
@@ -66,6 +66,41 @@
    "opening_source": "technical provisions note 5, 2024 block, gross provisions column, claims outstanding balance at 1 January 2024",
    "notes": "HTML filing; read from html_converted PDF. Gross and net tables both on page index 46 (printed 44). Opening agrees with balance sheet 2023 column 'Claims outstanding 5 14,917 2,151' (page index 19, printed 17). 2023 was the syndicate's first year (2023 block shows '-' at 1 January 2023). Converted text prints gross reserve for 2023 as '3, 707' (stray space)."
   },
+  "syndicate_1347_2023.json": {
+   "report_year": 2023,
+   "triangle_page_index": null,
+   "triangle_page_printed": null,
+   "net_page_index": null,
+   "net_page_printed": null,
+   "header_years": null,
+   "basis": "no claims development table printed",
+   "basis_quote": "(none: the filing prints no claims development table on any of its pages)",
+   "opening_printed": "-",
+   "opening_unit": "thousands",
+   "opening_currency": "GBP",
+   "opening_m": 0.0,
+   "opening_page_index": 30,
+   "opening_page_printed": "31",
+   "opening_quote": "At 1 January 2023 - - Claims incurred in the year 16,861 16,861 Claims paid during the year (4,438) (4,438) At 31 December 2023 12,423 12,423",
+   "opening_source": "note 11 claims outstanding, gross column, claims outstanding at 1 January 2023 (a dash: nil); the text layer prints the note's headings away from its table, and the block that opens with claims incurred in the year is note 11",
+   "opening_exemption": null,
+   "start_statements": [
+    {
+     "page_index": 18,
+     "page_printed": "19",
+     "quote": "2023 is the first year of trading for the Syndicate, so no prior year comparative disclosures are shown in this report."
+    },
+    {
+     "page_index": 6,
+     "page_printed": "7",
+     "quote": "This is the first year of operation for the Syndicate, so it is not possible to compare its performance with previous years"
+    }
+   ],
+   "notes": "Text layer. Strategic report (page 7): 'This is the first year of operation for the Syndicate'; note 3 (page 19): '2023 is the first year of trading for the Syndicate, so no prior year comparative disclosures are shown in this report'. The filing prints no claims development table: pages 20, 24 and 26 mention claims development in prose only. Note 11 opens gross and net claims outstanding at 1 January 2023 with a dash. The statements are in pounds sterling, rounded to thousands (note 3, page 21).",
+   "years_page_index": 18,
+   "years_page_printed": "19",
+   "years_quote": "2023 is the first year of trading for the Syndicate, so no prior year comparative disclosures are shown in this report."
+  },
   "syndicate_1416_2022.json": {
    "report_year": 2022,
    "triangle_page_index": 38,
@@ -107,6 +142,7 @@
    "opening_page_printed": null,
    "opening_quote": null,
    "opening_source": "not printed: no claims-outstanding movement note; statement of financial position (page index 23, printed 20) has a 2015 column only; note 3 (page index 35) analyses the change only",
+   "opening_exemption": "first_year_filing_prints_no_opening",
    "notes": "Syndicate commenced underwriting 1 October 2015 (page index 7: 'Lloyd\u2019s confirmed its approval for Probitas Syndicate 1492 to commence underwriting effective 1 October 2015'); accounts cover 1 October to 31 December 2015. Opening gross claims outstanding is logically nil but no line prints it; the only printed opening lines are 'Members\u2019 balances at 1 October -' (page index 37) and 'Cash and cash equivalents at beginning of period -' (page index 24). Page index 47 (printed 44) carries the 'Claims development table' introduction with no year headers; the table itself is on page index 48. Closing gross claims outstanding 132 \u00a3000 (not used)."
   },
   "syndicate_1492_2016.json": {
@@ -130,6 +166,40 @@
    "opening_quote": "reconciliation between the opening and closing balance of claims outstanding ... 2016 Gross \u00a3000 ... Brought forward (132) - - -",
    "opening_source": "note 10 Reconciliation of Insurance Balances, claims outstanding reconciliation, 2016 Gross column, Brought forward (opening balance at 1 January 2016)",
    "notes": "Opening printed in brackets (liabilities shown negative in this note); absolute value recorded. The line is labelled 'Brought forward', not '1 January'. Agrees with balance sheet 2015 column 'Claims outstanding 12,607 132' (page index 26, printed 25). Year columns printed in the order 2016 YOA then 2015 YOA. Intro on page index 55 says end-of-underwriting-year rates, but the table page says 'All data are at closing rates of exchange.'"
+  },
+  "syndicate_1609_2021.json": {
+   "report_year": 2021,
+   "triangle_page_index": 37,
+   "triangle_page_printed": "35",
+   "net_page_index": 38,
+   "net_page_printed": "36",
+   "header_years": [
+    2021
+   ],
+   "basis": "gross and net tables",
+   "basis_quote": "Gross Claims development table Underwriting year 2021 $\u2019000 Estimate of cumulative gross claims incurred: At end of first underwriting year 16,302",
+   "opening_printed": "-",
+   "opening_unit": "thousands",
+   "opening_currency": "USD",
+   "opening_m": 0.0,
+   "opening_page_index": 28,
+   "opening_page_printed": "26",
+   "opening_quote": "4. Technical provisions 2021 Gross provisions Reinsurance assets Net $\u2019000 $\u2019000 $\u2019000 Claims outstanding Balance at 1 January - - -",
+   "opening_source": "note 4 technical provisions, claims outstanding, 2021 gross provisions column, balance at 1 January 2021 (a dash: nil)",
+   "opening_exemption": null,
+   "start_statements": [
+    {
+     "page_index": 5,
+     "page_printed": "3",
+     "quote": "This is the first year of the Syndicate\u2019s operations."
+    },
+    {
+     "page_index": 5,
+     "page_printed": "3",
+     "quote": "The directors of the Managing Agent present their report for the period from 3 February 2021 to 31 December 2021."
+    }
+   ],
+   "notes": "Text layer. Managing agent's report (page 6): 'This is the first year of the Syndicate's operations', for the period from 3 February 2021 to 31 December 2021. The gross table (page 38, printed 35) and the net table (page 39, printed 36) hold underwriting year 2021 only. Note 4 opens claims outstanding at 1 January 2021 with a dash in all three columns. Amounts are in US dollars, thousands."
   },
   "syndicate_1609_2022.json": {
    "report_year": 2022,
@@ -172,6 +242,7 @@
    "opening_page_printed": null,
    "opening_quote": null,
    "opening_source": "not printed: claims outstanding note 12 (page index 40, printed 39) starts at 'Claims incurred in relation to current underwriting year' with no 1 January line; statement of financial position (page index 16, printed 15) has a 2021 column only",
+   "opening_exemption": "first_year_filing_prints_no_opening",
    "notes": "First year of trading (page index 4: 'In its first year of trading'); no explicit commencement date found. Opening gross claims outstanding is logically nil but not printed; the filing prints 'Member's balance brought forward at 1 January -' (page index 14) and 'Cash and cash equivalents at 1 January -' (page index 17). Gross and net triangles both on page index 38; triangle values printed in brackets, e.g. 'Gross outstanding claims provision as at 31 December 2021 (112.6)'. Page index 37 (printed 36) carries the note 9 introduction only. Closing gross claims outstanding 112.6 $m (not used)."
   },
   "syndicate_1618_2022.json": {
@@ -196,6 +267,36 @@
    "opening_source": "note 13 Claims outstanding, Gross column, Balance at 1 January 2022",
    "notes": "Gross triangle on page index 46 (printed 45), net triangle on page index 47 (printed 46). Triangle amounts are printed in brackets (negative), e.g. 'Gross outstanding claims provision as at 31 December 2022 (199.3) (253.4)'. Opening is printed positive in note 13; the 2021 block of the same note shows 'Balance at 1 January 2021 - - -' and 'Balance at 31 December 2021 112.6'."
   },
+  "syndicate_1686_2014.json": {
+   "report_year": 2014,
+   "triangle_page_index": null,
+   "triangle_page_printed": null,
+   "net_page_index": null,
+   "net_page_printed": null,
+   "header_years": null,
+   "basis": "no claims development table printed",
+   "basis_quote": "(none: the filing prints no claims development table on any of its pages)",
+   "opening_printed": null,
+   "opening_unit": "thousands",
+   "opening_currency": "USD",
+   "opening_m": null,
+   "opening_page_index": 16,
+   "opening_page_printed": "14",
+   "opening_quote": "Technical provisions Provision for unearned premiums 79,045 Claims outstanding 40,561",
+   "opening_source": "the balance sheet (page 17, printed 14) has a 2014 column only, there is no claims outstanding movement note (note 4, page 22, gives the year-end notified balance only) and the syndicate commenced underwriting on 1 January 2014, so no opening balance exists to print",
+   "opening_exemption": "first_year_filing_prints_no_opening",
+   "start_statements": [
+    {
+     "page_index": 4,
+     "page_printed": "2",
+     "quote": "AXIS Syndicate 1686 commenced underwriting for contracts incepting from 1st January, 2014 onwards, with AXIS as the sole capital provider."
+    }
+   ],
+   "notes": "Image-only filing: the text is the committed OCR page cache, and the start statement was checked on the rendered page (printed folio 2). Active underwriter's report (page 5): 'AXIS Syndicate 1686 commenced underwriting for contracts incepting from 1st January, 2014 onwards'; the existing AXIS portfolio was renewed into the syndicate in fixed proportions, which transfers no earlier cohort. The filing prints no claims development table and no claims outstanding movement; the balance sheet and profit and loss account hold 2014 only. Its only year of account is 2014 ('2014 YOA Open', page 7). US dollars, thousands.",
+   "years_page_index": 4,
+   "years_page_printed": "2",
+   "years_quote": "AXIS Syndicate 1686 commenced underwriting for contracts incepting from 1st January, 2014 onwards, with AXIS as the sole capital provider."
+  },
   "syndicate_1686_2015.json": {
    "report_year": 2015,
    "triangle_page_index": 34,
@@ -218,6 +319,40 @@
    "opening_source": "note 4 technical provisions, claims outstanding, 2015 gross provisions column, Balance at 1 January",
    "notes": "Scanned filing; located via the OCR page cache and confirmed on the rendered page image (the OCR renders $'000 as $7000, the heading as '4, Technical Provisions' and misreads some other cells). Agrees with the statement of financial position 2014 (Restated) column 'Claims outstanding 4 161,292 40,561' (page index 15, printed 11). The 2014 comparative opens at nil; the syndicate commenced underwriting for contracts incepting from 1 January 2014 (page index 4). Gross and net tables are both on page index 34."
   },
+  "syndicate_1699_2022.json": {
+   "report_year": 2022,
+   "triangle_page_index": 43,
+   "triangle_page_printed": "41",
+   "net_page_index": 43,
+   "net_page_printed": "41",
+   "header_years": [
+    2022
+   ],
+   "basis": "gross and net tables",
+   "basis_quote": "Estimate of cumulative gross claims incurred: Underwriting year 2022 \u00a3\u2019000 At end of underwriting year 19,910 One year later - Less cumulative paid - Liability for gross outstanding claims (487) Total gross outstanding claims (all years) 19,423",
+   "opening_printed": "-",
+   "opening_unit": "thousands",
+   "opening_currency": "GBP",
+   "opening_m": 0.0,
+   "opening_page_index": 33,
+   "opening_page_printed": "31",
+   "opening_quote": "4. Technical provisions 2022 Gross provisions \u00a3\u2019000 Reinsurance assets \u00a3\u2019000 Net \u00a3\u2019000 Claims outstanding Balance at 1 January - - -",
+   "opening_source": "note 4 technical provisions, claims outstanding, 2022 gross provisions column, balance at 1 January 2022 (a dash: nil)",
+   "opening_exemption": null,
+   "start_statements": [
+    {
+     "page_index": 6,
+     "page_printed": "4",
+     "quote": "The Syndicate was established in January 2022 to underwrite direct insurance and reinsurance business in the Lloyd\u2019s market."
+    },
+    {
+     "page_index": 4,
+     "page_printed": "2",
+     "quote": "The Volante Group launched Syndicate 1699 on the 1st of January 2022"
+    }
+   ],
+   "notes": "Text layer. Managing agent's report (page 7): 'The Syndicate was established in January 2022'; Active underwriter's report (page 5): 'The Volante Group launched Syndicate 1699 on the 1st of January 2022'. The gross and net tables (page 44, printed 41) hold underwriting year 2022 only. Note 4 opens claims outstanding at nil. Pounds sterling, thousands. The sibling filing 1699/2023 is already in the ledger (UW2022-2023)."
+  },
   "syndicate_1699_2023.json": {
    "report_year": 2023,
    "triangle_page_index": 45,
@@ -239,6 +374,70 @@
    "opening_quote": "4. Technical provisions 2023 Gross provisions \u00a3\u2019000 ... Claims outstanding Balance at 1 January 19,423 (1,279) 18,144",
    "opening_source": "technical provisions note 4, 2023 block, gross provisions column, claims outstanding balance at 1 January 2023",
    "notes": "Gross and net triangles both on page index 45. Opening agrees with the 2022 block's closing 'Balance at 31 December 19,423 (1,279) 18,144' on the same page; the 2022 block shows 'Balance at 1 January - - -' (syndicate's first year 2022). Closing 31 December 2023 is 60,867 (not used). Currency GBP per page index 24/28."
+  },
+  "syndicate_1729_2014.json": {
+   "report_year": 2014,
+   "triangle_page_index": null,
+   "triangle_page_printed": null,
+   "net_page_index": null,
+   "net_page_printed": null,
+   "header_years": null,
+   "basis": "no claims development table printed",
+   "basis_quote": "(none: the filing prints no claims development table on any of its pages)",
+   "opening_printed": null,
+   "opening_unit": "thousands",
+   "opening_currency": "GBP",
+   "opening_m": null,
+   "opening_page_index": 15,
+   "opening_page_printed": "13",
+   "opening_quote": "Technical provisions Provision for unearned premiums 20,533 Claims outstanding 12,419",
+   "opening_source": "the balance sheet (page 16, printed 13) has a 2014 column only and no claims outstanding movement note is printed; the syndicate was authorised to start underwriting in November 2013 for business incepting from January 2014, so no opening balance exists to print",
+   "opening_exemption": "first_year_filing_prints_no_opening",
+   "start_statements": [
+    {
+     "page_index": 4,
+     "page_printed": "2",
+     "quote": "Syndicate 1729 was authorised to start underwriting in November 2013 with respect to business incepting from January"
+    },
+    {
+     "page_index": 4,
+     "page_printed": "2",
+     "quote": "The Syndicate\u2019s first year results reflect the impact of some expense strain against the written premium volume."
+    }
+   ],
+   "notes": "Image-only filing: text from the committed OCR page cache; the start statement was checked on the rendered page (printed folio 2; the printed superscript in 'January 1st 2014' is read as '1' plus a degree sign by the OCR, so the quote stops before it). Active underwriter's report (page 5, headed '2014 Year of Account'): Syndicate 1729 was authorised to start underwriting in November 2013 for business incepting from 1 January 2014, and reports 'the Syndicate's first year results'. No claims development table and no movement note are printed. Pounds sterling, thousands.",
+   "years_page_index": 4,
+   "years_page_printed": "2",
+   "years_quote": "Syndicate 1729 was authorised to start underwriting in November 2013 with respect to business incepting from January"
+  },
+  "syndicate_1796_2021.json": {
+   "report_year": 2021,
+   "triangle_page_index": 26,
+   "triangle_page_printed": "24",
+   "net_page_index": 26,
+   "net_page_printed": "24",
+   "header_years": [
+    2021
+   ],
+   "basis": "gross and net tables",
+   "basis_quote": "Pure underwriting year 2021 Estimate of gross claims \u00a3'000 At end of reporting period 27",
+   "opening_printed": "-",
+   "opening_unit": "thousands",
+   "opening_currency": "GBP",
+   "opening_m": 0.0,
+   "opening_page_index": 30,
+   "opening_page_printed": "28",
+   "opening_quote": "Notified claims \u2014 \u2014 \u2014 Incurred but not reported \u2014 \u2014 \u2014 Total at 1 January \u2014 \u2014 \u2014",
+   "opening_source": "note 18 movements in insurance liabilities, gross column, total at 1 January 2021 (a dash: nil)",
+   "opening_exemption": null,
+   "start_statements": [
+    {
+     "page_index": 4,
+     "page_printed": "2",
+     "quote": "2021 is the first underwriting year that Syndicate 1796 has been in operation."
+    }
+   ],
+   "notes": "Text layer. Strategic report (page 5): '2021 is the first underwriting year that Syndicate 1796 has been in operation'. Note 5 (page 27, printed 24) prints one gross and one net table, each for pure underwriting year 2021 only, headed 'At end of reporting period'. Note 18 shows every 1 January line as a dash. Pounds sterling, thousands. The sibling filing 1796/2022 is already in the ledger (UW2021-2022)."
   },
   "syndicate_1796_2022.json": {
    "report_year": 2022,
@@ -479,6 +678,35 @@
    "opening_source": "note 4 technical provisions, claims outstanding, 2023 table, gross provisions column, Balance at 1 January",
    "notes": "Agrees with the statement of financial position 2022 column 'Claims outstanding 4 22,206 4,711' (page index 18, printed 16) and the 2022 comparative closing 'Balance at 31 December 4,711 (487) 4,224'. The 'Claims development table' introduction is at the foot of page index 36; both the net table and the gross table (net printed first) are on page index 37."
   },
+  "syndicate_1922_2024.json": {
+   "report_year": 2024,
+   "triangle_page_index": 43,
+   "triangle_page_printed": "41",
+   "net_page_index": 43,
+   "net_page_printed": "41",
+   "header_years": [
+    2024
+   ],
+   "basis": "gross and net tables",
+   "basis_quote": "Underwriting year 2024 $\u2019000 Estimate of cumulative gross claims incurred At end of first underwriting year 26 Less gross claims paid - Total gross claims reserve 26",
+   "opening_printed": "-",
+   "opening_unit": "thousands",
+   "opening_currency": "USD",
+   "opening_m": 0.0,
+   "opening_page_index": 31,
+   "opening_page_printed": "29",
+   "opening_quote": "5. Technical provisions 2024 Gross provisions $\u2019000 Reinsurance assets $\u2019000 Net $\u2019000 Claims outstanding Balance at 1 January - - -",
+   "opening_source": "note 5 technical provisions, claims outstanding, 2024 gross provisions column, balance at 1 January 2024 (a dash: nil)",
+   "opening_exemption": null,
+   "start_statements": [
+    {
+     "page_index": 22,
+     "page_printed": "20",
+     "quote": "The Syndicate incepted in 2024, as such there are no comparative financials for the year ended 31 December 2023."
+    }
+   ],
+   "notes": "HTML filing, read from its converted PDF (every font loaded). Note 1 (page 23, printed 20): 'The Syndicate incepted in 2024, as such there are no comparative financials for the year ended 31 December 2023'; the managing agent's note lists 'Syndicate 1922 on 1 January 2024' among the syndicates it took on in 2024 (page 40). The gross and net tables (page 44, printed 41) hold underwriting year 2024 only ($26k gross). Note 5 opens claims outstanding at nil. US dollars, thousands."
+  },
   "syndicate_1925_2024.json": {
    "report_year": 2024,
    "triangle_page_index": 76,
@@ -499,6 +727,41 @@
    "opening_quote": "13. Technical provisions ... Gross provisions Reinsurance assets Net 2024 - Claims outstanding $\u2019000 $\u2019000 $\u2019000 Balance at 1 January - - -",
    "opening_source": "technical provisions note 13, 2024 claims outstanding, gross provisions column, balance at 1 January 2024; printed as a dash, recorded 0",
    "notes": "HTML filing: page indices are for pdf_extraction/html_converted/syndicate_1925_2024.pdf, which has a blank page at every odd index. Syndicate began in 2024 (page index 12: 'SPA Syndicate 1925 commenced underwriting for the 2024 year of account'; page index 76: 'This is the first year of trading'). Gross and net triangles and the opening line are all on page index 76. Closing gross 12,872 (not used). Currency USD per page index 46/54."
+  },
+  "syndicate_1947_2018.json": {
+   "report_year": 2018,
+   "triangle_page_index": null,
+   "triangle_page_printed": null,
+   "net_page_index": null,
+   "net_page_printed": null,
+   "header_years": null,
+   "basis": "no claims development table printed",
+   "basis_quote": "As the Syndicate is reporting its first financial year results, no claims development analysis can be presented. This will be provided as a disclosure in future years.",
+   "opening_printed": "-",
+   "opening_unit": "thousands",
+   "opening_currency": "GBP",
+   "opening_m": 0.0,
+   "opening_page_index": 28,
+   "opening_page_printed": "28",
+   "opening_quote": "11. Technical Provisions 2018 Gross RI Net \u00a3000 \u00a3000 \u00a3000 Incurred claims outstanding: Balance at 1 January - - -",
+   "opening_source": "note 11 technical provisions, incurred claims outstanding, gross column, balance at 1 January 2018 (a dash: nil)",
+   "opening_exemption": null,
+   "start_statements": [
+    {
+     "page_index": 4,
+     "page_printed": "4",
+     "quote": "The Syndicate commenced underwriting on 1 April 2018."
+    },
+    {
+     "page_index": 26,
+     "page_printed": "26",
+     "quote": "As the Syndicate is reporting its first financial year results, no claims development analysis can be presented. This will be provided as a disclosure in future years."
+    }
+   ],
+   "notes": "Text layer. Managing agent's report (page 5): 'The Syndicate commenced underwriting on 1 April 2018'. Note 4 (page 27, printed 26): 'As the Syndicate is reporting its first financial year results, no claims development analysis can be presented'. Note 11 opens incurred claims outstanding at nil. Pounds sterling, thousands.",
+   "years_page_index": 4,
+   "years_page_printed": "4",
+   "years_quote": "The Syndicate commenced underwriting on 1 April 2018."
   },
   "syndicate_1971_2019.json": {
    "report_year": 2019,
@@ -542,6 +805,71 @@
    "opening_quote": "Unearned premiums Claims outstanding Total $\u2019000 $\u2019000 $\u2019000 Gross At 1 January 2020 52,074 28,036 80,110",
    "opening_source": "note 6 technical provisions (continued), movement in technical provisions, Gross block, At 1 January 2020, claims outstanding column (middle of three)",
    "notes": "The movement table has columns unearned premiums / claims outstanding / total, so the opening gross claims outstanding is the middle figure 28,036. Agrees with the balance sheet 2019 column 'Claims outstanding 6 80,366 28,036' (page index 22, printed 20). Gross triangle on page index 37, net triangle on page index 38."
+  },
+  "syndicate_1975_2018.json": {
+   "report_year": 2018,
+   "triangle_page_index": null,
+   "triangle_page_printed": null,
+   "net_page_index": null,
+   "net_page_printed": null,
+   "header_years": null,
+   "basis": "no claims development table printed",
+   "basis_quote": "(none: the filing prints no claims development table on any of its pages)",
+   "opening_printed": null,
+   "opening_unit": "thousands",
+   "opening_currency": "GBP",
+   "opening_m": null,
+   "opening_page_index": 28,
+   "opening_page_printed": "27",
+   "opening_quote": "2. Technical provisions Gross technical provisions \u00a3000 Claims outstanding 14,938 Provision for unearned premiums 15,612",
+   "opening_source": "note 2 (page 29, printed 27) prints the 31 December 2018 balances only, with no movement table, and the syndicate commenced business on 1 January 2018, so no opening balance exists to print",
+   "opening_exemption": "first_year_filing_prints_no_opening",
+   "start_statements": [
+    {
+     "page_index": 5,
+     "page_printed": "4",
+     "quote": "was approved by Lloyd\u2019s to commence underwriting at 1st January 2018. We are pleased with the outcome of the syndicate\u2019s first year of trading."
+    },
+    {
+     "page_index": 15,
+     "page_printed": "14",
+     "quote": "The syndicate commenced business on the 1st January 2018"
+    }
+   ],
+   "notes": "Text layer. Strategic report (page 6): the syndicate 'was approved by Lloyd's to commence underwriting at 1st January 2018' and 'the outcome of the syndicate's first year of trading'; note 1 (page 16): 'The syndicate commenced business on the 1st January 2018'. No claims development table is printed. The 31 December 2018 gross claims outstanding (14,938) is the opening balance of the sibling filing 1975/2019. Pounds sterling, thousands.",
+   "years_page_index": 5,
+   "years_page_printed": "4",
+   "years_quote": "was approved by Lloyd\u2019s to commence underwriting at 1st January 2018. We are pleased with the outcome of the syndicate\u2019s first year of trading."
+  },
+  "syndicate_1975_2019.json": {
+   "report_year": 2019,
+   "triangle_page_index": 31,
+   "triangle_page_printed": "30",
+   "net_page_index": 31,
+   "net_page_printed": "30",
+   "header_years": [
+    2018,
+    2019
+   ],
+   "basis": "gross and net tables",
+   "basis_quote": "Gross Claims development as at 31 December 2019 Pure underwriting year 2018 2019 Estimate of gross claims incurred \u00a3000 \u00a3000 After one year 14,557 11,350 After two years 31,179",
+   "opening_printed": "(14,938)",
+   "opening_unit": "thousands",
+   "opening_currency": "GBP",
+   "opening_m": 14.938,
+   "opening_page_index": 31,
+   "opening_page_printed": "30",
+   "opening_quote": "Reconciliation of movements in year Opening Mvt in tech Exchange Closing Balance account mvt Balance 2019 \u00a3000 \u00a3000 \u00a3000 \u00a3000 Gross provision for claims (14,938)",
+   "opening_source": "reconciliation of movements in year, 2019 block, gross provision for claims, opening balance (shown in brackets as a liability)",
+   "opening_exemption": null,
+   "start_statements": [
+    {
+     "page_index": 5,
+     "page_printed": "4",
+     "quote": "was approved by Lloyd\u2019s to commence underwriting at 1st January 2018. After a satisfactory outcome to its opening year"
+    }
+   ],
+   "notes": "Text layer. Strategic report (page 6): the syndicate 'was approved by Lloyd's to commence underwriting at 1st January 2018'; note 1 (page 17): 'The syndicate commenced business on the 1st January 2018'. The gross and net development triangulations (page 32, printed 30) hold pure underwriting years 2018 and 2019 only. The 2019 opening gross provision for claims (14,938) equals the 2018 block's closing balance, and the 2018 block opens at nil. Pounds sterling, thousands. The sibling filing 1975/2018 is audited in the same round."
   },
   "syndicate_1980_2019.json": {
    "report_year": 2019,
@@ -629,6 +957,76 @@
    "opening_quote": "4. Technical provisions 2022 ... Gross provisions $\u2019000 Reinsurance assets $\u2019000 Net $\u2019000 Claims outstanding Balance at 1 January 8,513 - 8,513",
    "opening_source": "note 4 technical provisions, claims outstanding, 2022 gross provisions column, Balance at 1 January",
    "notes": "Agrees with the statement of financial position 2021 column 'Claims outstanding 4 53,078 8,513' (page index 21, printed 19). No reinsurance assets, so the net table repeats the gross figures, and its liability row is printed 'Liability for gross outstanding claims'. The 2021 comparative opens at nil (first year 2021). Gross and net tables are both on page index 42."
+  },
+  "syndicate_1991_2014.json": {
+   "report_year": 2014,
+   "triangle_page_index": null,
+   "triangle_page_printed": null,
+   "net_page_index": null,
+   "net_page_printed": null,
+   "header_years": null,
+   "basis": "no claims development table printed",
+   "basis_quote": "(none: the filing prints no claims development table on any of its pages)",
+   "opening_printed": "396",
+   "opening_unit": "thousands",
+   "opening_currency": "GBP",
+   "opening_m": 0.396,
+   "opening_page_index": 15,
+   "opening_page_printed": "15",
+   "opening_quote": "Notes \u00a3000 2014 \u00a3000 \u00a3000 2013 \u00a3000 Capital and reserves Members\u2019 balances 8 (20,262) (6,868) Technical provisions Provision for unearned premiums 19,436 2,640 Claims outstanding 11,073 396",
+   "opening_source": "balance sheet, liabilities, technical provisions, claims outstanding, 2013 comparative column: the balance at 31 December 2013 is the balance at 1 January 2014 (no movement note prints an opening line)",
+   "opening_exemption": null,
+   "start_statements": [
+    {
+     "page_index": 5,
+     "page_printed": "5",
+     "quote": "was approved by Lloyd\u2019s for the 2013 year of account. In its second year"
+    },
+    {
+     "page_index": 5,
+     "page_printed": "5",
+     "quote": "2014 is the syndicate\u2019s second year of account."
+    }
+   ],
+   "notes": "Text layer. Strategic report (page 6, printed 5): the syndicate 'was approved by Lloyd's for the 2013 year of account' and '2014 is the syndicate's second year of account'; note 8 (page 24) opens the 2013 members' balances at 1 January 2013 with a dash. No claims development table is printed. Pounds sterling, thousands.",
+   "years_page_index": 5,
+   "years_page_printed": "5",
+   "years_quote": "was approved by Lloyd\u2019s for the 2013 year of account. In its second year"
+  },
+  "syndicate_2014_2014.json": {
+   "report_year": 2014,
+   "triangle_page_index": null,
+   "triangle_page_printed": null,
+   "net_page_index": null,
+   "net_page_printed": null,
+   "header_years": null,
+   "basis": "no claims development table printed",
+   "basis_quote": "(none: the filing prints no claims development table on any of its pages)",
+   "opening_printed": null,
+   "opening_unit": "thousands",
+   "opening_currency": "GBP",
+   "opening_m": null,
+   "opening_page_index": 14,
+   "opening_page_printed": "14",
+   "opening_quote": "Claims outstanding 18,715 38,051",
+   "opening_source": "the balance sheet (page 15, printed 14) has a 2014 column only, no claims outstanding movement note is printed, and note 11 (page 22, printed 21) opens the members' balances at 1 January 2014 with a dash: the syndicate commenced underwriting on that date",
+   "opening_exemption": "first_year_filing_prints_no_opening",
+   "start_statements": [
+    {
+     "page_index": 3,
+     "page_printed": "3",
+     "quote": "The Syndicate commenced underwriting at Lloyd\u2019s on 1 January 2014. The Syndicate is managed by Pembroke Managing Agency Limited (PMA). The Syndicate is a standalone Syndicate with its origins in Special Purpose Syndicate 6110."
+    },
+    {
+     "page_index": 5,
+     "page_printed": "5",
+     "quote": "The 2014 Year of Account is Syndicate 2014\u2019s first underwriting year"
+    }
+   ],
+   "notes": "Image-only filing: text from the committed OCR page cache; both start statements were checked on the rendered pages (printed folios 3 and 5). CAREFUL READ of 'a standalone Syndicate with its origins in Special Purpose Syndicate 6110' (page 4): the same sentence says the syndicate 'commenced underwriting at Lloyd's on 1 January 2014' and the managing agent's report (page 6) calls 2014 'Syndicate 2014's first underwriting year'. Special Purpose Syndicate 6110 is a separate syndicate: it appears only in the letter of representation shared by the two syndicates (pages 26-28), which speaks of 6110's own 2012 and 2013 years of account. Nothing of 6110's years is in this syndicate's accounts: the balance sheet, profit and loss account and every note hold a 2014 column only, note 11 opens the members' balances at nil, and the filing prints no claims development table (page 17 discusses claims provisions in accounting-policy prose only). Pounds sterling, thousands.",
+   "years_page_index": 3,
+   "years_page_printed": "3",
+   "years_quote": "The Syndicate commenced underwriting at Lloyd\u2019s on 1 January 2014. The Syndicate is managed by Pembroke Managing Agency Limited (PMA). The Syndicate is a standalone Syndicate with its origins in Special Purpose Syndicate 6110."
   },
   "syndicate_2019_2020.json": {
    "report_year": 2020,
@@ -754,6 +1152,7 @@
    "opening_page_printed": "12",
    "opening_quote": "Technical provisions Provision for unearned premiums 1,015 4,412",
    "opening_source": "not printed: no claims outstanding movement note, and the balance sheet (2014 and 2013 columns) has no Claims outstanding line; the quoted line is the only technical provision shown",
+   "opening_exemption": "filing_prints_no_claims_outstanding_balance",
    "notes": "Scanned filing (OCR cache), checked on rendered page images. All 25 pages searched: no claims development table, no 'Claims outstanding' balance and no 1 January claims line. Note 4 (page index 20, printed 18) says no claims were notified. P&L (page index 11, printed 9) prints '-' for 'Claims paid - Gross amount' and 'Change in the provision for claims Gross amount' in both 2014 and 2013. The 2013 balance sheet column adds up without a claims line (2,507 + 4,412 + 8,362 + 380 = 15,661 total liabilities), and the members' balance statement opens 2013 at '-' (syndicate began 2013). So the printed statements are consistent only with nil (0) gross claims outstanding at 1 January 2014, but no figure or dash for it is printed, so the value is left null. Unit/currency are the filing's presentation ($'000).",
    "years_page_index": 4,
    "years_page_printed": null,
@@ -1039,6 +1438,104 @@
    "opening_source": "technical provisions note 4, 2023 gross provisions column, opening line (printed 'Balance at 1 July', not '1 January'); corroborated by the statement of financial position 2022 column",
    "notes": "DATE-LABEL FLAG: the note's opening line in the 2023 columns reads 'Balance at 1 July', evidently carried over from the 2022 start-up period; its 488 equals the 2022 columns' 'Balance at 31 December ... 488 (4) 484' and the statement of financial position (page index 20, printed 21) 'Claims outstanding 4 6,822 488' prior-year (2022) column, so it is the opening at the start of 2023. The filing is inconsistent on commencement: page index 4 says it 'commenced underwriting on the 2022 Year of Account', page index 5 says 'in 2023'. Page index 40 (printed 41) has the 'Claims development table' introduction only; both tables are on page index 41. The net table's outstanding line is labelled 'Liability for gross outstanding claims' (2,968; 1,093). Closing gross 6,822 (not used). Currency USD per page index 22/26."
   },
+  "syndicate_3902_2017.json": {
+   "report_year": 2017,
+   "triangle_page_index": 25,
+   "triangle_page_printed": "24",
+   "net_page_index": 25,
+   "net_page_printed": "24",
+   "header_years": [
+    2017
+   ],
+   "basis": "gross and net tables",
+   "basis_quote": "2017 Gross claims \u00a3\u2019000 1 year 33,854 2017 Net claims \u00a3\u2019000 1 year 15,098 Gross All years Net All years \u00a3\u2019000 \u00a3\u2019000 Total claims 33,854 15,098 Less paid claims (3,595) (672) Total claims liabilities 30,259 14,426",
+   "opening_printed": null,
+   "opening_unit": "thousands",
+   "opening_currency": "GBP",
+   "opening_m": null,
+   "opening_page_index": 23,
+   "opening_page_printed": "22",
+   "opening_quote": "12. Insurance liabilities 2017 \u00a3\u2019000 Claims reported and loss adjustment expenses 12,950 Claims incurred but not reported 17,309 Gross claims liabilities 30,259",
+   "opening_source": "the balance sheet (page 13, printed 11) and note 12 (page 24, printed 22) print the 31 December 2017 balances only, there is no claims outstanding movement note, and note 13 (page 26, printed 24) opens the members' balances at 1 January with a dash: the syndicate began underwriting on the 2017 YOA",
+   "opening_exemption": "first_year_filing_prints_no_opening",
+   "start_statements": [
+    {
+     "page_index": 5,
+     "page_printed": "4",
+     "quote": "The Syndicate began underwriting on the 2017 YOA, replacing the Incidental Syndicate that previously operated within Syndicate 4020."
+    }
+   ],
+   "notes": "Text layer. CAREFUL READ of 'The Syndicate began underwriting on the 2017 YOA, replacing the Incidental Syndicate that previously operated within Syndicate 4020' (page 6): the Incidental Syndicate is a separate arrangement inside Syndicate 4020, and none of its years is in this syndicate's accounts. The loss development table (note 12b, page 26, printed 24) holds a single 2017 column at one year of development, gross 33,854 and net 15,098, and reconciles to the balance sheet: total claims 33,854 less paid claims (3,595) = gross claims liabilities 30,259, the figure note 12 gives for all gross claims liabilities (page 24), so no older cohort sits in the balance. There is no comparative column anywhere; note 13 opens the members' balances at 1 January with a dash. Pounds sterling (the presentation currency, page 16), thousands."
+  },
+  "syndicate_4321_2022.json": {
+   "report_year": 2022,
+   "triangle_page_index": 30,
+   "triangle_page_printed": "28",
+   "net_page_index": null,
+   "net_page_printed": null,
+   "header_years": [
+    2022
+   ],
+   "basis": "one gross table",
+   "basis_quote": "Gross claims development 2022 12 months (%) 66.0 Total ultimate losses ($'000) 14,618.4 Less paid claims ($'000) (15.8) Less unearned portion of ultimate losses ($'000) (10,046.2) Gross claims liabilities ($'000) 4,556.4",
+   "opening_printed": "-",
+   "opening_unit": "thousands",
+   "opening_currency": "USD",
+   "opening_m": 0.0,
+   "opening_page_index": 30,
+   "opening_page_printed": "28",
+   "opening_quote": "13 Technical Provisions Provision for unearned premium Claims outstanding $'000 $'000 Gross technical provisions As at 1 January 2022 \u2013 \u2013",
+   "opening_source": "note 13 technical provisions, gross claims outstanding, as at 1 January 2022 (a dash: nil)",
+   "opening_exemption": null,
+   "start_statements": [
+    {
+     "page_index": 4,
+     "page_printed": "02",
+     "quote": "is a start-up syndicate established in 2022 to write follow capacity insurance business at Lloyd\u2019s."
+    },
+    {
+     "page_index": 4,
+     "page_printed": "02",
+     "quote": "During its first year in operation, the syndicate has been impacted by claims activity arising from Hurricane Ian in the US."
+    }
+   ],
+   "notes": "Text layer. Strategic report (page 5, printed 02): 'a start-up syndicate established in 2022' and 'During its first year in operation'; the cover (page 3) says the syndicate launched in 2022. Note 13 (page 31, printed 28) prints one gross claims development table for 2022 only, at 12 months, and opens gross claims outstanding at 1 January 2022 with a dash. No net table is printed. US dollars, thousands. The sibling filing 4321/2023 is audited in the same round."
+  },
+  "syndicate_4321_2023.json": {
+   "report_year": 2023,
+   "triangle_page_index": 33,
+   "triangle_page_printed": "31",
+   "net_page_index": null,
+   "net_page_printed": null,
+   "header_years": [
+    2022,
+    2023
+   ],
+   "basis": "one gross table",
+   "basis_quote": "13 Technical Provisions continued 2022 2023 Total Gross Amounts $'000 $'000 $'000 Total 12 months 14,800.4 13,283.2 24 months 10,648.7 Total ultimate losses 10,648.7 13,283.2 23,931.9 Less paid claims (3,293.1) (6.6) (3,299.7) Less unearned portion of ultimate losses (357.9) (6,661.4) (7,019.3) Gross claims liabilities 6,997.7 6,615.2 13,612.9",
+   "opening_printed": "4,556.4",
+   "opening_unit": "thousands",
+   "opening_currency": "USD",
+   "opening_m": 4.5564,
+   "opening_page_index": 32,
+   "opening_page_printed": "30",
+   "opening_quote": "13 Technical Provisions Provision for unearned premium Claims outstanding $'000 $'000 Gross technical provisions As at 1 January 2023 5,635.1 4,556.4",
+   "opening_source": "note 13 technical provisions, gross claims outstanding, as at 1 January 2023",
+   "opening_exemption": null,
+   "start_statements": [
+    {
+     "page_index": 4,
+     "page_printed": "02",
+     "quote": "was established in 2022 to provide a choice of additional capacity for large corporate clients"
+    },
+    {
+     "page_index": 4,
+     "page_printed": "02",
+     "quote": "During its first year in operation the syndicate was impacted by claims activity arising from Hurricane Ian in the US."
+    }
+   ],
+   "notes": "Text layer. Strategic report (page 5, printed 02): 'was established in 2022' and 'During its first year in operation'. Note 13 (page 34, printed 31) prints one gross claims development table with columns 2022 and 2023 and rows 12 and 24 months; no net table is printed. The opening 4,556.4 equals the 2022 block's closing balance printed below it (page 33), and that block opens at nil. US dollars, thousands. The sibling filing 4321/2022 is audited in the same round."
+  },
   "syndicate_4747_2021.json": {
    "report_year": 2021,
    "triangle_page_index": 37,
@@ -1082,6 +1579,40 @@
    "opening_quote": "4. Technical provisions 2023 2022 Gross provisions \u00a3\u2019000 ... Claims outstanding Balance at 1 January 4 - 4 - - -",
    "opening_source": "note 4 technical provisions, claims outstanding, 2023 gross provisions column, Balance at 1 January",
    "notes": "Currency conflict on the page: note 4's column headers print \u00a3\u2019000, but the accounts are in US dollars ('prepared in USD which is the functional and presentational currency of the Syndicate and rounded to the nearest $'000', page index 22), and the statement of financial position (2022 column 'Claims outstanding 4 100 4', page index 20, printed 18) and the triangle are headed $\u2019000. USD recorded. The 2022 comparative opens at nil (first year 2022). The 'Claims development table' introduction is at the foot of page index 36; both tables are on page index 37."
+  },
+  "syndicate_5623_2018.json": {
+   "report_year": 2018,
+   "triangle_page_index": 27,
+   "triangle_page_printed": "25",
+   "net_page_index": 27,
+   "net_page_printed": "25",
+   "header_years": [
+    2018
+   ],
+   "basis": "gross and net tables",
+   "basis_quote": "Gross ultimate claims 2018 % 12 months 71.6% Total ultimate losses ($\u2019000) 10,204.0 Less paid claims ($\u2019000) 24.2 Less unearned portion of ultimate losses ($\u2019000) 8,422.6 Gross claims liabilities ($\u2019000) 1,757.2",
+   "opening_printed": "-",
+   "opening_unit": "thousands",
+   "opening_currency": "USD",
+   "opening_m": 0.0,
+   "opening_page_index": 27,
+   "opening_page_printed": "25",
+   "opening_quote": "9 Technical provisions Provision for unearned premium outstanding $\u2019000 Claims $\u2019000 Gross technical provisions As at 1 January 2018 \u2013 \u2013",
+   "opening_source": "note 9 technical provisions, gross claims outstanding, as at 1 January 2018 (a dash: nil)",
+   "opening_exemption": null,
+   "start_statements": [
+    {
+     "page_index": 4,
+     "page_printed": "2",
+     "quote": "was established in 2018 as a special purpose arrangement syndicate to write market facility business via a quota share from syndicate 3623."
+    },
+    {
+     "page_index": 4,
+     "page_printed": "2",
+     "quote": "2018 was the syndicate\u2019s first year of operation."
+    }
+   ],
+   "notes": "Text layer. Strategic report (page 5, printed 2): 'was established in 2018 as a special purpose arrangement syndicate' and '2018 was the syndicate's first year of operation'. Note 9 (page 28, printed 25) prints a gross and a net ultimate claims table for 2018 only, at 12 months, and opens gross claims outstanding at 1 January 2018 with a dash. US dollars, thousands. The sibling filing 5623/2019 is already in the ledger (UW2018-2019)."
   },
   "syndicate_5623_2019.json": {
    "report_year": 2019,
@@ -1147,6 +1678,191 @@
    "opening_quote": "4. Technical provisions 2018 Gross provisions \u00a3\u2019000 Reinsurance assets \u00a3\u2019000 Net Provisions \u00a3\u2019000 Claims outstanding Balance at 1 January 86,626 (47,922) 38,704",
    "opening_source": "note 4 technical provisions, claims outstanding, 2018 gross provisions column, Balance at 1 January",
    "notes": "Agrees with the statement of financial position 2017 column 'Claims outstanding 4 126,111 86,626' (page index 21, printed 18). The net table's heading is printed 'Estimate of cumulative GAAP gross net claims incurred:' (its figures differ from the gross table, so it is the net table). The 2017 comparative opens at nil (first year 2017). Gross and net tables are both on page index 41."
+  },
+  "syndicate_6050_2015.json": {
+   "report_year": 2015,
+   "triangle_page_index": null,
+   "triangle_page_printed": null,
+   "net_page_index": null,
+   "net_page_printed": null,
+   "header_years": null,
+   "basis": "no claims development table printed",
+   "basis_quote": "(none: the filing prints no claims development table on any of its pages)",
+   "opening_printed": "-",
+   "opening_unit": "thousands",
+   "opening_currency": "USD",
+   "opening_m": 0.0,
+   "opening_page_index": 26,
+   "opening_page_printed": "26",
+   "opening_quote": "7. Technical provisions Provision for unearned premium Claims outstanding $\u2019000 $\u2019000 Gross technical provisions As at 1 January 2015 - -",
+   "opening_source": "note 7 technical provisions, gross technical provisions, claims outstanding, as at 1 January 2015 (a dash: nil)",
+   "opening_exemption": null,
+   "start_statements": [
+    {
+     "page_index": 3,
+     "page_printed": "3",
+     "quote": "Syndicate 6050 was established in 2015 as a special purpose syndicate to write a whole account quota share of syndicates 2623 and 623."
+    },
+    {
+     "page_index": 3,
+     "page_printed": "3",
+     "quote": "Syndicate 6050 commenced writing business on the 2015 year of account, writing a 0.92% whole account quota share of syndicates 2623 and 623."
+    }
+   ],
+   "notes": "Text layer. Strategic report (page 4, printed 3): 'Syndicate 6050 was established in 2015 as a special purpose syndicate' and 'commenced writing business on the 2015 year of account'; the business review (page 6) calls it 'a new syndicate set up in 2015'. No claims development table is printed. Note 7 opens gross claims outstanding at 1 January 2015 with a dash (checked on the rendered page). US dollars, thousands. Currency conflict: the opening page (page 27) also prints note 8's table of directors' remuneration in pounds sterling, so it shows more pound signs than dollar signs; the accounts are in US dollars ('All amounts presented are stated in US dollars, being the syndicate's functional currency, and in thousands', page 17).",
+   "years_page_index": 3,
+   "years_page_printed": "3",
+   "years_quote": "Syndicate 6050 was established in 2015 as a special purpose syndicate to write a whole account quota share of syndicates 2623 and 623."
+  },
+  "syndicate_6050_2016.json": {
+   "report_year": 2016,
+   "triangle_page_index": 27,
+   "triangle_page_printed": "27",
+   "net_page_index": 27,
+   "net_page_printed": "27",
+   "header_years": [
+    2015,
+    2016
+   ],
+   "basis": "gross and net tables",
+   "basis_quote": "Gross Claims Development 2015 2016 Total % % 12 months 63.0% 63.8% 24 months 57.8%",
+   "opening_printed": "5,492.3",
+   "opening_unit": "thousands",
+   "opening_currency": "USD",
+   "opening_m": 5.4923,
+   "opening_page_index": 26,
+   "opening_page_printed": "26",
+   "opening_quote": "7. Technical provisions Provision for unearned premium Claims outstanding $\u2019000 $\u2019000 Gross technical provisions As at 1 January 2016 8,420.3 5,492.3",
+   "opening_source": "note 7 technical provisions, gross technical provisions, claims outstanding, as at 1 January 2016",
+   "opening_exemption": null,
+   "start_statements": [
+    {
+     "page_index": 3,
+     "page_printed": "3",
+     "quote": "Syndicate 6050 was established in 2015 as a special purpose syndicate to write a whole account quota share of syndicates 2623 and 623."
+    }
+   ],
+   "notes": "Text layer. Strategic report (page 4, printed 3): 'Syndicate 6050 was established in 2015 as a special purpose syndicate'. The gross and net claims development tables (page 28, printed 27) hold years 2015 and 2016 only, at 12 and 24 months. The opening 5,492.3 equals the 2015 block's closing balance, and the 2015 block opens at nil (checked on the rendered pages). US dollars, thousands. The sibling filing 6050/2015 is audited in the same round."
+  },
+  "syndicate_6113_2014.json": {
+   "report_year": 2014,
+   "triangle_page_index": null,
+   "triangle_page_printed": null,
+   "net_page_index": null,
+   "net_page_printed": null,
+   "header_years": null,
+   "basis": "no claims development table printed",
+   "basis_quote": "(none: the filing prints no claims development table on any of its pages)",
+   "opening_printed": "4,984",
+   "opening_unit": "thousands",
+   "opening_currency": "GBP",
+   "opening_m": 4.984,
+   "opening_page_index": 13,
+   "opening_page_printed": "12",
+   "opening_quote": "Liabilities 2014 2013 \u00a3000 \u00a3000 Capital and reserves Member\u2019s balance 9, 11 11,377 3,618 Technical provisions Provision for unearned premiums 11,591 6,447 Claims outstanding 11,492 4,984",
+   "opening_source": "balance sheet, liabilities, technical provisions, claims outstanding, 2013 comparative column: the balance at 31 December 2013 is the balance at 1 January 2014 (no movement note prints an opening line)",
+   "opening_exemption": null,
+   "start_statements": [
+    {
+     "page_index": 5,
+     "page_printed": "4",
+     "quote": "was established for the 2013 Year of Account to provide a dedicated vehicle for external investors to participate, via quota share reinsurance, on a specific portfolio of short tail business lines within Syndicate 1955."
+    }
+   ],
+   "notes": "Text layer. Directors' report (page 6, printed 4): 'Syndicate 6113 was established for the 2013 Year of Account'; note 9 (page 19) opens the 2013 members' balance with a dash. No claims development table is printed. Pounds sterling, thousands.",
+   "years_page_index": 5,
+   "years_page_printed": "4",
+   "years_quote": "was established for the 2013 Year of Account to provide a dedicated vehicle for external investors to participate, via quota share reinsurance, on a specific portfolio of short tail business lines within Syndicate 1955."
+  },
+  "syndicate_6115_2014.json": {
+   "report_year": 2014,
+   "triangle_page_index": null,
+   "triangle_page_printed": null,
+   "net_page_index": null,
+   "net_page_printed": null,
+   "header_years": null,
+   "basis": "no claims development table printed",
+   "basis_quote": "(none: the filing prints no claims development table on any of its pages)",
+   "opening_printed": "21,367",
+   "opening_unit": "thousands",
+   "opening_currency": "GBP",
+   "opening_m": 21.367,
+   "opening_page_index": 12,
+   "opening_page_printed": "12",
+   "opening_quote": "Technical provisions Provision for unearned premiums 30,636 33,990 Claims outstanding 8 36,880 21,367",
+   "opening_source": "balance sheet, liabilities, technical provisions, claims outstanding, 2013 comparative column: the balance at 31 December 2013 is the balance at 1 January 2014 (note 8, page 23, gives it as \u00a321.4m)",
+   "opening_exemption": null,
+   "start_statements": [
+    {
+     "page_index": 4,
+     "page_printed": "4",
+     "quote": "Syndicate 6115 is a Special Purpose Syndicate established with effect from the 2013 year of account."
+    }
+   ],
+   "notes": "Text layer. Directors' report (page 5, printed 4): 'Syndicate 6115 is a Special Purpose Syndicate established with effect from the 2013 year of account'; note 13 (page 24) opens the 2013 members' balances at 1 January with a dash. No claims development table is printed; note 8 reports a run-off deviation of \u00a3(0.6)m in prose. Pounds sterling, thousands.",
+   "years_page_index": 4,
+   "years_page_printed": "4",
+   "years_quote": "Syndicate 6115 is a Special Purpose Syndicate established with effect from the 2013 year of account."
+  },
+  "syndicate_6117_2014.json": {
+   "report_year": 2014,
+   "triangle_page_index": null,
+   "triangle_page_printed": null,
+   "net_page_index": null,
+   "net_page_printed": null,
+   "header_years": null,
+   "basis": "no claims development table printed",
+   "basis_quote": "(none: the filing prints no claims development table on any of its pages)",
+   "opening_printed": null,
+   "opening_unit": "thousands",
+   "opening_currency": "GBP",
+   "opening_m": null,
+   "opening_page_index": 15,
+   "opening_page_printed": "12",
+   "opening_quote": "Claims outstanding Accruals and deferred income TOTAL LIABILITIES 2014 Notes",
+   "opening_source": "the balance sheet (page 16, printed 12) carries a 2014 column only, and no claims outstanding movement note is printed; the syndicate was established in 2014",
+   "opening_exemption": "first_year_filing_prints_no_opening",
+   "start_statements": [
+    {
+     "page_index": 5,
+     "page_printed": "2",
+     "quote": "The Syndicate was established in 2014 as a \u2018sidecar\u2019 Special Purpose Syndicate writing 25 percent whole account quota share of Syndicate 1910"
+    }
+   ],
+   "notes": "Image-only filing: text from the committed OCR page cache; the start statement was checked on the rendered page (printed folio 2). Report of the directors (page 6): 'The Syndicate was established in 2014 as a sidecar Special Purpose Syndicate' writing a 25 percent whole account quota share of Syndicate 1910. The related-parties note (page 22) prints a 2013 comparative ('Expenses of \u00a33.05m (2013: \u00a33.2m) were recharged to the Syndicate by AMA'); the sentences before and after it are about Syndicate 1910's whole-account charges and the syndicate's 25 percent share of them, and this syndicate's own profit and loss account, balance sheet and notes hold a 2014 column only, so it is read as the host's comparative and not as a 2013 year of this syndicate. No claims development table is printed. Pounds sterling, thousands.",
+   "years_page_index": 5,
+   "years_page_printed": "2",
+   "years_quote": "The Syndicate was established in 2014 as a \u2018sidecar\u2019 Special Purpose Syndicate writing 25 percent whole account quota share of Syndicate 1910"
+  },
+  "syndicate_6119_2014.json": {
+   "report_year": 2014,
+   "triangle_page_index": null,
+   "triangle_page_printed": null,
+   "net_page_index": null,
+   "net_page_printed": null,
+   "header_years": null,
+   "basis": "no claims development table printed",
+   "basis_quote": "(none: the filing prints no claims development table on any of its pages)",
+   "opening_printed": null,
+   "opening_unit": "thousands",
+   "opening_currency": "GBP",
+   "opening_m": null,
+   "opening_page_index": 15,
+   "opening_page_printed": "12",
+   "opening_quote": "Provision for unearned premiums 7,392 Claims outstanding 4,332 11,724",
+   "opening_source": "the balance sheet (page 16, printed 12) carries a 2014 column only, no claims outstanding movement note is printed, and note 11 (page 23) opens the member's balance with no figure; the syndicate has been established since the 2014 year of account",
+   "opening_exemption": "first_year_filing_prints_no_opening",
+   "start_statements": [
+    {
+     "page_index": 4,
+     "page_printed": "1",
+     "quote": "Syndicate 6119 has been established since the 2014 year of account as a 'Special Purpose Syndicate to underwrite a whole account quota share reinsurance of Catlin Syndicate 2003"
+    }
+   ],
+   "notes": "Text layer. Strategic report (page 5, printed 1): 'Syndicate 6119 has been established since the 2014 year of account as a Special Purpose Syndicate to underwrite a whole account quota share reinsurance of Catlin Syndicate 2003'. No claims development table is printed. The 31 December 2014 gross claims outstanding (4,332) is the opening balance of the sibling filing 6119/2015, already in the ledger (UW2014-2015). Pounds sterling, thousands.",
+   "years_page_index": 4,
+   "years_page_printed": "1",
+   "years_quote": "Syndicate 6119 has been established since the 2014 year of account as a 'Special Purpose Syndicate to underwrite a whole account quota share reinsurance of Catlin Syndicate 2003"
   },
   "syndicate_6119_2015.json": {
    "report_year": 2015,
@@ -1297,6 +2013,41 @@
    "opening_quote": "13. Technical reserves ... Claims outstanding \u00a3m Gross At inception - - - -",
    "opening_source": "note 13 technical reserves, gross block, claims outstanding column, 'At inception' (no 1 January line); printed as a dash, recorded 0",
    "notes": "DATE/STRUCTURE FLAG: accounts cover the 6 months ended 31 December 2015; the syndicate was 'established for the 2015 year of account as a special legacy syndicate with effect from 30 June 2015' (page index 3) to reinsure Syndicate 1084's UK division 'prior claim liabilities and in-force policies' by 100% quota share. The acquired reserves enter through 'Movement in provision 253.6' in the period, not the opening; the opening line is dated 'At inception', not 1 January 2015 (members' balances: 'Balance as at 1 July -'). Scanned filing; OCR checked against rendered page images (OCR misreads the reinsurance '4.7' as '47', and omits the page-index-21 footer '19', which was read from the image). The triangle is one table: a gross row block then a net row block under the single header 'Pure underwriting year 2015 Total'. Closing gross 195.5 (not used)."
+  },
+  "syndicate_6125_2016.json": {
+   "report_year": 2016,
+   "triangle_page_index": null,
+   "triangle_page_printed": null,
+   "net_page_index": null,
+   "net_page_printed": null,
+   "header_years": null,
+   "basis": "no claims development table printed",
+   "basis_quote": "(none: the filing prints no claims development table on any of its pages)",
+   "opening_printed": "-",
+   "opening_unit": "thousands",
+   "opening_currency": "GBP",
+   "opening_m": 0.0,
+   "opening_page_index": 25,
+   "opening_page_printed": "25",
+   "opening_quote": "11. Technical provisions 2016 Gross RI Net \u00a3000 \u00a3000 \u00a3000 Incurred claims outstanding: Balance at 1 January - - -",
+   "opening_source": "note 11 technical provisions, incurred claims outstanding, gross column, balance at 1 January 2016 (a dash: nil)",
+   "opening_exemption": null,
+   "start_statements": [
+    {
+     "page_index": 4,
+     "page_printed": "4",
+     "quote": "The Syndicate commenced underwriting on 1 January 2016, and accordingly this is the first annual report prepared on behalf of the Syndicate."
+    },
+    {
+     "page_index": 15,
+     "page_printed": "15",
+     "quote": "The Syndicate commenced trading on 1st January 2016 as a Special Purpose Syndicate."
+    }
+   ],
+   "notes": "Text layer. Managing agent's report (page 5, printed 4): 'The Syndicate commenced underwriting on 1 January 2016, and accordingly this is the first annual report prepared on behalf of the Syndicate'; note 1 (page 16): 'commenced trading on 1st January 2016 as a Special Purpose Syndicate'. No claims development table is printed. Note 11 opens incurred claims outstanding at nil (checked on the rendered page). Pounds sterling, thousands.",
+   "years_page_index": 4,
+   "years_page_printed": "4",
+   "years_quote": "The Syndicate commenced underwriting on 1 January 2016, and accordingly this is the first annual report prepared on behalf of the Syndicate."
   },
   "syndicate_6126_2016.json": {
    "report_year": 2016,
@@ -1511,6 +2262,41 @@
    "opening_quote": "6. Technical provisions Unearned premiums Claims outstanding $'000 $'000 Gross At 1 January 2018 - -",
    "opening_source": "note 6 Technical provisions, Gross section, claims outstanding column, At 1 January 2018 (nil)",
    "notes": "Syndicate began in the report year: 'established for the 2018 year of account as a Special Purpose Arrangement' (page index 7) and 'This is the first year of trading and therefore there is no historic development' (page index 33). Opening printed as a dash; recorded as 0. Gross triangle prints 'Gross claims outstanding provision 67,330' while note 6 and the balance sheet print 67,730 (81,009 - 13,279 = 67,730)."
+  },
+  "syndicate_6134_2018.json": {
+   "report_year": 2018,
+   "triangle_page_index": null,
+   "triangle_page_printed": null,
+   "net_page_index": null,
+   "net_page_printed": null,
+   "header_years": null,
+   "basis": "no claims development table printed",
+   "basis_quote": "(none: the filing prints no claims development table on any of its pages)",
+   "opening_printed": "-",
+   "opening_unit": "thousands",
+   "opening_currency": "GBP",
+   "opening_m": 0.0,
+   "opening_page_index": 32,
+   "opening_page_printed": "31",
+   "opening_quote": "8. Technical provisions Claims outstanding 2018 Gross Reinsurers\u2019 Share Net \u00a3\u2019000 \u00a3\u2019000 \u00a3\u2019000 At 1 January - - -",
+   "opening_source": "note 8 technical provisions, claims outstanding, gross column, at 1 January 2018 (a dash: nil)",
+   "opening_exemption": null,
+   "start_statements": [
+    {
+     "page_index": 4,
+     "page_printed": "3",
+     "quote": "Syndicate 6134 was established during 2018 as a Special Purpose Arrangement to underwrite quota share reinsurances of business underwritten by Syndicate 2121 as the host syndicate."
+    },
+    {
+     "page_index": 4,
+     "page_printed": "3",
+     "quote": "Syndicate 6134 does not participate in the underwriting of any prior year of Syndicate 2121 and no element of that syndicate\u2019s reinsurance to close is ceded to Syndicate 6134."
+    }
+   ],
+   "notes": "Text layer. Managing agent's report (page 5, printed 3): 'Syndicate 6134 was established during 2018 as a Special Purpose Arrangement' and 'does not participate in the underwriting of any prior year of Syndicate 2121 and no element of that syndicate's reinsurance to close is ceded to Syndicate 6134'. No claims development table is printed (the risk note's sensitivity tables are not development tables). Note 8 opens claims outstanding at nil (checked on the rendered page). Pounds sterling, thousands.",
+   "years_page_index": 4,
+   "years_page_printed": "3",
+   "years_quote": "Syndicate 6134 was established during 2018 as a Special Purpose Arrangement to underwrite quota share reinsurances of business underwritten by Syndicate 2121 as the host syndicate."
   },
   "syndicate_6136_2023.json": {
    "report_year": 2023,

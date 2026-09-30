@@ -15,6 +15,16 @@ Round 62 (review of 29 September 2026, MAT-2). Two kinds of record carry no `mod
   format the table step refuses -- and its reason says so and names the filing-page audit that decided
   it instead.
 
+* **Unread records the filing-page audit decided** (third cycle of round 62, D2). 24 records the
+  pipeline had written as having no deterministic reading state in their filings that the syndicate
+  began underwriting in the report year (18) or the year before (6), and print no older cohort, so no
+  underwriting year up to t-2 can exist. The audit ledger (`structural_eligibility_audit.json`) holds
+  each one's page, quote and file hash, and `--audited-unread` restates the record as a first-year
+  stub the way `_first_year_record` writes one: `first_year_syndicate`, the audited reason and
+  `models_run` false replace `no_triangle_data`, `excluded`, `status` and `exclusion_reason`, and the
+  business mix the table step found stays. The pipeline itself would still write these records as
+  unread: the parsers find no figure in them, and the replay check expects exactly that.
+
 A record listed in `pdf_extraction/audit/redecision_pending.json` is to be extracted again with the
 models, and is left exactly as it is.
 
@@ -23,8 +33,9 @@ keys changed, and every changed line of text must be one of those keys' lines. T
 indentation, ASCII escaping and line endings.
 
 Usage:
-    python scripts/restate_record_status.py --no-reading   [--check]
-    python scripts/restate_record_status.py --first-year   [--check]
+    python scripts/restate_record_status.py --no-reading      [--check]
+    python scripts/restate_record_status.py --first-year      [--check]
+    python scripts/restate_record_status.py --audited-unread  [--check]
 
 --check changes nothing: it lists the records that are not yet in the restated form and exits 1 if
 there are any.
@@ -41,6 +52,9 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 import test_gemini as tg  # noqa: E402
+
+sys.path.insert(0, str(ROOT / "scripts"))
+from finalize_structural_eligibility_audit import UNREAD_RECORD_CONFIRMED  # noqa: E402
 
 RECORDS = ROOT / "pdf_extraction"
 PENDING = RECORDS / "audit" / "redecision_pending.json"
@@ -112,8 +126,29 @@ PREVIOUS_AUDITED_INCEPTION_STUB_REASONS = (
 )
 
 
+#: the reason an unread record the filing-page audit decided is restated with (third cycle of round 62,
+#: D2). It says what the audit found and what the pipeline had written, and is true of all 24: 18 began in
+#: the report year and 6 in the year before, and none prints an older cohort.
+AUDITED_UNREAD_STUB_REASON = (
+    "No underwriting year old enough for prior year development (u <= t-2): the filing states that the "
+    "syndicate began underwriting in the report year or the year before, and prints no older cohort, as "
+    "read on its pages in pdf_extraction/audit/structural_eligibility_audit.json. The record was first "
+    "written as having no deterministic reading (the parsers found no figure and the models were not "
+    "run) and was restated by that audit.")
+#: the keys of an unread record, all of which a first-year stub does not carry (`models_run` it does, and
+#: it stays false, but the key moves to where `_first_year_record` writes it)
+UNREAD_STATUS_KEYS = ("no_triangle_data", "excluded", "status", "models_run", "exclusion_reason")
+
+
 def first_year_reason(data: dict, audited: dict, name: str) -> str:
     reason = str(data.get("reason") or "")
+    if reason == AUDITED_UNREAD_STUB_REASON:
+        entry = audited.get(name) or {}
+        if (entry.get("extraction_status") != UNREAD_RECORD_CONFIRMED
+                or entry.get("decision") != "structural_ineligible_no_mature_cohort"):
+            raise SystemExit("%s: restated as an unread record the audit decided, and the audit does not say so"
+                             % name)
+        return AUDITED_UNREAD_STUB_REASON
     if (INCEPTION_RULE_WORDING not in reason and reason != AUDITED_INCEPTION_STUB_REASON
             and reason not in PREVIOUS_AUDITED_INCEPTION_STUB_REASONS):
         return tg.FIRST_YEAR_REASON
@@ -129,6 +164,32 @@ def restated_first_year(data: dict, audited: dict, name: str) -> dict:
            "models_run": bool(data.get("first_year_evidence"))}
     out = _insert_after(data, "reason", {"models_run": new["models_run"]})
     out["reason"] = new["reason"]
+    return out
+
+
+def restated_audited_unread(data: dict, audited: dict, name: str) -> dict:
+    """The record of an unread filing the audit decided, written as `_first_year_record` writes a stub.
+    The unread record's status keys go and `first_year_syndicate`, the audited reason and `models_run`
+    (false: the models were not run) take their place; everything else -- the source file, the business
+    mix, the premium and the currency the table step found -- stays. A record already in that form is
+    returned unchanged."""
+    entry = audited.get(name) or {}
+    if (entry.get("extraction_status") != UNREAD_RECORD_CONFIRMED
+            or entry.get("decision") != "structural_ineligible_no_mature_cohort"):
+        raise SystemExit("%s: the audit does not decide it as an unread record with no mature cohort" % name)
+    if data.get("first_year_syndicate") is True and data.get("reason") == AUDITED_UNREAD_STUB_REASON:
+        if any(k in data for k in ("no_triangle_data", "excluded", "status", "exclusion_reason")):
+            raise SystemExit("%s: a restated stub that still carries the unread record's keys" % name)
+        return data
+    if not data.get("no_triangle_data") or data.get("status") != tg.NO_DETERMINISTIC_READING:
+        raise SystemExit("%s: neither an unread record nor a restated one" % name)
+    out = {}
+    for key, value in data.items():
+        if key in UNREAD_STATUS_KEYS:
+            if key == "no_triangle_data":
+                out.update({"first_year_syndicate": True, "reason": AUDITED_UNREAD_STUB_REASON, "models_run": False})
+            continue
+        out[key] = value
     return out
 
 
@@ -153,6 +214,7 @@ def main() -> int:
     kind = ap.add_mutually_exclusive_group(required=True)
     kind.add_argument("--no-reading", action="store_true")
     kind.add_argument("--first-year", action="store_true")
+    kind.add_argument("--audited-unread", action="store_true")
     ap.add_argument("--check", action="store_true")
     args = ap.parse_args()
     skip = pending_stems()
@@ -169,6 +231,10 @@ def main() -> int:
         elif args.first_year and data.get("first_year_syndicate"):
             keys = {"reason", "models_run"}
             new = restated_first_year(data, audited, path.name)
+        elif (args.audited_unread
+              and (audited.get(path.name) or {}).get("extraction_status") == UNREAD_RECORD_CONFIRMED):
+            keys = set(UNREAD_STATUS_KEYS) | {"first_year_syndicate", "reason"}
+            new = restated_audited_unread(data, audited, path.name)
         else:
             continue
         if path.stem in skip:
@@ -183,7 +249,8 @@ def main() -> int:
         changed.append(path.stem)
         if not args.check:
             path.write_bytes(out)
-    what = "no-deterministic-reading" if args.no_reading else "first-year"
+    what = ("no-deterministic-reading" if args.no_reading else
+            "audited-unread" if args.audited_unread else "first-year")
     print("%s records: %d already restated, %d %s, %d left for a new extraction (%s)"
           % (what, current, len(changed), "to restate" if args.check else "restated", len(left),
              PENDING.name))

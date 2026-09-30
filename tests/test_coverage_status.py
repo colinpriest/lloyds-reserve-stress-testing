@@ -22,7 +22,8 @@ import replay_corpus_check as rcc  # noqa: E402
 COVERAGE = ROOT / "syndicate_reports" / "coverage" / "coverage_status.json"
 #: the coverage row's exclusion_class for each record class (scripts/build_coverage_status.py)
 ROW_CLASS = {"unread": "no_triangle_data", "stub_before_models": "first_year_syndicate",
-             "stub_after_models": "first_year_syndicate", "models": None, "reviewed_audit": None}
+             "stub_after_models": "first_year_syndicate", "models": None, "reviewed_audit": None,
+             "audited_unread_stub": "first_year_syndicate"}
 
 
 def test_every_coverage_row_is_classed_as_its_record_is():
@@ -43,4 +44,5 @@ def test_every_coverage_row_is_classed_as_its_record_is():
             assert row["pyd_failure_reason"] == d["exclusion_reason"], stem
         seen[cls] = seen.get(cls, 0) + 1
     # every class the corpus holds is exercised by the table
-    assert seen.get("unread") and seen.get("models") and seen.get("stub_before_models"), seen
+    assert (seen.get("unread") and seen.get("models") and seen.get("stub_before_models")
+            and seen.get("audited_unread_stub")), seen

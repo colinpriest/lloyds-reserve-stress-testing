@@ -13,7 +13,10 @@ corpus to an offline replay of the deterministic step (scripts/replay_corpus_che
   * a documented subset (SUBSET below) is replayed here, in the default suite (the full corpus takes
     about a quarter of an hour on 14 workers, so it is the script's job, not the suite's);
   * no unread record's cached grids hold a gross triangle with a usable cohort that yields a figure,
-    unless it is waiting for the models (redecision_pending.json).
+    unless it is waiting for the models (redecision_pending.json); the same holds for the unread
+    records the filing-page audit restated as first-year stubs (third cycle: 24 filings that state the
+    syndicate began in the report year or the year before), which are decided by the audit and must
+    still replay unread.
 
 Run:  python -m pytest tests/test_corpus_replay.py -q
       python scripts/replay_corpus_check.py --workers 14 --write      (the full run)
@@ -278,13 +281,37 @@ def test_no_unread_record_holds_a_usable_gross_triangle_in_its_cache():
     control = rcc.usable_gross_grids("syndicate_2468_2022")
     assert any(g["years"] == [2020] and g["pyd"] == pytest.approx(-0.153, abs=5e-4) for g in control), control
     pending, _ = rcc.declared()
-    found = []
+    found, checked = [], 0
     for stem, d in rcc.committed_records().items():
-        if rcc.committed_class(d) == "unread" and stem not in pending:
+        if rcc.committed_class(d) in rcc.UNREAD_CLASSES and stem not in pending:
+            checked += 1
             g = rcc.usable_gross_grids(stem)
             if g:
                 found.append((stem, g))
     assert found == []
+    assert checked == 45      # the 21 still unread and the 24 the audit restated as stubs
+
+
+def test_an_unread_record_the_audit_restated_must_still_replay_unread():
+    """Third cycle: the 24 stubs the filing-page audit made of unread records are decided by the audit, not
+    by the parsers, so their replay is expected to be `unread` -- the class the pipeline still writes for
+    them. A parser that came to read one (a figure) or to take it for young (first-year) differs from
+    that, and shows as a mismatch: the audit's decision would have to be looked at again."""
+    records = rcc.committed_records()
+    stems = sorted(s for s, d in records.items() if rcc.committed_class(d) == "audited_unread_stub")
+    assert len(stems) == 24
+    assert rcc.EXPECTED["audited_unread_stub"] == {"unread"}
+    d = records[stems[0]]
+    unread = {"stem": stems[0], "pyd": None, "method": "none", "pyd_from_triangle": False, "first_year": False,
+              "first_year_reserve_text": False, "no_triangle_data": True, "triangle_years": []}
+    assert rcc.compare(d, unread) == []
+    read = dict(unread, no_triangle_data=False, pyd=1.5, method="azure", pyd_from_triangle=True)
+    assert rcc.compare(d, read) and "committed audited_unread_stub, replay models" in rcc.compare(d, read)[0]
+    young = dict(unread, no_triangle_data=False, first_year=True)
+    assert rcc.compare(d, young) and "replay stub_before_models" in rcc.compare(d, young)[0]
+    # and the class is the ledger's, not the record's own key: an unaudited stub is an ordinary stub
+    ordinary = next(d for d in records.values() if rcc.committed_class(d) == "stub_before_models")
+    assert rcc.compare(ordinary, unread) and "committed stub_before_models, replay unread" in rcc.compare(ordinary, unread)[0]
 
 
 def _section(number: str) -> str:
@@ -299,26 +326,33 @@ def test_the_unread_filings_whose_gross_grids_the_structure_score_refuses_are_re
     holds a gross five-cohort triangle the multi-column rule scores 0.00, and it passed every clause.
     The replay now reports the unread filings whose gross grids with a usable cohort are all refused
     by the structure score. Committed caches only: the committed full run's list is the one the caches
-    give, 3500/2015's grid is found (the positive control), and docs 11.4 names every filing listed and
-    the four other unread filings it says print a table the parsers do not read, none of which holds a
-    grid either check can see."""
+    give, 3500/2015's grid is found (the positive control), and docs 11.4 names every filing listed, the
+    other unread filing it says prints a table the parsers do not read (3622/2018), and the three it named
+    that print young tables only and became audited first-year stubs in the third cycle (1699/2022,
+    1975/2019, 1922/2024), none of which holds a grid either check can see."""
     control = rcc.structure_refused_gross_grids("syndicate_3500_2015")
     assert control == [{"table": 3, "years": [2006, 2007, 2008, 2009, 2010], "structure_score": 0.0}], control
     pending, _ = rcc.declared()
     found = []
     for stem, d in sorted(rcc.committed_records().items()):
-        if rcc.committed_class(d) == "unread" and stem not in pending:
+        if rcc.committed_class(d) in rcc.UNREAD_CLASSES and stem not in pending:
             g = rcc.structure_refused_gross_grids(stem)
             if g:
                 found.append({"stem": stem, "grids": g})
     assert _report()["unread_records_whose_gross_grids_the_structure_score_refuses"] == found
     section = _section("11.4")
-    others = ["syndicate_3622_2018", "syndicate_1699_2022", "syndicate_1975_2019", "syndicate_1922_2024"]
-    for stem in [r["stem"] for r in found] + others:
+    # the other unread filing it says prints a table the parsers do not read; 1699/2022, 1975/2019 and
+    # 1922/2024, which it named before the third cycle, print young tables only and are now audited stubs
+    others = ["syndicate_3622_2018"]
+    moved = ["syndicate_1699_2022", "syndicate_1975_2019", "syndicate_1922_2024"]
+    for stem in [r["stem"] for r in found] + others + moved:
         assert "%s/%s" % tuple(stem.split("_")[1:]) in section, stem
     records = rcc.committed_records()
     for stem in others:
         assert rcc.committed_class(records[stem]) == "unread", stem
+        assert rcc.structure_refused_gross_grids(stem) == [] and rcc.usable_gross_grids(stem) == [], stem
+    for stem in moved:
+        assert rcc.committed_class(records[stem]) == "audited_unread_stub", stem
         assert rcc.structure_refused_gross_grids(stem) == [] and rcc.usable_gross_grids(stem) == [], stem
 
 

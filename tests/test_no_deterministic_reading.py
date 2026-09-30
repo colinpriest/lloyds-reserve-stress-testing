@@ -9,6 +9,11 @@ not say so. It now writes status "no_deterministic_reading", models_run false an
 describes the parsers; a first-year stub says whether the models ran before it was written; and the
 committed records carry the restated fields, except those listed for a new extraction.
 
+Third cycle (30 September 2026, D2): 24 of the unread records state in their filings that the syndicate
+began underwriting in the report year or the year before, so no underwriting year up to t-2 can exist.
+The filing-page audit records each with the filing's own words, and they are first-year stubs with an
+audited reason, written as the pipeline writes a stub (`_first_year_record`).
+
 Run:  python -m pytest tests/test_no_deterministic_reading.py -q
 """
 import json
@@ -103,8 +108,10 @@ def test_every_committed_unread_record_is_restated_or_listed_for_a_new_extractio
         assert not ABSENCE.search(json.dumps(d)), path.name
         restated.append(path.stem)
     # round 62: the 13 waiting records were extracted again with the models on 29 September 2026
-    # (12 now carry a figure, 1985/2024 became a first-year stub), so 45 are restated and none waits
-    assert len(restated) == 45 and not waiting, (len(restated), waiting)
+    # (12 now carry a figure, 1985/2024 became a first-year stub), so 45 were restated and none waited;
+    # the third cycle (30 September 2026, D2) then moved 24 of the 45 to audited first-year stubs, whose
+    # filings state that the syndicate began in the report year or the year before, and 21 remain
+    assert len(restated) == 21 and not waiting, (len(restated), waiting)
 
 
 def test_the_restatement_is_complete_and_changes_nothing_else():
@@ -133,8 +140,9 @@ def test_every_committed_first_year_stub_carries_the_current_reason_and_models_r
             # the inception-year rule's stubs: decided by the filing-page audit, and saying so
             assert audited[path.name]["decision"] == "structural_ineligible_no_mature_cohort", path.name
             assert "structural_eligibility_audit.json" in d["reason"], path.name
-    # 69 before round 62's re-extraction; 1985/2024's triangle holds 2023-2024 only (filing p50)
-    assert n == 70
+    # 69 before round 62's re-extraction; 1985/2024's triangle holds 2023-2024 only (filing p50); the
+    # third cycle's 24 audited unread records make 94
+    assert n == 94
 
 
 def test_the_stub_restatement_is_complete():
@@ -222,8 +230,9 @@ def test_an_audited_stub_says_its_table_step_has_no_usable_cache_and_has_none():
     assert "no usable cache" in reason and not re.search(r"has no (table )?cache", reason)
     audited = []
     for path, d in _committed():
-        if "models" in d or not d.get("first_year_syndicate") or d["reason"] == tg.FIRST_YEAR_REASON:
-            continue
+        if "models" in d or not d.get("first_year_syndicate") or d["reason"] in (
+                tg.FIRST_YEAR_REASON, restate.AUDITED_UNREAD_STUB_REASON):
+            continue     # (the 24 unread records the audit restated are read by the parsers: below)
         audited.append(path.stem)
         assert d["reason"] == reason, path.name
         cache = ROOT / "pdf_extraction" / "azure_output" / (path.stem + "_azure.json")
@@ -237,3 +246,75 @@ def test_an_audited_stub_says_its_table_step_has_no_usable_cache_and_has_none():
     for doc in ("README.md", "docs/ocr-pipeline.md", "scripts/replay_corpus_check.py"):
         hit = stale.search((ROOT / doc).read_text(encoding="utf-8"))
         assert hit is None, (doc, hit and hit.group(0))
+
+
+#: the keys `_first_year_record` can write, which a restated unread record may carry and no other
+STUB_KEYS = ("extraction_timestamp", "spec", "source_file", "first_year_syndicate", "reason", "models_run",
+             "syndicate", "year", "gross_premium_mix", "gross_premiums_written_gbp_m", "currency")
+
+
+def _ledger():
+    return {r["file"]: r for r in json.loads((ROOT / "pdf_extraction" / "audit" / "structural_eligibility_audit.json")
+                                             .read_text(encoding="utf-8"))["records"]}
+
+
+def test_every_unread_record_the_audit_restated_is_a_first_year_stub_that_says_so():
+    """Third cycle (D2): the ledger names 24 records as unread records the audit confirmed structural,
+    and the committed records are exactly the stubs that carry the audited reason: first_year_syndicate,
+    models_run false, no models block, none of the unread record's status keys, and nothing but the
+    keys `_first_year_record` writes (the business mix the table step found stays)."""
+    from finalize_structural_eligibility_audit import UNREAD_RECORD_CONFIRMED
+    ledger = _ledger()
+    restated = {n for n, r in ledger.items() if r["extraction_status"] == UNREAD_RECORD_CONFIRMED}
+    assert len(restated) == 24
+    records = {p.name: d for p, d in _committed()}
+    assert {n for n, d in records.items() if d.get("reason") == restate.AUDITED_UNREAD_STUB_REASON} == restated
+    for name in sorted(restated):
+        d = records[name]
+        assert d["first_year_syndicate"] is True and d["models_run"] is False and "models" not in d, name
+        assert not [k for k in ("no_triangle_data", "excluded", "status", "exclusion_reason") if k in d], name
+        assert set(d) <= set(STUB_KEYS), (name, sorted(set(d) - set(STUB_KEYS)))
+        assert "first_year_evidence" not in d, name          # the models were not run
+    reason = restate.AUDITED_UNREAD_STUB_REASON
+    assert reason.isascii() and "structural_eligibility_audit.json" in reason and "no deterministic reading" in reason
+
+
+def test_the_audited_unread_restatement_is_complete():
+    """The script's own check mode, as for the other two kinds: nothing left to restate."""
+    r = subprocess.run([sys.executable, str(ROOT / "scripts" / "restate_record_status.py"), "--audited-unread",
+                        "--check"], capture_output=True, text=True, cwd=str(ROOT))
+    assert r.returncode == 0 and "24 already restated" in r.stdout and "0 to restate" in r.stdout, r.stdout + r.stderr
+
+
+def test_the_restatement_writes_the_stub_the_pipeline_writes_and_keeps_everything_else():
+    """On a synthetic unread record: the result is `_first_year_record`'s own output in key order, the
+    business mix, premium and currency stay, restating it again changes nothing, and a record the audit
+    does not decide as an unread record with no mature cohort is refused."""
+    from finalize_structural_eligibility_audit import UNREAD_RECORD_CONFIRMED
+    mix = [{"line_of_business": "Property", "amount_gbp_m": 2.7, "percentage_of_total": 100.0}]
+    unread = {"extraction_timestamp": "2026-09-21T08:37:13+00:00", "spec": {"prompt_version": "2.13"},
+              "source_file": "syndicate_reports\\pdfs\\syndicate_9999_2020.pdf", "no_triangle_data": True, "excluded": True,
+              "status": tg.NO_DETERMINISTIC_READING, "models_run": False,
+              "exclusion_reason": tg.NO_DETERMINISTIC_READING_REASON, "syndicate": 9999, "year": 2020,
+              "gross_premium_mix": mix, "gross_premiums_written_gbp_m": 2.7, "currency": "GBP"}
+    name = "syndicate_9999_2020.json"
+    audited = {name: {"extraction_status": UNREAD_RECORD_CONFIRMED, "decision": "structural_ineligible_no_mature_cohort"}}
+    out = restate.restated_audited_unread(unread, audited, name)
+    pipeline = tg._first_year_record(Path("syndicate_9999_2020.pdf"), 9999, 2020,
+                                     {"adobe_lob": {"gross_premium_mix": mix, "gross_premiums_written_gbp_m": 2.7,
+                                                    "currency": "GBP"}}, {9999: 2019}, set())
+    assert list(out) == list(pipeline)
+    assert out["first_year_syndicate"] is True and out["models_run"] is False
+    assert out["reason"] == restate.AUDITED_UNREAD_STUB_REASON
+    assert {k: out[k] for k in ("extraction_timestamp", "spec", "source_file", "syndicate", "year", "gross_premium_mix",
+                                "gross_premiums_written_gbp_m", "currency")} == {
+        k: unread[k] for k in ("extraction_timestamp", "spec", "source_file", "syndicate", "year", "gross_premium_mix",
+                               "gross_premiums_written_gbp_m", "currency")}
+    assert restate.restated_audited_unread(out, audited, name) == out
+    for bad in ({}, {name: {"extraction_status": "pre_model_stub_confirmed_structural_by_source_page_audit",
+                            "decision": "structural_ineligible_no_mature_cohort"}},
+                {name: {"extraction_status": UNREAD_RECORD_CONFIRMED, "decision": "eligible_observed_zero"}}):
+        with pytest.raises(SystemExit):
+            restate.restated_audited_unread(unread, bad, name)
+    with pytest.raises(SystemExit):
+        restate.restated_audited_unread({**unread, "status": "something_else"}, audited, name)

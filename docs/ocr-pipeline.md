@@ -2765,12 +2765,41 @@ reason (round 61).
 
 Those counts are the round-61 corpus's (26 September 2026) and were not measured again. Since then
 every first-year stub has been read against its filing pages
-(`pdf_extraction/audit/structural_eligibility_audit.json`, 71 records): 70 hold no cohort up to
+(`pdf_extraction/audit/structural_eligibility_audit.json`, 95 records): 94 hold no cohort up to
 `t-2`, and 1840/2022's printed nil was retained as an eligible zero. The committed stubs' exclusion
-therefore rests on that audit, not on this flag. The corpus holds 70 stubs: 69 of the 70 the
-measurement saw, and 1985/2024, which became a stub when it was extracted again on 29 September 2026
-(its tables hold UW2023 and UW2024 only). The audit's script refuses to run when a committed stub has
-not been transcribed, and `tests/test_structural_eligibility_audit.py` fails in that case too.
+therefore rests on that audit, not on this flag. The corpus holds 94 stubs: 69 of the 70 the
+measurement saw, 1985/2024, which became a stub when it was extracted again on 29 September 2026
+(its tables hold UW2023 and UW2024 only), and 24 that were unread records until 30 September 2026
+(below). The audit's script refuses to run when a committed stub has not been transcribed, and
+`tests/test_structural_eligibility_audit.py` fails in that case too.
+
+**Unread records the audit restated as stubs** (third cycle of round 62, D2). The deterministic step
+still cannot call a report without a triangle young (`_no_mature_cohort()`, 11.4), and that is
+unchanged. 24 records the pipeline writes as having no deterministic reading state in their filings that
+the syndicate began underwriting in the report year (18) or the year before (6), and none prints an
+older cohort, so no underwriting year up to `t-2` can exist. The move lives in the audit and in the
+records, not in the code: the ledger holds each one's own words (`start_statements`: page, printed page
+and quote, each checked against the page of the file whose hash the ledger holds), and
+`scripts/restate_record_status.py --audited-unread` writes the record as a stub the way
+`_first_year_record` does, with its own reason (`AUDITED_UNREAD_STUB_REASON`), keeping the business mix
+the table step found. The pipeline would still write these filings as unread, and the replay check
+expects exactly that (11.4).
+
+- Began in the report year (18): 1347/2023, 1609/2021, 1686/2014, 1699/2022, 1729/2014, 1796/2021,
+  1922/2024, 1947/2018, 1975/2018, 2014/2014, 3902/2017, 4321/2022, 5623/2018, 6050/2015, 6117/2014,
+  6119/2014, 6125/2016 and 6134/2018.
+- Began in the year before (6): 1975/2019, 1991/2014, 4321/2023, 6050/2016, 6113/2014 and 6115/2014.
+- Two were read with care. 2014/2014 says the syndicate has "its origins in Special Purpose Syndicate
+  6110", and 3902/2017 that it replaced "the Incidental Syndicate that previously operated within
+  Syndicate 4020". Neither filing prints an older cohort: 2014/2014 has no comparative column and no
+  development table, and calls 2014 "Syndicate 2014's first underwriting year"; 3902/2017's single-cohort
+  table reconciles to the balance sheet's gross claims liabilities, so no older cohort is in its accounts.
+- The scan that found the 24 was repeated over the other 21 unread filings, all pages: none states a
+  start in the report year or the year before. One of the 21, 3210/2018, cannot be read: its local PDF is
+  damaged.
+- A restated filing that prints no opening balance says why (`opening_gross_reserve_exemption`): its
+  syndicate began in the report year, so no claims outstanding at 1 January exist to print, and the test
+  accepts the declaration for a first-year filing only.
 
 **Example**: syndicate 2468/2022 has a single-column triangle
 (UW year 2020).  Since 2020 ≤ 2022 − 2 = 2020, the year is
@@ -2976,8 +3005,10 @@ Those thirteen were extracted again with the models on 29 September
 2026 (`pdf_extraction/audit/redecision_pending.json`, `extracted`);
 every other record written this way carries the restated status and
 reason (`scripts/restate_record_status.py`), and says the models were
-not run.  Five of these still print a table the parsers do not read
-(below).
+not run.  Of the 45 that were left, 24 state in their filings that the
+syndicate began in the report year or the year before and were restated as
+first-year stubs on 30 September 2026 (11.2); 21 remain unread, and two of
+these still print a table the parsers do not read (below).
 
 **Important**: which of the two flags a report gets does not depend
 on the syndicate's age.  The inception-based distinction this
@@ -2990,7 +3021,11 @@ requires at least one triangle before it can say a record holds no
 usable cohort, so a report without one is classified
 `no_triangle_data` whatever the syndicate's age.  A report *with* a
 triangle whose cohorts all fall after `t-2` is the first-year stub
-(§11.1, §11.2; frozen review of 25 September 2026, D02).
+(§11.1, §11.2; frozen review of 25 September 2026, D02).  A filing that
+*states* the syndicate began in the report year or the year before is
+young whatever the parsers read, and that decision is the filing-page
+audit's, recorded in the ledger and in the record (§11.2), not this
+function's.
 
 **Two records the current code would not write** (review of 29
 September 2026, R7-02).  1884/2022 and 3330/2018 are committed as
@@ -3022,7 +3057,12 @@ class, the RAG figure and route, and the stored triangle; the records
 waiting for the models (`pdf_extraction/audit/redecision_pending.json`)
 and those without a usable table cache (`offline_unservable.json`) are the
 only declared exceptions, and a declaration that no longer differs is
-reported as stale.  The full run is recorded, with hashes of the code
+reported as stale.  The 24 unread records the audit restated as stubs are
+not exceptions but a class (`audited_unread_stub`, read from the ledger's
+`extraction_status`): their replay must still be `unread`, and their cached
+grids are held to the same test as the unread records', so a parser that
+came to read one shows as a mismatch and the audit's decision is looked at
+again.  The full run is recorded, with hashes of the code
 it ran and of the record content it compared, in
 `pdf_extraction/audit/corpus_replay_check.json`, and
 `tests/test_corpus_replay.py` fails when a record, `table_extraction.py`,
@@ -3049,7 +3089,7 @@ run standing (round 62, second cycle: Gemini's thinking tokens priced
 in `extract_with_gemini`).
 
 **Unread filings that print a table the parsers do not read**
-(verification review of round 62, N-V-E-4).  Five of the 45 records
+(verification review of round 62, N-V-E-4).  Two of the 21 records still
 with no deterministic reading print a claims development table.  Their
 committed caches and filing pages say why each stays unread:
 
@@ -3072,15 +3112,19 @@ committed caches and filing pages say why each stays unread:
   structure score, and the page-text loss-ratio parser reads the
   latest year of the printed header as 2011 and returns nothing.  A
   change to either is UNTESTED.
-- 1699/2022, 1975/2019 and 1922/2024: their caches hold no triangle
-  grid, and the filings print young tables only: a single 2022 cohort
-  (1699/2022), cohorts 2018 and 2019 (1975/2019), and a single 2024
-  cohort of $26k (1922/2024).  None holds a cohort up to t-2, so a
-  parser that read one could make it a first-year stub (§11.2), never
-  give it a figure.
+
+Three more filings were on this list before the third cycle: 1699/2022,
+1975/2019 and 1922/2024.  Their caches hold no triangle grid, and the
+filings print young tables only: a single 2022 cohort (1699/2022),
+cohorts 2018 and 2019 (1975/2019), and a single 2024 cohort of $26k
+(1922/2024).  None holds a cohort up to t-2, and each states that the
+syndicate began in the report year or the year before, so on 30 September
+2026 they became audited first-year stubs (§11.2), with 21 other unread
+records that print no table at all.
 
 `tests/test_corpus_replay.py` holds the reported list to the committed
-caches and requires this section to name every filing on it.
+caches and requires this section to name every filing on it, and the three
+that moved.
 
 ---
 
