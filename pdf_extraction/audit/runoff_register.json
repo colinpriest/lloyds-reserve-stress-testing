@@ -1,0 +1,219 @@
+{
+ "purpose": "Which of the records that carry a development figure and an adopted gross written premium at or below zero are in run-off in that year, by their own filings (the author's decision D1, option A as refined, 30 September 2026). A premium sign is not a run-off test: 3623/2018 is a live syndicate whose negative premium is a return premium under a reinsurance contract, and 5183/2024's filing puts its run-off at 1 January 2025. in_runoff is true only where the filing states that the syndicate itself is in run-off, has ceased underwriting or is being wound down during that year; a run-off year of account, and the reinsurance to close of closed years, are not that. A statement that is ambiguous leaves the record where it is (in_runoff false) and the note says why.",
+ "recorded": "2026-09-30",
+ "premium_adopted_gbp_m": "the adopted gross written premium as the record states it, in millions of the currency in premium_currency (the extraction's convention for every _gbp_m field); both models' readings agree for all nine",
+ "sources": "The local filings: syndicate_reports/pdfs (the converted PDF in pdf_extraction/html_converted for the two HTML-only filings). source_page is 1-based in the file source_sha256 hashes (the converted PDF for an HTML filing) and source_page_printed is the number printed on the page. Each quote in evidence and other_statements is verbatim from the page cited (white space collapsed; ' ... ' marks words left out); tests/test_runoff_register.py holds each to its page.",
+ "records": [
+  {
+   "stem": "syndicate_2468_2022",
+   "syndicate": 2468,
+   "year": 2022,
+   "premium_adopted_gbp_m": 0.0,
+   "premium_currency": "GBP",
+   "in_runoff": true,
+   "runoff_from": "6th January 2020",
+   "source_file": "syndicate_reports/pdfs/syndicate_2468_2022.pdf",
+   "source_sha256": "ab33047372c53a7ff7d62c3e0df61320b247b12d047a5125a98b0e5618acb308",
+   "source_page": 4,
+   "source_page_printed": "4",
+   "evidence": "On 6th January 2020, the Syndicate was put into an orderly run-off.",
+   "other_statements": [
+    {
+     "page": 16,
+     "page_printed": "16",
+     "quote": "The Syndicate ceased to write new business on the 6th January 2020."
+    }
+   ],
+   "note": "Its adopted premium is exactly zero, which the loader already treats as a run-off year; the filing states the run-off outright, and that the 2020 year of account, the last open one, was reinsured to close on 1 January 2023."
+  },
+  {
+   "stem": "syndicate_2468_2021",
+   "syndicate": 2468,
+   "year": 2021,
+   "premium_adopted_gbp_m": -2.19,
+   "premium_currency": "GBP",
+   "in_runoff": true,
+   "runoff_from": "6th January 2020",
+   "source_file": "syndicate_reports/pdfs/syndicate_2468_2021.pdf",
+   "source_sha256": "f7e5c7e05b555de7a42fa06e02f57a23f06c9eab734ac43c5152e6640599b3e2",
+   "source_page": 5,
+   "source_page_printed": "4",
+   "evidence": "On 6th January 2020, the Syndicate was put into an orderly run-off.",
+   "other_statements": [
+    {
+     "page": 18,
+     "page_printed": "17",
+     "quote": "the Syndicate ceased to write new business on the 6 January 2020."
+    }
+   ],
+   "note": "The negative premium is the run-off's adjustments: the syndicate wrote no business in the year."
+  },
+  {
+   "stem": "syndicate_1882_2018",
+   "syndicate": 1882,
+   "year": 2018,
+   "premium_adopted_gbp_m": -1.88,
+   "premium_currency": "GBP",
+   "in_runoff": true,
+   "runoff_from": "31 December 2016",
+   "source_file": "syndicate_reports/pdfs/syndicate_1882_2018.pdf",
+   "source_sha256": "43213722e4c0be5db60a5f96f5527fed49156ab463150a98134ce63c1592a17e",
+   "source_page": 4,
+   "source_page_printed": "3",
+   "evidence": "Syndicate 1882 formally ceased to trade on 31 December 2016 and CUAL has agreed terms to reinsure to close the liabilities of Syndicate 1882 into Syndicate 2488\u2019s 2017 year of account with effect from 1 January 2019. ... Since 31 December 2016 the conduct of the syndicate\u2019s run-off was overseen by the Run-Off Manager and a run-off committee.",
+   "other_statements": [
+    {
+     "page": 6,
+     "page_printed": "5",
+     "quote": "The syndicate did not underwrite in 2017 and 2018. Gross written premiums reported for 2017 and 2018 relate to adjustments made during those years to the premium for contracts entered into in prior years."
+    }
+   ],
+   "note": "The filing says the negative premium is an adjustment to the premium of contracts entered into in prior years, in a syndicate that ceased to trade on 31 December 2016."
+  },
+  {
+   "stem": "syndicate_2255_2015",
+   "syndicate": 2255,
+   "year": 2015,
+   "premium_adopted_gbp_m": -0.362,
+   "premium_currency": "GBP",
+   "in_runoff": false,
+   "runoff_from": null,
+   "source_file": "syndicate_reports/pdfs/syndicate_2255_2015.pdf",
+   "source_sha256": "cffe03ced7ae7e6d31d19cfab9f2a5c0f310bf9c575ad0f5f011f3131e14c992",
+   "source_page": 21,
+   "source_page_printed": "17",
+   "evidence": "the managing agent has a reasonable expectation that the syndicate will continue to write business for the foreseeable future. Moreover, the managing agent expects that continued capital support will be in place in order to do so. Accordingly, the financial statements have been prepared on the going concern basis.",
+   "other_statements": [
+    {
+     "page": 10,
+     "page_printed": "6",
+     "quote": "Syndicate 2255 continues to run-off its portfolio of liabilities"
+    },
+    {
+     "page": 10,
+     "page_printed": "6",
+     "quote": "Syndicate 2255 will continue to search for and evaluate suitable new business propositions."
+    },
+    {
+     "page": 7,
+     "page_printed": "3",
+     "quote": "No RITC contracts of Lloyd\u2019s syndicates were underwritten during 2015."
+    }
+   ],
+   "note": "Ambiguous, so it stays as it is. The filing says the syndicate 'continues to run-off its portfolio of liabilities' (a reinsurance-to-close vehicle: it underwrote RITC business in 2011, page 8, and none in 2015, page 7), but also that the managing agent expects it 'will continue to write business for the foreseeable future', that the accounts are on the going concern basis, and that it 'will continue to search for and evaluate suitable new business propositions'. The years of account it reinsures to close are the administrative closure of closed years. It is not stated to be in run-off in 2015."
+  },
+  {
+   "stem": "syndicate_1840_2024",
+   "syndicate": 1840,
+   "year": 2024,
+   "premium_adopted_gbp_m": -0.25,
+   "premium_currency": "GBP",
+   "in_runoff": true,
+   "runoff_from": "31 December 2022",
+   "source_file": "syndicate_reports/pdfs/syndicate_1840_2024.html",
+   "source_sha256": "2f02dc55b955f0bb6a48e56291110b031c0dca586dc80e7f14d83f51ec901719",
+   "source_page": 9,
+   "source_page_printed": "3",
+   "evidence": "Syndicate 1840 was placed in runoff on 31 December 2022 in line with the MRSL Board decision taken in Q1 of that year.",
+   "other_statements": [
+    {
+     "page": 15,
+     "page_printed": "6",
+     "quote": "Given the Syndicate is in run-off, the primary consideration for inflation is around reserves."
+    },
+    {
+     "page": 37,
+     "page_printed": "17",
+     "quote": "The Syndicate ceased underwriting with effect from 31 December 2022"
+    }
+   ],
+   "note": "HTML filing, read from its converted PDF. The 2022 year of account was the last year of underwriting."
+  },
+  {
+   "stem": "syndicate_1206_2019",
+   "syndicate": 1206,
+   "year": 2019,
+   "premium_adopted_gbp_m": -1.375,
+   "premium_currency": "GBP",
+   "in_runoff": true,
+   "runoff_from": "1 January 2018",
+   "source_file": "syndicate_reports/pdfs/syndicate_1206_2019.pdf",
+   "source_sha256": "e11cb6e377fad8e43d527ce13b3cae8908fcbefe980a9f3c26676c5c761dc74c",
+   "source_page": 6,
+   "source_page_printed": "4",
+   "evidence": "The Syndicate has been operating under a run-off closure plan since 1 January 2018 following ASL\u2019s decision to concentrate its non-life underwriting in Syndicate 1861 for the 2018 year of account onwards.",
+   "other_statements": [],
+   "note": "The last open year of account, 2017, was reinsured to close into Syndicate 1861 at 31 December 2019, which ended the syndicate."
+  },
+  {
+   "stem": "syndicate_1400_2014",
+   "syndicate": 1400,
+   "year": 2014,
+   "premium_adopted_gbp_m": -10.139,
+   "premium_currency": "GBP",
+   "in_runoff": true,
+   "runoff_from": "the end of 2013",
+   "source_file": "syndicate_reports/pdfs/syndicate_1400_2014.pdf",
+   "source_sha256": "ca0cf77f88b90efb3ffa3d81dc9e9726d68dfb28be4fbaf8754809be7e4313f6",
+   "source_page": 9,
+   "source_page_printed": "5",
+   "evidence": "The Syndicate ceased underwriting new business with effect from the end of 2013. ... Efforts will be focussed on managing an orderly and economical run-off for the remaining liabilities of the Syndicate.",
+   "other_statements": [],
+   "note": "Markel took over the business; certain lines moved to Syndicate 3000 for the 2014 year of account."
+  },
+  {
+   "stem": "syndicate_3623_2018",
+   "syndicate": 3623,
+   "year": 2018,
+   "premium_adopted_gbp_m": -33.4,
+   "premium_currency": "USD",
+   "in_runoff": false,
+   "runoff_from": null,
+   "source_file": "syndicate_reports/pdfs/syndicate_3623_2018.pdf",
+   "source_sha256": "1708336d79ac490cb5c50d1e33a702ae3611c48365748ba5b35ab7557c91f4f1",
+   "source_page": 26,
+   "source_page_printed": "25",
+   "evidence": "During the year the syndicate had a significant return premium resulting in overall negative gross premiums written.",
+   "other_statements": [
+    {
+     "page": 15,
+     "page_printed": "14",
+     "quote": "they do not intend to liquidate the syndicate or to cease its operations"
+    },
+    {
+     "page": 17,
+     "page_printed": "16",
+     "quote": "All of the above operations are continuing."
+    }
+   ],
+   "note": "A live syndicate, not a run-off: its negative gross premium is a return premium under a reinsurance contract (the reinsurance division's premium is (71.0) million dollars in a year that wrote 29.2 in life, accident and health)."
+  },
+  {
+   "stem": "syndicate_5183_2024",
+   "syndicate": 5183,
+   "year": 2024,
+   "premium_adopted_gbp_m": -0.633,
+   "premium_currency": "USD",
+   "in_runoff": false,
+   "runoff_from": "1 January 2025",
+   "source_file": "syndicate_reports/pdfs/syndicate_5183_2024.html",
+   "source_sha256": "ed24ee92b36f312a5f72ee5a11fbdd8f49a8721b34a073defbd80aa36a8a0587",
+   "source_page": 5,
+   "source_page_printed": "2",
+   "evidence": "The Syndicate ceased underwriting on the 1 January 2025 and entered into voluntary run off.",
+   "other_statements": [
+    {
+     "page": 8,
+     "page_printed": "5",
+     "quote": "On the 21 September 2024 the Syndicate announced that it will enter into run-off from 1 January 2025."
+    },
+    {
+     "page": 6,
+     "page_printed": "3",
+     "quote": "2024 YOA Open 2023 YOA Open 2022 YOA Closed"
+    }
+   ],
+   "note": "The run-off begins on 1 January 2025, after the year: in 2024 the syndicate was still underwriting (its 2024 year of account is open) and the negative premium is not a run-off signal. HTML filing, read from its converted PDF."
+  }
+ ]
+}
