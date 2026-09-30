@@ -13,6 +13,14 @@ the filing's own words, page and file hash. These tests hold the register to the
 its own verdicts, and to the filings (each quote is printed on the page it cites, in the file whose hash the
 register holds).
 
+2255/2015 is the one filing that says both: its Future developments statement says the syndicate "continues
+to run-off its portfolio of liabilities", and its basis of preparation says the managing agent expects the
+syndicate "will continue to write business for the foreseeable future". The author decided it is a run-off
+year (the negative premium, the named Syndicate Run-off Manager and the administrative reinsurance to close
+of the 2013 year into 2015 fit that account, and the going concern paragraph is the standard statement), so
+the register holds the Future developments statement as its evidence and the going concern paragraph, word
+for word, beside it in the note.
+
 Run:  python -m pytest tests/test_runoff_register.py -q
 """
 import hashlib
@@ -30,11 +38,14 @@ import finalize_structural_eligibility_audit as fin  # noqa: E402
 REGISTER = ROOT / "pdf_extraction" / "audit" / "runoff_register.json"
 #: what the filing's words say when they say the syndicate is in run-off or has ceased to write
 RUNOFF_WORDS = re.compile(r"run-?\s?off|ceased (to )?(underwrit|trad|write)", re.I)
-#: the verdicts, by the filings: three are not run-off years. 2255/2015 is ambiguous (it "continues to run-off
-#: its portfolio of liabilities" and expects to "continue to write business"), 3623/2018 is a live syndicate
-#: with a return premium and 5183/2024's run-off begins on 1 January 2025. A different verdict is the
-#: author's decision, so it fails here.
-NOT_IN_RUNOFF = {"syndicate_2255_2015", "syndicate_3623_2018", "syndicate_5183_2024"}
+#: the verdicts, by the filings: two are not run-off years. 3623/2018 is a live syndicate with a return
+#: premium and 5183/2024's run-off begins on 1 January 2025; the other seven, 2255/2015 among them, are run-off
+#: years. A different verdict is the author's decision, so it fails here.
+NOT_IN_RUNOFF = {"syndicate_3623_2018", "syndicate_5183_2024"}
+#: the standard going concern statement of 2255/2015's basis of preparation, which the register keeps in the
+#: entry's note beside the run-off statement that decides the year
+GOING_CONCERN_SENTENCE = ("the managing agent has a reasonable expectation that the syndicate will continue to write "
+                          "business for the foreseeable future.")
 
 
 def _register():
@@ -69,12 +80,24 @@ def test_the_register_covers_every_record_with_a_development_figure_and_a_premiu
     assert set(stems) == set(found), sorted(set(stems) ^ set(found))
 
 
+def _collapse(text):
+    return " ".join(text.split())
+
+
+def _quoted_in(note):
+    """The phrases a note puts in single quotes. An apostrophe inside a word neither opens nor closes one."""
+    return re.findall(r"(?<![A-Za-z0-9])'(.+?)'(?![A-Za-z0-9])", note)
+
+
 def test_each_entry_states_its_premium_and_its_verdict_from_the_record_and_the_filing():
     found = _with_a_premium_at_or_below_zero()
     fields = {"stem", "syndicate", "year", "premium_adopted_gbp_m", "premium_currency", "in_runoff", "runoff_from",
-              "source_file", "source_sha256", "source_page", "source_page_printed", "evidence", "other_statements", "note"}
+              "source_file", "source_sha256", "source_page", "source_page_printed", "evidence", "other_statements",
+              "note_quotes", "note"}
     for r in _register():
         assert set(r) == fields, r["stem"]
+        for q in r["other_statements"] + r["note_quotes"]:
+            assert set(q) == {"page", "page_printed", "quote"} and q["page"] >= 1 and q["quote"].strip(), r["stem"]
         assert r["stem"] == "syndicate_%d_%d" % (r["syndicate"], r["year"])
         # the premium is the record's own, and both models agree on it
         readings = {m.get("gross_premiums_written_gbp_m") for m in found[r["stem"]]}
@@ -88,7 +111,30 @@ def test_each_entry_states_its_premium_and_its_verdict_from_the_record_and_the_f
             assert r["runoff_from"] and RUNOFF_WORDS.search(r["evidence"]), r["stem"]
         assert r["source_page"] >= 1 and r["source_page_printed"], r["stem"]
         assert re.fullmatch(r"[0-9a-f]{64}", r["source_sha256"]), r["stem"]
-    assert sum(r["in_runoff"] for r in _register()) == 6
+    assert sum(r["in_runoff"] for r in _register()) == 7
+
+
+def test_2255_2015_is_a_run_off_year_with_its_going_concern_paragraph_recorded_beside_the_evidence():
+    """The author's decision on the one filing that says both. The evidence is the Future developments statement;
+    the going concern paragraph is a quote the register holds to its page, and it is in the note word for word,
+    so a reader of the entry sees both."""
+    (r,) = [x for x in _register() if x["stem"] == "syndicate_2255_2015"]
+    assert r["in_runoff"] is True
+    assert r["evidence"].startswith("Future developments ") and "continues to run-off its portfolio of liabilities" in r["evidence"]
+    (going_concern,) = [q for q in r["note_quotes"] if GOING_CONCERN_SENTENCE in _collapse(q["quote"])]
+    assert _collapse(going_concern["quote"]) in _collapse(r["note"])
+
+
+def test_a_note_that_quotes_the_filing_quotes_it_word_for_word():
+    """Each note_quotes quote is in its note as printed, and each phrase a note puts in single quotes is inside a
+    quote the entry cites (its evidence, other_statements or note_quotes): the note cannot misquote a page that
+    the quote test holds to the filing."""
+    for r in _register():
+        cited = [_collapse(r["evidence"])] + [_collapse(s["quote"]) for s in r["other_statements"] + r["note_quotes"]]
+        for q in r["note_quotes"]:
+            assert _collapse(q["quote"]) in _collapse(r["note"]), (r["stem"], q["quote"])
+        for phrase in _quoted_in(r["note"]):
+            assert any(_collapse(phrase) in c for c in cited), (r["stem"], phrase)
 
 
 def test_each_quote_is_on_the_page_it_cites_in_the_file_with_that_hash():
@@ -101,7 +147,8 @@ def test_each_quote_is_on_the_page_it_cites_in_the_file_with_that_hash():
         source = ROOT / r["source_file"]
         assert hashlib.sha256(source.read_bytes()).hexdigest() == r["source_sha256"], r["stem"]
         texts = fin.page_texts(source)
-        cited = [(r["source_page"], r["evidence"])] + [(s["page"], s["quote"]) for s in r["other_statements"]]
+        cited = ([(r["source_page"], r["evidence"])]
+                 + [(s["page"], s["quote"]) for s in r["other_statements"] + r["note_quotes"]])
         for page, quote in cited:
             assert 1 <= page <= len(texts), (r["stem"], page)
             assert fin.quote_on_page(quote, texts[page - 1]), (r["stem"], page, quote)
