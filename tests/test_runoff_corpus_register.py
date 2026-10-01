@@ -58,6 +58,17 @@ RE_READ = {"syndicate_2088_2019": "AFTER", "syndicate_2468_2020": "PART", "syndi
 COUNTS = {"WHOLE": 37, "PART": 8, "AFTER": 27, "NOTCOUNT": 16}
 #: the premium register's entries that are not corpus entries: a live syndicate whose negative premium is a return premium
 NOT_IN_CORPUS = {"syndicate_3623_2018"}
+#: the cited pages whose text layer shows no printed page at the head or foot (a number set in a graphic, a converted page, a scan):
+#: their printed page was read from the rendered page, and two of them (2008/2019 page 6, 2088/2019 page 15) are pages on which
+#: the text layer shows a different number. Every other cited page shows its printed page in its text, which the test below holds
+#: the register to.
+READ_FROM_THE_PAGE = {
+    ("syndicate_1840_2024", 15), ("syndicate_1840_2024", 37), ("syndicate_1880_2024", 9), ("syndicate_1994_2024", 25),
+    ("syndicate_2007_2019", 5), ("syndicate_2007_2019", 8), ("syndicate_2008_2016", 6), ("syndicate_2008_2018", 6),
+    ("syndicate_2008_2019", 6), ("syndicate_2088_2019", 4), ("syndicate_2088_2019", 15), ("syndicate_2468_2019", 9),
+    ("syndicate_3210_2016", 5), ("syndicate_3210_2017", 6), ("syndicate_557_2022", 5), ("syndicate_6124_2015", 4),
+    ("syndicate_6130_2018", 4),
+}
 
 
 def _load():
@@ -72,12 +83,13 @@ def _nine():
     return {r["stem"]: r for r in json.loads(PREMIUM.read_text(encoding="utf-8"))["records"]}
 
 
+#: hyphen variants and ligatures as a filing's text layer prints them (U+2010 to U+2014, the minus sign, the soft hyphen, fi, fl)
+_PRINTED = {0x2010: "-", 0x2011: "-", 0x2012: "-", 0x2013: "-", 0x2014: "-", 0x2212: "-", 0x00AD: None, 0xFB01: "fi", 0xFB02: "fl"}
+
+
 def _norm(text):
-    """Hyphen variants and ligatures written as they print."""
-    for bad, good in (("‐", "-"), ("‑", "-"), ("‒", "-"), ("–", "-"), ("—", "-"), ("−", "-"),
-                      ("­", ""), ("ﬁ", "fi"), ("ﬂ", "fl")):
-        text = text.replace(bad, good)
-    return text
+    """The text with those characters written plainly."""
+    return text.translate(_PRINTED)
 
 
 def _collapse(text):
@@ -100,7 +112,22 @@ def _undated(r):
 def _citations(r):
     """(page, printed page, quote) for everything the entry cites."""
     return ([(r["source_page"], r["source_page_printed"], r["evidence"])]
-            + [(s["page"], s["page_printed"], s["quote"]) for s in r["other_statements"] + r["note_quotes"]])
+            + [(s["page"], s["page_printed"], s["quote"]) for s in r["other_statements"] + r.get("note_quotes", [])])
+
+
+def _folio_candidates(text):
+    """The integers a page shows at its head or its foot (its first 14 and last 10 whitespace-separated tokens) and in a
+    'Page N' footer: its printed page, where the text layer carries one."""
+    tokens = text.split()
+    found = set()
+    for chunk in (tokens[:14], tokens[-10:]):
+        for token in chunk:
+            token = token.strip("|.,:;()[]")
+            if re.fullmatch(r"\d{1,3}", token):
+                found.add(int(token))
+    for m in re.finditer(r"Page\s*\|?\s*(\d{1,3})", text[:400] + " " + text[-400:], re.I):
+        found.add(int(m.group(1)))
+    return found
 
 
 def test_the_register_is_one_reading_per_syndicate_year_with_its_category_and_its_counts():
@@ -243,3 +270,22 @@ def test_each_quote_is_on_the_page_it_cites_in_the_file_with_that_hash():
         for page, quote in cited:
             assert 1 <= page <= len(texts), (r["stem"], page)
             assert fin.quote_on_page(quote, texts[page - 1]), (r["stem"], page, quote)
+
+
+def test_each_printed_page_is_the_folio_its_page_shows():
+    """A printed page the register states is the number the page itself prints, wherever the text layer carries it (all but
+    the 17 pages in READ_FROM_THE_PAGE, which were read from the rendered page). Needs the filings."""
+    data = _load()
+    entries = data["records"] + data["reviewed_not_run_off"]
+    present = _filings_present(entries)
+    if not present:
+        pytest.skip("source filings not present in this checkout")
+    checked = 0
+    for r in present:
+        texts = fin.page_texts(ROOT / r["source_file"])
+        for page, printed, _ in _citations(r):
+            if (r["stem"], page) in READ_FROM_THE_PAGE:
+                continue
+            assert int(printed) in _folio_candidates(texts[page - 1]), (r["stem"], page, printed)
+            checked += 1
+    assert checked >= 100, checked
