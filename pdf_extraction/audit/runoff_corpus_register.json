@@ -1,5 +1,5 @@
 {
- "purpose": "What the filings of the corpus say about a syndicate's own run-off, year by year (the author's decision of 1 October 2026, option A; round 62, fourth cycle). One entry per syndicate-year whose filing speaks of the syndicate itself running off or ceasing to underwrite, read from the filing's own words and classified by them. The whole-year run-off rule reads the WHOLE entries; the others are kept so that every reading is on record and a reader can see what was not counted, and why. An entry is classified only as far as the filing's words go: where they do not settle it the entry is NOTCOUNT and its note says so. A legacy vehicle (a syndicate that takes on other syndicates' liabilities by reinsurance to close or loss portfolio transfer) that says it is in run-off is WHOLE like any other; whether the analysis keeps it is for the analysis's assumed-business regime, not for this register.",
+ "purpose": "What the filings of the corpus say about a syndicate's own run-off, year by year (the author's decision of 1 October 2026, option A; round 62, fourth cycle). One entry per syndicate-year whose filing says that the syndicate itself is in run-off or has stopped, or will stop, underwriting, in whatever words it uses (some filings, Syndicate 1209's among them, never say run-off). The whole-year run-off rule reads the WHOLE entries; the others are kept so that every reading is on record and a reader can see what was not counted, and why. An entry is classified only as far as the filing's words go: where they do not settle it the entry is NOTCOUNT and its note says so. A legacy vehicle (a syndicate that takes on other syndicates' liabilities by reinsurance to close or loss portfolio transfer) that says it is in run-off is WHOLE like any other; whether the analysis keeps it is for the analysis's assumed-business regime, not for this register.",
  "recorded": "2026-10-01",
  "categories": {
   "WHOLE": "the filing states that the syndicate is in run-off, or has ceased underwriting, from the start of the year or before: a run-off year",
@@ -8,7 +8,8 @@
   "NOTCOUNT": "not counted as a run-off year: the filing's words do not settle it (the note says why), or the statement is about another entity"
  },
  "premium_register": "pdf_extraction/audit/runoff_register.json holds the premium rule's own readings (records with a development figure and a premium at or below zero). Eight of its entries are also entries here and are copies of it; tests/test_runoff_corpus_register.py fails if the two differ. 3623/2018, the one premium-register record that is no entry here, is a live syndicate.",
- "sources": "The local filings: syndicate_reports/pdfs (the converted PDF in pdf_extraction/html_converted for an HTML-only filing). source_page is 1-based in the file source_sha256 hashes (the converted PDF for an HTML filing); source_page_printed is the number printed on that page. Each quote in evidence, other_statements and note_quotes is verbatim from the page cited (white space collapsed; ' ... ' marks words left out), and tests/test_runoff_corpus_register.py holds each to its page. A phrase a note puts in single quotes is inside one of the entry's quotes.",
+ "sources": "The local filings: syndicate_reports/pdfs (the converted PDF in pdf_extraction/html_converted for an HTML-only filing). source_page is 1-based in the file source_sha256 hashes (the converted PDF for an HTML filing); source_page_printed is the number printed on that page. Each quote in evidence, other_statements and note_quotes is verbatim from the page cited (white space collapsed; ' ... ' marks words left out), and tests/test_runoff_corpus_register.py holds each to its page. A phrase a note puts in single quotes is inside one of the entry's quotes. The statements in scan_reviewed are quoted the same way.",
+ "scope": "What is complete, and how that was checked. (1) By test: every filing of the corpus (the 1,065 committed extraction records) is scanned with the statement forms in scripts/runoff_statement_forms.py, the forms in which a filing says that its syndicate is in run-off, has stopped underwriting or will stop. A filing that a form matches is an entry here, or the record reviewed apart (reviewed_not_run_off), or its matching sentences are listed in scan_reviewed with the reason each is not the syndicate's own run-off (another entity, a class or line, an office or channel, or not a stop); tests/test_runoff_corpus_register.py fails if a matching sentence is in none of them. For those forms, then, the WHOLE, PART and AFTER entries are complete over the whole corpus. (2) Not by test: the first version of this register, built from filings that say run-off or ceased underwriting, missed 17 syndicate-years that the forms find. The independent review of 1 October 2026 found ten of them (Syndicate 1209's 2015 to 2017 filings, which never say run-off, and seven others in the working sample), its verifier two more (779/2016 and 3500/2015), and the forms five more (1882/2016, 2008/2021, 3330/2017, 6132/2021 and 6133/2021). (3) Keyword and pattern scans can miss oblique wording, as both 1209 years show; the forms are the defence. One entry's own words match no form (4321/2023, which says the syndicate will no longer write new follow capacity insurance business), and a statement in words that no form matches and no reader found is not in this register.",
  "records": [
   {
    "stem": "syndicate_44_2018",
@@ -176,6 +177,37 @@
    "note": null
   },
   {
+   "stem": "syndicate_779_2016",
+   "syndicate": 779,
+   "year": 2016,
+   "category": "AFTER",
+   "runoff_from": "after the 2016 year of account",
+   "source_file": "syndicate_reports/pdfs/syndicate_779_2016.pdf",
+   "source_sha256": "5aa13cbfc3499c99bae026390ed8c6374c6b35c3bf439cc9a99cafad883678cd",
+   "source_page": 5,
+   "source_page_printed": "3",
+   "evidence": "Following the withdrawal of capital support, and despite the Managing Agent\u2019s best efforts, it was not possible to secure alternative capital to continue underwriting the Syndicate for the 2017 year of account. The Managing Agent has put the Syndicate into run-off with agreement of the Lloyd\u2019s Capacity Transfer Panel.",
+   "other_statements": [
+    {
+     "page": 5,
+     "page_printed": "3",
+     "quote": "The Syndicate capacity for the 2016 year of account is \u00a322.2m."
+    },
+    {
+     "page": 5,
+     "page_printed": "3",
+     "quote": "The Syndicate\u2019s principal activity continued to be the transaction of term life insurance and reinsurance business."
+    },
+    {
+     "page": 15,
+     "page_printed": "13",
+     "quote": "the Syndicate has ceased underwriting beyond the 2016 year of account and has not closed by reinsurance the 2014 year of account and is therefore in run-off."
+    }
+   ],
+   "note_quotes": [],
+   "note": "The 2016 year of account was underwritten (the filing gives its capacity as 22.2 million pounds and says the principal activity continued to be term life insurance and reinsurance); the run-off follows it, because no capital could be secured for a 2017 year of account."
+  },
+  {
    "stem": "syndicate_780_2018",
    "syndicate": 780,
    "year": 2018,
@@ -209,7 +241,7 @@
     }
    ],
    "note_quotes": [],
-   "note": null
+   "note": "The quote reproduces the OCR text of this scanned page, which misreads the superscript of the printed date; the page prints 31st December 2018."
   },
   {
    "stem": "syndicate_780_2020",
@@ -413,6 +445,114 @@
    "note": "The last open year of account, 2017, was reinsured to close into Syndicate 1861 at 31 December 2019, which ended the syndicate."
   },
   {
+   "stem": "syndicate_1209_2015",
+   "syndicate": 1209,
+   "year": 2015,
+   "category": "AFTER",
+   "runoff_from": "31 December 2015",
+   "source_file": "syndicate_reports/pdfs/syndicate_1209_2015.pdf",
+   "source_sha256": "523e59daecf9d9df6025896130287732d6a79818a5ab0f796ac5022599d4c27d",
+   "source_page": 5,
+   "source_page_printed": "2",
+   "evidence": "The Syndicate will not be participating in the 2016 year of account. All new and renewed business of the Syndicate will be written in Syndicate 2003, which CUAL is also the managing agent.",
+   "other_statements": [
+    {
+     "page": 5,
+     "page_printed": "2",
+     "quote": "The stamp capacity for the 2010 to 2015 years of account is \u00a3300m. The Syndicate will not be participating in 2016 year of account."
+    }
+   ],
+   "note_quotes": [],
+   "note": "The filing never says that the syndicate is in run-off. It says that the syndicate will not take part in the 2016 year of account and that all new and renewed business will be written in Syndicate 2003: the 2015 year of account is the syndicate's last."
+  },
+  {
+   "stem": "syndicate_1209_2016",
+   "syndicate": 1209,
+   "year": 2016,
+   "category": "WHOLE",
+   "runoff_from": "31 December 2015 (the 2015 year of account was the last year of participation)",
+   "source_file": "syndicate_reports/pdfs/syndicate_1209_2016.pdf",
+   "source_sha256": "0a760032f9a4996fdf3ebd9955158584953410d2de6f6a3145e0b387db7ee2e1",
+   "source_page": 5,
+   "source_page_printed": "2",
+   "evidence": "The Syndicate's last year of account participation is 2015. All new and renewed business of the Syndicate will be written in Syndicate 2003, which CUAL is also the managing agent.",
+   "other_statements": [
+    {
+     "page": 4,
+     "page_printed": "1",
+     "quote": "Syndicate capacity (\u00a3m)* _ 300.0"
+    },
+    {
+     "page": 4,
+     "page_printed": "1",
+     "quote": "*2015 year of account is the Syndicate's last year of participation."
+    },
+    {
+     "page": 6,
+     "page_printed": "3",
+     "quote": "In 2016, there is no active underwriter."
+    },
+    {
+     "page": 4,
+     "page_printed": "1",
+     "quote": "Gross premiums written (\u00a3m) 36.6 317.7"
+    },
+    {
+     "page": 16,
+     "page_printed": "13",
+     "quote": "Premiums written comprise premiums on contracts incepted during the financial year, together with adjustments made in the year to premiums written in prior accounting periods."
+    }
+   ],
+   "note_quotes": [],
+   "note": "The filing never says that the syndicate is in run-off. It says that 2015 was the syndicate's last year of participation, shows no capacity for 2016, says that there is no active underwriter in 2016 and that all new and renewed business will be written in Syndicate 2003. It prints gross premium written of 36.6 million pounds for 2016 (317.7 million for 2015) beside its own account of what premiums written comprise, which includes adjustments made in the year to premiums written in prior accounting periods; it does not say what the 2016 premium is."
+  },
+  {
+   "stem": "syndicate_1209_2017",
+   "syndicate": 1209,
+   "year": 2017,
+   "category": "WHOLE",
+   "runoff_from": "31 December 2015 (the 2015 year of account was the last year of participation)",
+   "source_file": "syndicate_reports/pdfs/syndicate_1209_2017.pdf",
+   "source_sha256": "9f8c32c98dbdeb7abca932209156ecd1ba6762dc68a7726b706c870389e9514e",
+   "source_page": 5,
+   "source_page_printed": "2",
+   "evidence": "The Syndicate's last underwriting year participation was 2015.",
+   "other_statements": [
+    {
+     "page": 4,
+     "page_printed": "1",
+     "quote": "Syndicate capacity (\u00a3m)* \u2014 \u2014"
+    },
+    {
+     "page": 4,
+     "page_printed": "1",
+     "quote": "*2015 underwriting year is the Syndicate's last year of participation."
+    },
+    {
+     "page": 5,
+     "page_printed": "2",
+     "quote": "2015 underwriting year is the Syndicate\u2019s last year of participation. As from 1 January 2018, it will be closed by Reinsurance to Close (\"RITC\") into Syndicate 2003."
+    },
+    {
+     "page": 6,
+     "page_printed": "3",
+     "quote": "In 2017, there is no active underwriter."
+    },
+    {
+     "page": 4,
+     "page_printed": "1",
+     "quote": "Gross premiums written (\u00a3m) 2.4 36.6"
+    },
+    {
+     "page": 17,
+     "page_printed": "14",
+     "quote": "Premiums written comprise premiums on contracts incepted during the financial year, together with adjustments made in the year to premiums written in prior accounting periods."
+    }
+   ],
+   "note_quotes": [],
+   "note": "The filing never says that the syndicate is in run-off. It says that 2015 was the syndicate's last year of participation, shows no capacity for 2017, says that there is no active underwriter in 2017 and that the 2015 year will be closed by reinsurance to close into Syndicate 2003 from 1 January 2018. It prints gross premium written of 2.4 million pounds for 2017 (36.6 million for 2016) beside its own account of what premiums written comprise, which includes adjustments made in the year to premiums written in prior accounting periods; it does not say what the 2017 premium is."
+  },
+  {
    "stem": "syndicate_1254_2022",
    "syndicate": 1254,
    "year": 2022,
@@ -463,6 +603,32 @@
    ],
    "note_quotes": [],
    "note": "Re-read on 1 October 2026: the reading of 30 September 2026 had this year as in run-off. The sentence describes a kind of syndicate, not this one's status; the filing says the syndicate transacts reinsurance to close and other legacy solutions, will continue to transact business as opportunities are identified, and wrote a new motor injury quota share for the 2023 year of account. A legacy vehicle with a run-off manager."
+  },
+  {
+   "stem": "syndicate_1301_2020",
+   "syndicate": 1301,
+   "year": 2020,
+   "category": "PART",
+   "runoff_from": "10 June 2020",
+   "source_file": "syndicate_reports/pdfs/syndicate_1301_2020.pdf",
+   "source_sha256": "e24cc312273800ee822ced0e27270d183f0b47602b667ad9236a6818918af858",
+   "source_page": 6,
+   "source_page_printed": "4",
+   "evidence": "On 10 June 2020, Enstar Group announced that they were placing StarStone International operations, including the Syndicate, into an immediate and orderly run-off.",
+   "other_statements": [
+    {
+     "page": 7,
+     "page_printed": "5",
+     "quote": "Gross written premiums decreased to \u00a3144.5m (2019: \u00a3175.4m) due to the cessation of underwriting mid-way through the year."
+    },
+    {
+     "page": 7,
+     "page_printed": "5",
+     "quote": "the decision by Enstar Group to place the Syndicate\u2019s 2020 and prior underwriting years into run-off."
+    }
+   ],
+   "note_quotes": [],
+   "note": "The filing dates the run-off to 10 June 2020 and puts the syndicate's 2020 and prior underwriting years into it; it says that gross written premium fell because of the cessation of underwriting mid-way through the year."
   },
   {
    "stem": "syndicate_1347_2023",
@@ -619,6 +785,27 @@
    "source_page_printed": "5",
    "evidence": "Until the point of closure, the Syndicate will be managed as a run-off syndicate.",
    "other_statements": [],
+   "note_quotes": [],
+   "note": null
+  },
+  {
+   "stem": "syndicate_1882_2016",
+   "syndicate": 1882,
+   "year": 2016,
+   "category": "AFTER",
+   "runoff_from": "31 December 2016",
+   "source_file": "syndicate_reports/pdfs/syndicate_1882_2016.pdf",
+   "source_sha256": "8b209980dfcde7462d2ba9ff6c5cf560cc684eae26c8ea435d60dafb3f27b7b1",
+   "source_page": 5,
+   "source_page_printed": "4",
+   "evidence": "The syndicate had a capacity of \u00a393.0m for 2016 (2015: \u00a393.0m) and ceased to trade on 31 December 2016.",
+   "other_statements": [
+    {
+     "page": 4,
+     "page_printed": "3",
+     "quote": "Syndicate 1882 formally ceased to trade on 31 December 2016, with elements of the portfolio being renewed into Syndicate 2488 with effect from 1 January 2017."
+    }
+   ],
    "note_quotes": [],
    "note": null
   },
@@ -830,6 +1017,27 @@
    "note": "Re-read on 1 October 2026: the reading of 30 September 2026 had this year as in run-off, on the run-off manager's report. As for 2023, the filing never says the syndicate is in run-off; it says the syndicate underwrites reinsurance to close and legacy reinsurance and continues to seek business, and that there were no new transactions in 2024. A legacy vehicle that did no deal in the year. Ambiguous, so not counted."
   },
   {
+   "stem": "syndicate_1897_2018",
+   "syndicate": 1897,
+   "year": 2018,
+   "category": "AFTER",
+   "runoff_from": "1 July 2019",
+   "source_file": "syndicate_reports/pdfs/syndicate_1897_2018.pdf",
+   "source_sha256": "8bb62da0896b7505b2108026451918d44ccbe9fe02f7faf6a2a46551e3acbcb1",
+   "source_page": 8,
+   "source_page_printed": "5",
+   "evidence": "The Syndicate will cease writing business on the 1st July 2019 and enter into a voluntary run off",
+   "other_statements": [
+    {
+     "page": 43,
+     "page_printed": "40",
+     "quote": "The Syndicate will cease writing business on the 1st July 2019 and enter into a voluntary run off"
+    }
+   ],
+   "note_quotes": [],
+   "note": "A future-dated statement: the filing for 2018 says that the syndicate will cease writing business on 1 July 2019, so the run-off begins after the year."
+  },
+  {
    "stem": "syndicate_1897_2019",
    "syndicate": 1897,
    "year": 2019,
@@ -943,11 +1151,32 @@
    "note": "A legacy vehicle with a run-off manager; the filing does not say the syndicate itself is in run-off, says it wrote no new business in 2024 and that it continues to look for suitable transactions."
   },
   {
+   "stem": "syndicate_2007_2018",
+   "syndicate": 2007,
+   "year": 2018,
+   "category": "AFTER",
+   "runoff_from": "1 January 2019",
+   "source_file": "syndicate_reports/pdfs/syndicate_2007_2018.pdf",
+   "source_sha256": "9c569c48657ac307cf22ad411f4d9cf93f1727a1f438f65f84d9fe32ddc838bc",
+   "source_page": 7,
+   "source_page_printed": "5",
+   "evidence": "Effective 1 January 2019, the Syndicate was placed into run-off. All AXIS Lloyd's sourced business will thereafter transact through Syndicate 1686.",
+   "other_statements": [
+    {
+     "page": 7,
+     "page_printed": "5",
+     "quote": "The Syndicate will continue to be managed by AMAL but will no longer be accepting business from 1 January 2019 onwards."
+    }
+   ],
+   "note_quotes": [],
+   "note": null
+  },
+  {
    "stem": "syndicate_2007_2019",
    "syndicate": 2007,
    "year": 2019,
    "category": "WHOLE",
-   "runoff_from": "January 2019",
+   "runoff_from": "1 January 2019",
    "source_file": "syndicate_reports/pdfs/syndicate_2007_2019.pdf",
    "source_sha256": "c3a1627a0890de18eca6965ea0aabfdda255ae2fda96faacbbf92f13e8deeaaa",
    "source_page": 5,
@@ -958,10 +1187,20 @@
      "page": 8,
      "page_printed": "6",
      "quote": "As it is in run off the Syndicate has not be participated on the Lloyd's Brussels platform."
+    },
+    {
+     "page": 5,
+     "page_printed": "3",
+     "quote": "Until 31st December 2018 the Syndicate wrote (re)insurance across marine, energy, property and specialty lines with a focus on credit and political as well as cyber insurance. From 1st January 2019 onwards business has been written through Syndicate 1686."
+    },
+    {
+     "page": 5,
+     "page_printed": "3",
+     "quote": "The written premium arises from 2018 and prior underwriting years, in particular under the delegated underwriting portfolios."
     }
    ],
    "note_quotes": [],
-   "note": "The filing gives the month, not the day."
+   "note": "The filing dates the run-off to January 2019 in one sentence and gives the day in the next two: the syndicate wrote until 31st December 2018, and from 1st January 2019 onwards business has been written through Syndicate 1686. It says the year's written premium arises from 2018 and prior underwriting years, in particular under the delegated underwriting portfolios."
   },
   {
    "stem": "syndicate_2008_2015",
@@ -1022,6 +1261,32 @@
    "other_statements": [],
    "note_quotes": [],
    "note": "A legacy vehicle: its principal activity is finality solutions for Lloyd's run-off business; the filing does not say the syndicate itself is in run-off."
+  },
+  {
+   "stem": "syndicate_2008_2021",
+   "syndicate": 2008,
+   "year": 2021,
+   "category": "WHOLE",
+   "runoff_from": null,
+   "source_file": "syndicate_reports/pdfs/syndicate_2008_2021.pdf",
+   "source_sha256": "fefde8bf0ec5b23971260839a5327cfe8115cc9d7a6905115177190d19a9c78b",
+   "source_page": 9,
+   "source_page_printed": "7",
+   "evidence": "The Syndicate specialises in run-off, and is not a live underwriter of new policies",
+   "other_statements": [
+    {
+     "page": 6,
+     "page_printed": "4",
+     "quote": "The principal activity of the business of Syndicate 2008 is to provide finality solutions for Lloyd\u2019s run-off business through either reinsurance to close, quota share agreements, adverse development cover or loss portfolio transfer."
+    },
+    {
+     "page": 29,
+     "page_printed": "27",
+     "quote": "Given that the business of the Syndicate is reinsuring Syndicates in run-off, the remaining insurance risk is primarily claims and reserving risk."
+    }
+   ],
+   "note_quotes": [],
+   "note": "A legacy vehicle: the filing says the syndicate is not a live underwriter of new policies and that its principal activity is to provide finality solutions for run-off business, including by reinsurance to close and loss portfolio transfer."
   },
   {
    "stem": "syndicate_2008_2023",
@@ -1332,6 +1597,32 @@
    "note": "Contradicted by the same filing, which says it is the fourth year of the syndicate's operations, that its principal activity is the underwriting of property insurance business, and that the 2021 year of account is open: the sentence reads as template text."
   },
   {
+   "stem": "syndicate_3330_2017",
+   "syndicate": 3330,
+   "year": 2017,
+   "category": "WHOLE",
+   "runoff_from": null,
+   "source_file": "syndicate_reports/pdfs/syndicate_3330_2017.pdf",
+   "source_sha256": "40151f9d45ae272bb96c49f1e72fa5579803ec7ef934f9e5e03ca5478d7bce0a",
+   "source_page": 12,
+   "source_page_printed": "10",
+   "evidence": "The continuing activity of the syndicate is the run-off of insurance liabilities.",
+   "other_statements": [
+    {
+     "page": 17,
+     "page_printed": "15",
+     "quote": "The syndicate continues to underwrite RITC for syndicates in run-off as the opportunity arises."
+    },
+    {
+     "page": 6,
+     "page_printed": "4",
+     "quote": "On 1 January 2017, the 2017 year of account accepted the Reinsurance to Close (RITC) of the 2014 year of account which consisted of the 2007 year of account of Syndicate 1208 and the 2011 year of account of Syndicate 102."
+    }
+   ],
+   "note_quotes": [],
+   "note": "A legacy vehicle: the filing says the continuing activity of the syndicate is the run-off of insurance liabilities, and also that it continues to underwrite reinsurance to close for syndicates in run-off."
+  },
+  {
    "stem": "syndicate_3330_2018",
    "syndicate": 3330,
    "year": 2018,
@@ -1356,6 +1647,58 @@
    ],
    "note_quotes": [],
    "note": "A legacy vehicle: the filing says the continuing activity of the syndicate is the run-off of insurance liabilities, and also that it continues to underwrite reinsurance to close for syndicates in run-off. A legacy vehicle: it also takes on other syndicates' liabilities by reinsurance to close or loss portfolio transfer."
+  },
+  {
+   "stem": "syndicate_3334_2019",
+   "syndicate": 3334,
+   "year": 2019,
+   "category": "AFTER",
+   "runoff_from": "1 January 2020",
+   "source_file": "syndicate_reports/pdfs/syndicate_3334_2019.pdf",
+   "source_sha256": "2ec87a4086f78e7081c78b5ea6569324b886cd236c966363c28119194a654c6b",
+   "source_page": 8,
+   "source_page_printed": "8",
+   "evidence": "Following the decision to cease underwriting through Syndicate 3334 with effect from 1 January 2020, Belinda Taylor has been appointed as the Run-Off Manager.",
+   "other_statements": [
+    {
+     "page": 8,
+     "page_printed": "8",
+     "quote": "a Group Board decision was made to transfer the Syndicate\u2019s underwriting business to Syndicate 4000 from 2020 and place Syndicate 3334 into run-off."
+    }
+   ],
+   "note_quotes": [],
+   "note": null
+  },
+  {
+   "stem": "syndicate_3500_2015",
+   "syndicate": 3500,
+   "year": 2015,
+   "category": "WHOLE",
+   "runoff_from": null,
+   "source_file": "syndicate_reports/pdfs/syndicate_3500_2015.pdf",
+   "source_sha256": "01e6e7fa1f6c04019ac76b4b61563a5b0730b67b048d9b871bb011fcfee29d6b",
+   "source_page": 8,
+   "source_page_printed": "7",
+   "evidence": "The principal activity of Syndicate 3500 is the run-off of its existing liabilities.",
+   "other_statements": [
+    {
+     "page": 24,
+     "page_printed": "23",
+     "quote": "As Syndicate 3500 is in runoff its exposures to reinsurers and insurance intermediaries are determined by contracts previously written."
+    },
+    {
+     "page": 27,
+     "page_printed": "26",
+     "quote": "is in run-off and premiums earned during the year are in respect of premiums and adjustments made in the year to estimates of premiums written in prior years."
+    },
+    {
+     "page": 8,
+     "page_printed": "7",
+     "quote": "Additionally, RiverStone Managing Agency actively pursues opportunities to reinsure to close further run-off portfolios into Syndicate 3500."
+    }
+   ],
+   "note_quotes": [],
+   "note": "A legacy vehicle: the filing says the principal activity of the syndicate is the run-off of its existing liabilities and that its managing agent actively pursues opportunities to reinsure to close further run-off portfolios into it."
   },
   {
    "stem": "syndicate_3500_2018",
@@ -1488,11 +1831,11 @@
     {
      "page": 6,
      "page_printed": "3",
-     "quote": "2024 YOA Open 2023 YOA Open 2022 YOA Closed"
+     "quote": "2024 YOA Open ... 2023 YOA Open ... 2022 YOA Closed"
     }
    ],
    "note_quotes": [],
-   "note": "The run-off begins on 1 January 2025, after the year: in 2024 the syndicate was still underwriting (its 2024 year of account is open) and the negative premium is not a run-off signal. HTML filing, read from its converted PDF."
+   "note": "The run-off begins on 1 January 2025, after the year: in 2024 the syndicate was still underwriting (its 2024 year of account is open) and the negative premium is not a run-off signal. HTML filing, read from its converted PDF. The last quote is the three header cells of the page's return-on-capacity table, each a year of account with its status beneath it; the three dots mark the joins between cells."
   },
   {
    "stem": "syndicate_5678_2019",
@@ -1540,6 +1883,36 @@
    "note": null
   },
   {
+   "stem": "syndicate_6105_2015",
+   "syndicate": 6105,
+   "year": 2015,
+   "category": "AFTER",
+   "runoff_from": "after the 2015 year of account (the filing gives no date)",
+   "source_file": "syndicate_reports/pdfs/syndicate_6105_2015.pdf",
+   "source_sha256": "c86d0b7f2f1bfd78f8f57b1f53059ac48df4c5f374a1d8cc689e23d6459665bf",
+   "source_page": 10,
+   "source_page_printed": "8",
+   "evidence": "The Syndicate has ceased underwriting. The capacity on the final 2015 YOA is \u00a360.0m.",
+   "other_statements": [],
+   "note_quotes": [],
+   "note": null
+  },
+  {
+   "stem": "syndicate_6111_2018",
+   "syndicate": 6111,
+   "year": 2018,
+   "category": "AFTER",
+   "runoff_from": "31 December 2018",
+   "source_file": "syndicate_reports/pdfs/syndicate_6111_2018.pdf",
+   "source_sha256": "b8af1ffc57c71e0f61839f37b35b301009f1d3259b85c36b5d787b039a95b238",
+   "source_page": 6,
+   "source_page_printed": "3",
+   "evidence": "The 2018 underwriting year is the Syndicate\u2019s last year of participation in underwriting the whole account quota share reinsurance of Syndicate 2003.",
+   "other_statements": [],
+   "note_quotes": [],
+   "note": null
+  },
+  {
    "stem": "syndicate_6115_2014",
    "syndicate": 6115,
    "year": 2014,
@@ -1553,6 +1926,32 @@
    "other_statements": [],
    "note_quotes": [],
    "note": null
+  },
+  {
+   "stem": "syndicate_6123_2019",
+   "syndicate": 6123,
+   "year": 2019,
+   "category": "AFTER",
+   "runoff_from": "after the 2019 year of account (the filing gives no date)",
+   "source_file": "syndicate_reports/pdfs/syndicate_6123_2019.pdf",
+   "source_sha256": "888733dc8822afea693cb808962e0fbca29cbffe845270796bc7e605f86b795c",
+   "source_page": 21,
+   "source_page_printed": "18",
+   "evidence": "2019 was the final year in which SPA 6123 wrote new business and itis therefore now in run- off.",
+   "other_statements": [
+    {
+     "page": 25,
+     "page_printed": "22",
+     "quote": "2019 was the final year in which SPA 6123 wrote new business and it is therefore now in run- off."
+    },
+    {
+     "page": 9,
+     "page_printed": "6",
+     "quote": "The SPA has ceased to underwrite for the 2020 underwriting year and as such these annual accounts are not prepared on a going concern basis."
+    }
+   ],
+   "note_quotes": [],
+   "note": "The text layer of page 21 reads the first quote's 'it is' as 'itis'; page 25 has the same sentence with the words apart."
   },
   {
    "stem": "syndicate_6124_2015",
@@ -1624,6 +2023,48 @@
    "evidence": "have decided to cease writing quota share re-insurance of Chaucer Syndicate 1084 from 1s January 2019.",
    "other_statements": [],
    "note_quotes": [],
+   "note": "The quote reproduces the OCR text of this scanned page, which misreads the superscript of the printed date; the page prints 1st January 2019."
+  },
+  {
+   "stem": "syndicate_6132_2021",
+   "syndicate": 6132,
+   "year": 2021,
+   "category": "AFTER",
+   "runoff_from": "after the 2021 year of account (the filing gives no date)",
+   "source_file": "syndicate_reports/pdfs/syndicate_6132_2021.pdf",
+   "source_sha256": "63d07e785fa4e2f4bcb59d85734f90952d803de65fd96620636d8b57bc77dfe6",
+   "source_page": 5,
+   "source_page_printed": "3",
+   "evidence": "The 2021 year of account is the final underwriting year for the Syndicate, and the Syndicate is now entering run off.",
+   "other_statements": [
+    {
+     "page": 5,
+     "page_printed": "3",
+     "quote": "When the 2021 year is closed this will be RITC into Syndicate 1955."
+    }
+   ],
+   "note_quotes": [],
+   "note": null
+  },
+  {
+   "stem": "syndicate_6133_2021",
+   "syndicate": 6133,
+   "year": 2021,
+   "category": "AFTER",
+   "runoff_from": "2022 (the filing says that from 2022 the SPA will cease underwriting)",
+   "source_file": "syndicate_reports/pdfs/syndicate_6133_2021.pdf",
+   "source_sha256": "559064af10e82c5adaeb16d556b800fa0054252084bd1e35107cb8b3492af43a",
+   "source_page": 8,
+   "source_page_printed": "5",
+   "evidence": "From 2022 SPA 6133 will cease underwriting and hence will have no approved capacity.",
+   "other_statements": [
+    {
+     "page": 14,
+     "page_printed": "11",
+     "quote": "The syndicate will not be writing new business for the 2022 year of account."
+    }
+   ],
+   "note_quotes": [],
    "note": null
   },
   {
@@ -1665,6 +2106,1050 @@
     }
    ],
    "reason": "The filing does not say the syndicate is in run-off. It describes a legacy consolidator whose principal activity is reinsurance to close, loss portfolio transfer and adverse development cover business, that wrote no deals in 2023 (gross premium 5.6m against 333.4m) and says it continues to pursue them. Its 2024 filing (syndicate_1110_2024, PART) puts the run-off in July 2024. On the filing's words the syndicate was not in run-off in 2023."
+  }
+ ],
+ "scan_reviewed": [
+  {
+   "stem": "syndicate_33_2018",
+   "syndicate": 33,
+   "year": 2018,
+   "source_sha256": "e33c5d9dadf2aeb47e694711a092cb40ee9afca7c2fb4921ed38798c83f9d91b",
+   "statements": [
+    {
+     "page": 43,
+     "quote": "In addition the aviation and portfolio accounts were transferred from Syndicate 3624 for the 2018 year of account, with the aviation account subsequently put into run-off. Premium income is forecast to increase by approximately 23% on 2017 when"
+    }
+   ],
+   "reason": "class or line: the aviation account, transferred from Syndicate 3624 for the 2018 year of account, was subsequently put into run-off: one account of the syndicate, not the syndicate"
+  },
+  {
+   "stem": "syndicate_218_2015",
+   "syndicate": 218,
+   "year": 2015,
+   "source_sha256": "7bf73b27a292e75dc6ff1b991adf0f7aa389d2d1fe235ed48b0a794c8f928e8d",
+   "statements": [
+    {
+     "page": 42,
+     "quote": "is \u00a32,629,834. No balance is outstanding at the year end. The company ceased to write new business with effect from 1 January 2014. ERS Syndicate Services Limited (\u201cERS"
+    }
+   ],
+   "reason": "another entity: ERS A&H, a company that placed business for the syndicate, ceased to write new business on 1 January 2014"
+  },
+  {
+   "stem": "syndicate_218_2018",
+   "syndicate": 218,
+   "year": 2018,
+   "source_sha256": "6685534333a29e2579485c74c5e25b268b2d9499ca920af612554cacbfbbe1ed",
+   "statements": [
+    {
+     "page": 9,
+     "quote": "competitor perspective in specialised segments with Lloyd\u2019s markets and MGA\u2019s ceasing to trade, others have merged. Despite this, ERS has seen a small number of new"
+    }
+   ],
+   "reason": "not a stop: market comment: MGAs and Lloyd's markets ceasing to trade and others merging; nothing about the syndicate's own business"
+  },
+  {
+   "stem": "syndicate_382_2019",
+   "syndicate": 382,
+   "year": 2019,
+   "source_sha256": "d4f61913fc36fc64626216f40f03e8c0c155d8ebadd66131a368da0dc30c63c1",
+   "statements": [
+    {
+     "page": 6,
+     "quote": "impact of exiting certain lines of business in the previous financial year. The Syndicate\u2019s Singapore branch was placed into run-off at the end of 2018 and as result incurred a significantly reduced level"
+    }
+   ],
+   "reason": "office or channel: the syndicate's Singapore branch was placed into run-off at the end of 2018: a branch, not the syndicate"
+  },
+  {
+   "stem": "syndicate_457_2022",
+   "syndicate": 457,
+   "year": 2022,
+   "source_sha256": "13f5fc488c1afbc621c4de1c7b0845c727f057acb7423eabbd8876cd998a1b20",
+   "statements": [
+    {
+     "page": 13,
+     "quote": "become a major insurer in that field. A further decision taken was to put our other managed syndicate, Innovation Syndicate 1840 (the first Syndicate in a Box (SiaB) at Lloyd\u2019s), into an orderly run-off and to integrate its business into Syndicate 457. This was in line with"
+    }
+   ],
+   "reason": "another entity: Innovation Syndicate 1840, another syndicate managed by the same agent, was put into an orderly run-off and its business integrated into Syndicate 457"
+  },
+  {
+   "stem": "syndicate_510_2020",
+   "syndicate": 510,
+   "year": 2020,
+   "source_sha256": "0ad5b2e6632ef051a9d2491db0e7c8189912c25196851d24c8942093c2520e5f",
+   "statements": [
+    {
+     "page": 39,
+     "quote": "syndicate and impairments related to the Hong Kong branch of Kiln which ceased trading in 2019 and Kiln Regional Underwriting Limited which ceased accepting"
+    }
+   ],
+   "reason": "another entity: the Hong Kong branch of Kiln and Kiln Regional Underwriting Limited, related companies whose expenses were paid on behalf of the syndicate, ceased trading or ceased accepting business"
+  },
+  {
+   "stem": "syndicate_609_2016",
+   "syndicate": 609,
+   "year": 2016,
+   "source_sha256": "c5092f64940a3cb8cedec1457ead3a097a6c539564bfc1cf9e1a67a59c2b3658",
+   "statements": [
+    {
+     "page": 36,
+     "quote": "Syndicate 609 to ASIA in calendar year 2016 (2015 \u2013 S$4,016,000). ASIA ceased to write business in 2016 and is now in run-o\ufb00 . ARMS is incorporated in Washington State,"
+    }
+   ],
+   "reason": "another entity: ASIA, the Lloyd's Singapore service company that charges fees to the syndicate, ceased to write business in 2016 and is in run-off"
+  },
+  {
+   "stem": "syndicate_609_2017",
+   "syndicate": 609,
+   "year": 2017,
+   "source_sha256": "4f179f639d79244d38962f6842170b8e9bc635add9b26e3bc405a8cc18734470",
+   "statements": [
+    {
+     "page": 36,
+     "quote": "Syndicate 609 to ASIA in calendar year 2017 (2016 \u2013 S$4,973,000). ASIA ceased to write business in 2016 and is now in run-off."
+    },
+    {
+     "page": 68,
+     "quote": "S$5,335,000 were paid by Syndicate 609 to ASIA on the 2015 year of account. Asia ceased to write business in 2016 and is now in run-off. ARMS is incorporated in Washington State,"
+    }
+   ],
+   "reason": "another entity: ASIA, the Lloyd's Singapore service company that charges fees to the syndicate, ceased to write business in 2016 and is in run-off"
+  },
+  {
+   "stem": "syndicate_609_2018",
+   "syndicate": 609,
+   "year": 2018,
+   "source_sha256": "c73577491245634ddfe898627f728403fa73f4bd55c759c372ed16f45269004e",
+   "statements": [
+    {
+     "page": 38,
+     "quote": "Syndicate 609 to ASIA in calendar year 2018 (2017 - S$1,785,000). ASIA ceased to write business in 2016 and is now in run-o\ufb00 . ARMS is incorporated in Washington State,"
+    },
+    {
+     "page": 69,
+     "quote": "S$4,716,000 were paid by Syndicate 609 to ASIA on the 2016 year of account. ASIA ceased to write business in 2016 and is now in run-o\ufb00 . ARMS is incorporated in Washington State,"
+    }
+   ],
+   "reason": "another entity: ASIA, the Lloyd's Singapore service company that charges fees to the syndicate, ceased to write business in 2016 and is in run-off"
+  },
+  {
+   "stem": "syndicate_623_2018",
+   "syndicate": 623,
+   "year": 2018,
+   "source_sha256": "31b62b11b0719c672140dcbe5f4b8b6f917aa98d511e45a2b51b3e90d51de06d",
+   "statements": [
+    {
+     "page": 11,
+     "quote": "and engineering book in a professional and orderly manner, but we have ceased underwriting new business. This decision affects only property risks and has no bearing on the construction"
+    }
+   ],
+   "reason": "class or line: the construction and engineering property book is being run off and no new business of that class is written; the page says the syndicate's construction liability and other business continue"
+  },
+  {
+   "stem": "syndicate_1084_2021",
+   "syndicate": 1084,
+   "year": 2021,
+   "source_sha256": "ca527ee54de30e1a5230d15f561ac54cba163c98f0043d50c9f9214d8e920782",
+   "statements": [
+    {
+     "page": 37,
+     "quote": "liabilities of Syndicate 2088 for the 2019 Year of Account. Syndicate 2088 ceased underwriting on 1 January 2020, and was also managed by Chaucer Syndicates Limited."
+    }
+   ],
+   "reason": "another entity: Syndicate 2088, also managed by Chaucer, ceased underwriting on 1 January 2020"
+  },
+  {
+   "stem": "syndicate_1176_2023",
+   "syndicate": 1176,
+   "year": 2023,
+   "source_sha256": "4d03e196957a2b16b5636a0acd5738529eb7dfeaf7952264b46bfa80e32acc18",
+   "statements": [
+    {
+     "page": 7,
+     "quote": "scheme, with unlimited reinsurance provided by the UK Government, was to cease accepting new business from 31 December 2023. The Syndicate only utilised this facility for a"
+    }
+   ],
+   "reason": "another entity: the UK Property Terrorism scheme, a government-backed reinsurance scheme the syndicate used for one risk, stopped accepting new business from 31 December 2023"
+  },
+  {
+   "stem": "syndicate_1176_2024",
+   "syndicate": 1176,
+   "year": 2024,
+   "source_sha256": "0461beefec2bc24f18db7dbec60385424634f4258aea12e17d83d41b4da50efd",
+   "statements": [
+    {
+     "page": 7,
+     "quote": "Terrorism scheme, with unlimited reinsurance provided by the UK Government, ceased accepting new business from 31 December 2023. The Syndicate only utilised this facility for a"
+    }
+   ],
+   "reason": "another entity: the UK Property Terrorism scheme, a government-backed reinsurance scheme the syndicate used for one risk, stopped accepting new business from 31 December 2023"
+  },
+  {
+   "stem": "syndicate_1183_2019",
+   "syndicate": 1183,
+   "year": 2019,
+   "source_sha256": "1c22275e6fe5bb660813a007ac81eeb124378ca76cc365543ec071bb788089bd",
+   "statements": [
+    {
+     "page": 7,
+     "quote": "During 2019, coverholder operations in Sydney, Dubai, Santiago and Shanghai ceased to underwrite on behalf of the syndicate. Gross premiums written increased by $35.2m"
+    }
+   ],
+   "reason": "office or channel: coverholder operations in Sydney, Dubai, Santiago and Shanghai ceased to underwrite on behalf of the syndicate"
+  },
+  {
+   "stem": "syndicate_1183_2020",
+   "syndicate": 1183,
+   "year": 2020,
+   "source_sha256": "50d5e9d3775a4e07926346067870ed84e16585ab1fa0c9a111c095fb41a6b8bc",
+   "statements": [
+    {
+     "page": 7,
+     "quote": "During 2019, coverholder operations in Sydney, Dubai, Santiago and Shanghai ceased to underwrite on behalf of the syndicate. Gross premiums written increased by $73.4m"
+    }
+   ],
+   "reason": "office or channel: coverholder operations in Sydney, Dubai, Santiago and Shanghai ceased to underwrite on behalf of the syndicate"
+  },
+  {
+   "stem": "syndicate_1200_2019",
+   "syndicate": 1200,
+   "year": 2019,
+   "source_sha256": "44ff74aa8da9dfb1856bb0f28a851cef5445286df2a4b597f093f7d5bf797ae4",
+   "statements": [
+    {
+     "page": 10,
+     "quote": "losses have largely arisen from sub classes within these lines that we no longer underwrite. 2018 AND 2019 YEARS OF ACCOUNT \u2013 OPEN Following the events of 2017 we"
+    }
+   ],
+   "reason": "class or line: sub-classes within its lines that the syndicate no longer underwrites; the same page reports its 2018 and 2019 years of account as open"
+  },
+  {
+   "stem": "syndicate_1414_2021",
+   "syndicate": 1414,
+   "year": 2021,
+   "source_sha256": "021c308ccceb695603c1ae70da907651cdafef24a338de348bdb8288c2511526",
+   "statements": [
+    {
+     "page": 5,
+     "quote": "year, Ascot Underwriting Asia (Private Limited) (AUA) a platform allowing Syndicate 1414 to underwrite Lloyd's Asia risks which is currently in run-off and expected to be closed during 2022, and Ascot Insurance Services Limited"
+    }
+   ],
+   "reason": "another entity: Ascot Underwriting Asia, a platform that allowed the syndicate to underwrite Lloyd's Asia risks, is in run-off"
+  },
+  {
+   "stem": "syndicate_1492_2017",
+   "syndicate": 1492,
+   "year": 2017,
+   "source_sha256": "8710d8c56c1c6cfc7fe06f53e8fd797f408e2caf139229e2afad185cfaaaca06",
+   "statements": [
+    {
+     "page": 7,
+     "quote": "underwriting performance \u2013 our cornerstone equity investor, Istmo Re, ceased trading and the property account was impacted by unprecedented catastrophe events."
+    }
+   ],
+   "reason": "another entity: the syndicate's cornerstone equity investor, Istmo Re, ceased trading"
+  },
+  {
+   "stem": "syndicate_1686_2018",
+   "syndicate": 1686,
+   "year": 2018,
+   "source_sha256": "c81a1688b051a692ebd56f821c21a5a0491254626f1c66d4c81e4275f13f1ae1",
+   "statements": [
+    {
+     "page": 7,
+     "quote": "% (3.6)% (26.3)% (15.5)% FUTURE DEVELOPMENTS Effective | January 2019, Syndicate 2007, which was acquired by the Group in 2017, was placed into run-off. All AXIS Lloyd's sourced business will thereafter transact through Syndicate"
+    },
+    {
+     "page": 36,
+     "quote": "(2017: USD 10.1m). 24, EVENT SINCE YEAR END Effective 1 January 2019, Syndicate 2007 was placed into run-off. All AXIS Lloyd's sourced business will thereafter transact through Syndicate"
+    }
+   ],
+   "reason": "another entity: Syndicate 2007, another AXIS syndicate, was placed into run-off effective 1 January 2019 and its business is transacted through Syndicate 1686"
+  },
+  {
+   "stem": "syndicate_1686_2019",
+   "syndicate": 1686,
+   "year": 2019,
+   "source_sha256": "4799ab9ad2ebd3cf71d4fa185af8613c975e6037b9448d56bc516b45dbc81be2",
+   "statements": [
+    {
+     "page": 7,
+     "quote": "_____________________________________________________________________________________________________5 FUTURE DEVELOPMENTS Following Syndicate 2007 being placed into run-off, all new and renewing AXIS Lloyd's sourced business was transacted through"
+    }
+   ],
+   "reason": "another entity: Syndicate 2007, another AXIS syndicate, was placed into run-off effective 1 January 2019 and its business is transacted through Syndicate 1686"
+  },
+  {
+   "stem": "syndicate_1686_2020",
+   "syndicate": 1686,
+   "year": 2020,
+   "source_sha256": "32b324b5d75735f29d1673cba5a8e86ee9631ed832441489dc92df1d9460addf",
+   "statements": [
+    {
+     "page": 6,
+     "quote": "casualty, accident and health, political risk and reinsurance. Following Syndicate 2007 being placed into run-off, all new and renewing AXIS Lloyd's sourced business was transacted through"
+    },
+    {
+     "page": 7,
+     "quote": "transaction has no impact on equity. Reinsurance to Close In line with the run-off closure plan, the 2018 year of account of Syndicate 2007 and Syndicate 6129 closed"
+    },
+    {
+     "page": 40,
+     "quote": "SUBSEQUENT EVENTS With effect from 1 January 2021 and in line with the run-off closure plan, Syndicate 2007 and Syndicate 6129 ceased having been subject to a Reinsurance"
+    }
+   ],
+   "reason": "another entity: Syndicate 2007, another AXIS syndicate, was placed into run-off effective 1 January 2019 and its business is transacted through Syndicate 1686; the run-off closure plan is that of Syndicates 2007 and 6129, whose 2018 years of account closed into Syndicate 1686's 2019 year of account"
+  },
+  {
+   "stem": "syndicate_1686_2021",
+   "syndicate": 1686,
+   "year": 2021,
+   "source_sha256": "5048c58275b2778a15b8ddd40173c8652c8cc5d28ecd1f73caa5608a14fba0ad",
+   "statements": [
+    {
+     "page": 6,
+     "quote": "casualty, accident and health, political risk and reinsurance. Following Syndicate 2007 being placed into run-off, all new and renewing AXIS Lloyd's sourced business was transacted through"
+    }
+   ],
+   "reason": "another entity: Syndicate 2007, another AXIS syndicate, was placed into run-off effective 1 January 2019 and its business is transacted through Syndicate 1686"
+  },
+  {
+   "stem": "syndicate_1729_2022",
+   "syndicate": 1729,
+   "year": 2022,
+   "source_sha256": "4227fe412454c6e6dee663129fd7765e23eb5e77174bcff9298e8d8b0f170f0e",
+   "statements": [
+    {
+     "page": 8,
+     "quote": "Stamp Capacity In 2022 our stamp capacity was \u00a3210m for Syndicate 1729. SPA 6131 was placed into run off at the end of 2021 and, when the 2021 YOA closes at the end of 2023, it"
+    }
+   ],
+   "reason": "another entity: SPA 6131, a special purpose arrangement, was placed into run-off at the end of 2021 and its 2021 year of account is to be reinsured to close into Syndicate 1729"
+  },
+  {
+   "stem": "syndicate_1861_2019",
+   "syndicate": 1861,
+   "year": 2019,
+   "source_sha256": "f849f7eedc981909014d8af0e9ab1d0a1feaf2e481f44bc1d7310b1dc39b459b",
+   "statements": [
+    {
+     "page": 6,
+     "quote": "at 31 December 2018 were called. At 31 December 2019, in line with the run-off closure plan that they had been operating under since ceasing to underwrite at 1 January 2018, Syndicate 5820\u2019s and Syndicate 1206\u2019s 2017 years of"
+    }
+   ],
+   "reason": "another entity: Syndicates 5820 and 1206, which operated under a run-off closure plan after ceasing to underwrite on 1 January 2018; their 2017 years of account closed into Syndicate 1861's 2018 year of account"
+  },
+  {
+   "stem": "syndicate_1861_2020",
+   "syndicate": 1861,
+   "year": 2020,
+   "source_sha256": "e93ee573f5f1e9c7e9ce8528df7bde31f1636bbb3aa8d09f033e2c01384b4d5e",
+   "statements": [
+    {
+     "page": 5,
+     "quote": "\u00a3500m). Significant events With effect from 1 January 2020, in line with the run-off closure plan that they had been operating under since ceasing to underwrite at 1 January 2018, Syndicate 5820\u2019s and Syndicate 1206\u2019s 2017 years of"
+    }
+   ],
+   "reason": "another entity: Syndicates 5820 and 1206, which operated under a run-off closure plan after ceasing to underwrite on 1 January 2018; their 2017 years of account closed into Syndicate 1861's 2018 year of account"
+  },
+  {
+   "stem": "syndicate_1880_2020",
+   "syndicate": 1880,
+   "year": 2020,
+   "source_sha256": "0c00063c9bf402e2d7d0848ba8130734b4b358cbed74cd266719d9772d23875d",
+   "statements": [
+    {
+     "page": 36,
+     "quote": "syndicate and impairment related to the Hong Kong branch of Kiln which ceased trading in 2019. 21. Risk management Details of the syndicate\u2019s risk management"
+    }
+   ],
+   "reason": "another entity: the Hong Kong branch of Kiln, a related company, ceased trading in 2019"
+  },
+  {
+   "stem": "syndicate_1880_2021",
+   "syndicate": 1880,
+   "year": 2021,
+   "source_sha256": "c9fe0cdb316063d621f13a1c35ecc52850c4ca71d90dc128fe6da5a09514df0c",
+   "statements": [
+    {
+     "page": 37,
+     "quote": "Limited for an impairment related to the Hong Kong branch of Kiln which ceased trading in 2019."
+    }
+   ],
+   "reason": "another entity: the Hong Kong branch of Kiln, a related company, ceased trading in 2019"
+  },
+  {
+   "stem": "syndicate_1945_2014",
+   "syndicate": 1945,
+   "year": 2014,
+   "source_sha256": "747b7e93155fed8ed22d7a1842d3bf57e1ca906f0b52f3cd5753e786e2487ccb",
+   "statements": [
+    {
+     "page": 30,
+     "quote": "capital provider to Syndicate 1945 owns 100% of P2H. During 2014, P2H ceased accepting new business, and a premium accrual of \u00a37k brought forward was reversed. The associated"
+    }
+   ],
+   "reason": "another entity: Passage2Health Ltd, a company for which the syndicate provides capacity, ceased accepting new business in 2014"
+  },
+  {
+   "stem": "syndicate_1955_2015",
+   "syndicate": 1955,
+   "year": 2015,
+   "source_sha256": "84b5a3072aa2dc94702dae1b5dada6073393227015539fcf4155f24911ef44d2",
+   "statements": [
+    {
+     "page": 5,
+     "quote": "to SPS 6118 and \u00a344.6m to newly created Arcus Syndicate 1856. SPS 6120 ceased to write business effective 1 January 2016. The cessions the Syndicate makes to the SPSs"
+    },
+    {
+     "page": 62,
+     "quote": "(2014: \u00a333.7m ceded to SPS 6113, and \u00a325m ceded to SPS 6118). SPS 6113 was ceased to write business from 1 January 2015. For the 2013 Year of Account, 42.4% of the Property"
+    },
+    {
+     "page": 62,
+     "quote": "the basis of a 31.0% cession of all classes of business, whilst SPS 6120 ceased to write business effective 1 January 2016. The Syndicate will cede \u00a344.6m to Arcus Syndicate"
+    }
+   ],
+   "reason": "another entity: SPS 6120 and SPS 6113, special purpose syndicates, ceased to write business"
+  },
+  {
+   "stem": "syndicate_1967_2018",
+   "syndicate": 1967,
+   "year": 2018,
+   "source_sha256": "e47ce8c60deda3a8cb4d32a84b764b8ce6a0ec34ad70121c4caecbcc73489e5e",
+   "statements": [
+    {
+     "page": 6,
+     "quote": "businesses acting as approved coverholders. The Syndicate has taken action to cease underwriting in non-performing classes where it did not believe that a sustainable"
+    }
+   ],
+   "reason": "class or line: the syndicate has taken action to cease underwriting in non-performing classes of business, a decision about classes and not about the whole of its business"
+  },
+  {
+   "stem": "syndicate_1967_2019",
+   "syndicate": 1967,
+   "year": 2019,
+   "source_sha256": "36ffbe5bdf9f3e9e9d17ece1703b56168f7dc80e13d6b969e9d2f59b72109f78",
+   "statements": [
+    {
+     "page": 6,
+     "quote": "businesses acting as approved coverholders. The Syndicate has taken action to cease underwriting in non-performing classes where it did not believe that a sustainable"
+    }
+   ],
+   "reason": "class or line: the syndicate has taken action to cease underwriting in non-performing classes of business, a decision about classes and not about the whole of its business"
+  },
+  {
+   "stem": "syndicate_1967_2020",
+   "syndicate": 1967,
+   "year": 2020,
+   "source_sha256": "fa6c20446511c87c403b3fb09f9b475f2a00afdb1ee8c309b5525ca7476dabdc",
+   "statements": [
+    {
+     "page": 6,
+     "quote": "China\u201d) and 100% reinsured by the Syndicate. The Syndicate has taken action to cease underwriting in non-performing classes where it did not believe that a sustainable"
+    }
+   ],
+   "reason": "class or line: the syndicate has taken action to cease underwriting in non-performing classes of business, a decision about classes and not about the whole of its business"
+  },
+  {
+   "stem": "syndicate_1967_2021",
+   "syndicate": 1967,
+   "year": 2021,
+   "source_sha256": "95609e0398c08bbd913c5cad5159605f282104dc566104273c914fddf0cf3cb3",
+   "statements": [
+    {
+     "page": 6,
+     "quote": "China\u201d) and 100% reinsured by the Syndicate. The Syndicate has taken action to cease underwriting in non-performing classes where it did not believe that a sustainable"
+    }
+   ],
+   "reason": "class or line: the syndicate has taken action to cease underwriting in non-performing classes of business, a decision about classes and not about the whole of its business"
+  },
+  {
+   "stem": "syndicate_1969_2021",
+   "syndicate": 1969,
+   "year": 2021,
+   "source_sha256": "3a6609d089ff4393a81c6fb909721f3a8bcf5aae6507324bef6140bd65431834",
+   "statements": [
+    {
+     "page": 6,
+     "quote": "any SPAs, as SPA 1971 becomes a stand-alone syndicate and SPA 6133 is no longer writing business. Apollo Syndicate Management Limited (\u201cASML\u201d) is approved as a managing"
+    },
+    {
+     "page": 15,
+     "quote": "1971 has converted to a stand-alone syndicate and SPA Syndicate 6133 is no longer writing business. As part of the plan to manage the orderly winding down of SPA Syndicate"
+    },
+    {
+     "page": 57,
+     "quote": "1971 has converted to a stand-alone syndicate and SPA Syndicate 6133 is no longer writing business. Alchemy\u2019s investment in AGHL was completed on 11 February 2022, following"
+    },
+    {
+     "page": 61,
+     "quote": "include any SPAs, as SPA 1971 is a stand-alone syndicate and SPA 6133 is no longer writing business. We forecast rates to continue to rise in 2022 in certain lines of business,"
+    }
+   ],
+   "reason": "another entity: SPA 6133, a special purpose arrangement the syndicate hosted, is no longer writing business, and SPA 1971 became a stand-alone syndicate"
+  },
+  {
+   "stem": "syndicate_1969_2022",
+   "syndicate": 1969,
+   "year": 2022,
+   "source_sha256": "9afded13a7a0923a21de9d4640ce3f3ecc4d1f6b64934d9ddeef88371ed047e7",
+   "statements": [
+    {
+     "page": 6,
+     "quote": "SPAs, as SPA 1971 became a stand-alone syndicate in 2022 and SPA 6133 is no longer writing business. Net of these SPAs, the syndicate achieved premium growth in 2022 of 27%"
+    }
+   ],
+   "reason": "another entity: SPA 6133, a special purpose arrangement the syndicate hosted, is no longer writing business, and SPA 1971 became a stand-alone syndicate"
+  },
+  {
+   "stem": "syndicate_2001_2014",
+   "syndicate": 2001,
+   "year": 2014,
+   "source_sha256": "4dd30ccead45f942f2de8fa6f1f62c2dbede49c82e594284ed3e82f1cd6555f7",
+   "statements": [
+    {
+     "page": 28,
+     "quote": "loss accounts for the 2009 underwriting year of account. Syndicate 6106 did not underwrite for the 2014 underwriting year of account. Syndicate 2001 retains a 5% overriding commission"
+    }
+   ],
+   "reason": "another entity: Special Purpose Syndicate 6106, managed by the same agent, did not underwrite for the 2014 underwriting year of account"
+  },
+  {
+   "stem": "syndicate_2001_2015",
+   "syndicate": 2001,
+   "year": 2015,
+   "source_sha256": "3f870015621b3b775d4e4417a6452a47d31776f22b2ae4e675ab641d33a82df3",
+   "statements": [
+    {
+     "page": 37,
+     "quote": "loss accounts for the 2009 underwriting year of account. Syndicate 6106 did not underwrite for the 2015 underwriting year of account. Syndicate 2001 retains a 5% overriding commission"
+    }
+   ],
+   "reason": "another entity: Special Purpose Syndicate 6106, managed by the same agent, did not underwrite for the 2015 underwriting year of account"
+  },
+  {
+   "stem": "syndicate_2001_2016",
+   "syndicate": 2001,
+   "year": 2016,
+   "source_sha256": "7716d74731db88238060be28da246077e3583ea7a3db068d94fa7fae0a60c389",
+   "statements": [
+    {
+     "page": 7,
+     "quote": "Group Holdings, Inc. From 1 January 2017, the underwriting business of Syndicate 3210 was renewed into Syndicate 2001 and Syndicate 3210's 2016 and prior years of account were placed in run-off. Syndicate 3210 is supported by MSI Corporate Capital Limited (MSICC)"
+    },
+    {
+     "page": 40,
+     "quote": "is provided as FIS. From 1 January 2017, the underwriting business of Syndicate 3210 was renewed into Syndicate 2001 and Syndicate 3210's 2016 and prior years of account were placed in run-off. Syndicate 3210 is supported by MSI Corporate Capital Limited (MSICC)"
+    }
+   ],
+   "reason": "another entity: Syndicate 3210, whose underwriting business was renewed into Syndicate 2001 from 1 January 2017 and whose 2016 and prior years of account were placed in run-off"
+  },
+  {
+   "stem": "syndicate_2001_2017",
+   "syndicate": 2001,
+   "year": 2017,
+   "source_sha256": "1fd9e7ec1a0a753be2fc5b413285f33f69ca44fd20f4f84bce50a9d63dd4b184",
+   "statements": [
+    {
+     "page": 38,
+     "quote": "accou-it is povided as uS. From 1 Janua-y 2017 the undcrwrti'ig business of Syndicate 320 was ie'iewed into Syndicate 20C1 aid Sync cate 3210's 2016 anc prior years of account were placed in run-off. Syndicate 3210 is supported by MSI Corporate Capital Limited (MSICC)"
+    }
+   ],
+   "reason": "another entity: Syndicate 3210, whose underwriting business was renewed into Syndicate 2001 from 1 January 2017 and whose 2016 and prior years of account were placed in run-off (the page's text is garbled in places)"
+  },
+  {
+   "stem": "syndicate_2001_2018",
+   "syndicate": 2001,
+   "year": 2018,
+   "source_sha256": "930651fde2e442ade4671382a1b550960d36dbdd438af8c6d8d968fea49b2861",
+   "statements": [
+    {
+     "page": 44,
+     "quote": "is provided as FIS. From 1 January 2017, the underwriting business of Syndicate 3210 was renewed into Syndicate 2001 and Syndicate 3210's 2016 and prior years of account were placed in run-off. Syndicate 3210 is supported by MSI Corporate Capital Limited (MSICC)"
+    }
+   ],
+   "reason": "another entity: Syndicate 3210, whose underwriting business was renewed into Syndicate 2001 from 1 January 2017 and whose 2016 and prior years of account were placed in run-off"
+  },
+  {
+   "stem": "syndicate_2001_2022",
+   "syndicate": 2001,
+   "year": 2022,
+   "source_sha256": "e6c257c579b4531176df95ad2a8077df96ba4799e380d6fe0ea74dc9d1f9286c",
+   "statements": [
+    {
+     "page": 14,
+     "quote": "Discontinued business relates to classes of business that Syndicate 2001 ceased to underwrite after the implementation of our remediation plan in 2019. These classes"
+    }
+   ],
+   "reason": "class or line: classes of business that Syndicate 2001 ceased to underwrite (its discontinued lines), not the syndicate"
+  },
+  {
+   "stem": "syndicate_2001_2023",
+   "syndicate": 2001,
+   "year": 2023,
+   "source_sha256": "cf12f624857beab405688ba9603483a5c57324e1fa397e29f5633498b7d09e93",
+   "statements": [
+    {
+     "page": 16,
+     "quote": "Discontinued business relates to classes of business that Syndicate 2001 ceased to underwrite after the implementation of our remediation plan in 2019 together with"
+    },
+    {
+     "page": 17,
+     "quote": "legacy issues in the discontinued classes \u2013 those which the Syndicate ceased to underwrite in 2019/2020 as part of efforts to reshape the business. A summary of"
+    }
+   ],
+   "reason": "class or line: classes of business that Syndicate 2001 ceased to underwrite (its discontinued lines), not the syndicate"
+  },
+  {
+   "stem": "syndicate_2001_2024",
+   "syndicate": 2001,
+   "year": 2024,
+   "source_sha256": "30360096b3b98d129107601c9557821ad430a2be20189aeed5a2d015c8383fab",
+   "statements": [
+    {
+     "page": 8,
+     "quote": "discontinued business related to classes of business that Syndicate 2001 ceased to underwrite and were impacted by the 2023 and 2022 RiverStone contracts."
+    },
+    {
+     "page": 16,
+     "quote": "Discontinued business relates to classes of business that Syndicate 2001 ceased to underwrite and were impacted by the 2023 and 2022 RiverStone contracts. Ratio analysis"
+    },
+    {
+     "page": 18,
+     "quote": "activities such as: evolving our approach to climate scenario analysis, ceasing to underwrite new business and new construction standalone coal risks, implementing a referrals process"
+    }
+   ],
+   "reason": "class or line: classes of business that Syndicate 2001 ceased to underwrite (its discontinued lines), not the syndicate; and an exclusion of new construction standalone coal risks under its climate approach"
+  },
+  {
+   "stem": "syndicate_2003_2015",
+   "syndicate": 2003,
+   "year": 2015,
+   "source_sha256": "d5c696c28ccff044e35304058e8f629dabe44d8badad41e98fe03ae5ea8fe740",
+   "statements": [
+    {
+     "page": 5,
+     "quote": "operating model of the combined companies. Legacy XL Syndicate 1209 has ceased to write new business from 1st January 2016, with all new and renewed business being written"
+    }
+   ],
+   "reason": "another entity: Legacy XL Syndicate 1209, which ceased to write new business from 1 January 2016 and whose new and renewed business is written by Syndicate 2003, the syndicate whose filing this is"
+  },
+  {
+   "stem": "syndicate_2010_2021",
+   "syndicate": 2010,
+   "year": 2021,
+   "source_sha256": "73c10038064ddf036bfa1764132fa513098939086c581d40e01a0165b0d78044",
+   "statements": [
+    {
+     "page": 45,
+     "quote": "Non-Marine account and also the Direct Property account. Syndicate 2010 did not participate on the 2021 year of account. Syndicate 2010\u2019s share is 15% for the 2020 year of account."
+    }
+   ],
+   "reason": "not a stop: a Group reinsurance cover note: the syndicate did not participate in that cover on the 2021 year of account; nothing about its own underwriting"
+  },
+  {
+   "stem": "syndicate_2010_2022",
+   "syndicate": 2010,
+   "year": 2022,
+   "source_sha256": "2150d550feb380159d36218151633cd8761e7539a1c09a6092c31193718d7761",
+   "statements": [
+    {
+     "page": 46,
+     "quote": "Non-Marine account and also the Direct Property account. Syndicate 2010 did not participate on the 2022 and 2021 years of account. Syndicate 2010\u2019s share is 15% for the 2020"
+    }
+   ],
+   "reason": "not a stop: a Group reinsurance cover note: the syndicate did not participate in that cover on the 2022 and 2021 years of account; nothing about its own underwriting"
+  },
+  {
+   "stem": "syndicate_2121_2014",
+   "syndicate": 2121,
+   "year": 2014,
+   "source_sha256": "e50bd85bcc0eb36b201969f46589d1f5601531c971bcd1c5fbedc42ac994a810",
+   "statements": [
+    {
+     "page": 8,
+     "quote": "primary marine employers\u2019 liability class, which the syndicate has now ceased underwriting, has had any adverse claims development but this made up a relatively"
+    }
+   ],
+   "reason": "class or line: the primary marine employers' liability class, which the syndicate has now ceased underwriting"
+  },
+  {
+   "stem": "syndicate_2121_2022",
+   "syndicate": 2121,
+   "year": 2022,
+   "source_sha256": "8269837073626a879e21ebdc4dd9e49b643a3c851a1a2d7f520e944c5aaff668",
+   "statements": [
+    {
+     "page": 6,
+     "quote": "(\u201cLICCL\u201d) based in Shanghai is now running-off. During the year it was also decided to cease underwriting from the service company office in Singapore; further details are provided"
+    }
+   ],
+   "reason": "office or channel: it was decided to cease underwriting from the service company office in Singapore"
+  },
+  {
+   "stem": "syndicate_2121_2023",
+   "syndicate": 2121,
+   "year": 2023,
+   "source_sha256": "ec67c0072373af56c5615712ab2eea2e2f9c31a08ffa81e7cf55dd4bdfe62316",
+   "statements": [
+    {
+     "page": 7,
+     "quote": "(China) Limited (\u201cLICCL\u201d) based in Shanghai. During 2022, it was also decided to cease underwriting from the AUA office in Singapore and the exposures are now being run-off."
+    },
+    {
+     "page": 7,
+     "quote": "a third of the overall gross premium income written by the syndicate. The syndicate continues to run-off its exposure to Chinese domiciled reinsurance business following the decision"
+    }
+   ],
+   "reason": "office or channel: the syndicate is running off exposures written through its Singapore office, closed in 2022, and its Chinese reinsurance business after the Shanghai division closed for the 2022 year of account"
+  },
+  {
+   "stem": "syndicate_2121_2024",
+   "syndicate": 2121,
+   "year": 2024,
+   "source_sha256": "afd720411ed366867db6412cd5a6f9c30e2eab7d4d2ce4d49eaebedf9c7056c2",
+   "statements": [
+    {
+     "page": 6,
+     "quote": "Lloyd's Insurance Company (China} Limited (\"LICCL\"} based in Shanghai. The syndicate is also continuing to run-off the exposures written via its office in Singapore, which was closed in August"
+    },
+    {
+     "page": 12,
+     "quote": "business from Singapore via AUA until August 2022. In June 2024 the syndicate ceased to underwrite new or renewal business from the AUA branch office in Sydney although the branch office in Tuggerah"
+    }
+   ],
+   "reason": "office or channel: the syndicate is running off exposures written through its Singapore office, closed in August 2022; the Sydney branch office ceased to underwrite new or renewal business in June 2024 while the Tuggerah branch office remains actively underwriting"
+  },
+  {
+   "stem": "syndicate_2488_2016",
+   "syndicate": 2488,
+   "year": 2016,
+   "source_sha256": "fe58d39d2e751fa92c6538cc185fea66d5b5e2342099b5cad4ae91c73b253f2c",
+   "statements": [
+    {
+     "page": 7,
+     "quote": "Rights Transfer Agreement also on 12 October 2016. Syndicate 1882 formally ceased to trade on 31 December 2016, with elements of the portfolio being renewed into"
+    }
+   ],
+   "reason": "another entity: Syndicate 1882, a Chubb syndicate, formally ceased to trade on 31 December 2016 and its portfolio was renewed into Syndicate 2488"
+  },
+  {
+   "stem": "syndicate_2488_2017",
+   "syndicate": 2488,
+   "year": 2017,
+   "source_sha256": "77765c9fb9105fe74c129203a329031dfb885988d0b962cab950565a7e087d0e",
+   "statements": [
+    {
+     "page": 4,
+     "quote": "of some of the business previously underwritten by Syndicate 1882 which ceased to trade with effect from 1st January 2017. Net written premiums for the year amounted"
+    }
+   ],
+   "reason": "another entity: Syndicate 1882, a Chubb syndicate, formally ceased to trade on 31 December 2016 and its portfolio was renewed into Syndicate 2488"
+  },
+  {
+   "stem": "syndicate_2488_2018",
+   "syndicate": 2488,
+   "year": 2018,
+   "source_sha256": "422f029b9d56fb1317dfb70ae733d0d3ce12cb74447bcbfe345600e0f57b9aed",
+   "statements": [
+    {
+     "page": 8,
+     "quote": "accepted the reinsurance to close of the liabilities of Syndicate 1882. Syndicate 1882 is also managed by CUAL and has been in run-off since 31 December 2016. The 2016 year of account was its last year of"
+    }
+   ],
+   "reason": "another entity: Syndicate 1882, also managed by CUAL, has been in run-off since 31 December 2016"
+  },
+  {
+   "stem": "syndicate_2488_2019",
+   "syndicate": 2488,
+   "year": 2019,
+   "source_sha256": "e62b49f39694340969e19546499df653c2121647bdcf2c623f07bd93e19feb14",
+   "statements": [
+    {
+     "page": 7,
+     "quote": "accepted the reinsurance to close of the liabilities of Syndicate 1882. Syndicate 1882 was also managed by CUAL and had been in run-off since 31 December 2016. The 2016 year of account was its last year of"
+    }
+   ],
+   "reason": "another entity: Syndicate 1882, also managed by CUAL, had been in run-off since 31 December 2016"
+  },
+  {
+   "stem": "syndicate_2526_2014",
+   "syndicate": 2526,
+   "year": 2014,
+   "source_sha256": "489323652c1fba3ad8d72f08d101c3b140749ee3c14082b05ed16d1fd4db909b",
+   "statements": [
+    {
+     "page": 6,
+     "quote": "expected and, since the 2013 incurred loss ratio was already over 100%, we decided to cease underwriting at this point."
+    }
+   ],
+   "reason": "class or line: the personal accident line: the decision to cease underwriting was taken at the half year because binder renewal business would not generate the premiums expected"
+  },
+  {
+   "stem": "syndicate_3334_2014",
+   "syndicate": 3334,
+   "year": 2014,
+   "source_sha256": "c9164df6b705a42fbdbd8dcc4531a439564e09353c48738812f537e5426bef09",
+   "statements": [
+    {
+     "page": 34,
+     "quote": "the year ended 31st December 2013 the recharges from SCE also included the Syndicate\u2019s bloodstock underwriter and assistant (no longer employed following the class of business being placed in to run-off). The salary costs plus associated administration costs directly relating"
+    }
+   ],
+   "reason": "class or line: a class of business (bloodstock) was placed in run-off and the staff who wrote it are no longer employed"
+  },
+  {
+   "stem": "syndicate_3623_2024",
+   "syndicate": 3623,
+   "year": 2024,
+   "source_sha256": "764af30a8dcc776f796ce79cea1d2c226320ea21696bce32a9615dc645c40c04",
+   "statements": [
+    {
+     "page": 4,
+     "quote": "personal accident and market facilities book. The 2023 year of account did not write any risks. The 2024 year of account is currently forecasting a positive return on"
+    },
+    {
+     "page": 4,
+     "quote": "written through Syndicate 2623 and Syndicate 623 in 2023. The syndicate did not write new business in 2023. Combined ratio The combined ratio is a measure of operating performance"
+    }
+   ],
+   "reason": "not a stop: describes 2023, when the syndicate wrote no new business and its 2023 year of account wrote no risks; the filing says the syndicate commenced underwriting once again in 2024"
+  },
+  {
+   "stem": "syndicate_4000_2019",
+   "syndicate": 4000,
+   "year": 2019,
+   "source_sha256": "53bf3dc3c3ab2f6c95a5f82b69b22f61ea5685af121bf58e70bfa827dfc0ed9a",
+   "statements": [
+    {
+     "page": 8,
+     "quote": "Environment As a result of the acquisition of HMA by the Hamilton Group, Syndicate 3334 has been put into run-off and relevant business has been transferred to and renewed by Syndicate"
+    }
+   ],
+   "reason": "another entity: Syndicate 3334, another syndicate, was put into run-off after the acquisition of HMA and its business renewed by Syndicate 4000"
+  },
+  {
+   "stem": "syndicate_4000_2020",
+   "syndicate": 4000,
+   "year": 2020,
+   "source_sha256": "5720a42c3d19de30ca481236c69ae82da04895f6cf66fc536e065cd1b6df67d9",
+   "statements": [
+    {
+     "page": 5,
+     "quote": "379,083 301,640 As a result of the acquisition of HMA by the Hamilton Group, Syndicate 3334 was put into run-off and relevant business renewed by Syndicate 4000 for the 2020 year of account"
+    },
+    {
+     "page": 7,
+     "quote": "quota share reinsurance cessions from its host, which is Syndicate 4000. Syndicate 6125 was placed into run-off in November 2020. Review of Financial Performance The Syndicate\u2019s key"
+    }
+   ],
+   "reason": "another entity: Syndicate 3334, another syndicate, was put into run-off after the acquisition of HMA and its business renewed by Syndicate 4000; Syndicate 6125, a special purpose arrangement hosted by Syndicate 4000, was placed into run-off in November 2020"
+  },
+  {
+   "stem": "syndicate_4000_2021",
+   "syndicate": 4000,
+   "year": 2021,
+   "source_sha256": "ecd9e1ccffe43cf122bbe61af5361fdcef08b76fc340ce97f7d9fb7ce088471e",
+   "statements": [
+    {
+     "page": 7,
+     "quote": "quota share reinsurance cessions from its host, which is Syndicate 4000. Syndicate 6125 was placed into run-off in November 2020. Review of Financial Performance The Syndicate\u2019s key"
+    }
+   ],
+   "reason": "another entity: Syndicate 6125, a special purpose arrangement hosted by Syndicate 4000, was placed into run-off in November 2020"
+  },
+  {
+   "stem": "syndicate_4000_2022",
+   "syndicate": 4000,
+   "year": 2022,
+   "source_sha256": "efc04866d3f6a6e6a06bb6962f7e4a01e950938acc73f93628c5a3609ce6b746",
+   "statements": [
+    {
+     "page": 5,
+     "quote": "decision was made to renew underwriting business into the newly acquired Syndicate 4000 from 1 January 2020 and place Syndicate 3334 into run-off. On the closure of its 2019 year of account, Syndicate 3334 was reinsured"
+    },
+    {
+     "page": 7,
+     "quote": "quota share reinsurance cessions from its host, which is Syndicate 4000. Syndicate 6125 was placed into run-off in November 2020. Effective 1 January 2021, the 2018 and prior years of"
+    }
+   ],
+   "reason": "another entity: Syndicate 3334, another syndicate, was put into run-off after the acquisition of HMA and its business renewed by Syndicate 4000; Syndicate 6125, a special purpose arrangement hosted by Syndicate 4000, was placed into run-off in November 2020"
+  },
+  {
+   "stem": "syndicate_4000_2023",
+   "syndicate": 4000,
+   "year": 2023,
+   "source_sha256": "c60ddc78e90287a39f3bec75682e72f1b56a3296aa3d8307565fae2d8202f87b",
+   "statements": [
+    {
+     "page": 7,
+     "quote": "Patria Corporate Member Limited, a company within the same group as Patria. Syndicate 6125 was placed into run-off in November 2020. Effective 1 January 2021, the 2018 and prior years of"
+    }
+   ],
+   "reason": "another entity: Syndicate 6125, a special purpose arrangement hosted by Syndicate 4000, was placed into run-off in November 2020"
+  },
+  {
+   "stem": "syndicate_4242_2019",
+   "syndicate": 4242,
+   "year": 2019,
+   "source_sha256": "91dce0a1a1895ada48dd24bc1bab92c8448b10df5ef3df24a653049cd81b4485",
+   "statements": [
+    {
+     "page": 10,
+     "quote": "(including strategic conflicts of interest). Future developments SPA 6123 ceased to underwrite for the 2020 underwriting year. The Syndicate (net of SPA 6123) maintained"
+    }
+   ],
+   "reason": "another entity: SPA 6123, a special purpose arrangement the syndicate hosted, ceased to underwrite for the 2020 underwriting year"
+  },
+  {
+   "stem": "syndicate_4242_2020",
+   "syndicate": 4242,
+   "year": 2020,
+   "source_sha256": "dbb8370cccc5393a9ea1b8638093ed0b3a4581c315233a522f3429017ac190a8",
+   "statements": [
+    {
+     "page": 6,
+     "quote": "the Syndicate\u2019s net result. Following Beat becoming corporate sponsors, the SPA went into run-off at the end of the 2019 YOA so there is no gross-up of written premium"
+    }
+   ],
+   "reason": "another entity: SPA 6123, whose results are grossed up into the syndicate's, went into run-off at the end of the 2019 year of account"
+  },
+  {
+   "stem": "syndicate_4242_2021",
+   "syndicate": 4242,
+   "year": 2021,
+   "source_sha256": "08579f9833888470ef59b5c7ad7bf698cbb684069325401e02b0bfcfea4e241c",
+   "statements": [
+    {
+     "page": 6,
+     "quote": "the Syndicate\u2019s net result. Following Beat becoming corporate sponsors, the SPA went into run-off at the end of the 2019 YOA so there is no gross-up of written premium"
+    }
+   ],
+   "reason": "another entity: SPA 6123, whose results are grossed up into the syndicate's, went into run-off at the end of the 2019 year of account"
+  },
+  {
+   "stem": "syndicate_4444_2018",
+   "syndicate": 4444,
+   "year": 2018,
+   "source_sha256": "215bc1a36f78141d453b1c4b9a86a411b77c27e5f69b8fecdccd908eccbbbb21",
+   "statements": [
+    {
+     "page": 43,
+     "quote": "underwrites principally caravan business on behalf of the syndicate. CUKSL ceased writing business and Premiums written during 2018 was \u00a3nil (2017: \u00a39,906,000). At 31 December"
+    }
+   ],
+   "reason": "another entity: Canopius UK Specialty Limited, a broker that underwrote caravan business on behalf of the syndicate, ceased writing business"
+  },
+  {
+   "stem": "syndicate_4711_2021",
+   "syndicate": 4711,
+   "year": 2021,
+   "source_sha256": "509e876c813e66dea3a9e0de983361b41173cd592641add28b8eccb99bc49703",
+   "statements": [
+    {
+     "page": 7,
+     "quote": "\u00a352.1m in 2020. Overall this segment is loss making, with Marine Liability (ceased writing in 2020) being the main driver. Bar Aviation, the remaining lines were"
+    },
+    {
+     "page": 7,
+     "quote": "Management Liability, with an offset in reduction of Accident & Health (ceased writing in 2020). The segment made a loss for the financial year, due to strengthening"
+    }
+   ],
+   "reason": "class or line: classes of business (Marine Liability, Accident & Health) that ceased writing in 2020"
+  },
+  {
+   "stem": "syndicate_5000_2014",
+   "syndicate": 5000,
+   "year": 2014,
+   "source_sha256": "175ace6948a3b48de302e911fe5d035700aff683e65e5f8b0265014e3199c8eb",
+   "statements": [
+    {
+     "page": 29,
+     "quote": "services company operating within the Lloyd\u2019s Asia trading platform, TAP ceased writing business and was put into run off on 31\u00b0 January 2014, Brokerage and commissions"
+    }
+   ],
+   "reason": "another entity: TAP, an insurance services company on the Lloyd's Asia platform, ceased writing business and was put into run-off on 31 January 2014"
+  },
+  {
+   "stem": "syndicate_5000_2015",
+   "syndicate": 5000,
+   "year": 2015,
+   "source_sha256": "09615b050a0a14a5914c8cbacff4a7645d41580649e30fd99d15c41c09d4645d",
+   "statements": [
+    {
+     "page": 38,
+     "quote": "services company operating within the Lloyd\u2019s Asia trading platform. TAP ceased writing business and was put into run-off on 31 January 2014. Brokerage and commissions"
+    }
+   ],
+   "reason": "another entity: TAP, an insurance services company on the Lloyd's Asia platform, ceased writing business and was put into run-off on 31 January 2014"
+  },
+  {
+   "stem": "syndicate_5000_2016",
+   "syndicate": 5000,
+   "year": 2016,
+   "source_sha256": "c32bc9f50aa7bdab8bff55c4d27824c12c324eeaad1866dbd9d0000a36668e01",
+   "statements": [
+    {
+     "page": 38,
+     "quote": "services company operating within the Lloyd's Asia trading platform. TAP ceased writing business and was put into run-off on 31 January 2014. Brokerage and commissions"
+    }
+   ],
+   "reason": "another entity: TAP, an insurance services company on the Lloyd's Asia platform, ceased writing business and was put into run-off on 31 January 2014"
+  },
+  {
+   "stem": "syndicate_5151_2016",
+   "syndicate": 5151,
+   "year": 2016,
+   "source_sha256": "b0d26abad1626ca3b116e2b270fe595ab6afbb181687b3a7a4b1c23126773be6",
+   "statements": [
+    {
+     "page": 7,
+     "quote": "Management has focused on re-underwriting the existing book of business, ceasing writing business which does not meet the Syndicate\u2019s risk appetite, and growing the business"
+    }
+   ],
+   "reason": "not a stop: management is ceasing to write business that does not meet the syndicate's risk appetite while re-underwriting its book and growing the rest"
+  },
+  {
+   "stem": "syndicate_6104_2018",
+   "syndicate": 6104,
+   "year": 2018,
+   "source_sha256": "d69633c485a776ecd01d4085f67e3d9badfd90d676e01d54a9db09a1aec870fc",
+   "statements": [
+    {
+     "page": 43,
+     "quote": "In addition the aviation and portfolio accounts were transferred from Syndicate 3624 for the 2018 year of account, with the aviation account subsequently put into run-off. Premium income is forecast to increase by approximately 23% on 2017 when"
+    }
+   ],
+   "reason": "class or line: the aviation account, transferred from Syndicate 3624 for the 2018 year of account, was subsequently put into run-off: one account of the syndicate, not the syndicate"
+  },
+  {
+   "stem": "syndicate_6134_2023",
+   "syndicate": 6134,
+   "year": 2023,
+   "source_sha256": "5c4a43dd7aae2092f18e66849e62ee4c0f7dcb958b61dba90289060dc017d123",
+   "statements": [
+    {
+     "page": 37,
+     "quote": "detailed are in line with other Australian facilities currently supported by the syndicate On 5 August 2022 the Board of ASML decided not to renew the service company agreement for Singapore and the business written in Singapore is now in run-off. The future structure under which the Australian branch offices are to"
+    }
+   ],
+   "reason": "office or channel: the business written in Singapore through the service company is in run-off after the managing agent decided not to renew the service company agreement"
+  },
+  {
+   "stem": "syndicate_6134_2024",
+   "syndicate": 6134,
+   "year": 2024,
+   "source_sha256": "aabf4138fe977ec91c16d822f61c3f235179c461d8d1066b9b4f1331a505c8d3",
+   "statements": [
+    {
+     "page": 9,
+     "quote": "business from Singapore via AUA until August 2022. In June 2024 the syndicate ceased to underwrite new or renewal business from the AUA branch office in Sydney although the branch office in Tuggerah"
+    }
+   ],
+   "reason": "office or channel: the Sydney branch office ceased to underwrite new or renewal business in June 2024 while the Tuggerah branch office remains actively underwriting"
   }
  ]
 }
