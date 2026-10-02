@@ -7,9 +7,10 @@ syndicate_reports/download_status.json, has one row for each of the workbook's 1
 one: already_present is the detail of 588 rows it records as downloaded. The 33 are not rows of the workbook.
 
 These tests hold that account to the files: the corpus is the ledger's downloaded rows plus the filings the audit page lists,
-the counts the page and the README state are the files' own, and no document repeats the retired account. Whether the ledger
-gains rows or an addendum for the 33 is the author's decision; when it does, the list on the page and these tests change
-with it.
+the counts the page and the README state are the files' own, and no document repeats the retired account. The author decided
+on 2 October 2026 that the ledger gains no rows for the 33: they are listed apart, with their source addresses and file
+fingerprints, in syndicate_reports/download_addendum.json, which tests/test_download_addendum.py holds to the corpus and the
+ledger.
 
 Run:  python -m pytest tests/test_download_ledger.py -q
 """

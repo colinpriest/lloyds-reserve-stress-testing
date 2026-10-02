@@ -214,8 +214,10 @@ review of 2 October 2026 found them in that script's local metadata
 (`syndicate_reports/metadata/reports.json`, which is not committed). Neither the workbook nor the
 ledger holds a source URL for them, so the documented route does not download them again. (A Lloyd's
 URL for three of them, 1206/2019, 1400/2015 and 2243/2014, appears in
-`market_commentary/discovered_sources.json`.)
-`docs/data-audit-results.md` lists the 33.
+`market_commentary/discovered_sources.json`.) A list apart from the ledger,
+`syndicate_reports/download_addendum.json`, holds the size and SHA-256 of each file and, where the scraper
+found one when it was run again on 2 October 2026, the filing's source address;
+`scripts/build_download_addendum.py` builds it. `docs/data-audit-results.md` lists the 33.
 
 #### 2. Classify quality of downloaded reports
 

@@ -1,0 +1,371 @@
+{
+ "purpose": "The corpus filings that have no row in the download ledger (syndicate_reports/download_status.json). For each: the web address Lloyd's site gave for it when it was looked up again (the re-fetch below), the size and SHA-256 of the file in the corpus, and whether the file Lloyd's serves is that file. Built by scripts/build_download_addendum.py; tests/test_download_addendum.py holds it to the corpus, the ledger and the files.",
+ "why_not_in_the_ledger": "The ledger has one row for each row of the workbook (syndicate_reports/Lloyds_Syndicates_2014_2024.xlsx), written by scripts/download_from_xlsx.py. These filings are not rows of the workbook: an earlier pass with scripts/lloyds_scraper.py collected them, and their extraction records were committed between 12 and 19 March 2026, before the downloader and the ledger existed (6 July 2026). So the ledger has no row for them and never had one. They are listed here, and not added to the ledger, by the author's decision of 2 October 2026.",
+ "refetch": {
+  "date": "2026-10-02",
+  "route": "scripts/lloyds_scraper.py, the earlier scraper that collected these filings, run on 2 October 2026 for each syndicate and the years listed here, with its output in a new folder outside the repository (one folder for each syndicate, because the scraper rewrites its output folder's metadata/reports.json). source_url is the address the scraper recorded for the filing (pdf_url). Each file it downloaded was compared with the corpus copy by SHA-256."
+ },
+ "fingerprint": "size_bytes and sha256 are the size and the SHA-256 of the corpus copy, syndicate_reports/pdfs/<file>. The corpus copy's SHA-256 is the record of what the extraction read (for an HTML filing, the file the extraction's converted PDF was made from). source_url says where Lloyd's served a file on the re-fetch date, and lloyds_copy says whether that file is the corpus copy.",
+ "lloyds_copy": {
+  "matches": "the file at source_url on the re-fetch date is, byte for byte, the corpus copy (the same SHA-256)",
+  "differs": "the file at source_url differs from the corpus copy; lloyds_size_bytes and lloyds_sha256 are those of the file Lloyd's served",
+  "not found": "the scraper found no address for the filing on the re-fetch date, so source_url is null and source_note says so; the filing may still be published, since the scraper looks only for the pages and file addresses it knows"
+ },
+ "counts": {
+  "filings": 33,
+  "matches": 16,
+  "differs": 1,
+  "not_found": 16
+ },
+ "filings": [
+  {
+   "stem": "syndicate_780_2019",
+   "syndicate": 780,
+   "year": 2019,
+   "file": "syndicate_780_2019.pdf",
+   "source_url": "https://assets.lloyds.com/assets/pdf-2019-0780-a/1/pdf-2019-0780-a.pdf",
+   "size_bytes": 998582,
+   "sha256": "4def634c62dc437f5ca9be97731dffdcad090c964719f8607f2dd6a9ddbeee24",
+   "lloyds_copy": "matches"
+  },
+  {
+   "stem": "syndicate_780_2020",
+   "syndicate": 780,
+   "year": 2020,
+   "file": "syndicate_780_2020.pdf",
+   "source_url": "https://assets.lloyds.com/media/4efc4dfb-892c-4aa1-b1d6-12023e388aba/SRA0780a.pdf",
+   "size_bytes": 875424,
+   "sha256": "7e6a019c7090a23677b6e1afff1c0a91f52ab18279acffb43bcca0ba7979f1e3",
+   "lloyds_copy": "matches"
+  },
+  {
+   "stem": "syndicate_1100_2024",
+   "syndicate": 1100,
+   "year": 2024,
+   "file": "syndicate_1100_2024.html",
+   "source_url": null,
+   "source_note": "The scraper (scripts/lloyds_scraper.py) found no address for this filing on Lloyd's site on 2 October 2026.",
+   "size_bytes": 8687882,
+   "sha256": "c021d81e3258de675fa5cfc975c1a2196446f09c077f95006d6d9e669ab0572c",
+   "lloyds_copy": "not found"
+  },
+  {
+   "stem": "syndicate_1110_2018",
+   "syndicate": 1110,
+   "year": 2018,
+   "file": "syndicate_1110_2018.pdf",
+   "source_url": "https://assets.lloyds.com/assets/pdf-2018-1110-a/1/pdf-2018-1110-a.pdf",
+   "size_bytes": 737014,
+   "sha256": "3fcedac549872f73b64cc71ccf0c134f3bba4f219f119b37ab16c6481d15ffa7",
+   "lloyds_copy": "matches"
+  },
+  {
+   "stem": "syndicate_1110_2020",
+   "syndicate": 1110,
+   "year": 2020,
+   "file": "syndicate_1110_2020.pdf",
+   "source_url": null,
+   "source_note": "The scraper (scripts/lloyds_scraper.py) found no address for this filing on Lloyd's site on 2 October 2026.",
+   "size_bytes": 521844,
+   "sha256": "b96ca726997763d051b199980e03457be43adc9406d924700cca44cb12886616",
+   "lloyds_copy": "not found"
+  },
+  {
+   "stem": "syndicate_1110_2021",
+   "syndicate": 1110,
+   "year": 2021,
+   "file": "syndicate_1110_2021.pdf",
+   "source_url": null,
+   "source_note": "The scraper (scripts/lloyds_scraper.py) found no address for this filing on Lloyd's site on 2 October 2026.",
+   "size_bytes": 750177,
+   "sha256": "3055ac921e391293f5c5543655c1b5aa059fb1183a70b6bd35ceab38411e74ad",
+   "lloyds_copy": "not found"
+  },
+  {
+   "stem": "syndicate_1110_2023",
+   "syndicate": 1110,
+   "year": 2023,
+   "file": "syndicate_1110_2023.pdf",
+   "source_url": null,
+   "source_note": "The scraper (scripts/lloyds_scraper.py) found no address for this filing on Lloyd's site on 2 October 2026.",
+   "size_bytes": 748643,
+   "sha256": "602fa5692e19b610be7c2dec167e905f3f5d3990be4cd85fb2e5d32e2fefc4e9",
+   "lloyds_copy": "not found"
+  },
+  {
+   "stem": "syndicate_1110_2024",
+   "syndicate": 1110,
+   "year": 2024,
+   "file": "syndicate_1110_2024.html",
+   "source_url": null,
+   "source_note": "The scraper (scripts/lloyds_scraper.py) found no address for this filing on Lloyd's site on 2 October 2026.",
+   "size_bytes": 2110309,
+   "sha256": "f0afc9598877566e7134bb38ad4393ee01c5937d94a533d39a13122ade1eae0d",
+   "lloyds_copy": "not found"
+  },
+  {
+   "stem": "syndicate_1206_2018",
+   "syndicate": 1206,
+   "year": 2018,
+   "file": "syndicate_1206_2018.pdf",
+   "source_url": "https://assets.lloyds.com/assets/pdf-2018-1206-a/1/pdf-2018-1206-a.pdf",
+   "size_bytes": 37394450,
+   "sha256": "450569dbb8f680592002d2a579f6f3ce2324e7ef666c2afb40a46889634afe79",
+   "lloyds_copy": "matches"
+  },
+  {
+   "stem": "syndicate_1206_2019",
+   "syndicate": 1206,
+   "year": 2019,
+   "file": "syndicate_1206_2019.pdf",
+   "source_url": "https://assets.lloyds.com/assets/pdf-2019-1206-a/1/pdf-2019-1206-a.pdf",
+   "size_bytes": 1138006,
+   "sha256": "e11cb6e377fad8e43d527ce13b3cae8908fcbefe980a9f3c26676c5c761dc74c",
+   "lloyds_copy": "matches"
+  },
+  {
+   "stem": "syndicate_1209_2016",
+   "syndicate": 1209,
+   "year": 2016,
+   "file": "syndicate_1209_2016.pdf",
+   "source_url": "https://assets.lloyds.com/assets/pdf-syndicate-reports-and-accounts-2016-1209-a/1/2016_1209_a.pdf",
+   "size_bytes": 2040626,
+   "sha256": "0a760032f9a4996fdf3ebd9955158584953410d2de6f6a3145e0b387db7ee2e1",
+   "lloyds_copy": "matches"
+  },
+  {
+   "stem": "syndicate_1209_2017",
+   "syndicate": 1209,
+   "year": 2017,
+   "file": "syndicate_1209_2017.pdf",
+   "source_url": "https://assets.lloyds.com/assets/pdf-syndicate-reports-and-accounts-2017-1209-a/1/2017_1209_a.pdf",
+   "size_bytes": 183455,
+   "sha256": "9f8c32c98dbdeb7abca932209156ecd1ba6762dc68a7726b706c870389e9514e",
+   "lloyds_copy": "matches"
+  },
+  {
+   "stem": "syndicate_1400_2014",
+   "syndicate": 1400,
+   "year": 2014,
+   "file": "syndicate_1400_2014.pdf",
+   "source_url": "https://assets.lloyds.com/assets/pdf-syndicate-reports-and-accounts-2014-1400-a/1/2014_1400_a.pdf",
+   "size_bytes": 386028,
+   "sha256": "ca0cf77f88b90efb3ffa3d81dc9e9726d68dfb28be4fbaf8754809be7e4313f6",
+   "lloyds_copy": "matches"
+  },
+  {
+   "stem": "syndicate_1400_2015",
+   "syndicate": 1400,
+   "year": 2015,
+   "file": "syndicate_1400_2015.pdf",
+   "source_url": "https://assets.lloyds.com/assets/pdf-syndicate-reports-and-accounts-2015-1400-a/1/2015_1400_a.pdf",
+   "size_bytes": 415587,
+   "sha256": "354e9fb1fb9b712389418590a8bab1d9366dea943c06a30aa44bd01ae132357a",
+   "lloyds_copy": "matches"
+  },
+  {
+   "stem": "syndicate_1840_2023",
+   "syndicate": 1840,
+   "year": 2023,
+   "file": "syndicate_1840_2023.pdf",
+   "source_url": null,
+   "source_note": "The scraper (scripts/lloyds_scraper.py) found no address for this filing on Lloyd's site on 2 October 2026.",
+   "size_bytes": 848234,
+   "sha256": "66e73741bce9088a08b1d360348172eb84d03739d28ab17882902031b9fc8846",
+   "lloyds_copy": "not found"
+  },
+  {
+   "stem": "syndicate_1840_2024",
+   "syndicate": 1840,
+   "year": 2024,
+   "file": "syndicate_1840_2024.html",
+   "source_url": null,
+   "source_note": "The scraper (scripts/lloyds_scraper.py) found no address for this filing on Lloyd's site on 2 October 2026.",
+   "size_bytes": 1367354,
+   "sha256": "2f02dc55b955f0bb6a48e56291110b031c0dca586dc80e7f14d83f51ec901719",
+   "lloyds_copy": "not found"
+  },
+  {
+   "stem": "syndicate_1861_2021",
+   "syndicate": 1861,
+   "year": 2021,
+   "file": "syndicate_1861_2021.pdf",
+   "source_url": null,
+   "source_note": "The scraper (scripts/lloyds_scraper.py) found no address for this filing on Lloyd's site on 2 October 2026.",
+   "size_bytes": 1108948,
+   "sha256": "7abd72d59e143bd6dec8dbb8ff90f045d625b9dd85ba6b93a8981ff85f631266",
+   "lloyds_copy": "not found"
+  },
+  {
+   "stem": "syndicate_1861_2022",
+   "syndicate": 1861,
+   "year": 2022,
+   "file": "syndicate_1861_2022.pdf",
+   "source_url": null,
+   "source_note": "The scraper (scripts/lloyds_scraper.py) found no address for this filing on Lloyd's site on 2 October 2026.",
+   "size_bytes": 772827,
+   "sha256": "3ad0fc7ea9d6755e803d231bd14e23c665aa650897548d1a4bebbb4591295062",
+   "lloyds_copy": "not found"
+  },
+  {
+   "stem": "syndicate_1882_2017",
+   "syndicate": 1882,
+   "year": 2017,
+   "file": "syndicate_1882_2017.pdf",
+   "source_url": "https://assets.lloyds.com/assets/pdf-syndicate-reports-and-accounts-2017-1882-a/1/pdf-syndicate-reports-and-accounts-2017_1882_a.pdf",
+   "size_bytes": 937730,
+   "sha256": "1352240f5331a3bc2849504794eb3638ae1d9ce571f02b2f38d7440954606f2c",
+   "lloyds_copy": "matches"
+  },
+  {
+   "stem": "syndicate_1882_2018",
+   "syndicate": 1882,
+   "year": 2018,
+   "file": "syndicate_1882_2018.pdf",
+   "source_url": "https://assets.lloyds.com/assets/pdf-syndicate-reports-and-accounts-2018-1882-a/1/pdf-syndicate-reports-and-accounts-2018_1882_a.pdf",
+   "size_bytes": 911435,
+   "sha256": "43213722e4c0be5db60a5f96f5527fed49156ab463150a98134ce63c1592a17e",
+   "lloyds_copy": "matches"
+  },
+  {
+   "stem": "syndicate_1884_2019",
+   "syndicate": 1884,
+   "year": 2019,
+   "file": "syndicate_1884_2019.pdf",
+   "source_url": null,
+   "source_note": "The scraper (scripts/lloyds_scraper.py) found no address for this filing on Lloyd's site on 2 October 2026.",
+   "size_bytes": 3274077,
+   "sha256": "6d3218b2772bc613a00152621a05e96e5cda3bbd334c4036197d66912b79c74c",
+   "lloyds_copy": "not found"
+  },
+  {
+   "stem": "syndicate_1884_2020",
+   "syndicate": 1884,
+   "year": 2020,
+   "file": "syndicate_1884_2020.pdf",
+   "source_url": null,
+   "source_note": "The scraper (scripts/lloyds_scraper.py) found no address for this filing on Lloyd's site on 2 October 2026.",
+   "size_bytes": 714425,
+   "sha256": "9b84d403375ed076ec6f77e69a4158dec9b936f91c5513c5e9c039ad68e9fd0e",
+   "lloyds_copy": "not found"
+  },
+  {
+   "stem": "syndicate_1884_2022",
+   "syndicate": 1884,
+   "year": 2022,
+   "file": "syndicate_1884_2022.pdf",
+   "source_url": null,
+   "source_note": "The scraper (scripts/lloyds_scraper.py) found no address for this filing on Lloyd's site on 2 October 2026.",
+   "size_bytes": 794369,
+   "sha256": "dbff5710320eae75a40d4629f77945e64a85d9a5da50434d57944c8b3813a73c",
+   "lloyds_copy": "not found"
+  },
+  {
+   "stem": "syndicate_1884_2023",
+   "syndicate": 1884,
+   "year": 2023,
+   "file": "syndicate_1884_2023.pdf",
+   "source_url": null,
+   "source_note": "The scraper (scripts/lloyds_scraper.py) found no address for this filing on Lloyd's site on 2 October 2026.",
+   "size_bytes": 738255,
+   "sha256": "e010f40a994ace2347d53689c12be400d7a159185fb05b75a72473ba77aa0b7e",
+   "lloyds_copy": "not found"
+  },
+  {
+   "stem": "syndicate_1884_2024",
+   "syndicate": 1884,
+   "year": 2024,
+   "file": "syndicate_1884_2024.html",
+   "source_url": null,
+   "source_note": "The scraper (scripts/lloyds_scraper.py) found no address for this filing on Lloyd's site on 2 October 2026.",
+   "size_bytes": 3206903,
+   "sha256": "2747c4f1c0a8093286c5c17e9114c59892eaf1d9c8a8ba347a23cace53bc51b1",
+   "lloyds_copy": "not found"
+  },
+  {
+   "stem": "syndicate_2007_2019",
+   "syndicate": 2007,
+   "year": 2019,
+   "file": "syndicate_2007_2019.pdf",
+   "source_url": "https://assets.lloyds.com/assets/pdf-2019-2007-a/1/pdf-2019-2007-a.pdf",
+   "size_bytes": 1064085,
+   "sha256": "c3a1627a0890de18eca6965ea0aabfdda255ae2fda96faacbbf92f13e8deeaaa",
+   "lloyds_copy": "matches"
+  },
+  {
+   "stem": "syndicate_2243_2014",
+   "syndicate": 2243,
+   "year": 2014,
+   "file": "syndicate_2243_2014.pdf",
+   "source_url": "https://assets.lloyds.com/assets/pdf-syndicate-reports-and-accounts-2014-2243-a/1/pdf-syndicate-reports-and-accounts-2014_2243_a.pdf",
+   "size_bytes": 657716,
+   "sha256": "cdf212d874cfdbd6daeb825f574896de1dfd230b044a1caa9f47200d34a68c1f",
+   "lloyds_copy": "matches"
+  },
+  {
+   "stem": "syndicate_2468_2021",
+   "syndicate": 2468,
+   "year": 2021,
+   "file": "syndicate_2468_2021.pdf",
+   "source_url": null,
+   "source_note": "The scraper (scripts/lloyds_scraper.py) found no address for this filing on Lloyd's site on 2 October 2026.",
+   "size_bytes": 1368760,
+   "sha256": "f7e5c7e05b555de7a42fa06e02f57a23f06c9eab734ac43c5152e6640599b3e2",
+   "lloyds_copy": "not found"
+  },
+  {
+   "stem": "syndicate_2468_2022",
+   "syndicate": 2468,
+   "year": 2022,
+   "file": "syndicate_2468_2022.pdf",
+   "source_url": null,
+   "source_note": "The scraper (scripts/lloyds_scraper.py) found no address for this filing on Lloyd's site on 2 October 2026.",
+   "size_bytes": 1010006,
+   "sha256": "ab33047372c53a7ff7d62c3e0df61320b247b12d047a5125a98b0e5618acb308",
+   "lloyds_copy": "not found"
+  },
+  {
+   "stem": "syndicate_2526_2017",
+   "syndicate": 2526,
+   "year": 2017,
+   "file": "syndicate_2526_2017.pdf",
+   "source_url": "https://assets.lloyds.com/assets/pdf-2017-2526-a/1/pdf-2017-2526-a.pdf",
+   "size_bytes": 455794,
+   "sha256": "5adbf26e8ff3b58acd8a4ff6a4676f9b7b6873761be7d24849262c17be9fd4ae",
+   "lloyds_copy": "matches"
+  },
+  {
+   "stem": "syndicate_3210_2017",
+   "syndicate": 3210,
+   "year": 2017,
+   "file": "syndicate_3210_2017.pdf",
+   "source_url": "https://assets.lloyds.com/assets/pdf-2017-3210-a/1/pdf-2017-3210-a.pdf",
+   "size_bytes": 4249090,
+   "sha256": "4ea1d21c88a4d38e731c0a83b0837e7b6ed8bf9b300e7d00bc037c6ba479757f",
+   "lloyds_copy": "matches"
+  },
+  {
+   "stem": "syndicate_3210_2018",
+   "syndicate": 3210,
+   "year": 2018,
+   "file": "syndicate_3210_2018.pdf",
+   "source_url": "https://assets.lloyds.com/assets/pdf-2018-3210-a/1/pdf-2018-3210-a.pdf",
+   "size_bytes": 8380416,
+   "sha256": "ea9e9842c02cc124a39e24ad36a6e1e244ec6d5e25717c9a2e6c32a1b0694838",
+   "lloyds_copy": "differs",
+   "lloyds_size_bytes": 24301861,
+   "lloyds_sha256": "cbdc7b8d0383d18ce1be2c00fa76fcdafb7f73623a38cac4d1fd03daec32efe8",
+   "note": "The corpus copy is the first 8,380,416 bytes of the file Lloyd's serves (24,301,861 bytes): the download was cut short, and the copy opens with no page."
+  },
+  {
+   "stem": "syndicate_5820_2019",
+   "syndicate": 5820,
+   "year": 2019,
+   "file": "syndicate_5820_2019.pdf",
+   "source_url": "https://assets.lloyds.com/assets/pdf-2019-5820-a/1/pdf-2019-5820-a.pdf",
+   "size_bytes": 923586,
+   "sha256": "6ba654e6ab151040ee59556974d373a38cef14411bf2cc05fd8526cb3af8adf6",
+   "lloyds_copy": "matches"
+  }
+ ]
+}

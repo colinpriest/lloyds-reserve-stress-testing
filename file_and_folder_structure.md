@@ -52,6 +52,7 @@ lloyds_reserve_stress_testing/
 │   │   ├── coverage_status.json            # Full detail incl. LoB mixes
 │   │   └── coverage_report.md              # Written coverage summary
 │   ├── download_status.json                # Per-row download ledger
+│   ├── download_addendum.json              # The filings the ledger has no row for: source addresses, file fingerprints
 │   └── quality_report.json                 # Quality classification output
 │
 ├── market_commentary/                      # Market commentary outputs
@@ -113,6 +114,7 @@ lloyds_reserve_stress_testing/
 ├── scripts/
 │   ├── lloyds_scraper.py                   # Earlier report scraper (the 33 filings off the workbook)
 │   ├── download_from_xlsx.py               # Report downloader for the workbook's rows (the current route)
+│   ├── build_download_addendum.py          # Build the list of the filings the ledger has no row for
 │   ├── quality_classifier.py               # Quality classification of syndicate reserve commentary
 │   ├── ocr_scanned_pdfs.py                 # OCR processing for scanned PDFs
 │   ├── build_coverage_status.py            # Build coverage/audit outputs
