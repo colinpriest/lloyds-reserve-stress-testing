@@ -5,7 +5,7 @@
   "date": "2026-10-02",
   "route": "scripts/lloyds_scraper.py, the earlier scraper that collected these filings, run on 2 October 2026 for each syndicate and the years listed here, with its output in a new folder outside the repository (one folder for each syndicate, because the scraper rewrites its output folder's metadata/reports.json). source_url is the address the scraper recorded for the filing (pdf_url). Each file it downloaded was compared with the corpus copy by SHA-256."
  },
- "fingerprint": "size_bytes and sha256 are the size and the SHA-256 of the corpus copy, syndicate_reports/pdfs/<file>. The corpus copy's SHA-256 is the record of what the extraction read (for an HTML filing, the file the extraction's converted PDF was made from). source_url says where Lloyd's served a file on the re-fetch date, and lloyds_copy says whether that file is the corpus copy.",
+ "fingerprint": "size_bytes and sha256 are the size and the SHA-256 of the corpus copy, syndicate_reports/pdfs/<file>. The corpus copy's SHA-256 is the record of what the extraction read (for an HTML filing, the file the extraction's converted PDF was made from), except for an entry with earlier_copy: its corpus copy replaced an earlier one, whose size and SHA-256 earlier_copy gives, and its note says which of the two the extraction record was made from. source_url says where Lloyd's served a file on the re-fetch date, and lloyds_copy says whether that file is the corpus copy.",
  "lloyds_copy": {
   "matches": "the file at source_url on the re-fetch date is, byte for byte, the corpus copy (the same SHA-256)",
   "differs": "the file at source_url differs from the corpus copy; lloyds_size_bytes and lloyds_sha256 are those of the file Lloyd's served",
@@ -13,8 +13,8 @@
  },
  "counts": {
   "filings": 33,
-  "matches": 16,
-  "differs": 1,
+  "matches": 17,
+  "differs": 0,
   "not_found": 16
  },
  "filings": [
@@ -350,12 +350,14 @@
    "year": 2018,
    "file": "syndicate_3210_2018.pdf",
    "source_url": "https://assets.lloyds.com/assets/pdf-2018-3210-a/1/pdf-2018-3210-a.pdf",
-   "size_bytes": 8380416,
-   "sha256": "ea9e9842c02cc124a39e24ad36a6e1e244ec6d5e25717c9a2e6c32a1b0694838",
-   "lloyds_copy": "differs",
-   "lloyds_size_bytes": 24301861,
-   "lloyds_sha256": "cbdc7b8d0383d18ce1be2c00fa76fcdafb7f73623a38cac4d1fd03daec32efe8",
-   "note": "The corpus copy is the first 8,380,416 bytes of the file Lloyd's serves (24,301,861 bytes): the download was cut short, and the copy opens with no page."
+   "size_bytes": 24301861,
+   "sha256": "cbdc7b8d0383d18ce1be2c00fa76fcdafb7f73623a38cac4d1fd03daec32efe8",
+   "lloyds_copy": "matches",
+   "earlier_copy": {
+    "size_bytes": 8380416,
+    "sha256": "ea9e9842c02cc124a39e24ad36a6e1e244ec6d5e25717c9a2e6c32a1b0694838"
+   },
+   "note": "This file replaced an earlier corpus copy on 2 October 2026. The earlier copy was the first 8,380,416 bytes of this file (24,301,861 bytes): a download cut short, and it opened with no page. The extraction record of this filing was written on 11 September 2026, before the replacement, so it was made from the earlier copy."
   },
   {
    "stem": "syndicate_5820_2019",

@@ -180,17 +180,10 @@ def corpus_sources():
 
 #: The filings of the corpus that yield no text, with why. The forms read nothing in them, so the register's completeness does
 #: not reach them; tests/test_runoff_corpus_register.py holds this list to the corpus in both directions (review of 2 October
-#: 2026, E-6: the README said every filing was scanned, and a filing with no page passed the scan unread).
-UNREADABLE = {
-    "syndicate_3210_2018": ("the local file is damaged: it opens with no page. Syndicate 3210 has been in run-off since "
-                            "31 December 2016 (its 2017 entry is WHOLE) and the record carries no development figure. "
-                            "A fresh download of the filing is the repair. It is not a row of the workbook, so "
-                            "scripts/download_from_xlsx.py cannot fetch it. Fetch it by hand from Lloyd's, or with "
-                            "scripts/lloyds_scraper.py --syndicates 3210 --years 2018 --output <a new folder>, and copy "
-                            "<folder>/pdfs/syndicate_3210_2018.pdf over the damaged file (the scraper skips a file that "
-                            "exists, and rewrites its output folder's metadata/reports.json, so it is not pointed at "
-                            "syndicate_reports/)."),
-}
+#: 2026, E-6: the README said every filing was scanned, and a filing with no page passed the scan unread). None since 2 October
+#: 2026: 3210/2018's earlier copy was a cut-short download that opened with no page; Lloyd's file replaced it, and, a scan with no
+#: text layer, it yields text through its committed OCR page cache (pdf_extraction/ocr_page_cache/syndicate_3210_2018.json).
+UNREADABLE = {}
 
 
 def without_text(texts_by_stem):

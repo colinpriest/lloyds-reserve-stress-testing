@@ -2800,8 +2800,11 @@ expects exactly that (11.4).
   development table, and calls 2014 "Syndicate 2014's first underwriting year"; 3902/2017's single-cohort
   table reconciles to the balance sheet's gross claims liabilities, so no older cohort is in its accounts.
 - The scan that found the 24 was repeated over the other 21 unread filings, all pages: none states a
-  start in the report year or the year before. One of the 21, 3210/2018, cannot be read: its local PDF is
-  damaged.
+  start in the report year or the year before. One of the 21, 3210/2018, could not be read when it was
+  made: its local PDF was a cut-short download that opened with no page. Lloyd's file, fetched on 2 October
+  2026 and read from its OCR page cache, states no start either: the audit's inception terms
+  (`INCEPTION_TERMS` in `scripts/audit_structural_eligibility.py`) match nothing in its 44 pages, and the
+  filing says that the syndicate ceased to write new business at 31 December 2016.
 - A restated filing that prints no opening balance says why (`opening_gross_reserve_exemption`): its
   syndicate began in the report year, so no claims outstanding at 1 January exist to print, and the test
   accepts the declaration for a first-year filing only.
@@ -3095,8 +3098,10 @@ in `extract_with_gemini`).
 
 **Unread filings that print a table the parsers do not read**
 (verification review of round 62, N-V-E-4).  Two of the 21 records still
-with no deterministic reading print a claims development table.  Their
-committed caches and filing pages say why each stays unread:
+with no deterministic reading print a claims development table that the
+parsers read and refuse; a third, 3210/2018, prints one that they have not
+read (last bullet).  Their committed caches and filing pages say why each
+stays unread:
 
 - 3500/2015: its Azure cache holds a gross triangle of five cohorts
   (2006-2010, £000) whose first estimates sit three to five years
@@ -3117,6 +3122,15 @@ committed caches and filing pages say why each stays unread:
   structure score, and the page-text loss-ratio parser reads the
   latest year of the printed header as 2011 and returns nothing.  A
   change to either is UNTESTED.
+- 3210/2018: Lloyd's file, fetched on 2 October 2026, is a scan whose
+  OCR page cache is committed, and page 41 prints a gross and a net claims
+  development table by underwriting year (2011 to 2016, £000), every cohort
+  of it up to t-2.  The record was written on 11 September 2026 from the
+  earlier local copy, a cut-short download that opened with no page, so the
+  parsers had nothing to read, and it is unchanged.  No table backend has
+  read the new file: no grid of it is committed (`backend_cache_absent.json`
+  lists it), and reading it needs a paid table extraction, which has not
+  been authorised.  No figure has been taken from the table.
 
 Three more filings were on this list before the third cycle: 1699/2022,
 1975/2019 and 1922/2024.  Their caches hold no triangle grid, and the

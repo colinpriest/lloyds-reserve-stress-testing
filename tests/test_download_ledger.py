@@ -105,13 +105,14 @@ def test_the_counts_the_audit_page_states_are_the_files():
     assert m and tuple(int(x) for x in m.groups()) == (counts["WHOLE"] + counts["PART"], counts["WHOLE"], counts["PART"]), (
         m and m.group(0), counts)
     reviewed = {r["stem"].replace("syndicate_", "") for r in reg["reviewed_not_run_off"]}
+    # each key is a pattern: "has no entry" when one filing is named, "have no entry" when several are
     expected = {
-        "are NOTCOUNT": {s for s in listed if category.get(s) == "NOTCOUNT"},
-        "was reviewed and states no run-off": listed & reviewed,
-        "have no entry": {s for s in listed if s not in category and s not in reviewed},
+        r"are NOTCOUNT": {s for s in listed if category.get(s) == "NOTCOUNT"},
+        r"was reviewed and states no run-off": listed & reviewed,
+        r"(?:have|has) no entry": {s for s in listed if s not in category and s not in reviewed},
     }
     for phrase, stems in expected.items():
-        m = re.search(r"((?:\d{2,4}/20\d\d(?:,? and |, )?)+) " + re.escape(phrase), item)
+        m = re.search(r"((?:\d{2,4}/20\d\d(?:,? and |, )?)+) " + phrase, item)
         named = {"%s_%s" % (a, b) for a, b in re.findall(r"(\d{2,4})/(20\d\d)", m.group(1))} if m else set()
         assert named == stems, (phrase, sorted(named), sorted(stems))
 

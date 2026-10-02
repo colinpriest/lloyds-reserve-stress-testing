@@ -33,7 +33,7 @@ NAME = "syndicate_reports/download_addendum.json"
 
 COPY_STATES = ("matches", "differs", "not found")
 REQUIRED = {"stem", "syndicate", "year", "file", "source_url", "size_bytes", "sha256", "lloyds_copy"}
-OPTIONAL = {"source_note", "lloyds_size_bytes", "lloyds_sha256", "note"}
+OPTIONAL = {"source_note", "lloyds_size_bytes", "lloyds_sha256", "note", "earlier_copy"}
 HEADER_TEXTS = ("purpose", "why_not_in_the_ledger", "fingerprint")
 
 
@@ -121,6 +121,19 @@ def _entry_problems(e):
                 bad.append("lloyds_copy is 'differs' but the SHA-256 is the corpus copy's")
     if "note" in keys and not (isinstance(e["note"], str) and e["note"].strip()):
         bad.append("note is empty")
+    if "earlier_copy" in keys:
+        # a corpus copy that was replaced by Lloyd's file: the entry says which copy it was, and that the file is now Lloyd's
+        early = e["earlier_copy"]
+        if not (isinstance(early, dict) and set(early) == {"size_bytes", "sha256"}):
+            bad.append("earlier_copy is not a size and a SHA-256")
+        elif not (_is_count(early["size_bytes"]) and _is_sha256(early["sha256"])):
+            bad.append("the earlier copy's size or SHA-256 is malformed")
+        elif early["sha256"] == e["sha256"]:
+            bad.append("the earlier copy has the corpus copy's own SHA-256")
+        if state != "matches":
+            bad.append("earlier_copy, but lloyds_copy is %r: a replaced copy is Lloyd's file" % state)
+        if "note" not in keys:
+            bad.append("earlier_copy without a note on it")
     return bad
 
 
@@ -147,6 +160,8 @@ def test_the_header_says_what_the_list_is_and_its_counts_are_the_entries():
     states = [e["lloyds_copy"] for e in entries]
     assert data["counts"] == {"filings": len(entries), "matches": states.count("matches"),
                               "differs": states.count("differs"), "not_found": states.count("not found")}, data["counts"]
+    if any("earlier_copy" in e for e in entries):
+        assert "earlier_copy" in data["fingerprint"], "the header does not say that a replaced copy has an earlier copy"
 
 
 def test_every_entry_is_well_formed():
@@ -163,6 +178,7 @@ GOOD = {"stem": "syndicate_9901_2099", "syndicate": 9901, "year": 2099, "file": 
         "lloyds_copy": "matches"}
 GOOD_DIFFERS = dict(GOOD, lloyds_copy="differs", lloyds_size_bytes=20, lloyds_sha256="b" * 64)
 GOOD_NOT_FOUND = dict(GOOD, source_url=None, source_note="No address was found.", lloyds_copy="not found")
+GOOD_REPLACED = dict(GOOD, earlier_copy={"size_bytes": 5, "sha256": "c" * 64}, note="This file replaced an earlier corpus copy.")
 
 
 def _without(entry, *keys):
@@ -198,15 +214,25 @@ DEFECTS = [
     ("a missing key", _without(GOOD, "sha256"), "missing"),
     ("an unknown key", dict(GOOD, comment="x"), "unexpected"),
     ("an empty note", dict(GOOD_DIFFERS, note=" "), "note"),
+    ("an earlier copy that is not a size and a SHA-256", dict(GOOD_REPLACED, earlier_copy="x"), "not a size and a SHA-256"),
+    ("an earlier copy with an extra key", dict(GOOD_REPLACED, earlier_copy={"size_bytes": 5, "sha256": "c" * 64, "file": "x"}),
+     "not a size and a SHA-256"),
+    ("an earlier copy with no size", dict(GOOD_REPLACED, earlier_copy={"sha256": "c" * 64}), "not a size and a SHA-256"),
+    ("an earlier copy with a size of zero", dict(GOOD_REPLACED, earlier_copy={"size_bytes": 0, "sha256": "c" * 64}), "earlier copy's size"),
+    ("an earlier copy with a short SHA-256", dict(GOOD_REPLACED, earlier_copy={"size_bytes": 5, "sha256": "c" * 10}), "earlier copy's size"),
+    ("an earlier copy that is the corpus copy", dict(GOOD_REPLACED, earlier_copy={"size_bytes": 5, "sha256": "a" * 64}), "own SHA-256"),
+    ("an earlier copy on an entry that is not Lloyd's file", dict(GOOD_REPLACED, lloyds_copy="differs", lloyds_size_bytes=20,
+                                                                     lloyds_sha256="b" * 64), "a replaced copy is Lloyd's file"),
+    ("an earlier copy with no note", _without(GOOD_REPLACED, "note"), "without a note"),
 ]
 
 
 def test_the_well_formedness_checks_pass_good_entries_and_catch_each_defect():
     """The control for the test above: a check that cannot fail proves nothing, so each rule is run on an entry broken in
     exactly that way, and the report must name it."""
-    for good in (GOOD, GOOD_DIFFERS, GOOD_NOT_FOUND):
+    for good in (GOOD, GOOD_DIFFERS, GOOD_NOT_FOUND, GOOD_REPLACED):
         assert _entry_problems(good) == [], good
-    assert len(DEFECTS) >= 25
+    assert len(DEFECTS) >= 35
     for what, entry, word in DEFECTS:
         problems = _entry_problems(entry)
         assert problems, "not caught: %s" % what
@@ -224,9 +250,14 @@ def test_every_corpus_file_is_the_one_its_entry_fingerprints():
         assert _sha256(path) == e["sha256"], e["file"]
 
 
+def _long(d):
+    """A date as the documents write it: 2 October 2026."""
+    return "%d %s %d" % (d.day, calendar.month_name[d.month], d.year)
+
+
 def test_the_audit_page_names_the_list_and_states_its_counts_and_date():
-    """The item on the filings the ledger does not hold says where the list is, when they were looked up again and how the
-    file at each address compares: every figure is the list's own."""
+    """The item on the filings the ledger does not hold says where the list is, when they were looked up again, how the file at
+    each address compares (and which filings differ, if any) and which corpus copy was replaced: every figure is the list's own."""
     _, item = _off_ledger_item()
     assert NAME in item, "the audit page's item does not name the list"
     data = _addendum()
@@ -234,15 +265,53 @@ def test_the_audit_page_names_the_list_and_states_its_counts_and_date():
     m = re.search(r"found an address for (\d+) of the (\d+)", item)
     assert m, "the item does not say for how many an address was found"
     assert (int(m.group(1)), int(m.group(2))) == (counts["matches"] + counts["differs"], counts["filings"]), m.group(0)
-    m = re.search(r"is, byte for byte, the corpus copy for (\d+) of them; it differs for (\d+), ([^.]*?) whose", item)
+    m = re.search(r"is, byte for byte, the corpus copy for (\d+) of them; it differs for (\d+)(?:, ([^.]*?) whose)?", item)
     assert m, "the item does not say how many of the files match and how many differ"
     differs = {"%s/%s" % (e["syndicate"], e["year"]) for e in entries if e["lloyds_copy"] == "differs"}
-    named = set(re.findall(r"\b(\d{2,4}/20\d\d)\b", m.group(3)))
+    named = set(re.findall(r"\b(\d{2,4}/20\d\d)\b", m.group(3) or ""))
     assert (int(m.group(1)), int(m.group(2)), named) == (counts["matches"], counts["differs"], differs), m.group(0)
     m = re.search(r"found no address for the other (\d+)", item)
     assert m and int(m.group(1)) == counts["not_found"], (m and m.group(0), counts["not_found"])
-    d = datetime.date.fromisoformat(data["refetch"]["date"])
-    assert "re-fetch of %d %s %d" % (d.day, calendar.month_name[d.month], d.year) in item
+    refetched = datetime.date.fromisoformat(data["refetch"]["date"])
+    assert "re-fetch of %s" % _long(refetched) in item
+    replaced = {"%s/%s" % (e["syndicate"], e["year"]): e for e in entries if "earlier_copy" in e}
+    m = re.search(r"The corpus copy of ((?:\d{2,4}/20\d\d(?:,? and |, )?)+) (?:was|were) replaced on (\d{1,2} [A-Za-z]+ \d{4})", item)
+    if replaced:
+        assert m, "the item does not say which corpus copy was replaced"
+        assert set(re.findall(r"\d{2,4}/20\d\d", m.group(1))) == set(replaced), (m.group(0), sorted(replaced))
+        assert m.group(2) == _long(refetched), m.group(0)
+        for label, e in replaced.items():
+            assert "{:,}".format(e["earlier_copy"]["size_bytes"]) in item, (label, "the earlier copy's size")
+        assert ("cut-short download" in item) == all("cut short" in e["note"] for e in replaced.values()), (
+            "the item calls the earlier copy a cut-short download, or not, against the list's note")
+    else:
+        assert not m, "the item names a replaced corpus copy that the list does not"
+
+
+def test_a_replaced_copys_note_is_what_the_files_and_the_extraction_record_say():
+    """An entry whose corpus copy replaced another says in its note when, how long the earlier copy was (and, when it is the first
+    bytes of this file, how long this one is) and which of the two its filing's extraction record was made from: the record's own
+    date against the replacement's. Each is checked here against the entry and the committed record."""
+    data = _addendum()
+    replaced_on = datetime.date.fromisoformat(data["refetch"]["date"])
+    seen = 0
+    for e in data["filings"]:
+        if "earlier_copy" not in e:
+            continue
+        seen += 1
+        note = " ".join(e["note"].split())
+        assert "replaced an earlier corpus copy on %s" % _long(replaced_on) in note, e["stem"]
+        assert "{:,} bytes".format(e["earlier_copy"]["size_bytes"]) in note, e["stem"]
+        if "a download cut short" in note:
+            assert "the first {:,} bytes of this file ({:,} bytes)".format(e["earlier_copy"]["size_bytes"], e["size_bytes"]) in note, e["stem"]
+            assert e["earlier_copy"]["size_bytes"] < e["size_bytes"], e["stem"]
+        record = json.loads((ROOT / "pdf_extraction" / (e["stem"] + ".json")).read_text(encoding="utf-8"))
+        written = datetime.date.fromisoformat(record["extraction_timestamp"][:10])
+        assert "written on %s" % _long(written) in note, (e["stem"], "the note does not give the record's date")
+        before = "before the replacement, so it was made from the earlier copy" in note
+        after = "after the replacement" in note
+        assert (before, after) == ((True, False) if written < replaced_on else (False, True)), (e["stem"], written, replaced_on)
+    assert seen, "no entry has an earlier copy, so this test checked nothing"
 
 
 def test_the_readme_download_step_points_to_the_list():

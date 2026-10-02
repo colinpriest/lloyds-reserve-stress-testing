@@ -99,13 +99,16 @@ equivalent of this table (across all ~180 syndicates) is the `by_syndicate` shee
   are in `syndicate_reports/download_addendum.json`, which
   `scripts/build_download_addendum.py` builds from a re-fetch of 2 October 2026 with
   `scripts/lloyds_scraper.py`. The scraper found an address for 17 of the 33, and the
-  file Lloyd's serves at the address is, byte for byte, the corpus copy for 16 of
-  them; it differs for 1, 3210/2018, whose local file is damaged. It found no
-  address for the other 16. By the run-off corpus register
-  (`pdf_extraction/audit/runoff_corpus_register.json`), 28 of them
-  are run-off years (27 WHOLE, 1 PART: 1110/2024); 1884/2023 and 1884/2024 are
-  NOTCOUNT; 1110/2023 was reviewed and states no run-off; 1100/2024 and 3210/2018
-  have no entry (3210/2018's local file is damaged). The coverage report reconciles
+  file Lloyd's serves at the address is, byte for byte, the corpus copy for 17 of
+  them; it differs for 0. It found no address for the other 16. The corpus copy of
+  3210/2018 was replaced on 2 October 2026: its earlier copy (8,380,416 bytes, which
+  opened with no page) was a cut-short download of Lloyd's file, and the list keeps
+  that copy's size and SHA-256 as `earlier_copy`. By the run-off corpus register
+  (`pdf_extraction/audit/runoff_corpus_register.json`), 29 of them
+  are run-off years (28 WHOLE, 1 PART: 1110/2024); 1884/2023 and 1884/2024 are
+  NOTCOUNT; 1110/2023 was reviewed and states no run-off; 1100/2024 has no entry.
+  (3210/2018 is a scan: its run-off reading is from local OCR text, as README item 9
+  says.) The coverage report reconciles
   the 1,125 workbook rows (1,032 downloaded), not the 1,065 filings. (Corrected on 2
   October 2026. This item said the ledger flagged the 33 as already present, and
   called the difference a gap of 3.1% in the ledger's completeness.)

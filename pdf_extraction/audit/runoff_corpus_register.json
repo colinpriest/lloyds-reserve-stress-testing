@@ -9,7 +9,7 @@
  },
  "premium_register": "pdf_extraction/audit/runoff_register.json holds the premium rule's own readings (records with a development figure and a premium at or below zero). Eight of its entries are also entries here and are copies of it; tests/test_runoff_corpus_register.py fails if the two differ. 3623/2018, the one premium-register record that is no entry here, is a live syndicate.",
  "sources": "The local filings: syndicate_reports/pdfs (the converted PDF in pdf_extraction/html_converted for an HTML-only filing). source_page is 1-based in the file source_sha256 hashes (the converted PDF for an HTML filing); source_page_printed is the number printed on that page. Each quote in evidence, other_statements and note_quotes is verbatim from the page cited (white space collapsed; ' ... ' marks words left out), and tests/test_runoff_corpus_register.py holds each to its page. A phrase a note puts in single quotes is inside one of the entry's quotes. The statements in scan_reviewed are quoted the same way.",
- "scope": "What is complete, and how that was checked. (1) By test: every filing of the corpus (the 1,065 committed extraction records) is scanned with the statement forms in scripts/runoff_statement_forms.py, the forms in which a filing says that its syndicate is in run-off, has stopped underwriting or will stop. A filing that a form matches is an entry here, or the record reviewed apart (reviewed_not_run_off), or its matching sentences are listed in scan_reviewed with the reason each is not the syndicate's own run-off (another entity, a class or line, an office or channel, or not a stop); tests/test_runoff_corpus_register.py fails if a matching sentence is in none of them. For those forms, then, the WHOLE, PART and AFTER entries are complete over every filing of the corpus that yields text. One filing yields none: the local copy of 3210/2018 is damaged (it opens with no page), so the forms read nothing in it; UNREADABLE in scripts/runoff_statement_forms.py declares it, and the test fails if any other filing yields no text, or if this one does once it is downloaded again. (2) Not by test: the first version of this register, built from filings that say run-off or ceased underwriting, missed 17 syndicate-years that the forms find. The independent review of 1 October 2026 found ten of them (Syndicate 1209's 2015 to 2017 filings, which never say run-off, and seven others in the working sample), its verifier two more (779/2016 and 3500/2015), and the forms five more (1882/2016, 2008/2021, 3330/2017, 6132/2021 and 6133/2021). (3) Keyword and pattern scans can miss oblique wording, as both 1209 years show; the forms are the defence. One entry's own words match no form (4321/2023, which says the syndicate will no longer write new follow capacity insurance business), and a statement in words that no form matches and no reader found is not in this register.",
+ "scope": "What is complete, and how that was checked. (1) By test: every filing of the corpus (the 1,065 committed extraction records) is scanned with the statement forms in scripts/runoff_statement_forms.py, the forms in which a filing says that its syndicate is in run-off, has stopped underwriting or will stop. A filing that a form matches is an entry here, or the record reviewed apart (reviewed_not_run_off), or its matching sentences are listed in scan_reviewed with the reason each is not the syndicate's own run-off (another entity, a class or line, an office or channel, or not a stop); tests/test_runoff_corpus_register.py fails if a matching sentence is in none of them. For those forms, then, the WHOLE, PART and AFTER entries are complete over every filing of the corpus: every filing yields text. 3210/2018 was fetched again on 2 October 2026, because its earlier copy was a cut-short download that opened with no page; Lloyd's file is a scan with no text layer, and its page text is its committed OCR page cache (pdf_extraction/ocr_page_cache/syndicate_3210_2018.json), made with the project's local Tesseract route. UNREADABLE in scripts/runoff_statement_forms.py is empty, and the test fails if any filing yields no text. (2) Not by test: the first version of this register, built from filings that say run-off or ceased underwriting, missed 17 syndicate-years that the forms find. The independent review of 1 October 2026 found ten of them (Syndicate 1209's 2015 to 2017 filings, which never say run-off, and seven others in the working sample), its verifier two more (779/2016 and 3500/2015), and the forms five more (1882/2016, 2008/2021, 3330/2017, 6132/2021 and 6133/2021). (3) Keyword and pattern scans can miss oblique wording, as both 1209 years show; the forms are the defence. One entry's own words match no form (4321/2023, which says the syndicate will no longer write new follow capacity insurance business), and a statement in words that no form matches and no reader found is not in this register.",
  "records": [
   {
    "stem": "syndicate_44_2018",
@@ -1580,6 +1580,27 @@
    "other_statements": [],
    "note_quotes": [],
    "note": null
+  },
+  {
+   "stem": "syndicate_3210_2018",
+   "syndicate": 3210,
+   "year": 2018,
+   "category": "WHOLE",
+   "runoff_from": "31 December 2016",
+   "source_file": "syndicate_reports/pdfs/syndicate_3210_2018.pdf",
+   "source_sha256": "cbdc7b8d0383d18ce1be2c00fa76fcdafb7f73623a38cac4d1fd03daec32efe8",
+   "source_page": 5,
+   "source_page_printed": "3",
+   "evidence": "From 31 December 2016 the Syndicate is no longer underwriting new business and is now in run-off.",
+   "other_statements": [
+    {
+     "page": 5,
+     "page_printed": "3",
+     "quote": "The Syndicate ceased to write new business at 31 December 2016 and has entered run-off."
+    }
+   ],
+   "note_quotes": [],
+   "note": "Lloyd's file is a scan with no text layer, so the quotes are the text of its committed OCR page cache (pdf_extraction/ocr_page_cache/syndicate_3210_2018.json, made with the project's local Tesseract route), checked against the rendered page; the printed page was read from the rendered page, which the OCR text does not carry. This file replaced a cut-short earlier copy on 2 October 2026; the filing's extraction record, which was made from the earlier copy, is unchanged. The filing also says that the syndicate closed into Riverstone syndicate 3500 by reinsurance to close with effect from 1 January 2019."
   },
   {
    "stem": "syndicate_3268_2021",

@@ -4,7 +4,7 @@ The author's in-sample decision (option A) excludes a syndicate-year whose own f
 run-off for the whole year, unless the model assigns it to the assumed-business regime. The exclusion needs one thing from
 the extraction: for every syndicate-year whose filing speaks of the syndicate itself running off or ceasing to underwrite,
 the filing's words, the page and the file they are on, and a category. `pdf_extraction/audit/runoff_corpus_register.json`
-holds that for 105 syndicate-years:
+holds that for 106 syndicate-years:
 
   WHOLE     in run-off, or ceased underwriting, from the start of the year or before: a run-off year
   PART      the run-off begins during the year
@@ -66,7 +66,7 @@ UNDATED_WHOLE = {"syndicate_2008_2021", "syndicate_2008_2023", "syndicate_2255_2
 RE_READ = {"syndicate_2088_2019": "AFTER", "syndicate_2468_2020": "PART", "syndicate_1884_2023": "NOTCOUNT",
            "syndicate_1884_2024": "NOTCOUNT", "syndicate_1254_2022": "NOTCOUNT", "syndicate_1254_2023": "NOTCOUNT",
            "syndicate_1975_2021": "AFTER"}
-COUNTS = {"WHOLE": 42, "PART": 9, "AFTER": 38, "NOTCOUNT": 16}
+COUNTS = {"WHOLE": 43, "PART": 9, "AFTER": 38, "NOTCOUNT": 16}
 #: the premium register's entries that are not corpus entries: a live syndicate whose negative premium is a return premium
 NOT_IN_CORPUS = {"syndicate_3623_2018"}
 #: the entry whose own words no statement form matches: it says the syndicate "will no longer write new follow capacity insurance
@@ -84,7 +84,7 @@ READ_FROM_THE_PAGE = {
     ("syndicate_1994_2024", 25), ("syndicate_2007_2018", 7), ("syndicate_2007_2019", 5), ("syndicate_2007_2019", 8),
     ("syndicate_2008_2016", 6), ("syndicate_2008_2018", 6), ("syndicate_2008_2019", 6), ("syndicate_2088_2019", 4),
     ("syndicate_2088_2019", 15), ("syndicate_2468_2019", 9), ("syndicate_3210_2016", 5), ("syndicate_3210_2017", 6),
-    ("syndicate_557_2022", 5), ("syndicate_6124_2015", 4), ("syndicate_6130_2018", 4),
+    ("syndicate_3210_2018", 5), ("syndicate_557_2022", 5), ("syndicate_6124_2015", 4), ("syndicate_6130_2018", 4),
 }
 
 
@@ -156,7 +156,7 @@ def test_the_register_is_one_reading_per_syndicate_year_with_its_category_and_it
     assert tuple(data["categories"]) == CATEGORIES
     records = data["records"]
     stems = [r["stem"] for r in records]
-    assert len(stems) == len(set(stems)) == 105
+    assert len(stems) == len(set(stems)) == 106
     assert stems == [s for _, s in sorted(((r["syndicate"], r["year"]), r["stem"]) for r in records)], "sorted by syndicate and year"
     for r in records:
         assert set(r) == FIELDS, r["stem"]
@@ -459,7 +459,7 @@ def test_each_quote_is_on_the_page_it_cites_in_the_file_with_that_hash():
 
 def test_each_printed_page_is_the_folio_its_page_shows():
     """A printed page the register states is the number the page itself prints, wherever the text layer carries it (all but
-    the 23 pages in READ_FROM_THE_PAGE, which were read from the rendered page). Needs the filings."""
+    the 24 pages in READ_FROM_THE_PAGE, which were read from the rendered page). Needs the filings."""
     data = _load()
     entries = data["records"] + data["reviewed_not_run_off"]
     present = _filings_present(entries)
@@ -542,21 +542,43 @@ def test_a_filing_with_no_text_is_found_whatever_way_it_is_damaged(tmp_path):
     assert sorted(read["textless"]) != sorted(forms.UNREADABLE)
 
 
+#: the OCR page cache that 3210/2018's page text comes from: its file is a scan with no text layer
+OCR_CACHE_3210_2018 = "pdf_extraction/ocr_page_cache/syndicate_3210_2018.json"
+
+
 def test_the_readme_and_the_register_name_every_unreadable_filing():
-    """README item 9 and the register's scope say the forms read every filing that yields text, and name each one that does
-    not. Before 2 October 2026 both said every filing of the corpus was scanned, and 3210/2018 had been read as nothing."""
+    """README item 9 and the register's scope say the forms read every filing that yields text. With a filing declared
+    unreadable, both name it. With none declared, as since 2 October 2026, both say that every filing yields text and name no
+    filing as one that does not, and both say how the one filing that was fetched again that day is read: 3210/2018's earlier
+    copy was a cut-short download that opened with no page, and Lloyd's file is a scan whose page text is a committed OCR page
+    cache, which has to be there. Before 2 October 2026 both said every filing of the corpus was scanned, and 3210/2018 had been
+    read as nothing."""
     text = (ROOT / "README.md").read_text(encoding="utf-8")
     start = text.index("9. **Run-off corpus register**")
     item = text[start:text.index("\n", start)]
     scope = _load()["scope"]
-    assert forms.UNREADABLE, "no unreadable filing is declared; if 3210/2018 was downloaded again, update item 9 and the scope"
-    for stem in forms.UNREADABLE:
-        label = stem.replace("syndicate_", "").replace("_", "/")
-        assert label in item, ("README item 9 does not name the unreadable filing", label)
-        assert label in scope, ("the register's scope does not name the unreadable filing", label)
+    labels = [stem.replace("syndicate_", "").replace("_", "/") for stem in forms.UNREADABLE]
     for where, words in (("README item 9", item), ("the register's scope", scope)):
         assert "complete over the whole corpus" not in words, (where, "claims the whole corpus")
         assert "yields text" in words, (where, "does not limit the claim to the filings that yield text")
+        for label in labels:
+            assert label in words, (where, "does not name the unreadable filing", label)
+        if not labels:
+            assert "every filing yields text" in words, (where, "does not say that every filing yields text")
+            assert "yields none" not in words, (where, "still says that a filing yields no text")
+            assert "3210/2018 was fetched again on 2 October 2026" in words, (where, "does not say 3210/2018 was fetched again")
+            assert "cut-short download" in words, (where, "does not say why")
+            assert OCR_CACHE_3210_2018 in words, (where, "does not name the OCR page cache the filing's text comes from")
+    if not labels:
+        assert (ROOT / OCR_CACHE_3210_2018).is_file(), "the OCR page cache that item 9 and the scope name is not committed"
+
+
+def test_the_counts_this_file_states_in_its_own_text_are_the_registers_and_the_lists():
+    """The module docstring says how many syndicate-years the register holds, and the folio test's docstring how many cited pages
+    were read from the rendered page: each is the file's own count, so neither drifts when an entry is added."""
+    assert "holds that for %d syndicate-years" % len(_records()) in " ".join(__doc__.split())
+    folio = " ".join(test_each_printed_page_is_the_folio_its_page_shows.__doc__.split())
+    assert "all but the %d pages in READ_FROM_THE_PAGE" % len(READ_FROM_THE_PAGE) in folio
 
 
 def test_every_filing_a_form_matches_is_an_entry_or_has_its_matching_sentences_reviewed(corpus_hits):

@@ -22,11 +22,16 @@ for each listed filing,
 one run for each syndicate with that syndicate's listed years (the scraper rewrites its output folder's metadata/reports.json,
 so each syndicate has a folder of its own, and none is pointed at syndicate_reports/; it also writes lloyds_scraper.log to the
 working directory). Each fresh copy is then compared with the corpus copy by SHA-256. This script re-reads every corpus copy and
-stops if one is not the file compare.json compared, so the list is never built from a comparison that is out of date. When the
-folder also holds the fresh copies (<folder>/<syndicate>/pdfs/<file>), a corpus copy that is the first bytes of its fresh copy
-(a download cut short) is said so.
+stops if one is neither the file compare.json compared nor that filing's fresh copy, so the list is never built from a comparison
+that is out of date. A corpus copy that is the fresh copy, where compare.json compared another file, was replaced by Lloyd's file
+after the comparison: it is listed as matching, and the copy it replaced is kept as earlier_copy (the size and SHA-256 that
+compare.json gives), with a note on which of the two the filing's extraction record was made from. compare.json must therefore be
+the one made before the replacement. When the folder also holds the fresh copies (<folder>/<syndicate>/pdfs/<file>), a corpus copy
+that is the first bytes of its fresh copy (a download cut short) is said so.
 
-Usage:  python scripts/build_download_addendum.py <folder> --fetched 2026-10-02 [--output PATH]
+Usage:  python scripts/build_download_addendum.py <folder> --fetched 2026-10-02 [--output PATH] [--earlier-copy N_YYYY=PATH ...]
+        (--earlier-copy names a replaced corpus copy that is kept: the build checks it against compare.json, and says so if it is the
+        first bytes of the file that replaced it, a download cut short)
 """
 import argparse
 import datetime
@@ -90,6 +95,33 @@ def first_bytes_of(path, other):
     return True
 
 
+def record_date(stem):
+    """The date the filing's extraction record was written (its extraction_timestamp), as YYYY-MM-DD, or None."""
+    path = ROOT / "pdf_extraction" / ("syndicate_%s.json" % stem)
+    stamp = json.loads(path.read_text(encoding="utf-8")).get("extraction_timestamp") if path.exists() else None
+    return stamp[:10] if isinstance(stamp, str) and re.match(r"\d{4}-\d{2}-\d{2}", stamp) else None
+
+
+def replaced_note(stem, earlier, pages, fetched, size=None, cut_short=False):
+    """What a reader needs about a corpus copy that replaced another: the earlier copy (said to be the first bytes of this file,
+    a download cut short, only when the build was given the earlier file and checked it), and which of the two the filing's
+    extraction record was made from (by its date against the replacement's)."""
+    if cut_short:
+        note = ("This file replaced an earlier corpus copy on %s. The earlier copy was the first {:,} bytes of this file ({:,} "
+                "bytes): a download cut short%s.".format(earlier["size_bytes"], size)
+                % (long_date(fetched), ", and it opened with no page" if pages == 0 else ""))
+    else:
+        note = ("This file replaced an earlier corpus copy on %s. The earlier copy was {:,} bytes%s.".format(earlier["size_bytes"])
+                % (long_date(fetched), " and opened with no page" if pages == 0 else ""))
+    written = record_date(stem)
+    if written and written < fetched:
+        note += (" The extraction record of this filing was written on %s, before the replacement, so it was made from the earlier "
+                 "copy." % long_date(written))
+    elif written:
+        note += " The extraction record of this filing was written on %s, after the replacement." % long_date(written)
+    return note
+
+
 def header(fetched):
     return {
         "purpose": ("The corpus filings that have no row in the download ledger (syndicate_reports/download_status.json). For "
@@ -114,8 +146,10 @@ def header(fetched):
         },
         "fingerprint": ("size_bytes and sha256 are the size and the SHA-256 of the corpus copy, syndicate_reports/pdfs/<file>. The "
                         "corpus copy's SHA-256 is the record of what the extraction read (for an HTML filing, the file the "
-                        "extraction's converted PDF was made from). source_url says where Lloyd's served a file on the re-fetch "
-                        "date, and lloyds_copy says whether that file is the corpus copy."),
+                        "extraction's converted PDF was made from), except for an entry with earlier_copy: its corpus copy "
+                        "replaced an earlier one, whose size and SHA-256 earlier_copy gives, and its note says which of the two "
+                        "the extraction record was made from. source_url says where Lloyd's served a file on the re-fetch date, "
+                        "and lloyds_copy says whether that file is the corpus copy."),
         "lloyds_copy": {
             "matches": "the file at source_url on the re-fetch date is, byte for byte, the corpus copy (the same SHA-256)",
             "differs": ("the file at source_url differs from the corpus copy; lloyds_size_bytes and lloyds_sha256 are those of "
@@ -127,8 +161,11 @@ def header(fetched):
     }
 
 
-def build(folder, fetched):
-    """The list, as a dict, from folder/compare.json and the corpus copies."""
+def build(folder, fetched, earlier_files=None):
+    """The list, as a dict, from folder/compare.json and the corpus copies. earlier_files ({'N_YYYY': path}) are the corpus copies
+    that were replaced, if they are kept: each is checked against the size and SHA-256 compare.json gives, and said to be the
+    first bytes of the file that replaced it where it is."""
+    earlier_files = dict(earlier_files or {})
     rows = json.loads((folder / "compare.json").read_text(encoding="utf-8"))
     by_stem = {}
     for row in rows:
@@ -147,11 +184,15 @@ def build(folder, fetched):
         if (row.get("syndicate"), row.get("year")) != (syndicate, year):
             raise SystemExit("%s: compare.json gives syndicate %s, year %s" % (stem, row.get("syndicate"), row.get("year")))
         size, sha = path.stat().st_size, sha256_of(path)
-        compared = row.get("corpus") or {}
+        compared, fresh = row.get("corpus") or {}, row.get("fresh")
+        earlier = None
         if (compared.get("size_bytes"), compared.get("sha256")) != (size, sha):
-            raise SystemExit("%s: the corpus copy is not the file compare.json compared (now %d bytes, SHA-256 %s): run the "
-                             "comparison again" % (stem, size, sha))
-        url, fresh = row.get("source_url"), row.get("fresh")
+            if fresh and (fresh.get("size_bytes"), fresh.get("sha256")) == (size, sha) and compared.get("size_bytes") and compared.get("sha256"):
+                earlier = {"size_bytes": compared["size_bytes"], "sha256": compared["sha256"]}   # replaced by Lloyd's file since
+            else:
+                raise SystemExit("%s: the corpus copy is neither the file compare.json compared nor its fresh copy (now %d bytes, "
+                                 "SHA-256 %s): run the comparison again" % (stem, size, sha))
+        url = row.get("source_url")
         if bool(url) != bool(fresh):
             raise SystemExit("%s: compare.json has %s: the re-fetch is not complete" % (
                 stem, "an address and no fresh copy" if url else "a fresh copy and no address"))
@@ -172,7 +213,22 @@ def build(folder, fetched):
                 entry["note"] = ("The corpus copy is the first {:,} bytes of the file Lloyd's serves ({:,} bytes): the download "
                                  "was cut short{}.".format(size, fresh["size_bytes"],
                                                            ", and the copy opens with no page" if compared.get("pages") == 0 else ""))
+        if earlier:
+            kept, cut = earlier_files.pop(stem, None), False
+            if kept is not None:
+                if (kept.stat().st_size, sha256_of(kept)) != (earlier["size_bytes"], earlier["sha256"]):
+                    raise SystemExit("%s: %s is not the earlier copy compare.json gives (%d bytes, SHA-256 %s)"
+                                     % (stem, kept, earlier["size_bytes"], earlier["sha256"]))
+                cut = first_bytes_of(kept, path)
+            else:
+                print("note: %s: the corpus copy is the fresh copy, where compare.json compared another file; it is listed as "
+                      "replaced, and the earlier copy (%d bytes, SHA-256 %s) is compare.json's word, not checked against a file "
+                      "(give it with --earlier-copy)" % (stem, earlier["size_bytes"], earlier["sha256"]), file=sys.stderr)
+            entry["earlier_copy"] = earlier
+            entry["note"] = replaced_note(stem, earlier, compared.get("pages"), fetched, size, cut)
         entries.append(entry)
+    if earlier_files:
+        raise SystemExit("--earlier-copy was given for %s, which is not a corpus copy that was replaced" % sorted(earlier_files))
     tally = {kind: sum(1 for e in entries if e["lloyds_copy"] == kind) for kind in ("matches", "differs", "not found")}
     out["counts"] = {"filings": len(entries), "matches": tally["matches"], "differs": tally["differs"],
                      "not_found": tally["not found"]}
@@ -191,16 +247,26 @@ def main(argv=None):
     ap.add_argument("folder", type=Path, help="the folder holding compare.json (and, if kept, the fresh copies)")
     ap.add_argument("--fetched", required=True, help="the date of the re-fetch, YYYY-MM-DD")
     ap.add_argument("--output", type=Path, default=OUTPUT, help="where to write the list (default: %(default)s)")
+    ap.add_argument("--earlier-copy", action="append", default=[], metavar="N_YYYY=PATH",
+                    help="the corpus copy of that filing that was replaced, if it is kept; may be repeated")
     args = ap.parse_args(argv)
     try:
         datetime.date.fromisoformat(args.fetched)
     except ValueError:
         ap.error("--fetched must be a date, YYYY-MM-DD")
-    data = build(args.folder, args.fetched)
+    earlier_files = {}
+    for item in args.earlier_copy:
+        stem, _, where = item.partition("=")
+        if not re.fullmatch(r"\d+_\d{4}", stem) or not Path(where).is_file():
+            ap.error("--earlier-copy must be N_YYYY=PATH, with PATH a file: %r" % item)
+        earlier_files[stem] = Path(where)
+    data = build(args.folder, args.fetched, earlier_files)
     write(args.output, data)
     c = data["counts"]
     print("wrote %s: %d filings; the file at Lloyd's address matches the corpus copy for %d and differs for %d; no address "
-          "found for %d" % (args.output, c["filings"], c["matches"], c["differs"], c["not_found"]))
+          "found for %d; %d corpus copies replaced since the comparison" % (
+              args.output, c["filings"], c["matches"], c["differs"], c["not_found"],
+              sum(1 for e in data["filings"] if "earlier_copy" in e)))
     return 0
 
 
