@@ -24,7 +24,7 @@ remaining validation uncertainty are retained in the audit trail.
 
 This toolkit provides three complementary pipelines:
 
-1. **Syndicate Report Scraper** - Downloads and classifies quality of individual syndicate annual reports (2014-2024)
+1. **Syndicate Report Download** - Downloads the syndicate annual reports the workbook lists (`scripts/download_from_xlsx.py`, 2014-2024) and classifies their quality
 2. **Market Commentary Scraper & Analyzer** - Discovers, scrapes, and standardizes market-wide reserve commentary from multiple sources
 3. **PDF Extraction Pipeline** - Extracts structured reserve data (prior year development, LOB breakdowns, claims triangles) from syndicate PDFs using a RAG-lite approach combining deterministic table extraction with dual-LLM verification
 
@@ -39,17 +39,22 @@ The three datasets an analysis project needs, and where to find them:
 
 | Dataset | Location | Format | In git? |
 |---------|----------|--------|---------|
-| **Syndicate reports** (raw source documents) | `syndicate_reports/pdfs/syndicate_{N}_{YYYY}.pdf` (or `.html` for 2024 iXBRL) | 1,065 PDF/HTML files, 2014–2024 | No (gitignored; re-download with `scripts/download_from_xlsx.py`) |
+| **Syndicate reports** (raw source documents) | `syndicate_reports/pdfs/syndicate_{N}_{YYYY}.pdf` (or `.html` for 2024 iXBRL) | 1,065 PDF/HTML files, 2014–2024 | No (gitignored; `scripts/download_from_xlsx.py` downloads the 1,032 found for the workbook's rows; the other 33 came from an earlier collection pass, see Quick Start) |
 | **Extracted structured data** (PYD, opening reserves, LoB mix, dual-LLM outputs, RAG triangle) | `pdf_extraction/syndicate_{N}_{YYYY}.json` | 1,065 JSON files (one per syndicate-year) | Yes |
 | **RITC occurrence flags** (external RITC detection with evidence/section/page) | `pdf_extraction/ritc_scan.json` | Single JSON keyed `"{syndicate}_{year}"` | Yes |
 | **Data audit results** (per-syndicate-year status, source attribution, reconciliations) | `syndicate_reports/coverage/coverage_status.xlsx` (sheets: `syndicate_years`, `by_year`, `by_syndicate`, `reconciliation`), `coverage_status.json` (full detail incl. LoB mixes), `coverage_report.md` | xlsx + JSON + markdown | Yes |
 | **Download ledger** (per-row download status, source URLs, failure reasons) | `syndicate_reports/download_status.json` | JSON keyed `"{syndicate}_{year}"` | Yes |
 | **Extraction audit trail** (LLM disagreements, rejections, run statistics) | `pdf_extraction/audit/` (`disagreement_log.json`, `rejection_log.json`, `run_manifest.json`) | JSON | Yes |
 
-The syndicate-year denominator is `syndicate_reports/Lloyds_syndicates_2014_2024.xlsx`
-(1,125 rows in the broader year-of-account candidate list with report URLs; this is
-NOT the active-market denominator, which is the 1,040 SFCR count the spreadsheet's own
-note directs use of). The current written summary is the generated
+The syndicate-year denominator is `syndicate_reports/Lloyds_Syndicates_2014_2024.xlsx`
+(1,125 rows in the broader year-of-account candidate list with report URLs). This is
+NOT the active-market denominator. That is 1,045 active syndicate-years: 572 for
+2014-2019, the workbook's SFCR column (Lloyd's annual reports and SFCRs), and 473 for
+2020-2024, Lloyd's official lists of active syndicates, which are the workbook's
+per-year sheets. The workbook's own note directs use of its SFCR column, which totals
+972; the active-market denominator follows it for 2014-2019 only. The analysis
+repository holds the same counts in `src/market_active.py` and
+`data/market_active_syndicates.json`. The current written summary is the generated
 [coverage report](syndicate_reports/coverage/coverage_report.md), backed by the
 companion JSON and workbook. `docs/data-audit-results.md` is an explicitly historical
 July 2026 snapshot. To rebuild the current coverage outputs after new downloads or
@@ -185,13 +190,32 @@ GOOGLE_CSE_ID=your-custom-search-engine-id
 
 #### 1. Download syndicate reports
 
-```bash
-# Test with a few syndicates
-python scripts/lloyds_scraper.py --syndicates 1209,2488,1274 --output ./syndicate_reports
+`scripts/download_from_xlsx.py` downloads the report for each of the 1,125 rows of
+`syndicate_reports/Lloyds_Syndicates_2014_2024.xlsx` and records each row in the download ledger,
+`syndicate_reports/download_status.json`. It is resumable: a row already downloaded is skipped.
 
-# Download all available reports (takes 2-4 hours)
-python scripts/lloyds_scraper.py --all --output ./syndicate_reports --delay 1.5
+```bash
+# A bounded batch
+python scripts/download_from_xlsx.py --limit 100
+
+# Every pending row
+python scripts/download_from_xlsx.py
+
+# Try the rows recorded as unavailable again
+python scripts/download_from_xlsx.py --retry-failed
 ```
+
+This route gives 1,032 of the corpus's 1,065 filings; the ledger records the other 93 rows as
+unavailable (no working report URL). The remaining 33 filings are not rows of the workbook, so the
+ledger has no row for them. Their records were committed in March 2026, before the downloader
+existed. They were collected by the earlier pass with `scripts/lloyds_scraper.py`, which scrapes
+lloyds.com for its own syndicate list (`data/syndicate_numbers.py`), not for the workbook's rows: the
+review of 2 October 2026 found them in that script's local metadata
+(`syndicate_reports/metadata/reports.json`, which is not committed). Neither the workbook nor the
+ledger holds a source URL for them, so the documented route does not download them again. (A Lloyd's
+URL for three of them, 1206/2019, 1400/2015 and 2243/2014, appears in
+`market_commentary/discovered_sources.json`.)
+`docs/data-audit-results.md` lists the 33.
 
 #### 2. Classify quality of downloaded reports
 
@@ -522,7 +546,7 @@ lloyds_reserve_stress_testing/
 ├── manual_override.py                      # Manual override for extraction results
 │
 ├── data/
-│   ├── syndicate_numbers.py                # List of syndicate numbers to scrape (~300)
+│   ├── syndicate_numbers.py                # The earlier scraper's syndicate list (US Treasury list, January 2025)
 │   └── __init__.py
 │
 ├── docs/                                   # Documentation and validation files
@@ -576,8 +600,8 @@ lloyds_reserve_stress_testing/
 │       └── corpus_summary.json             # Summary statistics
 │
 ├── scripts/
-│   ├── lloyds_scraper.py                   # Syndicate report downloader
-│   ├── download_from_xlsx.py               # xlsx-driven report downloader
+│   ├── lloyds_scraper.py                   # Earlier report scraper (the 33 filings off the workbook)
+│   ├── download_from_xlsx.py               # Report downloader for the workbook's rows (the current route)
 │   ├── quality_classifier.py               # Reserve commentary quality classifier
 │   ├── ocr_scanned_pdfs.py                 # OCR processing for scanned PDFs
 │   ├── build_coverage_status.py            # Build coverage/audit outputs
@@ -612,14 +636,9 @@ The syndicate classifier uses a 4-tier system based on line-of-business (LoB) br
 
 ### Syndicate Reports
 
-| Metric                             | Estimate                                                        |
-| ---------------------------------- | --------------------------------------------------------------- |
-| Total syndicates to check          | ~300                                                            |
-| Available years online             | 11 (2014-2024)                                                  |
-| Potential syndicate-years          | ~3,300                                                          |
-| Expected downloads                 | 500-800 (not all syndicates active all years)                   |
-| Usable reports (HIGH or VERY_HIGH) | ~85-140 (reports with LoB breakdown)                            |
-| VERY_HIGH quality rate             | ~5-10% (reports with LoB breakdown + clear causal descriptions) |
+The corpus is the dataset table's 1,065 filings, 2014-2024 (Quick Start step 1 says where they
+came from). The generated [coverage report](syndicate_reports/coverage/coverage_report.md) gives,
+for each year's rows of the workbook, how many were downloaded and how many extracted in full.
 
 ### Market Commentary
 
@@ -645,7 +664,7 @@ The pipeline maintains complete audit trails at every stage:
 6. **Rejection log**: Reports rejected during adjudication in `pdf_extraction/audit/rejection_log.json`
 7. **Run manifest**: Per-run statistics (processed/passed/failed/skipped counts, cost, tokens) in `pdf_extraction/audit/run_manifest.json`
 8. **Run-off register**: `pdf_extraction/audit/runoff_register.json` records, for each of the nine records that carry a development figure and an adopted gross written premium at or below zero, whether its own filing states that the syndicate is in run-off in that year: the verdict, the date the run-off is stated to begin, and the filing's words with page and file hash (`tests/test_runoff_register.py` holds each quote to its page). A premium sign is not a run-off test: 3623/2018 is a live syndicate whose negative premium is a return premium, and 5183/2024's filing puts its run-off at 1 January 2025. Seven of the nine are run-off years. 2255/2015 is one: its Future developments statement says it "continues to run-off its portfolio of liabilities", and the standard going concern paragraph of its basis of preparation, which says the managing agent expects it to "continue to write business", is recorded word for word beside that statement in the entry's note (the author's decision).
-9. **Run-off corpus register**: `pdf_extraction/audit/runoff_corpus_register.json` records, for each of the 105 syndicate-years whose filing says that the syndicate itself is in run-off or has stopped, or will stop, underwriting (in whatever words), what the filing says and how it is read: WHOLE (in run-off from the start of the year or before; 42), PART (the run-off begins during the year; 9), AFTER (it begins at or after the year end; 38) or NOTCOUNT (the filing's words do not settle it, or the statement is about another entity; 16), with the date the filing gives, its words, the page, the printed page and the file's hash (`tests/test_runoff_corpus_register.py` holds each quote to its page and each category to its date). The whole-year run-off rule reads the WHOLE entries. The premium register (item 8) copies the eight entries the two share, and a test fails if they differ. **What is complete.** The first version of the register (88 entries) was built from filings that say run-off or ceased underwriting and was checked only against its own words; it missed 17 syndicate-years, among them Syndicate 1209's 2016 and 2017 filings, which never say run-off (the independent review of 1 October 2026 found ten of them, its verifier two more, and the statement forms five). Every filing of the corpus (1,065) is now scanned with the statement forms in `scripts/runoff_statement_forms.py` (the forms in which a filing says that its syndicate is in run-off, has stopped underwriting or will stop: nine sentence-level patterns, the run-off ones with the syndicate itself as the subject), and `tests/test_runoff_corpus_register.py` fails if a filing that a form matches is neither an entry nor reviewed apart, or if a matching sentence is not in the register's `scan_reviewed` list (74 filings; each sentence with the reason it is not the syndicate's own run-off: another entity, a class or line, an office or channel, or not a stop). For those forms, then, the WHOLE, PART and AFTER entries are complete over the whole corpus, in or out of the analysis's working sample; another test holds every form to a statement that only it matches. That is the whole of the claim. Keyword and pattern scans can miss oblique wording, as both 1209 years show, and the forms are the defence: one entry's own words match no form (4321/2023, "the syndicate will no longer write new follow capacity insurance business at Lloyd's"), and a statement in words that no form matches and no reader found is not in the register. Seven readings differ from the first reading of the corpus (30 September 2026), each by the filing's words: 2088/2019 and 1975/2021 are AFTER (2088 wrote business through 2019; 1975 says it will cease underwriting after 2022), 2468/2020 is PART (its run-off began on 6 January 2020), and 1884/2023, 1884/2024, 1254/2022 and 1254/2023 are NOTCOUNT (the filings never say the syndicate is in run-off, and describe it as underwriting reinsurance to close and legacy business). 1110/2023 was reviewed and its filing states no run-off; it is recorded apart from the entries.
+9. **Run-off corpus register**: `pdf_extraction/audit/runoff_corpus_register.json` records, for each of the 105 syndicate-years whose filing says that the syndicate itself is in run-off or has stopped, or will stop, underwriting (in whatever words), what the filing says and how it is read: WHOLE (in run-off from the start of the year or before; 42), PART (the run-off begins during the year; 9), AFTER (it begins at or after the year end; 38) or NOTCOUNT (the filing's words do not settle it, or the statement is about another entity; 16), with the date the filing gives, its words, the page, the printed page and the file's hash (`tests/test_runoff_corpus_register.py` holds each quote to its page and each category to its date). The whole-year run-off rule reads the WHOLE entries. The premium register (item 8) copies the eight entries the two share, and a test fails if they differ. **What is complete.** The first version of the register (88 entries) was built from filings that say run-off or ceased underwriting and was checked only against its own words; it missed 17 syndicate-years, among them Syndicate 1209's 2016 and 2017 filings, which never say run-off (the independent review of 1 October 2026 found ten of them, its verifier two more, and the statement forms five). Every filing of the corpus (1,065) is now scanned with the statement forms in `scripts/runoff_statement_forms.py` (the forms in which a filing says that its syndicate is in run-off, has stopped underwriting or will stop: nine sentence-level patterns, the run-off ones with the syndicate itself as the subject), and `tests/test_runoff_corpus_register.py` fails if a filing that a form matches is neither an entry nor reviewed apart, or if a matching sentence is not in the register's `scan_reviewed` list (74 filings; each sentence with the reason it is not the syndicate's own run-off: another entity, a class or line, an office or channel, or not a stop). For those forms, then, the WHOLE, PART and AFTER entries are complete over every filing of the corpus that yields text, in or out of the analysis's working sample; another test holds every form to a statement that only it matches. One filing yields none: the local copy of 3210/2018 is damaged (it opens with no page), so the forms read nothing in it. Syndicate 3210 has been in run-off since 31 December 2016 (its 2017 entry is WHOLE), and the 3210/2018 record carries no development figure, so the filing does not reach the analysis's working sample. `UNREADABLE` in `scripts/runoff_statement_forms.py` declares it, and the corpus test fails if any other filing yields no text, or if this one does once it is downloaded again. That is the whole of the claim. Keyword and pattern scans can miss oblique wording, as both 1209 years show, and the forms are the defence: one entry's own words match no form (4321/2023, "the syndicate will no longer write new follow capacity insurance business at Lloyd's"), and a statement in words that no form matches and no reader found is not in the register. Seven readings differ from the first reading of the corpus (30 September 2026), each by the filing's words: 2088/2019 and 1975/2021 are AFTER (2088 wrote business through 2019; 1975 says it will cease underwriting after 2022), 2468/2020 is PART (its run-off began on 6 January 2020), and 1884/2023, 1884/2024, 1254/2022 and 1254/2023 are NOTCOUNT (the filings never say the syndicate is in run-off, and describe it as underwriting reinsurance to close and legacy business). 1110/2023 was reviewed and its filing states no run-off; it is recorded apart from the entries.
 
 **What a recorded cost counts.** A cost is the provider's token counts priced by `PRICING` in
 `test_gemini.py`, a table typed in with the pipeline in 02e160d4 (12 March 2026) with no source
@@ -737,7 +756,7 @@ The system identifies these causal categories:
 
 **Network Issues**
 
-- The scraper respects rate limits with configurable delay. If you encounter 429 errors, increase the delay.
+- Both download scripts wait between requests (`--delay`). If you encounter 429 errors, increase the delay.
 
 **API Limits**
 
@@ -766,9 +785,10 @@ The datasets produced by this toolkit support academic research on insurance res
 
 ### Suggested Workflow
 
-1. **Download syndicate reports**:
+1. **Download syndicate reports** (the workbook's rows; the 33 earlier filings are not re-downloaded,
+   see Quick Start), then classify their reserve commentary:
    ```bash
-   python scripts/lloyds_scraper.py --all --output ./syndicate_reports
+   python scripts/download_from_xlsx.py
    python scripts/quality_classifier.py --pdf-dir ./syndicate_reports/pdfs
    ```
 

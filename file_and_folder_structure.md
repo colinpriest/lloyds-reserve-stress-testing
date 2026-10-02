@@ -21,7 +21,7 @@ lloyds_reserve_stress_testing/
 │   └── temp.py                             # Ad-hoc testing
 │
 ├── data/
-│   ├── syndicate_numbers.py                # List of syndicate numbers to scrape (~300)
+│   ├── syndicate_numbers.py                # The earlier scraper's syndicate list (US Treasury list, January 2025)
 │   └── __init__.py
 │
 ├── docs/                                   # Documentation and validation files
@@ -39,7 +39,7 @@ lloyds_reserve_stress_testing/
 │       └── validation_sample_checked.xlsx  # Checked validation sample
 │
 ├── syndicate_reports/                      # Syndicate report outputs (gitignored PDFs/HTMLs)
-│   ├── Lloyds_syndicates_2014_2024.xlsx    # Syndicate-year denominator with report URLs
+│   ├── Lloyds_Syndicates_2014_2024.xlsx    # Syndicate-year denominator with report URLs
 │   ├── pdfs/                               # Downloaded source documents, one per syndicate-year
 │   │   ├── syndicate_NNNN_YYYY.pdf         # PDF filings
 │   │   └── syndicate_NNNN_YYYY.html        # iXBRL HTML filings (2024); counts live in README.md's dataset table
@@ -111,8 +111,8 @@ lloyds_reserve_stress_testing/
 │       └── corpus_summary.json             # Summary statistics
 │
 ├── scripts/
-│   ├── lloyds_scraper.py                   # Main scraper for downloading syndicate PDFs
-│   ├── download_from_xlsx.py               # xlsx-driven report downloader
+│   ├── lloyds_scraper.py                   # Earlier report scraper (the 33 filings off the workbook)
+│   ├── download_from_xlsx.py               # Report downloader for the workbook's rows (the current route)
 │   ├── quality_classifier.py               # Quality classification of syndicate reserve commentary
 │   ├── ocr_scanned_pdfs.py                 # OCR processing for scanned PDFs
 │   ├── build_coverage_status.py            # Build coverage/audit outputs
