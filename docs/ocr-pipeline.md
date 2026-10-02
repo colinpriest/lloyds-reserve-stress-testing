@@ -1238,6 +1238,25 @@ their tables, and checks every committed premium grid the reader
 admits: a class printed in brackets among positive classes is read
 negative.  The records change when they are regenerated.
 
+#### 7.7.4  Year-of-account and calendar-year columns (P-30)
+
+Ark's managing agent's report (syndicates 4020, 3902 and 6105) prints
+each class's premium by year of account and by calendar year: "2015
+YOA estimate | 2014 YOA estimate | 2013 YOA estimate | 2015 Cal. Year
+| Restated 2014 Cal. year".  The grid names no premium and its first
+header year is a comparative's, so the parser read none of these
+tables and the mixes were the models'.  6105/2015's adopted reading
+took the 2015 year-of-account column (43,178) where the premiums
+written are the calendar year's (43,859, the income statement's
+figure), and 3902/2019's took the year-of-account column scaled to
+the calendar total.  `_yoa_calendar_column` now names the report
+year's calendar-year column when the header prints year-of-account
+columns, whichever header row carries the year and the label; the
+gate holds the mix to a model's total before it is applied.  The
+rule reads 20 committed grids, all Ark's, and in each the classes
+sum to the calendar column's total, which is the premium every model
+read (`tests/test_yoa_calendar_column.py`).
+
 ### 7.8  Provisions and balance sheet grid parsing
 
 **Functions**: `_parse_nutrient_provisions(grid, report_year)`,

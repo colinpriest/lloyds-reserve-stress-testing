@@ -2551,6 +2551,28 @@ def _parse_transposed_lob(grid, report_year, flat, refusals: Optional[list] = No
                    table_total=table_total, class_sum=round(lob_sum / units_divisor, 6))
 
 
+_YOA_COLUMN = re.compile(r"\byoa\b", re.I)
+_CALENDAR_COLUMN = re.compile(r"\bcal(?:\.|endar)?\s+year\b", re.I)
+
+
+def _yoa_calendar_column(grid: list, report_year: int) -> Optional[int]:
+    """The report year's calendar-year column of a class table that prints each class's premium by year of
+    account and by calendar year, or None. Ark's managing agent's report does (4020, 3902 and 6105: "2015 YOA
+    estimate | 2014 YOA estimate | 2013 YOA estimate | 2015 Cal. Year | Restated 2014 Cal. year"). The gross
+    premiums written are the calendar year's: 6105/2015's year-of-account column sums to 43,178 and its
+    calendar-year column to the 43,859 its income statement prints, and a model reading took the first (review of
+    2 October 2026, P-30). The year and the label can sit on different header rows."""
+    if not grid or len(grid) < 3:
+        return None
+    width = max(len(r) for r in grid[:3])
+    heads = [" ".join(str(r[j]) for r in grid[:3] if j < len(r)) for j in range(width)]
+    if not any(_YOA_COLUMN.search(h) for h in heads):
+        return None
+    year = re.compile(r"(?<!\d)%d(?!\d)" % report_year)
+    cal = [j for j, h in enumerate(heads) if j and _CALENDAR_COLUMN.search(h) and year.search(h)]
+    return cal[0] if len(cal) == 1 else None
+
+
 def _parse_nutrient_lob(grid: list[list[str]], report_year: int,
                         page_text: str = "", refusals: Optional[list] = None):
     """Parse a Nutrient table grid as a segmental analysis / LOB breakdown.
@@ -2579,7 +2601,10 @@ def _parse_nutrient_lob(grid: list[list[str]], report_year: int,
         return None
     # A premium mix is read from a table that carries premiums: a strategic-report
     # class table (capacity, underwriting result by division) is not one (round 52).
-    if not any(kw in flat for kw in ("premium", "gwp", "gross written")):
+    # Ark's class table names no premium in its grid; its calendar-year column is the
+    # gross premiums written (P-30), and the gate holds it to a model's total
+    yoa_cal_col = _yoa_calendar_column(grid, report_year)
+    if yoa_cal_col is None and not any(kw in flat for kw in ("premium", "gwp", "gross written")):
         return None
 
     # Reject tables that are not segmental analysis:
@@ -2609,15 +2634,17 @@ def _parse_nutrient_lob(grid: list[list[str]], report_year: int,
     # Look at header row for year
     header_text = " ".join(grid[0]) if grid else ""
     for yr in range(report_year - 10, report_year + 2):
+        if yoa_cal_col is not None:
+            break  # the year columns are chosen below
         if str(yr) in header_text:
             if yr != report_year:
                 return None  # comparative table
             break
 
     # Find GWP column — look for "premiums" + "written" or positional
-    gwp_col = None
+    gwp_col = yoa_cal_col
     claims_col = None
-    if grid and len(grid[0]) >= 2:
+    if grid and len(grid[0]) >= 2 and gwp_col is None:
         for i, val in enumerate(grid[0]):
             val_lower = val.lower()
             if "written" in val_lower and "premium" in val_lower and gwp_col is None:
