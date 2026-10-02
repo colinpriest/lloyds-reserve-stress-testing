@@ -178,6 +178,39 @@ def corpus_sources():
     return out
 
 
+#: The filings of the corpus that yield no text, with why. The forms read nothing in them, so the register's completeness does
+#: not reach them; tests/test_runoff_corpus_register.py holds this list to the corpus in both directions (review of 2 October
+#: 2026, E-6: the README said every filing was scanned, and a filing with no page passed the scan unread).
+UNREADABLE = {
+    "syndicate_3210_2018": ("the local file is damaged: it opens with no page. Syndicate 3210 has been in run-off since "
+                            "31 December 2016 (its 2017 entry is WHOLE) and the record carries no development figure. "
+                            "A fresh download of the filing is the repair. It is not a row of the workbook, so "
+                            "scripts/download_from_xlsx.py cannot fetch it. Fetch it by hand from Lloyd's, or with "
+                            "scripts/lloyds_scraper.py --syndicates 3210 --years 2018 --output <a new folder>, and copy "
+                            "<folder>/pdfs/syndicate_3210_2018.pdf over the damaged file (the scraper skips a file that "
+                            "exists, and rewrites its output folder's metadata/reports.json, so it is not pointed at "
+                            "syndicate_reports/)."),
+}
+
+
+def without_text(texts_by_stem):
+    """The stems whose page texts hold no text at all: a damaged file opens with no page, or with pages that hold none."""
+    return sorted(stem for stem, texts in texts_by_stem.items() if not any(t.strip() for t in texts))
+
+
+def read_corpus(sources, page_texts):
+    """{"hits": {stem: [hit, ...]}, "textless": [stem, ...]} for [(stem, source path)], each filing read once with
+    `page_texts` (the audit's reader, finalize_structural_eligibility_audit.page_texts)."""
+    hits, textless = {}, []
+    for stem, source in sources:
+        texts = page_texts(source)
+        textless += without_text({stem: texts})
+        found = scan_filing(texts)
+        if found:
+            hits[stem] = found
+    return {"hits": hits, "textless": sorted(textless)}
+
+
 def unaccounted(register, hits_by_stem):
     """The hits not accounted for: those of a filing that is neither an entry nor reviewed apart, and that no scan_reviewed statement covers."""
     entries = {r["stem"] for r in register["records"]} | {r["stem"] for r in register["reviewed_not_run_off"]}
@@ -192,17 +225,15 @@ def main():
     import finalize_structural_eligibility_audit as fin
     register = json.loads(REGISTER.read_text(encoding="utf-8"))
     sources = corpus_sources()
-    hits = {}
-    for stem, source in sources:
-        found = scan_filing(fin.page_texts(source))
-        if found:
-            hits[stem] = found
+    read = read_corpus(sources, fin.page_texts)
+    hits, textless = read["hits"], read["textless"]
     todo = unaccounted(register, hits)
     by = defaultdict(list)
     for h in todo:
         by[h["stem"]].append(h)
     print("filings scanned: %d; with a matching sentence: %d; not accounted for: %d filings, %d sentences"
           % (len(sources), len(hits), len(by), len(todo)))
+    print("filings with no text: %s (declared unreadable: %s)" % (textless or "none", sorted(UNREADABLE) or "none"))
     for stem, lst in by.items():
         print(stem)
         for h in lst:

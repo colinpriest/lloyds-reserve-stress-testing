@@ -4,6 +4,11 @@ Lloyd's Syndicate Report Scraper
 ================================
 Downloads annual reports for Lloyd's syndicates (2014-2024) from lloyds.com
 
+The earlier collection route. The corpus is downloaded with scripts/download_from_xlsx.py, from the rows of
+syndicate_reports/Lloyds_Syndicates_2014_2024.xlsx; this script scrapes for its own syndicate list
+(data/syndicate_numbers.py). Its earlier pass collected the 33 corpus filings that are not rows of the
+workbook (README, Quick Start step 1).
+
 Usage:
     python lloyds_scraper.py [--syndicates 1209,2488] [--years 2020,2021,2022]
     python lloyds_scraper.py --all  # Scrape all syndicates, all years

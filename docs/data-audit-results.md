@@ -9,7 +9,7 @@
 > `python scripts/build_coverage_status.py`.
 
 Audit date: 2026-07-06 (historical; superseded by the generated coverage report)
-Retrieval denominator: `syndicate_reports/Lloyds_syndicates_2014_2024.xlsx` (1,125 rows, 2014–2024). This is the broader **year-of-account candidate list**, not the active-market denominator: the spreadsheet's own note directs use of the SFCR count, **1,040** active syndicate-years. The coverage percentages below are against the 1,125 candidate rows.
+Retrieval denominator: `syndicate_reports/Lloyds_Syndicates_2014_2024.xlsx` (1,125 rows, 2014–2024). This is the broader **year-of-account candidate list**, not the active-market denominator. That is **1,045** active syndicate-years: 572 for 2014–2019 from the workbook's SFCR column and 473 for 2020–2024 from Lloyd's official lists of active syndicates (the workbook's per-year sheets). The workbook's own note directs use of its SFCR column, which totals 972; the active-market denominator follows it for 2014–2019 only. (Corrected on 2 October 2026: this line gave the analysis's count from before Syndicate 33 was restored to the 2020–2024 lists, and attributed it to the SFCR column.) The coverage percentages below are against the 1,125 candidate rows.
 Machine-readable detail: `syndicate_reports/coverage/coverage_status.xlsx` / `.json`
 Rebuild with: `python scripts/build_coverage_status.py`
 
@@ -42,7 +42,7 @@ development tables', p.36 — computed from triangle diagonals"*).
 
 ## By year: candidate-list rows vs full success, with failure modes
 
-The **Candidates** column counts rows of the year-of-account candidate list (1,125 in total), not active syndicate-years. The active-market denominator is the SFCR count, **1,040**.
+The **Candidates** column counts rows of the year-of-account candidate list (1,125 in total), not active syndicate-years. The active-market denominator is **1,045** (see above).
 
 | Year | Candidates | Downloaded | Unavailable | PYD ok | LoB ok | Opening ok | **Full success** | fail: PYD | fail: LoB | fail: opening | 1st-yr excl | no-triangle excl | RITC occurred |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
@@ -77,12 +77,31 @@ equivalent of this table (across all ~180 syndicates) is the `by_syndicate` shee
 
 ## Extraction audit
 
-- 1,065 extraction JSONs (`pdf_extraction/syndicate_{N}_{YYYY}.json`). That is more
-  than the 1,032 downloads recorded above: 33 filings were obtained in an earlier
-  collection pass and are flagged `already_present` rather than logged as
-  downloads, so the gap is a **ledger-completeness gap of 3.1%**, not missing data.
-  No downloaded record lacks an extraction. One per
-  downloaded report.
+- 1,065 extraction JSONs (`pdf_extraction/syndicate_{N}_{YYYY}.json`), one per
+  filing. That is 33 more than the 1,032 downloads recorded above. No downloaded
+  record lacks an extraction.
+- The 33 are not rows of the workbook, so `syndicate_reports/download_status.json`
+  has no row for them, and never had one. (`already_present` is the detail of 588
+  rows the ledger records as downloaded: files already on disk when the downloader
+  ran.) They are 1100/2024, 1110/2018, 1110/2020, 1110/2021, 1110/2023, 1110/2024,
+  1206/2018, 1206/2019, 1209/2016, 1209/2017, 1400/2014, 1400/2015, 1840/2023,
+  1840/2024, 1861/2021, 1861/2022, 1882/2017, 1882/2018, 1884/2019, 1884/2020,
+  1884/2022, 1884/2023, 1884/2024, 2007/2019, 2243/2014, 2468/2021, 2468/2022,
+  2526/2017, 3210/2017, 3210/2018, 5820/2019, 780/2019 and 780/2020. Their records
+  were committed between 12 and 19 March 2026, before
+  `scripts/download_from_xlsx.py` existed (6 July 2026). They were collected by the
+  earlier pass with `scripts/lloyds_scraper.py` (the review of 2 October 2026 found them
+  in its local, uncommitted `syndicate_reports/metadata/reports.json`). Neither the workbook nor the
+  ledger holds their source URLs, so the documented re-download route does not
+  reproduce them. (A Lloyd's URL for three of them, 1206/2019, 1400/2015 and
+  2243/2014, appears in `market_commentary/discovered_sources.json`.) By the run-off
+  corpus register (`pdf_extraction/audit/runoff_corpus_register.json`), 28 of them
+  are run-off years (27 WHOLE, 1 PART: 1110/2024); 1884/2023 and 1884/2024 are
+  NOTCOUNT; 1110/2023 was reviewed and states no run-off; 1100/2024 and 3210/2018
+  have no entry (3210/2018's local file is damaged). The coverage report reconciles
+  the 1,125 workbook rows (1,032 downloaded), not the 1,065 filings. (Corrected on 2
+  October 2026. This item said the ledger flagged the 33 as already present, and
+  called the difference a gap of 3.1% in the ledger's completeness.)
 - PYD provenance hierarchy: deterministic absolute-amount claims-development-triangle
   computation (ordinarily authoritative and overriding LLMs -- but where the gross
   provisions movement disagrees with it in sign, provisions overrides the triangle)

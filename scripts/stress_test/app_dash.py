@@ -5119,8 +5119,8 @@ def handle_extraction_actions(
     project_root = get_project_root()
 
     if trigger_id == "extraction-download-btn":
-        command = "python scripts/lloyds_scraper.py --all"
-        description = "Downloading syndicate reports from Lloyd's website"
+        command = "python scripts/download_from_xlsx.py"
+        description = "Downloading the syndicate reports the workbook lists (scripts/download_from_xlsx.py)"
 
     elif trigger_id == "extraction-extract-btn":
         # Combined extraction: quality (if needed) + chatgpt + size metrics

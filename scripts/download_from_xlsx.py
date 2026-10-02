@@ -1,4 +1,4 @@
-"""Download syndicate reports listed in Lloyds_syndicates_2014_2024.xlsx.
+"""Download syndicate reports listed in Lloyds_Syndicates_2014_2024.xlsx.
 
 For each syndicate-year row in the spreadsheet:
   - if the report file already exists locally -> status "report downloaded" (already_present)
@@ -33,7 +33,7 @@ import requests
 from bs4 import BeautifulSoup
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
-XLSX_PATH = PROJECT_ROOT / "syndicate_reports" / "Lloyds_syndicates_2014_2024.xlsx"
+XLSX_PATH = PROJECT_ROOT / "syndicate_reports" / "Lloyds_Syndicates_2014_2024.xlsx"
 PDF_DIR = PROJECT_ROOT / "syndicate_reports" / "pdfs"
 STATUS_PATH = PROJECT_ROOT / "syndicate_reports" / "download_status.json"
 LOG_PATH = PROJECT_ROOT / "syndicate_reports" / "download_from_xlsx.log"

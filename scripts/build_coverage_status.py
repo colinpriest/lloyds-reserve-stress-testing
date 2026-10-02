@@ -1,6 +1,6 @@
 """Build the syndicate-year coverage status table and reconciliation reports.
 
-Joins, for every syndicate-year in syndicate_reports/Lloyds_syndicates_2014_2024.xlsx:
+Joins, for every syndicate-year in syndicate_reports/Lloyds_Syndicates_2014_2024.xlsx:
   a) download status            (syndicate_reports/download_status.json)
   b) PYD incurred development   (pdf_extraction/syndicate_{s}_{y}.json)
   c) gross LoB mix              (pdf_extraction/syndicate_{s}_{y}.json)
@@ -39,7 +39,7 @@ import fitz  # PyMuPDF
 import pandas as pd
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
-XLSX_PATH = PROJECT_ROOT / "syndicate_reports" / "Lloyds_syndicates_2014_2024.xlsx"
+XLSX_PATH = PROJECT_ROOT / "syndicate_reports" / "Lloyds_Syndicates_2014_2024.xlsx"
 PDF_DIR = PROJECT_ROOT / "syndicate_reports" / "pdfs"
 DOWNLOAD_STATUS_PATH = PROJECT_ROOT / "syndicate_reports" / "download_status.json"
 EXTRACTION_DIR = PROJECT_ROOT / "pdf_extraction"

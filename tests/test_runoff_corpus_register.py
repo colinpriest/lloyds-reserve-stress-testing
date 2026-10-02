@@ -492,18 +492,71 @@ def test_each_scan_reviewed_quote_is_on_its_page_in_the_file_with_that_hash():
 
 
 @pytest.fixture(scope="module")
-def corpus_hits():
-    """{stem: [hit, ...]} for every filing of the corpus, read as the audit reads them (the source filings of the 1,065 committed
-    extraction records: the converted PDF for an HTML filing, the committed OCR page cache for a page without a text layer)."""
+def corpus_scan():
+    """{"hits": {stem: [hit, ...]}, "textless": [stem, ...]} for every filing of the corpus, read as the audit reads them (the
+    source filings of the 1,065 committed extraction records: the converted PDF for an HTML filing, the committed OCR page cache
+    for a page without a text layer). A filing is read once; the hits and the filings that yield no text both come from it."""
     sources = forms.corpus_sources()
     if not all(path.exists() for _, path in sources):
         pytest.skip("source filings not present in this checkout")
-    hits = {}
-    for stem, path in sources:
-        found = forms.scan_filing(fin.page_texts(path))
-        if found:
-            hits[stem] = found
-    return hits
+    return forms.read_corpus(sources, fin.page_texts)
+
+
+@pytest.fixture(scope="module")
+def corpus_hits(corpus_scan):
+    return corpus_scan["hits"]
+
+
+def test_every_filing_yields_text_or_is_declared_unreadable(corpus_scan):
+    """A filing that yields no text passes every form vacuously: 3210/2018's damaged file did, while the README said every
+    filing was scanned (review of 2 October 2026, E-6). The filings with no text are exactly the declared ones: a new one fails
+    here, and so does a declared one that yields text (after a fresh download), so the list and the README stay true."""
+    assert sorted(corpus_scan["textless"]) == sorted(forms.UNREADABLE), (
+        "filings with no text: %s; declared in runoff_statement_forms.UNREADABLE: %s"
+        % (sorted(corpus_scan["textless"]), sorted(forms.UNREADABLE)))
+
+
+def test_a_filing_with_no_text_is_found_whatever_way_it_is_damaged(tmp_path):
+    """The control for the test above, on generated files read the way the corpus fixture reads the corpus
+    (runoff_statement_forms.read_corpus with the audit's own page reader): a whole filing yields text and its run-off
+    sentence; a truncated one opens with a page that holds none; a page with nothing printed holds none either."""
+    fitz = pytest.importorskip("fitz", reason="PyMuPDF builds the fixture PDFs")
+    doc = fitz.open()
+    doc.new_page().insert_text((72, 72), "The Syndicate ceased to write new business at 31 December 2016.")
+    whole = doc.tobytes()
+    doc.close()
+    blank = fitz.open()
+    blank.new_page()
+    files = {"syndicate_9901_2099": whole, "syndicate_9902_2099": whole[: len(whole) // 2], "syndicate_9903_2099": blank.tobytes()}
+    blank.close()
+    sources = []
+    for stem, data in files.items():
+        path = tmp_path / (stem + ".pdf")
+        path.write_bytes(data)
+        sources.append((stem, path))
+    read = forms.read_corpus(sources, fin.page_texts)
+    assert read["textless"] == ["syndicate_9902_2099", "syndicate_9903_2099"], read["textless"]
+    assert list(read["hits"]) == ["syndicate_9901_2099"], "the whole filing's run-off sentence is not found"
+    assert forms.without_text({"syndicate_9904_2099": []}) == ["syndicate_9904_2099"], "a file that opens with no page"
+    # the corpus test's comparison, on these files: undeclared filings with no text are reported
+    assert sorted(read["textless"]) != sorted(forms.UNREADABLE)
+
+
+def test_the_readme_and_the_register_name_every_unreadable_filing():
+    """README item 9 and the register's scope say the forms read every filing that yields text, and name each one that does
+    not. Before 2 October 2026 both said every filing of the corpus was scanned, and 3210/2018 had been read as nothing."""
+    text = (ROOT / "README.md").read_text(encoding="utf-8")
+    start = text.index("9. **Run-off corpus register**")
+    item = text[start:text.index("\n", start)]
+    scope = _load()["scope"]
+    assert forms.UNREADABLE, "no unreadable filing is declared; if 3210/2018 was downloaded again, update item 9 and the scope"
+    for stem in forms.UNREADABLE:
+        label = stem.replace("syndicate_", "").replace("_", "/")
+        assert label in item, ("README item 9 does not name the unreadable filing", label)
+        assert label in scope, ("the register's scope does not name the unreadable filing", label)
+    for where, words in (("README item 9", item), ("the register's scope", scope)):
+        assert "complete over the whole corpus" not in words, (where, "claims the whole corpus")
+        assert "yields text" in words, (where, "does not limit the claim to the filings that yield text")
 
 
 def test_every_filing_a_form_matches_is_an_entry_or_has_its_matching_sentences_reviewed(corpus_hits):
