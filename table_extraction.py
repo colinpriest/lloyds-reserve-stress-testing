@@ -2313,12 +2313,46 @@ def _drop_subtotal_rows(entries: list, tol: float = 0.006) -> tuple:
     return kept, dropped
 
 
-def _sums_classes_above(amount: float, entries: list) -> bool:
+def _keep_bracket_signs(entries: list) -> None:
+    """A class printed in brackets among positive classes is a negative premium, a return of premium, and keeps
+    its sign. Every reader stored 1414/2016's "Motor (other) (294)" as +294 (review of 2 October 2026, P-29), so
+    the class sum exceeded the table's total by twice the class, and the class carried weight in the mix that the
+    analysis gives no negative class. A column printed wholly in brackets is a presentation of outflows and is
+    read as positive, as before. `entries` carry the size in `amount_raw` and the printed value in `_signed`."""
+    signed = [e.get("_signed") for e in entries if isinstance(e.get("_signed"), (int, float)) and e.get("_signed")]
+    keep = bool(signed) and any(v > 0 for v in signed)
+    for e in entries:
+        v = e.pop("_signed", None)
+        if keep and isinstance(v, (int, float)) and v < 0:
+            e["amount_raw"] = v
+
+
+def _units_size(total: float, entries: list) -> float:
+    """The size the units are read from: the table's total, else the classes' sum. With a negative class, the
+    larger of the total and the classes' sizes, so that a sign does not change the units: 780/2020's classes
+    sum to 8,309 ($'000) with Motor's (1,537) and to 11,383 without the sign, the size that set its units
+    before P-29 (1884/2021's newly read total is 9,970 against sizes of 11,388)."""
+    sizes = sum(abs(e["amount_raw"]) for e in entries)
+    if any(e["amount_raw"] < 0 for e in entries):
+        return max(total or 0.0, sizes)
+    return total if total and total > 0 else sizes
+
+
+def _sums_classes_above(amount: float, entries: list, signed: Optional[float] = None) -> bool:
     """True when ``amount`` equals, within 0.6% (or 0.15), the sum of two or more classes
-    read above it: the amount of a total row, whatever its label says (round 58, M03)."""
+    read above it: the amount of a total row, whatever its label says (round 58, M03).
+    A row's printed value ``signed`` that equals the classes' sum with their printed signs
+    is one too: 3330/2014's unlabelled 78 under classes with a (33) among them (P-29)."""
     kept, _ = _drop_subtotal_rows(entries)
+    if len(kept) < 2:
+        return False
     above = sum(e["amount_raw"] for e in kept)
-    return len(kept) >= 2 and abs(amount - above) <= max(0.006 * above, 0.15)
+    if abs(amount - above) <= max(0.006 * above, 0.15):
+        return True
+    if signed is None:
+        return False
+    above = sum(e.get("_signed", e["amount_raw"]) for e in kept)
+    return abs(signed - above) <= max(0.006 * abs(above), 0.15)
 
 
 def _year_section_divider(row: list, label: str, report_year: int) -> Optional[int]:
@@ -2482,8 +2516,9 @@ def _parse_transposed_lob(grid, report_year, flat, refusals: Optional[list] = No
             continue
         if _is_pl_label(name):
             return None
-        if val > 0:
-            entries.append({"line_of_business": name, "amount_raw": abs(val)})
+        if val != 0:
+            entries.append({"line_of_business": name, "amount_raw": abs(val), "_signed": val})
+    _keep_bracket_signs(entries)
     # two or more classes, at least one of them a recognised class of business
     if len(entries) < 2 or not any(kw in e["line_of_business"].lower() for e in entries for kw in _LOB_KEYWORDS):
         return None
@@ -2499,10 +2534,11 @@ def _parse_transposed_lob(grid, report_year, flat, refusals: Optional[list] = No
             refusals.append("transposed table: classes sum to %g against its own total %g" % (lob_sum, total))
         return None
     basis = total or lob_sum
+    size = _units_size(total, entries)
     units_divisor = 1.0
-    if basis > 10_000_000:
+    if size > 10_000_000:
         units_divisor = 1_000_000.0
-    elif basis > 10_000:
+    elif size > 10_000:
         units_divisor = 1_000.0
     table_total = round(total / units_divisor, 6) if total else None
     for e in entries:
@@ -2629,12 +2665,15 @@ def _parse_nutrient_lob(grid: list[list[str]], report_year: int,
             continue
         label = str(row[0] or "").strip()
 
-        # Get GWP value
+        # Get GWP value: its size for the total and subtotal tests, and its printed sign, which a class
+        # keeps unless the whole column is printed in brackets (below)
         gwp_val = None
+        gwp_signed = None
         if gwp_col < len(row):
             val = _clean_cell(row[gwp_col])
             if isinstance(val, (int, float)):
                 gwp_val = abs(val)
+                gwp_signed = val
         prev, pending = pending, None
 
         if not label:
@@ -2645,7 +2684,7 @@ def _parse_nutrient_lob(grid: list[list[str]], report_year: int,
             # "Credit and suretyship" 33,147). Before round 58 both were skipped (M03).
             if gwp_val is None or (seen_any_year_row and not in_report_year_section):
                 continue
-            if _sums_classes_above(gwp_val, lob_entries):
+            if _sums_classes_above(gwp_val, lob_entries, gwp_signed):
                 totals_by_amount.append((gwp_val, len(lob_entries)))
                 continue
             if prev is None:
@@ -2655,6 +2694,7 @@ def _parse_nutrient_lob(grid: list[list[str]], report_year: int,
                 continue
             if prev["entry"] is not None:
                 prev["entry"]["amount_raw"] = gwp_val
+                prev["entry"]["_signed"] = gwp_signed
                 continue
             label = prev["label"]  # a label-only row: these are its amounts
         elif (prev is not None and prev.get("total") and gwp_val is not None
@@ -2701,7 +2741,7 @@ def _parse_nutrient_lob(grid: list[list[str]], report_year: int,
         # A profit-and-loss row carrying the sum of the classes above it is the total,
         # printed on the result line: 780/2015's "Net technical result" 240,488 under
         # seven classes summing to it was read as an eighth class (round 58, M03)
-        if gwp_val is not None and _is_pl_label(label) and _sums_classes_above(gwp_val, lob_entries):
+        if gwp_val is not None and _is_pl_label(label) and _sums_classes_above(gwp_val, lob_entries, gwp_signed):
             totals_by_amount.append((gwp_val, len(lob_entries)))
             continue
 
@@ -2714,7 +2754,7 @@ def _parse_nutrient_lob(grid: list[list[str]], report_year: int,
 
         entry = None
         if gwp_val is not None and gwp_val > 0:
-            entry = {"line_of_business": label, "amount_raw": gwp_val}
+            entry = {"line_of_business": label, "amount_raw": gwp_val, "_signed": gwp_signed}
             lob_entries.append(entry)
         elif claims_val is not None:
             entry = {"line_of_business": label, "amount_raw": 0.0}
@@ -2743,6 +2783,7 @@ def _parse_nutrient_lob(grid: list[list[str]], report_year: int,
     lob_entries, subtotal_rows = _drop_subtotal_rows(lob_entries)
     if not lob_entries:
         return None
+    _keep_bracket_signs(lob_entries)
 
     # The classes must reconcile with the table's own total, with or without the rows
     # kept out as not a class. A total 2% or more away is refused, never replaced by the
@@ -2752,9 +2793,12 @@ def _parse_nutrient_lob(grid: list[list[str]], report_year: int,
     class_sum = sum(e["amount_raw"] for e in lob_entries)
     # classes with claims but no premium are no premium mix: 1322/2024's "Additional
     # analysis" grid put three zero classes in place of the text's mix (round 58, M03)
+    # ... and nor are classes whose premiums, with their signs, sum to a negative premium: 2468/2021's run-off
+    # table prints "Total (2,190)" (P-29)
     if class_sum <= 0:
         if refusals is not None:
-            refusals.append("%d classes carry no premium" % len(lob_entries))
+            refusals.append("%d classes carry no premium" % len(lob_entries) if class_sum == 0 else
+                            "%d classes sum to a negative premium (%g)" % (len(lob_entries), class_sum))
         return None
     if total_gwp > 0 and not any(abs(s - total_gwp) <= 0.02 * total_gwp
                                  for s in (class_sum, class_sum + excluded_gwp)):
@@ -2764,10 +2808,11 @@ def _parse_nutrient_lob(grid: list[list[str]], report_year: int,
         return None
 
     basis = total_gwp if total_gwp > 0 else class_sum
+    size = _units_size(total_gwp, lob_entries)
     units_divisor = 1.0
-    if basis > 10_000_000:
+    if size > 10_000_000:
         units_divisor = 1_000_000.0
-    elif basis > 10_000:
+    elif size > 10_000:
         units_divisor = 1_000.0
     table_total = round(total_gwp / units_divisor, 6) if total_gwp > 0 else None
 
@@ -2892,6 +2937,7 @@ def _parse_lob_from_text(text: str, report_year: int) -> Optional[LOBData]:
         after = section[m.end():]
         # Collect numbers — stop at the next LOB name or section header
         numbers = []
+        bracketed = []
         pos = 0
         for nm in _NUM_RE.finditer(after):
             # Stop if we've gone past ~200 chars (into next LOB row)
@@ -2906,6 +2952,7 @@ def _parse_lob_from_text(text: str, report_year: int) -> Optional[LOBData]:
                 numbers.append(float(raw))
             except ValueError:
                 continue
+            bracketed.append(nm.group().startswith('('))
             pos = nm.end()
 
         if not numbers:
@@ -2915,19 +2962,23 @@ def _parse_lob_from_text(text: str, report_year: int) -> Optional[LOBData]:
         claims = numbers[2] if len(numbers) >= 3 else None
 
         if gwp > 0:
-            lob_entries.append({"line_of_business": lob_name, "amount_raw": gwp})
+            # a premium keeps a printed bracket's sign; a hyphen before a number in page text is not one (P-29)
+            lob_entries.append({"line_of_business": lob_name, "amount_raw": gwp,
+                                "_signed": -gwp if bracketed[0] else gwp})
         if claims is not None:
             claims_entries.append({"line_of_business": lob_name, "amount_raw": claims})
 
     if not lob_entries:
         return None
+    _keep_bracket_signs(lob_entries)
 
     # Auto-detect units from magnitude
     class_sum = sum(e["amount_raw"] for e in lob_entries)
+    size = _units_size(0.0, lob_entries)
     units_divisor = 1.0
-    if class_sum > 10_000_000:
+    if size > 10_000_000:
         units_divisor = 1_000_000.0
-    elif class_sum > 10_000:
+    elif size > 10_000:
         units_divisor = 1_000.0
 
     for e in lob_entries:

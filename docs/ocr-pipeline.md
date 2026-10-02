@@ -1206,10 +1206,37 @@ partial mixes.  Round 58 changed four things.
 Known limits: the table parser takes its unit from the amounts'
 magnitude, so a small syndicate's £'000 table can read as £m (the
 gate refuses such a table in a model record; first-year stubs have
-no gate); a negative class premium is stored as its absolute value,
-so a table whose signed classes reconcile with its total is refused
-and the models' signed mix kept; and a printed total with a leading
-currency sign ("£ 430,858") is not read as `table_total`.
+no gate); and a printed total with a leading currency sign
+("£ 430,858") is not read as `table_total`.
+
+#### 7.7.3  Bracketed class premiums (P-29)
+
+Until the review of 2 October 2026 every table reader stored a class
+premium printed in brackets as positive.  1414/2016's "Motor (other)
+(294)" was +0.294: its classes summed to 574.063 against the table's
+573.475, and the class took weight in a mix where the analysis gives
+a negative class none.  A class printed in brackets among positive
+classes now keeps its sign, in the row reader, the transposed reader
+and the page-text reader (`_keep_bracket_signs`); a column printed
+wholly in brackets is a presentation of outflows and is read as
+positive, as before.  In page text a bracket is a sign and a hyphen
+is not.  With the signs:
+
+* the classes reconcile with the printed total (4472/2019's 1,687.2,
+  1967/2020's 417.528, 1686/2019's 1,142.575), so the gate applies
+  the table's mix where it had kept the models';
+* an unlabelled row equal to the classes with their signs is a total
+  (`_sums_classes_above`: 3330/2014's 78);
+* the units are read from the classes' sizes, so a sign does not
+  change them (`_units_size`: 780/2020's classes sum to 8,309 $'000
+  with Motor's (1,537) and to 11,383 without);
+* classes whose signed sum is negative are refused: 2468/2021's
+  run-off table, total (2,190), is no mix.
+
+`tests/test_bracketed_premiums.py` holds the review's four records to
+their tables, and checks every committed premium grid the reader
+admits: a class printed in brackets among positive classes is read
+negative.  The records change when they are regenerated.
 
 ### 7.8  Provisions and balance sheet grid parsing
 
