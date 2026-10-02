@@ -3890,12 +3890,196 @@ def _rag_figure_source(rag_result):
     return "rag_" + method, "RAG " + method.replace("_", " "), None
 
 
+#: The smaller of a column's current and previous estimates is never under this share of the larger. A
+#: cumulative incurred estimate does not fall to a fiftieth of itself in a year, or rise fifty-fold; a step
+#: that does is a misread cell. 2791/2015's 2011 column ends "144,510 | 139.326": 139,326 with its
+#: thousands separator read as a decimal point, a -144.4m step (review of 2 October 2026, M-1). The
+#: review's screen at this share over the 1,347 committed triangle blocks flagged 2791/2015 and 6112/2016
+#: and nothing else.
+MIN_STEP_RATIO = 0.02
+
+
+def _as_number(v):
+    if v is None or isinstance(v, bool):
+        return None
+    try:
+        return float(v)
+    except (TypeError, ValueError):
+        return None
+
+
+def _same_figure(a, b):
+    """Two readings of one printed figure: equal, rounding of the last printed digit aside (2468/2021 prints
+    a current estimate of 235,350 under a diagonal cell of 235,351)."""
+    return abs(a - b) <= max(5e-4, 1e-5 * max(abs(a), abs(b)))
+
+
+def _thousandfold(a, b):
+    """One figure printed once in units and once in thousands: 6111/2015's total row prints 65.779 under a
+    column whose cell reads 65,779."""
+    return bool(a) and bool(b) and (_same_figure(a, b * 1000) or _same_figure(a * 1000, b))
+
+
+def _printed_current_estimates(triangle_data, n_cols):
+    """The table's own current-estimate row, one value per underwriting year, or None.
+
+    table_extraction keeps the row a claims development table prints under its development rows ("Current
+    estimate of cumulative claims", "Estimated total losses", "Total ultimate losses") as
+    `current_estimate_row` (review of 2 October 2026, M-1). A summary row the reader strips from the grid
+    stands in for it when the triangle carries none."""
+    row = triangle_data.get("current_estimate_row") if isinstance(triangle_data, dict) else None
+    if not isinstance(row, list) or len(row) != n_cols:
+        return None
+    vals = [_as_number(v) for v in row]
+    return vals if any(v is not None for v in vals) else None
+
+
+def _diagonal_cells(uw_years, rows, report_year, printed=None):
+    """Each mature column's current estimate and previous diagonal, placed by the column's own age.
+
+    The reader took a column's last filled cell as its current estimate, wherever that cell was. A cell
+    beyond the staircase then became the current one: 6112/2016's 2013 column carried a stray "7" one row
+    past its 48-month estimate, and -20.4m entered the figure where the filing shows -0.243m. A results
+    table read as a triangle (1967/2014's Note 16) and a lost deepest row (1910/2019) passed the same way
+    (review of 2 October 2026, M-1). Now underwriting year u's current estimate sits on the report-year
+    diagonal, row t - u (row 0 is the end of the underwriting year), and:
+
+    * a grid that starts one year later is read one row up throughout: that reading places more mature
+      columns' last cells on their diagonal than the plain one does;
+    * cells beyond the staircase are not estimates: such a column is read only when the printed current
+      estimate is its staircase cell;
+    * a column one row short is read only when the printed current estimate is the missing diagonal cell,
+      which is then the current estimate and the column's last cell the previous one;
+    * a printed current estimate that is not the staircase cell refuses the grid, unless the two are one
+      figure a factor of 1,000 apart, when the reading that keeps the step plausible is taken;
+    * a printed current estimate that is the column's sum refuses the grid: the table prints movements by
+      development year (382's tables do);
+    * a printed row with a value that cannot be a reading of its column's estimate (two cells run
+      together, a total from another line) is not aligned with the grid and is not used;
+    * a negative cell in a mature column refuses the grid: a cumulative estimate is not negative, and a
+      results table read as a triangle has them (1967/2014, 1400/2014);
+    * a column with nothing after its first cell is read as before: nothing to difference;
+    * a step whose smaller estimate is under MIN_STEP_RATIO of the larger refuses the grid.
+
+    `printed` is the table's current-estimate row (None when it has none). Returns (columns, None) or
+    (None, reason); each column is a dict with uw, cur, prev, cur_row, prev_row and note, and cur None
+    for a column with no filled cell (no claims activity, read as before)."""
+    n_cols = len(uw_years)
+    years = []
+    for y in uw_years:
+        try:
+            years.append(int(y))
+        except (TypeError, ValueError):
+            years.append(None)
+    cells = [[_as_number(rows[r][c]) if c < len(rows[r]) else None for r in range(len(rows))]
+             for c in range(n_cols)]
+    filled = [[r for r, v in enumerate(col) if v is not None] for col in cells]
+
+    def plausible(cur, prev):
+        big = max(abs(cur), abs(prev))
+        return big == 0 or min(abs(cur), abs(prev)) >= MIN_STEP_RATIO * big
+
+    mature = [c for c in range(n_cols)
+              if years[c] is not None and years[c] <= report_year - PYD_EXCLUDED_RECENT_UW_YEARS]
+
+    def on_diagonal(offset):
+        return sum(1 for c in mature if filled[c] and filled[c][-1] == report_year - years[c] + offset)
+
+    # A grid that starts one year later puts more columns' last cells one row up than on the diagonal.
+    # A grid that lost its first row does not: 727/2017 and 318/2021 print an empty report-year column
+    # and a newest column with one cell, and every other cell is in its place.
+    offset = -1 if on_diagonal(-1) > on_diagonal(0) else 0
+
+    # A printed row with a value that cannot be a reading of its column's estimate is not aligned with
+    # the grid: 623/2024's row runs two cells together ("365702366033" under 365,702), and every value
+    # after it sits one column to the left; 727/2015's row is a total from another line. It is not used.
+    def unreadable(c):
+        e = report_year - years[c] + offset
+        cell = cells[c][e] if 0 <= e < len(cells[c]) and cells[c][e] is not None else (
+            cells[c][filled[c][-1]] if filled[c] else None)
+        p = printed[c]
+        if p is None or cell is None or not cell or _same_figure(cell, p) or _thousandfold(cell, p):
+            return False
+        if _same_figure(sum(v for v in cells[c] if v is not None), p):
+            return False
+        return not (0.5 <= p / cell <= 2)
+
+    if printed is not None and any(unreadable(c) for c in mature):
+        printed = None
+
+    out = []
+    for c in mature:
+        u = years[c]
+        if not filled[c]:
+            out.append({"uw": u, "cur": None})
+            continue
+        negative = [v for v in cells[c] if v is not None and v < 0]
+        if negative:
+            # A cumulative estimate of claims is not negative (a grid printed wholly as outflows is
+            # normalised before this). 1967/2014's and 1400/2014's "triangles" are a year-of-account
+            # results note, profits and losses by year of account, read as one.
+            return None, ("%d: the column holds negative values (%s): not cumulative estimates of claims"
+                          % (u, ", ".join("%g" % v for v in negative[:3])))
+        e = report_year - u + offset
+        last = filled[c][-1]
+        if filled[c] == [0]:
+            # only the first cell, dashes after it: nothing to difference, read as before (1840/2023's
+            # 2020 cohort prints 19 and then dashes)
+            out.append({"uw": u, "cur": cells[c][0], "prev": None, "cur_row": 0, "prev_row": None, "note": ""})
+            continue
+        p = printed[c] if printed is not None else None
+        note = ""
+        if last == e:
+            cur_row, cur = e, cells[c][e]
+        elif last > e and e >= 0 and cells[c][e] is not None and p is not None and _same_figure(cells[c][e], p):
+            cur_row, cur = e, cells[c][e]
+            note = "cells beyond the staircase are not estimates: the printed current estimate is row %d" % e
+        elif last == e - 1 and p is not None and not _same_figure(cells[c][last], p):
+            out.append({"uw": u, "cur": p, "prev": cells[c][last], "cur_row": None, "prev_row": last,
+                        "note": "the diagonal cell is missing: the printed current estimate stands in for it"})
+            if not plausible(p, cells[c][last]):
+                return None, ("%d: a step from %s to %s is not one estimate developing: a misread cell"
+                              % (u, cells[c][last], p))
+            continue
+        else:
+            where = "beyond" if last > e else "short of"
+            return None, ("%d: the last filled cell (row %d) is %s the report-year diagonal (row %d), and %s"
+                          % (u, last, where, e,
+                             "the table prints no current estimate to place it" if p is None
+                             else "the printed current estimate (%s) does not place it" % p))
+        if p is not None and not _same_figure(cur, p):
+            column_sum = sum(v for v in cells[c] if v is not None)
+            if _thousandfold(cur, p):
+                if e >= 1 and cells[c][e - 1] is not None and plausible(p, cells[c][e - 1]):
+                    note = "the printed current estimate %s is the cell %s a factor of 1,000 apart" % (p, cur)
+                    cur = p
+            elif _same_figure(column_sum, p) and len(filled[c]) > 1:
+                # 382's tables print the first year's estimate and then each year's movement; the printed
+                # current estimate is their sum, and a difference of two movements is not a development
+                return None, ("%d: the table prints movements by development year, not cumulative estimates "
+                              "(its printed current estimate %s is the column's sum)" % (u, p))
+            else:
+                return None, ("%d: the printed current estimate (%s) is not the diagonal cell (%s)"
+                              % (u, p, cur))
+        if cur_row == 0:
+            out.append({"uw": u, "cur": cur, "prev": None, "cur_row": 0, "prev_row": None, "note": note})
+            continue
+        prev = cells[c][cur_row - 1]
+        if prev is not None and not plausible(cur, prev):
+            return None, ("%d: a step from %s to %s is not one estimate developing: a misread cell"
+                          % (u, prev, cur))
+        out.append({"uw": u, "cur": cur, "prev": prev, "cur_row": cur_row, "prev_row": cur_row - 1,
+                    "note": note})
+    return out, None
+
+
 def compute_pyd_from_triangle(triangle_data, report_year):
     """Compute prior year development from extracted triangle data.
 
     The LLM extracts the raw triangle table (all development rows).
-    Python finds the diagonals: for each UW year column, the current estimate
-    is the last non-null value, and the previous diagonal is one row above that.
+    Python finds the diagonals: for each UW year column, the current estimate is the cell on the
+    report-year diagonal and the previous diagonal is one row above it (`_diagonal_cells`; until the
+    review of 2 October 2026 the current estimate was the column's last filled cell, wherever it lay).
 
     Args:
         triangle_data: dict with keys: type, units, underwriting_years,
@@ -4037,12 +4221,37 @@ def compute_pyd_from_triangle(triangle_data, report_year):
                              f"loss ratio triangle by the magnitude heuristic, "
                              f"not a claims development triangle")
 
+    # We work on a COPY to avoid mutating the original triangle data.
+    rows = [list(r) for r in rows]  # deep copy
+    printed = _printed_current_estimates(triangle_data, n_cols)
+
+    # A cell beyond its column's development age cannot hold an estimate, so an exact
+    # zero there is a dash the backend read as nil (R139). This is repaired before the
+    # staircase is scored, because the zeros are what the staircase is being scored on,
+    # and before the summary row is looked for: 5000/2017's last development row read
+    # [228, 0, 0, 0, 0, 0, 0], its dash-zeros matched the dash-zeros above them, and the
+    # row was stripped as a summary, taking the 2011 column's 228 with it (review of
+    # 2 October 2026, M-1).
+    _pre_details = []
+    rows = _null_zeros_beyond_the_staircase(uw_years, rows, report_year, _pre_details)
+    while rows and all(v is None for v in rows[-1]):
+        rows.pop()
+    # A row with no cell at all, above rows that have cells, is not a development period: every column
+    # old enough to reach it would print an estimate there. 510/2020's grid carries one after its first
+    # row, and every cell below it sits a row deeper than its age (review of 2 October 2026, M-1).
+    _blank = [i for i, r in enumerate(rows) if all(v is None for v in r)]
+    if _blank:
+        rows = [r for i, r in enumerate(rows) if i not in _blank]
+        _pre_details.append("  (%d empty row(s) inside the grid dropped)" % len(_blank))
+    n_rows = len(rows)
+
     # Detect and strip "Current estimate" summary row if LLM included it.
     # The summary row repeats the last non-null value from each column's
     # development rows.  It may have nulls in recent columns (where the
-    # triangle itself has nulls), so we check non-null entries only.
-    # We work on a COPY to avoid mutating the original triangle data.
-    rows = [list(r) for r in rows]  # deep copy
+    # triangle itself has nulls), so we check non-null entries only. A row
+    # printed in thousands under cells in units repeats them too (6111/2015's
+    # total row). What is stripped is the table's current-estimate row, and the
+    # diagonal check below reads it as one when the triangle carries none.
     if n_rows >= 3:
         last_row = rows[-1]
         filled_cols = [col for col in range(n_cols) if last_row[col] is not None]
@@ -4051,18 +4260,23 @@ def compute_pyd_from_triangle(triangle_data, report_year):
             # in each corresponding column above
             matches = 0
             mismatched_cols = []
+            above = {}
             for col in filled_cols:
                 for r in range(n_rows - 2, -1, -1):
                     if rows[r][col] is not None:
                         try:
-                            if abs(float(rows[r][col]) - float(last_row[col])) < 0.01:
+                            a, b = float(rows[r][col]), float(last_row[col])
+                            if abs(a - b) < 0.01 or _thousandfold(a, b):
                                 matches += 1
+                                above[col] = a
                             else:
                                 mismatched_cols.append(col)
                         except (ValueError, TypeError):
                             pass
                         break
             if matches >= len(filled_cols) * 0.7:
+                if printed is None:
+                    printed = [above.get(col) for col in range(n_cols)]
                 if 0 in mismatched_cols:
                     # Col 0 has a DIFFERENT value from rows above — this last row
                     # contains real development data for the oldest UW year merged
@@ -4076,12 +4290,6 @@ def compute_pyd_from_triangle(triangle_data, report_year):
                     rows = rows[:-1]
                     n_rows -= 1
 
-    # A cell beyond its column's development age cannot hold an estimate, so an exact
-    # zero there is a dash the backend read as nil (R139). This is repaired before the
-    # staircase is scored, because the zeros are what the staircase is being scored on.
-    _pre_details = []
-    rows = _null_zeros_beyond_the_staircase(uw_years, rows, report_year, _pre_details)
-
     # Validate structure — proper triangles have a staircase pattern
     structure_score = _validate_triangle_structure(uw_years, rows, report_year)
     if structure_score < MIN_TRIANGLE_STRUCTURE_SCORE:
@@ -4089,8 +4297,8 @@ def compute_pyd_from_triangle(triangle_data, report_year):
                       "— the grid is not a staircase and its diagonals are not comparable"
                       % (structure_score, MIN_TRIANGLE_STRUCTURE_SCORE))
 
-    # For each column, find the current estimate (last non-null)
-    # and the previous diagonal (one row above the current)
+    # For each mature column, the current estimate on its report-year diagonal and the previous
+    # diagonal one row above it (_diagonal_cells, below)
     details = list(_pre_details)
     total_pyd = 0.0
     used_years = 0
@@ -4104,34 +4312,31 @@ def compute_pyd_from_triangle(triangle_data, report_year):
     _body = [v for row in rows for v in row if isinstance(v, (int, float))]
     if _body and all(v <= 0 for v in _body) and any(v < 0 for v in _body):
         rows = [[(-v if isinstance(v, (int, float)) else v) for v in row] for row in rows]
+        if printed is not None:
+            printed = [(-v if v is not None else None) for v in printed]
         if isinstance(triangle_data, dict):
             triangle_data["presentation_sign"] = "outflow"
         details.append("  (presented as outflows — sign normalised before differencing)")
 
-    for col_idx, uw_year in enumerate(uw_years):
-        try:
-            uw_year = int(uw_year)
-        except (ValueError, TypeError):
-            continue
+    # Each mature column's current estimate on the report-year diagonal, and the one above it
+    # (review of 2 October 2026, M-1): a grid whose cells cannot be placed there is refused.
+    columns, refusal = _diagonal_cells(uw_years, rows, report_year, printed)
+    if refusal:
+        return None, ("triangle refused: a current estimate is not on the report-year diagonal "
+                      "or its step is not plausible -- " + refusal)
+    row_labels = ["End of UW yr", "1yr later", "2yr later", "3yr later",
+                  "4yr later", "5yr later", "6yr later", "7yr later",
+                  "8yr later", "9yr later", "10yr later"]
 
-        # Exclude the PYD_EXCLUDED_RECENT_UW_YEARS most recent UW years
-        if uw_year > report_year - PYD_EXCLUDED_RECENT_UW_YEARS:
-            continue
+    def _label(i):
+        if i is None:
+            return "printed current estimate"
+        return row_labels[i] if i < len(row_labels) else f"row{i}"
 
-        # Find last non-null value in this column (= current estimate)
-        current_row_idx = None
-        current_val = None
-        for row_idx in range(n_rows - 1, -1, -1):
-            val = rows[row_idx][col_idx]
-            if val is not None:
-                try:
-                    current_val = float(val)
-                    current_row_idx = row_idx
-                    break
-                except (ValueError, TypeError):
-                    continue
-
-        if current_val is None or current_row_idx is None:
+    for col in columns:
+        uw_year = col["uw"]
+        current_val = col["cur"]
+        if current_val is None:
             # All-None column for an old enough UW year means zero claims
             # activity (dashes in the triangle = no claims, not missing data).
             # PYD contribution is 0 — count the year as used.
@@ -4149,19 +4354,13 @@ def compute_pyd_from_triangle(triangle_data, report_year):
             continue
 
         # Previous diagonal = one row above in same column
+        current_row_idx = col["cur_row"]
         if current_row_idx == 0:
             details.append(f"  {uw_year}: skipped (only 1 development period)")
             continue
 
-        prev_val = None
-        prev_row_idx = current_row_idx - 1
-        val = rows[prev_row_idx][col_idx]
-        if val is not None:
-            try:
-                prev_val = float(val)
-            except (ValueError, TypeError):
-                pass
-
+        prev_val = col["prev"]
+        prev_row_idx = col["prev_row"]
         if prev_val is None:
             details.append(f"  {uw_year}: skipped (no previous diagonal at row {prev_row_idx})")
             continue
@@ -4169,12 +4368,9 @@ def compute_pyd_from_triangle(triangle_data, report_year):
         change = round(current_val - prev_val, 3)
         total_pyd += change
         used_years += 1
-        row_labels = ["End of UW yr", "1yr later", "2yr later", "3yr later",
-                       "4yr later", "5yr later", "6yr later", "7yr later",
-                       "8yr later", "9yr later", "10yr later"]
-        cur_label = row_labels[current_row_idx] if current_row_idx < len(row_labels) else f"row{current_row_idx}"
-        prev_label = row_labels[prev_row_idx] if prev_row_idx < len(row_labels) else f"row{prev_row_idx}"
-        details.append(f"  {uw_year}: {current_val} ({cur_label}) - {prev_val} ({prev_label}) = {change:+.3f}")
+        details.append(f"  {uw_year}: {current_val} ({_label(current_row_idx)}) - {prev_val} "
+                       f"({_label(prev_row_idx)}) = {change:+.3f}"
+                       + (f"  [{col['note']}]" if col.get("note") else ""))
 
     if used_years == 0:
         return None, "no usable UW years in triangle"

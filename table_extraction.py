@@ -521,6 +521,9 @@ class TriangleData:
     # an aggregated older cohort read as the triangle's oldest column: its anchor year, the header
     # label and the grid column (R209)
     aggregated_cohort: Optional[dict] = None
+    # the table's printed current-estimate row, one value per underwriting year, when it prints one: the
+    # reader checks each column's diagonal cell against it (review of 2 October 2026, M-1)
+    current_estimate_row: Optional[list] = None
 
     def to_dict(self) -> dict:
         d = {
@@ -536,6 +539,8 @@ class TriangleData:
             d["row_labels"] = list(self.row_labels)
         if self.aggregated_cohort:
             d["aggregated_cohort"] = dict(self.aggregated_cohort)
+        if self.current_estimate_row is not None:
+            d["current_estimate_row"] = list(self.current_estimate_row)
         if self.page is not None:
             d["source_page"] = int(self.page) + 1
         if self.entity is not None:
@@ -1732,6 +1737,14 @@ def _aggregated_cohort_columns(grid):
     return cohorts, labels
 
 
+#: The row a claims development table prints under its development rows with each underwriting year's current
+#: estimate of cumulative claims: "Current estimate of cumulative claims incurred", "Estimated total losses",
+#: "Total ultimate losses", "Gross ultimate claims" (review of 2 October 2026, M-1).
+_CURRENT_ESTIMATE_LABEL = re.compile(
+    r"current estimate|estimated total|total ultimate|gross ultimate|ultimate (gross |net )?(loss|claim)|"
+    r"estimate of ultimate", re.I)
+
+
 def _parse_nutrient_triangle(grid: list[list[str]], report_year: int):
     """Parse a Nutrient table grid as a claims development triangle.
 
@@ -1902,6 +1915,9 @@ def _parse_nutrient_triangle(grid: list[list[str]], report_year: int):
     dev_labels = []  # the row label each development row was bound to (R139 provenance)
     block_basis = None  # the basis heading that governs the captured block (R167)
     collecting = False  # True once we've started finding dev rows
+    # The table's own current-estimate row, printed under the development rows: the reader checks each
+    # column's diagonal cell against it (review of 2 October 2026, M-1)
+    printed_current = None
     # Track rows consumed as continuation of a split label (skip them in main loop)
     consumed_as_continuation = set()
     for row_i, row in enumerate(grid):
@@ -1910,6 +1926,13 @@ def _parse_nutrient_triangle(grid: list[list[str]], report_year: int):
         label = row[0].lower().strip() if row else ""
         if not label:
             continue
+        if collecting and printed_current is None and _CURRENT_ESTIMATE_LABEL.search(label):
+            values = _extract_row_values(row, uw_col_indices, _ghost_cols)
+            if all(v is None for v in values) and row_i + 1 < len(grid) \
+                    and not (grid[row_i + 1][0] if grid[row_i + 1] else "").strip():
+                values = _extract_row_values(grid[row_i + 1], uw_col_indices, _ghost_cols)
+            if any(v is not None for v in values):
+                printed_current = values
         # Check for section break (paid claims section, reserve summary, etc.)
         if collecting and any(s in label for s in section_break_patterns):
             break
@@ -1981,6 +2004,8 @@ def _parse_nutrient_triangle(grid: list[list[str]], report_year: int):
             for row in dev_rows:
                 if _k < len(row):
                     row.pop(_k)
+            if printed_current is not None and _k < len(printed_current):
+                printed_current.pop(_k)
             _cohort = None
     # Strip trailing all-null rows (development periods with no data yet,
     # e.g. "After five years" when the triangle only covers 4 UW years)
@@ -2013,6 +2038,8 @@ def _parse_nutrient_triangle(grid: list[list[str]], report_year: int):
         type=tri_type, currency=currency, units=units, units_evidence=units_evidence,
         underwriting_years=uw_years, development_rows=dev_rows,
         cell_binding="header", row_labels=dev_labels, aggregated_cohort=_cohort,
+        current_estimate_row=(printed_current if printed_current is not None
+                              and len(printed_current) == len(uw_years) else None),
     )
     details = f"{len(uw_years)} UW years, {len(dev_rows)} dev rows"
     return tri, details

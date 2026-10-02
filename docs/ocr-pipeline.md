@@ -1605,10 +1605,38 @@ not strip trailing nulls.
 For each UW year column (excluding the 2 most recent):
 
 ```
-current_estimate  = last non-null value in column
-previous_estimate = value one row above current_estimate
-pyd_for_year      = current_estimate - previous_estimate
+For each underwriting year column u (mature: u <= report_year - 2):
+  current_estimate  = the cell on the report-year diagonal, row report_year - u
+                      (row 0 is the end of the underwriting year)
+  previous_estimate = the cell one row above it (the previous diagonal)
+  pyd_for_year      = current_estimate - previous_estimate
 ```
+
+Until the review of 2 October 2026 the current estimate was the column's last filled cell, wherever it
+lay. 6112/2016's 2013 column carried a stray "7" one row past its 48-month estimate and the figure was
+-19.264m where the filing shows +0.893m; 1967/2014's year-of-account results note was read as a
+triangle; 1910/2019 lost its deepest row; 2791/2015 read 139,326 as 139.326. Now
+(`_diagonal_cells` in `test_gemini.py`):
+
+- a grid that starts one year later is read one row up throughout (that reading places more mature
+  columns' last cells on their diagonal than the plain one); an empty row inside the grid is dropped;
+- cells beyond a column's staircase are not estimates: the column is read only when the table's printed
+  current estimate is its staircase cell; a column one row short is read only when the printed current
+  estimate is the missing cell, which then stands in for it; otherwise the grid is refused;
+- the printed current-estimate row ("Current estimate of cumulative claims", "Estimated total
+  losses", "Total ultimate losses") is kept by `_parse_nutrient_triangle` as `current_estimate_row`;
+  a summary row stripped from the grid (section 9.2) stands in for it. A printed estimate that is not
+  the diagonal cell refuses the grid, unless the two are one figure a factor of 1,000 apart (2791/2015)
+  or the printed value is the column's sum (a table of yearly movements, refused: 382's tables); a row
+  with a value that cannot be a reading of its column (two cells run together) is not used;
+- a negative cell in a mature column refuses the grid (a cumulative estimate is not negative; a grid
+  printed wholly as outflows is normalised first);
+- a step whose smaller estimate is under 2% of the larger refuses the grid (`MIN_STEP_RATIO`);
+- a column with nothing after its first cell is read as before: nothing to difference.
+
+`scripts/triangle_census.py` runs the reader before and after this change over every committed grid and
+writes `pdf_extraction/audit/stage2_triangle_census.json`; `tests/test_triangle_diagonal.py` holds it to
+the reader and the records.
 
 The 2 most recent UW years are excluded because they have
 insufficient development history (only 1 or 2 data points).
@@ -1621,7 +1649,12 @@ bottom of the triangle.  This row duplicates the last non-null
 value from each column.
 
 **Detection**: if the last row is fully filled and >= 70% of its
-values match the last non-null above, it is a summary row.
+values match the last non-null above (or the same figure a factor of
+1,000 apart: 6111/2015's total row prints 65.779 under 65,779), it is a summary
+row. Zeros beyond the staircase are read as no data before this test
+(5000/2017's last development row matched the dash-zeros above it and
+was stripped). The stripped row is the table's current-estimate row,
+and section 9.1 reads it as one.
 
 **Action**:
 - If column 0 has a **different** value (real development data

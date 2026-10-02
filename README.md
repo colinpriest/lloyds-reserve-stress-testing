@@ -345,14 +345,17 @@ When the API backend doesn't detect a table (common with certain PDF layouts), t
 PYD is computed from the triangle in Python, not by LLMs, to avoid arithmetic errors:
 
 ```
-For each underwriting year column:
-  current_estimate  = last non-null value in the column (current diagonal)
-  previous_estimate = value one row above (previous diagonal)
-  pyd_for_year = current_estimate - previous_estimate
+For each underwriting year column u (mature: u <= report_year - 2):
+  current_estimate  = the cell on the report-year diagonal, row report_year - u
+                      (row 0 is the end of the underwriting year)
+  previous_estimate = the cell one row above it (the previous diagonal)
+  pyd_for_year      = current_estimate - previous_estimate
 
 Total PYD = sum of pyd_for_year over columns with uw_year <= report_year - 2
             (the two most recent underwriting years are excluded)
 ```
+
+A cell beyond a column's staircase is not an estimate, and a column whose last cell is not on its diagonal is placed by the table's printed current-estimate row ("Current estimate of cumulative claims", "Estimated total losses"), which the parser keeps for this, or the triangle is refused; so is a grid with a negative cell in a mature column, a step whose smaller estimate is under 2% of the larger, or a printed current estimate that is not the diagonal cell (`_diagonal_cells` in `test_gemini.py`; `docs/ocr-pipeline.md` section 9.1). Until the review of 2 October 2026 the current estimate was the column's last filled cell, wherever it lay: 6112/2016's stray "7" one row past its 2013 column turned +0.893m into -19.264m. `pdf_extraction/audit/stage2_triangle_census.json` lists every committed triangle whose figure that change moves or refuses.
 
 The two most recent underwriting years (`report_year` and `report_year - 1`; `PYD_EXCLUDED_RECENT_UW_YEARS = 2`) are excluded: they are still in their initial development period, and the newest column has no previous estimate to compare against. The manuscript states the same rule (mature years only, $u \le t-2$).
 
