@@ -1676,8 +1676,10 @@ def _extract_row_values(row, uw_col_indices, ghost_cols):
 
 #: an aggregated older cohort named in a triangle's header: '2010 and prior', '2010 & prior',
 #: 'Before 2011', 'pre-2011', 'prior years' (R209)
+#: "2010&P" is Syndicate 2007's label for the cohort through 2010 (2007/2016, 2007/2017); before the review of
+#: 2 October 2026 (P-31) it was not read and the column was dropped. "P&L" is not a cohort.
 _COHORT_HEADER = re.compile(
-    r"\b(?P<through>(?:19|20)\d\d)\s*(?:&|and|\+)\s*(?:prior|before|earlier)\b"
+    r"\b(?P<through>(?:19|20)\d\d)\s*(?:&|and|\+)\s*(?:prior|before|earlier|p(?!\s*&))\b"
     r"|\b(?:before|pre|prior\s+to)\s*-?\s*(?P<before>(?:19|20)\d\d)\b"
     r"|^\s*(?:(?:&|and)\s+)?prior(?:\s+years?)?\b", re.I)
 _BARE_YEAR = re.compile(r"^\s*((?:19|20)\d\d)\s*$")

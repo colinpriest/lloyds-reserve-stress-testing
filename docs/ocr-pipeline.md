@@ -3285,9 +3285,13 @@ has only 1.  PYD is computed from UW years 2014--2018 only.
 ### 12.2  Aggregate columns ("2013 & prior")
 
 Many triangles print their oldest underwriting years as one
-aggregate column ("2010 and prior", "Before 2011", "Pre-2011").
-The grid parser reads its label across the column's first three
-header rows.  What it does next depends on what the column holds
+aggregate column ("2010 and prior", "Before 2011", "Pre-2011",
+Syndicate 2007's "2010&P").  The grid parser reads its label across
+the column's first three header rows.  "2010&P" was not read until
+the review of 2 October 2026 (P-31): the column was dropped, and
+2007/2016's figure was +61.3m where its cohort's step of -6.5m makes
+it +54.8m, and 2007/2017's -22.0m where it is -44.5m
+(`tests/test_cohort_label_and_p.py`).  What it does next depends on what the column holds
 (R209):
 
 - **Development by calendar year**: one value per calendar year
