@@ -1,6 +1,6 @@
 {
  "purpose": "Every committed record compared with an offline replay of the deterministic step on its own caches (scripts/replay_corpus_check.py); the code it ran is hashed.",
- "recorded": "2026-09-30",
+ "recorded": "2026-10-02",
  "code_sha256_lf": {
   "test_gemini.py": "0e3cb25dc4d046dcdaeeb95956bf740b642adc9f12581c29e22147f97f1349c9",
   "table_extraction.py": "77db6cd33e5226f63a2f27318996c02ec13c22bfb6d6032d6d24625982cc2235"
@@ -17,6 +17,7 @@
   "syndicate_2786_2017",
   "syndicate_2988_2017",
   "syndicate_2988_2018",
+  "syndicate_3210_2018",
   "syndicate_3268_2018",
   "syndicate_3268_2019"
  ],
@@ -31,7 +32,8 @@
   "stub_after_models -> models": 3,
   "stub_before_models -> error": 10,
   "stub_before_models -> stub_before_models": 57,
-  "unread -> unread": 21
+  "unread -> error": 1,
+  "unread -> unread": 20
  },
  "undeclared_mismatches": [],
  "stale_declarations": [],
@@ -82,6 +84,12 @@
    "stem": "syndicate_2988_2018",
    "differs": [
     "class: committed stub_before_models, replay error (RuntimeError: offline mode: Azure Document Intelligence for syndicate_2988_2018.pdf would call an external API (cache mi)"
+   ]
+  },
+  {
+   "stem": "syndicate_3210_2018",
+   "differs": [
+    "class: committed unread, replay error (RuntimeError: offline mode: Azure Document Intelligence for syndicate_3210_2018.pdf would call an external API (cache mi)"
    ]
   },
   {

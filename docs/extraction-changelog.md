@@ -1086,6 +1086,7 @@ These reports' page-level caches are absent or in the superseded format, so the 
 - `syndicate_2786_2017`
 - `syndicate_2988_2017`
 - `syndicate_2988_2018`
+- `syndicate_3210_2018`
 - `syndicate_3268_2018`
 - `syndicate_3268_2019`
 

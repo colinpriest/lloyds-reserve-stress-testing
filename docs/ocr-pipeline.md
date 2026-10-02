@@ -3099,7 +3099,7 @@ in `extract_with_gemini`).
 **Unread filings that print a table the parsers do not read**
 (verification review of round 62, N-V-E-4).  Two of the 21 records still
 with no deterministic reading print a claims development table that the
-parsers read and refuse; a third, 3210/2018, prints one that they have not
+parsers turn into no figure; a third, 3210/2018, prints one that they have not
 read (last bullet).  Their committed caches and filing pages say why each
 stays unread:
 
@@ -3130,7 +3130,10 @@ stays unread:
   parsers had nothing to read, and it is unchanged.  No table backend has
   read the new file: no grid of it is committed (`backend_cache_absent.json`
   lists it), and reading it needs a paid table extraction, which has not
-  been authorised.  No figure has been taken from the table.
+  been authorised.  A paid read of page 41's claims table would not bring
+  3210/2018 into the working sample, because it is a whole run-off year
+  (WHOLE in `runoff_corpus_register.json`) under the whole-year run-off
+  rule.  So it has not been bought.  No figure has been taken from the table.
 
 Three more filings were on this list before the third cycle: 1699/2022,
 1975/2019 and 1922/2024.  Their caches hold no triangle grid, and the

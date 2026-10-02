@@ -100,7 +100,8 @@ equivalent of this table (across all ~180 syndicates) is the `by_syndicate` shee
   `scripts/build_download_addendum.py` builds from a re-fetch of 2 October 2026 with
   `scripts/lloyds_scraper.py`. The scraper found an address for 17 of the 33, and the
   file Lloyd's serves at the address is, byte for byte, the corpus copy for 17 of
-  them; it differs for 0. It found no address for the other 16. The corpus copy of
+  them; it differs for 0. (3210/2018 is one of the 17 since its replacement,
+  below.) It found no address for the other 16. The corpus copy of
   3210/2018 was replaced on 2 October 2026: its earlier copy (8,380,416 bytes, which
   opened with no page) was a cut-short download of Lloyd's file, and the list keeps
   that copy's size and SHA-256 as `earlier_copy`. By the run-off corpus register
