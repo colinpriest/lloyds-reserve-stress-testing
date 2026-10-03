@@ -1243,8 +1243,13 @@ is not.  With the signs:
 `tests/test_bracketed_premiums.py` holds the review's four records to
 their tables, and checks every committed premium grid the reader
 admits: a class printed in brackets among positive classes is read
-negative.  The records were regenerated offline on 3 October 2026 (section 9.1): 81 now carry a bracketed class with its
-sign, and each of the review's four sums to its table's total (1414/2016's classes sum to 573.475, not 574.063).
+negative.  The records were regenerated offline on 3 October 2026 (section 9.1): of the 141 regenerated, 82 now carry a
+bracketed class with its sign, and each of the review's four sums to its table's total (1414/2016's classes sum to 573.475,
+not 574.063).  The 82 are counted by position in the stored mix: a record is counted when, at some position of a model block's
+mix (or of a stub's mix), the class was positive in the record of 5a6883d0 and is the same size and negative in the
+regenerated one.  An earlier count of 81 keyed the classes by name and so missed 1955/2021, whose mix holds two classes
+named Aviation (the first, "(160)" under Direct Insurance on page 42, is the bracketed one; the second, 3,985, is a
+Reinsurance class).
 
 #### 7.7.4  Year-of-account and calendar-year columns (P-30)
 
@@ -1264,8 +1269,13 @@ gate holds the mix to a model's total before it is applied.  The
 rule reads 20 committed grids, all Ark's, and in each the classes
 sum to the calendar column's total, which is the premium every model
 read (`tests/test_yoa_calendar_column.py`).  Regenerated on 3 October 2026,
-20 of the 21 Ark records carry the table's mix (6 did before); the amounts moved in 7: 6105/2015's calendar column
-sums to 43.859 where the adopted reading's year-of-account column gave 43.178, and 3902/2019's gemini reading,
+20 of the 21 Ark records carry the table's mix (6 did before).  A record carries it when a model block's stored mix equals
+the mix its table step read, class by class and amount by amount, and a stub carries it when it stores a mix; 3902/2017, a
+stub with no mix, is the one that does not.  Of the 21 stored mixes, 14 are the same before and after and 7 differ, and
+what moved in the 7 is counted three ways.  The class amounts moved in 5 (3902/2019, 3902/2023, 4020/2019, 6105/2014 and
+6105/2015).  The class names or amounts moved in 6, which adds 4020/2014, whose class names changed and whose amounts did
+not.  The mix differs in 7 only if the stub 4020/2015 is counted, whose mix is newly stored (it held none).  6105/2015's
+calendar column sums to 43.859 where the adopted reading's year-of-account column gave 43.178, and 3902/2019's gemini reading,
 scaled from the year-of-account column, now reads 42.498, 22.16 and 24.797.
 
 ### 7.8  Provisions and balance sheet grid parsing
@@ -1702,13 +1712,75 @@ the census or the brief names, were predicted; 141 were regenerated. Eight moved
 predicted: 1910/2019 5.0 to 5.5, 2007/2016 61.3 to 54.8, 2007/2017 -22.0 to -44.5, 2791/2015 -141.318 to -2.131,
 5000/2017 25.0 to 24.0, 6111/2015 0.0 to 0.49, 6112/2016 -19.264 to -0.9 (the table's +0.893 has the opposite sign to
 both models' -0.9 and is vetoed, section 10.3) and 727/2019 6.785 to 8.894. 94 moved their business mix (7.7.3, 7.7.4).
-Thirteen records reach the page-vision step on the refused triangle, for which no response is cached under the current
+Thirteen records reach the page-vision step on the refused triangle, for which no response was cached under the current
 prompt (1400/2014, 2010/2014, 2121/2019, 2999/2022, 3002/2021, 3622/2023, 3624/2023 and 382's 2015 to 2020): offline that
 is a cache miss and the record keeps its committed figure. Three more would be written as no deterministic reading and
-leave the working sample: 1967/2014 and 1991/2018 reach no page-vision step (no triangle page for it to send), and 3500/2018's
-served page is refused too, with no reserve text or loss-ratio grid behind it. None of the 16 is regenerated; each is declared
-in `redecision_pending.json`. The census counts 15 refused triangles with no committed page-vision entry (its
-`rag_replay_stops_on_a_cache_miss`); 13 of them reach that step, and 1967/2014 and 1991/2018 do not.
+leave the working sample: 1967/2014 and 1991/2018 reach no page-vision step (1967/2014's filing prints no claims development
+table; 1991/2018's gross triangle, on PDF page 30, matches one of the page finder's patterns where it needs two), and
+3500/2018's served page is refused too, with no reserve text or loss-ratio grid behind it. None of the 16 was regenerated at
+that point; each was declared in `redecision_pending.json`. The census then counted 15 refused triangles with no committed
+page-vision entry (its `rag_replay_stops_on_a_cache_miss`, which said that the replay stops on a cache miss for every one);
+13 of them reach that step, and 1967/2014 and 1991/2018 do not. It now walks the step with the pipeline's own code and counts
+the three apart: `rag_refused_with_no_cached_vision_page` (the 15, then), `rag_replay_stops_on_a_cache_miss` (the 13) and
+`rag_refused_reaching_no_page_vision` (the 2).
+
+**Option B: the page-vision calls (3 October 2026, 16:40 to 16:44).** The author chose to pay for the page-vision calls of the
+pages the step reaches, and the main session made them. Each is one call of the pipeline's own page-vision step (one page
+image to gemini-2.5-flash, prompt 2.13, unchanged since 15 March 2026), one attempt per page, 12 pages of 11 of the 13
+records. 2121/2019 (page 56) and 3622/2023 (page 36) were left out: a response to the same prompt text from an older driver
+version (2.8, cached on 18 March 2026, and 2.10, on 5 July 2026) is cached for each, and an unchanged prompt is not run
+again. 12 attempts, 12 results, every response parsed and cached (12 files in `pdf_extraction/llm_cache/`): 44,541 tokens
+(prompt 6,648, response 8,477, thinking 29,416) and an estimated US$0.0967 at the pipeline's price table (the prompt at
+the input rate, the response and thinking tokens at the output rate; it is not a provider's bill). No run manifest holds
+them (`run_manifest.json` records runs of `test_gemini.py`); the table below does. Each reading was compared with its page,
+cell by cell, against the page's own text:
+
+| Record | Page | Tokens | Est. US$ | The reading against its page |
+|---|---|---|---|---|
+| 1400/2014 | 8 | 2,749 | 0.005654 | no triangle: the page is the key performance indicators, and the reading says so |
+| 2010/2014 | 20 | 2,955 | 0.006169 | agrees in 28 cells: the gross loss-ratio triangle, in percent |
+| 2999/2022 | 48 | 6,851 | 0.015909 | **disagrees in all 55 cells**: see below |
+| 3002/2021 | 38 | 3,004 | 0.006291 | agrees in 55 cells |
+| 3624/2023 | 38 | 4,699 | 0.010529 | agrees in 55 cells |
+| 382/2015 | 46 | 3,716 | 0.008071 | agrees in 66 cells: a table of yearly movements, transcribed as printed |
+| 382/2016 | 46 | 4,169 | 0.009204 | agrees in 66 cells (movements) |
+| 382/2017 | 47 | 4,052 | 0.008911 | agrees in 66 cells (movements) |
+| 382/2018 | 46 | 4,381 | 0.009734 | agrees in 66 cells (movements) |
+| 382/2019 | 46 | 3,277 | 0.006974 | agrees in 66 cells (movements) |
+| 382/2020 | 46 | 1,489 | 0.002504 | no triangle: the page is the movement in technical provisions, and the reading says so |
+| 382/2020 | 47 | 3,199 | 0.006779 | agrees in 66 cells (movements) |
+
+2999/2022's reading drops the page's first column (2013, 262.7 down to 599.4) and puts every later column under the year
+before: its "2013" column is the page's 2014 (189.1 down to 709.6), all 45 cells of the page's other nine columns are one
+column to the left, and its "2022" column is blank. The 2021 cohort's first development (504.3 to 990.1, +485.8) therefore
+sits among the mature columns. The reader finds each of its eight mature columns ending one row short of its report-year
+diagonal, takes the grid for one that starts a year late (the offset rule of `_diagonal_cells`), reads it one row up and
+accepts it: +858.1, where the page's own grid gives +370.5 (the last cell of every column is the printed current
+estimate). The entry is cached because it is what the call returned; the record is not rebuilt from it, and the page's
+figure, +370.5, is on the list for stage 3. The shape that let it through is a blank newest column under a one-column shift;
+the reader does not test for it (a change to the reader belongs to a later stage).
+
+Ten of the 11 records were then regenerated offline from the readings, each after its figure, route and mix had been
+predicted, and every prediction held. Figures are the two models' (gemini-2.5-flash; gpt-5-mini where it differs):
+
+- 3002/2021: -11.426 to -9.478, the page reading's figure (route `rag_triangle`); the mix is the models' own, unchanged.
+- 3624/2023: 74.995 to 71.809 (route `rag_triangle`); the table's mix, whose class sum goes from 246.875 to 246.455.
+- 382/2015: -15.848 to 15.637 (gemini-2.5-flash) and -3.686 (gpt-5-mini); 382/2016: -50.211 to -8.932; 382/2017: 49.14 to
+  59.798 and 7.663. The reader refuses 382's movement tables (negative cells), so these records' figures become the models'
+  own readings (route `model_reading`), and the two models disagree for 2015 and 2017. 382/2017's mix sum goes from 320.587
+  to 319.553. 382/2018 (13.51 and 5.82), 382/2019 (173.514 and 12.549) and 382/2020 (7.269) keep their figures and route;
+  382/2019's mix sum goes from 316.458 to 316.334.
+- 2010/2014: the loss-ratio triangle is refused as not a claims triangle, and the record keeps its figures (-0.917 and none).
+- 1400/2014: its stored triangle was a net one-column grid of yearly results (15,660, 13,362, 201, 0, -3,833 and -6,131,
+  £000), which the reader refuses, and its page held no triangle, so with no figure from any other route and no reserve
+  text it is written as no deterministic reading (unread, the models not run). Its figure, -2.298, and its six-class mix are
+  gone, and it has left the working sample.
+
+They left `redecision_pending.json`. Six of the 16 remain declared, each keeping its committed form: 2999/2022 (above);
+2121/2019 and 3622/2023, whose only response is from an older driver version, which the cache does not serve (read through
+the reader offline it gives +57.034 and -4.8; serving it needs a cache lookup across driver versions, a later stage's
+decision); and 1967/2014, 1991/2018 and 3500/2018, each of which would be written as no deterministic reading and leave the
+working sample, a decision for the author (1400/2014 was written so, as its page held no triangle).
 
 The 2 most recent UW years are excluded because they have
 insufficient development history (only 1 or 2 data points).
@@ -3143,9 +3215,9 @@ every other record written this way carries the restated status and
 reason (`scripts/restate_record_status.py`), and says the models were
 not run.  Of the 45 that were left, 24 state in their filings that the
 syndicate began in the report year or the year before and were restated as
-first-year stubs on 30 September 2026 (11.2); 21 remain unread; two of
-these still print a table the parsers do not read, and a third, 3210/2018,
-whose table no backend has read (below).
+first-year stubs on 30 September 2026 (11.2); 21 remained unread, and 1400/2014
+made 22 on 3 October 2026 (9.1); two of the 21 still print a table the parsers do not read, and a third,
+3210/2018, whose table no backend has read (below).
 
 **Important**: which of the two flags a report gets does not depend
 on the syndicate's age.  The inception-based distinction this
@@ -3226,7 +3298,7 @@ run standing (round 62, second cycle: Gemini's thinking tokens priced
 in `extract_with_gemini`).
 
 **Unread filings that print a table the parsers do not read**
-(verification review of round 62, N-V-E-4).  Two of the 21 records still
+(verification review of round 62, N-V-E-4).  Two of the 22 records still
 with no deterministic reading print a claims development table that the
 parsers turn into no figure; a third, 3210/2018, prints one that they have not
 read (last bullet).  Their committed caches and filing pages say why each
@@ -3263,6 +3335,12 @@ stays unread:
   page; printed 39) would not bring 3210/2018 into the working sample, because it is a whole run-off year
   (WHOLE in `runoff_corpus_register.json`) under the whole-year run-off
   rule.  So it has not been bought.  No figure has been taken from the table.
+
+1400/2014 joined the unread records on 3 October 2026 and is not one of these three.  Its stored triangle was a net
+one-column grid of yearly results, which the diagonal rule refuses (a column of negative values), and the one page-vision
+call for it (PDF page 8, option B, section 9.1) returned no triangle: the page is the key performance indicators.  No
+other route finds a figure, so it is written as no deterministic reading, and the record's reason says what that means:
+it describes the parsers, not the filing, which may print a claims development table they could not read.
 
 Three more filings were on this list before the third cycle: 1699/2022,
 1975/2019 and 1922/2024.  Their caches hold no triangle grid, and the
