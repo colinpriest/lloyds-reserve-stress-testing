@@ -68,21 +68,28 @@ def test_the_2010_and_p_column_is_the_2010_cohort_and_enters_the_figure(stem, in
     assert pyd == pytest.approx(figure, abs=0.001), why
 
 
-def test_the_stored_triangles_are_these_tables_without_the_cohort():
-    """The records hold the 2011-onward reading of the same tables, and its figure, until they are regenerated."""
-    for stem, index, _, _, _ in CASES:
+def test_the_records_hold_these_tables_with_the_cohort_and_the_figure():
+    """The two records were regenerated offline on 3 October 2026 (stage 2, the PC steps). Until then they held the 2011-onward
+    reading of these tables and its figures (+61.3 and -22.0); each model block now stores the table read with its "2010&P" column
+    as the oldest cohort, and the adopted figure is the review's (+54.8 and -44.5), taken from the table's triangle."""
+    for stem, index, _, _, figure in CASES:
         with io.open(ROOT / "pdf_extraction" / ("%s.json" % stem), encoding="utf-8") as fh:
             rec = json.load(fh)
-        stored = next(b["_rag_triangle"] for b in rec["models"].values() if b.get("_rag_triangle"))
         year = int(stem.rsplit("_", 1)[1])
         tri, _ = te._parse_nutrient_triangle(_grid(stem, index), year)
         d = tri.to_dict()
-        assert stored["underwriting_years"] == d["underwriting_years"][1:]
-        # the single years' cells are the stored ones; the cohort alone reaches the deepest row
-        rows = [r[1:] for r in d["development_rows"]]
-        while rows and all(v is None for v in rows[-1]):
-            rows.pop()
-        assert rows == stored["development_rows"]
+        assert len(rec["models"]) == 2, stem
+        for name, block in rec["models"].items():
+            stored = block["_rag_triangle"]
+            assert stored["underwriting_years"] == d["underwriting_years"] and stored["underwriting_years"][0] == 2010, (stem, name)
+            assert stored.get("aggregated_cohort", {}).get("anchor") == 2010, (stem, name)
+            rows = [list(r) for r in d["development_rows"]]
+            while rows and all(v is None for v in rows[-1]):
+                rows.pop()
+            assert stored["development_rows"] == rows, (stem, name)
+            assert block["_pyd_route"]["source"] == "rag_triangle", (stem, name)
+            assert block["_pyd_route"]["value"] == pytest.approx(figure, abs=0.001), (stem, name)
+            assert block["prior_year_development_gbp_m"] == pytest.approx(figure, abs=0.001), (stem, name)
 
 
 _YEAR_THEN_P = re.compile(r"\b(?:19|20)\d\d\s*(?:&|and|\+)\s*p", re.I)

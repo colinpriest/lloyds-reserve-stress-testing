@@ -1,5 +1,5 @@
 {
-  "extraction_timestamp": "2026-09-13T11:04:11.082127+00:00",
+  "extraction_timestamp": "2026-10-03T04:08:13.242365+00:00",
   "spec": {
     "prompt_version": "2.13",
     "driver_prompt_version": "2.13",
@@ -94,7 +94,7 @@
       "gross_premium_page": 16,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior year development figure is NET of reinsurance as no gross figure was explicitly stated or calculable from available tables. The claims development table on page 13 is not a full triangle and is distorted by a significant RITC adjustment, making it unsuitable for calculating total prior year development. Some gross written premiums are negative due to adjustments/cancellations exceeding new business in a run-off scenario. [RAG OVERRIDE: Model said PYD=1.2, RAG triangle computed 21.237. Using RAG value.]",
+      "data_quality_notes": "Prior year development figure is NET of reinsurance as no gross figure was explicitly stated or calculable from available tables. The claims development table on page 13 is not a full triangle and is distorted by a significant RITC adjustment, making it unsuitable for calculating total prior year development. Some gross written premiums are negative due to adjustments/cancellations exceeding new business in a run-off scenario. [RAG OVERRIDE: Model said PYD=1.2, RAG triangle computed 21.237. Using RAG value.] [LOB NOT APPLIED: deterministic mix of 9 class(es) sums to 5192.000m, which does not reconcile within 2% with the model totals [5.192, 5.192]; model mix retained.]",
       "_claims_triangle": {
         "type": "none",
         "currency": null,
@@ -151,6 +151,100 @@
             null
           ]
         ]
+      },
+      "_adobe_lob": {
+        "gross_premium_mix": [
+          {
+            "line_of_business": "Accident and health",
+            "amount_gbp_m": -527.0,
+            "percentage_of_total": -10.0
+          },
+          {
+            "line_of_business": "Motor (third party liability)",
+            "amount_gbp_m": -324.0,
+            "percentage_of_total": -6.2
+          },
+          {
+            "line_of_business": "Motor (other classes)",
+            "amount_gbp_m": -967.0,
+            "percentage_of_total": -18.4
+          },
+          {
+            "line_of_business": "Energy",
+            "amount_gbp_m": -28.0,
+            "percentage_of_total": -0.5
+          },
+          {
+            "line_of_business": "Marine, Aviation & Transport",
+            "amount_gbp_m": -3.0,
+            "percentage_of_total": -0.1
+          },
+          {
+            "line_of_business": "Fire & other damage to property",
+            "amount_gbp_m": 1702.0,
+            "percentage_of_total": 32.3
+          },
+          {
+            "line_of_business": "Third party liability",
+            "amount_gbp_m": -260.0,
+            "percentage_of_total": -4.9
+          },
+          {
+            "line_of_business": "Credit and Suretyship",
+            "amount_gbp_m": 5670.0,
+            "percentage_of_total": 107.7
+          },
+          {
+            "line_of_business": "Reinsurance inwards",
+            "amount_gbp_m": -71.0,
+            "percentage_of_total": -1.3
+          }
+        ],
+        "gross_premiums_written_gbp_m": 5263.0,
+        "table_total": 5263.0,
+        "class_sum": 5192.0,
+        "claims_incurred_by_lob": [
+          {
+            "line_of_business": "Accident and health",
+            "amount_gbp_m": 287.0
+          },
+          {
+            "line_of_business": "Motor (third party liability)",
+            "amount_gbp_m": -251.0
+          },
+          {
+            "line_of_business": "Motor (other classes)",
+            "amount_gbp_m": -129.0
+          },
+          {
+            "line_of_business": "Energy",
+            "amount_gbp_m": -1120.0
+          },
+          {
+            "line_of_business": "Marine, Aviation & Transport",
+            "amount_gbp_m": 2.0
+          },
+          {
+            "line_of_business": "Fire & other damage to property",
+            "amount_gbp_m": -5802.0
+          },
+          {
+            "line_of_business": "Third party liability",
+            "amount_gbp_m": -698.0
+          },
+          {
+            "line_of_business": "Credit and Suretyship",
+            "amount_gbp_m": -13760.0
+          },
+          {
+            "line_of_business": "Reinsurance inwards",
+            "amount_gbp_m": 27.0
+          }
+        ],
+        "currency": "GBP",
+        "method": "azure",
+        "source_page": 34,
+        "entity": 5820
       },
       "_entity_binding": {
         "requested_syndicate": 5820,
@@ -314,7 +408,7 @@
       "gross_premium_page": 32,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "No explicit GROSS prior-year movement (2017 & older) is provided in the 'movement in prior year's provision' format. The report explicitly states a NET deterioration of GBP 1.2m to claims reserves established at the prior year end (Note 9) - this NET figure has been used as a fallback for prior_year_development_gbp_m and flagged accordingly. There are RITC adjustments (notably 2016 & Prior) which distort opening/adjusted balances and complicate extraction of a clean gross PYD. A gross claims development table is present but only for the 2017 year of account; no consolidated gross prior-years movement figure is shown. Users should treat the prior_year_development_gbp_m as a net-derived, lowerconfidence estimate. [RAG OVERRIDE: Model said PYD=1.2, RAG triangle computed 21.237. Using RAG value.]",
+      "data_quality_notes": "No explicit GROSS prior-year movement (2017 & older) is provided in the 'movement in prior year's provision' format. The report explicitly states a NET deterioration of GBP 1.2m to claims reserves established at the prior year end (Note 9) - this NET figure has been used as a fallback for prior_year_development_gbp_m and flagged accordingly. There are RITC adjustments (notably 2016 & Prior) which distort opening/adjusted balances and complicate extraction of a clean gross PYD. A gross claims development table is present but only for the 2017 year of account; no consolidated gross prior-years movement figure is shown. Users should treat the prior_year_development_gbp_m as a net-derived, lowerconfidence estimate. [RAG OVERRIDE: Model said PYD=1.2, RAG triangle computed 21.237. Using RAG value.] [LOB NOT APPLIED: deterministic mix of 9 class(es) sums to 5192.000m, which does not reconcile within 2% with the model totals [5.192, 5.192]; model mix retained.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -383,6 +477,100 @@
             null
           ]
         ]
+      },
+      "_adobe_lob": {
+        "gross_premium_mix": [
+          {
+            "line_of_business": "Accident and health",
+            "amount_gbp_m": -527.0,
+            "percentage_of_total": -10.0
+          },
+          {
+            "line_of_business": "Motor (third party liability)",
+            "amount_gbp_m": -324.0,
+            "percentage_of_total": -6.2
+          },
+          {
+            "line_of_business": "Motor (other classes)",
+            "amount_gbp_m": -967.0,
+            "percentage_of_total": -18.4
+          },
+          {
+            "line_of_business": "Energy",
+            "amount_gbp_m": -28.0,
+            "percentage_of_total": -0.5
+          },
+          {
+            "line_of_business": "Marine, Aviation & Transport",
+            "amount_gbp_m": -3.0,
+            "percentage_of_total": -0.1
+          },
+          {
+            "line_of_business": "Fire & other damage to property",
+            "amount_gbp_m": 1702.0,
+            "percentage_of_total": 32.3
+          },
+          {
+            "line_of_business": "Third party liability",
+            "amount_gbp_m": -260.0,
+            "percentage_of_total": -4.9
+          },
+          {
+            "line_of_business": "Credit and Suretyship",
+            "amount_gbp_m": 5670.0,
+            "percentage_of_total": 107.7
+          },
+          {
+            "line_of_business": "Reinsurance inwards",
+            "amount_gbp_m": -71.0,
+            "percentage_of_total": -1.3
+          }
+        ],
+        "gross_premiums_written_gbp_m": 5263.0,
+        "table_total": 5263.0,
+        "class_sum": 5192.0,
+        "claims_incurred_by_lob": [
+          {
+            "line_of_business": "Accident and health",
+            "amount_gbp_m": 287.0
+          },
+          {
+            "line_of_business": "Motor (third party liability)",
+            "amount_gbp_m": -251.0
+          },
+          {
+            "line_of_business": "Motor (other classes)",
+            "amount_gbp_m": -129.0
+          },
+          {
+            "line_of_business": "Energy",
+            "amount_gbp_m": -1120.0
+          },
+          {
+            "line_of_business": "Marine, Aviation & Transport",
+            "amount_gbp_m": 2.0
+          },
+          {
+            "line_of_business": "Fire & other damage to property",
+            "amount_gbp_m": -5802.0
+          },
+          {
+            "line_of_business": "Third party liability",
+            "amount_gbp_m": -698.0
+          },
+          {
+            "line_of_business": "Credit and Suretyship",
+            "amount_gbp_m": -13760.0
+          },
+          {
+            "line_of_business": "Reinsurance inwards",
+            "amount_gbp_m": 27.0
+          }
+        ],
+        "currency": "GBP",
+        "method": "azure",
+        "source_page": 34,
+        "entity": 5820
       },
       "_entity_binding": {
         "requested_syndicate": 5820,

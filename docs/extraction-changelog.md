@@ -4,11 +4,11 @@
 
 Round 55 (the external review of 10 September 2026) corrected two extraction rules and re-extracted the records they touch, offline from the committed response and table caches. The rules were: the percentage-against-monetary decision, which now rests on the table's own unit evidence before any magnitude heuristic (finding T03); and the transposed-grid parser, which now captures one basis block of a page that prints a gross and a net triangle under one header, and labels it by that block's own heading. The route by which each record's development figure was adopted is now recorded on the record (`_pyd_route`) instead of being inferred from a sentence in its notes.
 
-**1065 record(s) differ from `7334497`.** The adopted figure moves in 219 of them.
+**1065 record(s) differ from `7334497`.** The adopted figure moves in 225 of them.
 
 | Record | Development, before | after | Route, before | after | Fields that differ |
 |---|---:|---:|---|---|---|
-| `syndicate_1084_2014` | -77.4 | -77.4 | model | model_reading (?) | gross_premiums_written_gbp_m, adobe_lob, data_quality_notes |
+| `syndicate_1084_2014` | -77.4 | -77.4 | model | model_reading (?) | gross_premiums_written_gbp_m, gross_premium_mix, adobe_lob, data_quality_notes |
 | `syndicate_1084_2015` | -95.7 | -95.7 | model | model_reading (?) | gross_premiums_written_gbp_m, gross_premium_mix, claims_triangle, rag_triangle, adobe_lob, data_quality_notes |
 | `syndicate_1084_2016` | -95.7 | -95.7 | model | model_reading (?) | gross_premiums_written_gbp_m, gross_premium_mix, claims_triangle, rag_triangle, adobe_lob, adobe_provisions, data_quality_notes |
 | `syndicate_1084_2017` | -38.9 | -38.9 | deterministic override (note) | rag_triangle (gross) | claims_triangle, rag_triangle, adobe_lob, data_quality_notes |
@@ -29,7 +29,7 @@ Round 55 (the external review of 10 September 2026) corrected two extraction rul
 | `syndicate_1110_2020` | 2.728 | 2.728 | deterministic override (note) | rag_triangle (gross) | gross_premiums_written_gbp_m, gross_premium_mix, claims_triangle, rag_triangle, adobe_lob, data_quality_notes |
 | `syndicate_1110_2021` | 55.171 | 55.171 | deterministic override (note) | rag_triangle (gross) | opening_reserves_gbp_m, gross_premiums_written_gbp_m, gross_premium_mix, claims_triangle, rag_triangle, adobe_lob, data_quality_notes |
 | `syndicate_1110_2022` | 9.082 | 9.082 | model | rag_triangle (gross) | gross_premiums_written_gbp_m, gross_premium_mix, claims_triangle, rag_triangle, adobe_lob, data_quality_notes |
-| `syndicate_1110_2023` | 38.784 | 38.784 | model | rag_triangle (gross) | gross_premium_mix, claims_triangle, rag_triangle, data_quality_notes |
+| `syndicate_1110_2023` | 38.784 | 38.784 | model | rag_triangle (gross) | gross_premium_mix, claims_triangle, rag_triangle, adobe_lob, data_quality_notes |
 | `syndicate_1110_2024` | 64.979 | 64.979 | deterministic override (note) | rag_triangle (gross) | claims_triangle, rag_triangle, adobe_lob, adobe_provisions, data_quality_notes |
 | `syndicate_1176_2014` | -9.5 | -9.5 | model | model_reading (?) | gross_premiums_written_gbp_m, gross_premium_mix, claims_triangle, adobe_lob, data_quality_notes |
 | `syndicate_1176_2015` | -5.749 | -5.749 | deterministic override (note) | rag_triangle (net) | gross_premium_mix, claims_triangle, rag_triangle, adobe_lob, data_quality_notes |
@@ -73,7 +73,7 @@ Round 55 (the external review of 10 September 2026) corrected two extraction rul
 | `syndicate_1209_2014` | 0.3 | 0.3 | model | model_reading (?) | gross_premiums_written_gbp_m, gross_premium_mix, adobe_lob, data_quality_notes |
 | `syndicate_1209_2015` | -37.6 | -37.6 | model | model_reading (?) | gross_premiums_written_gbp_m, gross_premium_mix, claims_triangle, rag_triangle, adobe_lob, data_quality_notes |
 | `syndicate_1209_2016` | 11.649 | -19.0 | model | model_reading (?) | prior_year_development_gbp_m, prior_year_development_pct, gross_premiums_written_gbp_m, gross_premium_mix, claims_triangle, rag_triangle, adobe_lob, data_quality_notes, direction |
-| `syndicate_1209_2017` | 21.389 | 21.389 | deterministic override (note) | rag_triangle (gross) | gross_premium_mix, claims_triangle, rag_triangle, data_quality_notes |
+| `syndicate_1209_2017` | 21.389 | 21.389 | deterministic override (note) | rag_triangle (gross) | gross_premium_mix, claims_triangle, rag_triangle, adobe_lob, data_quality_notes |
 | `syndicate_1218_2014` | -10.9 | -10.9 | model | model_reading (?) | prior_year_development_pct, gross_premiums_written_gbp_m, gross_premium_mix, adobe_lob, data_quality_notes |
 | `syndicate_1218_2015` | -0.46 | -0.46 | model | rag_triangle (gross) | prior_year_development_pct, opening_reserves_gbp_m, gross_premium_mix, claims_triangle, rag_triangle, adobe_lob, data_quality_notes |
 | `syndicate_1218_2016` | -8.941 | -8.941 | deterministic override (note) | rag_triangle (gross) | gross_premium_mix, claims_triangle, rag_triangle, adobe_lob, data_quality_notes |
@@ -229,7 +229,7 @@ Round 55 (the external review of 10 September 2026) corrected two extraction rul
 | `syndicate_1861_2019` | 22.179 | 22.179 | deterministic override (note) | rag_triangle (gross) | gross_premium_mix, claims_triangle, rag_triangle, adobe_lob, data_quality_notes |
 | `syndicate_1861_2020` | 7.9 | 7.9 | model | model_reading (?) | gross_premiums_written_gbp_m, gross_premium_mix, rag_triangle, adobe_lob, data_quality_notes |
 | `syndicate_1861_2021` | 34.519 | 34.519 | model | rag_triangle (gross) | gross_premiums_written_gbp_m, gross_premium_mix, claims_triangle, rag_triangle, adobe_lob, data_quality_notes |
-| `syndicate_1861_2022` | 7.156 | 7.156 | model | rag_triangle (gross) | gross_premium_mix, claims_triangle, rag_triangle, data_quality_notes |
+| `syndicate_1861_2022` | 7.156 | 7.156 | model | rag_triangle (gross) | gross_premium_mix, claims_triangle, rag_triangle, adobe_lob, data_quality_notes |
 | `syndicate_1880_2014` | -13.6 | -13.6 | deterministic override (note) | rag_triangle (gross) | gross_premiums_written_gbp_m, gross_premium_mix, claims_triangle, rag_triangle, adobe_lob, data_quality_notes |
 | `syndicate_1880_2015` | -5.8 | -5.8 | model | rag_triangle (gross) | gross_premiums_written_gbp_m, gross_premium_mix, claims_triangle, rag_triangle, adobe_lob, data_quality_notes |
 | `syndicate_1880_2016` | -16.4 | -16.4 | model | rag_triangle (gross) | gross_premiums_written_gbp_m, gross_premium_mix, claims_triangle, rag_triangle, adobe_lob, data_quality_notes |
@@ -245,7 +245,7 @@ Round 55 (the external review of 10 September 2026) corrected two extraction rul
 | `syndicate_1882_2015` | 12.863 | 12.863 | model | rag_triangle (net) | gross_premiums_written_gbp_m, gross_premium_mix, claims_triangle, rag_triangle, adobe_lob, data_quality_notes |
 | `syndicate_1882_2016` | 9.798 | 9.798 | deterministic override (note) | rag_triangle (net) | opening_reserves_gbp_m, gross_premiums_written_gbp_m, gross_premium_mix, claims_triangle, rag_triangle, adobe_lob, data_quality_notes |
 | `syndicate_1882_2017` | 17.581 | 17.581 | model | rag_triangle (gross) | gross_premiums_written_gbp_m, gross_premium_mix, claims_triangle, rag_triangle, adobe_lob, data_quality_notes |
-| `syndicate_1882_2018` | 10.653 | 10.653 | deterministic override (note) | rag_triangle (gross) | gross_premiums_written_gbp_m, gross_premium_mix, claims_triangle, rag_triangle, data_quality_notes, currency |
+| `syndicate_1882_2018` | 10.653 | 10.653 | deterministic override (note) | rag_triangle (gross) | gross_premiums_written_gbp_m, gross_premium_mix, claims_triangle, rag_triangle, adobe_lob, data_quality_notes, currency |
 | `syndicate_1884_2015` | None | None | model | model | provenance only |
 | `syndicate_1884_2016` | None | None | model | model | provenance only |
 | `syndicate_1884_2017` | 0.557 | -0.557 | deterministic override (note) | rag_triangle (gross) | prior_year_development_gbp_m, prior_year_development_pct, gross_premiums_written_gbp_m, gross_premium_mix, claims_triangle, rag_triangle, adobe_lob, data_quality_notes, direction |
@@ -276,7 +276,7 @@ Round 55 (the external review of 10 September 2026) corrected two extraction rul
 | `syndicate_1910_2016` | -8.28 | -8.28 | model | rag_triangle (gross) | gross_premium_mix, claims_triangle, rag_triangle, data_quality_notes |
 | `syndicate_1910_2017` | -5.3 | -5.3 | model | rag_triangle (gross) | gross_premiums_written_gbp_m, gross_premium_mix, claims_triangle, rag_triangle, adobe_lob, data_quality_notes |
 | `syndicate_1910_2018` | 1.91 | 1.91 | deterministic override (note) | rag_triangle (gross) | gross_premium_mix, claims_triangle, rag_triangle, data_quality_notes |
-| `syndicate_1910_2019` | 5.0 | 5.0 | deterministic override (note) | rag_triangle (gross) | opening_reserves_gbp_m, gross_premiums_written_gbp_m, gross_premium_mix, claims_triangle, rag_triangle, adobe_lob, data_quality_notes |
+| `syndicate_1910_2019` | 5.0 | 5.5 | deterministic override (note) | rag_triangle (gross) | prior_year_development_gbp_m, prior_year_development_pct, opening_reserves_gbp_m, gross_premiums_written_gbp_m, gross_premium_mix, claims_triangle, rag_triangle, adobe_lob, data_quality_notes |
 | `syndicate_1910_2020` | -22.3 | -22.3 | deterministic override (note) | rag_triangle (gross) | gross_premium_mix, data_quality_notes |
 | `syndicate_1910_2021` | -24.0 | -24.0 | deterministic override (note) | rag_triangle (gross) | data_quality_notes |
 | `syndicate_1910_2022` | 10.1 | 10.1 | deterministic override (note) | rag_triangle (gross) | claims_triangle, rag_triangle, data_quality_notes |
@@ -392,8 +392,8 @@ Round 55 (the external review of 10 September 2026) corrected two extraction rul
 | `syndicate_2003_2020` | 369.0 | 369.0 | deterministic override (note) | rag_triangle (gross) | gross_premium_mix, rag_triangle, adobe_lob, data_quality_notes |
 | `syndicate_2007_2014` | -26.8 | -26.8 | model | model_reading (?) | gross_premiums_written_gbp_m, gross_premium_mix, adobe_lob, data_quality_notes |
 | `syndicate_2007_2015` | -2.0 | -2.0 | deterministic override (note) | code_triangle (gross) | gross_premiums_written_gbp_m, gross_premium_mix, claims_triangle, rag_triangle, adobe_lob, data_quality_notes |
-| `syndicate_2007_2016` | 61.3 | 61.3 | deterministic override (note) | rag_triangle (gross) | gross_premiums_written_gbp_m, gross_premium_mix, claims_triangle, rag_triangle, adobe_lob, data_quality_notes |
-| `syndicate_2007_2017` | -22.0 | -22.0 | deterministic override (note) | rag_triangle (gross) | gross_premiums_written_gbp_m, gross_premium_mix, claims_triangle, rag_triangle, adobe_lob, data_quality_notes |
+| `syndicate_2007_2016` | 61.3 | 54.8 | deterministic override (note) | rag_triangle (gross) | prior_year_development_gbp_m, prior_year_development_pct, gross_premiums_written_gbp_m, gross_premium_mix, claims_triangle, rag_triangle, adobe_lob, data_quality_notes |
+| `syndicate_2007_2017` | -22.0 | -44.5 | deterministic override (note) | rag_triangle (gross) | prior_year_development_gbp_m, prior_year_development_pct, gross_premiums_written_gbp_m, gross_premium_mix, claims_triangle, rag_triangle, adobe_lob, data_quality_notes |
 | `syndicate_2007_2018` | 29.57 | 29.57 | deterministic override (note) | rag_triangle (gross) | gross_premiums_written_gbp_m, gross_premium_mix, claims_triangle, rag_triangle, adobe_lob, data_quality_notes |
 | `syndicate_2007_2019` | 8.358 | 8.358 | model | rag_triangle (gross) | gross_premiums_written_gbp_m, gross_premium_mix, claims_triangle, rag_triangle, adobe_lob, data_quality_notes |
 | `syndicate_2008_2014` | -9.715 | -9.714936 | model | model_reading (?) | prior_year_development_gbp_m, gross_premiums_written_gbp_m, gross_premium_mix, rag_triangle, adobe_lob, data_quality_notes |
@@ -555,7 +555,7 @@ Round 55 (the external review of 10 September 2026) corrected two extraction rul
 | `syndicate_2786_2023` | 1.381 | 1.381 | deterministic override (note) | rag_triangle (gross) | gross_premiums_written_gbp_m, gross_premium_mix, claims_triangle, rag_triangle, adobe_lob, data_quality_notes |
 | `syndicate_2786_2024` | 5.989 | 5.989 | deterministic override (note) | rag_triangle (gross) | gross_premiums_written_gbp_m, gross_premium_mix, rag_triangle, adobe_lob, adobe_provisions, data_quality_notes |
 | `syndicate_2791_2014` | -46.836 | -22.8 | deterministic override (note) | model_reading (?) | prior_year_development_gbp_m, prior_year_development_pct, gross_premium_mix, adobe_provisions, data_quality_notes |
-| `syndicate_2791_2015` | -141.318 | -141.318 | deterministic override (note) | rag_triangle (gross) | gross_premium_mix, claims_triangle, rag_triangle, data_quality_notes |
+| `syndicate_2791_2015` | -141.318 | -2.131 | deterministic override (note) | rag_triangle (gross) | prior_year_development_gbp_m, prior_year_development_pct, gross_premium_mix, claims_triangle, rag_triangle, data_quality_notes |
 | `syndicate_2791_2016` | -6.954 | -6.954 | deterministic override (note) | rag_triangle (gross) | gross_premiums_written_gbp_m, gross_premium_mix, claims_triangle, rag_triangle, data_quality_notes, currency |
 | `syndicate_2791_2017` | -11.35 | -11.35 | deterministic override (note) | rag_triangle (gross) | gross_premium_mix, claims_triangle, rag_triangle, data_quality_notes |
 | `syndicate_2791_2018` | -9.783 | -9.783 | deterministic override (note) | rag_triangle (gross) | gross_premium_mix, claims_triangle, rag_triangle, data_quality_notes |
@@ -737,10 +737,10 @@ Round 55 (the external review of 10 September 2026) corrected two extraction rul
 | `syndicate_386_2023` | 60.4 | 60.4 | deterministic override (note) | rag_triangle (gross) | gross_premiums_written_gbp_m, gross_premium_mix, rag_triangle, adobe_lob, data_quality_notes |
 | `syndicate_386_2024` | 48.491 | 48.491 | deterministic override (note) | rag_triangle (gross) | gross_premiums_written_gbp_m, gross_premium_mix, claims_triangle, rag_triangle, adobe_lob, adobe_provisions, data_quality_notes |
 | `syndicate_3902_2017` | None | None | model | model | provenance only |
-| `syndicate_3902_2018` | None | 4.3 | model | rag_provisions (?) | prior_year_development_gbp_m, prior_year_development_pct, opening_reserves_gbp_m, gross_premiums_written_gbp_m, gross_premium_mix, claims_triangle, adobe_provisions, data_quality_notes, currency, direction |
-| `syndicate_3902_2019` | -1.2 | -1.2 | model | rag_provisions (?) | gross_premium_mix, claims_triangle, rag_triangle, adobe_provisions, data_quality_notes |
-| `syndicate_3902_2020` | -8.2 | -8.2 | model | rag_provisions (?) | claims_triangle, rag_triangle, adobe_provisions, data_quality_notes |
-| `syndicate_3902_2021` | -6.5 | -6.5 | model | rag_provisions (?) | claims_triangle, rag_triangle, adobe_provisions, data_quality_notes |
+| `syndicate_3902_2018` | None | 4.3 | model | rag_provisions (?) | prior_year_development_gbp_m, prior_year_development_pct, opening_reserves_gbp_m, gross_premiums_written_gbp_m, gross_premium_mix, claims_triangle, adobe_lob, adobe_provisions, data_quality_notes, currency, direction |
+| `syndicate_3902_2019` | -1.2 | -1.2 | model | rag_provisions (?) | gross_premium_mix, claims_triangle, rag_triangle, adobe_lob, adobe_provisions, data_quality_notes |
+| `syndicate_3902_2020` | -8.2 | -8.2 | model | rag_provisions (?) | gross_premium_mix, claims_triangle, rag_triangle, adobe_lob, adobe_provisions, data_quality_notes |
+| `syndicate_3902_2021` | -6.5 | -6.5 | model | rag_provisions (?) | claims_triangle, rag_triangle, adobe_lob, adobe_provisions, data_quality_notes |
 | `syndicate_3902_2022` | -39.0 | -39.0 | model | rag_provisions (?) | gross_premiums_written_gbp_m, gross_premium_mix, adobe_lob, adobe_provisions, data_quality_notes |
 | `syndicate_3902_2023` | -6.5 | -6.5 | model | rag_provisions (?) | gross_premiums_written_gbp_m, gross_premium_mix, claims_triangle, rag_triangle, adobe_lob, adobe_provisions, data_quality_notes |
 | `syndicate_3902_2024` | -12.1 | -12.1 | model | rag_provisions (?) | gross_premiums_written_gbp_m, gross_premium_mix, claims_triangle, rag_triangle, adobe_lob, adobe_provisions, data_quality_notes |
@@ -755,14 +755,14 @@ Round 55 (the external review of 10 September 2026) corrected two extraction rul
 | `syndicate_4000_2022` | -15.0 | -15.0 | model | model_reading (?) | gross_premiums_written_gbp_m, gross_premium_mix, rag_triangle, adobe_lob, data_quality_notes |
 | `syndicate_4000_2023` | -18.865 | -18.865 | model | rag_triangle (gross) | gross_premiums_written_gbp_m, gross_premium_mix, rag_triangle, adobe_lob, data_quality_notes |
 | `syndicate_4000_2024` | -3.3 | -3.3 | model | rag_provisions (?) | gross_premiums_written_gbp_m, gross_premium_mix, claims_triangle, rag_triangle, adobe_lob, adobe_provisions, data_quality_notes |
-| `syndicate_4020_2014` | -27.6 | -27.6 | model | model_reading (?) | gross_premium_mix, data_quality_notes |
+| `syndicate_4020_2014` | -27.6 | -27.6 | model | model_reading (?) | gross_premium_mix, adobe_lob, data_quality_notes |
 | `syndicate_4020_2015` | None | None | model | model | provenance only |
-| `syndicate_4020_2016` | 18.492 | 25.303 | deterministic override (note) | rag_triangle (gross) | prior_year_development_gbp_m, prior_year_development_pct, gross_premium_mix, claims_triangle, rag_triangle, data_quality_notes |
-| `syndicate_4020_2017` | 17.285 | 21.188 | deterministic override (note) | rag_triangle (gross) | prior_year_development_gbp_m, prior_year_development_pct, claims_triangle, rag_triangle, data_quality_notes |
-| `syndicate_4020_2018` | 54.639 | 43.863 | deterministic override (note) | rag_triangle (gross) | prior_year_development_gbp_m, prior_year_development_pct, opening_reserves_gbp_m, gross_premium_mix, claims_triangle, rag_triangle, data_quality_notes |
-| `syndicate_4020_2019` | -4.0 | -4.0 | model | rag_provisions (?) | gross_premium_mix, claims_triangle, adobe_provisions, data_quality_notes |
-| `syndicate_4020_2020` | -8.9 | -8.9 | model | rag_provisions (?) | gross_premium_mix, adobe_provisions, data_quality_notes |
-| `syndicate_4020_2021` | -22.6 | -22.6 | model | rag_provisions (?) | prior_year_development_pct, opening_reserves_gbp_m, gross_premium_mix, claims_triangle, adobe_provisions, data_quality_notes |
+| `syndicate_4020_2016` | 18.492 | 25.303 | deterministic override (note) | rag_triangle (gross) | prior_year_development_gbp_m, prior_year_development_pct, gross_premium_mix, claims_triangle, rag_triangle, adobe_lob, data_quality_notes |
+| `syndicate_4020_2017` | 17.285 | 21.188 | deterministic override (note) | rag_triangle (gross) | prior_year_development_gbp_m, prior_year_development_pct, gross_premium_mix, claims_triangle, rag_triangle, adobe_lob, data_quality_notes |
+| `syndicate_4020_2018` | 54.639 | 43.863 | deterministic override (note) | rag_triangle (gross) | prior_year_development_gbp_m, prior_year_development_pct, opening_reserves_gbp_m, gross_premium_mix, claims_triangle, rag_triangle, adobe_lob, data_quality_notes |
+| `syndicate_4020_2019` | -4.0 | -4.0 | model | rag_provisions (?) | gross_premium_mix, claims_triangle, adobe_lob, adobe_provisions, data_quality_notes |
+| `syndicate_4020_2020` | -8.9 | -8.9 | model | rag_provisions (?) | gross_premium_mix, adobe_lob, adobe_provisions, data_quality_notes |
+| `syndicate_4020_2021` | -22.6 | -22.6 | model | rag_provisions (?) | prior_year_development_pct, opening_reserves_gbp_m, claims_triangle, adobe_lob, adobe_provisions, data_quality_notes |
 | `syndicate_4020_2022` | -48.6 | -48.6 | model | rag_provisions (?) | gross_premiums_written_gbp_m, gross_premium_mix, adobe_lob, adobe_provisions |
 | `syndicate_4020_2023` | -36.4 | -36.4 | model | rag_provisions (?) | gross_premiums_written_gbp_m, gross_premium_mix, adobe_lob, adobe_provisions, data_quality_notes |
 | `syndicate_4020_2024` | -43.5 | -43.5 | model | rag_provisions (?) | gross_premiums_written_gbp_m, gross_premium_mix, claims_triangle, rag_triangle, adobe_lob, adobe_provisions, data_quality_notes |
@@ -817,8 +817,8 @@ Round 55 (the external review of 10 September 2026) corrected two extraction rul
 | `syndicate_4472_2016` | 26.1 | 26.1 | model | rag_triangle (gross) | claims_triangle, rag_triangle, adobe_lob, data_quality_notes |
 | `syndicate_4472_2017` | 95.2 | 95.2 | model | rag_triangle (gross) | gross_premium_mix, claims_triangle, rag_triangle, adobe_lob, data_quality_notes |
 | `syndicate_4472_2018` | 87.9 | 87.9 | model | rag_triangle (gross) | claims_triangle, rag_triangle, adobe_lob, data_quality_notes |
-| `syndicate_4472_2019` | 226.2 | 226.2 | deterministic override (note) | rag_triangle (gross) | claims_triangle, rag_triangle, adobe_lob, data_quality_notes |
-| `syndicate_4472_2020` | 373.3 | 373.3 | model | rag_triangle (gross) | rag_triangle, adobe_lob, data_quality_notes |
+| `syndicate_4472_2019` | 226.2 | 226.2 | deterministic override (note) | rag_triangle (gross) | gross_premium_mix, claims_triangle, rag_triangle, adobe_lob, data_quality_notes |
+| `syndicate_4472_2020` | 373.3 | 373.3 | model | rag_triangle (gross) | gross_premium_mix, rag_triangle, adobe_lob, data_quality_notes |
 | `syndicate_4472_2021` | -166.7 | -498.9 | model | model_reading (?) | prior_year_development_gbp_m, prior_year_development_pct, claims_triangle, rag_triangle, adobe_lob, data_quality_notes |
 | `syndicate_4472_2022` | -1.5 | -1.5 | deterministic override (note) | rag_triangle (gross) | claims_triangle, rag_triangle, adobe_lob, data_quality_notes |
 | `syndicate_4472_2023` | 249.0 | 249.0 | deterministic override (note) | rag_triangle (gross) | claims_triangle, rag_triangle, adobe_lob, data_quality_notes |
@@ -856,7 +856,7 @@ Round 55 (the external review of 10 September 2026) corrected two extraction rul
 | `syndicate_5000_2014` | -22.9 | -22.954 | model | model_reading (?) | prior_year_development_gbp_m, prior_year_development_pct, gross_premiums_written_gbp_m, gross_premium_mix, adobe_lob, data_quality_notes |
 | `syndicate_5000_2015` | 14.0 | 14.0 | deterministic override (note) | rag_triangle (gross) | gross_premiums_written_gbp_m, gross_premium_mix, rag_triangle, adobe_lob, data_quality_notes |
 | `syndicate_5000_2016` | -24.0 | -24.0 | deterministic override (note) | rag_triangle (gross) | gross_premiums_written_gbp_m, gross_premium_mix, rag_triangle, adobe_lob, data_quality_notes |
-| `syndicate_5000_2017` | -183.0 | 25.0 | deterministic override (note) | rag_triangle (gross) | prior_year_development_gbp_m, prior_year_development_pct, gross_premiums_written_gbp_m, gross_premium_mix, rag_triangle, adobe_lob, data_quality_notes, direction |
+| `syndicate_5000_2017` | -183.0 | 24.0 | deterministic override (note) | rag_triangle (gross) | prior_year_development_gbp_m, prior_year_development_pct, gross_premiums_written_gbp_m, gross_premium_mix, rag_triangle, adobe_lob, data_quality_notes, direction |
 | `syndicate_5000_2018` | 38.47 | 38.47 | model | rag_triangle (gross) | gross_premiums_written_gbp_m, gross_premium_mix, rag_triangle, adobe_lob, data_quality_notes |
 | `syndicate_5000_2019` | 68.19 | 68.19 | deterministic override (note) | rag_triangle (gross) | gross_premiums_written_gbp_m, gross_premium_mix, claims_triangle, rag_triangle, adobe_lob, data_quality_notes |
 | `syndicate_5000_2020` | 8.4 | 8.4 | deterministic override (note) | rag_triangle (gross) | gross_premiums_written_gbp_m, gross_premium_mix, rag_triangle, adobe_lob, data_quality_notes |
@@ -910,7 +910,7 @@ Round 55 (the external review of 10 September 2026) corrected two extraction rul
 | `syndicate_5820_2015` | 10.4 | 10.4 | model | rag_triangle (gross) | gross_premium_mix, rag_triangle, data_quality_notes |
 | `syndicate_5820_2016` | 11.8 | 38.4 | deterministic override (note) | rag_triangle (gross) | prior_year_development_gbp_m, prior_year_development_pct, gross_premiums_written_gbp_m, gross_premium_mix, claims_triangle, rag_triangle, adobe_lob, adobe_provisions, data_quality_notes |
 | `syndicate_5820_2017` | 9.0 | 6.8 | deterministic override (note) | rag_triangle (gross) | prior_year_development_gbp_m, prior_year_development_pct, gross_premiums_written_gbp_m, gross_premium_mix, rag_triangle, adobe_lob, adobe_provisions, data_quality_notes |
-| `syndicate_5820_2019` | 21.237 | 21.237 | deterministic override (note) | rag_triangle (gross) | gross_premium_mix, claims_triangle, rag_triangle, data_quality_notes |
+| `syndicate_5820_2019` | 21.237 | 21.237 | deterministic override (note) | rag_triangle (gross) | gross_premium_mix, claims_triangle, rag_triangle, adobe_lob, data_quality_notes |
 | `syndicate_5886_2017` | None | None | model | model | provenance only |
 | `syndicate_5886_2018` | None | None | model | model | provenance only |
 | `syndicate_5886_2019` | 6.485 | 6.485 | model | rag_triangle (gross) | gross_premiums_written_gbp_m, gross_premium_mix, rag_triangle, adobe_lob, data_quality_notes |
@@ -955,7 +955,7 @@ Round 55 (the external review of 10 September 2026) corrected two extraction rul
 | `syndicate_6104_2022` | -9.315 | -9.315 | deterministic override (note) | rag_triangle (gross) | rag_triangle, adobe_provisions, data_quality_notes |
 | `syndicate_6104_2023` | -13.374 | -13.374 | deterministic override (note) | rag_triangle (gross) | claims_triangle, rag_triangle, adobe_provisions, data_quality_notes |
 | `syndicate_6104_2024` | -16.07 | -16.07 | model | rag_triangle (gross) | gross_premium_mix, rag_triangle, adobe_lob, adobe_provisions, data_quality_notes |
-| `syndicate_6105_2014` | -1.0 | -1.0 | model | model_reading (?) | gross_premium_mix, claims_triangle, data_quality_notes |
+| `syndicate_6105_2014` | -1.0 | -1.0 | model | model_reading (?) | gross_premium_mix, claims_triangle, adobe_lob, data_quality_notes |
 | `syndicate_6105_2015` | 0.284 | 0.284 | deterministic override (note) | rag_triangle (gross) | gross_premiums_written_gbp_m, gross_premium_mix, rag_triangle, adobe_lob, data_quality_notes |
 | `syndicate_6107_2014` | -4.103 | -4.103 | model | rag_general_narrative (?) | gross_premium_mix, claims_triangle, data_quality_notes |
 | `syndicate_6107_2015` | -4.3 | -4.3 | model | model_reading (?) | gross_premium_mix, data_quality_notes |
@@ -969,13 +969,13 @@ Round 55 (the external review of 10 September 2026) corrected two extraction rul
 | `syndicate_6107_2023` | -4.7 | 4.1 | model | model_reading (?) | prior_year_development_gbp_m, prior_year_development_pct, gross_premium_mix, claims_triangle, rag_triangle, data_quality_notes, direction |
 | `syndicate_6107_2024` | -0.946 | -0.946 | deterministic override (note) | rag_triangle (gross) | prior_year_development_pct, opening_reserves_gbp_m, gross_premiums_written_gbp_m, gross_premium_mix, claims_triangle, rag_triangle, adobe_provisions, data_quality_notes |
 | `syndicate_6111_2014` | None | None | model | model | provenance only |
-| `syndicate_6111_2015` | 39.043 | 0.0 | deterministic override (note) | rag_triangle (gross) | prior_year_development_gbp_m, prior_year_development_pct, gross_premiums_written_gbp_m, gross_premium_mix, claims_triangle, rag_triangle, adobe_lob, data_quality_notes, direction |
+| `syndicate_6111_2015` | 39.043 | 0.49 | deterministic override (note) | rag_triangle (gross) | prior_year_development_gbp_m, prior_year_development_pct, gross_premiums_written_gbp_m, gross_premium_mix, claims_triangle, rag_triangle, adobe_lob, data_quality_notes |
 | `syndicate_6111_2016` | 3.599 | 3.599 | deterministic override (note) | rag_triangle (gross) | gross_premiums_written_gbp_m, gross_premium_mix, rag_triangle, adobe_lob, data_quality_notes |
 | `syndicate_6111_2017` | 19.038 | 19.038 | deterministic override (note) | rag_triangle (gross) | gross_premiums_written_gbp_m, gross_premium_mix, claims_triangle, rag_triangle, adobe_lob, data_quality_notes |
 | `syndicate_6111_2018` | 21.059 | 21.059 | deterministic override (note) | rag_triangle (gross) | gross_premiums_written_gbp_m, gross_premium_mix, claims_triangle, rag_triangle, adobe_lob, data_quality_notes |
 | `syndicate_6112_2014` | None | None | model | model | provenance only |
 | `syndicate_6112_2015` | 9.895 | 0.248 | deterministic override (note) | rag_triangle (gross) | prior_year_development_gbp_m, prior_year_development_pct, gross_premiums_written_gbp_m, gross_premium_mix, rag_triangle, adobe_lob, data_quality_notes |
-| `syndicate_6112_2016` | -19.264 | -19.264 | deterministic override (note) | rag_triangle (gross) | gross_premiums_written_gbp_m, gross_premium_mix, claims_triangle, rag_triangle, adobe_lob, data_quality_notes |
+| `syndicate_6112_2016` | -19.264 | -0.9 | deterministic override (note) | model_reading (?) | prior_year_development_gbp_m, prior_year_development_pct, gross_premiums_written_gbp_m, gross_premium_mix, claims_triangle, rag_triangle, adobe_lob, data_quality_notes |
 | `syndicate_6113_2014` | None | None | model | model | provenance only |
 | `syndicate_6115_2014` | None | None | model | model | provenance only |
 | `syndicate_6117_2014` | None | None | model | model | provenance only |
@@ -1055,7 +1055,7 @@ Round 55 (the external review of 10 September 2026) corrected two extraction rul
 | `syndicate_727_2016` | -7.098 | -7.098 | deterministic override (note) | rag_triangle (gross) | rag_triangle, adobe_provisions, data_quality_notes |
 | `syndicate_727_2017` | -16.0 | 2.966 | deterministic override (note) | rag_triangle (gross) | prior_year_development_gbp_m, prior_year_development_pct, gross_premiums_written_gbp_m, gross_premium_mix, rag_triangle, adobe_lob, adobe_provisions, data_quality_notes, direction |
 | `syndicate_727_2018` | -0.148 | -0.148 | deterministic override (note) | rag_triangle (gross) | gross_premiums_written_gbp_m, gross_premium_mix, rag_triangle, adobe_lob, adobe_provisions, data_quality_notes |
-| `syndicate_727_2019` | 6.785 | 6.785 | deterministic override (note) | rag_triangle (gross) | gross_premium_mix, claims_triangle, rag_triangle, data_quality_notes |
+| `syndicate_727_2019` | 6.785 | 8.894 | deterministic override (note) | rag_triangle (gross) | prior_year_development_gbp_m, prior_year_development_pct, gross_premium_mix, claims_triangle, rag_triangle, data_quality_notes |
 | `syndicate_727_2020` | -3.319 | -3.319 | deterministic override (note) | rag_triangle (gross) | gross_premiums_written_gbp_m, gross_premium_mix, rag_triangle, adobe_lob, adobe_provisions, data_quality_notes |
 | `syndicate_727_2021` | -10.157 | -10.157 | deterministic override (note) | rag_triangle (gross) | rag_triangle, data_quality_notes |
 | `syndicate_727_2022` | -5.836 | -5.836 | deterministic override (note) | rag_triangle (gross) | rag_triangle, data_quality_notes |

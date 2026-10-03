@@ -1,5 +1,5 @@
 {
-  "extraction_timestamp": "2026-09-21T09:15:08.675560+00:00",
+  "extraction_timestamp": "2026-10-03T04:07:36.916061+00:00",
   "spec": {
     "prompt_version": "2.13",
     "driver_prompt_version": "2.13",
@@ -15,8 +15,8 @@
       "opening_reserves_gbp_m": 1157.9,
       "opening_reserves_page": 9,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": 61.3,
-      "prior_year_development_pct": 5.29,
+      "prior_year_development_gbp_m": 54.8,
+      "prior_year_development_pct": 4.73,
       "direction": "strengthening",
       "prior_year_movement_page": 13,
       "prior_year_movement_confidence": 0.8,
@@ -151,7 +151,7 @@
       "gross_premium_page": 18,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The narrative text on pages 3 and 20 states a net increase in reserves of GBP 33.1 million for 2014 and prior underwriting years. However, the gross claims development table on page 13 indicates a gross strengthening of GBP 61.3 million for the same period (excluding the 2010&P aggregate column and the two most recent underwriting years). The gross figure from the triangle is used as per instructions.",
+      "data_quality_notes": "The narrative text on pages 3 and 20 states a net increase in reserves of GBP 33.1 million for 2014 and prior underwriting years. However, the gross claims development table on page 13 indicates a gross strengthening of GBP 61.3 million for the same period (excluding the 2010&P aggregate column and the two most recent underwriting years). The gross figure from the triangle is used as per instructions. [RAG OVERRIDE: Model said PYD=61.3, RAG triangle computed 54.8. Using RAG value.]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -238,13 +238,13 @@
       },
       "_pyd_route": {
         "source": "rag_triangle",
-        "value": 61.3,
+        "value": 54.8,
         "model_value": 61.3,
         "triangle_type": "gross",
         "triangle_units": "millions",
         "triangle_units_evidence": "header",
         "triangle_source_page": 35,
-        "note": "confirmed by the model value"
+        "note": "overrode the model value"
       },
       "_rag_triangle": {
         "type": "gross",
@@ -253,6 +253,7 @@
         "units_evidence": "header",
         "cell_binding": "header",
         "underwriting_years": [
+          2010,
           2011,
           2012,
           2013,
@@ -262,6 +263,7 @@
         ],
         "development_rows": [
           [
+            1440.4,
             237.8,
             212.9,
             186.3,
@@ -270,6 +272,7 @@
             248.6
           ],
           [
+            1851.3,
             386.2,
             350.9,
             329.6,
@@ -278,6 +281,7 @@
             null
           ],
           [
+            1825.8,
             417.4,
             385.1,
             352.8,
@@ -286,6 +290,7 @@
             null
           ],
           [
+            1853.1,
             417.9,
             379.6,
             357.2,
@@ -294,6 +299,7 @@
             null
           ],
           [
+            1779.3,
             421.7,
             390.7,
             null,
@@ -302,7 +308,17 @@
             null
           ],
           [
+            1723.1,
             422.3,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            1716.6,
+            null,
             null,
             null,
             null,
@@ -316,8 +332,14 @@
           "Two years later",
           "Three years later",
           "Four years later",
-          "Five years later"
+          "Five years later",
+          "Six years later"
         ],
+        "aggregated_cohort": {
+          "anchor": 2010,
+          "label": "2010&P GBP m 1,440.4",
+          "column": 1
+        },
         "source_page": 35,
         "entity": 2007
       },
@@ -514,8 +536,8 @@
       "opening_reserves_gbp_m": 1157.9,
       "opening_reserves_page": 23,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": 61.3,
-      "prior_year_development_pct": 5.29,
+      "prior_year_development_gbp_m": 54.8,
+      "prior_year_development_pct": 4.73,
       "direction": "strengthening",
       "prior_year_movement_page": 34,
       "prior_year_movement_confidence": 0.8,
@@ -692,7 +714,7 @@
       "gross_premium_page": 46,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior-year development gross figure was calculated from the gross claims development table (triangle) on page 34 by summing the changes in current estimates vs prior diagonal for underwriting years 2014 and earlier. The narrative and P&L reference a GBP 33.1m figure relating to increases on 2014 and prior years but that appears in claims-incurred (P&L) wording; the triangle-based gross re-estimate is c. GBP 54.8m. 2010 & prior column in the triangle is an aggregate and was excluded per instructions. Ogden announcement occurred post-year-end (Feb 2017) but the syndicate adjusted reserves accordingly; this timing may explain differences between narrative P&L phrasing and triangle-based calculation. [RAG OVERRIDE: Model said PYD=54.8, RAG triangle computed 61.3. Using RAG value.]",
+      "data_quality_notes": "Prior-year development gross figure was calculated from the gross claims development table (triangle) on page 34 by summing the changes in current estimates vs prior diagonal for underwriting years 2014 and earlier. The narrative and P&L reference a GBP 33.1m figure relating to increases on 2014 and prior years but that appears in claims-incurred (P&L) wording; the triangle-based gross re-estimate is c. GBP 54.8m. 2010 & prior column in the triangle is an aggregate and was excluded per instructions. Ogden announcement occurred post-year-end (Feb 2017) but the syndicate adjusted reserves accordingly; this timing may explain differences between narrative P&L phrasing and triangle-based calculation.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -779,13 +801,13 @@
       },
       "_pyd_route": {
         "source": "rag_triangle",
-        "value": 61.3,
+        "value": 54.8,
         "model_value": 54.8,
         "triangle_type": "gross",
         "triangle_units": "millions",
         "triangle_units_evidence": "header",
         "triangle_source_page": 35,
-        "note": "overrode the model value"
+        "note": "confirmed by the model value"
       },
       "_rag_triangle": {
         "type": "gross",
@@ -794,6 +816,7 @@
         "units_evidence": "header",
         "cell_binding": "header",
         "underwriting_years": [
+          2010,
           2011,
           2012,
           2013,
@@ -803,6 +826,7 @@
         ],
         "development_rows": [
           [
+            1440.4,
             237.8,
             212.9,
             186.3,
@@ -811,6 +835,7 @@
             248.6
           ],
           [
+            1851.3,
             386.2,
             350.9,
             329.6,
@@ -819,6 +844,7 @@
             null
           ],
           [
+            1825.8,
             417.4,
             385.1,
             352.8,
@@ -827,6 +853,7 @@
             null
           ],
           [
+            1853.1,
             417.9,
             379.6,
             357.2,
@@ -835,6 +862,7 @@
             null
           ],
           [
+            1779.3,
             421.7,
             390.7,
             null,
@@ -843,7 +871,17 @@
             null
           ],
           [
+            1723.1,
             422.3,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          [
+            1716.6,
+            null,
             null,
             null,
             null,
@@ -857,8 +895,14 @@
           "Two years later",
           "Three years later",
           "Four years later",
-          "Five years later"
+          "Five years later",
+          "Six years later"
         ],
+        "aggregated_cohort": {
+          "anchor": 2010,
+          "label": "2010&P GBP m 1,440.4",
+          "column": 1
+        },
         "source_page": 35,
         "entity": 2007
       },

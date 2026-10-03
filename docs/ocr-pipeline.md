@@ -1243,7 +1243,8 @@ is not.  With the signs:
 `tests/test_bracketed_premiums.py` holds the review's four records to
 their tables, and checks every committed premium grid the reader
 admits: a class printed in brackets among positive classes is read
-negative.  The records change when they are regenerated.
+negative.  The records were regenerated offline on 3 October 2026 (section 9.1): 81 now carry a bracketed class with its
+sign, and each of the review's four sums to its table's total (1414/2016's classes sum to 573.475, not 574.063).
 
 #### 7.7.4  Year-of-account and calendar-year columns (P-30)
 
@@ -1262,7 +1263,10 @@ columns, whichever header row carries the year and the label; the
 gate holds the mix to a model's total before it is applied.  The
 rule reads 20 committed grids, all Ark's, and in each the classes
 sum to the calendar column's total, which is the premium every model
-read (`tests/test_yoa_calendar_column.py`).
+read (`tests/test_yoa_calendar_column.py`).  Regenerated on 3 October 2026,
+20 of the 21 Ark records carry the table's mix (6 did before); the amounts moved in 7: 6105/2015's calendar column
+sums to 43.859 where the adopted reading's year-of-account column gave 43.178, and 3902/2019's gemini reading,
+scaled from the year-of-account column, now reads 42.498, 22.16 and 24.797.
 
 ### 7.8  Provisions and balance sheet grid parsing
 
@@ -1690,6 +1694,21 @@ triangle; 1910/2019 lost its deepest row; 2791/2015 read 139,326 as 139.326. Now
 `scripts/triangle_census.py` runs the reader before and after this change over every committed grid and
 writes `pdf_extraction/audit/stage2_triangle_census.json`; `tests/test_triangle_diagonal.py` holds it to
 the reader and the records.
+
+**Regenerated on 3 October 2026** (the PC steps; `python test_gemini.py --stems <list> --offline --table-backend azure`,
+from the committed caches, no call). The RAG step was first run offline over all 1,065 filings under the
+pre-stage-2 code (f4fdf559) and under this one, on the same inputs, and the 157 records whose result differs, or that
+the census or the brief names, were predicted; 141 were regenerated. Eight moved their development figure, each as
+predicted: 1910/2019 5.0 to 5.5, 2007/2016 61.3 to 54.8, 2007/2017 -22.0 to -44.5, 2791/2015 -141.318 to -2.131,
+5000/2017 25.0 to 24.0, 6111/2015 0.0 to 0.49, 6112/2016 -19.264 to -0.9 (the table's +0.893 has the opposite sign to
+both models' -0.9 and is vetoed, section 10.3) and 727/2019 6.785 to 8.894. 94 moved their business mix (7.7.3, 7.7.4).
+Thirteen records reach the page-vision step on the refused triangle, for which no response is cached under the current
+prompt (1400/2014, 2010/2014, 2121/2019, 2999/2022, 3002/2021, 3622/2023, 3624/2023 and 382's 2015 to 2020): offline that
+is a cache miss and the record keeps its committed figure. Three more would be written as no deterministic reading and
+leave the working sample: 1967/2014 and 1991/2018 reach no page-vision step (no triangle page for it to send), and 3500/2018's
+served page is refused too, with no reserve text or loss-ratio grid behind it. None of the 16 is regenerated; each is declared
+in `redecision_pending.json`. The census counts 15 refused triangles with no committed page-vision entry (its
+`rag_replay_stops_on_a_cache_miss`); 13 of them reach that step, and 1967/2014 and 1991/2018 do not.
 
 The 2 most recent UW years are excluded because they have
 insufficient development history (only 1 or 2 data points).
@@ -3174,7 +3193,7 @@ and unread records included -- on its own caches and compares the
 class, the RAG figure and route, and the stored triangle; the records
 waiting for the models (`pdf_extraction/audit/redecision_pending.json`)
 and those without a usable table cache (`offline_unservable.json`) are the
-only declared exceptions, and a declaration that no longer differs is
+only declared exceptions (the pending list also holds the 16 records of section 9.1), and a declaration that no longer differs is
 reported as stale.  The 24 unread records the audit restated as stubs are
 not exceptions but a class (`audited_unread_stub`, read from the ledger's
 `extraction_status`): their replay must still be `unread`, and their cached
@@ -3322,7 +3341,8 @@ the column's first three header rows.  "2010&P" was not read until
 the review of 2 October 2026 (P-31): the column was dropped, and
 2007/2016's figure was +61.3m where its cohort's step of -6.5m makes
 it +54.8m, and 2007/2017's -22.0m where it is -44.5m
-(`tests/test_cohort_label_and_p.py`).  What it does next depends on what the column holds
+(`tests/test_cohort_label_and_p.py`); both records were regenerated on 3 October 2026 and carry +54.8m and -44.5m.
+What it does next depends on what the column holds
 (R209):
 
 - **Development by calendar year**: one value per calendar year

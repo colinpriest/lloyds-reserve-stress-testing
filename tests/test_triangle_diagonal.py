@@ -35,14 +35,19 @@ DIAGONAL = "not on the report-year diagonal"
 #: None is a refusal. The filing figures are the review's: 6112/2016 read on page 32 (+0.893m), 1910/2019's
 #: printed current estimate 53.9 on page 36 (5.5), 2791/2015's 139,326 (-2.131, the analysis's confirmed
 #: figure), 6111/2015's grid without its mixed-unit total row (+0.490), 5000/2017's 2011 cohort kept (24.0).
+#: 6112/2016, 1910/2019 and 2791/2015 were regenerated offline on 3 October 2026 (stage 2, the PC steps): their
+#: committed grids now carry the printed row, so the committed grid gives the filing's figure where, before, it was
+#: refused (None). 1967/2014 and 3624/2023 keep their committed grids, which the reader refuses: no page-vision
+#: response is cached for 3624/2023, and 1967/2014 would be written as no deterministic reading (both are declared
+#: in pdf_extraction/audit/redecision_pending.json).
 SEVEN = (
-    ("syndicate_6112_2016", None, 0.893),
+    ("syndicate_6112_2016", 0.893, 0.893),
     ("syndicate_1967_2014", None, None),
     ("syndicate_6111_2015", 0.49, 0.49),
     ("syndicate_5000_2017", 24.0, 24.0),
     ("syndicate_3624_2023", None, None),
-    ("syndicate_1910_2019", None, 5.5),
-    ("syndicate_2791_2015", None, -2.131),
+    ("syndicate_1910_2019", 5.5, 5.5),
+    ("syndicate_2791_2015", -2.131, -2.131),
 )
 #: grids the review flagged and read on the page as right: their committed figures stand
 RIGHT = (("syndicate_727_2017", 2.966), ("syndicate_318_2021", -20.6), ("syndicate_510_2020", 20.0),
@@ -311,9 +316,14 @@ def test_the_census_counts_are_its_entries(census):
 def test_each_served_page_vision_triangle_is_read_as_the_census_says(census):
     """Review of the stage-2 branch, F4: for a refused table triangle whose page vision the replay serves from the
     committed cache, the census reads the served triangle with the reader too. 3334/2017's page 47 and 3500/2018's
-    page 24 are refused as well, so those records fall to the later routes with no call."""
+    page 24 are refused as well, so those records fall to the later routes with no call.
+
+    3334/2017 was regenerated offline on 3 October 2026 (stage 2, the PC steps): its record no longer stores the
+    refused triangle, so the census no longer lists it, and its figure is the models' reading (5.129). 3500/2018's later
+    routes find nothing (no reserve text, no loss-ratio grid), so regenerating it would write it as no deterministic
+    reading and take it out of the working sample: it is not regenerated, and is declared in redecision_pending.json."""
     served = [e for e in census["entries"] if e["block"] == "rag_triangle" and e.get("vision_pages_cached")]
-    assert sorted(e["stem"] for e in served) == ["syndicate_3334_2017", "syndicate_3500_2018"]
+    assert sorted(e["stem"] for e in served) == ["syndicate_3500_2018"]
     for e in served:
         syn, year = (int(x) for x in e["stem"].split("_")[1:])
         assert sorted(e["vision_outcomes"]) == sorted(str(p) for p in e["vision_pages_cached"]), e["stem"]
@@ -322,3 +332,11 @@ def test_each_served_page_vision_triangle_is_read_as_the_census_says(census):
             assert tri is not None, (e["stem"], page, "the served entry is not committed")
             assert e["vision_outcomes"][str(page)] == tc._outcome(*tc.read(tg.compute_pyd_from_triangle, tri, year))
         assert "the reader refuses what it holds too" in e["replay"], e["replay"]
+    # 3334/2017: the served page is still refused, and the regenerated record carries no triangle of the table step's
+    served_47 = tc.served_vision(3334, 2017, 47)
+    assert served_47 is not None, "3334/2017's page-47 entry is not committed"
+    v, why = tc.read(tg.compute_pyd_from_triangle, served_47, 2017)
+    assert v is None and DIAGONAL in why, (v, why)
+    for block in _record("syndicate_3334_2017")["models"].values():
+        assert not block.get("_rag_triangle")
+        assert block["_pyd_route"]["source"] == "model_reading" and block["_pyd_route"]["value"] == pytest.approx(5.129)

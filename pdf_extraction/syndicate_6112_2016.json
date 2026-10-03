@@ -1,5 +1,5 @@
 {
-  "extraction_timestamp": "2026-09-21T10:46:23.282082+00:00",
+  "extraction_timestamp": "2026-10-03T04:11:42.448387+00:00",
   "spec": {
     "prompt_version": "2.13",
     "driver_prompt_version": "2.13",
@@ -15,8 +15,8 @@
       "opening_reserves_gbp_m": 46.298,
       "opening_reserves_page": 6,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": -19.264,
-      "prior_year_development_pct": -41.61,
+      "prior_year_development_gbp_m": -0.9,
+      "prior_year_development_pct": -1.94,
       "direction": "release",
       "prior_year_movement_page": 16,
       "prior_year_movement_confidence": 1.0,
@@ -62,7 +62,7 @@
       "gross_premium_page": 15,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Discrepancy between narrative prior year development (GBP 0.9m release) and claims development triangle calculation (GBP 0.893m strengthening). Narrative figure used as primary source. [RAG OVERRIDE: Model said PYD=-0.9, RAG triangle computed -19.264. Using RAG value.]",
+      "data_quality_notes": "Discrepancy between narrative prior year development (GBP 0.9m release) and claims development triangle calculation (GBP 0.893m strengthening). Narrative figure used as primary source. [RAG PYD NOT APPLIED: deterministic figure +0.893m has the opposite sign to both model values [-0.9, -0.9], which agree with each other; model values retained. Sign agreement between the models is not a reconciliation: where they differ in value the cohort and accrual scope of each still has to be settled from the filing (R140).] [CODE PYD NOT APPLIED: deterministic figure +0.893m has the opposite sign to both model values [-0.9, -0.9], which agree with each other; model values retained. Sign agreement between the models is not a reconciliation: where they differ in value the cohort and accrual scope of each still has to be settled from the filing (R140).]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -125,16 +125,6 @@
         "total_tokens": 15990,
         "cost_usd": 0.006047
       },
-      "_pyd_route": {
-        "source": "rag_triangle",
-        "value": -19.264,
-        "model_value": -0.9,
-        "triangle_type": "gross",
-        "triangle_units": "thousands",
-        "triangle_units_evidence": "header",
-        "triangle_source_page": 32,
-        "note": "overrode the model value"
-      },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -191,6 +181,13 @@
           "36 months",
           "48 months",
           "60 months"
+        ],
+        "current_estimate_row": [
+          20980.0,
+          20407.0,
+          24752.0,
+          22870.0,
+          13820.0
         ],
         "source_page": 32,
         "entity": 6112
@@ -318,6 +315,12 @@
         "source": "azure_table",
         "applied_value_m": 46.298,
         "unit_resolution": "header"
+      },
+      "_pyd_route": {
+        "source": "model_reading",
+        "value": -0.9,
+        "note": "stated in the reserve text",
+        "stated": true
       }
     },
     "gpt-5-mini": {
@@ -326,8 +329,8 @@
       "opening_reserves_gbp_m": 46.298,
       "opening_reserves_page": 10,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": -19.264,
-      "prior_year_development_pct": -41.61,
+      "prior_year_development_gbp_m": -0.9,
+      "prior_year_development_pct": -1.94,
       "direction": "release",
       "prior_year_movement_page": 27,
       "prior_year_movement_confidence": 1.0,
@@ -415,7 +418,7 @@
       "gross_premium_page": 26,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Opening gross claims outstanding taken from Balance Sheet (Claims outstanding, prior year column). Prior year development amount is explicitly stated as a favourable run-off of GBP 0.9m (gross) in the Movement in Prior Year's Provision note. No LOB-level prior year movement figures disclosed; LOB mapping inferred from segmental premium mix. Claims development triangle (gross) is present and retained in _claims_triangle for cross-checking. [RAG OVERRIDE: Model said PYD=-0.9, RAG triangle computed -19.264. Using RAG value.]",
+      "data_quality_notes": "Opening gross claims outstanding taken from Balance Sheet (Claims outstanding, prior year column). Prior year development amount is explicitly stated as a favourable run-off of GBP 0.9m (gross) in the Movement in Prior Year's Provision note. No LOB-level prior year movement figures disclosed; LOB mapping inferred from segmental premium mix. Claims development triangle (gross) is present and retained in _claims_triangle for cross-checking. [RAG PYD NOT APPLIED: deterministic figure +0.893m has the opposite sign to both model values [-0.9, -0.9], which agree with each other; model values retained. Sign agreement between the models is not a reconciliation: where they differ in value the cohort and accrual scope of each still has to be settled from the filing (R140).] [CODE PYD NOT APPLIED: deterministic figure +0.893m has the opposite sign to both model values [-0.9, -0.9], which agree with each other; model values retained. Sign agreement between the models is not a reconciliation: where they differ in value the cohort and accrual scope of each still has to be settled from the filing (R140).]",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -478,16 +481,6 @@
         "total_tokens": 27689,
         "cost_usd": 0.014825
       },
-      "_pyd_route": {
-        "source": "rag_triangle",
-        "value": -19.264,
-        "model_value": -0.9,
-        "triangle_type": "gross",
-        "triangle_units": "thousands",
-        "triangle_units_evidence": "header",
-        "triangle_source_page": 32,
-        "note": "overrode the model value"
-      },
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -544,6 +537,13 @@
           "36 months",
           "48 months",
           "60 months"
+        ],
+        "current_estimate_row": [
+          20980.0,
+          20407.0,
+          24752.0,
+          22870.0,
+          13820.0
         ],
         "source_page": 32,
         "entity": 6112
@@ -671,6 +671,12 @@
         "source": "azure_table",
         "applied_value_m": 46.298,
         "unit_resolution": "header"
+      },
+      "_pyd_route": {
+        "source": "model_reading",
+        "value": -0.9,
+        "note": "stated in the reserve text",
+        "stated": true
       }
     }
   },
