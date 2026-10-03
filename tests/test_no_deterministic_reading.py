@@ -112,7 +112,8 @@ def test_every_committed_unread_record_is_restated_or_listed_for_a_new_extractio
     # the third cycle (30 September 2026, D2) then moved 24 of the 45 to audited first-year stubs, whose
     # filings state that the syndicate began in the report year or the year before, and 21 remained; 1400/2014 made 22 on 3 October 2026
     # (stage 2, the PC steps): the one page-vision call for its table (PDF page 8, option B) returned no triangle, so the offline
-    # regeneration wrote it as no deterministic reading, and it left the working sample
+    # regeneration wrote it as no deterministic reading; it did not leave the working sample, as it was never in it (the analysis
+    # has it in run-off)
     assert len(restated) == 22 and not waiting, (len(restated), waiting)
 
 

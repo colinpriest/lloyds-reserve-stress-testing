@@ -1774,7 +1774,10 @@ predicted, and every prediction held. Figures are the two models' (gemini-2.5-fl
 - 1400/2014: its stored triangle was a net one-column grid of yearly results (15,660, 13,362, 201, 0, -3,833 and -6,131,
   £000), which the reader refuses, and its page held no triangle, so with no figure from any other route and no reserve
   text it is written as no deterministic reading (unread, the models not run). Its figure, -2.298, and its six-class mix are
-  gone, and it has left the working sample.
+  gone. It did not leave the working sample, because it was never in it: the analysis has it in run-off (its premium is
+  -10.139m, its filing says on PDF page 9 that the Syndicate "ceased underwriting new business with effect from the end of
+  2013", and it is WHOLE in `runoff_corpus_register.json`). Without a development figure it is no longer an entry of the
+  run-off register (README item 8), which holds the records that carry one.
 
 They left `redecision_pending.json`. Six of the 16 remain declared, each keeping its committed form: 2999/2022 (above);
 2121/2019 and 3622/2023, whose only response is from an older driver version, which the cache does not serve (read through
@@ -3340,7 +3343,9 @@ stays unread:
 one-column grid of yearly results, which the diagonal rule refuses (a column of negative values), and the one page-vision
 call for it (PDF page 8, option B, section 9.1) returned no triangle: the page is the key performance indicators.  No
 other route finds a figure, so it is written as no deterministic reading, and the record's reason says what that means:
-it describes the parsers, not the filing, which may print a claims development table they could not read.
+it describes the parsers, not the filing.  This filing prints no claims development table: the one table of development in
+it is note 17's "Year of account development" on PDF page 29 (printed page 25), which gives profit and loss by year of
+account in £000, and its other mentions of development are accounting-policy text.
 
 Three more filings were on this list before the third cycle: 1699/2022,
 1975/2019 and 1922/2024.  Their caches hold no triangle grid, and the
