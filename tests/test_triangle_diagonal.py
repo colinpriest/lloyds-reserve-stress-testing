@@ -164,6 +164,11 @@ def test_a_movement_table_is_refused():
             [-2, None, None, None, None]]
     v, why = _read(_grid(rows, YEARS, printed=[106, 106, 127, 134, 140]), 2019)
     assert v is None and ("negative values" in why or "movements" in why), why
+    # every movement positive: no negative cell refuses it, and the printed sum names it a movements table
+    rows = [[100, 110, 120, 130, 140], [10, 5, 8, 4, None], [3, 2, 1, None, None], [1, 1, None, None, None],
+            [2, None, None, None, None]]
+    v, why = _read(_grid(rows, YEARS, printed=[116, 118, 129, 134, 140]), 2019)
+    assert v is None and "movements by development year" in why, why
 
 
 def test_a_results_table_read_as_a_triangle_is_refused():
