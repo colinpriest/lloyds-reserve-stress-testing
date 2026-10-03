@@ -419,6 +419,24 @@ FORM_CASES = [
     ("Coverholder operations in Sydney ceased to underwrite on behalf of the syndicate.", []),
     ("The Syndicate ceased underwriting new business in December 2016.", ["ceased_to_write"]),
     ("The Syndicate ceased underwriting new business in 2016.", ["ceased_to_write"]),
+    # review of the stage-2 branch: the new wordings with the Syndicate as subject, about a class, a coverholder, an account,
+    # a subsidiary or a place, are left alone (F1); Lloyd's and the Lloyd's market end a stop (F2)
+    ("The Syndicate's marine hull class was closed to new business in 2015.", []),
+    ("The Syndicate's Treaty account is closed to new business.", []),
+    ("The Syndicate's coverholder in Dubai is dormant.", []),
+    ("The Syndicate owns XYZ Services Ltd, which is dormant.", []),
+    ("The Syndicate's managing agent is dormant.", []),
+    ("The Syndicate is winding down its operations in Canada.", []),
+    ("The Syndicate no longer accepts business from coverholder X.", []),
+    ("The Syndicate's last underwriting year was 2018 for the marine line.", []),
+    ("The Syndicate does not have a 2020 underwriting year of account for its Treaty line.", []),
+    ("The Syndicate's aviation account is being run off.", []),
+    ("The Syndicate's marine account merged into Syndicate 5678.", []),
+    ("The Syndicate has not written any new business since 2017 through its Bermuda platform.", []),
+    ("The Syndicate, managed by Ark Syndicate Management Limited, is dormant.", ["in_run_off"]),
+    ("Syndicate 1234 ceased underwriting in Lloyd's with effect from 31 December 2017.", ["ceased_to_write"]),
+    ("The Syndicate decided to cease underwriting in Lloyd's.", ["ceased_to_write"]),
+    ("The Syndicate ceased underwriting in the Lloyd's market at the end of 2015.", ["ceased_to_write"]),
 ]
 
 
