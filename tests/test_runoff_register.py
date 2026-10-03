@@ -8,10 +8,12 @@ live Beazley syndicate whose negative premium is a return premium under a reinsu
 rule (D1, option A, refined): a record whose development figure is kept and whose adopted premium is at or
 below zero is a run-off year when its own filing states the syndicate is in run-off in that year.
 
-`pdf_extraction/audit/runoff_register.json` records that reading for the nine records the rule concerns, with
-the filing's own words, page and file hash. These tests hold the register to the records (which nine), to
+`pdf_extraction/audit/runoff_register.json` records that reading for the eight records the rule concerns, with
+the filing's own words, page and file hash. These tests hold the register to the records (which eight), to
 its own verdicts, and to the filings (each quote is printed on the page it cites, in the file whose hash the
-register holds).
+register holds). 1400/2014 was a ninth until 3 October 2026, when its record was regenerated with no models: it
+carries no development figure, so the rule no longer concerns it, and its run-off year stays an entry of
+`runoff_corpus_register.json`.
 
 2255/2015 is the one filing that says both: its Future developments statement says the syndicate "continues
 to run-off its portfolio of liabilities", and its basis of preparation says the managing agent expects the
@@ -39,7 +41,7 @@ REGISTER = ROOT / "pdf_extraction" / "audit" / "runoff_register.json"
 #: what the filing's words say when they say the syndicate is in run-off or has ceased to write
 RUNOFF_WORDS = re.compile(r"run-?\s?off|ceased (to )?(underwrit|trad|write)", re.I)
 #: the verdicts, by the filings: two are not run-off years. 3623/2018 is a live syndicate with a return
-#: premium and 5183/2024's run-off begins on 1 January 2025; the other seven, 2255/2015 among them, are run-off
+#: premium and 5183/2024's run-off begins on 1 January 2025; the other six, 2255/2015 among them, are run-off
 #: years. A different verdict is the author's decision, so it fails here.
 NOT_IN_RUNOFF = {"syndicate_3623_2018", "syndicate_5183_2024"}
 #: the standard going concern statement of 2255/2015's basis of preparation, which the register keeps in the
@@ -72,11 +74,11 @@ def _with_a_premium_at_or_below_zero():
 
 
 def test_the_register_covers_every_record_with_a_development_figure_and_a_premium_at_or_below_zero():
-    """Nine records, and the register has exactly them: a record that comes to carry a premium at or below
+    """Eight records, and the register has exactly them: a record that comes to carry a premium at or below
     zero with a development figure needs its filing read before it is treated either way."""
     found = _with_a_premium_at_or_below_zero()
     stems = [r["stem"] for r in _register()]
-    assert len(stems) == len(set(stems)) == 9
+    assert len(stems) == len(set(stems)) == 8
     assert set(stems) == set(found), sorted(set(stems) ^ set(found))
 
 
@@ -111,7 +113,7 @@ def test_each_entry_states_its_premium_and_its_verdict_from_the_record_and_the_f
             assert r["runoff_from"] and RUNOFF_WORDS.search(r["evidence"]), r["stem"]
         assert r["source_page"] >= 1 and r["source_page_printed"], r["stem"]
         assert re.fullmatch(r"[0-9a-f]{64}", r["source_sha256"]), r["stem"]
-    assert sum(r["in_runoff"] for r in _register()) == 7
+    assert sum(r["in_runoff"] for r in _register()) == 6
 
 
 def test_2255_2015_is_a_run_off_year_with_its_going_concern_paragraph_recorded_beside_the_evidence():

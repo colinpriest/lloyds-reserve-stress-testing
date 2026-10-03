@@ -13,7 +13,7 @@ holds that for 111 syndicate-years:
 
 These tests hold the register to its own rules (a category has to agree with the date the filing gives), to the filings (each
 quote is printed on the page it cites, in the file whose hash the register holds), to the premium register
-(`runoff_register.json`, the nine records the premium rule reads), whose entries it copies where the two overlap, and to the
+(`runoff_register.json`, the eight records the premium rule reads), whose entries it copies where the two overlap, and to the
 corpus itself. The first version of the register (88 entries) was checked only against its own words, and its words were run-off
 words, so it could not show that Syndicate 1209's 2016 and 2017 filings, which never say run-off, were missing. The statement
 forms in `scripts/runoff_statement_forms.py` say what a filing says when its syndicate has stopped or will stop, in whatever
@@ -100,7 +100,7 @@ def _records():
     return _load()["records"]
 
 
-def _nine():
+def _premium_register():
     return {r["stem"]: r for r in json.loads(PREMIUM.read_text(encoding="utf-8"))["records"]}
 
 
@@ -351,10 +351,10 @@ def test_the_premium_register_and_this_one_hold_the_same_words_for_the_same_reco
     """One reading of a filing, not two: the premium register's entries that are also entries here are copies, in_runoff is
     true exactly for WHOLE and PART, and the premium register's other records are the ones that are live."""
     corpus = {r["stem"]: r for r in _records()}
-    nine = _nine()
-    assert set(nine) - set(corpus) == NOT_IN_CORPUS
-    assert len(set(nine) & set(corpus)) == 8
-    for stem, n in nine.items():
+    premium = _premium_register()
+    assert set(premium) - set(corpus) == NOT_IN_CORPUS
+    assert len(set(premium) & set(corpus)) == 7
+    for stem, n in premium.items():
         if stem in NOT_IN_CORPUS:
             assert n["in_runoff"] is False, stem
             continue
