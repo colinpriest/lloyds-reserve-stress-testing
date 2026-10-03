@@ -4,7 +4,7 @@ The author's in-sample decision (option A) excludes a syndicate-year whose own f
 run-off for the whole year, unless the model assigns it to the assumed-business regime. The exclusion needs one thing from
 the extraction: for every syndicate-year whose filing speaks of the syndicate itself running off or ceasing to underwrite,
 the filing's words, the page and the file they are on, and a category. `pdf_extraction/audit/runoff_corpus_register.json`
-holds that for 110 syndicate-years:
+holds that for 111 syndicate-years:
 
   WHOLE     in run-off, or ceased underwriting, from the start of the year or before: a run-off year
   PART      the run-off begins during the year
@@ -70,7 +70,7 @@ RE_READ = {"syndicate_2088_2019": "AFTER", "syndicate_2468_2020": "PART", "syndi
 #: 2022 year of account; the three 2016 quota-share SPAs say that Syndicate 2003 will not continue its purchase for 2017)
 DEFERRED_2 = {"syndicate_6131_2021": "AFTER", "syndicate_6112_2016": "NOTCOUNT", "syndicate_6119_2016": "NOTCOUNT",
               "syndicate_6121_2016": "NOTCOUNT"}
-COUNTS = {"WHOLE": 43, "PART": 9, "AFTER": 39, "NOTCOUNT": 19}
+COUNTS = {"WHOLE": 43, "PART": 9, "AFTER": 40, "NOTCOUNT": 19}
 #: the premium register's entries that are not corpus entries: a live syndicate whose negative premium is a return premium
 NOT_IN_CORPUS = {"syndicate_3623_2018"}
 #: the entry whose own words no statement form matches: it says the syndicate "will no longer write new follow capacity insurance
@@ -160,7 +160,7 @@ def test_the_register_is_one_reading_per_syndicate_year_with_its_category_and_it
     assert tuple(data["categories"]) == CATEGORIES
     records = data["records"]
     stems = [r["stem"] for r in records]
-    assert len(stems) == len(set(stems)) == 110
+    assert len(stems) == len(set(stems)) == 111
     assert stems == [s for _, s in sorted(((r["syndicate"], r["year"]), r["stem"]) for r in records)], "sorted by syndicate and year"
     for r in records:
         assert set(r) == FIELDS, r["stem"]
@@ -234,9 +234,9 @@ def test_the_readings_re_read_in_the_fourth_cycle_keep_their_verdicts_and_their_
 def test_the_deferred_readings_of_the_second_of_october_keep_their_verdicts_and_their_reasons():
     """Review of 2 October 2026, deferred item 2. 6131/2021 says in its own words that the SPA is discontinued from the 2022 year of
     account, after a year in which it wrote: AFTER. 6112, 6119 and 6121 (2016) say that Syndicate 2003, which buys the whole account
-    quota share they write, will not continue that purchase for 2017: a sentence about another entity's purchase, which no form
-    reads as a stop and which does not say that the SPA stops, so NOTCOUNT and the note says why. A different verdict is the author's
-    decision."""
+    quota share they write, will not continue that purchase for 2017: a sentence about the host's purchase decision, which no form
+    reads as a stop and which the filing does not turn into a statement about the SPA, so NOTCOUNT and the note says why (the notes called
+    the host "another entity" until 3 October 2026, and do not now). A different verdict is the author's decision."""
     by = {r["stem"]: r for r in _records()}
     for stem, verdict in DEFERRED_2.items():
         assert by[stem]["category"] == verdict, stem
@@ -250,7 +250,91 @@ def test_the_deferred_readings_of_the_second_of_october_keep_their_verdicts_and_
         r = by[stem]
         assert "Syndicate 2003 will not continue its whole account quota share purchase with the SPA" in r["evidence"], stem
         assert not forms.says_stopped(r["evidence"]) and r["runoff_from"] is None, stem
-        assert "another entity" in r["note"] and "so it is not AFTER" in r["note"], stem
+        assert "the host's purchase decision, which the filing does not turn into a statement about the SPA" in r["note"], stem
+        assert "another entity" not in r["note"] and "so it is not AFTER" in r["note"], stem
+
+
+#: 6126/2017 (review of the stage-2 commits, 3 October 2026). The filing says that the SPA has no 2018 year of account, that its property book is written
+#: through a dedicated syndicate which the SPA is converting to, and that the SPA received approval to transition to a full independent syndicate status. It was
+#: listed in scan_reviewed as a change of vehicle that is not a stop. It is an AFTER entry: the SPA wrote for 2017 (gross written premium 42,496 in GBP000), and
+#: 2017 is its own last year of account, as the year each of 1209/2015, 2088/2019, 2007/2018 and 6133/2021 covers is its last although its business went on in
+#: another syndicate. The filing gives no date. Two filings of the dedicated syndicate, Syndicate 3268, that the entry's note cites: (stem, PDF page, the words)
+SYNDICATE_3268_PAGES = (
+    ("syndicate_3268_2018", 5, "2018 was Agora\u2019s first year as a full syndicate having been an SPA of Skuld 1897 for the previous two years."),
+    ("syndicate_3268_2019", 33, "The \u00a32.5m claims fund is to cover anticipated claims payments in relation to SPA 6126 YOA 2016 which was accepted as an RITC "
+                                "into Syndicate 3268 on 1 January 2019."),
+)
+
+
+def test_6126_2017_is_an_after_entry_for_the_change_of_vehicle_and_no_longer_a_reviewed_statement():
+    """The entry is AFTER, dated by the year of account (the filing gives no date); it says in its own words that the SPA has no 2018 year of account, holds the
+    words that show the SPA wrote for 2017 and the words for the change of vehicle, and is no longer in scan_reviewed, where it stood as 'not a stop'."""
+    data = _load()
+    by = {r["stem"]: r for r in data["records"]}
+    assert "syndicate_6126_2017" not in {r["stem"] for r in data["scan_reviewed"]}
+    r = by["syndicate_6126_2017"]
+    assert r["category"] == "AFTER" and r["runoff_from"].startswith("after the 2017 year of account") and "gives no date" in r["runoff_from"]
+    assert (r["source_page"], r["source_page_printed"]) == (8, "5")
+    assert "The SPA does not have a 2018 Year of Account" in r["evidence"] and forms.says_stopped(r["evidence"])
+    others = " ".join(q["quote"] for q in r["other_statements"])
+    assert "transition to a full independent syndicate status" in others, "the change of vehicle"
+    assert "gross written premium of \u00a342.5m" in others and "For the 2017 Year of account the SPA assumes 85.5%" in others, "the SPA wrote for 2017"
+    for words in ("Syndicate 3268", "PDF page 5", "PDF page 33", "42,496", "1209/2015, 2088/2019, 2007/2018 and 6133/2021"):
+        assert words in r["note"], words
+
+
+def test_the_pages_of_syndicate_3268_that_the_6126_2017_note_cites_say_so():
+    """The note's two citations of Syndicate 3268's filings are held to their pages as the entries' quotes are (a note_quote can only be from the entry's own
+    filing). Needs the filings."""
+    sources = dict(forms.corpus_sources())
+    if not all(sources[stem].exists() for stem, _, _ in SYNDICATE_3268_PAGES):
+        pytest.skip("source filing not present in this checkout")
+    for stem, page, words in SYNDICATE_3268_PAGES:
+        texts = fin.page_texts(sources[stem])
+        assert 1 <= page <= len(texts), (stem, page)
+        assert fin.quote_on_page(words, texts[page - 1]), (stem, page, words)
+
+
+def test_lloyds_candidate_list_has_no_2017_row_for_the_three_2016_spas_while_6111_runs_to_2018():
+    """The three notes say that Lloyd's candidate list of syndicate-years (syndicate_reports/Lloyds_Syndicates_2014_2024.xlsx) has no 2017 row for 6112, 6119 or
+    6121, while its rows for 6111, which the same managing agent ran, go to 2018. The file is committed, so the claim is held to it. It is not the filings' own
+    words, which is why the entries stay NOTCOUNT."""
+    import openpyxl
+    path = ROOT / "syndicate_reports" / "Lloyds_Syndicates_2014_2024.xlsx"
+    assert path.is_file(), "the candidate list is committed"
+    wb = openpyxl.load_workbook(path, read_only=True, data_only=True)
+    rows = list(wb["All Data"].iter_rows(values_only=True))
+    wb.close()
+    assert rows[0][:3] == ("Reporting Year", "Syndicate", "Managing Agent"), rows[0]
+    listed = {(int(y), int(s)): agent for y, s, agent, *_ in rows[1:] if y is not None}
+    for s in (6112, 6119, 6121):
+        assert (2016, s) in listed and (2017, s) not in listed, s
+    assert max(y for y, s in listed if s == 6111) == 2018
+    assert len({listed[k] for k in listed if k[1] in (6111, 6112, 6119, 6121)}) == 1, "the same managing agent"
+    by = {r["stem"]: r for r in _records()}
+    for s in (6112, 6119, 6121):
+        note = by["syndicate_%d_2016" % s]["note"]
+        assert "syndicate_reports/Lloyds_Syndicates_2014_2024.xlsx" in note and "has no 2017 row for %d" % s in note, s
+        assert "rows for 6111, which the same managing agent ran, go to 2018" in note and "stays NOTCOUNT" in note, s
+
+
+def _readme_item_9():
+    text = (ROOT / "README.md").read_text(encoding="utf-8")
+    start = text.index("9. **Run-off corpus register**")
+    return " ".join(text[start:text.index("\n", start)].split())
+
+
+def test_a_page_of_50_characters_or_fewer_is_scanned_like_any_other_and_the_texts_say_so():
+    """Review of the stage-2 commits, 3 October 2026: the scope and README item 9 said that the 333 pages that hold 50 characters or fewer are read by no form.
+    scan_page has no length floor: a statement on a page that short is found. What those pages hold is, for the most part, a cover title, a running head, a page
+    number, a blank-page notice or a printer's line (also a web address, and on one page a string of OCR noise); none has a sentence a form matches."""
+    short = "The Syndicate is in run-off."
+    assert len(short) <= 50
+    assert [name for name, _, _ in forms.scan_page(short)] == ["in_run_off"], "scan_page reads a page of 50 characters or fewer"
+    for where, words in (("the register's scope", _load()["scope"]), ("README item 9", _readme_item_9())):
+        assert "so no form reads them" not in words, where
+        assert "333 more hold 50 characters or fewer (such as a cover title, a running head, a page number, a blank-page notice or a printer's line), too little to " \
+               "carry a statement: the scan reads them like any other page, and none of them has a sentence a form matches" in words, where
 
 
 def test_a_note_quotes_only_what_the_entry_cites():
@@ -322,7 +406,8 @@ def test_the_scan_reviewed_list_is_well_formed_and_holds_only_statements_a_form_
     reviewed = data["scan_reviewed"]
     stems = [r["stem"] for r in reviewed]
     assert stems == [s for _, s in sorted(((r["syndicate"], r["year"]), r["stem"]) for r in reviewed)], "sorted by syndicate and year"
-    assert len(stems) == len(set(stems)) == 67
+    assert len(stems) == len(set(stems)) == 66, "66 filings"
+    assert sum(len(r["statements"]) for r in reviewed) == 84, "the 66 filings hold 84 statements"
     assert len(forms.corpus_sources()) == 1065, "the corpus the scan covers is the 1,065 committed extraction records"
     for r in reviewed:
         assert set(r) == SCAN_FIELDS, r["stem"]
@@ -545,8 +630,9 @@ def test_the_readme_states_the_counts_the_register_holds():
     for cat in CATEGORIES:
         m = re.search(r"%s \([^()]*; (\d+)\)" % cat, item)
         assert m and int(m.group(1)) == sum(r["category"] == cat for r in data["records"]), cat
-    m = re.search(r"`scan_reviewed` list \((\d+) filings", item)
-    assert m and int(m.group(1)) == len(data["scan_reviewed"])
+    m = re.search(r"`scan_reviewed` list \((\d+) filings, which hold (\d+) statements", item)
+    assert m and int(m.group(1)) == len(data["scan_reviewed"]), "the README counts filings here"
+    assert int(m.group(2)) == sum(len(r["statements"]) for r in data["scan_reviewed"]), "and then the statements they hold"
 
 
 def _filings_present(entries):
