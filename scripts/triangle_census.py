@@ -15,7 +15,9 @@ triangle, on the same inputs, and lists each one whose figure changes or is refu
 For each RAG triangle the new reader refuses, the census says what an offline replay will then do: the
 table step passes to page vision, which the replay serves only from a committed page-level cache entry under
 the current prompt. With none, the call is a cache miss, the replay stops for that record and the committed
-record keeps its figure until the call is made (a paid step).
+record keeps its figure until the call is made (a paid step). With one, the census reads the served triangle with
+the new reader too (`vision_outcomes`): where it refuses that as well, the record falls to the later routes with no
+call (3334/2017 and 3500/2018, whose figures are the models' readings already).
 
 The records are not regenerated here (a PC step); tests/test_triangle_diagonal.py holds the census to the
 reader and the committed records, so the census has to be written again when either changes.
@@ -135,6 +137,30 @@ def cached_vision_pages(syndicate, year):
     return out
 
 
+def served_vision(syndicate, year, page):
+    """The page-vision triangle the offline replay serves for a page: the committed entry under the current prompt's
+    key, or None."""
+    prompt = tg.TRIANGLE_EXTRACT_PROMPT.replace("{report_year}", str(year))
+    path = ROOT / "pdf_extraction" / "llm_cache" / (
+        tg._llm_cache_key("gemini-2.5-flash", prompt, syndicate, year, page_num=page) + ".json")
+    try:
+        data = json.loads(path.read_text(encoding="utf-8")).get("data")
+    except (OSError, ValueError):
+        return None
+    return data if isinstance(data, dict) else None
+
+
+def vision_outcomes(syndicate, year, pages):
+    """{page: the reader's outcome on the served page-vision triangle} (review of the stage-2 branch, F4: the census
+    said the replay serves these pages, and the reader refuses what they hold too)."""
+    out = {}
+    for page in pages:
+        tri = served_vision(syndicate, year, page)
+        out[str(page)] = _outcome(*read(tg.compute_pyd_from_triangle, tri, year)) if tri else {
+            "refused": "the served entry holds no triangle"}
+    return out
+
+
 def reader_at(rev):
     """compute_pyd_from_triangle as it was at `rev`, imported from that commit's test_gemini.py."""
     src = subprocess.run(["git", "-C", str(ROOT), "show", "%s:test_gemini.py" % rev], capture_output=True,
@@ -175,12 +201,22 @@ def census(before):
                 entry["after_with_printed_row"] = _outcome(*replayed)
             if name == "rag_triangle" and final[0] is None:
                 pages = cached_vision_pages(syn, year)
-                entry["replay"] = (
-                    "the table triangle is refused; page vision has committed entries for page(s) %s under the "
-                    "current prompt, which the replay serves" % pages if pages else
-                    "the table triangle is refused; page vision has no committed entry under the current prompt, "
-                    "so the offline replay stops for this record on a cache miss and the record keeps its figure")
+                outcomes = vision_outcomes(syn, year, pages) if pages else None
+                if pages:
+                    read_ok = [o["value"] for o in outcomes.values() if "value" in o]
+                    entry["replay"] = (
+                        "the table triangle is refused; page vision serves page(s) %s from the committed cache under "
+                        "the current prompt, and %s" % (pages, (
+                            "the reader gives %s from it" % read_ok[0] if read_ok else
+                            "the reader refuses what it holds too, so the record falls to the later routes (loss "
+                            "ratio, provisions, narrative and the models) with no call")))
+                else:
+                    entry["replay"] = (
+                        "the table triangle is refused; page vision has no committed entry under the current prompt, "
+                        "so the offline replay stops for this record on a cache miss and the record keeps its figure")
                 entry["vision_pages_cached"] = pages
+                if outcomes:
+                    entry["vision_outcomes"] = outcomes
             entries.append(entry)
     return entries
 
@@ -204,6 +240,8 @@ def main():
             "rag_refused_on_replay": sum(1 for e in rag if "refused" in (e.get("after_with_printed_row")
                                                                           or e["after"])),
             "rag_replay_stops_on_a_cache_miss": sum(1 for e in rag if e.get("vision_pages_cached") == []),
+            "rag_replay_vision_refused_too": sum(1 for e in rag if e.get("vision_outcomes") and not any(
+                "value" in o for o in e["vision_outcomes"].values())),
             "claims_triangle_entries": len(entries) - len(rag),
         },
         "entries": entries,

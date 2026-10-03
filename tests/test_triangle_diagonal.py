@@ -145,6 +145,38 @@ def test_a_printed_row_that_contradicts_the_diagonal_cell_refuses_the_grid():
     assert v is None and "is not the diagonal cell" in why
 
 
+def test_a_stand_in_for_a_missing_diagonal_cell_must_be_a_plausible_step():
+    """Review of the stage-2 branch, F5 (a): the printed value that stands in for a missing diagonal cell is held to
+    the step rule. A printed value that is the column's sum is kept as a reading of the column, and here it would
+    stand in as a step from 1 to 104."""
+    rows = copy.deepcopy(CLEAN)
+    for r, v in enumerate([100, 2, 1, 1, None]):
+        rows[r][0] = v      # 2015's column one row short, its last cell 1
+    v, why = _read(_grid(rows, YEARS, printed=[104, 157, 175, 180, 140]), 2019)
+    assert v is None and "not one estimate developing" in why, why
+
+
+def test_a_stripped_summary_row_stands_in_for_the_printed_row():
+    """F5 (b): a summary row repeating each column's last cell is stripped from the grid and read as the table's
+    current-estimate row (section 9.2). 2015's column is one row short, and its printed estimate is its last cell,
+    so it does not place the missing diagonal cell: the refusal names the printed estimate."""
+    rows = copy.deepcopy(CLEAN)
+    rows[4][0] = None
+    rows.append([152, 157, 175, 180, 140])
+    v, why = _read(_grid(rows, YEARS), 2019)
+    assert v is None and "printed current estimate (152" in why and "short of" in why, why
+
+
+def test_a_printed_row_of_an_outflow_grid_is_normalised_with_it():
+    """F5 (c): a grid printed wholly as outflows is normalised before differencing, and so is its printed row: the
+    stray cell beyond 2016's staircase is placed by the printed row, as in the grid printed as positives."""
+    rows = copy.deepcopy(CLEAN)
+    rows[4][1] = 7
+    neg = [[-v if v is not None else None for v in r] for r in rows]
+    v, why = _read(_grid(neg, YEARS, printed=[-151, -157, -175, -180, -140]), 2019)
+    assert v == pytest.approx(3.0), why
+
+
 def test_a_misaligned_printed_row_is_not_used():
     """A value that cannot be a reading of its column (two cells run together) means the row is not aligned."""
     v, why = _read(_grid(CLEAN, YEARS, printed=[151157, 175, 180, 140, None]), 2019)
@@ -272,3 +304,21 @@ def test_the_census_counts_are_its_entries(census):
     assert c["rag_refused_on_replay"] == sum(
         1 for e in rag if "refused" in (e.get("after_with_printed_row") or e["after"]))
     assert c["rag_replay_stops_on_a_cache_miss"] == sum(1 for e in rag if e.get("vision_pages_cached") == [])
+    assert c["rag_replay_vision_refused_too"] == sum(1 for e in rag if e.get("vision_outcomes") and not any(
+        "value" in o for o in e["vision_outcomes"].values()))
+
+
+def test_each_served_page_vision_triangle_is_read_as_the_census_says(census):
+    """Review of the stage-2 branch, F4: for a refused table triangle whose page vision the replay serves from the
+    committed cache, the census reads the served triangle with the reader too. 3334/2017's page 47 and 3500/2018's
+    page 24 are refused as well, so those records fall to the later routes with no call."""
+    served = [e for e in census["entries"] if e["block"] == "rag_triangle" and e.get("vision_pages_cached")]
+    assert sorted(e["stem"] for e in served) == ["syndicate_3334_2017", "syndicate_3500_2018"]
+    for e in served:
+        syn, year = (int(x) for x in e["stem"].split("_")[1:])
+        assert sorted(e["vision_outcomes"]) == sorted(str(p) for p in e["vision_pages_cached"]), e["stem"]
+        for page in e["vision_pages_cached"]:
+            tri = tc.served_vision(syn, year, page)
+            assert tri is not None, (e["stem"], page, "the served entry is not committed")
+            assert e["vision_outcomes"][str(page)] == tc._outcome(*tc.read(tg.compute_pyd_from_triangle, tri, year))
+        assert "the reader refuses what it holds too" in e["replay"], e["replay"]
