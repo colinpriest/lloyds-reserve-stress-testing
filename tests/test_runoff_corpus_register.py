@@ -296,7 +296,7 @@ def test_the_scan_reviewed_list_is_well_formed_and_holds_only_statements_a_form_
     reviewed = data["scan_reviewed"]
     stems = [r["stem"] for r in reviewed]
     assert stems == [s for _, s in sorted(((r["syndicate"], r["year"]), r["stem"]) for r in reviewed)], "sorted by syndicate and year"
-    assert len(stems) == len(set(stems)) == 66
+    assert len(stems) == len(set(stems)) == 67
     assert len(forms.corpus_sources()) == 1065, "the corpus the scan covers is the 1,065 committed extraction records"
     for r in reviewed:
         assert set(r) == SCAN_FIELDS, r["stem"]
