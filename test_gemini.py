@@ -5268,10 +5268,17 @@ def _append_to_disagreement_log_locked(log_path, report_stem, hard_failures):
 
 
 def write_run_manifest(run_stats):
-    """Append this run's stats to the cumulative run manifest log."""
+    """Append this run's stats to the cumulative run manifest log.
+
+    A run made offline (--offline, LLOYDS_EXTRACTION_OFFLINE=1) calls no API. The tokens and cost it records are the
+    sums of what the cached responses it read recorded when they were made, so its entry is marked "offline" and its
+    costs carry "new_spend_usd": 0.0 and a "basis": a sum of "total_cost_usd" over the manifest must not read them as
+    spend (the five offline runs of 3 October 2026 recorded US$4.35 that way; none was a charge)."""
+    offline = os.getenv("LLOYDS_EXTRACTION_OFFLINE") == "1"
     entry = {
         "run_id": datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ"),
         "run_timestamp": datetime.now(timezone.utc).isoformat(),
+        "offline": offline,
         "spec": {
             "prompt_version": PROMPT_VERSION,
             "field_definitions_version": FIELD_DEFINITIONS_VERSION,
@@ -5297,6 +5304,10 @@ def write_run_manifest(run_stats):
         "output_dir": str(OUTPUT_DIR),
         "stopped_early": run_stats.get("stopped_early", False),
     }
+    if offline:
+        entry["costs"]["new_spend_usd"] = 0.0
+        entry["costs"]["basis"] = (
+            "offline run: the tokens and cost are the sums recorded in the cached responses it read; no call was made, so there is no new spend")
 
     manifest_path = AUDIT_DIR / "run_manifest.json"
     lock_path = AUDIT_DIR / "run_manifest.lock"
