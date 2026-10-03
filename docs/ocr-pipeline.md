@@ -1277,12 +1277,13 @@ stub with no mix, is the one that does not.  Of the 21 records, 20 store a mix (
 are the record of 5a6883d0 and the regenerated one.  A record is the same when its stored mix has the same classes and the
 same amounts in both (the percentages of the total are not compared), and 3902/2017, which stores none in either, is
 counted with them; a record moved when it is not the same, and 4020/2015, whose mix is newly stored, is counted with those.
-So 14 of the 21 are the same and 7 moved, and what moved in the 7 is counted three ways.  The class amounts moved in 5
-(3902/2019, 3902/2023, 4020/2019, 6105/2014 and 6105/2015).  The class names or amounts moved in 6, which adds 4020/2014,
-whose class names changed and whose amounts did not.  The mix differs in 7 only if the stub 4020/2015 is counted, whose
-mix is newly stored (it held none).  6105/2015's calendar column sums to 43.859 where the adopted reading's
-year-of-account column gave 43.178, and 3902/2019's gemini reading, scaled from the year-of-account column, now reads
-42.498, 22.16 and 24.797.
+So 14 of the 21 are the same and 7 moved, and what moved in the 7 is counted three ways.  The class amounts moved in 5:
+the list of amounts differs in at least one model block (3902/2019, 3902/2023, 4020/2019, 6105/2014 and 6105/2015), and in
+4020/2019 the block is one that newly stores a mix (gemini-2.5-flash held none).  The class names or amounts moved in 6,
+which adds 4020/2014, whose class names changed and whose amounts did not.  The mix differs in 7 only if the stub 4020/2015
+is counted, a stub that newly stores a mix (it held none).  6105/2015's calendar column sums to 43.859 where the adopted
+reading's year-of-account column gave 43.178, and 3902/2019's gemini reading, scaled from the year-of-account column, now
+reads 42.498, 22.16 and 24.797.
 
 ### 7.8  Provisions and balance sheet grid parsing
 
@@ -1765,9 +1766,13 @@ accepts it: +858.1, where the page's own grid gives +370.5 (the last cell of eve
 estimate). The entry is cached because it is what the call returned; the record is not rebuilt from it, and the page's
 figure, +370.5, is on the list for stage 3. The shape that let it through is a blank newest column under a one-column shift;
 the reader does not test for it (a change to the reader belongs to a later stage). 2999/2022 stays on the pending list
-(`redecision_pending.json`) until the reader refuses the shifted grid or the cache entry is quarantined. Taking it off
-sends the corpus replay red: the record's committed figure (375.6) then differs from a replay that reads the cached
-page-vision entry and gives +858.1, and nothing declares the difference.
+(`redecision_pending.json`) while its committed figure (375.6) differs from its replay, which reads the cached page-vision
+entry and gives +858.1. Taking it off sends the corpus replay red, because nothing then declares the difference. Refusing the
+shifted grid, or taking the cache entry out of service, changes only what the replay differs by (the replay then gives no
+figure, or stops on a cache miss), and so would a correct reading in the cache (+370.5), while the record still carried
+375.6. The declaration ends when the record and its replay agree: when the record is regenerated from a correct
+reading of the page and carries its +370.5. Registering +370.5 in the analysis settles the analysis's figure and leaves this
+declaration as it is.
 
 Ten of the 11 records were then regenerated offline from the readings, each after its figure, route and mix had been
 predicted, and every prediction held. Figures are the two models' (gemini-2.5-flash; gpt-5-mini where it differs):
@@ -1783,16 +1788,17 @@ predicted, and every prediction held. Figures are the two models' (gemini-2.5-fl
 - 1400/2014: its stored triangle was a net one-column grid of yearly results (15,660, 13,362, 201, 0, -3,833 and -6,131,
   £000), which the reader refuses, and its page held no triangle, so with no figure from any other route and no reserve
   text it is written as no deterministic reading (unread, the models not run). Its figure, -2.298, and its six-class mix are
-  gone. It did not leave the working sample, because it was never in it: the analysis has it in run-off (its premium is
-  -10.139m, its filing says on PDF page 9 that the Syndicate "ceased underwriting new business with effect from the end of
-  2013", and it is WHOLE in `runoff_corpus_register.json`). Without a development figure it is no longer an entry of the
-  run-off register (README item 8), which holds the records that carry one.
+  gone. It did not leave the working sample, because it was never in it: the analysis excluded it as a run-off year (its
+  premium is -10.139m, its filing says on PDF page 9 that the Syndicate "ceased underwriting new business with effect from
+  the end of 2013", and it is WHOLE in `runoff_corpus_register.json`). Without a development figure it is no longer an
+  entry of the run-off register (README item 8), which holds the records that carry one.
 
 They left `redecision_pending.json`. Six of the 16 remain declared, each keeping its committed form: 2999/2022 (above);
 2121/2019 and 3622/2023, whose only response is from an older driver version, which the cache does not serve (read through
 the reader offline it gives +57.034 and -4.8; serving it needs a cache lookup across driver versions, a later stage's
 decision); and 1967/2014, 1991/2018 and 3500/2018, each of which would be written as no deterministic reading and leave the
-working sample, a decision for the author (1400/2014 was written so, as its page held no triangle).
+working sample, a decision for the author (1400/2014 was written as no deterministic reading because its page held no
+triangle; it was never in the working sample).
 
 The 2 most recent UW years are excluded because they have
 insufficient development history (only 1 or 2 data points).
@@ -3355,7 +3361,8 @@ call for it (PDF page 8, option B, section 9.1) returned no triangle: the page i
 other route finds a figure, so it is written as no deterministic reading, and the record's reason says what that means:
 it describes the parsers, not the filing.  This filing prints no claims development table: the one table of development in
 it is note 17's "Year of account development" on PDF page 29 (printed page 25), which gives profit and loss by year of
-account in £000, and its other mentions of development are accounting-policy text.
+account in £000, and its other mentions of development are prose (the reserving policy on PDF pages 21 and 22, the carbon
+policy on page 10), not tables.
 
 Three more filings were on this list before the third cycle: 1699/2022,
 1975/2019 and 1922/2024.  Their caches hold no triangle grid, and the
