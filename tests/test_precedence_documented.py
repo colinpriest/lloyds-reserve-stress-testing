@@ -73,6 +73,50 @@ def test_every_readme_statement_of_the_sign_override_states_its_conditions():
         assert "R138" in flat and re.search(r"affirmed movement (note|row)", flat), flat[:200]
 
 
+#: a statement in docs/ocr-pipeline.md that the provisions movement overrides, or is preferred to, a triangle
+#: (review of the stage-2 branch, F3: also a figure that replaces or takes the place of the triangle, and a sign
+#: disagreement that triggers the override, as 11.3.1's 780/2016 example said)
+DOC_SIGN_OVERRIDE = re.compile(
+    r"(?:provisions?|balance-sheet movement|movement note)[^.;]{0,160}?\b(?:overrides?|is authoritative|takes precedence|"
+    r"is preferred|wins|replaces?|displaces?|supersedes?|takes the place of)\b"
+    r"|\bprefer(?:red)?\b[^.;]{0,40}\bprovisions\b"
+    r"|\b(?:replaces?|displaces?|supersedes?|takes\s+the\s+place\s+of|overrides?)\s+(?:the\s+)?triangle"
+    r"|\b(?:sign\s+disagreement|signs?\s+differ|disagree\s+in\s+sign)[^.;]{0,80}?\b(?:override|overrides|triggers|"
+    r"replaces?|wins)\b", re.I)
+
+
+def _doc_statements():
+    """The units of docs/ocr-pipeline.md that state a rule: each paragraph, or each item of a list, outside the
+    fenced blocks, and the flow diagram's Step 4b box. A fenced log line shows output and states no rule."""
+    doc = _doc()
+    box = re.search(r"\| Step 4b:.*?\n\+-+\+", doc, re.S)
+    units = [" ".join(box.group(0).replace("|", " ").split())] if box else []
+    prose = re.sub(r"```.*?```", "\n\n", doc, flags=re.S)
+    for para in re.split(r"\n\s*\n", prose):
+        for item in re.split(r"\n(?=\s*(?:[*-]|\d+\.)\s)", para):
+            units.append(" ".join(item.split()))
+    return units
+
+
+def test_every_doc_statement_of_the_sign_override_states_its_conditions():
+    """Review of 2 October 2026, E-5 (R11-12): section 10.3, the canonical hierarchy, said a provisions movement
+    of the other sign "is authoritative and overrides the triangle", and so did section 10.4's list, the RITC
+    caveat, section 11.3.1's rule and trigger list, the change history and the flow diagram; only the
+    precedence table's row 1a gave R138's conditions, which the code has applied since 13 September 2026 (an
+    affirmed movement note whose column is bound to the report year). Every statement of the override in the
+    canonical document carries them, as every README line already must."""
+    units = _doc_statements()
+    assert any(u.startswith("Step 4b:") for u in units), "the flow diagram's Step 4b box was not found"
+    stating = [u for u in units if DOC_SIGN_OVERRIDE.search(u)]
+    # the diagram, 10.3 item 3, 10.4's list, the RITC caveat, 11.3.1's rule, its 780/2016 example and the change history
+    assert len(stating) >= 7, stating
+    for u in stating:
+        assert "R138" in u and re.search(r"affirmed movement note", u) and "report year" in u, u[:240]
+    # and section 11.3.1's list of when the cross-check runs names them
+    triggers = re.search(r"\*\*Trigger conditions\*\*.*?(?=\n\n\*\*)", _doc(), re.S).group(0)
+    assert "R138" in triggers and "affirmed movement note" in " ".join(triggers.split()), triggers
+
+
 def test_resolved_table_value_does_not_override_two_agreeing_model_values():
     value, label, note = tg._resolve_rag_opening(
         200.0,

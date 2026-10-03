@@ -104,11 +104,14 @@ PDF input
   |
   v
 +-----------------------------------------------+
-| Step 4b: Triangle vs provisions cross-check    |
-|   If triangle PYD and provisions PYD disagree  |
-|   in sign: prefer provisions (measures actual  |
-|   balance-sheet reserve movement, not diagonal  |
-|   development which can include emergence)     |
+| Step 4b: Triangle vs provisions cross-check   |
+|   Only from an affirmed movement note whose   |
+|   column is bound to the report year (R138):  |
+|   if its gross prior-year movement and the    |
+|   triangle PYD disagree in sign, prefer       |
+|   provisions (the balance-sheet movement, not |
+|   diagonal development, which can include     |
+|   emergence); otherwise the triangle stands   |
 +-----------------------------------------------+
   |
   v
@@ -1206,10 +1209,60 @@ partial mixes.  Round 58 changed four things.
 Known limits: the table parser takes its unit from the amounts'
 magnitude, so a small syndicate's £'000 table can read as £m (the
 gate refuses such a table in a model record; first-year stubs have
-no gate); a negative class premium is stored as its absolute value,
-so a table whose signed classes reconcile with its total is refused
-and the models' signed mix kept; and a printed total with a leading
-currency sign ("£ 430,858") is not read as `table_total`.
+no gate); and a printed total with a leading currency sign
+("£ 430,858") is not read as `table_total`.
+
+#### 7.7.3  Bracketed class premiums (P-29)
+
+Until the review of 2 October 2026 every table reader stored a class
+premium printed in brackets as positive.  1414/2016's "Motor (other)
+(294)" was +0.294: its classes summed to 574.063 against the table's
+573.475, and the class took weight in a mix where the analysis gives
+a negative class none.  A class printed in brackets among positive
+classes now keeps its sign, in the row reader, the transposed reader
+and the page-text reader (`_keep_bracket_signs`); a column printed
+wholly in brackets is a presentation of outflows and is read as
+positive, as before.  In page text a bracket is a sign and a hyphen
+is not.  With the signs:
+
+* the classes sum to the printed total (1414/2016's 573.475,
+  4472/2019's 1,687.2, 1967/2020's 417.528, 1686/2019's 1,142.575).
+  The gate had applied
+  those four tables' mixes already, within its 2%, with the bracketed
+  class's sign wrong; it now also applies six it had kept out, whose
+  unsigned classes were further from the models' total (780/2020,
+  1110/2017, 1882/2017, 1884/2021, 1884/2022 and 2468/2020);
+* an unlabelled row equal to the classes with their signs is a total
+  (`_sums_classes_above`: 3330/2014's 78);
+* the units are read from the classes' sizes, so a sign does not
+  change them (`_units_size`: 780/2020's classes sum to 8,309 $'000
+  with Motor's (1,537) and to 11,383 without);
+* classes whose signed sum is negative are refused: 2468/2021's
+  run-off table, total (2,190), is no mix.
+
+`tests/test_bracketed_premiums.py` holds the review's four records to
+their tables, and checks every committed premium grid the reader
+admits: a class printed in brackets among positive classes is read
+negative.  The records change when they are regenerated.
+
+#### 7.7.4  Year-of-account and calendar-year columns (P-30)
+
+Ark's managing agent's report (syndicates 4020, 3902 and 6105) prints
+each class's premium by year of account and by calendar year: "2015
+YOA estimate | 2014 YOA estimate | 2013 YOA estimate | 2015 Cal. Year
+| Restated 2014 Cal. year".  The grid names no premium and its first
+header year is a comparative's, so the parser read none of these
+tables and the mixes were the models'.  6105/2015's adopted reading
+took the 2015 year-of-account column (43,178) where the premiums
+written are the calendar year's (43,859, the income statement's
+figure), and 3902/2019's took the year-of-account column scaled to
+the calendar total.  `_yoa_calendar_column` now names the report
+year's calendar-year column when the header prints year-of-account
+columns, whichever header row carries the year and the label; the
+gate holds the mix to a model's total before it is applied.  The
+rule reads 20 committed grids, all Ark's, and in each the classes
+sum to the calendar column's total, which is the premium every model
+read (`tests/test_yoa_calendar_column.py`).
 
 ### 7.8  Provisions and balance sheet grid parsing
 
@@ -1605,10 +1658,38 @@ not strip trailing nulls.
 For each UW year column (excluding the 2 most recent):
 
 ```
-current_estimate  = last non-null value in column
-previous_estimate = value one row above current_estimate
-pyd_for_year      = current_estimate - previous_estimate
+For each underwriting year column u (mature: u <= report_year - 2):
+  current_estimate  = the cell on the report-year diagonal, row report_year - u
+                      (row 0 is the end of the underwriting year)
+  previous_estimate = the cell one row above it (the previous diagonal)
+  pyd_for_year      = current_estimate - previous_estimate
 ```
+
+Until the review of 2 October 2026 the current estimate was the column's last filled cell, wherever it
+lay. 6112/2016's 2013 column carried a stray "7" one row past its 48-month estimate and the figure was
+-19.264m where the filing shows +0.893m; 1967/2014's year-of-account results note was read as a
+triangle; 1910/2019 lost its deepest row; 2791/2015 read 139,326 as 139.326. Now
+(`_diagonal_cells` in `test_gemini.py`):
+
+- a grid that starts one year later is read one row up throughout (that reading places more mature
+  columns' last cells on their diagonal than the plain one); an empty row inside the grid is dropped;
+- cells beyond a column's staircase are not estimates: the column is read only when the table's printed
+  current estimate is its staircase cell; a column one row short is read only when the printed current
+  estimate is the missing cell, which then stands in for it; otherwise the grid is refused;
+- the printed current-estimate row ("Current estimate of cumulative claims", "Estimated total
+  losses", "Total ultimate losses") is kept by `_parse_nutrient_triangle` as `current_estimate_row`;
+  a summary row stripped from the grid (section 9.2) stands in for it. A printed estimate that is not
+  the diagonal cell refuses the grid, unless the two are one figure a factor of 1,000 apart (2791/2015)
+  or the printed value is the column's sum (a table of yearly movements, refused: 382's tables); a row
+  with a value that cannot be a reading of its column (two cells run together) is not used;
+- a negative cell in a mature column refuses the grid (a cumulative estimate is not negative; a grid
+  printed wholly as outflows is normalised first);
+- a step whose smaller estimate is under 2% of the larger refuses the grid (`MIN_STEP_RATIO`);
+- a column with nothing after its first cell is read as before: nothing to difference.
+
+`scripts/triangle_census.py` runs the reader before and after this change over every committed grid and
+writes `pdf_extraction/audit/stage2_triangle_census.json`; `tests/test_triangle_diagonal.py` holds it to
+the reader and the records.
 
 The 2 most recent UW years are excluded because they have
 insufficient development history (only 1 or 2 data points).
@@ -1621,7 +1702,12 @@ bottom of the triangle.  This row duplicates the last non-null
 value from each column.
 
 **Detection**: if the last row is fully filled and >= 70% of its
-values match the last non-null above, it is a summary row.
+values match the last non-null above (or the same figure a factor of
+1,000 apart: 6111/2015's total row prints 65.779 under 65,779), it is a summary
+row. Zeros beyond the staircase are read as no data before this test
+(5000/2017's last development row matched the dash-zeros above it and
+was stripped). The stripped row is the table's current-estimate row,
+and section 9.1 reads it as one.
 
 **Action**:
 - If column 0 has a **different** value (real development data
@@ -2090,9 +2176,13 @@ hierarchy; every other document defers to it.
    triangle PYD, it is ordinarily authoritative.
 2. Where the gross claims-provisions movement is also
    available, the two are compared (section 11.3.1).
-3. **If their signs disagree, the provisions movement is
-   authoritative and overrides the triangle**; the override is
-   recorded in `data_quality_notes`. This matters most for
+3. **If the provisions table is an affirmed movement note whose
+   column is bound to the report year (R138), and the two signs
+   disagree, the provisions movement is authoritative and
+   overrides the triangle**; the override is recorded in
+   `data_quality_notes`. Without both conditions the triangle
+   stands whatever the sign: 1274/2019's `2010 & prior years`
+   cumulative total displaced a correct -6.619m before R138. This matters most for
    RITC acceptors, where the triangle tracks only organic
    development (see the RITC caveat below).
 4. Otherwise the absolute-amount triangle PYD replaces both
@@ -2148,7 +2238,9 @@ LLM-extracted figure **unless a gate rejects it**.  Its authority
 is therefore conditional, on four counts and not one:
 
 * a gross provisions movement whose sign disagrees with the
-  triangle overrides the triangle (section 11.3.1);
+  triangle overrides the triangle, but only from an affirmed
+  movement note whose column is bound to the report year (R138,
+  section 11.3.1);
 * `_pyd_override_gate` withholds the triangle value when both
   model values agree in sign with each other and the triangle has
   the opposite sign, or when the triangle implies a movement above
@@ -2856,8 +2948,9 @@ includes RITC-acquired reserves in the prior year movement,
 while the triangle only tracks organic development.  When both
 sources are available and agree in sign, the triangle PYD takes
 precedence (per RAG authority rules in section 10).  When they
-disagree in sign, provisions takes precedence (per the cross-
-validation in section 11.3.1).  The difference is logged but not
+disagree in sign and the provisions figure is an affirmed
+movement note whose column is bound to the report year (R138),
+provisions takes precedence (section 11.3.1).  The difference is logged but not
 treated as an error.
 
 **Example**: syndicate 2791/2024 accepted RITC from syndicate
@@ -2887,10 +2980,17 @@ provisions gross PYD can measure different things:
   claims outstanding attributable to prior years as disclosed in
   the accounts.
 
-**Cross-validation rule**: when both are available and they
-**disagree in sign** (one is a release, the other a
-strengthening), the provisions figure is preferred.  A sign
-disagreement is a strong signal that the triangle diagonal is
+**Cross-validation rule**: when both are available, the
+provisions table is an affirmed movement note
+(`movement_semantics.table_is_movement_note`), its column carries
+the report year in its own header (`column_bound_to_report_year`)
+and the two **disagree in sign** (one is a release, the other a
+strengthening), the provisions figure is preferred (R138).
+Without both conditions the triangle stands: a sign disagreement
+on its own is as consistent with the figure not being a movement
+at all, and 1274/2019's `2010 & prior years` cumulative incurred
+total displaced a correct -6.619m on that reasoning.  With them,
+a sign disagreement is a strong signal that the triangle diagonal is
 contaminated by normal emergence in immature years, or that the
 triangle is missing prior-year aggregate rows that contribute to
 the provisions figure.
@@ -2912,15 +3012,24 @@ computed deterministically from the raw data.
 2. `result["method"]` is a table-extraction method (`"azure"`,
    `"nutrient"`, or `"adobe"`)
 3. Provisions `gross_prior_year_claims` is available and non-zero
+4. The provisions table is an affirmed movement note and its
+   column is bound to the report year (`movement_semantics`;
+   R138); otherwise the triangle stands
 
 **Example** (syndicate 780/2016):
 
 The triangle diagonal PYD is +24.9m (cumulative claims estimates
 rose for 2011--2014 UW years), but the provisions note reports
-gross prior year claims movement of −15.6m (a release).  The
-sign disagreement triggers the override, and −15.6m is used.
-Both LLMs independently extracted −15.6m and −17.1m, confirming
-the provisions figure.
+gross prior year claims movement of −15.6m (a release).  Before
+R138 the sign disagreement triggered the override, and −15.6m
+was used.  Since R138 it does not: the note is an affirmed
+movement note, but its column does not carry the report year in
+its own header (`column_bound_to_report_year` is false), so the
+provisions figure does not replace the triangle.  The triangle's
++24.9m is withheld by the conflict veto instead, because both
+models read a release (−15.6m and −17.1m), and the record carries
+the models' −15.6m, stated in the reserve text (route
+`model_reading`).
 
 **Example** (syndicate 33/2024):
 
@@ -3015,8 +3124,9 @@ every other record written this way carries the restated status and
 reason (`scripts/restate_record_status.py`), and says the models were
 not run.  Of the 45 that were left, 24 state in their filings that the
 syndicate began in the report year or the year before and were restated as
-first-year stubs on 30 September 2026 (11.2); 21 remain unread, and two of
-these still print a table the parsers do not read (below).
+first-year stubs on 30 September 2026 (11.2); 21 remain unread; two of
+these still print a table the parsers do not read, and a third, 3210/2018,
+whose table no backend has read (below).
 
 **Important**: which of the two flags a report gets does not depend
 on the syndicate's age.  The inception-based distinction this
@@ -3130,8 +3240,8 @@ stays unread:
   parsers had nothing to read, and it is unchanged.  No table backend has
   read the new file: no grid of it is committed (`backend_cache_absent.json`
   lists it), and reading it needs a paid table extraction, which has not
-  been authorised.  A paid read of page 41's claims table would not bring
-  3210/2018 into the working sample, because it is a whole run-off year
+  been authorised.  A paid read of the claims table on page 41 (a PDF
+  page; printed 39) would not bring 3210/2018 into the working sample, because it is a whole run-off year
   (WHOLE in `runoff_corpus_register.json`) under the whole-year run-off
   rule.  So it has not been bought.  No figure has been taken from the table.
 
@@ -3206,9 +3316,13 @@ has only 1.  PYD is computed from UW years 2014--2018 only.
 ### 12.2  Aggregate columns ("2013 & prior")
 
 Many triangles print their oldest underwriting years as one
-aggregate column ("2010 and prior", "Before 2011", "Pre-2011").
-The grid parser reads its label across the column's first three
-header rows.  What it does next depends on what the column holds
+aggregate column ("2010 and prior", "Before 2011", "Pre-2011",
+Syndicate 2007's "2010&P").  The grid parser reads its label across
+the column's first three header rows.  "2010&P" was not read until
+the review of 2 October 2026 (P-31): the column was dropped, and
+2007/2016's figure was +61.3m where its cohort's step of -6.5m makes
+it +54.8m, and 2007/2017's -22.0m where it is -44.5m
+(`tests/test_cohort_label_and_p.py`).  What it does next depends on what the column holds
 (R209):
 
 - **Development by calendar year**: one value per calendar year
@@ -4312,7 +4426,9 @@ releases.  The log shows:
 3. Added triangle vs provisions cross-validation (Step 4b,
    section 11.3.1).  When both triangle PYD and provisions gross
    PYD are available and disagree in sign, provisions is preferred
-   because it directly measures balance-sheet reserve movement.
+   because it directly measures balance-sheet reserve movement;
+   since R138, only where the provisions table is an affirmed
+   movement note whose column is bound to the report year.
 
 **Result**: PYD for syndicate 780/2016 changed from 0.0m to
 −15.6m (−4.5% of $348m reserves, release), confirmed by both

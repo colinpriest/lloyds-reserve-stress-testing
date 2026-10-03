@@ -521,6 +521,9 @@ class TriangleData:
     # an aggregated older cohort read as the triangle's oldest column: its anchor year, the header
     # label and the grid column (R209)
     aggregated_cohort: Optional[dict] = None
+    # the table's printed current-estimate row, one value per underwriting year, when it prints one: the
+    # reader checks each column's diagonal cell against it (review of 2 October 2026, M-1)
+    current_estimate_row: Optional[list] = None
 
     def to_dict(self) -> dict:
         d = {
@@ -536,6 +539,8 @@ class TriangleData:
             d["row_labels"] = list(self.row_labels)
         if self.aggregated_cohort:
             d["aggregated_cohort"] = dict(self.aggregated_cohort)
+        if self.current_estimate_row is not None:
+            d["current_estimate_row"] = list(self.current_estimate_row)
         if self.page is not None:
             d["source_page"] = int(self.page) + 1
         if self.entity is not None:
@@ -1671,8 +1676,10 @@ def _extract_row_values(row, uw_col_indices, ghost_cols):
 
 #: an aggregated older cohort named in a triangle's header: '2010 and prior', '2010 & prior',
 #: 'Before 2011', 'pre-2011', 'prior years' (R209)
+#: "2010&P" is Syndicate 2007's label for the cohort through 2010 (2007/2016, 2007/2017); before the review of
+#: 2 October 2026 (P-31) it was not read and the column was dropped. "P&L" is not a cohort.
 _COHORT_HEADER = re.compile(
-    r"\b(?P<through>(?:19|20)\d\d)\s*(?:&|and|\+)\s*(?:prior|before|earlier)\b"
+    r"\b(?P<through>(?:19|20)\d\d)\s*(?:&|and|\+)\s*(?:prior|before|earlier|p(?!\s*&))\b"
     r"|\b(?:before|pre|prior\s+to)\s*-?\s*(?P<before>(?:19|20)\d\d)\b"
     r"|^\s*(?:(?:&|and)\s+)?prior(?:\s+years?)?\b", re.I)
 _BARE_YEAR = re.compile(r"^\s*((?:19|20)\d\d)\s*$")
@@ -1730,6 +1737,14 @@ def _aggregated_cohort_columns(grid):
         cohorts.append((c, anchor))
         labels.add(c)
     return cohorts, labels
+
+
+#: The row a claims development table prints under its development rows with each underwriting year's current
+#: estimate of cumulative claims: "Current estimate of cumulative claims incurred", "Estimated total losses",
+#: "Total ultimate losses", "Gross ultimate claims" (review of 2 October 2026, M-1).
+_CURRENT_ESTIMATE_LABEL = re.compile(
+    r"current estimate|estimated total|total ultimate|gross ultimate|ultimate (gross |net )?(loss|claim)|"
+    r"estimate of ultimate", re.I)
 
 
 def _parse_nutrient_triangle(grid: list[list[str]], report_year: int):
@@ -1902,6 +1917,9 @@ def _parse_nutrient_triangle(grid: list[list[str]], report_year: int):
     dev_labels = []  # the row label each development row was bound to (R139 provenance)
     block_basis = None  # the basis heading that governs the captured block (R167)
     collecting = False  # True once we've started finding dev rows
+    # The table's own current-estimate row, printed under the development rows: the reader checks each
+    # column's diagonal cell against it (review of 2 October 2026, M-1)
+    printed_current = None
     # Track rows consumed as continuation of a split label (skip them in main loop)
     consumed_as_continuation = set()
     for row_i, row in enumerate(grid):
@@ -1910,6 +1928,13 @@ def _parse_nutrient_triangle(grid: list[list[str]], report_year: int):
         label = row[0].lower().strip() if row else ""
         if not label:
             continue
+        if collecting and printed_current is None and _CURRENT_ESTIMATE_LABEL.search(label):
+            values = _extract_row_values(row, uw_col_indices, _ghost_cols)
+            if all(v is None for v in values) and row_i + 1 < len(grid) \
+                    and not (grid[row_i + 1][0] if grid[row_i + 1] else "").strip():
+                values = _extract_row_values(grid[row_i + 1], uw_col_indices, _ghost_cols)
+            if any(v is not None for v in values):
+                printed_current = values
         # Check for section break (paid claims section, reserve summary, etc.)
         if collecting and any(s in label for s in section_break_patterns):
             break
@@ -1981,6 +2006,8 @@ def _parse_nutrient_triangle(grid: list[list[str]], report_year: int):
             for row in dev_rows:
                 if _k < len(row):
                     row.pop(_k)
+            if printed_current is not None and _k < len(printed_current):
+                printed_current.pop(_k)
             _cohort = None
     # Strip trailing all-null rows (development periods with no data yet,
     # e.g. "After five years" when the triangle only covers 4 UW years)
@@ -2013,6 +2040,8 @@ def _parse_nutrient_triangle(grid: list[list[str]], report_year: int):
         type=tri_type, currency=currency, units=units, units_evidence=units_evidence,
         underwriting_years=uw_years, development_rows=dev_rows,
         cell_binding="header", row_labels=dev_labels, aggregated_cohort=_cohort,
+        current_estimate_row=(printed_current if printed_current is not None
+                              and len(printed_current) == len(uw_years) else None),
     )
     details = f"{len(uw_years)} UW years, {len(dev_rows)} dev rows"
     return tri, details
@@ -2286,12 +2315,46 @@ def _drop_subtotal_rows(entries: list, tol: float = 0.006) -> tuple:
     return kept, dropped
 
 
-def _sums_classes_above(amount: float, entries: list) -> bool:
+def _keep_bracket_signs(entries: list) -> None:
+    """A class printed in brackets among positive classes is a negative premium, a return of premium, and keeps
+    its sign. Every reader stored 1414/2016's "Motor (other) (294)" as +294 (review of 2 October 2026, P-29), so
+    the class sum exceeded the table's total by twice the class, and the class carried weight in the mix that the
+    analysis gives no negative class. A column printed wholly in brackets is a presentation of outflows and is
+    read as positive, as before. `entries` carry the size in `amount_raw` and the printed value in `_signed`."""
+    signed = [e.get("_signed") for e in entries if isinstance(e.get("_signed"), (int, float)) and e.get("_signed")]
+    keep = bool(signed) and any(v > 0 for v in signed)
+    for e in entries:
+        v = e.pop("_signed", None)
+        if keep and isinstance(v, (int, float)) and v < 0:
+            e["amount_raw"] = v
+
+
+def _units_size(total: float, entries: list) -> float:
+    """The size the units are read from: the table's total, else the classes' sum. With a negative class, the
+    larger of the total and the classes' sizes, so that a sign does not change the units: 780/2020's classes
+    sum to 8,309 ($'000) with Motor's (1,537) and to 11,383 without the sign, the size that set its units
+    before P-29 (1884/2021's newly read total is 9,970 against sizes of 11,388)."""
+    sizes = sum(abs(e["amount_raw"]) for e in entries)
+    if any(e["amount_raw"] < 0 for e in entries):
+        return max(total or 0.0, sizes)
+    return total if total and total > 0 else sizes
+
+
+def _sums_classes_above(amount: float, entries: list, signed: Optional[float] = None) -> bool:
     """True when ``amount`` equals, within 0.6% (or 0.15), the sum of two or more classes
-    read above it: the amount of a total row, whatever its label says (round 58, M03)."""
+    read above it: the amount of a total row, whatever its label says (round 58, M03).
+    A row's printed value ``signed`` that equals the classes' sum with their printed signs
+    is one too: 3330/2014's unlabelled 78 under classes with a (33) among them (P-29)."""
     kept, _ = _drop_subtotal_rows(entries)
+    if len(kept) < 2:
+        return False
     above = sum(e["amount_raw"] for e in kept)
-    return len(kept) >= 2 and abs(amount - above) <= max(0.006 * above, 0.15)
+    if abs(amount - above) <= max(0.006 * above, 0.15):
+        return True
+    if signed is None:
+        return False
+    above = sum(e.get("_signed", e["amount_raw"]) for e in kept)
+    return abs(signed - above) <= max(0.006 * abs(above), 0.15)
 
 
 def _year_section_divider(row: list, label: str, report_year: int) -> Optional[int]:
@@ -2455,8 +2518,9 @@ def _parse_transposed_lob(grid, report_year, flat, refusals: Optional[list] = No
             continue
         if _is_pl_label(name):
             return None
-        if val > 0:
-            entries.append({"line_of_business": name, "amount_raw": abs(val)})
+        if val != 0:
+            entries.append({"line_of_business": name, "amount_raw": abs(val), "_signed": val})
+    _keep_bracket_signs(entries)
     # two or more classes, at least one of them a recognised class of business
     if len(entries) < 2 or not any(kw in e["line_of_business"].lower() for e in entries for kw in _LOB_KEYWORDS):
         return None
@@ -2472,10 +2536,11 @@ def _parse_transposed_lob(grid, report_year, flat, refusals: Optional[list] = No
             refusals.append("transposed table: classes sum to %g against its own total %g" % (lob_sum, total))
         return None
     basis = total or lob_sum
+    size = _units_size(total, entries)
     units_divisor = 1.0
-    if basis > 10_000_000:
+    if size > 10_000_000:
         units_divisor = 1_000_000.0
-    elif basis > 10_000:
+    elif size > 10_000:
         units_divisor = 1_000.0
     table_total = round(total / units_divisor, 6) if total else None
     for e in entries:
@@ -2486,6 +2551,28 @@ def _parse_transposed_lob(grid, report_year, flat, refusals: Optional[list] = No
     return LOBData(gross_premium_mix=entries, gross_premiums_written_gbp_m=table_total,
                    claims_incurred_by_lob=None, currency=currency, method="nutrient_transposed",
                    table_total=table_total, class_sum=round(lob_sum / units_divisor, 6))
+
+
+_YOA_COLUMN = re.compile(r"\byoa\b", re.I)
+_CALENDAR_COLUMN = re.compile(r"\bcal(?:\.|endar)?\s+year\b", re.I)
+
+
+def _yoa_calendar_column(grid: list, report_year: int) -> Optional[int]:
+    """The report year's calendar-year column of a class table that prints each class's premium by year of
+    account and by calendar year, or None. Ark's managing agent's report does (4020, 3902 and 6105: "2015 YOA
+    estimate | 2014 YOA estimate | 2013 YOA estimate | 2015 Cal. Year | Restated 2014 Cal. year"). The gross
+    premiums written are the calendar year's: 6105/2015's year-of-account column sums to 43,178 and its
+    calendar-year column to the 43,859 its income statement prints, and a model reading took the first (review of
+    2 October 2026, P-30). The year and the label can sit on different header rows."""
+    if not grid or len(grid) < 3:
+        return None
+    width = max(len(r) for r in grid[:3])
+    heads = [" ".join(str(r[j]) for r in grid[:3] if j < len(r)) for j in range(width)]
+    if not any(_YOA_COLUMN.search(h) for h in heads):
+        return None
+    year = re.compile(r"(?<!\d)%d(?!\d)" % report_year)
+    cal = [j for j, h in enumerate(heads) if j and _CALENDAR_COLUMN.search(h) and year.search(h)]
+    return cal[0] if len(cal) == 1 else None
 
 
 def _parse_nutrient_lob(grid: list[list[str]], report_year: int,
@@ -2516,7 +2603,10 @@ def _parse_nutrient_lob(grid: list[list[str]], report_year: int,
         return None
     # A premium mix is read from a table that carries premiums: a strategic-report
     # class table (capacity, underwriting result by division) is not one (round 52).
-    if not any(kw in flat for kw in ("premium", "gwp", "gross written")):
+    # Ark's class table names no premium in its grid; its calendar-year column is the
+    # gross premiums written (P-30), and the gate holds it to a model's total
+    yoa_cal_col = _yoa_calendar_column(grid, report_year)
+    if yoa_cal_col is None and not any(kw in flat for kw in ("premium", "gwp", "gross written")):
         return None
 
     # Reject tables that are not segmental analysis:
@@ -2546,15 +2636,17 @@ def _parse_nutrient_lob(grid: list[list[str]], report_year: int,
     # Look at header row for year
     header_text = " ".join(grid[0]) if grid else ""
     for yr in range(report_year - 10, report_year + 2):
+        if yoa_cal_col is not None:
+            break  # the year columns are chosen below
         if str(yr) in header_text:
             if yr != report_year:
                 return None  # comparative table
             break
 
     # Find GWP column — look for "premiums" + "written" or positional
-    gwp_col = None
+    gwp_col = yoa_cal_col
     claims_col = None
-    if grid and len(grid[0]) >= 2:
+    if grid and len(grid[0]) >= 2 and gwp_col is None:
         for i, val in enumerate(grid[0]):
             val_lower = val.lower()
             if "written" in val_lower and "premium" in val_lower and gwp_col is None:
@@ -2602,12 +2694,15 @@ def _parse_nutrient_lob(grid: list[list[str]], report_year: int,
             continue
         label = str(row[0] or "").strip()
 
-        # Get GWP value
+        # Get GWP value: its size for the total and subtotal tests, and its printed sign, which a class
+        # keeps unless the whole column is printed in brackets (below)
         gwp_val = None
+        gwp_signed = None
         if gwp_col < len(row):
             val = _clean_cell(row[gwp_col])
             if isinstance(val, (int, float)):
                 gwp_val = abs(val)
+                gwp_signed = val
         prev, pending = pending, None
 
         if not label:
@@ -2618,7 +2713,7 @@ def _parse_nutrient_lob(grid: list[list[str]], report_year: int,
             # "Credit and suretyship" 33,147). Before round 58 both were skipped (M03).
             if gwp_val is None or (seen_any_year_row and not in_report_year_section):
                 continue
-            if _sums_classes_above(gwp_val, lob_entries):
+            if _sums_classes_above(gwp_val, lob_entries, gwp_signed):
                 totals_by_amount.append((gwp_val, len(lob_entries)))
                 continue
             if prev is None:
@@ -2628,6 +2723,7 @@ def _parse_nutrient_lob(grid: list[list[str]], report_year: int,
                 continue
             if prev["entry"] is not None:
                 prev["entry"]["amount_raw"] = gwp_val
+                prev["entry"]["_signed"] = gwp_signed
                 continue
             label = prev["label"]  # a label-only row: these are its amounts
         elif (prev is not None and prev.get("total") and gwp_val is not None
@@ -2674,7 +2770,7 @@ def _parse_nutrient_lob(grid: list[list[str]], report_year: int,
         # A profit-and-loss row carrying the sum of the classes above it is the total,
         # printed on the result line: 780/2015's "Net technical result" 240,488 under
         # seven classes summing to it was read as an eighth class (round 58, M03)
-        if gwp_val is not None and _is_pl_label(label) and _sums_classes_above(gwp_val, lob_entries):
+        if gwp_val is not None and _is_pl_label(label) and _sums_classes_above(gwp_val, lob_entries, gwp_signed):
             totals_by_amount.append((gwp_val, len(lob_entries)))
             continue
 
@@ -2687,7 +2783,7 @@ def _parse_nutrient_lob(grid: list[list[str]], report_year: int,
 
         entry = None
         if gwp_val is not None and gwp_val > 0:
-            entry = {"line_of_business": label, "amount_raw": gwp_val}
+            entry = {"line_of_business": label, "amount_raw": gwp_val, "_signed": gwp_signed}
             lob_entries.append(entry)
         elif claims_val is not None:
             entry = {"line_of_business": label, "amount_raw": 0.0}
@@ -2716,6 +2812,7 @@ def _parse_nutrient_lob(grid: list[list[str]], report_year: int,
     lob_entries, subtotal_rows = _drop_subtotal_rows(lob_entries)
     if not lob_entries:
         return None
+    _keep_bracket_signs(lob_entries)
 
     # The classes must reconcile with the table's own total, with or without the rows
     # kept out as not a class. A total 2% or more away is refused, never replaced by the
@@ -2725,9 +2822,12 @@ def _parse_nutrient_lob(grid: list[list[str]], report_year: int,
     class_sum = sum(e["amount_raw"] for e in lob_entries)
     # classes with claims but no premium are no premium mix: 1322/2024's "Additional
     # analysis" grid put three zero classes in place of the text's mix (round 58, M03)
+    # ... and nor are classes whose premiums, with their signs, sum to a negative premium: 2468/2021's run-off
+    # table prints "Total (2,190)" (P-29)
     if class_sum <= 0:
         if refusals is not None:
-            refusals.append("%d classes carry no premium" % len(lob_entries))
+            refusals.append("%d classes carry no premium" % len(lob_entries) if class_sum == 0 else
+                            "%d classes sum to a negative premium (%g)" % (len(lob_entries), class_sum))
         return None
     if total_gwp > 0 and not any(abs(s - total_gwp) <= 0.02 * total_gwp
                                  for s in (class_sum, class_sum + excluded_gwp)):
@@ -2737,10 +2837,11 @@ def _parse_nutrient_lob(grid: list[list[str]], report_year: int,
         return None
 
     basis = total_gwp if total_gwp > 0 else class_sum
+    size = _units_size(total_gwp, lob_entries)
     units_divisor = 1.0
-    if basis > 10_000_000:
+    if size > 10_000_000:
         units_divisor = 1_000_000.0
-    elif basis > 10_000:
+    elif size > 10_000:
         units_divisor = 1_000.0
     table_total = round(total_gwp / units_divisor, 6) if total_gwp > 0 else None
 
@@ -2865,6 +2966,7 @@ def _parse_lob_from_text(text: str, report_year: int) -> Optional[LOBData]:
         after = section[m.end():]
         # Collect numbers — stop at the next LOB name or section header
         numbers = []
+        bracketed = []
         pos = 0
         for nm in _NUM_RE.finditer(after):
             # Stop if we've gone past ~200 chars (into next LOB row)
@@ -2879,6 +2981,7 @@ def _parse_lob_from_text(text: str, report_year: int) -> Optional[LOBData]:
                 numbers.append(float(raw))
             except ValueError:
                 continue
+            bracketed.append(nm.group().startswith('('))
             pos = nm.end()
 
         if not numbers:
@@ -2888,19 +2991,23 @@ def _parse_lob_from_text(text: str, report_year: int) -> Optional[LOBData]:
         claims = numbers[2] if len(numbers) >= 3 else None
 
         if gwp > 0:
-            lob_entries.append({"line_of_business": lob_name, "amount_raw": gwp})
+            # a premium keeps a printed bracket's sign; a hyphen before a number in page text is not one (P-29)
+            lob_entries.append({"line_of_business": lob_name, "amount_raw": gwp,
+                                "_signed": -gwp if bracketed[0] else gwp})
         if claims is not None:
             claims_entries.append({"line_of_business": lob_name, "amount_raw": claims})
 
     if not lob_entries:
         return None
+    _keep_bracket_signs(lob_entries)
 
     # Auto-detect units from magnitude
     class_sum = sum(e["amount_raw"] for e in lob_entries)
+    size = _units_size(0.0, lob_entries)
     units_divisor = 1.0
-    if class_sum > 10_000_000:
+    if size > 10_000_000:
         units_divisor = 1_000_000.0
-    elif class_sum > 10_000:
+    elif size > 10_000:
         units_divisor = 1_000.0
 
     for e in lob_entries:
