@@ -104,11 +104,14 @@ PDF input
   |
   v
 +-----------------------------------------------+
-| Step 4b: Triangle vs provisions cross-check    |
-|   If triangle PYD and provisions PYD disagree  |
-|   in sign: prefer provisions (measures actual  |
-|   balance-sheet reserve movement, not diagonal  |
-|   development which can include emergence)     |
+| Step 4b: Triangle vs provisions cross-check   |
+|   Only from an affirmed movement note whose   |
+|   column is bound to the report year (R138):  |
+|   if its gross prior-year movement and the    |
+|   triangle PYD disagree in sign, prefer       |
+|   provisions (the balance-sheet movement, not |
+|   diagonal development, which can include     |
+|   emergence); otherwise the triangle stands   |
 +-----------------------------------------------+
   |
   v
@@ -2169,9 +2172,13 @@ hierarchy; every other document defers to it.
    triangle PYD, it is ordinarily authoritative.
 2. Where the gross claims-provisions movement is also
    available, the two are compared (section 11.3.1).
-3. **If their signs disagree, the provisions movement is
-   authoritative and overrides the triangle**; the override is
-   recorded in `data_quality_notes`. This matters most for
+3. **If the provisions table is an affirmed movement note whose
+   column is bound to the report year (R138), and the two signs
+   disagree, the provisions movement is authoritative and
+   overrides the triangle**; the override is recorded in
+   `data_quality_notes`. Without both conditions the triangle
+   stands whatever the sign: 1274/2019's `2010 & prior years`
+   cumulative total displaced a correct -6.619m before R138. This matters most for
    RITC acceptors, where the triangle tracks only organic
    development (see the RITC caveat below).
 4. Otherwise the absolute-amount triangle PYD replaces both
@@ -2227,7 +2234,9 @@ LLM-extracted figure **unless a gate rejects it**.  Its authority
 is therefore conditional, on four counts and not one:
 
 * a gross provisions movement whose sign disagrees with the
-  triangle overrides the triangle (section 11.3.1);
+  triangle overrides the triangle, but only from an affirmed
+  movement note whose column is bound to the report year (R138,
+  section 11.3.1);
 * `_pyd_override_gate` withholds the triangle value when both
   model values agree in sign with each other and the triangle has
   the opposite sign, or when the triangle implies a movement above
@@ -2935,8 +2944,9 @@ includes RITC-acquired reserves in the prior year movement,
 while the triangle only tracks organic development.  When both
 sources are available and agree in sign, the triangle PYD takes
 precedence (per RAG authority rules in section 10).  When they
-disagree in sign, provisions takes precedence (per the cross-
-validation in section 11.3.1).  The difference is logged but not
+disagree in sign and the provisions figure is an affirmed
+movement note whose column is bound to the report year (R138),
+provisions takes precedence (section 11.3.1).  The difference is logged but not
 treated as an error.
 
 **Example**: syndicate 2791/2024 accepted RITC from syndicate
@@ -2966,10 +2976,17 @@ provisions gross PYD can measure different things:
   claims outstanding attributable to prior years as disclosed in
   the accounts.
 
-**Cross-validation rule**: when both are available and they
-**disagree in sign** (one is a release, the other a
-strengthening), the provisions figure is preferred.  A sign
-disagreement is a strong signal that the triangle diagonal is
+**Cross-validation rule**: when both are available, the
+provisions table is an affirmed movement note
+(`movement_semantics.table_is_movement_note`), its column carries
+the report year in its own header (`column_bound_to_report_year`)
+and the two **disagree in sign** (one is a release, the other a
+strengthening), the provisions figure is preferred (R138).
+Without both conditions the triangle stands: a sign disagreement
+on its own is as consistent with the figure not being a movement
+at all, and 1274/2019's `2010 & prior years` cumulative incurred
+total displaced a correct -6.619m on that reasoning.  With them,
+a sign disagreement is a strong signal that the triangle diagonal is
 contaminated by normal emergence in immature years, or that the
 triangle is missing prior-year aggregate rows that contribute to
 the provisions figure.
@@ -2991,6 +3008,9 @@ computed deterministically from the raw data.
 2. `result["method"]` is a table-extraction method (`"azure"`,
    `"nutrient"`, or `"adobe"`)
 3. Provisions `gross_prior_year_claims` is available and non-zero
+4. The provisions table is an affirmed movement note and its
+   column is bound to the report year (`movement_semantics`;
+   R138); otherwise the triangle stands
 
 **Example** (syndicate 780/2016):
 
@@ -3094,8 +3114,9 @@ every other record written this way carries the restated status and
 reason (`scripts/restate_record_status.py`), and says the models were
 not run.  Of the 45 that were left, 24 state in their filings that the
 syndicate began in the report year or the year before and were restated as
-first-year stubs on 30 September 2026 (11.2); 21 remain unread, and two of
-these still print a table the parsers do not read (below).
+first-year stubs on 30 September 2026 (11.2); 21 remain unread; two of
+these still print a table the parsers do not read, and a third, 3210/2018,
+whose table no backend has read (below).
 
 **Important**: which of the two flags a report gets does not depend
 on the syndicate's age.  The inception-based distinction this
@@ -3209,8 +3230,8 @@ stays unread:
   parsers had nothing to read, and it is unchanged.  No table backend has
   read the new file: no grid of it is committed (`backend_cache_absent.json`
   lists it), and reading it needs a paid table extraction, which has not
-  been authorised.  A paid read of page 41's claims table would not bring
-  3210/2018 into the working sample, because it is a whole run-off year
+  been authorised.  A paid read of the claims table on page 41 (a PDF
+  page; printed 39) would not bring 3210/2018 into the working sample, because it is a whole run-off year
   (WHOLE in `runoff_corpus_register.json`) under the whole-year run-off
   rule.  So it has not been bought.  No figure has been taken from the table.
 
@@ -4395,7 +4416,9 @@ releases.  The log shows:
 3. Added triangle vs provisions cross-validation (Step 4b,
    section 11.3.1).  When both triangle PYD and provisions gross
    PYD are available and disagree in sign, provisions is preferred
-   because it directly measures balance-sheet reserve movement.
+   because it directly measures balance-sheet reserve movement;
+   since R138, only where the provisions table is an affirmed
+   movement note whose column is bound to the report year.
 
 **Result**: PYD for syndicate 780/2016 changed from 0.0m to
 −15.6m (−4.5% of $348m reserves, release), confirmed by both

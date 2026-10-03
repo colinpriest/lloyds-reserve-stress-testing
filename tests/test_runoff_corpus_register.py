@@ -420,6 +420,25 @@ def test_the_scope_the_register_states_names_the_forms_and_the_oblique_entries()
         assert stem.replace("syndicate_", "").replace("_", "/") in scope, stem
 
 
+def test_the_register_and_the_readme_claim_the_words_and_the_pages_the_forms_read():
+    """FOLLOWUP5 item 3 (review of 2 October 2026, deferred 3): the register's purpose and README item 9 said an entry is kept
+    for a filing that says so "in whatever words it uses", and the scope said the forms read every filing. The claim reaches
+    the words the statement forms read and those the readers found, on every readable page: a page with no text layer and no
+    text in the committed OCR page cache is not read."""
+    data = _load()
+    text = (ROOT / "README.md").read_text(encoding="utf-8")
+    start = text.index("9. **Run-off corpus register**")
+    item = " ".join(text[start:text.index("\n", start)].split())
+    for where, words in (("the register's purpose", data["purpose"]), ("README item 9", item)):
+        assert "whatever words" not in words, where
+        assert "in the words the statement forms read, and those the readers found" in words, where
+    for where, words in (("the register's scope", data["scope"]), ("README item 9", item)):
+        # what is scanned, and what the entries are complete over
+        assert "every readable page of every filing of the corpus" in words.lower(), where
+        assert "complete over every readable page of the corpus" in words, where
+        assert "complete over every filing of the corpus" not in words, where
+
+
 def test_the_readme_states_the_counts_the_register_holds():
     """README item 9 gives the register's counts: the entries, each category and the scan_reviewed filings are the file's own."""
     text = (ROOT / "README.md").read_text(encoding="utf-8")

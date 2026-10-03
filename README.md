@@ -426,8 +426,8 @@ the page-vision step, were extracted again with the models on 29 September 2026 
 carry the restated status and reason (`scripts/restate_record_status.py`). Of the 45 that were left,
 24 state in their filings that the syndicate began in the report year or the year before, and the
 filing-page audit restated them as first-year stubs on 30 September 2026 (§11.2); 21 remain unread,
-and two of them still print a table the parsers do not read (§11.4 names them and says why each stays
-unread).
+and two of them still print a table the parsers do not read, and a third, 3210/2018, whose table no
+backend has read (§11.4 names them and says why each stays unread).
 
 ### Dual-LLM Extraction and Cross-Validation
 
@@ -466,45 +466,50 @@ All LLM API calls are cached in `pdf_extraction/llm_cache/` using SHA-256 hashes
 
 ### Output Format
 
-Each processed report produces a JSON file in `pdf_extraction/`:
+Each processed report produces a JSON file in `pdf_extraction/`. The examples are committed records, abridged: 1110/2022's, 1322/2023's and 4020/2015's. A model block carries more fields than the first shows, and every value shown is the record's (`tests/test_readme_output_example.py`):
 
 ```json
 {
-  "extraction_timestamp": "2025-03-15T10:30:00+00:00",
+  "extraction_timestamp": "2026-09-21T08:11:34.033787+00:00",
   "spec": {
-    "prompt_version": "2025-03-10-v3",
-    "field_definitions_version": "2025-03-08-v2",
-    "tolerance_rules_version": "2025-03-08-v1"
+    "prompt_version": "2.13",
+    "driver_prompt_version": "2.13",
+    "responses_served_from_cache": null,
+    "field_definitions_version": "1.0",
+    "tolerance_rules_version": "1.0"
   },
-  "source_file": "syndicate_reports/pdfs/syndicate_1110_2022.pdf",
+  "source_file": "syndicate_reports\\pdfs\\syndicate_1110_2022.pdf",
   "models": {
     "gemini-2.5-flash": {
-      "syndicate_number": 1110,
-      "report_year": 2022,
-      "opening_reserves_gbp_m": 850.2,
+      "opening_reserves_gbp_m": 221.885,
       "prior_year_development_gbp_m": 9.082,
-      "prior_year_development_pct": 1.07,
+      "prior_year_development_pct": 4.09,
       "direction": "strengthening",
-      "gross_premiums_written_gbp_m": 333.4,
+      "gross_premiums_written_gbp_m": 333.442,
       "gross_premium_mix": [
-        {"line_of_business": "Reinsurance", "amount_gbp_m": 248.2, "percentage_of_total": 74.4},
-        {"line_of_business": "Third party liability", "amount_gbp_m": 72.8, "percentage_of_total": 21.8}
+        {"line_of_business": "Fire and other damage to property", "amount_gbp_m": 5.853, "percentage_of_total": 1.8},
+        {"line_of_business": "Marine, aviation and transport", "amount_gbp_m": 0.635, "percentage_of_total": 0.2},
+        {"line_of_business": "Pecuniary loss", "amount_gbp_m": 3.037, "percentage_of_total": 0.9},
+        {"line_of_business": "Third party liability", "amount_gbp_m": 72.786, "percentage_of_total": 21.8},
+        {"line_of_business": "Other", "amount_gbp_m": 2.95, "percentage_of_total": 0.9},
+        {"line_of_business": "Reinsurance", "amount_gbp_m": 248.181, "percentage_of_total": 74.4}
       ],
       "_rag_triangle": {
         "type": "gross",
         "currency": "GBP",
         "units": "thousands",
         "underwriting_years": [2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2022],
-        "development_rows": [["...NxN matrix..."]]
+        "development_rows": ["...one row per development year..."]
       }
     },
-    "gpt-5-mini": { "...same fields..." }
+    "gpt-5-mini": {"...": "...the same fields, from the second model..."}
   },
   "validation": {
     "passed": true,
-    "total_discrepancies": 2,
-    "within_tolerance": 2,
-    "hard_failures": 0
+    "total_discrepancies": 18,
+    "within_tolerance": 18,
+    "hard_failures": 0,
+    "hard_failure_details": []
   }
 }
 ```
@@ -516,8 +521,7 @@ For first-year syndicates:
   "reason": "No underwriting year old enough for prior year development in the report's triangles, and no prior-year figure stated in its reserve text",
   "models_run": false,
   "syndicate": 1322,
-  "year": 2023,
-  "gross_premium_mix": ["...if available..."]
+  "year": 2023
 }
 ```
 
@@ -529,8 +533,8 @@ For reports the deterministic step could not read (the models were not run):
   "status": "no_deterministic_reading",
   "models_run": false,
   "exclusion_reason": "No deterministic reading: the table, page-text and narrative parsers found no prior-year figure, no reserve-movement text and no loss-ratio triangle they could use. This describes the parsers, not the filing, which may still print a claims development table they could not read. The models were not run, so no figure was obtained and the report is not in the analysis.",
-  "syndicate": 1110,
-  "year": 2019
+  "syndicate": 4020,
+  "year": 2015
 }
 ```
 
@@ -669,7 +673,7 @@ The pipeline maintains complete audit trails at every stage:
 6. **Rejection log**: Reports rejected during adjudication in `pdf_extraction/audit/rejection_log.json`
 7. **Run manifest**: Per-run statistics (processed/passed/failed/skipped counts, cost, tokens) in `pdf_extraction/audit/run_manifest.json`
 8. **Run-off register**: `pdf_extraction/audit/runoff_register.json` records, for each of the nine records that carry a development figure and an adopted gross written premium at or below zero, whether its own filing states that the syndicate is in run-off in that year: the verdict, the date the run-off is stated to begin, and the filing's words with page and file hash (`tests/test_runoff_register.py` holds each quote to its page). A premium sign is not a run-off test: 3623/2018 is a live syndicate whose negative premium is a return premium, and 5183/2024's filing puts its run-off at 1 January 2025. Seven of the nine are run-off years. 2255/2015 is one: its Future developments statement says it "continues to run-off its portfolio of liabilities", and the standard going concern paragraph of its basis of preparation, which says the managing agent expects it to "continue to write business", is recorded word for word beside that statement in the entry's note (the author's decision).
-9. **Run-off corpus register**: `pdf_extraction/audit/runoff_corpus_register.json` records, for each of the 106 syndicate-years whose filing says that the syndicate itself is in run-off or has stopped, or will stop, underwriting (in whatever words), what the filing says and how it is read: WHOLE (in run-off from the start of the year or before; 43), PART (the run-off begins during the year; 9), AFTER (it begins at or after the year end; 38) or NOTCOUNT (the filing's words do not settle it, or the statement is about another entity; 16), with the date the filing gives, its words, the page, the printed page and the file's hash (`tests/test_runoff_corpus_register.py` holds each quote to its page and each category to its date). The whole-year run-off rule reads the WHOLE entries. The premium register (item 8) copies the eight entries the two share, and a test fails if they differ. **What is complete.** The first version of the register (88 entries) was built from filings that say run-off or ceased underwriting and was checked only against its own words; it missed 17 syndicate-years, among them Syndicate 1209's 2016 and 2017 filings, which never say run-off (the independent review of 1 October 2026 found ten of them, its verifier two more, and the statement forms five). Every filing of the corpus (1,065) is now scanned with the statement forms in `scripts/runoff_statement_forms.py` (the forms in which a filing says that its syndicate is in run-off, has stopped underwriting or will stop: nine sentence-level patterns, the run-off ones with the syndicate itself as the subject), and `tests/test_runoff_corpus_register.py` fails if a filing that a form matches is neither an entry nor reviewed apart, or if a matching sentence is not in the register's `scan_reviewed` list (74 filings; each sentence with the reason it is not the syndicate's own run-off: another entity, a class or line, an office or channel, or not a stop). For those forms, then, the WHOLE, PART and AFTER entries are complete over every filing of the corpus, in or out of the analysis's working sample: every filing yields text. 3210/2018 was fetched again on 2 October 2026, because its earlier copy was a cut-short download that opened with no page; Lloyd's file is a scan with no text layer, and its page text comes from local OCR (`pdf_extraction/ocr_page_cache/syndicate_3210_2018.json`, made with the project's own Tesseract route, with no paid call). It is a WHOLE entry (Syndicate 3210 has been in run-off since 31 December 2016), and its extraction record, which was made from the earlier copy, carries no development figure and is unchanged, so the filing does not reach the analysis's working sample. `UNREADABLE` in `scripts/runoff_statement_forms.py` is empty, and the corpus test fails if any filing yields no text; another test holds every form to a statement that only it matches. That is the whole of the claim. Keyword and pattern scans can miss oblique wording, as both 1209 years show, and the forms are the defence: one entry's own words match no form (4321/2023, "the syndicate will no longer write new follow capacity insurance business at Lloyd's"), and a statement in words that no form matches and no reader found is not in the register. Seven readings differ from the first reading of the corpus (30 September 2026), each by the filing's words: 2088/2019 and 1975/2021 are AFTER (2088 wrote business through 2019; 1975 says it will cease underwriting after 2022), 2468/2020 is PART (its run-off began on 6 January 2020), and 1884/2023, 1884/2024, 1254/2022 and 1254/2023 are NOTCOUNT (the filings never say the syndicate is in run-off, and describe it as underwriting reinsurance to close and legacy business). 1110/2023 was reviewed and its filing states no run-off; it is recorded apart from the entries.
+9. **Run-off corpus register**: `pdf_extraction/audit/runoff_corpus_register.json` records, for each of the 106 syndicate-years whose filing says that the syndicate itself is in run-off or has stopped, or will stop, underwriting (in the words the statement forms read, and those the readers found), what the filing says and how it is read: WHOLE (in run-off from the start of the year or before; 43), PART (the run-off begins during the year; 9), AFTER (it begins at or after the year end; 38) or NOTCOUNT (the filing's words do not settle it, or the statement is about another entity; 16), with the date the filing gives, its words, the page, the printed page and the file's hash (`tests/test_runoff_corpus_register.py` holds each quote to its page and each category to its date). The whole-year run-off rule reads the WHOLE entries. The premium register (item 8) copies the eight entries the two share, and a test fails if they differ. **What is complete.** The first version of the register (88 entries) was built from filings that say run-off or ceased underwriting and was checked only against its own words; it missed 17 syndicate-years, among them Syndicate 1209's 2016 and 2017 filings, which never say run-off (the independent review of 1 October 2026 found ten of them, its verifier two more, and the statement forms five). Every readable page of every filing of the corpus (1,065) is now scanned with the statement forms in `scripts/runoff_statement_forms.py` (the forms in which a filing says that its syndicate is in run-off, has stopped underwriting or will stop: nine sentence-level patterns, the run-off ones with the syndicate itself as the subject), and `tests/test_runoff_corpus_register.py` fails if a filing that a form matches is neither an entry nor reviewed apart, or if a matching sentence is not in the register's `scan_reviewed` list (74 filings; each sentence with the reason it is not the syndicate's own run-off: another entity, a class or line, an office or channel, or not a stop). For those forms, then, the WHOLE, PART and AFTER entries are complete over every readable page of the corpus, in or out of the analysis's working sample: every filing yields text, and a page is readable when it has a text layer or text in the committed OCR page cache; a page with neither is not read. 3210/2018 was fetched again on 2 October 2026, because its earlier copy was a cut-short download that opened with no page; Lloyd's file is a scan with no text layer, and its page text comes from local OCR (`pdf_extraction/ocr_page_cache/syndicate_3210_2018.json`, made with the project's own Tesseract route, with no paid call). It is a WHOLE entry (Syndicate 3210 has been in run-off since 31 December 2016), and its extraction record, which was made from the earlier copy, carries no development figure and is unchanged, so the filing does not reach the analysis's working sample. `UNREADABLE` in `scripts/runoff_statement_forms.py` is empty, and the corpus test fails if any filing yields no text; another test holds every form to a statement that only it matches. That is the whole of the claim. Keyword and pattern scans can miss oblique wording, as both 1209 years show, and the forms are the defence: one entry's own words match no form (4321/2023, "the syndicate will no longer write new follow capacity insurance business at Lloyd's"), and a statement in words that no form matches and no reader found is not in the register. Seven readings differ from the first reading of the corpus (30 September 2026), each by the filing's words: 2088/2019 and 1975/2021 are AFTER (2088 wrote business through 2019; 1975 says it will cease underwriting after 2022), 2468/2020 is PART (its run-off began on 6 January 2020), and 1884/2023, 1884/2024, 1254/2022 and 1254/2023 are NOTCOUNT (the filings never say the syndicate is in run-off, and describe it as underwriting reinsurance to close and legacy business). 1110/2023 was reviewed and its filing states no run-off; it is recorded apart from the entries.
 
 **What a recorded cost counts.** A cost is the provider's token counts priced by `PRICING` in
 `test_gemini.py`, a table typed in with the pipeline in 02e160d4 (12 March 2026) with no source
