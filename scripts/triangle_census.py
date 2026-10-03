@@ -12,12 +12,18 @@ triangle, on the same inputs, and lists each one whose figure changes or is refu
   * each model's own triangle (`_claims_triangle`), which verify_triangles recomputes (the code_triangle
     route).
 
-For each RAG triangle the new reader refuses, the census says what an offline replay will then do: the
-table step passes to page vision, which the replay serves only from a committed page-level cache entry under
-the current prompt. With none, the call is a cache miss, the replay stops for that record and the committed
-record keeps its figure until the call is made (a paid step). With one, the census reads the served triangle with
-the new reader too (`vision_outcomes`): where it refuses that as well, the record falls to the later routes with no
-call (3334/2017 and 3500/2018, whose figures are the models' readings already).
+For each RAG triangle the new reader refuses, the census says what an offline replay will then do. It walks the
+page-vision step with the pipeline's own code, the call that renders and sends a page replaced by a recorder
+(`walk_page_vision`; it needs the filings, a PC step): the step passes to page vision only if the text-based page
+finder selects a triangle page, and reaches none for 1967/2014 (its filing prints no claims development table) and
+1991/2018 (its gross triangle, on PDF page 30, matches one of the finder's patterns where two are needed); such a
+record, with no figure from the later routes and no reserve text, would be written as no deterministic reading.
+Where a page is reached, page vision is served by the replay only from a committed page-level cache entry under the
+current prompt. With none, the call is a cache miss, the replay stops for that record and the committed record keeps
+its figure until the call is made (a paid step). With one, the census reads the served triangle with the new reader
+too (`vision_outcomes`): where it refuses that as well, the record falls to the later routes with no call (3334/2017
+and 3500/2018, whose figures are the models' readings already); where it accepts it, that is the figure, right or wrong
+(2999/2022's served reading is the page's table shifted one column, and gives +858.1 where the page gives +370.5).
 
 The records are not regenerated here (a PC step); tests/test_triangle_diagonal.py holds the census to the
 reader and the committed records, so the census has to be written again when either changes.
@@ -28,6 +34,7 @@ Usage:
     python scripts/triangle_census.py --before <rev>      # the reader before the change (default f4fdf559)
 """
 import argparse
+import contextlib
 import copy
 import hashlib
 import importlib.util
@@ -161,6 +168,39 @@ def vision_outcomes(syndicate, year, pages):
     return out
 
 
+def filing_path(stem):
+    for ext in (".pdf", ".html", ".htm"):
+        p = ROOT / "syndicate_reports" / "pdfs" / (stem + ext)
+        if p.exists():
+            return p
+    return None
+
+
+def walk_page_vision(stem, year):
+    """(the pages the page-vision step would send for this filing, and what the RAG step ends with if no page returns a triangle), or None
+    when the filing is not in this checkout. It is the pipeline's own walk (test_gemini.extract_pyd_from_relevant_pages, offline, on the
+    committed caches) with the call that renders a page and sends it replaced by a recorder: nothing is rendered or sent, and a page that is
+    cached is walked like one that is not."""
+    path = filing_path(stem)
+    if path is None:
+        return None
+    seen = []
+
+    def recorder(pdf_path, page_num, report_year, model="gemini-2.5-flash"):
+        seen.append(int(page_num))
+        return None, 0
+
+    real = tg.extract_triangle_from_page
+    tg.extract_triangle_from_page = recorder
+    try:
+        with contextlib.redirect_stdout(io.StringIO()):
+            actual = tg.convert_html_to_pdf(path) if path.suffix.lower() in (".html", ".htm") else path
+            res = tg.extract_pyd_from_relevant_pages(actual, year)
+    finally:
+        tg.extract_triangle_from_page = real
+    return sorted(set(seen)), {"pyd": res.get("pyd"), "method": res.get("method"), "no_triangle_data": bool(res.get("no_triangle_data"))}
+
+
 def reader_at(rev):
     """compute_pyd_from_triangle as it was at `rev`, imported from that commit's test_gemini.py."""
     src = subprocess.run(["git", "-C", str(ROOT), "show", "%s:test_gemini.py" % rev], capture_output=True,
@@ -202,18 +242,33 @@ def census(before):
             if name == "rag_triangle" and final[0] is None:
                 pages = cached_vision_pages(syn, year)
                 outcomes = vision_outcomes(syn, year, pages) if pages else None
-                if pages:
-                    read_ok = [o["value"] for o in outcomes.values() if "value" in o]
+                walk = walk_page_vision(stem, year)
+                if walk is None:
+                    sys.exit("%s: its filing is not in this checkout, and the census walks the page-vision step on the filings (a PC step)" % stem)
+                walked, ends = walk
+                served = sorted(set(walked) & set(pages))
+                if served:
+                    read_ok = [o["value"] for p, o in outcomes.items() if "value" in o and int(p) in served]
                     entry["replay"] = (
                         "the table triangle is refused; page vision serves page(s) %s from the committed cache under "
-                        "the current prompt, and %s" % (pages, (
+                        "the current prompt, and %s" % (served, (
                             "the reader gives %s from it" % read_ok[0] if read_ok else
                             "the reader refuses what it holds too, so the record falls to the later routes (loss "
                             "ratio, provisions, narrative and the models) with no call")))
+                elif walked:
+                    entry["replay"] = (
+                        "the table triangle is refused; the step reaches page vision on page(s) %s, for which there is no committed entry "
+                        "under the current prompt, so the offline replay stops for this record on a cache miss and the record keeps its "
+                        "figure" % walked)
                 else:
                     entry["replay"] = (
-                        "the table triangle is refused; page vision has no committed entry under the current prompt, "
-                        "so the offline replay stops for this record on a cache miss and the record keeps its figure")
+                        "the table triangle is refused and the step reaches no page-vision step (the page finder selects no triangle "
+                        "page for the filing); %s" % (
+                            "it ends with no figure, no reserve text and no loss-ratio grid, so the record would be written as no "
+                            "deterministic reading (unread, the models not run) and leave the working sample" if ends["no_triangle_data"] else
+                            "it ends with %s by the %s route" % (ends["pyd"], ends["method"])))
+                entry["vision_pages_walked"] = walked
+                entry["reaches_page_vision"] = bool(walked)
                 entry["vision_pages_cached"] = pages
                 if outcomes:
                     entry["vision_outcomes"] = outcomes
@@ -239,7 +294,10 @@ def main():
             "rag_triangle_entries": len(rag),
             "rag_refused_on_replay": sum(1 for e in rag if "refused" in (e.get("after_with_printed_row")
                                                                           or e["after"])),
-            "rag_replay_stops_on_a_cache_miss": sum(1 for e in rag if e.get("vision_pages_cached") == []),
+            "rag_refused_with_no_cached_vision_page": sum(1 for e in rag if e.get("vision_pages_cached") == []),
+            "rag_replay_stops_on_a_cache_miss": sum(1 for e in rag if e.get("vision_pages_walked") and not (
+                set(e["vision_pages_walked"]) & set(e["vision_pages_cached"]))),
+            "rag_refused_reaching_no_page_vision": sum(1 for e in rag if e.get("vision_pages_walked") == []),
             "rag_replay_vision_refused_too": sum(1 for e in rag if e.get("vision_outcomes") and not any(
                 "value" in o for o in e["vision_outcomes"].values())),
             "claims_triangle_entries": len(entries) - len(rag),

@@ -3,9 +3,11 @@
  "reader_before": "f4fdf559",
  "written_by": "scripts/triangle_census.py --write",
  "counts": {
-  "rag_triangle_entries": 22,
-  "rag_refused_on_replay": 16,
-  "rag_replay_stops_on_a_cache_miss": 15,
+  "rag_triangle_entries": 12,
+  "rag_refused_on_replay": 6,
+  "rag_refused_with_no_cached_vision_page": 4,
+  "rag_replay_stops_on_a_cache_miss": 2,
+  "rag_refused_reaching_no_page_vision": 2,
   "rag_replay_vision_refused_too": 1,
   "claims_triangle_entries": 83
  },
@@ -167,31 +169,6 @@
      "model_value": 241.37
     }
    }
-  },
-  {
-   "stem": "syndicate_1400_2014",
-   "block": "rag_triangle",
-   "grid": "879c506da086cb9e",
-   "before": {
-    "value": -2.298
-   },
-   "after": {
-    "refused": "triangle refused: a current estimate is not on the report-year diagonal or its step is not plausible -- 2009: the column holds negative values (-3833, -6131): not cumulative estimates of claims"
-   },
-   "routes": {
-    "gemini-2.5-flash": {
-     "source": "rag_triangle",
-     "value": -2.298,
-     "model_value": -10.6
-    },
-    "gpt-5-mini": {
-     "source": "rag_triangle",
-     "value": -2.298,
-     "model_value": -10.6
-    }
-   },
-   "replay": "the table triangle is refused; page vision has no committed entry under the current prompt, so the offline replay stops for this record on a cache miss and the record keeps its figure",
-   "vision_pages_cached": []
   },
   {
    "stem": "syndicate_1458_2016",
@@ -443,7 +420,9 @@
      "value": 9.082
     }
    },
-   "replay": "the table triangle is refused; page vision has no committed entry under the current prompt, so the offline replay stops for this record on a cache miss and the record keeps its figure",
+   "replay": "the table triangle is refused and the step reaches no page-vision step (the page finder selects no triangle page for the filing); it ends with no figure, no reserve text and no loss-ratio grid, so the record would be written as no deterministic reading (unread, the models not run) and leave the working sample",
+   "vision_pages_walked": [],
+   "reaches_page_vision": false,
    "vision_pages_cached": []
   },
   {
@@ -466,7 +445,9 @@
      "value": 42.676
     }
    },
-   "replay": "the table triangle is refused; page vision has no committed entry under the current prompt, so the offline replay stops for this record on a cache miss and the record keeps its figure",
+   "replay": "the table triangle is refused and the step reaches no page-vision step (the page finder selects no triangle page for the filing); it ends with no figure, no reserve text and no loss-ratio grid, so the record would be written as no deterministic reading (unread, the models not run) and leave the working sample",
+   "vision_pages_walked": [],
+   "reaches_page_vision": false,
    "vision_pages_cached": []
   },
   {
@@ -664,26 +645,6 @@
    }
   },
   {
-   "stem": "syndicate_2010_2014",
-   "block": "rag_triangle",
-   "grid": "838104064e0ef185",
-   "before": {
-    "value": 202312.477
-   },
-   "after": {
-    "refused": "triangle refused: a current estimate is not on the report-year diagonal or its step is not plausible -- 2012: the column holds negative values (-1998): not cumulative estimates of claims"
-   },
-   "routes": {
-    "gemini-2.5-flash": {
-     "source": "model_reading",
-     "value": -0.917
-    },
-    "gpt-5-mini": {}
-   },
-   "replay": "the table triangle is refused; page vision has no committed entry under the current prompt, so the offline replay stops for this record on a cache miss and the record keeps its figure",
-   "vision_pages_cached": []
-  },
-  {
    "stem": "syndicate_2012_2018",
    "block": "claims_triangle:gpt-5-mini",
    "grid": "b7fc99719cac2344",
@@ -792,7 +753,11 @@
      "value": 3.7
     }
    },
-   "replay": "the table triangle is refused; page vision has no committed entry under the current prompt, so the offline replay stops for this record on a cache miss and the record keeps its figure",
+   "replay": "the table triangle is refused; the step reaches page vision on page(s) [56], for which there is no committed entry under the current prompt, so the offline replay stops for this record on a cache miss and the record keeps its figure",
+   "vision_pages_walked": [
+    56
+   ],
+   "reaches_page_vision": true,
    "vision_pages_cached": []
   },
   {
@@ -1007,8 +972,19 @@
    "after_with_printed_row": {
     "refused": "triangle refused: a current estimate is not on the report-year diagonal or its step is not plausible -- 2013: the last filled cell (row 7) is short of the report-year diagonal (row 9), and the printed current estimate (599.4) does not place it"
    },
-   "replay": "the table triangle is refused; page vision has no committed entry under the current prompt, so the offline replay stops for this record on a cache miss and the record keeps its figure",
-   "vision_pages_cached": []
+   "replay": "the table triangle is refused; page vision serves page(s) [48] from the committed cache under the current prompt, and the reader gives 858.1 from it",
+   "vision_pages_walked": [
+    48
+   ],
+   "reaches_page_vision": true,
+   "vision_pages_cached": [
+    48
+   ],
+   "vision_outcomes": {
+    "48": {
+     "value": 858.1
+    }
+   }
   },
   {
    "stem": "syndicate_2999_2024",
@@ -1099,46 +1075,6 @@
    }
   },
   {
-   "stem": "syndicate_3002_2021",
-   "block": "rag_triangle",
-   "grid": "2d23b84696707a2a",
-   "before": {
-    "value": -11.426
-   },
-   "after": {
-    "refused": "triangle refused: a current estimate is not on the report-year diagonal or its step is not plausible -- 2012: the last filled cell (row 7) is short of the report-year diagonal (row 8), and the table prints no current estimate to place it"
-   },
-   "routes": {
-    "gemini-2.5-flash": {
-     "source": "rag_triangle",
-     "value": -11.426,
-     "model_value": -4.1
-    },
-    "gpt-5-mini": {
-     "source": "rag_triangle",
-     "value": -11.426,
-     "model_value": -4.1
-    }
-   },
-   "printed_current_estimate_row": [
-    3902.0,
-    4805.0,
-    4927.0,
-    14081.0,
-    17454.0,
-    33734.0,
-    31544.0,
-    18670.0,
-    17998.0,
-    8981.0
-   ],
-   "after_with_printed_row": {
-    "refused": "triangle refused: a current estimate is not on the report-year diagonal or its step is not plausible -- 2012: the last filled cell (row 7) is short of the report-year diagonal (row 8), and the printed current estimate (3902.0) does not place it"
-   },
-   "replay": "the table triangle is refused; page vision has no committed entry under the current prompt, so the offline replay stops for this record on a cache miss and the record keeps its figure",
-   "vision_pages_cached": []
-  },
-  {
    "stem": "syndicate_3002_2023",
    "block": "claims_triangle:gpt-5-mini",
    "grid": "c98ecc59baf76567",
@@ -1195,6 +1131,10 @@
     }
    },
    "replay": "the table triangle is refused; page vision serves page(s) [24] from the committed cache under the current prompt, and the reader refuses what it holds too, so the record falls to the later routes (loss ratio, provisions, narrative and the models) with no call",
+   "vision_pages_walked": [
+    24
+   ],
+   "reaches_page_vision": true,
    "vision_pages_cached": [
     24
    ],
@@ -1275,73 +1215,11 @@
    "after_with_printed_row": {
     "refused": "triangle refused: a current estimate is not on the report-year diagonal or its step is not plausible -- 2018: the printed current estimate (12.8) is not the diagonal cell (13.0)"
    },
-   "replay": "the table triangle is refused; page vision has no committed entry under the current prompt, so the offline replay stops for this record on a cache miss and the record keeps its figure",
-   "vision_pages_cached": []
-  },
-  {
-   "stem": "syndicate_3624_2023",
-   "block": "rag_triangle",
-   "grid": "e2cb1224e98d69f8",
-   "before": {
-    "value": 74.995
-   },
-   "after": {
-    "refused": "triangle refused: a current estimate is not on the report-year diagonal or its step is not plausible -- 2015: the last filled cell (row 9) is beyond the report-year diagonal (row 8), and the table prints no current estimate to place it"
-   },
-   "routes": {
-    "gemini-2.5-flash": {
-     "source": "rag_triangle",
-     "value": 74.995,
-     "model_value": 67.322
-    },
-    "gpt-5-mini": {
-     "source": "rag_triangle",
-     "value": 74.995,
-     "model_value": 67.322
-    }
-   },
-   "replay": "the table triangle is refused; page vision has no committed entry under the current prompt, so the offline replay stops for this record on a cache miss and the record keeps its figure",
-   "vision_pages_cached": []
-  },
-  {
-   "stem": "syndicate_382_2015",
-   "block": "rag_triangle",
-   "grid": "64a6a2bd42cb742d",
-   "before": {
-    "value": -15.848
-   },
-   "after": {
-    "refused": "triangle refused: a current estimate is not on the report-year diagonal or its step is not plausible -- 2005: the column holds negative values (-5832, -5313, -1176): not cumulative estimates of claims"
-   },
-   "routes": {
-    "gemini-2.5-flash": {
-     "source": "rag_triangle",
-     "value": -15.848,
-     "model_value": 15.637
-    },
-    "gpt-5-mini": {
-     "source": "rag_triangle",
-     "value": -15.848,
-     "model_value": -3.686
-    }
-   },
-   "printed_current_estimate_row": [
-    57389.0,
-    58560.0,
-    61246.0,
-    75731.0,
-    89021.0,
-    161206.0,
-    124542.0,
-    97648.0,
-    132000.0,
-    134848.0,
-    125052.0
+   "replay": "the table triangle is refused; the step reaches page vision on page(s) [36], for which there is no committed entry under the current prompt, so the offline replay stops for this record on a cache miss and the record keeps its figure",
+   "vision_pages_walked": [
+    36
    ],
-   "after_with_printed_row": {
-    "refused": "triangle refused: a current estimate is not on the report-year diagonal or its step is not plausible -- 2005: the column holds negative values (-5832, -5313, -1176): not cumulative estimates of claims"
-   },
-   "replay": "the table triangle is refused; page vision has no committed entry under the current prompt, so the offline replay stops for this record on a cache miss and the record keeps its figure",
+   "reaches_page_vision": true,
    "vision_pages_cached": []
   },
   {
@@ -1356,9 +1234,8 @@
    },
    "routes": {
     "gemini-2.5-flash": {
-     "source": "rag_triangle",
-     "value": -15.848,
-     "model_value": 15.637
+     "source": "model_reading",
+     "value": 15.637
     }
    }
   },
@@ -1374,52 +1251,10 @@
    },
    "routes": {
     "gpt-5-mini": {
-     "source": "rag_triangle",
-     "value": -15.848,
-     "model_value": -3.686
+     "source": "model_reading",
+     "value": -3.686
     }
    }
-  },
-  {
-   "stem": "syndicate_382_2016",
-   "block": "rag_triangle",
-   "grid": "b702b8be7115f59b",
-   "before": {
-    "value": -50.211
-   },
-   "after": {
-    "refused": "triangle refused: a current estimate is not on the report-year diagonal or its step is not plausible -- 2006: the column holds negative values (-2110, -17, -4074): not cumulative estimates of claims"
-   },
-   "routes": {
-    "gemini-2.5-flash": {
-     "source": "rag_triangle",
-     "value": -50.211,
-     "model_value": -8.932
-    },
-    "gpt-5-mini": {
-     "source": "rag_triangle",
-     "value": -50.211,
-     "model_value": -8.932
-    }
-   },
-   "printed_current_estimate_row": [
-    65138.0,
-    67504.0,
-    84437.0,
-    97707.0,
-    176628.0,
-    141813.0,
-    112121.0,
-    137589.0,
-    153678.0,
-    179223.0,
-    159492.0
-   ],
-   "after_with_printed_row": {
-    "refused": "triangle refused: a current estimate is not on the report-year diagonal or its step is not plausible -- 2006: the column holds negative values (-2110, -17, -4074): not cumulative estimates of claims"
-   },
-   "replay": "the table triangle is refused; page vision has no committed entry under the current prompt, so the offline replay stops for this record on a cache miss and the record keeps its figure",
-   "vision_pages_cached": []
   },
   {
    "stem": "syndicate_382_2016",
@@ -1433,9 +1268,8 @@
    },
    "routes": {
     "gemini-2.5-flash": {
-     "source": "rag_triangle",
-     "value": -50.211,
-     "model_value": -8.932
+     "source": "model_reading",
+     "value": -8.932
     }
    }
   },
@@ -1451,52 +1285,10 @@
    },
    "routes": {
     "gpt-5-mini": {
-     "source": "rag_triangle",
-     "value": -50.211,
-     "model_value": -8.932
+     "source": "model_reading",
+     "value": -8.932
     }
    }
-  },
-  {
-   "stem": "syndicate_382_2017",
-   "block": "rag_triangle",
-   "grid": "3bfc4987f5a19bd1",
-   "before": {
-    "value": 49.14
-   },
-   "after": {
-    "refused": "triangle refused: a current estimate is not on the report-year diagonal or its step is not plausible -- 2007: the column holds negative values (-7802, -2438, -6246): not cumulative estimates of claims"
-   },
-   "routes": {
-    "gemini-2.5-flash": {
-     "source": "rag_triangle",
-     "value": 49.14,
-     "model_value": 59.798
-    },
-    "gpt-5-mini": {
-     "source": "rag_triangle",
-     "value": 49.14,
-     "model_value": 7.663
-    }
-   },
-   "printed_current_estimate_row": [
-    64317.0,
-    78472.0,
-    94529.0,
-    171758.0,
-    131743.0,
-    106503.0,
-    125389.0,
-    143568.0,
-    160500.0,
-    162652.0,
-    184482.0
-   ],
-   "after_with_printed_row": {
-    "refused": "triangle refused: a current estimate is not on the report-year diagonal or its step is not plausible -- 2007: the column holds negative values (-7802, -2438, -6246): not cumulative estimates of claims"
-   },
-   "replay": "the table triangle is refused; page vision has no committed entry under the current prompt, so the offline replay stops for this record on a cache miss and the record keeps its figure",
-   "vision_pages_cached": []
   },
   {
    "stem": "syndicate_382_2017",
@@ -1510,9 +1302,8 @@
    },
    "routes": {
     "gemini-2.5-flash": {
-     "source": "rag_triangle",
-     "value": 49.14,
-     "model_value": 59.798
+     "source": "model_reading",
+     "value": 59.798
     }
    }
   },
@@ -1528,50 +1319,10 @@
    },
    "routes": {
     "gpt-5-mini": {
-     "source": "rag_triangle",
-     "value": 49.14,
-     "model_value": 7.663
+     "source": "model_reading",
+     "value": 7.663
     }
    }
-  },
-  {
-   "stem": "syndicate_382_2018",
-   "block": "rag_triangle",
-   "grid": "4151d27670b8285d",
-   "before": {
-    "value": -1.546
-   },
-   "after": {
-    "refused": "triangle refused: a current estimate is not on the report-year diagonal or its step is not plausible -- 2008: the column holds negative values (-6896, -271, -5073): not cumulative estimates of claims"
-   },
-   "routes": {
-    "gemini-2.5-flash": {
-     "source": "model_reading",
-     "value": 13.51
-    },
-    "gpt-5-mini": {
-     "source": "model_reading",
-     "value": 5.82
-    }
-   },
-   "printed_current_estimate_row": [
-    107793.0,
-    140715.0,
-    324227.0,
-    239771.0,
-    162912.0,
-    166040.0,
-    195559.0,
-    203313.0,
-    204790.0,
-    249626.0,
-    218282.0
-   ],
-   "after_with_printed_row": {
-    "refused": "triangle refused: a current estimate is not on the report-year diagonal or its step is not plausible -- 2008: the column holds negative values (-6896, -271, -5073): not cumulative estimates of claims"
-   },
-   "replay": "the table triangle is refused; page vision has no committed entry under the current prompt, so the offline replay stops for this record on a cache miss and the record keeps its figure",
-   "vision_pages_cached": []
   },
   {
    "stem": "syndicate_382_2018",
@@ -1609,29 +1360,6 @@
   },
   {
    "stem": "syndicate_382_2019",
-   "block": "rag_triangle",
-   "grid": "01fc607f61a242b6",
-   "before": {
-    "value": -22.898
-   },
-   "after": {
-    "refused": "triangle refused: a current estimate is not on the report-year diagonal or its step is not plausible -- 2009: the column holds negative values (-6237, -594, -2213): not cumulative estimates of claims"
-   },
-   "routes": {
-    "gemini-2.5-flash": {
-     "source": "model_reading",
-     "value": 173.514
-    },
-    "gpt-5-mini": {
-     "source": "model_reading",
-     "value": 12.549
-    }
-   },
-   "replay": "the table triangle is refused; page vision has no committed entry under the current prompt, so the offline replay stops for this record on a cache miss and the record keeps its figure",
-   "vision_pages_cached": []
-  },
-  {
-   "stem": "syndicate_382_2019",
    "block": "claims_triangle:gemini-2.5-flash",
    "grid": "79b308f5658134b5",
    "before": {
@@ -1646,45 +1374,6 @@
      "value": 173.514
     }
    }
-  },
-  {
-   "stem": "syndicate_382_2020",
-   "block": "rag_triangle",
-   "grid": "4ef33eddb1f57442",
-   "before": {
-    "value": -123.866
-   },
-   "after": {
-    "refused": "triangle refused: a current estimate is not on the report-year diagonal or its step is not plausible -- 2010: the column holds negative values (-515): not cumulative estimates of claims"
-   },
-   "routes": {
-    "gemini-2.5-flash": {
-     "source": "model_reading",
-     "value": 7.269
-    },
-    "gpt-5-mini": {
-     "source": "model_reading",
-     "value": 7.269
-    }
-   },
-   "printed_current_estimate_row": [
-    null,
-    135323.0,
-    109143.0,
-    129822.0,
-    138836.0,
-    166749.0,
-    173256.0,
-    220469.0,
-    202532.0,
-    null,
-    null
-   ],
-   "after_with_printed_row": {
-    "refused": "triangle refused: a current estimate is not on the report-year diagonal or its step is not plausible -- 2010: the column holds negative values (-515): not cumulative estimates of claims"
-   },
-   "replay": "the table triangle is refused; page vision has no committed entry under the current prompt, so the offline replay stops for this record on a cache miss and the record keeps its figure",
-   "vision_pages_cached": []
   },
   {
    "stem": "syndicate_382_2020",
