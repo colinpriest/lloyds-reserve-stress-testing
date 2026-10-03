@@ -70,6 +70,9 @@ NOT_A_PLACE = (r"(?!\s+(?:in|from|at|through|via|within)\s+(?:the\s+|its\s+|our\
                r"(?!\s+on\s+behalf\b)")
 BOUND = (NOT_A_PLACE + r"(?=\s*(?:$|[,.;:)]|\s(?:with|on|at|from|in|after|since|by|as|following|during|when|effective|before|"
          r"until|through\s+syndicate|and|which|because|due|having|so|to\s+the)\b|\sfor\s+the\s+20\d\d))")
+#: what ends "discontinue the SPA": a year of account, a year or a date, or the end of one ("for the 2022 year of account onwards", "with effect
+#: from 1 January 2020"); never a class or a line, which the phrase would have to name instead (review of 2 October 2026, deferred item 2)
+ENDED_BY = (r"(?:for|from|after|at|with\s+effect\s+from)\s+(?:the\s+)?(?:(?:\d{1,2}\s+)?(?:" + MONTH + r"\s+)?(?:19|20)\d\d\b|end\s+of\b)")
 #: a clause that names a class, a line, an account (not a year of account), a coverholder, an office, a branch, a subsidiary,
 #: a division or a place is about that, not about the whole syndicate (review of the stage-2 branch, F1: "the Syndicate's
 #: marine hull class was closed to new business", "the Syndicate's coverholder in Dubai is dormant"). It guards the forms'
@@ -114,9 +117,12 @@ _form("run_off_of_its_business", (SUBJ + GAP + r"\b(?:is|was)\s+(?:the\s+)?" + R
                                   + RO + r"\s+closure\s+plan\b"))
 #: "ceased underwriting new business with effect from the end of 2013"; "ceased to trade on 31 December 2016"; "decision to cease underwriting through Syndicate 3334"
 #: "stopped underwriting at the end of 2019"; "discontinued writing new business"; "withdrew from underwriting"; "ceased all
-#: underwriting activities"; "the Syndicate was closed to new business from 1 January 2021"
+#: underwriting activities"; "the Syndicate was closed to new business from 1 January 2021"; "The decision has been made to discontinue the SPA
+#: for the 2022 year of account onwards" (6131/2021); "the SPA was discontinued for the 2020 year of account"
 _form("ceased_to_write", (STOP_VERB + r"\s+(?:to\s+)?(?:actively\s+)?" + STOP_WHAT + OBJ + BOUND + "|"
-                          + OWN + r"\b(?:is|was|has\s+been|had\s+been|will\s+be)\s+(?:now\s+)?closed\s+to\s+(?:all\s+)?new\s+business\b"),
+                          + OWN + r"\b(?:is|was|has\s+been|had\s+been|will\s+be)\s+(?:now\s+)?closed\s+to\s+(?:all\s+)?new\s+business\b|"
+                          + PART + r"\bdiscontinu(?:e|ed|ing)\s+" + SUBJ + r"\s+" + ENDED_BY + "|"
+                          + OWN + r"\b(?:is|was|has\s+been|had\s+been|will\s+be)\s+(?:now\s+)?discontinued\s+" + ENDED_BY),
       hedged=True)
 #: "the Syndicate is no longer underwriting new business"
 #: "... no longer writes new business" (the third person)

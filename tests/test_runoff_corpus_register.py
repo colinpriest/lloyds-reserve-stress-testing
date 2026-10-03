@@ -4,7 +4,7 @@ The author's in-sample decision (option A) excludes a syndicate-year whose own f
 run-off for the whole year, unless the model assigns it to the assumed-business regime. The exclusion needs one thing from
 the extraction: for every syndicate-year whose filing speaks of the syndicate itself running off or ceasing to underwrite,
 the filing's words, the page and the file they are on, and a category. `pdf_extraction/audit/runoff_corpus_register.json`
-holds that for 106 syndicate-years:
+holds that for 110 syndicate-years:
 
   WHOLE     in run-off, or ceased underwriting, from the start of the year or before: a run-off year
   PART      the run-off begins during the year
@@ -66,7 +66,11 @@ UNDATED_WHOLE = {"syndicate_2008_2021", "syndicate_2008_2023", "syndicate_2255_2
 RE_READ = {"syndicate_2088_2019": "AFTER", "syndicate_2468_2020": "PART", "syndicate_1884_2023": "NOTCOUNT",
            "syndicate_1884_2024": "NOTCOUNT", "syndicate_1254_2022": "NOTCOUNT", "syndicate_1254_2023": "NOTCOUNT",
            "syndicate_1975_2021": "AFTER"}
-COUNTS = {"WHOLE": 43, "PART": 9, "AFTER": 38, "NOTCOUNT": 16}
+#: the four readings of deferred item 2 of the review of 2 October 2026, with their verdicts (6131/2021 discontinues the SPA from the
+#: 2022 year of account; the three 2016 quota-share SPAs say that Syndicate 2003 will not continue its purchase for 2017)
+DEFERRED_2 = {"syndicate_6131_2021": "AFTER", "syndicate_6112_2016": "NOTCOUNT", "syndicate_6119_2016": "NOTCOUNT",
+              "syndicate_6121_2016": "NOTCOUNT"}
+COUNTS = {"WHOLE": 43, "PART": 9, "AFTER": 39, "NOTCOUNT": 19}
 #: the premium register's entries that are not corpus entries: a live syndicate whose negative premium is a return premium
 NOT_IN_CORPUS = {"syndicate_3623_2018"}
 #: the entry whose own words no statement form matches: it says the syndicate "will no longer write new follow capacity insurance
@@ -156,7 +160,7 @@ def test_the_register_is_one_reading_per_syndicate_year_with_its_category_and_it
     assert tuple(data["categories"]) == CATEGORIES
     records = data["records"]
     stems = [r["stem"] for r in records]
-    assert len(stems) == len(set(stems)) == 106
+    assert len(stems) == len(set(stems)) == 110
     assert stems == [s for _, s in sorted(((r["syndicate"], r["year"]), r["stem"]) for r in records)], "sorted by syndicate and year"
     for r in records:
         assert set(r) == FIELDS, r["stem"]
@@ -225,6 +229,28 @@ def test_the_readings_re_read_in_the_fourth_cycle_keep_their_verdicts_and_their_
     # 1884/2023 and 1884/2024: no statement that the syndicate is in run-off; it says it underwrites RITC and legacy reinsurance
     for stem in ("syndicate_1884_2023", "syndicate_1884_2024"):
         assert "underwrites Reinsurance to Close" in by[stem]["evidence"] and not RUNOFF_WORDS.search(_norm(by[stem]["evidence"])), stem
+
+
+def test_the_deferred_readings_of_the_second_of_october_keep_their_verdicts_and_their_reasons():
+    """Review of 2 October 2026, deferred item 2. 6131/2021 says in its own words that the SPA is discontinued from the 2022 year of
+    account, after a year in which it wrote: AFTER. 6112, 6119 and 6121 (2016) say that Syndicate 2003, which buys the whole account
+    quota share they write, will not continue that purchase for 2017: a sentence about another entity's purchase, which no form
+    reads as a stop and which does not say that the SPA stops, so NOTCOUNT and the note says why. A different verdict is the author's
+    decision."""
+    by = {r["stem"]: r for r in _records()}
+    for stem, verdict in DEFERRED_2.items():
+        assert by[stem]["category"] == verdict, stem
+    r = by["syndicate_6131_2021"]
+    assert r["source_page"] == 7 and "discontinue the SPA for the 2022 year of account onwards" in r["evidence"]
+    assert "2022 year of account" in r["runoff_from"] and forms.says_stopped(r["evidence"])
+    assert any("For the 2021 Year of Account, the SPA assumes 60%" in s["quote"] for s in r["other_statements"])
+    for stem in DEFERRED_2:
+        if DEFERRED_2[stem] != "NOTCOUNT":
+            continue
+        r = by[stem]
+        assert "Syndicate 2003 will not continue its whole account quota share purchase with the SPA" in r["evidence"], stem
+        assert not forms.says_stopped(r["evidence"]) and r["runoff_from"] is None, stem
+        assert "another entity" in r["note"] and "so it is not AFTER" in r["note"], stem
 
 
 def test_a_note_quotes_only_what_the_entry_cites():
@@ -437,6 +463,18 @@ FORM_CASES = [
     ("Syndicate 1234 ceased underwriting in Lloyd's with effect from 31 December 2017.", ["ceased_to_write"]),
     ("The Syndicate decided to cease underwriting in Lloyd's.", ["ceased_to_write"]),
     ("The Syndicate ceased underwriting in the Lloyd's market at the end of 2015.", ["ceased_to_write"]),
+    # review of 2 October 2026, deferred item 2: a filing that discontinues the syndicate or its SPA itself, by year of account or from
+    # a date, is read; the same words about an account, a class, a coverholder or a hypothetical are left alone
+    ("The decision has been made to discontinue the SPA for the 2022 year of account onwards.", ["ceased_to_write"]),
+    ("The Managing Agent decided to discontinue Syndicate 1234 with effect from 1 January 2020.", ["ceased_to_write"]),
+    ("The SPA was discontinued for the 2020 year of account.", ["ceased_to_write"]),
+    ("The decision has been made to discontinue the SPA's Treaty account for the 2022 year of account.", []),
+    ("The decision has been made to discontinue the SPA for the Marine class.", []),
+    ("The Managing Agent may discontinue the SPA for the 2022 year of account if capacity is not renewed.", []),
+    ("The Managing Agent has decided to discontinue its coverholder in Dubai from 2020.", []),
+    ("The Syndicate's Treaty account was discontinued for the 2020 year of account.", []),
+    ("The decision has been made to discontinue the SPA for the 2022 year of account in the Singapore office.", []),
+    ("The Managing Agent has decided to discontinue the SPA for reporting purposes.", []),
 ]
 
 
