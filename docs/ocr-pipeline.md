@@ -1764,7 +1764,10 @@ diagonal, takes the grid for one that starts a year late (the offset rule of `_d
 accepts it: +858.1, where the page's own grid gives +370.5 (the last cell of every column is the printed current
 estimate). The entry is cached because it is what the call returned; the record is not rebuilt from it, and the page's
 figure, +370.5, is on the list for stage 3. The shape that let it through is a blank newest column under a one-column shift;
-the reader does not test for it (a change to the reader belongs to a later stage).
+the reader does not test for it (a change to the reader belongs to a later stage). 2999/2022 stays on the pending list
+(`redecision_pending.json`) until the reader refuses the shifted grid or the cache entry is quarantined. Taking it off
+sends the corpus replay red: the record's committed figure (375.6) then differs from a replay that reads the cached
+page-vision entry and gives +858.1, and nothing declares the difference.
 
 Ten of the 11 records were then regenerated offline from the readings, each after its figure, route and mix had been
 predicted, and every prediction held. Figures are the two models' (gemini-2.5-flash; gpt-5-mini where it differs):
