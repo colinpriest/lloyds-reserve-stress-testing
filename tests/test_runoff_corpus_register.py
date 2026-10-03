@@ -296,7 +296,7 @@ def test_the_scan_reviewed_list_is_well_formed_and_holds_only_statements_a_form_
     reviewed = data["scan_reviewed"]
     stems = [r["stem"] for r in reviewed]
     assert stems == [s for _, s in sorted(((r["syndicate"], r["year"]), r["stem"]) for r in reviewed)], "sorted by syndicate and year"
-    assert len(stems) == len(set(stems)) == 74
+    assert len(stems) == len(set(stems)) == 66
     assert len(forms.corpus_sources()) == 1065, "the corpus the scan covers is the 1,065 committed extraction records"
     for r in reviewed:
         assert set(r) == SCAN_FIELDS, r["stem"]
@@ -379,6 +379,46 @@ FORM_CASES = [
     ("All new and renewing business will be transacted through Syndicate 2003.", ["business_written_in_another_syndicate"]),
     ("We will not underwrite business if we do not believe pricing is at a level that will meet our targeted returns.", []),
     ("Chubb will not underwrite risks related to the construction and operation of new coal-fired plants.", []),
+    # FOLLOWUP5 item 1 (review of 2 October 2026, deferred 1): each widening reads a sentence and leaves its neighbour alone
+    ("The Syndicate no longer writes new business.", ["no_longer_writing"]),
+    ("The Syndicate no longer writes marine hull business.", []),
+    ("The Syndicate stopped underwriting at the end of 2019.", ["ceased_to_write"]),
+    ("The Syndicate stopped underwriting cargo business.", []),
+    ("The Syndicate discontinued writing new business with effect from 1 January 2020.", ["ceased_to_write"]),
+    ("The Syndicate discontinued writing its Australian property book.", []),
+    ("The Syndicate withdrew from underwriting at 31 December 2018.", ["ceased_to_write"]),
+    ("The Syndicate withdrew from underwriting in the Japanese market.", []),
+    ("The Syndicate was closed to new business from 1 January 2021.", ["ceased_to_write"]),
+    ("The marine account was closed to new business.", []),
+    ("The Syndicate ceased all underwriting activities on 31 December 2019.", ["ceased_to_write"]),
+    ("The Syndicate ceased all underwriting activities in Dubai.", []),
+    ("The Syndicate is dormant.", ["in_run_off"]),
+    ("The Syndicate's dormant claims were reviewed in the year.", []),
+    ("The Syndicate is winding down its remaining liabilities.", ["in_run_off"]),
+    ("The Syndicate is winding down its aviation account.", []),
+    ("The Syndicate is being run off.", ["in_run_off"]),
+    ("The aviation account is being run off.", []),
+    ("Syndicate 1234 is a run-off vehicle.", ["run_off_of_its_business"]),
+    ("The group established a run-off vehicle for its legacy books.", []),
+    ("Syndicate 1234 merged into Syndicate 5678 on 1 January 2018.", ["business_written_in_another_syndicate"]),
+    ("The two managing agents merged into one company.", []),
+    ("The Syndicate's last underwriting year was 2018.", ["last_year_of_participation"]),
+    ("The last underwriting year was a difficult one for the market.", []),
+    ("2019 is the Syndicate's final year of account.", ["last_year_of_participation"]),
+    ("The final year of account result was a profit.", []),
+    ("The Syndicate has not written any new business since 2017.", ["no_business_in_a_year"]),
+    ("The Syndicate has not written any cyber business since 2017.", []),
+    ("The Syndicate did not write any new business during the year.", ["no_business_in_a_year"]),
+    ("The Syndicate did not write any new marine business during the year.", []),
+    ("The Syndicate does not have a 2020 underwriting year of account.", ["no_business_in_a_year"]),
+    ("The Syndicate does not have a material exposure to the 2020 underwriting year of account.", []),
+    # ... and the over-match on places, offices and classes is gone, while a month or a year still bounds a stop
+    ("The Syndicate ceased underwriting new business in Dubai.", []),
+    ("During the year it was decided to cease underwriting from the service company office in Singapore.", []),
+    ("The Syndicate has taken action to cease underwriting in non-performing classes.", []),
+    ("Coverholder operations in Sydney ceased to underwrite on behalf of the syndicate.", []),
+    ("The Syndicate ceased underwriting new business in December 2016.", ["ceased_to_write"]),
+    ("The Syndicate ceased underwriting new business in 2016.", ["ceased_to_write"]),
 ]
 
 
