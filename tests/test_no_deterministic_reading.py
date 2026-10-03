@@ -110,8 +110,10 @@ def test_every_committed_unread_record_is_restated_or_listed_for_a_new_extractio
     # round 62: the 13 waiting records were extracted again with the models on 29 September 2026
     # (12 now carry a figure, 1985/2024 became a first-year stub), so 45 were restated and none waited;
     # the third cycle (30 September 2026, D2) then moved 24 of the 45 to audited first-year stubs, whose
-    # filings state that the syndicate began in the report year or the year before, and 21 remain
-    assert len(restated) == 21 and not waiting, (len(restated), waiting)
+    # filings state that the syndicate began in the report year or the year before, and 21 remained; 1400/2014 made 22 on 3 October 2026
+    # (stage 2, the PC steps): the one page-vision call for its table (PDF page 8, option B) returned no triangle, so the offline
+    # regeneration wrote it as no deterministic reading, and it left the working sample
+    assert len(restated) == 22 and not waiting, (len(restated), waiting)
 
 
 def test_the_restatement_is_complete_and_changes_nothing_else():

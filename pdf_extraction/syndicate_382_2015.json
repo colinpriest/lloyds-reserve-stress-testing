@@ -1,5 +1,5 @@
 {
-  "extraction_timestamp": "2026-09-21T10:07:04.884274+00:00",
+  "extraction_timestamp": "2026-10-03T07:13:33.026302+00:00",
   "spec": {
     "prompt_version": "2.13",
     "driver_prompt_version": "2.13",
@@ -15,9 +15,9 @@
       "opening_reserves_gbp_m": 235.385,
       "opening_reserves_page": 7,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": -15.848,
-      "prior_year_development_pct": -6.73,
-      "direction": "release",
+      "prior_year_development_gbp_m": 15.637,
+      "prior_year_development_pct": 6.64,
+      "direction": "strengthening",
       "prior_year_movement_page": 20,
       "prior_year_movement_confidence": 0.8,
       "exact_reserve_text": "The Syndicate also recorded a relatively low level of favourable development of prior accident year loss reserves.",
@@ -117,7 +117,7 @@
       "gross_premium_page": 17,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "The gross prior year development calculated from the claims development triangle (strengthening of GBP 15.637m) contradicts the narrative statement on page 2 which mentions 'favourable development of prior accident year loss reserves'. The LOB movements for prior year development are net of reinsurance as gross breakdown was not available. The claims development triangle is structured with rows representing movements from the initial estimate, requiring reconstruction of cumulative estimates for diagonal comparison. [RAG OVERRIDE: Model said PYD=15.637, RAG triangle computed -15.848. Using RAG value.]",
+      "data_quality_notes": "The gross prior year development calculated from the claims development triangle (strengthening of GBP 15.637m) contradicts the narrative statement on page 2 which mentions 'favourable development of prior accident year loss reserves'. The LOB movements for prior year development are net of reinsurance as gross breakdown was not available. The claims development triangle is structured with rows representing movements from the initial estimate, requiring reconstruction of cumulative estimates for diagonal comparison.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -294,196 +294,6 @@
         "total_tokens": 22872,
         "cost_usd": 0.009192
       },
-      "_pyd_route": {
-        "source": "rag_triangle",
-        "value": -15.848,
-        "model_value": 15.637,
-        "triangle_type": "gross",
-        "triangle_units": "thousands",
-        "triangle_units_evidence": "conflict",
-        "triangle_source_page": 47,
-        "note": "overrode the model value"
-      },
-      "_rag_triangle": {
-        "type": "gross",
-        "currency": "GBP",
-        "units": "thousands",
-        "units_evidence": "conflict",
-        "cell_binding": "header",
-        "underwriting_years": [
-          2005,
-          2006,
-          2007,
-          2008,
-          2009,
-          2010,
-          2011,
-          2012,
-          2013,
-          2014,
-          2015
-        ],
-        "development_rows": [
-          [
-            72566.0,
-            62473.0,
-            79846.0,
-            90595.0,
-            97253.0,
-            131759.0,
-            129166.0,
-            122515.0,
-            121262.0,
-            130599.0,
-            125052.0
-          ],
-          [
-            -5832.0,
-            -1909.0,
-            -7271.0,
-            -1977.0,
-            -287.0,
-            21774.0,
-            -5551.0,
-            -19839.0,
-            15356.0,
-            4249.0,
-            null
-          ],
-          [
-            -5313.0,
-            133.0,
-            -2360.0,
-            -6236.0,
-            -5060.0,
-            1157.0,
-            5518.0,
-            -1631.0,
-            -4618.0,
-            null,
-            null
-          ],
-          [
-            -1176.0,
-            2457.0,
-            -5813.0,
-            -4937.0,
-            -330.0,
-            2396.0,
-            -3628.0,
-            -3397.0,
-            null,
-            null,
-            null
-          ],
-          [
-            -2782.0,
-            -3642.0,
-            -2668.0,
-            -508.0,
-            -2378.0,
-            3439.0,
-            -963.0,
-            null,
-            null,
-            null,
-            null
-          ],
-          [
-            -192.0,
-            -515.0,
-            175.0,
-            -675.0,
-            -2716.0,
-            681.0,
-            null,
-            null,
-            null,
-            null,
-            null
-          ],
-          [
-            -1087.0,
-            1138.0,
-            658.0,
-            -984.0,
-            2539.0,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-          ],
-          [
-            206.0,
-            -979.0,
-            -220.0,
-            453.0,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-          ],
-          [
-            1401.0,
-            -287.0,
-            -1101.0,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-          ],
-          [
-            -299.0,
-            -309.0,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-          ],
-          [
-            -103.0,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-          ]
-        ],
-        "row_labels": [
-          "At end of first year",
-          "One year later",
-          "Two years later",
-          "Three years later",
-          "Four years later",
-          "Five years later",
-          "Six years later",
-          "Seven years later",
-          "Eight years later",
-          "Nine years later",
-          "Ten years later"
-        ],
-        "source_page": 47,
-        "entity": 382
-      },
       "_adobe_lob": {
         "gross_premium_mix": [
           {
@@ -644,6 +454,12 @@
         "source": "azure_table",
         "applied_value_m": 235.385,
         "unit_resolution": "header"
+      },
+      "_pyd_route": {
+        "source": "model_reading",
+        "value": 15.637,
+        "note": "derived: not printed in either block's reserve text",
+        "stated": false
       }
     },
     "gpt-5-mini": {
@@ -652,8 +468,8 @@
       "opening_reserves_gbp_m": 235.385,
       "opening_reserves_page": 17,
       "opening_reserves_confidence": 1.0,
-      "prior_year_development_gbp_m": -15.848,
-      "prior_year_development_pct": -6.73,
+      "prior_year_development_gbp_m": -3.686,
+      "prior_year_development_pct": -1.57,
       "direction": "release",
       "prior_year_movement_page": 38,
       "prior_year_movement_confidence": 0.8,
@@ -761,7 +577,7 @@
       "gross_premium_page": 37,
       "gross_premium_confidence": 1.0,
       "currency": "GBP",
-      "data_quality_notes": "Prior year development extracted from Note 6 (Claims incurred) where a total 'Release/(Strengthening) 3,686' is shown; wording in the note refers to 'net payments and provisions' so there is some ambiguity whether the table is presented net of reinsurance. A gross claims development triangle (gross of reinsurance) is present in the technical provisions notes (page 44) but parsing of that triangle in the source text was incomplete; the Note 6 movement was used as primary figure. LOB mapping: the note groups 'Energy, Marine and Aviation' together; this was represented as 'Aggregate' in lob_movements because the amount cannot be apportioned to individual standard LOBs. Users should treat the prior-year development amount as reasonably reliable but note the potential gross/net ambiguity. [RAG OVERRIDE: Model said PYD=-3.686, RAG triangle computed -15.848. Using RAG value.]",
+      "data_quality_notes": "Prior year development extracted from Note 6 (Claims incurred) where a total 'Release/(Strengthening) 3,686' is shown; wording in the note refers to 'net payments and provisions' so there is some ambiguity whether the table is presented net of reinsurance. A gross claims development triangle (gross of reinsurance) is present in the technical provisions notes (page 44) but parsing of that triangle in the source text was incomplete; the Note 6 movement was used as primary figure. LOB mapping: the note groups 'Energy, Marine and Aviation' together; this was represented as 'Aggregate' in lob_movements because the amount cannot be apportioned to individual standard LOBs. Users should treat the prior-year development amount as reasonably reliable but note the potential gross/net ambiguity.",
       "_claims_triangle": {
         "type": "gross",
         "currency": "GBP",
@@ -938,196 +754,6 @@
         "total_tokens": 45520,
         "cost_usd": 0.025594
       },
-      "_pyd_route": {
-        "source": "rag_triangle",
-        "value": -15.848,
-        "model_value": -3.686,
-        "triangle_type": "gross",
-        "triangle_units": "thousands",
-        "triangle_units_evidence": "conflict",
-        "triangle_source_page": 47,
-        "note": "overrode the model value"
-      },
-      "_rag_triangle": {
-        "type": "gross",
-        "currency": "GBP",
-        "units": "thousands",
-        "units_evidence": "conflict",
-        "cell_binding": "header",
-        "underwriting_years": [
-          2005,
-          2006,
-          2007,
-          2008,
-          2009,
-          2010,
-          2011,
-          2012,
-          2013,
-          2014,
-          2015
-        ],
-        "development_rows": [
-          [
-            72566.0,
-            62473.0,
-            79846.0,
-            90595.0,
-            97253.0,
-            131759.0,
-            129166.0,
-            122515.0,
-            121262.0,
-            130599.0,
-            125052.0
-          ],
-          [
-            -5832.0,
-            -1909.0,
-            -7271.0,
-            -1977.0,
-            -287.0,
-            21774.0,
-            -5551.0,
-            -19839.0,
-            15356.0,
-            4249.0,
-            null
-          ],
-          [
-            -5313.0,
-            133.0,
-            -2360.0,
-            -6236.0,
-            -5060.0,
-            1157.0,
-            5518.0,
-            -1631.0,
-            -4618.0,
-            null,
-            null
-          ],
-          [
-            -1176.0,
-            2457.0,
-            -5813.0,
-            -4937.0,
-            -330.0,
-            2396.0,
-            -3628.0,
-            -3397.0,
-            null,
-            null,
-            null
-          ],
-          [
-            -2782.0,
-            -3642.0,
-            -2668.0,
-            -508.0,
-            -2378.0,
-            3439.0,
-            -963.0,
-            null,
-            null,
-            null,
-            null
-          ],
-          [
-            -192.0,
-            -515.0,
-            175.0,
-            -675.0,
-            -2716.0,
-            681.0,
-            null,
-            null,
-            null,
-            null,
-            null
-          ],
-          [
-            -1087.0,
-            1138.0,
-            658.0,
-            -984.0,
-            2539.0,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-          ],
-          [
-            206.0,
-            -979.0,
-            -220.0,
-            453.0,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-          ],
-          [
-            1401.0,
-            -287.0,
-            -1101.0,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-          ],
-          [
-            -299.0,
-            -309.0,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-          ],
-          [
-            -103.0,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-          ]
-        ],
-        "row_labels": [
-          "At end of first year",
-          "One year later",
-          "Two years later",
-          "Three years later",
-          "Four years later",
-          "Five years later",
-          "Six years later",
-          "Seven years later",
-          "Eight years later",
-          "Nine years later",
-          "Ten years later"
-        ],
-        "source_page": 47,
-        "entity": 382
-      },
       "_adobe_lob": {
         "gross_premium_mix": [
           {
@@ -1288,16 +914,41 @@
         "source": "azure_table",
         "applied_value_m": 235.385,
         "unit_resolution": "header"
+      },
+      "_pyd_route": {
+        "source": "model_reading",
+        "value": -3.686,
+        "note": "stated in the reserve text",
+        "stated": true
       }
     }
   },
   "total_cost_usd": 0.034786,
   "total_tokens": 68392,
   "validation": {
-    "passed": true,
-    "total_discrepancies": 17,
+    "passed": false,
+    "total_discrepancies": 20,
     "within_tolerance": 17,
-    "hard_failures": 0,
-    "hard_failure_details": []
+    "hard_failures": 3,
+    "hard_failure_details": [
+      {
+        "field": "direction",
+        "type": "value_mismatch",
+        "gemini-2.5-flash": "strengthening",
+        "gpt-5-mini": "release"
+      },
+      {
+        "field": "prior_year_development_gbp_m",
+        "type": "value_mismatch",
+        "gemini-2.5-flash": 15.637,
+        "gpt-5-mini": -3.686
+      },
+      {
+        "field": "prior_year_development_pct",
+        "type": "value_mismatch",
+        "gemini-2.5-flash": 6.64,
+        "gpt-5-mini": -1.57
+      }
+    ]
   }
 }

@@ -289,7 +289,7 @@ def test_no_unread_record_holds_a_usable_gross_triangle_in_its_cache():
             if g:
                 found.append((stem, g))
     assert found == []
-    assert checked == 45      # the 21 still unread and the 24 the audit restated as stubs
+    assert checked == 46      # the 22 still unread (1400/2014 joined the 21 on 3 October 2026) and the 24 the audit restated as stubs
 
 
 def test_an_unread_record_the_audit_restated_must_still_replay_unread():
