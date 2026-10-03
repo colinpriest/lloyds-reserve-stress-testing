@@ -74,9 +74,15 @@ def test_every_readme_statement_of_the_sign_override_states_its_conditions():
 
 
 #: a statement in docs/ocr-pipeline.md that the provisions movement overrides, or is preferred to, a triangle
+#: (review of the stage-2 branch, F3: also a figure that replaces or takes the place of the triangle, and a sign
+#: disagreement that triggers the override, as 11.3.1's 780/2016 example said)
 DOC_SIGN_OVERRIDE = re.compile(
-    r"provisions[^.;]{0,160}?\b(overrides?|is authoritative|takes precedence|is preferred)\b"
-    r"|\bprefer(red)?\b[^.;]{0,40}\bprovisions\b", re.I)
+    r"(?:provisions?|balance-sheet movement|movement note)[^.;]{0,160}?\b(?:overrides?|is authoritative|takes precedence|"
+    r"is preferred|wins|replaces?|displaces?|supersedes?|takes the place of)\b"
+    r"|\bprefer(?:red)?\b[^.;]{0,40}\bprovisions\b"
+    r"|\b(?:replaces?|displaces?|supersedes?|takes\s+the\s+place\s+of|overrides?)\s+(?:the\s+)?triangle"
+    r"|\b(?:sign\s+disagreement|signs?\s+differ|disagree\s+in\s+sign)[^.;]{0,80}?\b(?:override|overrides|triggers|"
+    r"replaces?|wins)\b", re.I)
 
 
 def _doc_statements():
@@ -102,8 +108,8 @@ def test_every_doc_statement_of_the_sign_override_states_its_conditions():
     units = _doc_statements()
     assert any(u.startswith("Step 4b:") for u in units), "the flow diagram's Step 4b box was not found"
     stating = [u for u in units if DOC_SIGN_OVERRIDE.search(u)]
-    # the diagram, 10.3 item 3, 10.4's list, the RITC caveat, 11.3.1's rule and the change history
-    assert len(stating) >= 6, stating
+    # the diagram, 10.3 item 3, 10.4's list, the RITC caveat, 11.3.1's rule, its 780/2016 example and the change history
+    assert len(stating) >= 7, stating
     for u in stating:
         assert "R138" in u and re.search(r"affirmed movement note", u) and "report year" in u, u[:240]
     # and section 11.3.1's list of when the cross-check runs names them

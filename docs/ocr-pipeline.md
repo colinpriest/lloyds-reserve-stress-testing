@@ -1225,9 +1225,13 @@ wholly in brackets is a presentation of outflows and is read as
 positive, as before.  In page text a bracket is a sign and a hyphen
 is not.  With the signs:
 
-* the classes reconcile with the printed total (4472/2019's 1,687.2,
-  1967/2020's 417.528, 1686/2019's 1,142.575), so the gate applies
-  the table's mix where it had kept the models';
+* the classes sum to the printed total (1414/2016's 573.475,
+  4472/2019's 1,687.2, 1967/2020's 417.528, 1686/2019's 1,142.575).
+  The gate had applied
+  those four tables' mixes already, within its 2%, with the bracketed
+  class's sign wrong; it now also applies six it had kept out, whose
+  unsigned classes were further from the models' total (780/2020,
+  1110/2017, 1882/2017, 1884/2021, 1884/2022 and 2468/2020);
 * an unlabelled row equal to the classes with their signs is a total
   (`_sums_classes_above`: 3330/2014's 78);
 * the units are read from the classes' sizes, so a sign does not
@@ -3016,10 +3020,16 @@ computed deterministically from the raw data.
 
 The triangle diagonal PYD is +24.9m (cumulative claims estimates
 rose for 2011--2014 UW years), but the provisions note reports
-gross prior year claims movement of −15.6m (a release).  The
-sign disagreement triggers the override, and −15.6m is used.
-Both LLMs independently extracted −15.6m and −17.1m, confirming
-the provisions figure.
+gross prior year claims movement of −15.6m (a release).  Before
+R138 the sign disagreement triggered the override, and −15.6m
+was used.  Since R138 it does not: the note is an affirmed
+movement note, but its column does not carry the report year in
+its own header (`column_bound_to_report_year` is false), so the
+provisions figure does not replace the triangle.  The triangle's
++24.9m is withheld by the conflict veto instead, because both
+models read a release (−15.6m and −17.1m), and the record carries
+the models' −15.6m, stated in the reserve text (route
+`model_reading`).
 
 **Example** (syndicate 33/2024):
 
