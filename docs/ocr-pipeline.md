@@ -1249,7 +1249,9 @@ not 574.063).  The 82 are counted by position in the stored mix: a record is cou
 mix (or of a stub's mix), the class was positive in the record of 5a6883d0 and is the same size and negative in the
 regenerated one.  An earlier count of 81 keyed the classes by name and so missed 1955/2021, whose mix holds two classes
 named Aviation (the first, "(160)" under Direct Insurance on page 42, is the bracketed one; the second, 3,985, is a
-Reinsurance class).
+Reinsurance class).  The ten records regenerated afterwards from the page-vision readings (section 9.1) add three to the 82,
+counted by position in the same way: 3624/2023, 382/2017 and 382/2019.  So 85 of the 151 regenerated in all carry a
+bracketed class with its sign.
 
 #### 7.7.4  Year-of-account and calendar-year columns (P-30)
 
@@ -1271,12 +1273,16 @@ sum to the calendar column's total, which is the premium every model
 read (`tests/test_yoa_calendar_column.py`).  Regenerated on 3 October 2026,
 20 of the 21 Ark records carry the table's mix (6 did before).  A record carries it when a model block's stored mix equals
 the mix its table step read, class by class and amount by amount, and a stub carries it when it stores a mix; 3902/2017, a
-stub with no mix, is the one that does not.  Of the 21 stored mixes, 14 are the same before and after and 7 differ, and
-what moved in the 7 is counted three ways.  The class amounts moved in 5 (3902/2019, 3902/2023, 4020/2019, 6105/2014 and
-6105/2015).  The class names or amounts moved in 6, which adds 4020/2014, whose class names changed and whose amounts did
-not.  The mix differs in 7 only if the stub 4020/2015 is counted, whose mix is newly stored (it held none).  6105/2015's
-calendar column sums to 43.859 where the adopted reading's year-of-account column gave 43.178, and 3902/2019's gemini reading,
-scaled from the year-of-account column, now reads 42.498, 22.16 and 24.797.
+stub with no mix, is the one that does not.  Of the 21 records, 20 store a mix (3902/2017 stores none).  Before and after
+are the record of 5a6883d0 and the regenerated one.  A record is the same when its stored mix has the same classes and the
+same amounts in both (the percentages of the total are not compared), and 3902/2017, which stores none in either, is
+counted with them; a record moved when it is not the same, and 4020/2015, whose mix is newly stored, is counted with those.
+So 14 of the 21 are the same and 7 moved, and what moved in the 7 is counted three ways.  The class amounts moved in 5
+(3902/2019, 3902/2023, 4020/2019, 6105/2014 and 6105/2015).  The class names or amounts moved in 6, which adds 4020/2014,
+whose class names changed and whose amounts did not.  The mix differs in 7 only if the stub 4020/2015 is counted, whose
+mix is newly stored (it held none).  6105/2015's calendar column sums to 43.859 where the adopted reading's
+year-of-account column gave 43.178, and 3902/2019's gemini reading, scaled from the year-of-account column, now reads
+42.498, 22.16 and 24.797.
 
 ### 7.8  Provisions and balance sheet grid parsing
 
@@ -3219,8 +3225,8 @@ reason (`scripts/restate_record_status.py`), and says the models were
 not run.  Of the 45 that were left, 24 state in their filings that the
 syndicate began in the report year or the year before and were restated as
 first-year stubs on 30 September 2026 (11.2); 21 remained unread, and 1400/2014
-made 22 on 3 October 2026 (9.1); two of the 21 still print a table the parsers do not read, and a third,
-3210/2018, whose table no backend has read (below).
+made 22 on 3 October 2026 (9.1); two of the 22 still print a table the parsers do not read, and a third,
+3210/2018, whose table no backend has read (below); 1400/2014 prints none.
 
 **Important**: which of the two flags a report gets does not depend
 on the syndicate's age.  The inception-based distinction this
@@ -3268,7 +3274,8 @@ and unread records included -- on its own caches and compares the
 class, the RAG figure and route, and the stored triangle; the records
 waiting for the models (`pdf_extraction/audit/redecision_pending.json`)
 and those without a usable table cache (`offline_unservable.json`) are the
-only declared exceptions (the pending list also holds the 16 records of section 9.1), and a declaration that no longer differs is
+only declared exceptions (the pending list holds seven records: 4242/2024 and six of the 16 records of section 9.1, the six
+that remain declared), and a declaration that no longer differs is
 reported as stale.  The 24 unread records the audit restated as stubs are
 not exceptions but a class (`audited_unread_stub`, read from the ledger's
 `extraction_status`): their replay must still be `unread`, and their cached

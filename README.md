@@ -426,8 +426,9 @@ the page-vision step, were extracted again with the models on 29 September 2026 
 carry the restated status and reason (`scripts/restate_record_status.py`). Of the 45 that were left,
 24 state in their filings that the syndicate began in the report year or the year before, and the
 filing-page audit restated them as first-year stubs on 30 September 2026 (§11.2); 21 remained unread, and
-1400/2014 made 22 on 3 October 2026 (§9.1). Two of the 21 still print a table the parsers do not read, and a
-third, 3210/2018, whose table no backend has read (§11.4 names them and says why each stays unread).
+1400/2014 made 22 on 3 October 2026 (§9.1). Two of the 22 still print a table the parsers do not read, and a
+third, 3210/2018, whose table no backend has read (§11.4 names them and says why each stays unread); 1400/2014
+prints none.
 
 ### Dual-LLM Extraction and Cross-Validation
 
