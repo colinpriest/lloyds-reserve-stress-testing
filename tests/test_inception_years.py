@@ -2,7 +2,8 @@
 
 pdf_extraction/syndicate_inception_years.json said "2014": 2009. Syndicate 2014's own filings say it commenced underwriting at Lloyd's on
 1 January 2014, and that the 2014 year of account is its first underwriting year; none of its six filings in the corpus (2014 to 2019)
-mentions 2009. The correction and its quotes are in `_meta.corrections`, not in a new top-level key: test_gemini._load_inception_years reads
+mentions 2009. The filings also say that the origins of the Syndicate are in Special Purpose Syndicate 6110, which traded for the 2012 and 2013
+years of account (2014/2016, page 38): that trading was under another number, so 2014 is the syndicate number's own first year. The correction and its quotes are in `_meta.corrections`, not in a new top-level key: test_gemini._load_inception_years reads
 every top-level key but `_meta` and `_manual_overrides` as a syndicate number, and _save_inception_years rewrites the file from `_meta`,
 `_manual_overrides` and the numeric keys, so an extra top-level key would break the first and be dropped by the second.
 
@@ -40,6 +41,11 @@ def test_syndicate_2014_began_in_2014_and_the_registry_names_the_words_that_say_
         assert data[str(c["syndicate"])] == c["now"]
         assert c["quotes"] and all(set(q) == {"file", "sha256", "page", "quote"} for q in c["quotes"])
         assert any("commenced underwriting" in q["quote"] and "1 January 2014" in q["quote"] for q in c["quotes"])
+        # the filings' account of the syndicate's origins, and what follows from it
+        assert "Special Purpose Syndicate 6110" in c["why"] and "2012 and 2013 years of account" in c["why"], c["why"]
+        assert "so 2014 is the syndicate number's own first year" in c["why"], c["why"]
+        assert any("The origins of the Syndicate are in Special Purpose Syndicate 6110" in q["quote"] for q in c["quotes"])
+        assert any("SPS 6110 traded for the 2012 and 2013 years of account" in q["quote"] and q["page"] == 38 for q in c["quotes"])
 
 
 def test_each_quote_is_on_its_page_in_the_file_with_that_hash():
