@@ -374,8 +374,9 @@ before or after the models run:
   compare against. A single 2020 cohort in a 2022 report is mature and does produce development; a
   triangle holding only 2015 and 2016 in a 2016 report does not, however many columns it has.
 - **Before the models** (the deterministic table step): if no triangle in the record holds a usable
-  cohort *and* the reserve-text steps found no figure either, LLM extraction is skipped and the
-  pipeline writes `{"first_year_syndicate": true, ...}` with no `models` block, saving the API cost.
+  cohort *and* the record has no reserve text for the models to read, LLM extraction is skipped and
+  the pipeline writes `{"first_year_syndicate": true, ...}` with no `models` block, saving the API cost.
+  A record whose reserve text gives the parsers no figure still goes to the models (next bullet).
   LOB breakdown is still extracted if available.
 - **After the models**: where the deterministic step found nothing but the reserve text might, both
   models run first and the stub is written afterwards — if the RAG step returned no development
