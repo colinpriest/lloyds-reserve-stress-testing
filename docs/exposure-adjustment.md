@@ -762,6 +762,10 @@ dynamically for comparison.
 
 ## 12  IME Paper Outputs
 
+> **Archival.** The `IME/` outputs described in this section (five tables, six figures and the worked
+> example) come from the earlier method this document is superseded for. They are not results of the
+> current paper or its operator; see `IME/README.md`.
+
 The script `IME-paper-table-figures.py` reads the novelty analysis results and
 the analysis table, and writes all outputs into the `IME/` subfolder.  All
 figures are saved in both PDF and PNG format at 300 DPI.

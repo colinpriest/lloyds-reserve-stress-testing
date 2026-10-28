@@ -6,19 +6,27 @@ The pipeline is the branched, uncertainty-preserving process below.
 
 ```mermaid
 flowchart LR
-  A[Annual report PDF or HTML] --> B[Page discovery and OCR]
-  B --> C{Structured table extraction succeeds?}
-  C -->|Yes| D[Deterministic triangle/provisions candidate]
-  C -->|No| E[Text parser and vision fallback]
-  D --> F[Dual-model comparison]
-  E --> F
-  F --> G{Conditional precedence, sign checks and vetoes}
-  G -->|Accepted| H[Structured record with source and method notes]
-  G -->|Unreconciled| I[Pending disagreement or explicit unresolved status]
+  A["Annual report PDF or HTML"] --> B["Page discovery and OCR"]
+  B --> C{"Structured table extraction succeeds?"}
+  C -->|Yes| D["Deterministic triangle/provisions candidate"]
+  C -->|No| E["Text parser and vision fallback"]
+  D --> K{"Deterministic step result"}
+  E --> K
+  K -->|"No usable mature cohort and no reserve text"| S1["First-year stub written before the models (models not run)"]
+  K -->|"No deterministic reading (no_triangle_data)"| X["Terminal exclusion: no usable triangle, models not run, no figure"]
+  K -->|"Otherwise"| F["Dual-model comparison (conditional: runs on this branch only)"]
+  F --> L{"No development figure, no cohort up to t-2, and no model figure printed in the reserve text?"}
+  L -->|Yes| S2["First-year stub written after the models (models_run true)"]
+  L -->|No| G{"Conditional precedence, sign checks and vetoes"}
+  G -->|Accepted| H["Structured record with source and method notes"]
+  G -->|Unreconciled| I["Pending disagreement or explicit unresolved status"]
 ```
 
-Deterministic readings therefore have conditional—not absolute—authority; fallback readings and
-remaining validation uncertainty are retained in the audit trail.
+The models are therefore not run on every record: a record with no deterministic reading is excluded
+without them, and a first-year stub may be written before or after them (see "First-Year Syndicate
+Detection" and "No Deterministic Reading" below). Where they do run, deterministic readings have
+conditional, not absolute, authority; fallback readings and remaining validation uncertainty are
+retained in the audit trail.
 
 ## Overview
 
@@ -361,7 +369,7 @@ The two most recent underwriting years (`report_year` and `report_year - 1`; `PY
 
 **Unit handling**: If the triangle is in thousands (£000), the total PYD is divided by 1000 to convert to millions (£m). This is detected from page text keywords ("£000", "£'000", "thousands").
 
-**Summary row stripping**: If the LLM or API includes a "current estimate" summary row at the bottom of the triangle (where every column has a value), it is detected and removed before computation. This prevents double-counting.
+**Summary row stripping**: If the LLM or API includes a "current estimate" summary row at the bottom of the triangle (where every column has a value), it is detected and removed from the grid before any difference is taken, which prevents double-counting. The removal is of the row as a development period, not of the evidence it carries: its values are first kept as the printed current estimate (when the table did not already supply one as `current_estimate_row`), and the diagonal check above uses them only to place or refuse a column, never as an input to the arithmetic of the sum (`_printed_current_estimates` and `_diagonal_cells` in `test_gemini.py`).
 
 ### First-Year Syndicate Detection
 
@@ -566,7 +574,7 @@ lloyds_reserve_stress_testing/
 │   ├── llm-prompt-development.md           # LLM prompt development notes
 │   ├── ocr-pipeline.md                     # OCR pipeline documentation
 │   ├── prompt-history.md                   # Generated: prompt versions behind the cached responses
-│   ├── table-4-explanation.md              # Table 4 explanation
+│   ├── table-4-explanation.md              # Historical Table 4 explanation (superseded, archival)
 │   └── validation/                         # Validation artefacts (xlsx, csv)
 │
 ├── syndicate_reports/                      # Syndicate report outputs (gitignored)
@@ -859,7 +867,7 @@ For academic research use only. Lloyd's syndicate reports are copyright of respe
 | [docs/llm-prompt-development.md](docs/llm-prompt-development.md) | LLM prompt development notes |
 | [docs/ocr-pipeline.md](docs/ocr-pipeline.md) | OCR pipeline documentation |
 | [docs/prompt-history.md](docs/prompt-history.md) | Generated: which prompt version governed each committed model response, and the records the round-55 prompt corrections touched (`scripts/prompt_history.py`) |
-| [docs/table-4-explanation.md](docs/table-4-explanation.md) | Table 4 explanation |
+| [docs/table-4-explanation.md](docs/table-4-explanation.md) | Historical Table 4 explanation (superseded, archival; not the current paper's Table 4) |
 
 ## References
 

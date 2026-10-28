@@ -31,7 +31,7 @@ lloyds_reserve_stress_testing/
 │   ├── llm-prompt-development.md           # LLM prompt development notes
 │   ├── ocr-pipeline.md                     # OCR pipeline documentation
 │   ├── prompt-history.md                   # Generated: prompt versions behind the cached responses
-│   ├── table-4-explanation.md              # Table 4 explanation
+│   ├── table-4-explanation.md              # Historical Table 4 explanation (superseded, archival)
 │   └── validation/                         # Validation artefacts
 │       ├── rejection_log.xlsx              # Rejected reports log
 │       ├── syndicate_corpus_v1.0.csv       # Syndicate corpus v1.0

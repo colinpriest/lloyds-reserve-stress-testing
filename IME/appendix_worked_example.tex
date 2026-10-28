@@ -1,9 +1,15 @@
+% ARCHIVAL WARNING: this file is superseded archival material from an earlier method
+% (line-level projection and power-law mix adjustment). It is NOT a result of the
+% current paper or its operator and must not be used for the current method.
+% See IME/README.md and the pinned analysis repository:
+% https://github.com/colinpriest/lloyds-exposure-composition-analysis
 \section*{Appendix: Worked Example --- 2017 Natural Catastrophe}
 
 This appendix traces the exposure-adjustment formula through a single
 historical event: the 2017 HIM (Harvey--Irma--Maria) hurricane season.
 Two syndicates are chosen to illustrate how raw severity can differ
-by a factor of seven while the standardised severity is identical.
+by a factor of seven while the capped, mix-standardised severity is the
+same.
 
 \subsection*{Event and syndicates}
 
@@ -52,9 +58,14 @@ S_{\text{std}} = \mathbf{w}_q \cdot \mathbf{s}_{\text{lob}}
   = 3.00\%
 \]
 
-Both syndicates converge to $S_{\text{std}} = 3.00\%$.  The 7$\times$
-difference in raw severity was entirely attributable to LoB-mix
-heterogeneity, not to a difference in the underlying event severity.
+Both syndicates converge to $S_{\text{std}} = 3.00\%$, but only because
+the per-unit Property severity is capped at $\pm 5$ before the mix is
+applied.  The uncapped Property severities differ (11.50 and 6.13), so
+the underlying event severity was not equal.  The two become equal only
+after the cap, so this comparison isolates the effect of LoB mix only
+under that cap.  The 7$\times$ difference in raw severity is therefore
+not shown to be entirely attributable to LoB-mix heterogeneity: part of
+it reflects the different uncapped Property severities.
 
 \subsection*{Step 2: Size adjustment}
 
@@ -87,7 +98,7 @@ Fully adjusted $S_{\text{adj}}$ & --- & --- & 4.16\% \\
 \end{tabular}
 
 \medskip
-The worked example demonstrates that the adjustment formula removes
-idiosyncratic LoB-mix and size effects, producing a severity estimate
+The worked example illustrates how the adjustment formula, with the
+cap applied, removes LoB-mix and size effects, producing a severity estimate
 that answers the question: ``what would this event have meant for
 \emph{my} portfolio?''

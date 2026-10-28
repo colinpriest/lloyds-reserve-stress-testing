@@ -1,17 +1,22 @@
-# Table 4 Explanation
+# Historical Table 4 Explanation (superseded; archival)
 
-> **Status: superseded.**
-> This note describes the earlier line-level projection and the power-law mix adjustment
-> with $\beta\approx-0.24$. Both were replaced by the robust Bayesian pooling operator
-> (size and concentration, Student-$t$ errors, two-regime RITC tail, an undiversifiable
-> floor). Table 4 as reproduced in the manuscript is produced by that operator, not by
-> the method described here. This file is retained as a record of the earlier stage:
-> see the analysis repository's `docs/current-results.md` and the manuscript for the
-> current method.
+> **Status: superseded and archival. Do not cite this note's numbers or table as results of the
+> current paper.**
+> This note explains a capital-distortion table (the "Historical Table 4" below) produced by an
+> earlier method: the earlier line-level projection and the power-law mix adjustment with
+> $etapprox-0.24$. Both were replaced by the robust Bayesian pooling operator (size and
+> concentration, Student-$t$ errors, two-regime RITC tail, an undiversifiable floor). The table
+> described here is not reproduced in the current manuscript under this or any other number, and
+> no number in it is a result of the current operator. The current paper's Table 4 is a different
+> table, and the current method's worked example of the size-only transfer is a different table
+> again. This file is kept only as a record of the earlier stage. For the current method, see the
+> worked example of the size-only transfer in the current paper, cited at the pinned analysis
+> commit, and the analysis repository's `docs/current-results.md`
+> (<https://github.com/colinpriest/lloyds-exposure-composition-analysis>).
 
 
-This note answers the questions a reviewer would ask about Table 4
-(capital distortion from omitting exposure adjustments).
+This note answers the questions a reviewer would ask about the Historical Table 4
+(capital distortion from omitting exposure adjustments, earlier method).
 
 ---
 
@@ -187,7 +192,7 @@ dominant scenario (e.g.\ nat-cat-only).
 
 ### DENSE vs FULL consistency
 
-Table 4 reports the DENSE subset (2014–2019).  The same calculations
+The Historical Table 4 reports the DENSE subset (2014–2019).  The same calculations
 are repeated on the FULL subset (2014–2023) and stored in the results
 file.  All directional conclusions hold: mix dominates size in every
 portfolio on both subsets.  FULL-subset VaRs are slightly lower
