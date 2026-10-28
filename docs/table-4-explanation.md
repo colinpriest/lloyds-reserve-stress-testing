@@ -4,7 +4,7 @@
 > current paper.**
 > This note explains a capital-distortion table (the "Historical Table 4" below) produced by an
 > earlier method: the earlier line-level projection and the power-law mix adjustment with
-> $etapprox-0.24$. Both were replaced by the robust Bayesian pooling operator (size and
+> $\beta\approx-0.24$. Both were replaced by the robust Bayesian pooling operator (size and
 > concentration, Student-$t$ errors, two-regime RITC tail, an undiversifiable floor). The table
 > described here is not reproduced in the current manuscript under this or any other number, and
 > no number in it is a result of the current operator. The current paper's Table 4 is a different
