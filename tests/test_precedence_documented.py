@@ -108,8 +108,13 @@ def test_every_doc_statement_of_the_sign_override_states_its_conditions():
     units = _doc_statements()
     assert any(u.startswith("Step 4b:") for u in units), "the flow diagram's Step 4b box was not found"
     stating = [u for u in units if DOC_SIGN_OVERRIDE.search(u)]
-    # the diagram, 10.3 item 3, 10.4's list, the RITC caveat, 11.3.1's rule, its 780/2016 example and the change history
-    assert len(stating) >= 7, stating
+    # The RITC caveat now describes potentially different scopes without asserting an override.
+    # Require the remaining rule locations, and inspect every detected statement, including future additions.
+    assert len(stating) >= 6, stating
+    assert any(u.startswith("3. **If the provisions table") for u in stating)
+    assert any(u.startswith("**Cross-validation rule**") for u in stating)
+    assert any(u.startswith("The triangle diagonal PYD is +24.9m") for u in stating)
+    assert any(u.startswith("3. Added triangle vs provisions cross-validation") for u in stating)
     for u in stating:
         assert "R138" in u and re.search(r"affirmed movement note", u) and "report year" in u, u[:240]
     # and section 11.3.1's list of when the cross-check runs names them
