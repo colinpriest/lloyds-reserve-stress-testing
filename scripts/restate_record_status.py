@@ -17,8 +17,8 @@ Round 62 (review of 29 September 2026, MAT-2). Two kinds of record carry no `mod
 
 * **Unread records the filing-page audit decided** (third cycle of round 62, D2). 24 records the
   pipeline had written as having no deterministic reading state in their filings that the syndicate
-  began underwriting in the report year (18) or the year before (6), and print no older cohort, so no
-  underwriting year up to t-2 can exist. The audit ledger (`structural_eligibility_audit.json`) holds
+  began underwriting in the report year (18) or the year before (6), and the reviewed table or
+  inception years show no mature diagonal. Inherited underwriting histories remain unresolved. The audit ledger (`structural_eligibility_audit.json`) holds
   each one's page, quote and file hash, and `--audited-unread` restates the record as a first-year
   stub the way `_first_year_record` writes one: `first_year_syndicate`, the audited reason and
   `models_run` false replace `no_triangle_data`, `excluded`, `status` and `exclusion_reason`, and the
@@ -129,12 +129,17 @@ PREVIOUS_AUDITED_INCEPTION_STUB_REASONS = (
 #: the reason an unread record the filing-page audit decided is restated with (third cycle of round 62,
 #: D2). It says what the audit found and what the pipeline had written, and is true of all 24: 18 began in
 #: the report year and 6 in the year before, and none prints an older cohort.
-AUDITED_UNREAD_STUB_REASON = (
+PREVIOUS_AUDITED_UNREAD_STUB_REASON = (
     "No underwriting year old enough for prior year development (u <= t-2): the filing states that the "
     "syndicate began underwriting in the report year or the year before, and prints no older cohort, as "
     "read on its pages in pdf_extraction/audit/structural_eligibility_audit.json. The record was first "
     "written as having no deterministic reading (the parsers found no figure and the models were not "
     "run) and was restated by that audit.")
+AUDITED_UNREAD_STUB_REASON = (
+    "The filing-page audit established no mature development diagonal in the reviewed table or inception "
+    "years; inherited underwriting history and the applicable outcome remain unresolved. See "
+    "pdf_extraction/audit/structural_eligibility_audit.json. The record was first written as having no "
+    "deterministic reading (the parsers found no figure and the models were not run) and was restated by that audit.")
 #: the keys of an unread record, all of which a first-year stub does not carry (`models_run` it does, and
 #: it stays false, but the key moves to where `_first_year_record` writes it)
 UNREAD_STATUS_KEYS = ("no_triangle_data", "excluded", "status", "models_run", "exclusion_reason")
@@ -142,10 +147,10 @@ UNREAD_STATUS_KEYS = ("no_triangle_data", "excluded", "status", "models_run", "e
 
 def first_year_reason(data: dict, audited: dict, name: str) -> str:
     reason = str(data.get("reason") or "")
-    if reason == AUDITED_UNREAD_STUB_REASON:
+    if reason in (AUDITED_UNREAD_STUB_REASON, PREVIOUS_AUDITED_UNREAD_STUB_REASON):
         entry = audited.get(name) or {}
         if (entry.get("extraction_status") != UNREAD_RECORD_CONFIRMED
-                or entry.get("decision") != "structural_ineligible_no_mature_cohort"):
+                or entry.get("decision") != "no_disclosed_mature_diagonal_inherited_history_unresolved"):
             raise SystemExit("%s: restated as an unread record the audit decided, and the audit does not say so"
                              % name)
         return AUDITED_UNREAD_STUB_REASON
@@ -153,7 +158,8 @@ def first_year_reason(data: dict, audited: dict, name: str) -> str:
             and reason not in PREVIOUS_AUDITED_INCEPTION_STUB_REASONS):
         return tg.FIRST_YEAR_REASON
     decision = (audited.get(name) or {}).get("decision")
-    if decision != "structural_ineligible_no_mature_cohort":
+    if decision not in ("no_disclosed_mature_diagonal_inherited_history_unresolved", "inherited_mature_cohort_outcome_unavailable",
+                        "inherited_business_cohort_and_outcome_unresolved"):
         raise SystemExit("%s: written by the inception-year rule and not decided by the filing-page audit"
                          % name)
     return AUDITED_INCEPTION_STUB_REASON
@@ -175,12 +181,13 @@ def restated_audited_unread(data: dict, audited: dict, name: str) -> dict:
     returned unchanged."""
     entry = audited.get(name) or {}
     if (entry.get("extraction_status") != UNREAD_RECORD_CONFIRMED
-            or entry.get("decision") != "structural_ineligible_no_mature_cohort"):
-        raise SystemExit("%s: the audit does not decide it as an unread record with no mature cohort" % name)
-    if data.get("first_year_syndicate") is True and data.get("reason") == AUDITED_UNREAD_STUB_REASON:
+            or entry.get("decision") != "no_disclosed_mature_diagonal_inherited_history_unresolved"):
+        raise SystemExit("%s: the audit does not decide it as an unread record with no established mature diagonal" % name)
+    if data.get("first_year_syndicate") is True and data.get("reason") in (
+            AUDITED_UNREAD_STUB_REASON, PREVIOUS_AUDITED_UNREAD_STUB_REASON):
         if any(k in data for k in ("no_triangle_data", "excluded", "status", "exclusion_reason")):
             raise SystemExit("%s: a restated stub that still carries the unread record's keys" % name)
-        return data
+        return {**data, "reason": AUDITED_UNREAD_STUB_REASON}
     if not data.get("no_triangle_data") or data.get("status") != tg.NO_DETERMINISTIC_READING:
         raise SystemExit("%s: neither an unread record nor a restated one" % name)
     out = {}

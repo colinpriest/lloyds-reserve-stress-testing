@@ -28,7 +28,7 @@ lloyds_reserve_stress_testing/
 │   ├── data-construction.md                # Data construction methodology
 │   ├── data-audit-results.md               # Historical July 2026 audit snapshot
 │   ├── exposure-adjustment.md              # Exposure adjustment documentation
-│   ├── llm-prompt-development.md           # LLM prompt development notes
+│   ├── llm-prompt-development.md           # Historical prompt development notes
 │   ├── ocr-pipeline.md                     # OCR pipeline documentation
 │   ├── prompt-history.md                   # Generated: prompt versions behind the cached responses
 │   ├── table-4-explanation.md              # Historical Table 4 explanation (superseded, archival)

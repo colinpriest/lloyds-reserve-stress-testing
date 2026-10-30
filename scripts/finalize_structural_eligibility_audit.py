@@ -5,8 +5,8 @@ unread records it restated.
 before it, 1985/2024 among them since its re-extraction of 29 September 2026 found UW2023-2024 only;
 1840/2022, retained as an observed zero; and 24 records the pipeline had written as having no
 deterministic reading (its parsers found no figure and the models were not run) whose filings state
-that the syndicate began underwriting in the report year (18) or the year before (6), so that no
-underwriting year up to t-2 can exist (the author's decision D2, 30 September 2026). Those 24 are read
+that the syndicate began underwriting in the report year (18) or the year before (6), with no
+older years printed in the reviewed tables (the author's decision D2, 30 September 2026). Those 24 are read
 from their filing pages like the rest and restated as first-year stubs by
 ``restate_record_status.py --audited-unread``; their ledger records carry ``start_statements``, the
 filing's own words on when the syndicate began, each checked to be printed on the page it cites.
@@ -44,7 +44,7 @@ OUT_JSON = AUDIT_DIR / "structural_eligibility_audit.json"
 OUT_CSV = AUDIT_DIR / "structural_eligibility_audit.csv"
 HEADING_WORDS = ("underwriting year", "year of account", "pure underwriting", "estimate of")
 #: the ledger's extraction_status of an unread record the audit restated as a first-year stub
-UNREAD_RECORD_CONFIRMED = "unread_record_confirmed_structural_by_source_page_audit"
+UNREAD_RECORD_CONFIRMED = "unread_record_audited_no_disclosed_mature_diagonal"
 #: the declared reason a record has no opening: the syndicate began in the report year, so none exists to print
 FIRST_YEAR_NO_OPENING = "first_year_filing_prints_no_opening"
 
@@ -272,14 +272,35 @@ def build_record(candidate: dict, tr: dict) -> dict:
         if facts["opening_gross_reserve_gbp_m"] != 0.279:
             raise ValueError(f"{name}: the audited opening 0.279 is not the transcribed one")
         extraction_status = "corrected_from_pre_model_stub_by_source_page_audit"
+    elif name == "syndicate_3268_2019.json":
+        if years != [2018, 2019] or mature:
+            raise ValueError(f"{name}: unexpected disclosed triangle years {years}")
+        decision = "inherited_mature_cohort_outcome_unavailable"
+        # The cohort exists, but its relevant development and target eligibility are unresolved.
+        eligibility = "unresolved"
+        nil_status = "inherited_mature_development_not_disclosed"
+        calculation = ("The printed triangle has only UW2018 and UW2019; it does not disclose "
+                       "the two estimates needed for the inherited UW2016 movement.")
+        extraction_status = "pre_model_stub_outcome_unavailable_by_source_page_audit"
+    elif name in ("syndicate_6124_2015.json", "syndicate_1980_2019.json"):
+        if mature:
+            raise ValueError(f"{name}: unexpected disclosed mature triangle years {mature}")
+        decision = "inherited_business_cohort_and_outcome_unresolved"
+        eligibility = "unresolved"
+        nil_status = "prior_liability_underwriting_years_and_development_unresolved"
+        calculation = (f"No mature year appears in the reviewed triangle ({years}); "
+                       "underlying prior-liability years and their movement have not been established.")
+        extraction_status = "pre_model_stub_inherited_business_unresolved_by_source_page_audit"
     else:
         if mature:
             raise ValueError(f"{name}: reviewed years unexpectedly contain a mature cohort {mature}")
-        decision = "structural_ineligible_no_mature_cohort"
-        eligibility = "ineligible"
-        nil_status = "not_applicable_no_mature_cohort"
-        calculation = f"no underwriting year u <= {year - 2}; reviewed years are {years}"
-        extraction_status = "pre_model_stub_confirmed_structural_by_source_page_audit"
+        decision = "no_disclosed_mature_diagonal_inherited_history_unresolved"
+        eligibility = "unresolved"
+        nil_status = "mature_diagonal_not_established_in_reviewed_table"
+        calculation = (f"No mature diagonal was established in the reviewed filing table; "
+                       f"reviewed years are {years} and the cutoff is {year - 2}. "
+                       "The list does not establish inherited underwriting history.")
+        extraction_status = "pre_model_stub_audited_no_disclosed_mature_diagonal"
         if facts["start_statements"]:
             # an unread record: the filing says when the syndicate began, and no year before t-1 is printed
             if min(years) not in (year, year - 1) or max(years) != year:
@@ -290,13 +311,30 @@ def build_record(candidate: dict, tr: dict) -> dict:
         raise ValueError(f"{name}: the first-year exemption is declared for a syndicate that began in {min(years)}, not {year}")
 
     note = None
+    if name == "syndicate_3268_2019.json":
+        note = ("The filing confirms acceptance of SPA 6126 UW2016 effective 1 January 2019 "
+                "(PDF pages 27 and 33); UW2016 is economically mature under the cutoff. "
+                "Page 29 prints a GBP 44.829m gross opening and a GBP 8.428m RITC take-on. "
+                "The page 37 triangle prints only UW2018 and UW2019; the UW2016 movement, "
+                "its outcome scope and the applicable denominator are not established. "
+                "The 2016 cohort must not be treated as zero or added to the model on this evidence.")
+    if name == "syndicate_6124_2015.json":
+        note = ("PDF page 4 records a 100% quota share from Syndicate 1084 including prior claim "
+                "liabilities. Their underlying underwriting years and movement scope are not established. "
+                "The opening at inception is nil; whether take-on belongs in any denominator depends "
+                "on the adopted outcome scope. A mature cohort and model inclusion are not established.")
+    if name == "syndicate_1980_2019.json":
+        note = ("PDF page 30 records a USD 163.213m prior-year portfolio transfer into the 2018 "
+                "opening and USD 221.625m gross claims outstanding at the 2019 opening. The underlying "
+                "underwriting years and development scope have not been established; neither a mature "
+                "cohort nor model inclusion follows from the transfer alone.")
     if name == "syndicate_2358_2022.json":
         note = ("The filing's template prints legacy year headings with dashes in every old column; "
                 "only UW2022 contains a cohort, and gross claims outstanding at 1 January 2022 is nil.")
     if name == "syndicate_2357_2014.json":
         note = ("The filing prints no claims development table and no claims outstanding balance: note 4 "
-                "says no claims were notified. It trades in 2013 and 2014 only (page 5), so no cohort up "
-                "to 2012 exists.")
+                "says no claims were notified. It reports trading in 2013 and 2014 (page 5); inherited "
+                "underwriting history and any older outcome remain unresolved.")
     if name == "syndicate_2014_2014.json":
         note = ("Read with care: the filing says the syndicate has 'its origins in Special Purpose Syndicate 6110', and also "
                 "that it 'commenced underwriting at Lloyd's on 1 January 2014' and that 2014 is 'Syndicate 2014's first "
@@ -305,8 +343,14 @@ def build_record(candidate: dict, tr: dict) -> dict:
     if name == "syndicate_3902_2017.json":
         note = ("Read with care: the filing says the syndicate began underwriting on the 2017 YOA, 'replacing the Incidental "
                 "Syndicate that previously operated within Syndicate 4020'. Its loss development table holds a single 2017 "
-                "column and reconciles to the balance sheet's gross claims liabilities (30,259), so no older cohort is in "
-                "this syndicate's accounts.")
+                "column and reconciles to the balance sheet's gross claims liabilities (30,259); the "
+                "reconciliation alone does not resolve the composition of any inherited business.")
+
+    if decision == "no_disclosed_mature_diagonal_inherited_history_unresolved":
+        caveat = ("The reviewed displayed years or inception statement do not establish the complete "
+                  "underwriting history of any inherited liabilities. A mature outcome and its "
+                  "applicable denominator have not been established; the record remains outside the fit.")
+        note = (note + " " if note else "") + caveat
 
     record = {
         "file": name,
@@ -319,10 +363,16 @@ def build_record(candidate: dict, tr: dict) -> dict:
         "source_evidence": facts["source_evidence"],
         "inception_year": min(years),
         "underwriting_years": years,
+        "underwriting_years_scope": "reviewed_table_or_inception_years_not_complete_inherited_history",
         **({"start_statements": facts["start_statements"]} if facts["start_statements"] else {}),
         "triangle_basis": facts["triangle_basis"],
         "triangle_basis_quote": facts["triangle_basis_quote"],
         "mature_underwriting_years": mature,
+        "mature_underwriting_years_scope": "mature_years_among_reviewed_years_only",
+        **({"inherited_mature_cohort": {"underwriting_year": 2016, "source_syndicate": 6126,
+                                        "effective_date": "2019-01-01", "evidence_pages": [27, 33]},
+            "outcome_availability": "inherited_2016_development_not_disclosed_in_triangle"}
+           if name == "syndicate_3268_2019.json" else {}),
         "nil_vs_missing": nil_status,
         "mature_cohort_calculation": calculation,
         "opening_gross_reserve_gbp_m": facts["opening_gross_reserve_gbp_m"],
@@ -386,7 +436,8 @@ def main() -> None:
     OUT_JSON.write_text(json.dumps({
         "definition": ("Filing-page audit of every record formerly classified from the extraction skip flag, and of the "
                        "unread records whose filings state that the syndicate began underwriting in the report year or "
-                       "the year before. Economic eligibility is decided independently of extraction success."),
+                       "the year before. Displayed years do not establish the absence of inherited cohorts; "
+                       "economic eligibility is reviewed independently of extraction success, with inherited-history coverage incomplete."),
         "mature_cohort_rule": "u <= report_year - 2",
         "counts": counts,
         "records": records,
@@ -403,6 +454,8 @@ def main() -> None:
                 row["audited_source_fields"] = json.dumps(row["audited_source_fields"], sort_keys=True)
             if row.get("start_statements") is not None:
                 row["start_statements"] = json.dumps(row["start_statements"], sort_keys=True)
+            if row.get("inherited_mature_cohort") is not None:
+                row["inherited_mature_cohort"] = json.dumps(row["inherited_mature_cohort"], sort_keys=True)
             writer.writerow(row)
     print(json.dumps(counts, sort_keys=True))
 

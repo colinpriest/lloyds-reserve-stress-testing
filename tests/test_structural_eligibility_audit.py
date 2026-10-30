@@ -40,9 +40,9 @@ def test_all_pre_model_stubs_have_source_reviewed_decisions():
     audit = _audit()
     assert audit["counts"] == {
         "reviewed": 95,
-        "structural_ineligible": 94,
+        "structural_ineligible": 0,
         "eligible_observed_zero": 1,
-        "eligibility_unresolved": 0,
+        "eligibility_unresolved": 94,
     }
     assert len(audit["records"]) == 95
     assert all((r["source_page"] or r["source_file"].endswith((".html", ".htm")))
@@ -71,9 +71,24 @@ def test_the_decision_is_recomputed_from_the_years_for_every_record():
         assert r["mature_underwriting_years"] == mature, name
         if mature:
             assert r["decision"] == "eligible_observed_zero" and r["economic_eligibility"] == "eligible", name
+        elif name == "syndicate_3268_2019.json":
+            assert r["decision"] == "inherited_mature_cohort_outcome_unavailable"
+            assert r["economic_eligibility"] == "unresolved"
+            assert r["inherited_mature_cohort"]["underwriting_year"] == 2016 <= t - 2
+            assert r["inherited_mature_cohort"]["source_syndicate"] == 6126
+            assert r["outcome_availability"] == "inherited_2016_development_not_disclosed_in_triangle"
+            assert r["nil_vs_missing"] == "inherited_mature_development_not_disclosed"
+        elif name in {"syndicate_6124_2015.json", "syndicate_1980_2019.json"}:
+            assert r["decision"] == "inherited_business_cohort_and_outcome_unresolved", name
+            assert r["economic_eligibility"] == "unresolved", name
+            assert r["nil_vs_missing"] == "prior_liability_underwriting_years_and_development_unresolved", name
         else:
-            assert r["decision"] == "structural_ineligible_no_mature_cohort", name
-            assert r["economic_eligibility"] == "ineligible", name
+            assert r["decision"] == "no_disclosed_mature_diagonal_inherited_history_unresolved", name
+            assert r["economic_eligibility"] == "unresolved", name
+            assert r["nil_vs_missing"] == "mature_diagonal_not_established_in_reviewed_table", name
+            assert "inherited" in r["review_note"].lower(), name
+        assert r["underwriting_years_scope"] == "reviewed_table_or_inception_years_not_complete_inherited_history"
+        assert r["mature_underwriting_years_scope"] == "mature_years_among_reviewed_years_only"
 
 
 #: the records whose filings print no opening gross claims outstanding: three from before the third
@@ -160,6 +175,46 @@ def _texts_of(source_file):
 
 def _page_texts(r):
     return list(_texts_of(r["source_file"]))
+
+
+def test_inherited_3268_cohort_and_unavailable_outcome_match_the_filing():
+    r = _records()["syndicate_3268_2019.json"]
+    source = ROOT / r["source_file"]
+    if not source.exists():
+        pytest.skip("3268 filing not present in this checkout")
+    pages = _page_texts(r)
+    assert "SPA 6126 for the 2016 year of account" in pages[26]
+    assert "SPA 6126 YOA 2016" in pages[32] and "1 January 2019" in pages[32]
+    assert "44,829" in pages[28] and "8,428" in pages[28]
+    assert r["underwriting_years"] == [2018, 2019]
+    assert r["mature_underwriting_years"] == []
+    assert r["inherited_mature_cohort"]["underwriting_year"] == 2016
+    assert r["nil_vs_missing"] == "inherited_mature_development_not_disclosed"
+    assert r["economic_eligibility"] == "unresolved"
+
+
+def test_3624_hand_confirmation_preserves_later_grouped_column_scope_uncertainty():
+    register = json.loads((AUDIT / "triangle_figures_confirmed_by_hand.json").read_text(encoding="utf-8"))
+    r = next(r for r in register["records"] if r["stem"] == "syndicate_3624_2015")
+    assert r["figure_m"] == pytest.approx(5.025)
+    assert len(r["readings"]) == 2
+    assert "-0.912m" in r["later_scope_review"]
+    assert "low-confidence" in r["later_scope_review"]
+
+
+def test_prior_liability_leads_are_unresolved_without_assuming_mature_years():
+    for name, page, phrases in [
+        ("syndicate_6124_2015.json", 4, ("100% quota share", "prior claim liabilities")),
+        ("syndicate_1980_2019.json", 30, ("Portfolio transfer at 1 January", "163,213", "221,625")),
+    ]:
+        r = _records()[name]
+        if not (ROOT / r["source_file"]).exists():
+            pytest.skip("source filing not present in this checkout")
+        text = _page_texts(r)[page - 1]
+        assert all(phrase in text for phrase in phrases), name
+        assert r["economic_eligibility"] == "unresolved"
+        assert r["mature_underwriting_years"] == []  # displayed years only
+        assert r["nil_vs_missing"] == "prior_liability_underwriting_years_and_development_unresolved"
 
 
 def _present():
@@ -365,7 +420,7 @@ def _restated():
 
 def test_the_unread_records_the_audit_restated_state_when_the_syndicate_began():
     """24 records were written as having no deterministic reading; their filings state that the syndicate
-    began in the report year (18) or the year before (6), so no underwriting year up to t-2 can exist.
+    began in the report year (18) or the year before (6); this does not rule out inherited business.
     Each is in the ledger with the filing's own words, and nothing else in the ledger carries them."""
     recs, restated = _records(), _restated()
     assert len(restated) == 24
@@ -373,7 +428,8 @@ def test_the_unread_records_the_audit_restated_state_when_the_syndicate_began():
     assert sum(r["inception_year"] == r["report_year"] - 1 for r in restated.values()) == 6
     for name, r in restated.items():
         t = r["report_year"]
-        assert r["decision"] == "structural_ineligible_no_mature_cohort" and r["mature_underwriting_years"] == [], name
+        assert r["decision"] == "no_disclosed_mature_diagonal_inherited_history_unresolved" and r["mature_underwriting_years"] == [], name
+        assert r["economic_eligibility"] == "unresolved", name
         assert r["underwriting_years"] in ([t], [t - 1, t]), name
         assert r["start_statements"], name
         for s in r["start_statements"]:

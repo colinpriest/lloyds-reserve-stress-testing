@@ -1,14 +1,9 @@
 #!/usr/bin/env python3
-"""Write docs/prompt-history.md: which prompt version governed each committed model
-response, and how many records rest on the routes the round-55 prompt change touched.
+"""Write docs/prompt-history.md from record specifications and cache counts.
 
-Round 55 (review of 10 September 2026, T02) corrected three defects in the extraction
-prompt (one business-mix hierarchy, the claims-incurred definition, a loss-ratio route
-that needs underwriting-year premiums) and moved PROMPT_VERSION to 2.11. Every committed
-response cache was produced under an earlier version, and regenerating a record under
-the corrected prompt needs fresh paid model inference, which was not authorised. This
-document is therefore the record of what the old prompt governed; it is generated from
-the caches and the records, never typed.
+The document counts response caches and groups records by their recorded prompt
+version, including no-model stubs. It also records which routes were affected by
+the round-55 prompt changes; it does not establish the prompt of every response.
 
 Run:  python scripts/prompt_history.py           (writes docs/prompt-history.md)
       python scripts/prompt_history.py --check   (exit 1 if the document is stale)

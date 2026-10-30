@@ -767,10 +767,9 @@ conventions with triangle-specific dash semantics:
 - **Parenthesised negatives**: `(123.4)` -> `-123.4`
 - **Comma separators**: `2,364` -> `2364.0`
 - **Standalone dashes as None**: `-`, `–` (en-dash), `—`
-  (em-dash), `nil` -> `None`.  In a claims development triangle,
-  a dash means "no data yet" -- the UW year has not reached that
-  development period.  This is distinct from the financial-
-  statement convention (see below).
+  (em-dash), `nil` -> `None` in this cleaner. A dash below the
+  observed staircase can mean no data yet; a dash in a reached
+  cell can instead denote zero. The printed context matters.
 - **Azure annotations**: `:unselected:` and `:selected:` suffixes
   (Azure Document Intelligence checkbox markers) are stripped
   before parsing.
@@ -780,15 +779,15 @@ conventions with triangle-specific dash semantics:
 | Function                | Dash semantics | Used by                    |
 |-------------------------|----------------|----------------------------|
 | `_clean_cell()`         | dash -> `0.0`  | LOB tables, provisions     |
-| `_clean_cell_triangle()`| dash -> `None` | Triangle dev rows (all parsers) |
+| `_clean_cell_triangle()`| dash -> `None` | Triangle table cells using this cleaner |
 
 The distinction matters because in a **financial statement** (LOB
 breakdown, provisions movement), a dash means nil/zero per UK
-accounting convention.  But in a **triangle**, a dash means the
-cell is below the staircase diagonal -- there is no data for that
-UW year at that development period.  Treating these as `0.0`
-would corrupt PYD computation by making the parser think claims
-went to zero when in fact no observation exists yet.
+accounting convention. In a triangle a dash outside the reached
+staircase can denote an unavailable observation, while a reached
+cell can represent zero (as in run-off examples below). Treating
+every unavailable cell as zero can corrupt PYD; treating every
+reached zero as unavailable can also lose information.
 
 **Example** (syndicate 1880/2024, UW year 2023): the "two years
 later" row has a dash in the 2023 column because only one year
@@ -801,10 +800,9 @@ and the PYD computation correctly ignores this cell.
 necessary for LOB tables and provisions tables.  It is also used
 by the **text-based** triangle fallback parser
 (`_parse_triangle_from_text()`) which has its own dash handling
-via regex number extraction (dashes are simply not matched by
-the number regex and are skipped).  The text-based parser also
-has explicit standalone-dash detection for row alignment purposes
-(section 8.2.1).
+with explicit standalone-dash detection that maps these cells to
+zero for alignment (section 8.2.1). The vision prompt uses null
+for a dash; these routes therefore need context-specific checking.
 
 ### 7.2.1  Split-label row merging
 
@@ -2292,8 +2290,8 @@ hierarchy; every other document defers to it.
    `data_quality_notes`. Without both conditions the triangle
    stands whatever the sign: 1274/2019's `2010 & prior years`
    cumulative total displaced a correct -6.619m before R138. This matters most for
-   RITC acceptors, where the triangle tracks only organic
-   development (see the RITC caveat below).
+   RITC acceptors, whose triangle and provisions may cover
+   different business or transaction timing (see the RITC caveat below).
 4. Otherwise the absolute-amount triangle PYD replaces both
    LLM-extracted values -- however close an LLM value is -- and any
    LLM override is logged, subject to the round-52 gate: the
@@ -2331,8 +2329,8 @@ statement of which figure wins; the README's summary points here.
 
 | Order | Check | Outcome | Note written | Code |
 |---|---|---|---|---|
-| 1 | Sanity: the figure implies more than +200% of opening reserves, or is non-zero against zero opening reserves | discarded; the model values stand | printed | `process_one_report` |
-| 2 | Hand confirmation: the figure equals, to half a thousand, one that two readings of the filing confirmed (`pdf_extraction/audit/triangle_figures_confirmed_by_hand.json`; an entry needs two readings, pages, a quote and the figure, or it is refused) | applied over the check in row 3, for that record and that figure only | `[RAG PYD APPLIED OVER THE SIGN VETO ...]` | `_rag_veto`, `_hand_confirmed_figure` |
+| 1 | Sanity: using the first positive model opening, PYD/opening is below -100% or above +200%; if neither model has a positive opening, absolute PYD exceeds 0.1m | discarded; the model values stand | printed | `process_one_report` |
+| 2 | Hand confirmation: the figure equals, to half a thousand, one that two readings of the filing confirmed (`pdf_extraction/audit/triangle_figures_confirmed_by_hand.json`; an entry needs two readings, pages, a quote and the figure, or it is refused; 3624/2015 has a later unresolved grouped-column scope issue) | applied over the check in row 3, for that record and that figure only | `[RAG PYD APPLIED OVER THE SIGN VETO ...]` | `_rag_veto`, `_hand_confirmed_figure` |
 | 3 | Model agreement: both model values agree in sign and the figure has the opposite sign, or the figure implies above 50% of opening while both models imply under 10% | not applied; the model values stand | `[RAG PYD NOT APPLIED ...]` (`[CODE PYD NOT APPLIED ...]` on the code recomputation route) | `_pyd_override_gate` |
 | 4 | Otherwise | the figure replaces both model values, however close they are | the override is logged | `process_one_report` |
 
@@ -2393,13 +2391,13 @@ direction.
   from syndicate-level figure.]
   ```
 
-**Sanity gate**: before applying, the RAG PYD is checked
-against opening reserves.  If `pyd / opening_reserves < -100%`
-(i.e. a release exceeding the entire opening balance), the
-RAG PYD is discarded and the pipeline falls back to
-`verify_triangles()` for LLM-based resolution.  This catches
-cases where a non-triangle table (e.g. segmental analysis)
-was misidentified as a claims triangle by the API backend.
+**Sanity gate**: before applying, the RAG PYD is checked against
+the first positive model opening reserve. Ratios strictly below
+-100% or above +200% are discarded; exactly -100% or +200% passes
+this check. If neither model has a positive opening (including
+missing and zero values), an absolute PYD above 0.1m is discarded.
+Model values then remain available for resolution. This catches
+some non-triangle tables misidentified by the API backend.
 
 This override (for non-loss-ratio triangles, and subject to the
 gate above) is necessary because LLMs sometimes extract PYD from the
@@ -2966,9 +2964,14 @@ reason (round 61).
 
 Those counts are the round-61 corpus's (26 September 2026) and were not measured again. Since then
 every first-year stub has been read against its filing pages
-(`pdf_extraction/audit/structural_eligibility_audit.json`, 95 records): 94 hold no cohort up to
-`t-2`, and 1840/2022's printed nil was retained as an eligible zero. The committed stubs' exclusion
-therefore rests on that audit, not on this flag. The corpus holds 94 stubs: 69 of the 70 the
+(`pdf_extraction/audit/structural_eligibility_audit.json`, 95 records). The audit retains
+1840/2022's printed nil as an eligible zero. For the other 94, economic eligibility remains
+unresolved: 91 have no mature diagonal established in the reviewed table or inception years, which
+does not establish inherited underwriting history. In 3268/2019 an inherited UW2016 cohort is
+confirmed, but its movement is not disclosed in the printed triangle; 6124/2015 and 1980/2019 have
+prior-liability transfers whose underlying years and development are unestablished. No mature
+outcome or applicable denominator is established for those 94, and they remain outside the fit. The
+corpus holds 94 stubs: 69 of the 70 the
 measurement saw, 1985/2024, which became a stub when it was extracted again on 29 September 2026
 (its tables hold UW2023 and UW2024 only), and 24 that were unread records until 30 September 2026
 (below). The audit's script refuses to run when a committed stub has not been transcribed, and
@@ -2978,7 +2981,7 @@ measurement saw, 1985/2024, which became a stub when it was extracted again on 2
 still cannot call a report without a triangle young (`_no_mature_cohort()`, 11.4), and that is
 unchanged. 24 records the pipeline writes as having no deterministic reading state in their filings that
 the syndicate began underwriting in the report year (18) or the year before (6), and none prints an
-older cohort, so no underwriting year up to `t-2` can exist. The move lives in the audit and in the
+older cohort in the reviewed table. This does not alone rule out inherited liabilities. The move lives in the audit and in the
 records, not in the code: the ledger holds each one's own words (`start_statements`: page, printed page
 and quote, each checked against the page of the file whose hash the ledger holds), and
 `scripts/restate_record_status.py --audited-unread` writes the record as a stub the way
@@ -2999,7 +3002,8 @@ expects exactly that (11.4).
   6110", and 3902/2017 that it replaced "the Incidental Syndicate that previously operated within
   Syndicate 4020". Neither filing prints an older cohort: 2014/2014 has no comparative column and no
   development table, and calls 2014 "Syndicate 2014's first underwriting year"; 3902/2017's single-cohort
-  table reconciles to the balance sheet's gross claims liabilities, so no older cohort is in its accounts.
+  table reconciles to the balance sheet's gross claims liabilities. This reconciliation alone does not
+  establish the underwriting-year composition of any inherited liabilities.
 - The scan that found the 24 was repeated over the other 21 unread filings, all pages: none states a
   start in the report year or the year before. One of the 21, 3210/2018, could not be read when it was
   made: its local PDF was a cut-short download that opened with no page. Lloyd's file, fetched on 2 October
@@ -3043,31 +3047,25 @@ used as the PYD value with `method: "provisions"` and
 reports from being excluded when a valid provisions note exists
 but no claims development triangle was found.
 
-**Example**: syndicate 2791/2024 has no claims development
-triangle in the report (Azure detected only P&L/premium tables),
-but the provisions movement note on page 49 discloses gross
-prior year claims development of −27.986m.  Without this
-fallback, the report would be flagged as `no_triangle_data` and
-excluded.
+**Source example and scope**: syndicate 2791/2024 has a gross
+claims-development triangle on filing page 49. Note 6 on page 36
+reports gross prior-year provisions movement of -67.573m. An older
+triangle calculation of -27.986m excluded the grouped 2014-and-prior
+column; the current extracted triangle figure is -36.191m with that
+column included. Its cohort scope is disputed in the analysis
+repository's `data/aggregated_column_review.json`, which retains the
+column and records the alternative. These are different sources and
+scope choices, not evidence that page 49 lacks a triangle.
 
-**RITC caveat**: for syndicates that accept Reinsurance to Close
-(RITC) from other syndicates, the provisions note PYD may differ
-significantly from a triangle-derived PYD.  The provisions note
-includes RITC-acquired reserves in the prior year movement,
-while the triangle only tracks organic development.  When both
-sources are available and agree in sign, the triangle PYD takes
-precedence (per RAG authority rules in section 10).  When they
-disagree in sign and the provisions figure is an affirmed
-movement note whose column is bound to the report year (R138),
-provisions takes precedence (section 11.3.1).  The difference is logged but not
-treated as an error.
-
-**Example**: syndicate 2791/2024 accepted RITC from syndicate
-6103.  Both LLMs independently extracted PYD ≈ −67.6m (matching
-the provisions note including RITC), but the RAG triangle
-computed −28.0m (organic development only).  The RAG triangle
-value was used, and the RITC distortion was noted in
-`data_quality_notes`.
+**RITC caveat**: a provisions movement and a triangle may differ in
+business scope or the treatment of a transaction. A triangle can
+include acquired business in both diagonals: in 1856/2024 the source
+notes that pre-2022 development includes the business reinsured from
+3268, and the measured difference is subsequent development, not the
+transferred amount itself. A transaction can change the composition
+and subsequent development even without a visible transaction step.
+The sign-based precedence and the R138 movement-note and report-year
+conditions remain as described in section 10 and section 11.3.1.
 
 ### 11.3.1  Triangle vs provisions cross-validation (Step 4b)
 
@@ -3368,8 +3366,8 @@ Three more filings were on this list before the third cycle: 1699/2022,
 1975/2019 and 1922/2024.  Their caches hold no triangle grid, and the
 filings print young tables only: a single 2022 cohort (1699/2022),
 cohorts 2018 and 2019 (1975/2019), and a single 2024 cohort of $26k
-(1922/2024).  None holds a cohort up to t-2, and each states that the
-syndicate began in the report year or the year before, so on 30 September
+(1922/2024). None of the reviewed tables prints a cohort up to t-2, and each states that the
+syndicate began in the report year or the year before; inherited histories remain unresolved. Thus so on 30 September
 2026 they became audited first-year stubs (§11.2), with 21 other unread
 records. Of those 21, seven print young development tables too (1609/2021,
 1796/2021, 3902/2017, 4321/2022, 4321/2023, 5623/2018 and 6050/2016) and 14
@@ -3620,9 +3618,11 @@ decided them (`pdf_extraction/audit/structural_eligibility_audit.json`):
 }
 ```
 
-For a current stub, the report contains one or more triangles but no
-underwriting year at or before $t-2$, and no prior-year figure is
-stated in the reserve text:
+A post-model stub can be produced when the pipeline finds no old-enough
+triangle year or reserve-text figure. The 24 previously unread records
+restated as stubs by source-page audit are a different pathway: models
+were not run, 14 had no triangle, and reserve text was not systematically
+searched. Their stub status is not proof of those post-model conditions:
 
 ```json
 {
@@ -3690,7 +3690,8 @@ underlying report does not contain sufficient reserve data.
 
 ## 15  Progress report dashboard
 
-The file `pdf_extraction/progress_report.html` provides a
+An optional, local-only `pdf_extraction/progress_report.html` dashboard
+(if present; it is not shipped in the repository) provides a
 browser-based monitoring dashboard that reads JSON output files
 and source PDFs via the File System Access API.
 
@@ -3966,9 +3967,9 @@ is excluded with `no_triangle_data: true`.
 
 **Cause**: run-off syndicates (e.g. syndicate 1840) may have
 UW year columns where cumulative claims went to zero, shown as
-`-` (dash) in the PDF.  `_clean_cell_triangle()` correctly
-treats dashes as `None` (no data in triangle context), but this
-makes the oldest column appear sparse.  The old validation
+`-` (dash) in the PDF. `_clean_cell_triangle()` maps dashes
+to `None`, even where a reached cell may denote zero, which makes
+the oldest column appear sparse.  The old validation
 required `col0_filled >= min(n_rows, n_cols)`, which rejected
 legitimate run-off triangles where the oldest UW year has only
 one development period with a real value.
@@ -4400,11 +4401,10 @@ triangle + no reserve text) before consulting the provisions
 note.  Reports with a provisions PYD but no triangle were
 incorrectly excluded.
 
-**Example**: syndicate 2791/2024 has no claims development
-triangle (Azure detected only P&L/premium tables on the
-misclassified `claims_triangle` pages), but provisions data
-on page 49 shows gross prior year claims development of
-−27.986m.
+**Historical example correction**: 2791/2024 has a gross triangle
+on page 49 and its provisions note is on page 36. The historical
+-27.986m was a triangle result excluding a grouped older-year
+column; see section 11.3 for the current figure and scope caveat.
 
 **Fix**: added a provisions PYD fallback step (Step 4c) in
 `process_one_report()` that runs **before** the

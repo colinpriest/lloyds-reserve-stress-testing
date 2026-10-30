@@ -1,5 +1,7 @@
 # LLM Prompt Development Note
 
+> **Historical note.** This describes an earlier design and trial workflow, including the former single-model summarizer. For current extraction behaviour, see [the OCR pipeline](ocr-pipeline.md) and `test_gemini.py`; [prompt history](prompt-history.md) documents the recorded versions and cache counts.
+
 ## Initial Design Intent
 
 Four distinct LLM roles were defined: (i) Perplexity for source discovery, returning URLs with brief descriptions; (ii) ChatGPT for market commentary standardisation, extracting reserve movements as direction/percentage/amount triples with causal factor classification; (iii) ChatGPT for syndicate report summarisation, parsing individual annual report PDFs into structured JSON with line-of-business breakdowns; and (iv) ChatGPT for synthetic scenario generation, producing plausible stress narratives calibrated to specific severity and portfolio-complexity cells derived from a fitted GPD tail model.

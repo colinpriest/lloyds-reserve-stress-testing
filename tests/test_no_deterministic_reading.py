@@ -10,7 +10,7 @@ describes the parsers; a first-year stub says whether the models ran before it w
 committed records carry the restated fields, except those listed for a new extraction.
 
 Third cycle (30 September 2026, D2): 24 of the unread records state in their filings that the syndicate
-began underwriting in the report year or the year before, so no underwriting year up to t-2 can exist.
+began underwriting in the report year or the year before; inherited underwriting history remains unresolved.
 The filing-page audit records each with the filing's own words, and they are first-year stubs with an
 audited reason, written as the pipeline writes a stub (`_first_year_record`).
 
@@ -141,7 +141,12 @@ def test_every_committed_first_year_stub_carries_the_current_reason_and_models_r
         assert "within the first two underwriting years" not in d["reason"], path.name
         if d["reason"] != tg.FIRST_YEAR_REASON:
             # the inception-year rule's stubs: decided by the filing-page audit, and saying so
-            assert audited[path.name]["decision"] == "structural_ineligible_no_mature_cohort", path.name
+            expected = {
+                "syndicate_3268_2019.json": "inherited_mature_cohort_outcome_unavailable",
+                "syndicate_6124_2015.json": "inherited_business_cohort_and_outcome_unresolved",
+                "syndicate_1980_2019.json": "inherited_business_cohort_and_outcome_unresolved",
+            }.get(path.name, "no_disclosed_mature_diagonal_inherited_history_unresolved")
+            assert audited[path.name]["decision"] == expected, path.name
             assert "structural_eligibility_audit.json" in d["reason"], path.name
     # 69 before round 62's re-extraction; 1985/2024's triangle holds 2023-2024 only (filing p50); the
     # third cycle's 24 audited unread records make 94
@@ -262,7 +267,7 @@ def _ledger():
 
 
 def test_every_unread_record_the_audit_restated_is_a_first_year_stub_that_says_so():
-    """Third cycle (D2): the ledger names 24 records as unread records the audit confirmed structural,
+    """Third cycle (D2): the ledger names 24 unread records reviewed against their filings,
     and the committed records are exactly the stubs that carry the audited reason: first_year_syndicate,
     models_run false, no models block, none of the unread record's status keys, and nothing but the
     keys `_first_year_record` writes (the business mix the table step found stays)."""
@@ -292,7 +297,7 @@ def test_the_audited_unread_restatement_is_complete():
 def test_the_restatement_writes_the_stub_the_pipeline_writes_and_keeps_everything_else():
     """On a synthetic unread record: the result is `_first_year_record`'s own output in key order, the
     business mix, premium and currency stay, restating it again changes nothing, and a record the audit
-    does not decide as an unread record with no mature cohort is refused."""
+    does not identify as an audited unread record is refused."""
     from finalize_structural_eligibility_audit import UNREAD_RECORD_CONFIRMED
     mix = [{"line_of_business": "Property", "amount_gbp_m": 2.7, "percentage_of_total": 100.0}]
     unread = {"extraction_timestamp": "2026-09-21T08:37:13+00:00", "spec": {"prompt_version": "2.13"},
@@ -301,7 +306,7 @@ def test_the_restatement_writes_the_stub_the_pipeline_writes_and_keeps_everythin
               "exclusion_reason": tg.NO_DETERMINISTIC_READING_REASON, "syndicate": 9999, "year": 2020,
               "gross_premium_mix": mix, "gross_premiums_written_gbp_m": 2.7, "currency": "GBP"}
     name = "syndicate_9999_2020.json"
-    audited = {name: {"extraction_status": UNREAD_RECORD_CONFIRMED, "decision": "structural_ineligible_no_mature_cohort"}}
+    audited = {name: {"extraction_status": UNREAD_RECORD_CONFIRMED, "decision": "no_disclosed_mature_diagonal_inherited_history_unresolved"}}
     out = restate.restated_audited_unread(unread, audited, name)
     pipeline = tg._first_year_record(Path("syndicate_9999_2020.pdf"), 9999, 2020,
                                      {"adobe_lob": {"gross_premium_mix": mix, "gross_premiums_written_gbp_m": 2.7,
@@ -314,6 +319,9 @@ def test_the_restatement_writes_the_stub_the_pipeline_writes_and_keeps_everythin
         k: unread[k] for k in ("extraction_timestamp", "spec", "source_file", "syndicate", "year", "gross_premium_mix",
                                "gross_premiums_written_gbp_m", "currency")}
     assert restate.restated_audited_unread(out, audited, name) == out
+    old_reason = {**out, "reason": restate.PREVIOUS_AUDITED_UNREAD_STUB_REASON}
+    assert restate.restated_audited_unread(old_reason, audited, name) == out
+    assert restate.restated_first_year(old_reason, audited, name) == out
     for bad in ({}, {name: {"extraction_status": "pre_model_stub_confirmed_structural_by_source_page_audit",
                             "decision": "structural_ineligible_no_mature_cohort"}},
                 {name: {"extraction_status": UNREAD_RECORD_CONFIRMED, "decision": "eligible_observed_zero"}}):
