@@ -62,6 +62,9 @@ def run():
     r = subprocess.run(cmd, cwd=str(ROOT), env=suite_env(), capture_output=True, text=True,
                        encoding="utf-8", errors="replace")
     out = r.stdout + r.stderr
+    # Keep a failed run diagnosable: the record stores counts, not tracebacks.
+    if r.returncode != 0:
+        print(out, file=sys.stderr, end="" if out.endswith("\n") else "\n")
     last = [l for l in out.splitlines() if re.search(r"\d+ (passed|failed)", l)]
     if not last:
         raise SystemExit("could not read the pytest summary:\n" + out[-2000:])

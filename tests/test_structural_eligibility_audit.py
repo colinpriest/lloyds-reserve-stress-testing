@@ -181,7 +181,7 @@ def test_inherited_3268_cohort_and_unavailable_outcome_match_the_filing():
     r = _records()["syndicate_3268_2019.json"]
     source = ROOT / r["source_file"]
     if not source.exists():
-        pytest.skip("3268 filing not present in this checkout")
+        pytest.skip("the source filing is not in this checkout")
     pages = _page_texts(r)
     assert "SPA 6126 for the 2016 year of account" in pages[26]
     assert "SPA 6126 YOA 2016" in pages[32] and "1 January 2019" in pages[32]
