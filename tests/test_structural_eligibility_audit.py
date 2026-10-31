@@ -81,7 +81,10 @@ def test_the_decision_is_recomputed_from_the_years_for_every_record():
         elif name in {"syndicate_6124_2015.json", "syndicate_1980_2019.json"}:
             assert r["decision"] == "inherited_business_cohort_and_outcome_unresolved", name
             assert r["economic_eligibility"] == "unresolved", name
-            assert r["nil_vs_missing"] == "prior_liability_underwriting_years_and_development_unresolved", name
+            expected = ("inherited_transfer_years_known_outcome_and_2019_cohort_unresolved"
+                        if name == "syndicate_1980_2019.json" else
+                        "prior_liability_underwriting_years_and_development_unresolved")
+            assert r["nil_vs_missing"] == expected, name
         else:
             assert r["decision"] == "no_disclosed_mature_diagonal_inherited_history_unresolved", name
             assert r["economic_eligibility"] == "unresolved", name
@@ -193,6 +196,44 @@ def test_inherited_3268_cohort_and_unavailable_outcome_match_the_filing():
     assert r["economic_eligibility"] == "unresolved"
 
 
+def test_1980_transfer_years_do_not_establish_2019_outcome_or_eligibility():
+    """The donor's transfer years and the recipient's observed triangle are distinct facts."""
+    r = _records()["syndicate_1980_2019.json"]
+    assert r["underwriting_years"] == [2018, 2019]
+    assert r["mature_underwriting_years"] == []
+    assert r["decision"] == "inherited_business_cohort_and_outcome_unresolved"
+    assert r["economic_eligibility"] == "unresolved"
+    assert r["nil_vs_missing"] == "inherited_transfer_years_known_outcome_and_2019_cohort_unresolved"
+    assert "2014-2017" in r["mature_cohort_calculation"]
+    assert "2019 opening" in r["mature_cohort_calculation"]
+    assert "syndicate_4472_2018.pdf" in r["review_note"]
+    assert "018bf183f5b97a5765d28e39109a89a07c7e2bf9dd622dc007a73351c541ff6d" in r["review_note"]
+    assert "denominator and 2019 mature movement are not established" in r["review_note"]
+
+
+def test_1980_transfer_source_and_generated_record_match_when_filings_present():
+    import hashlib
+    import finalize_structural_eligibility_audit as fin
+
+    donor = ROOT / "syndicate_reports" / "pdfs" / "syndicate_4472_2018.pdf"
+    r = _records()["syndicate_1980_2019.json"]
+    recipient = ROOT / r["source_file"]
+    if not donor.exists() or not recipient.exists():
+        pytest.skip("donor and recipient filings are not present in this checkout")
+    assert hashlib.sha256(donor.read_bytes()).hexdigest() == (
+        "018bf183f5b97a5765d28e39109a89a07c7e2bf9dd622dc007a73351c541ff6d")
+    assert hashlib.sha256(recipient.read_bytes()).hexdigest() == r["source_sha256"]
+    donor_page = fin.page_texts(donor)[5]
+    assert fin.quote_on_page("loss portfolio transfer agreement with Syndicate 1980 ... "
+                             "Pioneer business relating to 2014-2017 underwriting years", donor_page)
+    candidates = json.loads((AUDIT / "structural_eligibility_candidates.json").read_text(encoding="utf-8"))["records"]
+    candidate = next(x for x in candidates if x["file"] == r["file"])
+    transcription = json.loads((AUDIT / "structural_eligibility_transcription.json").read_text(encoding="utf-8"))["records"][r["file"]]
+    generated = fin.build_record(candidate, transcription)
+    for key in ("decision", "economic_eligibility", "nil_vs_missing", "mature_cohort_calculation", "review_note"):
+        assert generated[key] == r[key], key
+
+
 def test_3624_hand_confirmation_preserves_later_grouped_column_scope_uncertainty():
     register = json.loads((AUDIT / "triangle_figures_confirmed_by_hand.json").read_text(encoding="utf-8"))
     r = next(r for r in register["records"] if r["stem"] == "syndicate_3624_2015")
@@ -202,7 +243,7 @@ def test_3624_hand_confirmation_preserves_later_grouped_column_scope_uncertainty
     assert "low-confidence" in r["later_scope_review"]
 
 
-def test_prior_liability_leads_are_unresolved_without_assuming_mature_years():
+def test_prior_liability_leads_are_unresolved_without_assuming_observed_outcomes():
     for name, page, phrases in [
         ("syndicate_6124_2015.json", 4, ("100% quota share", "prior claim liabilities")),
         ("syndicate_1980_2019.json", 30, ("Portfolio transfer at 1 January", "163,213", "221,625")),
@@ -214,7 +255,10 @@ def test_prior_liability_leads_are_unresolved_without_assuming_mature_years():
         assert all(phrase in text for phrase in phrases), name
         assert r["economic_eligibility"] == "unresolved"
         assert r["mature_underwriting_years"] == []  # displayed years only
-        assert r["nil_vs_missing"] == "prior_liability_underwriting_years_and_development_unresolved"
+        expected = ("inherited_transfer_years_known_outcome_and_2019_cohort_unresolved"
+                    if name == "syndicate_1980_2019.json" else
+                    "prior_liability_underwriting_years_and_development_unresolved")
+        assert r["nil_vs_missing"] == expected
 
 
 def _present():

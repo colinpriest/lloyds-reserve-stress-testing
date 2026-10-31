@@ -290,6 +290,11 @@ def build_record(candidate: dict, tr: dict) -> dict:
         nil_status = "prior_liability_underwriting_years_and_development_unresolved"
         calculation = (f"No mature year appears in the reviewed triangle ({years}); "
                        "underlying prior-liability years and their movement have not been established.")
+        if name == "syndicate_1980_2019.json":
+            nil_status = "inherited_transfer_years_known_outcome_and_2019_cohort_unresolved"
+            calculation = (f"No mature year appears in the reviewed triangle ({years}). The 2018 "
+                           "transfer included UYs 2014-2017, but the original-year composition at "
+                           "the 2019 opening and the mature movement are unresolved.")
         extraction_status = "pre_model_stub_inherited_business_unresolved_by_source_page_audit"
     else:
         if mature:
@@ -325,9 +330,14 @@ def build_record(candidate: dict, tr: dict) -> dict:
                 "on the adopted outcome scope. A mature cohort and model inclusion are not established.")
     if name == "syndicate_1980_2019.json":
         note = ("PDF page 30 records a USD 163.213m prior-year portfolio transfer into the 2018 "
-                "opening and USD 221.625m gross claims outstanding at the 2019 opening. The underlying "
-                "underwriting years and development scope have not been established; neither a mature "
-                "cohort nor model inclusion follows from the transfer alone.")
+                "opening and USD 221.625m gross claims outstanding at the 2019 opening. Syndicate "
+                "4472's 2018 filing, PDF page 6 (printed 5), states that the Pioneer business "
+                "transferred to 1980 related to underwriting years 2014-2017 "
+                "(syndicate_reports/pdfs/syndicate_4472_2018.pdf, SHA-256 "
+                "018bf183f5b97a5765d28e39109a89a07c7e2bf9dd622dc007a73351c541ff6d). "
+                "The surviving original-year composition at the 2019 opening, applicable "
+                "denominator and 2019 mature movement are not established; model inclusion does "
+                "not follow from the transfer alone.")
     if name == "syndicate_2358_2022.json":
         note = ("The filing's template prints legacy year headings with dashes in every old column; "
                 "only UW2022 contains a cohort, and gross claims outstanding at 1 January 2022 is nil.")
