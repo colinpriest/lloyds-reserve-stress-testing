@@ -98,7 +98,9 @@ REVIEWED_UW_YEARS = {
     "syndicate_2024_2024.json": [2024],
     "syndicate_2288_2020.json": [2020],
     "syndicate_2288_2021.json": [2020, 2021],
-    "syndicate_2357_2014.json": [2013, 2014],
+    # The 2014 filing prints calendar-year activity but no development table;
+    # neither the inception year nor an exhaustive underwriting-year list is known.
+    "syndicate_2357_2014.json": [],
     "syndicate_2358_2022.json": [2022],
     "syndicate_2358_2023.json": [2022, 2023],
     "syndicate_2689_2017.json": [2017],
@@ -343,8 +345,12 @@ def build_record(candidate: dict, tr: dict) -> dict:
                 "only UW2022 contains a cohort, and gross claims outstanding at 1 January 2022 is nil.")
     if name == "syndicate_2357_2014.json":
         note = ("The filing prints no claims development table and no claims outstanding balance: note 4 "
-                "says no claims were notified. It reports trading in 2013 and 2014 (page 5); inherited "
-                "underwriting history and any older outcome remain unresolved.")
+                "says no claims were notified. It reports calendar-year trading in 2013 and 2014 "
+                "(page 5), but this does not establish inception or an underwriting-year list. "
+                "Inherited underwriting history and any older outcome remain unresolved.")
+        nil_status = "triangle_not_printed_mature_outcome_unresolved"
+        calculation = ("No development triangle was printed; the calendar-year financial columns "
+                       "do not establish inception, an underwriting-year list or a mature outcome.")
     if name == "syndicate_2014_2014.json":
         note = ("Read with care: the filing says the syndicate has 'its origins in Special Purpose Syndicate 6110', and also "
                 "that it 'commenced underwriting at Lloyd's on 1 January 2014' and that 2014 is 'Syndicate 2014's first "
@@ -371,14 +377,16 @@ def build_record(candidate: dict, tr: dict) -> dict:
         "source_page": facts["source_page"],
         "source_page_printed": facts["source_page_printed"],
         "source_evidence": facts["source_evidence"],
-        "inception_year": min(years),
+        "inception_year": min(years) if years else None,
         "underwriting_years": years,
-        "underwriting_years_scope": "reviewed_table_or_inception_years_not_complete_inherited_history",
+        "underwriting_years_scope": ("no_underwriting_years_established_from_reviewed_filing" if not years else
+                                    "reviewed_table_or_inception_years_not_complete_inherited_history"),
         **({"start_statements": facts["start_statements"]} if facts["start_statements"] else {}),
         "triangle_basis": facts["triangle_basis"],
         "triangle_basis_quote": facts["triangle_basis_quote"],
         "mature_underwriting_years": mature,
-        "mature_underwriting_years_scope": "mature_years_among_reviewed_years_only",
+        "mature_underwriting_years_scope": ("not_established_without_underwriting_years" if not years else
+                                           "mature_years_among_reviewed_years_only"),
         **({"inherited_mature_cohort": {"underwriting_year": 2016, "source_syndicate": 6126,
                                         "effective_date": "2019-01-01", "evidence_pages": [27, 33]},
             "outcome_availability": "inherited_2016_development_not_disclosed_in_triangle"}

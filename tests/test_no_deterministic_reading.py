@@ -242,7 +242,8 @@ def test_an_audited_stub_says_its_table_step_has_no_usable_cache_and_has_none():
                 tg.FIRST_YEAR_REASON, restate.AUDITED_UNREAD_STUB_REASON):
             continue     # (the 24 unread records the audit restated are read by the parsers: below)
         audited.append(path.stem)
-        assert d["reason"] == reason, path.name
+        expected = restate.AUDITED_2357_REASON if path.name == "syndicate_2357_2014.json" else reason
+        assert d["reason"] == expected and "no usable cache" in expected, path.name
         cache = ROOT / "pdf_extraction" / "azure_output" / (path.stem + "_azure.json")
         usable = cache.exists() and isinstance(json.loads(cache.read_text(encoding="utf-8")), dict)
         assert not usable, "%s has a usable Azure cache, and its reason says it has none" % path.name
@@ -254,6 +255,18 @@ def test_an_audited_stub_says_its_table_step_has_no_usable_cache_and_has_none():
     for doc in ("README.md", "docs/ocr-pipeline.md", "scripts/replay_corpus_check.py"):
         hit = stale.search((ROOT / doc).read_text(encoding="utf-8"))
         assert hit is None, (doc, hit and hit.group(0))
+
+
+def test_2357_restatement_migrates_the_old_inception_and_stays_stable():
+    """Restatement must not recreate an unsupported year or a non-existent triangle."""
+    name = "syndicate_2357_2014.json"
+    record = json.loads((ROOT / "pdf_extraction" / name).read_text(encoding="utf-8"))
+    audit = _ledger()
+    assert restate.restated_first_year(record, audit, name) == record
+    old = {**record, "inception_year": 2013, "reason": restate.AUDITED_INCEPTION_STUB_REASON}
+    assert restate.restated_first_year(old, audit, name) == record
+    with pytest.raises(SystemExit):
+        restate.restated_first_year(old, {name: {**audit[name], "inception_year": 2013}}, name)
 
 
 #: the keys `_first_year_record` can write, which a restated unread record may carry and no other

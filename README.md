@@ -412,6 +412,9 @@ before or after the models run:
   audit now records a confirmed inherited 2016 cohort and unavailable movement; the inherited-history
   audit for the other 91 records does not establish inherited histories; their economic eligibility
   remains unresolved. None is added to the fit or assigned a denominator on that basis.
+  For 2357/2014 the filing prints no development triangle; its 2013 and 2014 financial columns
+  are calendar years and do not establish inception or a complete list of underwriting years.
+  The historical inception cache's 2013 entry is not source-verified by this filing.
 
 `docs/ocr-pipeline.md` §11.1 and §11.2 state the executed conditions function by function;
 `_no_mature_cohort()` and `_first_year_record()` in `test_gemini.py` are the code

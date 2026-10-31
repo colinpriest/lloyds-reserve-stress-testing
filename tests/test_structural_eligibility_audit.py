@@ -85,13 +85,21 @@ def test_the_decision_is_recomputed_from_the_years_for_every_record():
                         if name == "syndicate_1980_2019.json" else
                         "prior_liability_underwriting_years_and_development_unresolved")
             assert r["nil_vs_missing"] == expected, name
+        elif name == "syndicate_2357_2014.json":
+            assert r["decision"] == "no_disclosed_mature_diagonal_inherited_history_unresolved"
+            assert r["economic_eligibility"] == "unresolved"
+            assert r["nil_vs_missing"] == "triangle_not_printed_mature_outcome_unresolved"
         else:
             assert r["decision"] == "no_disclosed_mature_diagonal_inherited_history_unresolved", name
             assert r["economic_eligibility"] == "unresolved", name
             assert r["nil_vs_missing"] == "mature_diagonal_not_established_in_reviewed_table", name
             assert "inherited" in r["review_note"].lower(), name
-        assert r["underwriting_years_scope"] == "reviewed_table_or_inception_years_not_complete_inherited_history"
-        assert r["mature_underwriting_years_scope"] == "mature_years_among_reviewed_years_only"
+        if name == "syndicate_2357_2014.json":
+            assert r["underwriting_years_scope"] == "no_underwriting_years_established_from_reviewed_filing"
+            assert r["mature_underwriting_years_scope"] == "not_established_without_underwriting_years"
+        else:
+            assert r["underwriting_years_scope"] == "reviewed_table_or_inception_years_not_complete_inherited_history"
+            assert r["mature_underwriting_years_scope"] == "mature_years_among_reviewed_years_only"
 
 
 #: the records whose filings print no opening gross claims outstanding: three from before the third
@@ -104,9 +112,36 @@ NO_OPENING = {
 }
 FIRST_YEAR_NO_OPENING = "first_year_filing_prints_no_opening"
 #: the one record whose filing prints no claims outstanding balance at all (note 4: no claims were
-#: notified), so it has no opening although its syndicate began a year before the report year: named
-#: here with its reason, and accepted only as that
+#: notified), so it has no printed opening; inception is not established by these financial columns.
 NO_BALANCE_PRINTED = {"syndicate_2357_2014.json": "filing_prints_no_claims_outstanding_balance"}
+
+
+def test_2357_calendar_columns_do_not_establish_inception_or_underwriting_years():
+    """A calendar-year comparison and members' balance are not a triangle or inception record."""
+    r = _records()["syndicate_2357_2014.json"]
+    assert r["inception_year"] is None
+    assert r["underwriting_years"] == []
+    assert r["mature_underwriting_years"] == []
+    assert r["mature_underwriting_years_scope"] == "not_established_without_underwriting_years"
+    assert r["triangle_basis"] == "no claims development table printed"
+    assert r["opening_gross_reserve_gbp_m"] is None
+    assert r["economic_eligibility"] == "unresolved"
+    assert "calendar-year" in r["review_note"]
+    stub = json.loads((ROOT / "pdf_extraction" / r["file"]).read_text(encoding="utf-8"))
+    assert stub["inception_year"] is None
+    assert "no claims development table" in stub["reason"]
+    source = ROOT / r["source_file"]
+    if source.is_file():
+        import finalize_structural_eligibility_audit as fin
+        pages = fin.page_texts(source)
+        calendar_page = " ".join(pages[4].lower().split())
+        assert "calendar year 2014" in calendar_page and "2013" in calendar_page
+        # This scanned page's partial embedded layer omits the sentence; the
+        # committed OCR cache transcribes the separately inspected page image.
+        cache = ROOT / "pdf_extraction" / "ocr_page_cache" / "syndicate_2357_2014.json"
+        cached_pages = json.loads(cache.read_text(encoding="utf-8"))
+        page21 = next(item["text"] for item in cached_pages if item["page"] == 21)
+        assert "no claims notified" in " ".join(page21.lower().split())
 
 
 def test_every_record_has_its_opening_read_from_the_filing_with_its_currency():
@@ -150,7 +185,7 @@ def test_a_missing_opening_is_a_declared_exemption_of_a_first_year_filing():
         if name in NO_BALANCE_PRINTED:
             assert declared == NO_BALANCE_PRINTED[name], name
             assert r["triangle_basis"] == "no claims development table printed", name
-            assert r["inception_year"] == r["report_year"] - 1, name
+            assert r["inception_year"] is None and r["underwriting_years"] == [], name
         else:
             assert declared == FIRST_YEAR_NO_OPENING, name
             assert r["inception_year"] == r["report_year"], name     # a first-year filing

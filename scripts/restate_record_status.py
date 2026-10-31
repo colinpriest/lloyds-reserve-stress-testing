@@ -115,6 +115,13 @@ AUDITED_INCEPTION_STUB_REASON = (
     "pdf_extraction/audit/structural_eligibility_audit.json. The record was written by the "
     "inception-year rule removed in round 58; the table step has no usable cache for this filing, "
     "and neither it nor the models has read its reserve text.")
+# Its filing has no triangle; calendar-year columns do not establish inception.
+AUDITED_2357_REASON = (
+    "The filing prints no claims development table and no claims outstanding balance. Its 2013 and 2014 "
+    "calendar-year financial columns do not establish inception or underwriting years; the mature outcome "
+    "and inherited history remain unresolved. The record was written by the inception-year rule removed in "
+    "round 58; the table step has no usable cache and neither it nor the models read its reserve text. See "
+    "pdf_extraction/audit/structural_eligibility_audit.json.")
 #: the earlier wordings of that reason, restated to the current one. Round 62 wrote "has no cache",
 #: which was not true of 1100/2024 (verification review of round 62, N-V-E-2).
 PREVIOUS_AUDITED_INCEPTION_STUB_REASONS = (
@@ -147,6 +154,12 @@ UNREAD_STATUS_KEYS = ("no_triangle_data", "excluded", "status", "models_run", "e
 
 def first_year_reason(data: dict, audited: dict, name: str) -> str:
     reason = str(data.get("reason") or "")
+    if name == "syndicate_2357_2014.json":
+        entry = audited.get(name) or {}
+        if (entry.get("nil_vs_missing") != "triangle_not_printed_mature_outcome_unresolved"
+                or entry.get("inception_year") is not None or entry.get("underwriting_years") != []):
+            raise SystemExit("%s: the audited absence of a triangle or known inception is not recorded" % name)
+        return AUDITED_2357_REASON
     if reason in (AUDITED_UNREAD_STUB_REASON, PREVIOUS_AUDITED_UNREAD_STUB_REASON):
         entry = audited.get(name) or {}
         if (entry.get("extraction_status") != UNREAD_RECORD_CONFIRMED
@@ -170,6 +183,8 @@ def restated_first_year(data: dict, audited: dict, name: str) -> dict:
            "models_run": bool(data.get("first_year_evidence"))}
     out = _insert_after(data, "reason", {"models_run": new["models_run"]})
     out["reason"] = new["reason"]
+    if name == "syndicate_2357_2014.json":
+        out["inception_year"] = None
     return out
 
 
@@ -237,6 +252,8 @@ def main() -> int:
             new = restated_no_reading(data)
         elif args.first_year and data.get("first_year_syndicate"):
             keys = {"reason", "models_run"}
+            if path.name == "syndicate_2357_2014.json":
+                keys.add("inception_year")
             new = restated_first_year(data, audited, path.name)
         elif (args.audited_unread
               and (audited.get(path.name) or {}).get("extraction_status") == UNREAD_RECORD_CONFIRMED):
