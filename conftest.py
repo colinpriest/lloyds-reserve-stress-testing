@@ -41,6 +41,8 @@ SKIP_BUDGET = (
      r"|^the (source )?filings? (is|are) not in this clone|^source filing is not in this clone; the fixture stands alone$"
      r"|^the source filing is not in this checkout$",
      "the filings are published by Lloyd's and are not committed; tests that read them run where they are"),
+    (r"^donor and recipient filings are not present in this checkout$",
+     "the source-backed transfer test needs both uncommitted Lloyd's filings and runs where they are present"),
     (r"^\S+ is not present in this checkout \(local-only file\)$",
      "local-only files named by the documentation hierarchy are not committed"),
     (r"^PyMuPDF (builds the fixture PDFs?|not installed)$",
