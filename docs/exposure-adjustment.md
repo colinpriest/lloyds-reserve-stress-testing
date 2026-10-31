@@ -816,7 +816,7 @@ without a server.
 | **Est. Remaining** | HH:MM:SS | Based on average time per report |
 | **Reliable Data** | Percentage | Active reliable reports as % of all completed (excludes run-off) |
 | **Total Cost** | USD | Sum of `total_cost_usd` across all extraction JSONs |
-| **Skipped** | Percentage | First-year / no-triangle reports as % of completed |
+| **Skipped** | Percentage | Structurally skipped records as % of completed; the label alone does not establish cohort eligibility |
 | **Excluded** | Percentage | Manually excluded reports as % of completed |
 
 ### 13.2  PYD statistics cards
@@ -924,7 +924,7 @@ For each JSON file in pdf_extraction/:
 | **Reliable** | `.badge.reliable` | Green | PYD% extracted successfully AND either (a) premium mix with GPW > 0 available, or (b) syndicate is in run-off with GPW = 0. Full data available for downstream analysis. |
 | **In Runoff** | `.badge.runoff` | Blue | PYD% available but GPW = 0 and no premium mix — run-off syndicate with no new business but valid reserve development data. Counted separately from active reliable reports. |
 | **Incomplete** | `.badge.unreliable` | Red | Models were extracted but either PYD% is missing or premium mix is incomplete. May lack key fields for downstream analysis. |
-| **Skipped** | `.badge.skipped` | Yellow | No model block was retained. Reasons: a first-year stub (no triangle in the record holds a usable cohort up to `t-2`), no claims development triangle found, no reserve movement text found. Minimal audit JSON written. The badge describes the **structure that was retained**, and cannot be used to infer API usage: a first-year stub may be written after both models have read the reserve text, in which case their figures are in `first_year_evidence` and the API cost was incurred (frozen review of 25 September 2026, D02; `docs/ocr-pipeline.md` §11.1). |
+| **Skipped** | `.badge.skipped` | Yellow | The record is not excluded, has no model block and carries a first-year, reason or no-triangle field. The badge describes the **structure that was retained**; it does not establish whether the filing or inherited business has an eligible mature cohort. It cannot establish API usage either: a first-year stub may be written after both models read the reserve text, in which case their figures are in `first_year_evidence` and the API cost was incurred (frozen review of 25 September 2026, D02; `docs/ocr-pipeline.md` §11.1). |
 | **Excluded** | `.badge.excluded` | Purple | Manually excluded from analysis via `manual_override_status: 'excluded'`, or post-extraction exclusion (`excluded: true` with models present). Reason recorded in `manual_override_reason` or `exclusion_reason`. |
 
 ### 14.3  Additional row annotations

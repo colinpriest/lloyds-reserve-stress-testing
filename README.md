@@ -373,10 +373,11 @@ The two most recent underwriting years (`report_year` and `report_year - 1`; `PY
 
 ### First-Year Syndicate Detection
 
-A report is recorded as a first-year stub when it carries no underwriting cohort old enough for prior
-year development to be separated from current year activity. The rule turns on **usable mature
-cohorts**, not on the raw number of columns in the triangle, and the decision may be taken either
-before or after the models run:
+The pipeline writes first-year stubs, and a historical audit also restated some unread records as
+stubs. A stub is not proof that the filing or inherited business has no usable mature cohort for
+separating prior-year development from current-year activity; the structural audit records what was
+and was not established. The pipeline rule concerns **usable mature cohorts**, not the raw number
+of triangle columns, and the decision may be taken either before or after the models run:
 
 - A cohort is usable for PYD when `uw_year <= report_year - 2`, so that a previous diagonal exists to
   compare against. A single 2020 cohort in a 2022 report is mature and does produce development; a

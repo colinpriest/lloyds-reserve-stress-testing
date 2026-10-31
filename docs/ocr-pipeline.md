@@ -2968,9 +2968,11 @@ every first-year stub has been read against its filing pages
 1840/2022's printed nil as an eligible zero. For the other 94, economic eligibility remains
 unresolved: 91 have no mature diagonal established in the reviewed table or inception years, which
 does not establish inherited underwriting history. In 3268/2019 an inherited UW2016 cohort is
-confirmed, but its movement is not disclosed in the printed triangle; 6124/2015 and 1980/2019 have
-prior-liability transfers whose underlying years and development are unestablished. No mature
-outcome or applicable denominator is established for those 94, and they remain outside the fit. The
+confirmed, but its movement is not disclosed in the printed triangle. For 6124/2015, the transferred
+underwriting years and their development are unestablished. For 1980/2019, 4472/2018 confirms that
+UW2014--2017 business was transferred to 1980 in 2018 (physical page 6); which cohorts survived into
+2019, their development and the applicable denominator remain unestablished. No mature outcome or
+applicable denominator is established for those 94, and they remain outside the fit. The
 corpus holds 94 stubs: 69 of the 70 the
 measurement saw, 1985/2024, which became a stub when it was extracted again on 29 September 2026
 (its tables hold UW2023 and UW2024 only), and 24 that were unread records until 30 September 2026
