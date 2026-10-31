@@ -434,7 +434,7 @@ def test_mature_nil_cohort_with_positive_reserve_is_an_observed_zero():
     assert record["opening_gross_reserve_currency"] == "GBP"
     assert record["economic_eligibility"] == "eligible"
     assert record["decision"] == "eligible_observed_zero"
-    assert record["nil_vs_missing"] == "printed_dashes_are_reported_nil_values"
+    assert record["nil_vs_missing"] == "printed_dashes_interpreted_as_nil"
     assert "printed as dashes" in record["mature_cohort_calculation"]
     assert "interpreting each as nil gives 0 minus 0 = 0.000 GBP m" in record["mature_cohort_calculation"]
     assert "One year after - 3,407 Two years after -" in record["source_evidence"]

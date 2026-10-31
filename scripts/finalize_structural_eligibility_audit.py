@@ -268,7 +268,7 @@ def build_record(candidate: dict, tr: dict) -> dict:
     if eligible_zero:
         decision = "eligible_observed_zero"
         eligibility = "eligible"
-        nil_status = "printed_dashes_are_reported_nil_values"
+        nil_status = "printed_dashes_interpreted_as_nil"
         # The source prints dashes, not numeric zeroes. The recorded values interpret
         # both dashes as nil; the table's paid/reserve columns and totals support that reading.
         calculation = ("UW2020: the one- and two-years-after estimates are printed as dashes; "
