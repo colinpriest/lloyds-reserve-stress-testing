@@ -4415,41 +4415,24 @@ section 11.3 for details and RITC caveats.
 
 ### Incorrect inception year causes reports to be skipped
 
-Historical: the inception-year check, its soft flag and its cache correction were removed in round 58 (section 11.1).
+**Historical mechanism**: the early inception-year check trusted
+`syndicate_inception_years.json` before reading the PDF and could write a
+`first_year_syndicate` stub without inspecting the filing. A later soft flag
+and automatic cache correction were also removed in round 58; section 11.1
+describes the current decision process.
 
-**Symptom**: report flagged as `first_year_syndicate` with
-`"reason": "Syndicate N began underwriting in YYYY"`, but the
-PDF contains a full claims development triangle with UW years
-going back much further.  Example: syndicate 1980/2018 was
-skipped with `inception_year: 2018` despite the triangle
-showing UW years 2011--2017.
-
-**Cause**: the inception year check (Step 0) ran before any PDF
-reading and trusted the `syndicate_inception_years.json` cache
-blindly.  If Perplexity returned the wrong year (or the cache
-was populated from a different report's partial data), the
-pipeline returned `first_year_syndicate` without ever opening
-the PDF or inspecting the triangle.
-
-**Fix**: the inception year check is now a **soft flag** rather
-than a hard skip.  The pipeline always proceeds to RAG-lite
-extraction (Step 1--4).  After the triangle is extracted, the
-pipeline compares the triangle's earliest UW year against the
-cached inception year.  If the triangle contradicts the cache:
-
-1. The cache is corrected to `min(underwriting_years)`
-2. `inception_skip` is cleared
-3. Extraction proceeds normally
-
-This ensures the triangle (ground truth) always takes precedence
-over the inception cache (heuristic).  See section 11.1 for
-the updated decision rule.
-
-**If automatic correction keeps reverting a manually-set value**:
-add the syndicate number to the `_manual_overrides` array in
-`syndicate_inception_years.json`.  This protects the entry from
-all automated updates (Perplexity, triangle backfill, cache
-correction).  See section 11.1 "Manual overrides".
+**Correction to the former example**: this section previously said that
+1980/2018's own triangle showed underwriting years 2011--2017. Its filing's
+gross claims-development table, physical PDF page 37, displays only 2018.
+The separate 4472/2018 filing, physical PDF page 6 (printed page 5), says
+that 4472 transferred Pioneer business relating to underwriting years
+2014--2017 to 1980 in 2018. The donor filing is
+`syndicate_reports/pdfs/syndicate_4472_2018.pdf` (SHA-256
+`018bf183f5b97a5765d28e39109a89a07c7e2bf9dd622dc007a73351c541ff6d`).
+The transfer-year range is evidence of inherited business, not an older-year
+diagonal in 1980's table or, by itself, a measured mature-cohort movement.
+The $30.368m in 1980/2018's physical PDF page 28 is gross written
+premium for the prior-year loss-portfolio-transfer segment, not prior-year claims development.
 
 ### Image-based segmental analysis table not extracted
 
