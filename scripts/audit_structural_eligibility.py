@@ -47,7 +47,7 @@ TRANSCRIPTION = RECORD_DIR / "audit" / "structural_eligibility_transcription.jso
 def structural_records() -> list[tuple[Path, dict]]:
     """Return the records under audit: the committed first-year stubs, and every record the audit has
     transcribed. The second set matters twice. A stub the audit has decided eligible is written from
-    the ledger and is no longer a stub (1840/2022, whose printed nil was retained in 11b1bc36): before
+    the ledger and is no longer a stub (1840/2022, whose printed dashes were interpreted as nil): before
     round 62 only the stubs were selected, so once 1840/2022 was retained the script found 69 and
     refused to run on the committed corpus. And an unread record the audit restates as a stub (third
     cycle of round 62: 24 records whose filings state that the syndicate began in the report year or

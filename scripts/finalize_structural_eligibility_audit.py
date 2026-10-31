@@ -269,8 +269,10 @@ def build_record(candidate: dict, tr: dict) -> dict:
         decision = "eligible_observed_zero"
         eligibility = "eligible"
         nil_status = "printed_dashes_are_reported_nil_values"
-        # the report year's movement: two years after less one year after (both printed nil)
-        calculation = "UW2020: two-years-after 0 minus one-year-after 0 = 0.000 GBP m"
+        # The source prints dashes, not numeric zeroes. The recorded values interpret
+        # both dashes as nil; the table's paid/reserve columns and totals support that reading.
+        calculation = ("UW2020: the one- and two-years-after estimates are printed as dashes; "
+                       "interpreting each as nil gives 0 minus 0 = 0.000 GBP m")
         if facts["opening_gross_reserve_gbp_m"] != 0.279:
             raise ValueError(f"{name}: the audited opening 0.279 is not the transcribed one")
         extraction_status = "corrected_from_pre_model_stub_by_source_page_audit"

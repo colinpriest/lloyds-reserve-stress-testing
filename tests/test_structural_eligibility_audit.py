@@ -435,12 +435,17 @@ def test_mature_nil_cohort_with_positive_reserve_is_an_observed_zero():
     assert record["economic_eligibility"] == "eligible"
     assert record["decision"] == "eligible_observed_zero"
     assert record["nil_vs_missing"] == "printed_dashes_are_reported_nil_values"
-    assert record["mature_cohort_calculation"].startswith("UW2020: two-years-after 0 minus one-year-after 0")
-    assert "= 0.000 GBP m" in record["mature_cohort_calculation"]
+    assert "printed as dashes" in record["mature_cohort_calculation"]
+    assert "interpreting each as nil gives 0 minus 0 = 0.000 GBP m" in record["mature_cohort_calculation"]
+    assert "One year after - 3,407 Two years after -" in record["source_evidence"]
+    assert "Gross claims reserve - 25 184 209" in record["source_evidence"]
+    assert "25 + 184 = 209" in record["transcription_notes"]
 
     extracted = pipeline._reviewed_eligible_record(
         pipeline.REPORTS_DIR / "syndicate_1840_2022.pdf", 1840, 2022)
     block = extracted["models"]["source-page-audit"]
+    assert "interpreting its printed dashes as nil" in block["standardized_narrative"]
+    assert "source does not print numeric zeros" in block["data_quality_notes"]
     assert block["prior_year_development_gbp_m"] == 0.0
     assert block["prior_year_development_pct"] == 0.0
     assert block["opening_reserves_gbp_m"] > 0

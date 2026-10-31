@@ -2965,7 +2965,9 @@ reason (round 61).
 Those counts are the round-61 corpus's (26 September 2026) and were not measured again. Since then
 every first-year stub has been read against its filing pages
 (`pdf_extraction/audit/structural_eligibility_audit.json`, 95 records). The audit retains
-1840/2022's printed nil as an eligible zero. For the other 94, economic eligibility remains
+1840/2022 as an eligible zero by interpreting the mature cohort's printed dashes as nil;
+its paid and reserve columns and totals support that interpretation, but the filing does not print
+numeric zeroes in the two development cells. For the other 94, economic eligibility remains
 unresolved: 91 have no mature diagonal established in the reviewed table or inception years, which
 does not establish inherited underwriting history. In 3268/2019 an inherited UW2016 cohort is
 confirmed, but its movement is not disclosed in the printed triangle. For 6124/2015, the transferred

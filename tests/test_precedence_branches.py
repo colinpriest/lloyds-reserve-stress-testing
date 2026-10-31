@@ -8,7 +8,7 @@ development-figure precedence (docs/ocr-pipeline.md section 10.3), at its bounda
   * the veto: two agreeing model signs against the figure, and the 50% / 10% magnitude rule at its
     edges; fewer than two model values never veto;
   * the hand-confirmed-figures exception, to half a thousand, and its register's own rule;
-  * nil against missing cells: a printed nil ([18, 0, 0]) is a zero movement, a missing cell
+  * nil against missing cells: cells interpreted as nil ([18, 0, 0]) give a zero movement, a missing cell
     ([18, None, None]) is no movement at all; and an all-dash mature column.
 
 Each test names the branch it pins; each was mutation-checked against the code it names.
@@ -201,7 +201,7 @@ def _tri(rows, years=(2020, 2021, 2022), units="thousands"):
 
 
 def test_printed_nil_cells_are_a_zero_movement():
-    """1840/2022's mature cohort as printed: 18, then nil, then nil (GBP000)."""
+    """1840/2022's mature cohort, interpreting the two printed dashes as nil (GBP000)."""
     pyd, details = tg.compute_pyd_from_triangle(_tri([[18, 2364, 190], [0, 3407, None], [0, None, None]]), 2022)
     assert pyd == 0.0, details
 

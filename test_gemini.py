@@ -520,7 +520,7 @@ def _reviewed_eligible_record(report_path: Path, syndicate_num: int, report_year
     The old early-return promoted ``first_year_syndicate`` directly to economic
     ineligibility.  The filing-page audit is now the independent decision layer.  Its
     one eligible record is deterministic and therefore does not trigger paid model
-    calls merely to preserve a reported zero.
+    calls merely to preserve the audit's dash-as-nil interpretation.
     """
     if not STRUCTURAL_ELIGIBILITY_AUDIT.exists():
         return None
@@ -555,8 +555,8 @@ def _reviewed_eligible_record(report_path: Path, syndicate_num: int, report_year
         "prior_year_events": [], "named_events": [], "raw_causal_phrases": [],
         "lob_movements": [],
         "standardized_narrative": ("The gross claims development table on filing page %s holds one cohort up "
-                                   "to t-2 (UW%s); its printed dashes are reported nil values, so its movement "
-                                   "in %d is %s: %s. Opening gross claims outstanding: %s %.3f million."
+                                   "to t-2 (UW%s); interpreting its printed dashes as nil gives a movement "
+                                   "in %d of %s: %s. Opening gross claims outstanding: %s %.3f million."
                                    % (fields["prior_year_movement_page"], ", UW".join(str(y) for y in mature),
                                       report_year, "nil" if pyd == 0 else "%+.3fm" % pyd,
                                       reviewed["mature_cohort_calculation"], currency, opening)),
@@ -572,7 +572,8 @@ def _reviewed_eligible_record(report_path: Path, syndicate_num: int, report_year
                        "source_page": fields["gross_premium_page"], "entity": syndicate_num},
         "data_quality_notes": ("Source-page audit (%s): no model was run, and every figure in this block is "
                                "the audit's reading of the filing pages. The printed dashes in the mature "
-                               "cohort are reported nil values, not unread cells."
+                               "cohort are interpreted as nil, supported by the paid/reserve columns and totals; "
+                               "the source does not print numeric zeros in those cells."
                                % str(STRUCTURAL_ELIGIBILITY_AUDIT).replace("\\", "/")),
         "_claims_triangle": {**triangle, "page": triangle.get("source_page")},
         "_rag_triangle": {**triangle, "units_evidence": "header",
@@ -581,7 +582,7 @@ def _reviewed_eligible_record(report_path: Path, syndicate_num: int, report_year
                        "triangle_type": triangle.get("type"),
                        "triangle_units": triangle.get("units"),
                        "triangle_source_page": triangle.get("source_page"),
-                       "note": "filing-page audit retained the reported nil outcome; no model was run"},
+                       "note": "filing-page audit interpreted printed dashes as nil; no model was run"},
     }
     return {
         "extraction_timestamp": datetime.now(timezone.utc).isoformat(),
