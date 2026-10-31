@@ -15,6 +15,8 @@ import json
 import sys
 from pathlib import Path
 
+import pytest
+
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 import build_coverage_status as bcs  # noqa: E402
@@ -51,18 +53,20 @@ def test_every_coverage_row_is_classed_as_its_record_is():
 
 
 def _stub_rows():
-    """(row, expected text, stem, restated by the audit) for every coverage row of a first-year stub. A stub the
-    pipeline wrote says no eligible mature cohort and no stated prior-year development figure, which its rule tested;
-    one the structural audit restated from an unread record says only what the audit read."""
+    """Return each legacy stub's row and its independently audited expected scope."""
     records = rcc.committed_records()
+    audit = json.loads((ROOT / "pdf_extraction" / "audit" / "structural_eligibility_audit.json").read_text(encoding="utf-8"))
+    audited_records = {r["file"]: r for r in audit["records"]}
     for row in json.loads(COVERAGE.read_text(encoding="utf-8"))["rows"]:
         stem = "syndicate_%s_%s" % (row["syndicate"], row["year"])
         d = records.get(stem)
         if d is not None and row["exclusion_class"] == "first_year_syndicate":
-            audited = d.get("reason") == restate.AUDITED_UNREAD_STUB_REASON
-            special = d.get("reason") == restate.AUDITED_2357_REASON
+            entry = audited_records.get(stem + ".json", {})
+            audited = entry.get("extraction_status") == restate.UNREAD_RECORD_CONFIRMED
+            special = stem == "syndicate_2357_2014"
             expected = (bcs.AUDITED_2357_ROW_REASON if special else
-                        bcs.AUDITED_UNREAD_ROW_REASON if audited else bcs.FIRST_YEAR_ROW_REASON)
+                        bcs.AUDITED_UNREAD_ROW_REASON if audited else
+                        entry.get("review_note") or bcs.FIRST_YEAR_ROW_REASON)
             yield row, expected, stem, audited
 
 
@@ -82,7 +86,7 @@ def test_a_stub_row_says_what_was_read_and_no_more_and_the_builder_writes_the_sa
     assert "no stated" not in bcs.AUDITED_UNREAD_ROW_REASON
     assert "did not look for a stated one" in bcs.AUDITED_UNREAD_ROW_REASON
     assert "inherited history remains unresolved" in bcs.AUDITED_UNREAD_ROW_REASON
-    assert "no stated prior-year development figure" in bcs.FIRST_YEAR_ROW_REASON
+    assert "consult the source filing" in bcs.FIRST_YEAR_ROW_REASON
 
 
 def test_the_report_waterfall_keeps_the_24_apart_from_the_stubs_the_pipeline_wrote():
@@ -133,7 +137,107 @@ def test_2357_coverage_output_reports_unknown_scope_without_changing_class():
     for r in audited_rows:
         assert r[header["pyd_failure_reason"]] == bcs.AUDITED_UNREAD_ROW_REASON
         assert r[header["opening_failure_reason"]] == bcs.AUDITED_UNREAD_ROW_REASON
+    by_key = {(r[header["syndicate"]], r[header["year"]]): r for r in all_rows}
+    for source_row, _, _, _ in _stub_rows():
+        key = (source_row["syndicate"], source_row["year"])
+        fresh_row = bcs.analyse_extraction(*key, None, None)
+        for field in ("pyd_failure_reason", "opening_failure_reason", "lob_failure_reason"):
+            assert by_key[key][header[field]] == fresh_row[field], (key, field)
     steps = list(book["reconciliation"].iter_rows(values_only=True))
     assert sum(row[0] == bcs.LEGACY_STUB_WATERFALL_LABEL for row in steps) == 1
     assert sum(row[0] == bcs.AUDITED_UNREAD_WATERFALL_LABEL for row in steps) == 1
     book.close()
+
+
+def test_audit_backed_legacy_reasons_follow_actual_source_evidence():
+    """A disclosed inherited cohort or unread outcome cannot become an absence claim."""
+    checks = {
+        (3268, 2019): ("UW2016", "not established"),
+        (6124, 2015): ("quota share", "not established"),
+        (1980, 2019): ("2014-2017", "not established"),
+        (2786, 2016): ("inherited liabilities", "not been established"),
+    }
+    for key, phrases in checks.items():
+        row = bcs.analyse_extraction(*key, None, None)
+        assert row["exclusion_class"] == "first_year_syndicate"
+        assert all(phrase in row["pyd_failure_reason"] for phrase in phrases), key
+        assert "no stated prior-year development figure" not in row["pyd_failure_reason"]
+
+
+def test_legacy_routing_uses_audit_identity_not_reason_prose(tmp_path, monkeypatch):
+    """Edits to a stub's free-form reason cannot turn its uncertain evidence into an absence claim."""
+    audit = tmp_path / "audit"
+    audit.mkdir()
+    (audit / "structural_eligibility_audit.json").write_bytes(
+        (ROOT / "pdf_extraction" / "audit" / "structural_eligibility_audit.json").read_bytes())
+    for syndicate, year in ((2357, 2014), (1686, 2014), (3268, 2019)):
+        name = f"syndicate_{syndicate}_{year}.json"
+        data = json.loads((ROOT / "pdf_extraction" / name).read_text(encoding="utf-8"))
+        data["reason"] = "A benign edited reason unrelated to audit classification."
+        (tmp_path / name).write_text(json.dumps(data), encoding="utf-8")
+    monkeypatch.setattr(bcs, "EXTRACTION_DIR", tmp_path)
+    bcs.audited_stub_records.cache_clear()
+    try:
+        special = bcs.analyse_extraction(2357, 2014, None, None)
+        unread = bcs.analyse_extraction(1686, 2014, None, None)
+        mature = bcs.analyse_extraction(3268, 2019, None, None)
+        assert special["pyd_failure_reason"] == bcs.AUDITED_2357_ROW_REASON
+        assert unread["pyd_failure_reason"] == bcs.AUDITED_UNREAD_ROW_REASON
+        assert "UW2016" in mature["pyd_failure_reason"]
+        rows = json.loads(COVERAGE.read_text(encoding="utf-8"))["rows"]
+        assert bcs.count_audited_unread_rows(rows) == 24
+    finally:
+        bcs.audited_stub_records.cache_clear()
+
+
+def test_missing_or_invalid_audit_cannot_silently_claim_ineligibility(tmp_path, monkeypatch):
+    data = json.loads((ROOT / "pdf_extraction" / "syndicate_2357_2014.json").read_text(encoding="utf-8"))
+    (tmp_path / "syndicate_2357_2014.json").write_text(json.dumps(data), encoding="utf-8")
+    monkeypatch.setattr(bcs, "EXTRACTION_DIR", tmp_path)
+    bcs.audited_stub_records.cache_clear()
+    try:
+        with pytest.raises(RuntimeError, match="without the structural audit ledger"):
+            bcs.analyse_extraction(2357, 2014, None, None)
+        audit = tmp_path / "audit"
+        audit.mkdir()
+        (audit / "structural_eligibility_audit.json").write_text("not JSON", encoding="utf-8")
+        with pytest.raises(RuntimeError, match="without the structural audit ledger"):
+            bcs.analyse_extraction(2357, 2014, None, None)
+        ledger = json.loads((ROOT / "pdf_extraction" / "audit" / "structural_eligibility_audit.json").read_text(encoding="utf-8"))
+        ledger["records"] = [r for r in ledger["records"] if r["file"] != "syndicate_2357_2014.json"]
+        ledger["counts"]["reviewed"] = len(ledger["records"])
+        (audit / "structural_eligibility_audit.json").write_text(json.dumps(ledger), encoding="utf-8")
+        with pytest.raises(RuntimeError, match="has no structural audit record"):
+            bcs.analyse_extraction(2357, 2014, None, None)
+    finally:
+        bcs.audited_stub_records.cache_clear()
+
+
+@pytest.mark.parametrize("mutation", ["missing_status", "unknown_status", "wrong_status", "wrong_decision"])
+def test_malformed_audited_status_cannot_silently_change_rows_or_waterfall(tmp_path, monkeypatch, mutation):
+    """A real unread record must not become an ordinary stub through a damaged audit."""
+    name = "syndicate_1686_2014.json"
+    (tmp_path / name).write_bytes((ROOT / "pdf_extraction" / name).read_bytes())
+    audit_dir = tmp_path / "audit"
+    audit_dir.mkdir()
+    ledger = json.loads((ROOT / "pdf_extraction" / "audit" / "structural_eligibility_audit.json").read_text(encoding="utf-8"))
+    record = next(r for r in ledger["records"] if r["file"] == name)
+    if mutation == "missing_status":
+        record.pop("extraction_status")
+    elif mutation == "unknown_status":
+        record["extraction_status"] = "unsupported_status"
+    elif mutation == "wrong_status":
+        record["extraction_status"] = "pre_model_stub_audited_no_disclosed_mature_diagonal"
+    else:
+        record["decision"] = "eligible_observed_zero"
+    (audit_dir / "structural_eligibility_audit.json").write_text(json.dumps(ledger), encoding="utf-8")
+    monkeypatch.setattr(bcs, "EXTRACTION_DIR", tmp_path)
+    bcs.audited_stub_records.cache_clear()
+    try:
+        with pytest.raises(RuntimeError, match="without the structural audit ledger"):
+            bcs.analyse_extraction(1686, 2014, None, None)
+        with pytest.raises(RuntimeError, match="without the structural audit ledger"):
+            bcs.count_audited_unread_rows([{"syndicate": 1686, "year": 2014,
+                                           "exclusion_class": "first_year_syndicate"}])
+    finally:
+        bcs.audited_stub_records.cache_clear()

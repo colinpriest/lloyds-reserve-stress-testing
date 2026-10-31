@@ -31,6 +31,7 @@ import json
 import logging
 import re
 import sys
+from functools import lru_cache
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
@@ -60,13 +61,12 @@ sys.path.insert(0, str(PROJECT_ROOT))
 from test_gemini import COMPARISON_ABS_TOL, COMPARISON_REL_TOL  # noqa: E402
 
 sys.path.insert(0, str(PROJECT_ROOT / "scripts"))
-from restate_record_status import AUDITED_2357_REASON, AUDITED_UNREAD_STUB_REASON  # noqa: E402
+from finalize_structural_eligibility_audit import UNREAD_RECORD_CONFIRMED  # noqa: E402
 
-#: The row text of a first-year stub the pipeline wrote. Its rule (docs/ocr-pipeline.md 11.1) writes a stub only when the
-#: triangles, the reserve text and both models show no development figure, so "no stated prior-year development figure"
-#: is something the pipeline tested.
-FIRST_YEAR_ROW_REASON = ('no eligible mature cohort in the report triangles and no stated '
-                         'prior-year development figure')
+#: A missing audit note cannot establish eligibility from the historical
+#: first-year flag or from a free-form reason string alone.
+FIRST_YEAR_ROW_REASON = ('legacy extraction stub; consult the source filing and extraction record '
+                         'to establish outcome availability, eligibility and model history')
 #: The row text of a first-year stub the structural audit restated from an unread record (third cycle of round 62; 24 of
 #: them). What the audit read is the filing's start statement, its claims development table and its opening balance, so
 #: that is what the text claims; whether the filing states a prior-year development figure was not tested (fourth cycle
@@ -75,12 +75,73 @@ AUDITED_UNREAD_ROW_REASON = ('no mature year was established in the reviewed fil
                              'inherited history remains unresolved; the parsers found no development figure, '
                              'the models were not run and the structural audit did not look for a stated one')
 AUDITED_2357_ROW_REASON = ('no claims development table or claims outstanding balance is printed; '
-                           'inception, inherited history and the mature outcome remain unresolved; '
-                           'neither the table step nor the models read the reserve text')
+                           'inception, inherited history and the mature outcome remain unresolved')
 LEGACY_STUB_WATERFALL_LABEL = ('Less: other legacy extraction stubs '
                                '(evidence varies; see individual rows)')
 AUDITED_UNREAD_WATERFALL_LABEL = ('Less: unread stubs reviewed by the structural audit '
                                   '(mature outcome not established; stated figure not sought)')
+
+
+@lru_cache(maxsize=1)
+def audited_stub_records():
+    """Read the independent status ledger; absent or malformed evidence must not fall back silently."""
+    path = EXTRACTION_DIR / 'audit' / 'structural_eligibility_audit.json'
+    try:
+        with path.open(encoding='utf-8') as source:
+            audit = json.load(source)
+        records = audit['records']
+        if not isinstance(records, list):
+            raise ValueError('records is not a list')
+        by_name = {r['file']: r for r in records}
+        if len(by_name) != len(records):
+            raise ValueError('duplicate audit record names')
+        if audit['counts']['reviewed'] != len(records):
+            raise ValueError('audit record count does not match its ledger')
+        decisions = {
+            'pre_model_stub_audited_no_disclosed_mature_diagonal':
+                'no_disclosed_mature_diagonal_inherited_history_unresolved',
+            UNREAD_RECORD_CONFIRMED: 'no_disclosed_mature_diagonal_inherited_history_unresolved',
+            'pre_model_stub_inherited_business_unresolved_by_source_page_audit':
+                'inherited_business_cohort_and_outcome_unresolved',
+            'pre_model_stub_outcome_unavailable_by_source_page_audit':
+                'inherited_mature_cohort_outcome_unavailable',
+            'corrected_from_pre_model_stub_by_source_page_audit': 'eligible_observed_zero',
+        }
+        for record in records:
+            status = record.get('extraction_status')
+            decision = record.get('decision')
+            if status not in decisions or decision != decisions[status]:
+                raise ValueError(f"invalid audit status or decision for {record.get('file')}")
+            eligibility = 'eligible' if decision == 'eligible_observed_zero' else 'unresolved'
+            if record.get('economic_eligibility') != eligibility:
+                raise ValueError(f"invalid audit eligibility for {record.get('file')}")
+            if bool(record.get('start_statements')) != (status == UNREAD_RECORD_CONFIRMED):
+                raise ValueError(f"audit start statements disagree with status for {record.get('file')}")
+        return by_name
+    except (OSError, ValueError, KeyError, TypeError) as exc:
+        raise RuntimeError('cannot classify legacy stubs without the structural audit ledger') from exc
+
+
+def legacy_stub_classification(syndicate: int, year: int) -> tuple[str, dict]:
+    """Use stable record identity and audit status, never free-form stub reason prose."""
+    name = f'syndicate_{syndicate}_{year}.json'
+    record = audited_stub_records().get(name)
+    if record is None:
+        raise RuntimeError(f'legacy stub {name} has no structural audit record')
+    if (syndicate, year) == (2357, 2014):
+        if (record.get('nil_vs_missing') != 'triangle_not_printed_mature_outcome_unresolved'
+                or record.get('inception_year') is not None or record.get('underwriting_years') != []):
+            raise RuntimeError('2357/2014 audit is inconsistent with the no-triangle classification')
+        return 'audited_2357', record
+    if record.get('extraction_status') == UNREAD_RECORD_CONFIRMED:
+        return 'audited_unread', record
+    return 'audited_other', record
+
+
+def count_audited_unread_rows(rows) -> int:
+    """Count audited unread stubs from stable ledger status, independently of row prose."""
+    return sum(legacy_stub_classification(int(row['syndicate']), int(row['year']))[0] == 'audited_unread'
+               for row in rows if row.get('exclusion_class') == 'first_year_syndicate')
 
 PYD_ABS_TOL = COMPARISON_ABS_TOL
 PYD_REL_TOL = COMPARISON_REL_TOL
@@ -287,10 +348,10 @@ def analyse_extraction(syndicate: int, year: int,
 
     # ---- special classifications -------------------------------------
     if data.get('first_year_syndicate'):
-        record_reason = data.get('reason')
-        reason = (AUDITED_2357_ROW_REASON if record_reason == AUDITED_2357_REASON else
-                  AUDITED_UNREAD_ROW_REASON if record_reason == AUDITED_UNREAD_STUB_REASON else
-                  FIRST_YEAR_ROW_REASON)
+        audit_class, audit_record = legacy_stub_classification(syndicate, year)
+        reason = (AUDITED_2357_ROW_REASON if audit_class == 'audited_2357' else
+                  AUDITED_UNREAD_ROW_REASON if audit_class == 'audited_unread' else
+                  audit_record.get('review_note') or FIRST_YEAR_ROW_REASON)
         out['exclusion_class'] = 'first_year_syndicate'
         out['pyd_failure_reason'] = reason
         out['opening_failure_reason'] = reason
@@ -298,9 +359,7 @@ def analyse_extraction(syndicate: int, year: int,
         if mix:
             out.update(_unreconciled_table_mix(mix))
         else:
-            out['lob_failure_reason'] = ('no LOB mix in the extraction stub'
-                                         if record_reason == AUDITED_2357_REASON else
-                                         'no LOB mix in no-mature-cohort audit JSON')
+            out['lob_failure_reason'] = 'no LOB mix in the extraction stub'
         return out
     if data.get('no_triangle_data') or data.get('excluded'):
         reason = data.get('exclusion_reason',
@@ -585,8 +644,7 @@ def main() -> int:
     n_unavailable = total - n_downloaded
     dl = detail[detail['download_status'] == 'report downloaded']
     n_first_year = int((dl['exclusion_class'] == 'first_year_syndicate').sum())
-    n_audited = int(((dl['exclusion_class'] == 'first_year_syndicate')
-                     & (dl['pyd_failure_reason'] == AUDITED_UNREAD_ROW_REASON)).sum())
+    n_audited = count_audited_unread_rows(dl.to_dict('records'))
     n_no_triangle = int((dl['exclusion_class'] == 'no_triangle_data').sum())
     n_not_extracted = int((~dl['extraction_file_exists']).sum())
     analysable = dl[dl['exclusion_class'].isna() & dl['extraction_file_exists']]
