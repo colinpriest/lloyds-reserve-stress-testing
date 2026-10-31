@@ -116,7 +116,7 @@ The PDF extraction pipeline (`test_gemini.py` + `table_extraction.py`) uses a la
 │  └── Interactive adjudication for unresolved discrepancies          │
 │                                                                     │
 │  Step 5: Report Classification                                      │
-│  ├── first_year_syndicate: no usable cohort up to t-2               │
+│  ├── first_year_syndicate: legacy stub; audit eligibility separately │
 │  ├── no_triangle_data: no deterministic reading; models not run     │
 │  └── Normal: full extraction with cross-validated PYD               │
 │                                                                     │

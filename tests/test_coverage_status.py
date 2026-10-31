@@ -60,7 +60,10 @@ def _stub_rows():
         d = records.get(stem)
         if d is not None and row["exclusion_class"] == "first_year_syndicate":
             audited = d.get("reason") == restate.AUDITED_UNREAD_STUB_REASON
-            yield row, (bcs.AUDITED_UNREAD_ROW_REASON if audited else bcs.FIRST_YEAR_ROW_REASON), stem, audited
+            special = d.get("reason") == restate.AUDITED_2357_REASON
+            expected = (bcs.AUDITED_2357_ROW_REASON if special else
+                        bcs.AUDITED_UNREAD_ROW_REASON if audited else bcs.FIRST_YEAR_ROW_REASON)
+            yield row, expected, stem, audited
 
 
 def test_a_stub_row_says_what_was_read_and_no_more_and_the_builder_writes_the_same():
@@ -78,6 +81,7 @@ def test_a_stub_row_says_what_was_read_and_no_more_and_the_builder_writes_the_sa
     assert counts == {True: 24, False: 69}, counts
     assert "no stated" not in bcs.AUDITED_UNREAD_ROW_REASON
     assert "did not look for a stated one" in bcs.AUDITED_UNREAD_ROW_REASON
+    assert "inherited history remains unresolved" in bcs.AUDITED_UNREAD_ROW_REASON
     assert "no stated prior-year development figure" in bcs.FIRST_YEAR_ROW_REASON
 
 
@@ -90,11 +94,46 @@ def test_the_report_waterfall_keeps_the_24_apart_from_the_stubs_the_pipeline_wro
         return label, int(change), int(running)
 
     before = cells("Less: not yet through extraction pipeline")
-    pipeline = cells("Less: no eligible mature cohort and no stated development figure")
-    audited = cells("Less: no eligible mature cohort, read on the filing pages")
+    pipeline = cells("Less: other legacy extraction stubs")
+    audited = cells("Less: unread stubs reviewed by the structural audit")
     n = {True: 0, False: 0}
     for _, _, _, is_audited in _stub_rows():
         n[is_audited] += 1
     assert (pipeline[1], audited[1]) == (-n[False], -n[True]) == (-69, -24)
     assert pipeline[2] == before[2] + pipeline[1] and audited[2] == pipeline[2] + audited[1]
     assert "not sought" in audited[0] and "structural audit" in audited[0]
+    assert "evidence varies" in pipeline[0] and "no stated" not in pipeline[0]
+
+
+def test_2357_coverage_output_reports_unknown_scope_without_changing_class():
+    """A legacy stub with no printed triangle must not assert that one was read."""
+    from openpyxl import load_workbook
+
+    rows = json.loads(COVERAGE.read_text(encoding="utf-8"))["rows"]
+    row, = [r for r in rows if (r["syndicate"], r["year"]) == (2357, 2014)]
+    fresh = bcs.analyse_extraction(2357, 2014, None, None)
+    assert row["exclusion_class"] == fresh["exclusion_class"] == "first_year_syndicate"
+    for key in ("pyd_failure_reason", "opening_failure_reason", "lob_failure_reason"):
+        assert row[key] == fresh[key]
+    assert "no claims development table" in fresh["pyd_failure_reason"]
+    assert "mature outcome remain unresolved" in fresh["pyd_failure_reason"]
+    assert "no LOB mix in the extraction stub" == fresh["lob_failure_reason"]
+    book = load_workbook(ROOT / "syndicate_reports" / "coverage" / "coverage_status.xlsx", read_only=True)
+    detail = book["syndicate_years"]
+    rows = detail.iter_rows(values_only=True)
+    header = {v: i for i, v in enumerate(next(rows))}
+    all_rows = list(rows)
+    matching = [r for r in all_rows if (r[header["syndicate"]], r[header["year"]]) == (2357, 2014)]
+    assert len(matching) == 1
+    for key in ("pyd_failure_reason", "opening_failure_reason", "lob_failure_reason"):
+        assert matching[0][header[key]] == fresh[key]
+    audited_keys = {(row["syndicate"], row["year"]) for row, _, _, audited in _stub_rows() if audited}
+    audited_rows = [r for r in all_rows if (r[header["syndicate"]], r[header["year"]]) in audited_keys]
+    assert len(audited_rows) == len(audited_keys) == 24
+    for r in audited_rows:
+        assert r[header["pyd_failure_reason"]] == bcs.AUDITED_UNREAD_ROW_REASON
+        assert r[header["opening_failure_reason"]] == bcs.AUDITED_UNREAD_ROW_REASON
+    steps = list(book["reconciliation"].iter_rows(values_only=True))
+    assert sum(row[0] == bcs.LEGACY_STUB_WATERFALL_LABEL for row in steps) == 1
+    assert sum(row[0] == bcs.AUDITED_UNREAD_WATERFALL_LABEL for row in steps) == 1
+    book.close()

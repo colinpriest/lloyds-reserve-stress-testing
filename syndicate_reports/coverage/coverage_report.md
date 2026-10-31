@@ -9,8 +9,8 @@ Generated: 2026-10-03T08:53:04.790791+00:00
 | Less: report unavailable (not published / download failed) | -93 | 1032 |
 | Reports downloaded |  | 1032 |
 | Less: not yet through extraction pipeline | 0 | 1032 |
-| Less: no eligible mature cohort and no stated development figure (first-year stubs the pipeline wrote) | -69 | 963 |
-| Less: no eligible mature cohort, read on the filing pages by the structural audit (unread filings restated as first-year stubs; a stated development figure was not sought) | -24 | 939 |
+| Less: other legacy extraction stubs (evidence varies; see individual rows) | -69 | 963 |
+| Less: unread stubs reviewed by the structural audit (mature outcome not established; stated figure not sought) | -24 | 939 |
 | Less: no deterministic reading (models not run) | -20 | 919 |
 | Less: other field failures (PYD/LoB/opening not all extracted) | -68 | 851 |
 | Fully successful syndicate-years (a+b+c+d) |  | 851 |

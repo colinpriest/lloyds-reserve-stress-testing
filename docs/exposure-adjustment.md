@@ -931,11 +931,13 @@ For each JSON file in pdf_extraction/:
 
 | Annotation | Badge CSS class | Condition | Meaning |
 |------------|----------------|-----------|---------|
-| **1st yr UW** | `.badge.uw1` | `report_year - inception_year === 0` | Syndicate's first underwriting year report — no prior year development possible |
-| **2nd yr UW** | `.badge.uw2` | `report_year - inception_year === 1` | Syndicate's second underwriting year report — limited prior year development |
+| **1st yr UW** | `.badge.uw1` | `report_year - inception_year === 0` | The cached inception year equals the report year; source verification and inherited history require separate review. |
+| **2nd yr UW** | `.badge.uw2` | `report_year - inception_year === 1` | The cached inception year precedes the report year by one; source verification and inherited history require separate review. |
 
 Inception years are loaded from `syndicate_inception_years.json` in the output
-directory.
+directory. Cache entries are not independently verified by the badge, and a recent
+inception does not rule out inherited older liabilities. For 2357/2014, the filing's
+calendar-year columns do not establish the cache's 2013 inception year.
 
 ### 14.4  Validation column
 

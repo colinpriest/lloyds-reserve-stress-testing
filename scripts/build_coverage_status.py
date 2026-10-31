@@ -60,7 +60,7 @@ sys.path.insert(0, str(PROJECT_ROOT))
 from test_gemini import COMPARISON_ABS_TOL, COMPARISON_REL_TOL  # noqa: E402
 
 sys.path.insert(0, str(PROJECT_ROOT / "scripts"))
-from restate_record_status import AUDITED_UNREAD_STUB_REASON  # noqa: E402
+from restate_record_status import AUDITED_2357_REASON, AUDITED_UNREAD_STUB_REASON  # noqa: E402
 
 #: The row text of a first-year stub the pipeline wrote. Its rule (docs/ocr-pipeline.md 11.1) writes a stub only when the
 #: triangles, the reserve text and both models show no development figure, so "no stated prior-year development figure"
@@ -71,10 +71,16 @@ FIRST_YEAR_ROW_REASON = ('no eligible mature cohort in the report triangles and 
 #: them). What the audit read is the filing's start statement, its claims development table and its opening balance, so
 #: that is what the text claims; whether the filing states a prior-year development figure was not tested (fourth cycle
 #: of round 62: the row text had said no stated figure, which nobody had looked for).
-AUDITED_UNREAD_ROW_REASON = ('no eligible mature cohort: the filing states that the syndicate began in the report year '
-                             'or the year before and prints no older underwriting year (read on its pages by the '
-                             'structural audit); the parsers found no development figure, the models were not run and '
-                             'the audit did not look for a stated one')
+AUDITED_UNREAD_ROW_REASON = ('no mature year was established in the reviewed filing disclosures; '
+                             'inherited history remains unresolved; the parsers found no development figure, '
+                             'the models were not run and the structural audit did not look for a stated one')
+AUDITED_2357_ROW_REASON = ('no claims development table or claims outstanding balance is printed; '
+                           'inception, inherited history and the mature outcome remain unresolved; '
+                           'neither the table step nor the models read the reserve text')
+LEGACY_STUB_WATERFALL_LABEL = ('Less: other legacy extraction stubs '
+                               '(evidence varies; see individual rows)')
+AUDITED_UNREAD_WATERFALL_LABEL = ('Less: unread stubs reviewed by the structural audit '
+                                  '(mature outcome not established; stated figure not sought)')
 
 PYD_ABS_TOL = COMPARISON_ABS_TOL
 PYD_REL_TOL = COMPARISON_REL_TOL
@@ -281,8 +287,10 @@ def analyse_extraction(syndicate: int, year: int,
 
     # ---- special classifications -------------------------------------
     if data.get('first_year_syndicate'):
-        reason = (AUDITED_UNREAD_ROW_REASON if data.get('reason') == AUDITED_UNREAD_STUB_REASON
-                  else FIRST_YEAR_ROW_REASON)
+        record_reason = data.get('reason')
+        reason = (AUDITED_2357_ROW_REASON if record_reason == AUDITED_2357_REASON else
+                  AUDITED_UNREAD_ROW_REASON if record_reason == AUDITED_UNREAD_STUB_REASON else
+                  FIRST_YEAR_ROW_REASON)
         out['exclusion_class'] = 'first_year_syndicate'
         out['pyd_failure_reason'] = reason
         out['opening_failure_reason'] = reason
@@ -290,7 +298,9 @@ def analyse_extraction(syndicate: int, year: int,
         if mix:
             out.update(_unreconciled_table_mix(mix))
         else:
-            out['lob_failure_reason'] = 'no LOB mix in no-mature-cohort audit JSON'
+            out['lob_failure_reason'] = ('no LOB mix in the extraction stub'
+                                         if record_reason == AUDITED_2357_REASON else
+                                         'no LOB mix in no-mature-cohort audit JSON')
         return out
     if data.get('no_triangle_data') or data.get('excluded'):
         reason = data.get('exclusion_reason',
@@ -588,10 +598,9 @@ def main() -> int:
         ('Less: report unavailable (not published / download failed)', -n_unavailable, total - n_unavailable),
         ('Reports downloaded', None, n_downloaded),
         ('Less: not yet through extraction pipeline', -n_not_extracted, n_downloaded - n_not_extracted),
-        ('Less: no eligible mature cohort and no stated development figure (first-year stubs the pipeline wrote)',
+        (LEGACY_STUB_WATERFALL_LABEL,
          -(n_first_year - n_audited), n_downloaded - n_not_extracted - (n_first_year - n_audited)),
-        ('Less: no eligible mature cohort, read on the filing pages by the structural audit (unread filings '
-         'restated as first-year stubs; a stated development figure was not sought)',
+        (AUDITED_UNREAD_WATERFALL_LABEL,
          -n_audited, n_downloaded - n_not_extracted - n_first_year),
         ('Less: no deterministic reading (models not run)', -n_no_triangle,
          n_downloaded - n_not_extracted - n_first_year - n_no_triangle),

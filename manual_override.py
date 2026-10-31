@@ -88,6 +88,9 @@ def get_current_status(data):
                 return status["name"]
         return f"Custom: {data['manual_override_status']}"
     if data.get("first_year_syndicate"):
+        if (data.get("syndicate") == 2357 and data.get("year") == 2014
+                and data.get("inception_year") is None):
+            return "No development table; eligibility unresolved"
         return "First Year Syndicate"
     if data.get("no_triangle_data") or data.get("excluded"):
         return "Excluded"

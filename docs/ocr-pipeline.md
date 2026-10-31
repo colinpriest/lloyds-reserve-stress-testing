@@ -156,9 +156,9 @@ PDF input
   v
 +-----------------------------------------------+
 | Step 6: Report classification                  |
-|   first_year_syndicate: no usable cohort up to |
-|     t-2; decided BEFORE the models, or after   |
-|     them on the reserve text (see 11.1, 11.2)  |
+|   first_year_syndicate: legacy extraction stub  |
+|     eligibility is audited separately; models  |
+|     may have run on reserve text (11.1, 11.2)  |
 |   no_triangle_data: no triangle + no text      |
 |   Normal: full extraction with PYD             |
 +-----------------------------------------------+
